@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <configuration scan="true" scanPeriod="30 seconds">
-    <timestamp key="byDay" datePattern="yyyy-MM-dd"/>
+    <!--<timestamp key="byDay" datePattern="yyyy-MM-dd"/>-->
     <!--<property name="LOG_HOME" value="${}" />-->
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">

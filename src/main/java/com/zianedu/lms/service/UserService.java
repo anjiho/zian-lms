@@ -15,7 +15,7 @@ public class UserService {
     protected static final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     public Integer test() {
-        logger.info(">>>>>>>>>>" + userMapper.selectExam());
+        //logger.info(">>>>>>>>>>" + userMapper.selectExam());
         return userMapper.selectExam();
     }
 }
