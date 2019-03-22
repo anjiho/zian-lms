@@ -1,0 +1,23 @@
+.clear_fix {
+  &:after{content: '';display: table;clear: both;}
+}
+.vertical_middle{
+  &:before{content: '';display: inline-block;height: 100%;vertical-align: middle;}
+}
+.ellipsis{
+  text-overflow: ellipsis;white-space: nowrap;overflow: hidden;
+}
+.outbox{
+  margin: auto; width: 1400px; max-width: calc(100% - 20px);
+}
+.font_style{
+  font-family:'AppleSDGothicNeo-Light','HelveticaNeue-Light','Noto Sans', '맑은 고딕', MalgunGothic,sans-serif;
+}
+$orange: #ff6d0c;
+$dark-orange: #ff4a0c;
+@mixin multi_ellipsis($lineCnt){
+  display: -webkit-box;
+  -webkit-line-clamp: $lineCnt;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
