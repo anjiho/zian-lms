@@ -7,6 +7,10 @@
 <body>
 
 지안에듀 LMS
+
 <img src="img/ajax-loader.gif">
+
+1234
+
 </body>
 </html>
