@@ -1,16 +1,41 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%--<%@include file="/common/jsp/top.jsp" %>--%>
-<%--<script type='text/javascript' src='<%=webRoot%>/dwr/interface/memberService.js'></script>--%>
-<%--<script type='text/javascript' src='<%=webRoot%>/dwr/interface/loginService.js'></script>--%>
-<%--<script type='text/javascript' src='<%=webRoot%>/dwr/interface/lectureService.js'></script>--%>
-<html>
-<body>
+<%@include file="/common/jsp/common.jsp" %>
+    <div id="main-wrapper">
+        <div class="container">
+            <h2>Black/Dark Table</h2>
+            <p>The .table-dark class adds a black background to the table:</p>
+            <table class="table table-dark">
+                <thead>
+                <tr>
+                    <th>Firstname</th>
+                    <th>Lastname</th>
+                    <th>Email</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>John</td>
+                    <td>Doe</td>
+                    <td>john@example.com</td>
+                </tr>
+                <tr>
+                    <td>Mary</td>
+                    <td>Moe</td>
+                    <td>mary@example.com</td>
+                </tr>
+                <tr>
+                    <td>July</td>
+                    <td>Dooley</td>
+                    <td>july@example.com</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
 
-지안에듀 LMS
-
-<img src="img/ajax-loader.gif">
-
-1234
-
+    </div>
 </body>
 </html>
+<script>
+    $( document ).ready(function() {
+        alert(11);
+    });
+</script>
