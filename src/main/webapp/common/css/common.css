@@ -1,0 +1,12 @@
+/* 개인 추가 */
+#selArea { z-index:100000; }
+/* 페이징 관련 CSS **/
+.tb_navi{margin-top:40px;text-align:center}
+.tb_navi a,.tb_navi strong{display:inline-block;height:29px;padding:0 7px;font-family:arial;font-size:11px;color:#777;line-height:29px;vertical-align:top}
+.tb_navi strong{color:#88714c}
+.tb_navi .sp{width:28px;padding:0;line-height:100px}
+/* .tb_navi .bn_prev2{background-position:-276px 0} */
+.tb_navi .bn_prev{margin-right:8px;background-position:-210px 0}
+.tb_navi .bn_next{margin-left:8px;background-position:-243px 0}
+/* .tb_navi .bn_next2{background-position:-309px 0} */
+
