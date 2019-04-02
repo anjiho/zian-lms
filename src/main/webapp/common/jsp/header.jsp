@@ -8,7 +8,6 @@
                <a href="#">Link 3</a>
            </div>
         </li>
-        <li class='has-sub'><a href='javascript:void(0);' onclick="goPage('test', 'loginTest')">로그인</a></li>
     </ul>
 </div>
 <!--

@@ -13,6 +13,8 @@
     <script src="common/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="common/vendor/jquery/jquery.validate.js"></script>
     <script src="common/vendor/jquery/jquery.validate.min.js"></script>
+    <!--css-->
+    <link href="common/css/header.css" rel="stylesheet">
 
     <!-- 공통 함수 JS -->
     <script src="common/js/common.js"></script>

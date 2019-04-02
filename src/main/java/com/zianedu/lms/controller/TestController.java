@@ -12,10 +12,7 @@ public class TestController {
     @RequestMapping(value={"/test"})
     public ModelAndView test(@RequestParam(value="page_gbn", required=false)String page_gbn) {
         ModelAndView mvc = new ModelAndView();
-
         if("testList".equals(page_gbn)) {
-            mvc.setViewName("login/login");
-        }else if("loginTest".equals(page_gbn)){
             mvc.setViewName("login/login");
         }
         return mvc;
