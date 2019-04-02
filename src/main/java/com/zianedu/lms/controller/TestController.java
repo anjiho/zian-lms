@@ -15,6 +15,8 @@ public class TestController {
 
         if("testList".equals(page_gbn)) {
             mvc.setViewName("login/login");
+        }else if("loginTest".equals(page_gbn)){
+            mvc.setViewName("login/login");
         }
         return mvc;
     }

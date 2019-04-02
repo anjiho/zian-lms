@@ -1,4 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"    pageEncoding="UTF-8"%>
+<div id='cssmenu'>
+    <ul>
+        <li class='has-sub dropdown-content'><a href='#'>기본관리</a>
+           <div >
+               <a href="#">Link 1</a>
+               <a href="#">Link 2</a>
+               <a href="#">Link 3</a>
+           </div>
+        </li>
+        <li class='has-sub'><a href='javascript:void(0);' onclick="goPage('test', 'loginTest')">로그인</a></li>
+    </ul>
+</div>
 <!--
 <nav class="navbar navbar-expand-lg navbar-light bg-light sb-navbar">
     <div class="container">
@@ -101,4 +113,3 @@
     </div>
 </nav>
 -->
-header

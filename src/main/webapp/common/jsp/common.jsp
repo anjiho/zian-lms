@@ -15,6 +15,7 @@
     <!-- 공토 함수 JS -->
     <script src="common/js/common.js"></script>
 
+    <link href="common/css/header.css" rel="stylesheet">
     <link href="common/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="common/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
