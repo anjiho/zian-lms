@@ -12,6 +12,13 @@
 			<param name="class" value="com.zianedu.lms.service.UserService"/>
 			<param name="beanName" value="userService" />
 		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.LoginService"/>
+
+		<create creator="spring" javascript="loginService">
+			<param name="class" value="com.zianedu.lms.service.LoginService"/>
+			<param name="beanName" value="loginService" />
+		</create>
 	</allow>
 
 </dwr>
