@@ -9,8 +9,8 @@ import org.springframework.web.servlet.ModelAndView;
 @Controller
 public class TestController {
 
-    @RequestMapping(value={"/test/{page_gbn}"}, method = RequestMethod.GET)
-    public ModelAndView academy(@RequestParam(value="page_gbn", required=false)String page_gbn) throws Exception {
+    @RequestMapping(value={"/test"})
+    public ModelAndView test(@RequestParam(value="page_gbn", required=false)String page_gbn) {
         ModelAndView mvc = new ModelAndView();
 
         if("testList".equals(page_gbn)) {
