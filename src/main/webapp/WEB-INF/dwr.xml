@@ -19,6 +19,11 @@
 			<param name="class" value="com.zianedu.lms.service.LoginService"/>
 			<param name="beanName" value="loginService" />
 		</create>
+
+		<!-- ========================= MANAGER ======================== -->
+
+		<!--  vo 선언 -->
+		<convert converter="bean" match="com.zianedu.lms.vo.TUserVO"/>
 	</allow>
 
 </dwr>

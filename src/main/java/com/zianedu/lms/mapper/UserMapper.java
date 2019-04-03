@@ -5,7 +5,7 @@ import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
 
-    Integer getUserCount(@Param("userId") String userId, @Param("userPass") String userPass);
+    Long getUserKey(@Param("userId") String userId, @Param("userPass") String userPass);
 
     TUserVO getUserInfo(@Param("userKey") Long userKey);
 

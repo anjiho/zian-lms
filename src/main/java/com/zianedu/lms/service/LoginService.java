@@ -1,6 +1,7 @@
 package com.zianedu.lms.service;
 
 import com.zianedu.lms.mapper.UserMapper;
+import com.zianedu.lms.vo.TUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -12,21 +13,28 @@ public class LoginService {
     private UserMapper userMapper;
 
     /**
-     * 로그인
+     * 로그인(회원 존재 유무)
      * @param userId
      * @param userPass
      * @return
-     * @desc 유저가 있으면 true, 없으면 false
+     */
+    public Long login(String userId, String userPass) {
+        if ("".equals(userId)) return null;
+        return userMapper.getUserKey(userId, userPass);
+    }
+
+    /**
+     * 회원정보 가져오기
+     * @param userId
+     * @param userPass
+     * @return
+     * @desc 유저가 있으면 TUserVo, 없으면 null;
      */
     @Transactional(readOnly = true)
-    public boolean login(String userId, String userPass) {
-        if (userId == null) {
-            return false;
+    public TUserVO getUserInfo(Long userKey) {
+        if (userKey == null) {
+            return null;
         }
-        Integer userCnt = userMapper.getUserCount(userId, userPass);
-        if (userCnt > 0) {
-            return true;
-        }
-        return false;
+        return userMapper.getUserInfo(userKey);
     }
 }
