@@ -9,4 +9,8 @@
 		AND PWD = #{userPass}
 	</select>
 
+	<select id="getUserInfo" parameterType="String" resultType="com.zianedu.lms.vo.TUserVO">
+		SELECT * FROM T_USER WHERE USER_KEY = #{userKey}
+	</select>
+
 </mapper>
