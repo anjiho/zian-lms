@@ -16,6 +16,8 @@ public class LoginController {
 
         if ("session".equals(page_gbn)) {
             mvc.setViewName("login/session");
+        } else if ("logout".equals(page_gbn)) {
+            mvc.setViewName("login/logout");
         }
         return mvc;
     }

@@ -31,6 +31,7 @@
                 <ul class="navbar-nav float-left mr-auto"></ul>
                 <ul class="navbar-nav float-right">
                     <li class="nav-item">
+                        <input type="button" value="로그아웃" onclick="goPage('login', 'logout')">
                         <a  class="nav-link text-muted waves-effect waves-dark pro-pic">LoginTEST</a>
                     </li>
                     <li class="nav-item dropdown">

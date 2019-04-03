@@ -15,16 +15,18 @@ public class CreateSESSION {
 
 	final static Logger logger = LoggerFactory.getLogger(CreateSESSION.class);
 
-	public static TUserVO createSession(HttpServletRequest request) {
+	public static TUserVO createSession(HttpServletRequest request) throws Exception {
 		Long userKey = Long.parseLong(request.getParameter("userKey"));
-		LoginService loginService = new LoginService();
-		loginService.getUserInfo(userKey);
-		return null;
-//		if (tUserVO.getUserKey() < 1L) return null;
-//		//세션 쓰래드에 세션 생성
-//		UserSession.set(tUserVO);
-//		request.setAttribute("userInfo", tUserVO);
-//		return tUserVO;
+		String userName = new String(request.getParameter("userName").getBytes("ISO-8859-1"), "UTF-8");
+		String authority = request.getParameter("authority");
+
+		logger.info(">>>>>>>>>>>>>>" + authority);
+
+		TUserVO tUserVO = new TUserVO(userKey, userName, Integer.parseInt(authority));
+		UserSession.set(tUserVO);
+		request.setAttribute("userInfo", tUserVO);
+
+		return tUserVO;
 	}
 
 }

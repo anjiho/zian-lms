@@ -2,8 +2,10 @@ package com.zianedu.lms.vo;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 @Data
-public class TUserVO {
+public class TUserVO implements Serializable {
 
     private Long userKey;
 
@@ -80,5 +82,13 @@ public class TUserVO {
     private String appPushKey;
 
     private String appDeviceType;
+
+    public TUserVO() {}
+
+    public TUserVO(Long userKey, String userName, int authority) {
+        this.userKey = userKey;
+        this.name = userName;
+        this.authority = authority;
+    }
 
 }
