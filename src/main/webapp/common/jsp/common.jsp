@@ -8,17 +8,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <!--- JQuery -->
+    <!--- JQuery
     <script src="common/vendor/jquery/jquery.min.js"></script>
     <script src="common/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
     <script src="common/vendor/jquery/jquery.validate.js"></script>
-    <script src="common/vendor/jquery/jquery.validate.min.js"></script>
-    <!--css-->
-    <link href="common/css/header.css" rel="stylesheet">
+    <script src="common/vendor/jquery/jquery.validate.min.js"></script>-->
 
     <!-- 공통 함수 JS -->
     <script src="common/js/common.js"></script>
     <script src="common/js/comPage.js"></script>
+    <script type='text/javascript' src='/dwr/engine.js'></script>
+    <script type='text/javascript' src='/dwr/util.js'></script>
     <!-- Bootstrap CSS -->
     <link href="common/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
     <link href="common/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
