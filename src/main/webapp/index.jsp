@@ -1,45 +1,4 @@
-<%@include file="/common/jsp/common.jsp" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
-<input type="hidden" id="userKey" name="userKey">
-<script type='text/javascript' src='/dwr/interface/loginService.js'></script>
-    아이디 : <input type="text" id="userId">
-    비밀번호 : <input type="password" id="userPass">
-    <input type="button" value="로그인" onclick="loginCheck();">
-
-</form>
-</body>
-</html>
-<script>
-    function loginCheck() {
-        var userId = getInputTextValue("userId");
-        var userPass = getInputTextValue("userPass");
-
-        loginService.login(userId, userPass, function(userKey) {
-            console.log(userKey);
-            if (userKey != null) {
-                loginOk(userKey);
-            } else {
-                alert("error");
-            }
-            /*if (data.flowMemberId != null ) {
-                loginOk(data, URL);
-            } else {
-                alert(comment.blank_login_check);
-                return;
-            }*/
-            alert(userKey);
-        });
-    }
-
-    function loginOk(userKey) {
-        with(document.frm) {
-            innerValue("userKey", userKey);
-            goPage("login", "session");
-        }
-    }
-</script>
-
-=======
 <!DOCTYPE html>
 <html dir="ltr">
 <head>
@@ -85,24 +44,24 @@
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
         <div class="auth-box bg-dark border-top border-secondary">
             <div id="loginform">
-                <div class="text-center p-t-20 p-b-20">
-                    <span class="db"><img src="common/assets/images/logo.png" alt="logo" /></span>
-                </div>
+                <%--<div class="text-center p-t-20 p-b-20">--%>
+                    <%--<span class="db"><img src="common/assets/images/logo.png" alt="logo" /></span>--%>
+                <%--</div>--%>
                 <!-- Form -->
-                <form class="form-horizontal m-t-20" id="loginform" action="index.html">
+                <form class="form-horizontal m-t-20" id="frm">
                     <div class="row p-b-30">
                         <div class="col-12">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-success text-white" id="basic-addon1"><i class="ti-user"></i></span>
                                 </div>
-                                <input type="text" class="form-control form-control-lg" placeholder="Username" aria-label="Username" aria-describedby="basic-addon1" required="">
+                                <input type="text" class="form-control form-control-lg" placeholder="아이디" aria-label="Username" aria-describedby="basic-addon1" required="">
                             </div>
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-warning text-white" id="basic-addon2"><i class="ti-pencil"></i></span>
                                 </div>
-                                <input type="text" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="basic-addon1" required="">
+                                <input type="text" class="form-control form-control-lg" placeholder="비밀번호" aria-label="Password" aria-describedby="basic-addon1" required="">
                             </div>
                         </div>
                     </div>
@@ -187,7 +146,6 @@
         $("#loginform").fadeIn();
     });
 </script>
-
 </body>
 
 </html>
