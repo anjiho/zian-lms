@@ -9,27 +9,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-<<<<<<< HEAD
-    <!--- JQuery
-    <script src="common/vendor/jquery/jquery.min.js"></script>
-    <script src="common/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <script src="common/vendor/jquery/jquery.validate.js"></script>
-    <script src="common/vendor/jquery/jquery.validate.min.js"></script>-->
-=======
->>>>>>> test
-
     <!-- 공통 함수 JS -->
     <script src="common/js/common.js"></script>
     <script src="common/js/comPage.js"></script>
-<<<<<<< HEAD
-    <script type='text/javascript' src='/dwr/engine.js'></script>
-    <script type='text/javascript' src='/dwr/util.js'></script>
-    <!-- Bootstrap CSS -->
-    <link href="common/vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
-    <link href="common/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-    <link href="common/css/common.css" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
-=======
 
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="common/assets/images/favicon.png">
@@ -66,7 +48,7 @@
     <script src="common/assets/libs/flot/jquery.flot.crosshair.js"></script>
     <script src="common/assets/libs/flot.tooltip/js/jquery.flot.tooltip.min.js"></script>
     <script src="common/dist/js/pages/chart/chart-page-init.js"></script>
->>>>>>> test
+
 </head>
 <title>지안에듀관리자</title>
 <body>
