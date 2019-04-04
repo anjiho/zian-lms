@@ -22,6 +22,11 @@ public class DashboardController {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
 
+        if ("dashboard".equals(page_gbn)) {
+            mvc.setViewName("dashboard/dashboard");
+        } else if ("dashboard2".equals(page_gbn)) {
+            mvc.setViewName("dashboard/dashboard2");
+        }
         return mvc;
     }
 }
