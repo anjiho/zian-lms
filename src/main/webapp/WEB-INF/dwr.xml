@@ -7,23 +7,37 @@
 	<allow>
 		<!-- ========================= SERVICE ======================== -->
 		<convert converter="bean" match="com.zianedu.lms.service.UserService"/>
-
 		<create creator="spring" javascript="userService">
 			<param name="class" value="com.zianedu.lms.service.UserService"/>
 			<param name="beanName" value="userService" />
 		</create>
 
 		<convert converter="bean" match="com.zianedu.lms.service.LoginService"/>
-
 		<create creator="spring" javascript="loginService">
 			<param name="class" value="com.zianedu.lms.service.LoginService"/>
 			<param name="beanName" value="loginService" />
+		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.DataManageService"/>
+		<create creator="spring" javascript="dataManageService">
+			<param name="class" value="com.zianedu.lms.service.DataManageService"/>
+			<param name="beanName" value="dataManageService" />
+		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.SelectboxService"/>
+		<create creator="spring" javascript="selectboxService">
+			<param name="class" value="com.zianedu.lms.service.SelectboxService"/>
+			<param name="beanName" value="selectboxService" />
 		</create>
 
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.vo.TUserVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryOtherInfoVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TSiteVO"/>
+
 	</allow>
 
 </dwr>

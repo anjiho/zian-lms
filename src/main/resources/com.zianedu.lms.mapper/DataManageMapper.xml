@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.DataManageMapper">
+
+	<select id="selectTCategoryList" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		<if test="parentKey != '' and parentKey != null">
+			WHERE PARENT_KEY = #{parentKey}
+		</if>
+	</select>
+
+	<select id="selectTCategoryLastPosNumber" parameterType="Integer" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS FROM T_CATEGORY
+			<if test="parentKey != '' and parentKey != null">
+				WHERE PARENT_KEY = #{parentKey}
+			</if>
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTCategoryOtherInfoList" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		SELECT * FROM T_CATEGORY_OTHER_INFO
+		WHERE T_CATEGORY_OTHER_INFO.CTG_KEY = #{ctgKey}
+	</select>
+
+	<insert id="insertClassficationTCategoryInfo">
+		INSERT INTO T_CATEGORY
+		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME )
+    	VALUES
+		( T_CATEGORY_SEQ.NEXTVAL, 100, 202, #{pos}, #{name} )
+	</insert>
+
+
+</mapper>
