@@ -14,5 +14,13 @@ public interface DataManageMapper {
 
     List<TCategoryOtherInfoVO> selectTCategoryOtherInfoList(@Param("ctgKey") int ctgKey);
 
+    TCategoryOtherInfoVO selectTCategoryOtherInfo(@Param("ctgInfoKey") int ctgInfoKey);
+
+    List<TCategoryVO> selectBannerTitleList(@Param("ctgKey") int ctgKey);
+
     void insertClassficationTCategoryInfo(@Param("name") String ctgName, @Param("pos") int pos);
+
+    void deleteTCategoryOtherInfo(@Param("ctgInfoKey") int ctgInfoKey);
+
+    void updateTCategoryOtherInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 }

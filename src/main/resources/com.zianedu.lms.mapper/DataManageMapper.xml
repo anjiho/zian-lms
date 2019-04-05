@@ -12,7 +12,7 @@
 	<select id="selectTCategoryLastPosNumber" parameterType="Integer" resultType="Integer">
 		SELECT Z.* FROM (
 			SELECT POS FROM T_CATEGORY
-			<if test="parentKey != '' and parentKey != null">
+			<if test="parentKey != '' or parentKey != null">
 				WHERE PARENT_KEY = #{parentKey}
 			</if>
 			ORDER BY POS DESC
@@ -22,7 +22,24 @@
 
 	<select id="selectTCategoryOtherInfoList" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
 		SELECT * FROM T_CATEGORY_OTHER_INFO
-		WHERE T_CATEGORY_OTHER_INFO.CTG_KEY = #{ctgKey}
+		WHERE CTG_KEY = #{ctgKey}
+	</select>
+
+	<select id="selectTCategoryOtherInfo" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		SELECT * FROM T_CATEGORY_OTHER_INFO
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
+	</select>
+
+	<select id="selectBannerTitleList" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		WHERE PARENT_KEY =
+		(
+			SELECT CTG_KEY FROM T_CATEGORY
+			WHERE PARENT_KEY = #{ctgKey}
+			AND ROLE_TYPE = 12001
+		)
+		AND VALUE IS NOT NULL
+		ORDER BY POS ASC
 	</select>
 
 	<insert id="insertClassficationTCategoryInfo">
@@ -31,6 +48,28 @@
     	VALUES
 		( T_CATEGORY_SEQ.NEXTVAL, 100, 202, #{pos}, #{name} )
 	</insert>
+
+	<delete id="deleteTCategoryOtherInfo" parameterType="Integer">
+		DELETE FROM T_CATEGORY_OTHER_INFO
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
+	</delete>
+
+	<update id="updateTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		UPDATE T_CATEGORY_OTHER_INFO
+		<set>
+			<if test="value1 != '' and value1 != null">VALUE_1 = #{value1},</if>
+			<if test="value3 != '' and value3 != null">VALUE_3 = #{value3},</if>
+			<if test="value4 != '' and value4 != null">VALUE_4 = #{value4},</if>
+			<if test="value5 != '' and value5 != null">VALUE_5 = #{value5},</if>
+			<if test="valueBit1 != '' and valueBit1 != null">VALUE_BIT_1 = #{valueBit1},</if>
+			<if test="pos != null">POS = #{pos},</if>
+		</set>
+		<where>
+			<if test="ctgInfoKey > 0">
+				CTG_INFO_KEY = #{ctgInfoKey}
+			</if>
+		</where>
+	</update>
 
 
 </mapper>

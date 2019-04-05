@@ -38,6 +38,9 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryOtherInfoVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TSiteVO"/>
 
+		<!--  dto 선언 -->
+		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
+
 	</allow>
 
 </dwr>
