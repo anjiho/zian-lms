@@ -14,7 +14,8 @@ function goPage(mapping_value, page_value, obj) {
             if (mapping_value != "" && page_value != "") {
                 page_gbn.value = page_value;
             }
-            action = "/" + mapping_value + "/" + page_value;
+            //action = "/" + mapping_value + "/" + page_value;
+            action = "/" + mapping_value;
             submit();
         }
     }

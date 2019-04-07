@@ -16,14 +16,14 @@
       <param-value>true</param-value>
     </init-param>
   </filter>
-  <!--<filter>-->
-    <!--<filter-name>userSessionFilter</filter-name>-->
-    <!--<filter-class>com.flowedu.filter.UserSessionFilter</filter-class>-->
-  <!--</filter>-->
-  <!--<filter-mapping>-->
-    <!--<filter-name>userSessionFilter</filter-name>-->
-    <!--<url-pattern>/*</url-pattern>-->
-  <!--</filter-mapping>-->
+  <filter>
+    <filter-name>userSessionFilter</filter-name>
+    <filter-class>com.zianedu.lms.filter.UserSessionFilter</filter-class>
+  </filter>
+  <filter-mapping>
+    <filter-name>userSessionFilter</filter-name>
+    <url-pattern>/</url-pattern>
+  </filter-mapping>
 
   <listener>
     <display-name>contextConfigLocation</display-name>

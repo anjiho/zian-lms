@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.DataManageMapper">
+
+	<select id="selectTCategoryList" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		<if test="parentKey != '' and parentKey != null">
+			WHERE PARENT_KEY = #{parentKey}
+		</if>
+	</select>
+
+	<select id="selectTCategoryLastPosNumber" parameterType="Integer" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS FROM T_CATEGORY
+			<if test="parentKey != '' or parentKey != null">
+				WHERE PARENT_KEY = #{parentKey}
+			</if>
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTCategoryOtherInfoLastPosNumber" parameterType="Integer" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS FROM T_CATEGORY_OTHER_INFO
+			<if test="ctgKey != '' or ctgKey != null">
+				WHERE CTG_KEY = #{ctgKey}
+			</if>
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTCategoryOtherInfoList" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		SELECT * FROM T_CATEGORY_OTHER_INFO
+		WHERE CTG_KEY = #{ctgKey}
+	</select>
+
+	<select id="selectTCategoryOtherInfo" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		SELECT * FROM T_CATEGORY_OTHER_INFO
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
+	</select>
+
+	<select id="selectBannerTitleList" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		WHERE PARENT_KEY =
+		(
+			SELECT CTG_KEY FROM T_CATEGORY
+			WHERE PARENT_KEY = #{ctgKey}
+			AND ROLE_TYPE = 12001
+		)
+		AND VALUE IS NOT NULL
+		ORDER BY POS ASC
+	</select>
+
+	<select id="selectBannerTitleListByCtgKey" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		WHERE CTG_KEY =
+		(
+			SELECT CTG_KEY FROM T_CATEGORY
+			WHERE PARENT_KEY = #{ctgKey}
+			<if test="roleType > 0">
+				AND ROLE_TYPE = #{roleType}
+			</if>
+		)
+		AND VALUE IS NOT NULL
+		ORDER BY POS ASC
+	</select>
+
+	<select id="selectTScheduleList" resultType="com.zianedu.lms.vo.TScheduleVO">
+		SELECT * FROM T_SCHEDULE ORDER BY START_DATE ASC
+	</select>
+
+	<select id="selectTSearchKeywordList" resultType="com.zianedu.lms.vo.TSearchKeywordVO">
+		SELECT * FROM T_SEARCH_KEYWORD
+		WHERE SITE_CLASS_NAME = #{className}
+		ORDER BY POS ASC
+	</select>
+
+    <select id="selectTSearchKeywordLastPosNumber" parameterType="String" resultType="Integer">
+        SELECT Z.* FROM (
+            SELECT POS FROM T_SEARCH_KEYWORD
+            WHERE SITE_CLASS_NAME = #{className}
+            ORDER BY POS DESC
+        ) Z
+        WHERE ROWNUM = 1
+    </select>
+
+	<insert id="insertClassficationTCategoryInfo">
+		INSERT INTO T_CATEGORY
+		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME )
+    	VALUES
+		( T_CATEGORY_SEQ.NEXTVAL, 100, 202, #{pos}, #{name} )
+	</insert>
+
+	<insert id="insertTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		INSERT INTO T_CATEGORY_OTHER_INFO
+		(
+			CTG_INFO_KEY, CTG_KEY, TYPE, VALUE_1, VALUE_2, VALUE_3, VALUE_4, VALUE_5, VALUE_LONG_1, VALUE_LONG_2, VALUE_BIT_1, POS
+		)
+		VALUES
+		(
+			T_CATEGORY_OTHER_INFO_SEQ.nextval, #{ctgKey}, #{type}, #{value1}, #{value2}, #{value3}, #{value4}, #{value5}, #{valueLong1}, #{valueLong2}, #{valueBit1}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTSchedule" parameterType="com.zianedu.lms.vo.TScheduleVO">
+		INSERT INTO T_SCHEDULE
+		(
+			SCHEDULE_KEY, C_KEY, TYPE, TITLE, START_DATE, END_DATE, CONTENTS, COLOR, LINK
+		)
+		VALUES
+		(
+			T_SCHEDULE_SEQ.nextval, #{cKey}, #{type}, #{title}, #{startDate}, #{endDate}, #{contents}, #{color}, #{link}
+		)
+	</insert>
+
+    <insert id="insertTSearchKeyword" parameterType="com.zianedu.lms.vo.TSearchKeywordVO">
+        INSERT INTO T_SEARCH_KEYWORD
+        (
+          SEARCH_KEYWORD_KEY, C_KEY, SITE_CLASS_NAME, KEYWORD, POS
+        )
+        VALUES
+        (
+            T_SEARCH_KEYWORD_SEQ.nextval, #{cKey}, #{siteClassName}, #{keyword}, #{pos}
+        )
+    </insert>
+
+	<delete id="deleteTCategoryOtherInfo" parameterType="Integer">
+		DELETE FROM T_CATEGORY_OTHER_INFO
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
+	</delete>
+
+	<delete id="deleteTSchedule" parameterType="Integer">
+		DELETE FROM T_SCHEDULE
+		WHERE SCHEDULE_KEY = #{scheduleKey}
+	</delete>
+
+    <delete id="deleteTSearchKeyword" parameterType="Integer">
+        DELETE FROM T_SEARCH_KEYWORD
+        WHERE SEARCH_KEYWORD_KEY = #{searchKeywordKey}
+    </delete>
+
+	<update id="updateTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		UPDATE T_CATEGORY_OTHER_INFO
+		<set>
+			<if test="value1 != '' and value1 != null">VALUE_1 = #{value1},</if>
+			<if test="value3 != '' and value3 != null">VALUE_3 = #{value3},</if>
+			<if test="value4 != '' and value4 != null">VALUE_4 = #{value4},</if>
+			<if test="value5 != '' and value5 != null">VALUE_5 = #{value5},</if>
+			<if test="valueBit1 != '' and valueBit1 != null">VALUE_BIT_1 = #{valueBit1},</if>
+			<if test="pos != null">POS = #{pos},</if>
+		</set>
+		<where>
+			<if test="ctgInfoKey > 0">
+				CTG_INFO_KEY = #{ctgInfoKey}
+			</if>
+		</where>
+	</update>
+
+	<update id="updateTSchedule" parameterType="com.zianedu.lms.vo.TScheduleVO">
+		UPDATE T_SCHEDULE
+		<set>
+			<if test="title != '' and title != null">TITLE = #{title},</if>
+			<if test="startDate != '' and startDate != null">START_DATE = #{startDate},</if>
+		</set>
+		<where>
+			<if test="scheduleKey > 0">
+				SCHEDULE_KEY = #{scheduleKey}
+			</if>
+		</where>
+	</update>
+
+    <update id="updateTSearchKeyword">
+        UPDATE T_SEARCH_KEYWORD
+        <set>
+            <if test="keyword != '' and keyword != null">KEYWORD = #{keyword}</if>
+        </set>
+        WHERE SEARCH_KEYWORD_KEY = #{searchKeywordKey}
+    </update>
+
+
+</mapper>
