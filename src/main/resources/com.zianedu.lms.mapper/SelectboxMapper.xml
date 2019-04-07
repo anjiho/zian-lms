@@ -4,7 +4,6 @@
 
 	<select id="selectSubDomainList" resultType="com.zianedu.lms.vo.TSiteVO">
 		SELECT * FROM T_SITE
-		WHERE DOMAIN = 'zianedu.com'
 		ORDER BY S_KEY ASC
 	</select>
 

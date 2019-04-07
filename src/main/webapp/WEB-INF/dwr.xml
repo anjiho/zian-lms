@@ -37,6 +37,9 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryOtherInfoVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TSiteVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TScheduleVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.SearchKeywordDomainVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TSearchKeywordVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>

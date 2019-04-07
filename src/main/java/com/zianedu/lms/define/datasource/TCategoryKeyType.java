@@ -10,9 +10,11 @@ public enum TCategoryKeyType {
     ADMIN_TOP_SUB_BANNER(787),
     //상단 대 배너(행정직 동영상)
     ADMIN_VIDEO_BANNER(792),
-    //
+    //사이드바 배너
+    SIDE_BAR_BANNER(4202),
+    //빅모의고사 배너
+    BIG_MOK_EXAM_BANNER(6736)
     ;
-
 
     int ctgKey;
 

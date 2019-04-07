@@ -25,7 +25,7 @@ public class TCategoryOtherInfoVO {
 
     private int valueLong2;
     //새창에서 열기 여부
-    private String valueBit1;
+    private int valueBit1;
 
     private int pos;
 }
