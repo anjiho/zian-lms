@@ -13,7 +13,8 @@ import java.util.List;
 public interface ProductManageMapper {
 
     /** SELECT **/
-    List<VideoListDTO> selectVideoList(PagingSearchDTO pagingSearchDTO);
+    List<VideoListDTO> selectVideoList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                       @Param("searchText") String searchText, @Param("searchType") String searchType);
 
 
     /** INSERT **/

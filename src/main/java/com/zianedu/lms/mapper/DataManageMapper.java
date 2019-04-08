@@ -32,7 +32,7 @@ public interface DataManageMapper {
     int selectTSearchKeywordLastPosNumber(@Param("className") String className);
 
     /** INSERT **/
-    void insertClassficationTCategoryInfo(@Param("name") String ctgName, @Param("pos") int pos);
+    void insertTCategoryInfo(@Param("parentKey") int parentKey, @Param("name") String ctgName, @Param("pos") int pos);
 
     void insertTCategoryOtherInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 

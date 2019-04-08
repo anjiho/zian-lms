@@ -118,7 +118,8 @@ public class DataManageService {
     public List<TCategoryVO> saveClassficationInfo(String categoryTypeStr, String ctgName) {
         if ("".equals(ctgName)) return null;
         int lastPosNum = dataManageMapper.selectTCategoryLastPosNumber(TCategoryParentKeyType.getParentKey(categoryTypeStr));
-        dataManageMapper.insertClassficationTCategoryInfo(ctgName, lastPosNum + 1);
+        dataManageMapper.insertTCategoryInfo(
+                TCategoryParentKeyType.getParentKey(categoryTypeStr), ctgName, lastPosNum + 1);
         return dataManageMapper.selectTCategoryList(TCategoryParentKeyType.getParentKey(categoryTypeStr));
     }
 

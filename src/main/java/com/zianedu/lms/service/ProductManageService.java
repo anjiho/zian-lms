@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 
 @Service
-public class ProductManageSerivce extends PagingSupport {
+public class ProductManageService extends PagingSupport {
 
     @Autowired
     private ProductManageMapper productManageMapper;
@@ -21,7 +21,7 @@ public class ProductManageSerivce extends PagingSupport {
         if (sPage == 0) return null;
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
         PagingSearchDTO searchDTO = new PagingSearchDTO(
-                startNumber, listLimit, searchType, searchType
+                startNumber, listLimit, searchType, searchText
         );
         return productManageMapper.selectVideoList(searchDTO);
     }
