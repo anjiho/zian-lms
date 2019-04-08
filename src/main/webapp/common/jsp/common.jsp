@@ -75,7 +75,7 @@
 <!--헤더-->
 <%@include file="/common/jsp/header.jsp" %>
 <!-- form 시작-->
-<form name="frm" method="get">
+<form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
 
 <%

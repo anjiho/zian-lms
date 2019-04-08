@@ -58,7 +58,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="cono1" class="col-sm-3 text-right control-label col-form-label">노출</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">노출</label>
                     <div class="col-sm-9">
                         <div style="margin-top: -23px;">
                             OFF
@@ -71,7 +71,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="cono1" class="col-sm-3 text-right control-label col-form-label">판매</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">판매</label>
                     <div class="col-sm-9">
                         <div style="margin-top: -23px;">
                             OFF
@@ -84,7 +84,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="cono1" class="col-sm-3 text-right control-label col-form-label">무료</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">무료</label>
                     <div class="col-sm-9">
                         <div style="margin-top: -23px;">
                             OFF
@@ -97,7 +97,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="cono1" class="col-sm-3 text-right control-label col-form-label">리스트이미지</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">리스트이미지</label>
                     <div class="col-md-9">
                         <div class="custom-file">
                             <input type="file" class="custom-file-input" id="validatedCustomFile" required>
