@@ -12,6 +12,8 @@ public interface DataManageMapper {
 
     /** SELECT **/
     List<TCategoryVO> selectTCategoryList(@Param("parentKey") int parentKey);
+
+    TCategoryVO selectTCategoryInfoByCtgKey(@Param("ctgKey") int ctgKey);
     //t_category의 마지막 pos 가져오기
     int selectTCategoryLastPosNumber(@Param("parentKey") int parentKey);
 

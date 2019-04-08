@@ -7,7 +7,14 @@ public enum TCategoryParentKeyType {
     //분류관리
     CLASSFICATION(202),
     //과목관리
-    SUBJECT(70);
+    SUBJECT(70),
+    //급수
+    RATE(4309),
+    //유형
+    TYPE(202)
+
+
+    ;
 
     int parentKey;
 

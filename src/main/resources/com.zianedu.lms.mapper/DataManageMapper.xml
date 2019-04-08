@@ -4,8 +4,16 @@
 
 	<select id="selectTCategoryList" resultType="com.zianedu.lms.vo.TCategoryVO">
 		SELECT * FROM T_CATEGORY
-		<if test="parentKey != '' and parentKey != null">
+		<if test="parentKey > 0">
 			WHERE PARENT_KEY = #{parentKey}
+		</if>
+		ORDER BY POS ASC
+	</select>
+
+	<select id="selectTCategoryInfoByCtgKey" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		<if test="ctgKey > 0">
+			WHERE CTG_KEY = #{ctgKey}
 		</if>
 	</select>
 

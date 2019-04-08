@@ -109,6 +109,29 @@ public class DataManageService {
     }
 
     /**
+     * 마지막 카테고리 값 기준 4뎁스 목록 카테고리 목록 가져오기
+     * @param ctgKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCategoryVO> getSequentialCategoryList(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        int j = 0;
+        for (int i=0; i<4; i++) {
+            TCategoryVO tCategoryVO = new TCategoryVO();
+
+            if (i == 0) tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+            else tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(j);
+
+            j = tCategoryVO.getParentKey();
+
+            list.add(tCategoryVO);
+        }
+        return list;
+    }
+
+    /**
      * 카테고리 저장하기
      * @param categoryTypeStr (분류관리 : CLASSFICATION(202), 과목관리 : SUBJECT(70))
      * @param ctgName

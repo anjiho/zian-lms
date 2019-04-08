@@ -46,10 +46,14 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TScheduleVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.SearchKeywordDomainVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TSearchKeywordVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsPriceOptionVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.VideoListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.SelectboxDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PagingSearchDTO"/>
 
 	</allow>
 

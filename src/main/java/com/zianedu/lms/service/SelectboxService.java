@@ -1,6 +1,8 @@
 package com.zianedu.lms.service;
 
-import com.zianedu.lms.define.datasource.SearchKeywordType;
+import com.zianedu.lms.define.datasource.*;
+import com.zianedu.lms.dto.SelectboxDTO;
+import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.SelectboxMapper;
 import com.zianedu.lms.vo.SearchKeywordDomainVO;
 import com.zianedu.lms.vo.TCategoryVO;
@@ -9,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +19,9 @@ public class SelectboxService {
 
     @Autowired
     private SelectboxMapper selectboxMapper;
+
+    @Autowired
+    private DataManageMapper dataManageMapper;
 
     /**
      * 서브도메인 목록 가져오기
@@ -43,6 +49,56 @@ public class SelectboxService {
     public List<TCategoryVO> getCategoryList(int ctgKey) {
         if (ctgKey == 0) return null;
         return selectboxMapper.selectTCategoryByParentKey(ctgKey);
+    }
+
+    /**
+     * 동영상 검색에서 검색종류 가져오기
+     * @return
+     */
+    public List<SelectboxDTO> getVideoSearchTypeList() {
+        return VideoSearchType.getVideoSeaerchTypeList();
+    }
+
+    /**
+     * 옵션명 선택하는 셀렉트박스 가져오기
+     * @return
+     */
+    public List<SelectboxDTO> getVideoOptionTypeList() {
+        return GoodsKindType.getGoodsOptionKindSelectbox();
+    }
+
+    /**
+     * 강조표시 셀렉트박스 가져오기
+     * @return
+     */
+    public List<SelectboxDTO> getEmphasisList() {
+        return EmphasisType.getEmphasisSelectbox();
+    }
+
+    /**
+     * 동영상 목록 강좌정보안의 (급수(4309), 과목(70), 유형(202)) 셀렉트박스
+     * @param ctgKey ({@link TCategoryParentKeyType} 클래스에 정의
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SelectboxDTO> getSelectboxListForVideoInfo(int ctgKey) {
+        List<SelectboxDTO>selectboxDTOList = new ArrayList<>();
+        List<TCategoryVO>list = dataManageMapper.selectTCategoryList(ctgKey);
+        for (TCategoryVO tCategoryVO : list) {
+            SelectboxDTO selectboxDTO = new SelectboxDTO(
+                    tCategoryVO.getCtgKey(), tCategoryVO.getName()
+            );
+            selectboxDTOList.add(selectboxDTO);
+        }
+        return selectboxDTOList;
+    }
+
+    /**
+     * 동영상 목록 강좌정보안의 진행상태 셀렉트박스
+     * @return
+     */
+    public List<SelectboxDTO> getLectureStatusSelectbox() {
+        return LectureStatusType.getLectureStatusSelectbox();
     }
 
 }
