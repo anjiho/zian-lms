@@ -141,6 +141,10 @@
         WHERE SEARCH_KEYWORD_KEY = #{searchKeywordKey}
     </delete>
 
+	<delete id="deleteTCategory" parameterType="Integer">
+		DELETE FROM T_CATEGORY WHERE CTG_KEY = #{ctgKey}
+	</delete>
+
 	<update id="updateTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
 		UPDATE T_CATEGORY_OTHER_INFO
 		<set>
