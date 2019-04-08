@@ -30,6 +30,12 @@
 			<param name="beanName" value="selectboxService" />
 		</create>
 
+		<convert converter="bean" match="com.zianedu.lms.service.ProductManageService"/>
+		<create creator="spring" javascript="productManageService">
+			<param name="class" value="com.zianedu.lms.service.ProductManageService"/>
+			<param name="beanName" value="productManageService" />
+		</create>
+
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->
@@ -43,6 +49,7 @@
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.VideoListDTO"/>
 
 	</allow>
 

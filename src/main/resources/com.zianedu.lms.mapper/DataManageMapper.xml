@@ -86,11 +86,11 @@
         WHERE ROWNUM = 1
     </select>
 
-	<insert id="insertClassficationTCategoryInfo">
+	<insert id="insertTCategoryInfo">
 		INSERT INTO T_CATEGORY
 		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME )
     	VALUES
-		( T_CATEGORY_SEQ.NEXTVAL, 100, 202, #{pos}, #{name} )
+		( T_CATEGORY_SEQ.NEXTVAL, 100, #{parentKey}, #{pos}, #{name} )
 	</insert>
 
 	<insert id="insertTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
