@@ -199,6 +199,16 @@ public class DataManageService {
     }
 
     /**
+     * 분류관리, 과목관리 삭제
+     * @param ctgKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteClassSubject(int ctgKey) {
+        if (ctgKey == 0) return;
+        dataManageMapper.deleteTCategory(ctgKey);
+    }
+
+    /**
      * 배너정보 수정하기
      * @param otherInfoVO
      */

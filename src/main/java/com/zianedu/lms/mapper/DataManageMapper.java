@@ -47,6 +47,8 @@ public interface DataManageMapper {
 
     void deleteTSearchKeyword(@Param("searchKeywordKey") int searchKeywordKey);
 
+    void deleteTCategory(@Param("ctgKey") int ctgKey);
+
     /** UPDATE **/
     void updateTCategoryOtherInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 

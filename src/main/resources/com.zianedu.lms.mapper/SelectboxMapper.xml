@@ -7,5 +7,9 @@
 		ORDER BY S_KEY ASC
 	</select>
 
+	<select id="selectTCategoryByParentKey" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY WHERE PARENT_KEY = #{parentKey}
+	</select>
+
 
 </mapper>

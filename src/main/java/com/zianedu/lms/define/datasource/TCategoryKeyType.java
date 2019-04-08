@@ -13,7 +13,9 @@ public enum TCategoryKeyType {
     //사이드바 배너
     SIDE_BAR_BANNER(4202),
     //빅모의고사 배너
-    BIG_MOK_EXAM_BANNER(6736)
+    BIG_MOK_EXAM_BANNER(6736),
+    //카테고리 트리 리스트 메인 키값
+    CATEGORY_TREE_MAIN_KEY(214)
     ;
 
     int ctgKey;

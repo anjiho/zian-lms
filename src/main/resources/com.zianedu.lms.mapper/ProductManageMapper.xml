@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.ProductManageMapper">
+
+	<select id="selectVideoList" resultType="VideoListDTO">
+		SELECT A.G_KEY, A.NAME as GOODS_NANE, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
+		FROM T_GOODS A INNER JOIN T_GOODS_TEACHER_LINK B
+		ON A.G_KEY = B.G_KEY
+		INNER JOIN T_TEACHER C
+		ON B.TEACHER_KEY = C.TEACHER_KEY
+		INNER JOIN T_USER D
+		ON C.USER_KEY = D.USER_KEY
+		INNER JOIN T_LEC E
+		ON A.G_KEY = E.G_KEY
+		WHERE 1=1
+		<if test="searchType != '' and searchType != null">
+			<if test="searchType == 'code'">
+				A.G_KEY = #{searchText}
+			</if>
+			<if test="searchType == 'title'">
+				A.NAME LIKE ('%' + #{searchText} + '%')
+			</if>
+		</if>
+		ORDER BY A.G_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY;
+	</select>
+
+
+</mapper>
