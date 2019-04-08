@@ -23,6 +23,6 @@ public class ProductManageService extends PagingSupport {
         PagingSearchDTO searchDTO = new PagingSearchDTO(
                 startNumber, listLimit, searchType, searchText
         );
-        return productManageMapper.selectVideoList(searchDTO);
+        return productManageMapper.selectVideoList(startNumber, listLimit, searchText, searchType);
     }
 }
