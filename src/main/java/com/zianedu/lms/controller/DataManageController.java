@@ -24,6 +24,10 @@ public class DataManageController {
             mvc.setViewName("data/detachmanage");
         }else if("subjectSave".equals(page_gbn)) {
             mvc.setViewName("data/subjectmanage");
+        }else if("bannerSave".equals(page_gbn)) {
+            mvc.setViewName("data/bannermanage");
+        }else if("sideBannerSave".equals(page_gbn)) {
+            mvc.setViewName("data/sidebannermanage");
         }
         return mvc;
     }

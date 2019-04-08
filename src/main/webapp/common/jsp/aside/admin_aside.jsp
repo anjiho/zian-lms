@@ -28,9 +28,9 @@
                         <li class="sidebar-item" ><a href="icon-material.html" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 카테고리관리 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'detachSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 분류관리 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'subjectSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 과목관리 </span></a></li>
-                        <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 배너관리 </span></a></li>
-                        <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class=""></i><span class="hide-menu">배너관리</span></a></li>
-                        <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class=""></i><span class="hide-menu">사이드바배너관리</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)"  class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 배너관리 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'bannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">배너관리</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'sideBannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">사이드바배너관리</span></a></li>
                         <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class=""></i><span class="hide-menu">빅모의고사배너관리</span></a></li>
                         <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 일정/검색어관리 </span></a></li>
                         <li class="sidebar-item"><a href="icon-fontawesome.html" class="sidebar-link"><i class=""></i><span class="hide-menu"> 시험일정관리 </span></a></li>
