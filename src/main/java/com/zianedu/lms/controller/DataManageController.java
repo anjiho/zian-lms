@@ -20,7 +20,15 @@ public class DataManageController {
     public ModelAndView dataManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
-
+        if("detachSave".equals(page_gbn)) {
+            mvc.setViewName("data/detachmanage");
+        }else if("subjectSave".equals(page_gbn)) {
+            mvc.setViewName("data/subjectmanage");
+        }else if("bannerSave".equals(page_gbn)) {
+            mvc.setViewName("data/bannermanage");
+        }else if("sideBannerSave".equals(page_gbn)) {
+            mvc.setViewName("data/sidebannermanage");
+        }
         return mvc;
     }
 }
