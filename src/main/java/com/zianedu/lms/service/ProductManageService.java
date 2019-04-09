@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -174,6 +175,18 @@ public class ProductManageService extends PagingSupport {
     public List<TLecCurri>getLectureCurriList(int lecKey) {
         if (lecKey == 0) return null;
         return productManageMapper.selectTLecCurriList(lecKey);
+    }
+
+    /**
+     * 상품기본정보 저장하기
+     * @param tGoodsVO
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer saveGoodsInfo(TGoodsVO tGoodsVO) {
+        if (tGoodsVO == null) return null;
+        productManageMapper.insertTGoods(tGoodsVO);
+        return tGoodsVO.getGKey();
     }
 
 }

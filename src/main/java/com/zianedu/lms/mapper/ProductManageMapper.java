@@ -32,7 +32,7 @@ public interface ProductManageMapper {
     List<TLinkKeyVO>selectTLinkKeyList(@Param("reqKey") int reqKey);
 
     /** INSERT **/
-
+    int insertTGoods(TGoodsVO tGoodsVO);
 
     /** DELETE **/
 
