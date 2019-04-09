@@ -4,15 +4,17 @@
 
 	<select id="selectVideoList" resultType="VideoListDTO">
 		SELECT A.G_KEY, A.NAME as GOODS_NANE, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
-		FROM T_GOODS A INNER JOIN T_GOODS_TEACHER_LINK B
+		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
 		ON A.G_KEY = B.G_KEY
-		INNER JOIN T_TEACHER C
+		LEFT JOIN T_TEACHER C
 		ON B.TEACHER_KEY = C.TEACHER_KEY
-		INNER JOIN T_USER D
+		LEFT JOIN T_USER D
 		ON C.USER_KEY = D.USER_KEY
-		INNER JOIN T_LEC E
+		LEFT JOIN T_LEC E
 		ON A.G_KEY = E.G_KEY
 		WHERE 1=1
+		AND A.TYPE = 1
+		ORDER BY A.G_KEY DESC
 		<if test="searchType eq 'code'">
 			AND A.G_KEY = #{searchText}
 		</if>
@@ -74,6 +76,22 @@
 	<select id="selectTLecCurriList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecCurri">
 		SELECT * FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey} ORDER BY POS ASC
 	</select>
+
+	<select id="selectTLinkKeyList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT * FROM T_LINK_KEY WHERE req_key = #{reqKey}
+	</select>
+
+	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
+		INSERT INTO T_GOODS
+		(
+			C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, IMAGE_LIST, IMAGE_VIEW, EMPHASIS, TAGS,
+			SUMMARY, DESCRIPTION, CALCULATE_RATE, IS_FREEBIE_DELIVERY_FREE, IS_QUICK_DELIVERY, GOODS_ID
+		)
+		VALUES
+		(
+
+		)
+	</insert>
 
 
 </mapper>

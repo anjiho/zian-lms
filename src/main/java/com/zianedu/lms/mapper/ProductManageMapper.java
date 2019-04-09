@@ -29,6 +29,8 @@ public interface ProductManageMapper {
 
     List<TLecCurri>selectTLecCurriList(@Param("lecKey") int lecKey);
 
+    List<TLinkKeyVO>selectTLinkKeyList(@Param("reqKey") int reqKey);
+
     /** INSERT **/
 
 

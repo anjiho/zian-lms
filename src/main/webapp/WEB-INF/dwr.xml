@@ -49,12 +49,16 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsPriceOptionVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TLecVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TLecCurri"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TLinkKeyVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TGoodTeacherLinkVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.VideoListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.SelectboxDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PagingSearchDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.VideoDetailInfoDTO"/>
 
 	</allow>
 
