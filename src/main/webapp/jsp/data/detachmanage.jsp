@@ -31,7 +31,6 @@ function categoryList() { /* 분류 리스트 */
             for (var i = 0; i < selList.length; i++) {
                 var cmpList = selList[i];
                 if (cmpList != undefined) {
-                    console.log(cmpList);
                     var cellData = [
                         function(data) {return cmpList.name;},
                         function(data) {return "<a href='javascript:void(0)' id='"+ cmpList.ctgKey + "' onclick='deleteSubject(this.id)' data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\" ></i><i class=\"mdi mdi-close\"></i></a>"}
@@ -40,7 +39,6 @@ function categoryList() { /* 분류 리스트 */
                 }
             }
         }
-
     });
 }
 $( document ).ready(function() {

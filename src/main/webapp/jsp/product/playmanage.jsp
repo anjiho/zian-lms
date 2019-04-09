@@ -100,8 +100,8 @@
                     <label class="col-sm-3 text-right control-label col-form-label">리스트이미지</label>
                     <div class="col-md-9">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                            <input type="file" class="custom-file-input" required>
+                            <label class="custom-file-label" >Choose file...</label>
                             <div class="invalid-feedback">Example invalid custom file feedback</div>
                         </div>
                     </div>
@@ -110,8 +110,8 @@
                     <label class="col-sm-3 text-right control-label col-form-label">상세이미지</label>
                     <div class="col-md-9">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
+                            <input type="file" class="custom-file-input" required>
+                            <label class="custom-file-label" >Choose file...</label>
                             <div class="invalid-feedback">Example invalid custom file feedback</div>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="cono1" class="col-sm-3 text-right control-label col-form-label">사은품 배송비무료</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">사은품 배송비무료</label>
                     <div class="col-sm-9">
                         <div style="margin-top: -23px;">
                             OFF
