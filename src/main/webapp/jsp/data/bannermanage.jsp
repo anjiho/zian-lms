@@ -4,42 +4,136 @@
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 <script>
-$(document).ready(function() {
-    getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
-//    getBannerList();
-});
 
+    $(document).ready(function() {
+        getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
+    });
+    //파일 선택시 파일명 보이게 하기
+    $(document).on('change', '.custom-file-input', function() {
+        $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.custom-file-input1', function() {
+        $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    function changeBox2(val) {
+        $(".card").remove();
+        dataManageService.getBannerList(val,function (selList) {
+            if (selList.length > 0) {
+                for (var i = 0; i < selList.length; i++) {
+                    var cmpList = selList[i];
+                    var result = cmpList.result;
+                    if(result.name){
+                        var bannerNmaeHtml = "<div class='card'>";
+                        bannerNmaeHtml += '<div class=\'card-body\'>';
+                        bannerNmaeHtml += '<div class=\'row\'>';
+                        bannerNmaeHtml += "<label class=\'text-right control-label col-form-label\'>" + result.name + "</label>";
+                        bannerNmaeHtml += '</div>';
+                        bannerNmaeHtml += "<div id='"+result.ctgKey+"'>";
+                        bannerNmaeHtml += '</div>';
+                        bannerNmaeHtml += '</div>';
+                        bannerNmaeHtml += '</div>';
+                        $("#test").append(bannerNmaeHtml);
+                    }
+                    var bannerContentHtml = "<table class=\"table\">";
+                    bannerContentHtml += '<thead>';
+                    bannerContentHtml += ' <tr>';
+                    bannerContentHtml += '<th>타이틀</th>';
+                    bannerContentHtml += '<th>이미지</th>';
+                    bannerContentHtml += '<th>배경이미지</th>';
+                    bannerContentHtml += '<th>배경색상</th>';
+                    bannerContentHtml += '<th>새창열기</th>';
+                    bannerContentHtml += '<th>링크URL</th>';
+                    bannerContentHtml += '<th></th>';
+                    bannerContentHtml += '</tr>';
+                    bannerContentHtml += '</thead>';
+                    bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
+                    bannerContentHtml += '</table>';
+                    $('#'+result.ctgKey).append(bannerContentHtml);
 
-function changeBox2(val) {
-   dataManageService.getBannerList(val,function (selList) {
-       if (selList.length > 0) {
-           for (var i = 0; i < selList.length; i++) {
-               var cmpList = selList[i];
-               var result = cmpList.result;
-               console.log(result);
+                    var selList2 = cmpList.resultList;
+                    var dataList =  "dataList"+i;
+                    for (var j = 0; j < selList2.length; j++) {
+                        var cmpList1 = selList2[j];
+                        var btn = '<button type="button" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-success btn-sm">수정</button><button type="button" class="btn btn-danger btn-sm">삭제</button>';
+                        if (cmpList1 != undefined) {
+                            var cellData = [
+                                //return cmpList1.valueBit1 == null ? "-" : cmpList1.value1;
+                                function(data) {return cmpList1.value5 == null ? "-" : cmpList1.value5;},
+                                function(data) {return cmpList1.value1 == null ? "-" : cmpList1.value1;},
+                                function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
+                                function(data) {return cmpList1.value3 == null ? "-" : cmpList1.value3;},
+                                function(data) {return cmpList1.valueBit1 == null ? "-" : cmpList1.valueBit1;},
+                                function(data) {return cmpList1.value4 == null ? "-" : cmpList1.value4;},
+                                function(data) {return btn;}
+                            ];
+                            dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
+                        }
+                    }
+                }
+            }
+        });
+    }
 
+    function popup(val,ctgKey,pos) {
+        $('#myModal').show();
+        dataManageService.getBannerDetailInfo(val, function (selList) {
+            $("#bannerKey").val(val);
+            $("#ctgKey").val(ctgKey);
+            $("#pos").val(pos);
+            $("#title").val(selList.value5);
+            $("#bannerColor").val(selList.value3);
+            $("#newPopYn").val(selList.valueBit1);
+            $("#bannerLink").val(selList.value4);
 
+            if (selList.value1 != null) { /*파일명보이게*/
+                $(document).ready(function() {
+                    $('.custom-file-control').html(selList.value1);
+                });
+            }
 
+        });
+    }
+    //팝업 Close 기능
+    function close_pop(flag) {
+        $('#myModal').hide();
+    };
+    
+    function modify() {
+        var data = new FormData();
+        $.each($('#attachFile')[0].files, function(i, file) {
+            data.append('file_name', file);
+        });
+        var attachFile = fn_clearFilePath($('#attachFile').val());
+        var ctgKey= $("#ctgKey").val();
+        var pos = $("#pos").val();
+        var bannerKey= $("#bannerKey").val();
+        var title = $("#title").val();
+        var bannerColor = $("#bannerColor").val();
+        var newPopYn = $("#newPopYn").val();
+        var bannerLink = $("#bannerLink").val();
 
+        data.append("pos", pos);
+        data.append("ctgInfoKey", bannerKey);
+        data.append("ctgKey", ctgKey);
+        data.append("value5", title);
+        data.append("value3", bannerColor);
+        data.append("valueBit1", newPopYn);
+        data.append("value4", bannerLink);
 
-               var selList2 = cmpList.resultList;
-
-               for (var j=0; j<selList2.length;j++){
-                  var cmpList2 =  selList2[j];
-                  console.log(cmpList2);
-               }
-
-
-              /* if (cmpList != undefined) {
-                   for(var i = 0; i < cmpList.resultList.length; i++){
-                       var reList = cmpList.resultList[i];
-                       console.log(reList.value5);
-                   }
-               }*/
-           }
-       }
-   });
-}
+        if(confirm("파일업로드")) {
+                $.ajax({
+                    url: "/file/bannerUpload",
+                    method: "post",
+                    dataType: "JSON",
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                    }
+                });
+        }
+    }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -67,132 +161,89 @@ function changeBox2(val) {
             </div>
         </div>
     </div>
-    <div class="row">
-        <div class="col-md-6" id="banner_top">
-            <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title">상단 대 배너</h5>
-                        <button type="button" class="btn btn-info" style="float:right;" data-toggle="modal" data-target="#Modal1">추가</button>
-                        <button type="button" class="btn btn-success" style="float:right;">순서변경</button>
-                    </div>
-            </div>
-        </div><!--end card-->
-        <!--<div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title m-b-0">상단 소 배너</h5>
-                    <button type="button" class="btn btn-info" style="float:right;">추가</button>
-
-                </div>
-            </div>
-        </div>
-    </div>
-    <%--<div class="row">--%>
-        <%--<div class="col-md-6">--%>
-            <%--<div class="card">--%>
-                <%--<form class="form-horizontal">--%>
-                    <%--<div class="card-body">--%>
-                        <%--<h5 class="card-title">자인교수진</h5>--%>
-                        <%--<button type="button" class="btn btn-info" style="float:right;">추가</button>--%>
-                        <%--<div class="form-group row">--%>
-
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</form>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-        <%--<div class="col-md-6">--%>
-            <%--<div class="card">--%>
-                <%--<div class="card-body">--%>
-                    <%--<h5 class="card-title m-b-0">중앙 소 배너</h5>--%>
-                    <%--<button type="button" class="btn btn-info" style="float:right;">추가</button>--%>
-                <%--</div>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-    <%--<div class="row">--%>
-        <%--<div class="col-md-6">--%>
-            <%--<div class="card">--%>
-                <%--<form class="form-horizontal">--%>
-                    <%--<div class="card-body">--%>
-                        <%--<h5 class="card-title">이벤트 소식</h5>--%>
-                        <%--<button type="button" class="btn btn-info" style="float:right;">추가</button>--%>
-                        <%--<div class="form-group row">--%>
-
-                        <%--</div>--%>
-                    <%--</div>--%>
-                <%--</form>--%>
-            <%--</div>--%>
-        <%--</div>--%>
-    <%--</div>--%>
-<%--</div>--%>
-
-<!--배너 등록 팝업-->
-<div class="modal fade" id="Modal1" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">배너설정</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true ">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
+    <div id="test"></div>
+    <!-- The Modal -->
+    <form name="popupModal" id="popupModal">
+        <div id="myModal" class="modal1">
+            <input type="hidden" id="bannerKey" value="">
+            <input type="hidden" id="pos" value="">
+            <input type="hidden" id="ctgKey" value="">
+            <!-- Modal content -->
+            <div class="modal-content1">
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">이름</label>
+                    <label class="text-right control-label col-form-label">타이틀</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="lname">
+                        <input type="text" class="form-control" id="title">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">이미지</label>
-                    <div class="col-md-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" id="validatedCustomFile" required>
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">배경이미지</label>
-                    <div class="col-md-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input" required>
-                            <label class="custom-file-label" for="validatedCustomFile">Choose file...</label>
-                            <div class="invalid-feedback">Example invalid custom file feedback</div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">배경색상</label>
+                    <label class="text-right control-label col-form-label">이미지</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control">
+                        <label class="custom-file">
+                            <input type="file" id="attachFile" class="custom-file-input" required>
+                            <span class="custom-file-control"></span>
+                        </label>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">링크URL</label>
+                    <label class="text-right control-label col-form-label">배경이미지</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control">
+                        <label class="custom-file1">
+                            <input type="file" id="attachFile1" class="custom-file-input1" required>
+                            <span class="custom-file-control1"></span>
+                        </label>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">새창열기</label>
+                    <label class="text-right control-label col-form-label">배경색상</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="bannerColor">
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="text-right control-label col-form-label">새창열기</label>
                     <div class="col-sm-9">
                         <div style="margin-top: -23px;">
                             OFF
                             <label class="switch">
-                                <input type="checkbox">
+                                <input type="checkbox" id="newPopYn">
                                 <span class="slider"></span>
                             </label>
                             ON
                         </div>
                     </div>
                 </div>
-                <button type="button" class="btn btn-info" style="float:right;">저장</button>
-            </div><!--//modal-body-->
+                <div class="form-group row">
+                    <label class="text-right control-label col-form-label">링크url</label>
+                    <div class="col-sm-9">
+                        <input type="text" class="form-control" id="bannerLink">
+                    </div>
+                </div>
+                <div class="form-group row">
+                     <button type="button" class="btn btn-info" onclick="modify()">수정</button>
+                     <button type="button" class="btn btn-info"   onClick="close_pop();">닫기</button>
+                </div>
+             </div>
         </div>
-    </div>
+    </form>
 </div>
-<!--// 배너 등록 팝업-->
 <%@include file="/common/jsp/footer.jsp" %>
+<script>
+function fn_clearFilePath(val){
+    var tmpStr = val;
+
+    var cnt = 0;
+    while(true){
+        cnt = tmpStr.indexOf("/");
+        if(cnt == -1) break;
+        tmpStr = tmpStr.substring(cnt+1);
+    }
+    while(true){
+        cnt = tmpStr.indexOf("\\");
+        if(cnt == -1) break;
+        tmpStr = tmpStr.substring(cnt+1);
+    }
+
+    return tmpStr;
+}
+</script>

@@ -20,7 +20,8 @@ import java.util.Map;
 public class FileUploadController {
 
     //private static final String BANNER_FILE_UPLOAD_ROOT = "C:\\fileServer\\100\\main";
-    private static final String BANNER_FILE_UPLOAD_ROOT = "/Users/jihoan/Documents";
+    //private static final String BANNER_FILE_UPLOAD_ROOT = "/Users/jihoan/Documents";
+    private static final String BANNER_FILE_UPLOAD_ROOT = "C:\\Users\\won\\Documents\\ejwon";
 
     @Autowired
     private DataManageService dataManageService;
