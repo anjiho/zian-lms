@@ -39,5 +39,41 @@
 		SELECT * FROM T_LEC WHERE G_KEY = #{gKey}
 	</select>
 
+	<select id="selectTeacherListByTeacherLink" parameterType="Integer" resultType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		SELECT A.*, B.name as subject_name, D.name as teacher_name
+		FROM T_GOODS_TEACHER_LINK A
+		LEFT JOIN T_CATEGORY B
+		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		LEFT JOIN T_TEACHER C
+		ON C.TEACHER_KEY = A.TEACHER_KEY
+		INNER JOIN T_USER D
+		ON D.USER_KEY = C.USER_KEY
+		WHERE A.G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTGoodsFromTLinkKeyRel" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_GOODS B
+		ON A.res_key = B.g_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTExamMasterFromTLinkKeyRel" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_EXAM_MASTER B
+		ON A.res_key = B.exam_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTLecCurriList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecCurri">
+		SELECT * FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey} ORDER BY POS ASC
+	</select>
+
 
 </mapper>

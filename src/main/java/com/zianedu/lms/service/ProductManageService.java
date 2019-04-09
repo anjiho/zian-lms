@@ -1,5 +1,6 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.PagingSearchDTO;
 import com.zianedu.lms.dto.VideoListDTO;
 import com.zianedu.lms.mapper.DataManageMapper;
@@ -95,6 +96,47 @@ public class ProductManageService extends PagingSupport {
     public TLecVO getVideoLecInfo(int gKey) {
         if (gKey == 0) return null;
         return productManageMapper.selectTLecInfo(gKey);
+    }
+
+    /**
+     * 동영상 상세정보의 강사 정보
+     * @param gKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TGoodTeacherLinkVO>getTeacherListByVideoInfo(int gKey) {
+        if (gKey == 0) return null;
+        return productManageMapper.selectTeacherListByTeacherLink(gKey);
+    }
+
+    /**
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보
+     * @param gKey
+     * @param resType {@link com.zianedu.lms.define.datasource.LinkKeyReqType} 정의 (4: 사은품, 5 : 강의교재)
+     * @param goodsType (GOODS : 강의교재,사은품 || EXAM : 전범위모의고사, 기출문제 회차별)
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TLinkKeyVO>getGoodsListFromTLinkKey(int gKey, int resType, String goodsType) {
+        if (gKey == 0) return null;
+        List<TLinkKeyVO>list = new ArrayList<>();
+        if (ZianCoreManage.GOODS.equals(goodsType)) {
+            list = productManageMapper.selectTGoodsFromTLinkKeyRel(gKey, resType);
+        } else if (ZianCoreManage.GOODS.equals(goodsType)) {
+            list = productManageMapper.selectTExamMasterFromTLinkKeyRel(gKey, resType);
+        }
+        return list;
+    }
+
+    /**
+     * 동영상 상세안의 강의 목록
+     * @param lecKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TLecCurri>getLectureCurriList(int lecKey) {
+        if (lecKey == 0) return null;
+        return productManageMapper.selectTLecCurriList(lecKey);
     }
 
 }

@@ -21,8 +21,13 @@ public interface ProductManageMapper {
 
     TLecVO selectTLecInfo(@Param("gKey") int gKey);
 
+    List<TGoodTeacherLinkVO>selectTeacherListByTeacherLink(@Param("gKey") int gKey);
 
+    List<TLinkKeyVO>selectTGoodsFromTLinkKeyRel(@Param("reqKey") int reqKey, @Param("resType") int resType);
 
+    List<TLinkKeyVO>selectTExamMasterFromTLinkKeyRel(@Param("reqKey") int reqKey, @Param("resType") int resType);
+
+    List<TLecCurri>selectTLecCurriList(@Param("lecKey") int lecKey);
 
     /** INSERT **/
 

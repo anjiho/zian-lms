@@ -32,12 +32,13 @@ public class TCategoryOtherInfoVO {
     public TCategoryOtherInfoVO() {}
 
     public TCategoryOtherInfoVO(int ctgKey, String value1, String value3,
-                                String value4, String value5, int valueBit1) {
+                                String value4, String value5, int valueBit1, int pos) {
         this.ctgKey = ctgKey;
         this.value1 = value1;
         this.value3 = value3;
         this.value4 = value4;
         this.value5 = value5;
         this.valueBit1 = valueBit1;
+        this.pos = pos;
     }
 }

@@ -15,5 +15,9 @@ public class ZianCoreManage {
 
     public static final int[] EXAM_PREPARE_YEAR = {2010, 2022};
 
+    public static final String GOODS = "GOODS";
+
+    public static final String EXAM = "EXAM";
+
     public static final int OK = HttpStatus.SC_OK;
 }

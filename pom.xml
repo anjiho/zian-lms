@@ -40,7 +40,7 @@
     </pluginRepositories>
 
     <build>
-        <finalName>zian-lms</finalName>
+        <finalName>ROOT</finalName>
         <resources>
             <resource>
                 <directory>src/main/resources</directory>

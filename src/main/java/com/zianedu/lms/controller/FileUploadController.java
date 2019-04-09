@@ -5,6 +5,7 @@ import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.service.DataManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
 import com.zianedu.lms.utils.JsonBuilder;
+import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.TCategoryOtherInfoVO;
 import org.apache.http.HttpStatus;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,8 @@ import java.util.Map;
 @RequestMapping(value = "file")
 public class FileUploadController {
 
-    //private static final String FILE_UPLOAD_ROOT = "C:/imageFiles";
-    private static final String FILE_UPLOAD_ROOT = "/Users/jihoan/Documents";
-
-    private static final String INSERT = "INSERT";
-
-    private static final String UPDATE = "UPDATE";
+    //private static final String BANNER_FILE_UPLOAD_ROOT = "C:\\fileServer\\100\\main";
+    private static final String BANNER_FILE_UPLOAD_ROOT = "/Users/jihoan/Documents";
 
     @Autowired
     private DataManageService dataManageService;
@@ -36,32 +33,31 @@ public class FileUploadController {
      * @param value4
      * @param value5
      * @param valueBit1
-     * @param regType (등록 : INSERT, 수정 : UPDATE)
      * @return
      */
-    @RequestMapping(value = "/bannerUpload/{regType}", method = RequestMethod.POST)
+    @RequestMapping(value = "/bannerUpload", method = RequestMethod.POST)
     public @ResponseBody String bannerUpload(MultipartHttpServletRequest request, @RequestParam(value = "ctgKey") String ctgKey,
                                              @RequestParam(value = "value3") String value3, @RequestParam(value = "value4") String value4,
                                              @RequestParam(value = "value5") String value5, @RequestParam(value = "valueBit1") String valueBit1,
-                                             @PathVariable(value = "regType") String regType) {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, FILE_UPLOAD_ROOT, "BANNER");
-        if (uploadInfoMap.get("filePath") != null) {
-            TCategoryOtherInfoVO tCategoryOtherInfoVO = new TCategoryOtherInfoVO(
-                    Integer.parseInt(ctgKey),
-                    String.valueOf(uploadInfoMap.get("filePath")),
-                    value3,
-                    value4,
-                    value5,
-                    Integer.parseInt(valueBit1)
-            );
-            if (INSERT.equals(regType)) {
-                dataManageService.saveBannerInfo(tCategoryOtherInfoVO);
-            } else if (UPDATE.equals(regType)) {
-                dataManageService.modifyBannerDetailInfo(tCategoryOtherInfoVO);
-            }
+                                             @RequestParam(value = "ctgInfoKey") String ctgInfoKey, @RequestParam(value = "pos") String pos) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, BANNER_FILE_UPLOAD_ROOT, "BANNER");
+        TCategoryOtherInfoVO tCategoryOtherInfoVO = new TCategoryOtherInfoVO(
+                Integer.parseInt(ctgKey),
+                Util.isNullValue(String.valueOf(uploadInfoMap.get("filePath")), ""),
+                value3,
+                value4,
+                value5,
+                Integer.parseInt(valueBit1),
+                Integer.parseInt(pos)
 
-            return new JsonBuilder().add("result", ZianCoreManage.OK).build();
+        );
+        if ("".equals(ctgInfoKey)) {
+            dataManageService.saveBannerInfo(tCategoryOtherInfoVO);
+        } else {
+            tCategoryOtherInfoVO.setCtgInfoKey(Integer.parseInt(ctgInfoKey));
+            if (uploadInfoMap.get("filePath") == null) tCategoryOtherInfoVO.setValue1("");
+            dataManageService.modifyBannerDetailInfo(tCategoryOtherInfoVO);
         }
-        return new JsonBuilder().add("result", null).build();
+        return new JsonBuilder().add("result", ZianCoreManage.OK).build();
     }
 }
