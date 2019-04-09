@@ -48,6 +48,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TSearchKeywordVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsPriceOptionVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TLecVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>

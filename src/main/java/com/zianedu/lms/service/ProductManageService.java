@@ -68,7 +68,7 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상 상세정보의 카테고리 목록 가져오
+     * 동영상 상세정보의 카테고리 목록 가져오기
      * @param gKey
      * @return
      */
@@ -86,6 +86,11 @@ public class ProductManageService extends PagingSupport {
         return videoCategoryList;
     }
 
+    /**
+     * 동영상 상세정보의 강좌 정보
+     * @param gKey
+     * @return
+     */
     @Transactional(readOnly = true)
     public TLecVO getVideoLecInfo(int gKey) {
         if (gKey == 0) return null;

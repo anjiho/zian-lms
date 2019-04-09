@@ -81,7 +81,7 @@ public class SelectboxService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<SelectboxDTO> getSelectboxListForVideoInfo(int ctgKey) {
+    public List<SelectboxDTO> getSelectboxListForCtgKey(int ctgKey) {
         List<SelectboxDTO>selectboxDTOList = new ArrayList<>();
         List<TCategoryVO>list = dataManageMapper.selectTCategoryList(ctgKey);
         for (TCategoryVO tCategoryVO : list) {
@@ -97,8 +97,50 @@ public class SelectboxService {
      * 동영상 목록 강좌정보안의 진행상태 셀렉트박스
      * @return
      */
-    public List<SelectboxDTO> getLectureStatusSelectbox() {
+    public List<SelectboxDTO>getLectureStatusSelectbox() {
         return LectureStatusType.getLectureStatusSelectbox();
+    }
+
+    /**
+     * 강좌수, 강좌시간 셀렉트박스
+     * @return
+     */
+    public List<Integer>getLectureCountSelectbox() {
+        int startNum = ZianCoreManage.LECTURE_COUNT_START_END[0];
+        int endNum = ZianCoreManage.LECTURE_COUNT_START_END[1];
+        List<Integer>list = new ArrayList<>();
+        for (int i = startNum; i <= endNum; i++) {
+            list.add(i);
+        }
+        return list;
+    }
+
+    /**
+     * 수강일수 셀렉트박스
+     * @return
+     */
+    public List<Integer>getClassRegistraionDaySelectbox() {
+        int startNum = ZianCoreManage.CLASS_REGISTRATION_START_END[0];
+        int endNum = ZianCoreManage.CLASS_REGISTRATION_START_END[1];
+        List<Integer>list = new ArrayList<>();
+        for (int i = startNum; i <= endNum; i++) {
+            list.add(i);
+        }
+        return list;
+    }
+
+    /**
+     * 시험대비년도 셀렉트박스
+     * @return
+     */
+    public List<Integer>getExamPrepareSelectbox() {
+        int startNum = ZianCoreManage.EXAM_PREPARE_YEAR[0];
+        int endNum = ZianCoreManage.EXAM_PREPARE_YEAR[1];
+        List<Integer>list = new ArrayList<>();
+        for (int i = startNum; i <= endNum; i++) {
+            list.add(i);
+        }
+        return list;
     }
 
 }
