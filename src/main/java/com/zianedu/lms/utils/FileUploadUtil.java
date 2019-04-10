@@ -26,6 +26,69 @@ public class FileUploadUtil {
             while (it.hasNext()) {
                 String uploadFileName = it.next();
 
+                String filePath = "";
+                if ("BANNER".equals(uploadType)) {
+                    filePath = "100/main/";
+                } else if ("VIDEO".equals(uploadType)) {
+                    if("imageListFile".equals(uploadFileName)) {
+                        filePath = "100/book/";
+                    } else {
+                        filePath = "100/lec/";
+                    }
+                }
+
+                if (uploadFileName != null || !"".equals(uploadFileName)) {
+                    MultipartFile multipartFile = request.getFile(uploadFileName);
+                    //한글 꺠짐 방지처리
+                    String originalFileName = multipartFile.getOriginalFilename();
+                    //파일명 변경
+                    //String finalFileName = FileUploadRename.multipartFileRename(multipartFile).toString();
+                    String makeFileName = originalFileName.substring(0, originalFileName.lastIndexOf("."));
+                    int filePos = originalFileName.lastIndexOf(".");
+                    String fileExtension = originalFileName.substring(filePos+1);
+                    String finalFileName = makeFileName + "_" + Util.returnNowDateByYyyymmddhhmmss() + "." + fileExtension;
+
+                    if (originalFileName != null || !"".equals(originalFileName)) {
+                        File serverFile = new File(FileUtil.concatPath(savePath, filePath, finalFileName));
+                        multipartFile.transferTo(serverFile);
+                        //root경로 파일 삭제
+                        FileUtil.fileDelete(finalFileName);
+                        FileUtil.fileDelete(originalFileName);
+
+                        fileName = serverFile.getName();
+                    }
+                    if ("BANNER".equals(uploadType)) {
+                        map.put("filePath", filePath + fileName);
+                    } else if ("VIDEO".equals(uploadType)) {
+                        if("imageListFile".equals(uploadFileName)) {
+                            filePath = "100/book/";
+                            map.put("imageListFilePath", filePath + fileName);
+                        } else {
+                            filePath = "100/lec/";
+                            map.put("imageViewFilePath", filePath + fileName);
+                        }
+                    }
+
+                }
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return map;
+    }
+
+    public static List<Map<String, Object>> fileUploadByVideoImg(MultipartHttpServletRequest request, String savePath, String uploadType) {
+        List< Map<String, Object>> list = new ArrayList<>();
+        Map<String, Object> map = new HashMap<>();
+        String fileName = "";
+
+        Iterator<String> it = request.getFileNames();
+        try {
+            while (it.hasNext()) {
+                String uploadFileName = it.next();
+                //uploadFileName : 프론트에서 정의한 프로퍼티(imageListFile,.. )
                 if (uploadFileName != null || !"".equals(uploadFileName)) {
                     MultipartFile multipartFile = request.getFile(uploadFileName);
                     //한글 꺠짐 방지처리
@@ -53,83 +116,26 @@ public class FileUploadUtil {
                         fileName = serverFile.getName();
                     }
                     String filePath = "";
-                    if ("BANNER".equals(uploadType)) {
-                        filePath = "100\\main\\";
-                    }
-                    map.put("filePath", filePath + fileName);
+//                    if ("BANNER".equals(uploadType)) {
+//                        filePath = "100\\main\\";
+//                    }
+                    String imageListFilePath = "100\\book\\";
+                    String imageViewFilePath = "100\\lec\\";
+
+                    map.put("imageList", imageListFilePath + fileName);
+                    map.put("imageView", imageViewFilePath + fileName);
                 }
+                list.add(map);
             }
         } catch (UnsupportedEncodingException e) {
             e.printStackTrace();
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return map;
+        return list;
     }
 
-    public static Map<String, Object> fileUploadAssignmentFile(MultipartHttpServletRequest request, String savePath, Long lectureId) {
-        Map<String, Object> map = new HashMap<>();
-        String fileName = "";
-        Iterator<String> it = request.getFileNames();
-        try {
-            while (it.hasNext()) {
-                String uploadFileName = it.next();
 
-                if (uploadFileName != null || !"".equals(uploadFileName)) {
-                    MultipartFile multipartFile = request.getFile(uploadFileName);
-                    long fileSize = multipartFile.getSize();
-                    //이미지 용량 제한 500kb
-//                    if (fileSize > 500000) {
-//                        map.put("error_code", FlowEduErrorCode.CUSTOM_IMAGE_FILE_SIZE_LIMIT.code());
-//                        return map;
-//                    }
-                    //한글 꺠짐 방지처리
-                    String originalFileName = multipartFile.getOriginalFilename();
-                    /** 파일명이 한글일때 에러 처리 **/
-                    /*
-                    if (StringUtil.isKorean(originalFileName)) {
-                        map.put("error_code", FlowEduErrorCode.CUSTOM_IMAGE_FILE_NAME_KOREAN.code());
-                        return map;
-                    }
-                    */
-                    //파일명 변경
-                    //String finalFileName = FileUploadRename.multipartFileRename(multipartFile).toString();
-                    String makeFileName = originalFileName.substring(0, originalFileName.lastIndexOf("."));
-                    int filePos = originalFileName.lastIndexOf(".");
-                    String fileExtension = originalFileName.substring(filePos+1);
-                    //파일 확장자 예외처리
-//                    if (!("hwp".equalsIgnoreCase(fileExtension) || "doc".equalsIgnoreCase(fileExtension)
-//                            || "docx".equalsIgnoreCase(fileExtension) || "pdf".equalsIgnoreCase(fileExtension))) {
-//                        map.put("error_code", FlowEduErrorCode.CUSTOM_IMAGE_FILE_EXTENSION_NOT_ALLOW.code());
-//                        return map;
-//                    }
-                    String finalFileName = makeFileName + "_" + Util.returnNowDateByYyyymmddhhmmss() + "." + fileExtension;
-                    //디렉토리 존재 확인
-                    File assignmentDirectory = new File(FileUtil.concatPath(savePath, "assignment", String.valueOf(lectureId)));
-                    if (!assignmentDirectory.isDirectory()) {
-                        assignmentDirectory.mkdirs();
-                    }
-                    if (originalFileName != null || !"".equals(originalFileName)) {
-                        File serverFile = new File(FileUtil.concatPath(assignmentDirectory.toString(), finalFileName));
-                        logger.info("serverFile ---------------> " + serverFile);
-                        multipartFile.transferTo(serverFile);
-                        //root경로 파일 삭제
-                        FileUtil.fileDelete(finalFileName);
-                        FileUtil.fileDelete(originalFileName);
-                        logger.info("originalFileName ---------------> " + originalFileName);
-
-                        fileName = serverFile.getName();
-                    }
-                    map.put("file_name", fileName);
-                }
-            }
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return map;
-    }
 
     public static Map<String, Object>boardFileUpload(MultipartHttpServletRequest request, String savePath) {
         List<MultipartFile>mf = request.getFiles("file_name");

@@ -17,11 +17,11 @@ public class ConfigHolder {
     private String loggerLevel;
     @Value("#{config['logger.name']}")
     private String loggerName;
-    @Value("#{config['board.file.upload.path']}")
-    private String boardFileUploadPath;
+    @Value("#{config['file.upload.path']}")
+    private String fileUploadPath;
 
-    public static String getBoardFileUploadPath() {
-        return configHolder.boardFileUploadPath;
+    public static String getFileUploadPath() {
+        return configHolder.fileUploadPath;
     }
 
     @PostConstruct

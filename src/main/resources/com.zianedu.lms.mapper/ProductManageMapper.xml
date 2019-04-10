@@ -84,16 +84,16 @@
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		INSERT INTO T_GOODS
 		(
-			C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, TYPE, IS_SHOW, IS_SELL, IS_FREE, IS_NODC, IMAGE_LIST, IMAGE_VIEW,
+			G_KEY, C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, TYPE, IS_SHOW, IS_SELL, IS_FREE, IS_NODC, IMAGE_LIST, IMAGE_VIEW,
 			EMPHASIS, TAGS, SUMMARY, DESCRIPTION, CALCULATE_RATE, IS_FREEBIE_DELIVERY_FREE, IS_QUICK_DELIVERY, GOODS_ID
 		)
 		VALUES
 		(
-			#{cKey}, #{cpKey}, #{name}, #{indate}, #{sellstartdate}, #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc} #{imageList}, #{imageView},
+			T_GOODS_SEQ.NEXTVAL, #{cKey}, #{cpKey}, #{name}, #{indate}, #{sellstartdate}, #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
 			#{emphasis}, #{tags}, #{summary}, #{description}, #{calculateRate}, #{isFreebieDeliveryFree}, #{isQuickDelivery}, #{goodsId}
 		)
-		<selectKey keyProperty="gKet" resultType="Integer">
-			SELECT LAST_INSERT_ID()
+		<selectKey resultType="Integer" keyProperty="gKey" order="BEFORE">
+			SELECT T_GOODS_SEQ.NEXTVAL FROM DUAL
 		</selectKey>
 	</insert>
 

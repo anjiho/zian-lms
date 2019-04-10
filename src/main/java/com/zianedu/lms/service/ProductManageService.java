@@ -186,7 +186,7 @@ public class ProductManageService extends PagingSupport {
     public Integer saveGoodsInfo(TGoodsVO tGoodsVO) {
         if (tGoodsVO == null) return null;
         productManageMapper.insertTGoods(tGoodsVO);
-        return tGoodsVO.getGKey();
+        return tGoodsVO.getGKey() + 1;
     }
 
 }
