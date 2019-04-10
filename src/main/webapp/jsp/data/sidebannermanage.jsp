@@ -21,7 +21,6 @@
     function changeBox2() {
         $(".card").remove();
         dataManageService.getSideBarBannerList(4200,function (selList) {
-            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -40,7 +39,7 @@
                         bannerNmaeHtml += '</div>';
                         $("#test").append(bannerNmaeHtml);
                     }
-
+                    var dragidText = "dragtable"+i;
                     var bannerContentHtml = "<table class='table'  id='dragtable"+i+"' cellspacing='0' cellpadding='2'>";
                     bannerContentHtml += '<thead>';
                     bannerContentHtml += ' <tr>';
@@ -56,7 +55,7 @@
                     bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
                     bannerContentHtml += '</table>';
                     $('#'+result.ctgKey).append(bannerContentHtml);
-
+                    $('#'+dragidText).tableDnD();
                     var selList2 = cmpList.resultList;
                     var dataList =  "dataList"+i;
                     for (var j = 0; j < selList2.length; j++) {

@@ -8,7 +8,7 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
-        $("#table-1").tableDnD();
+
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -20,6 +20,7 @@
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
+            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -38,8 +39,8 @@
                         bannerNmaeHtml += '</div>';
                         $("#test").append(bannerNmaeHtml);
                     }
-
-                    var bannerContentHtml = "<table class='table'  id='dragtable"+i+"' cellspacing='0' cellpadding='2'>";
+                    var dragidText = "dragtable"+i;
+                    var bannerContentHtml = "<table class='table'  id='dragtable_"+i+"' cellspacing='0' cellpadding='2'>";
                     bannerContentHtml += '<thead>';
                     bannerContentHtml += ' <tr>';
                     bannerContentHtml += '<th>타이틀</th>';
@@ -54,9 +55,12 @@
                     bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
                     bannerContentHtml += '</table>';
                     $('#'+result.ctgKey).append(bannerContentHtml);
-                    $("#dragtable0").tableDnD();
+                    //$('#'+dragidText).tableDnD();
+                    //$("#dragtable1").tableDnD();
+
                     var selList2 = cmpList.resultList;
                     var dataList =  "dataList"+i;
+                    $("#dragtable_"+i).tableDnD();
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
 
@@ -171,6 +175,10 @@
           });
       }
   }
+
+  function changeBannerList() {
+      //changeBannerPosition(List<TCategoryOtherInfoVO>list)
+  }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -195,6 +203,9 @@
                 <select id="sel_subDomain" class="form-control" onChange="changeBox2(this.value);">
                     <option value="">선택</option>
                 </select>
+                </div>
+                    <button type="button" class="btn btn-info" onclick="changeBannerList();">순서변경저장</button>
+                <div>
             </div>
         </div>
     </div>
@@ -271,6 +282,16 @@
         <tr id="5"><td>5</td><td>Five</td><td>some text</td></tr>
         <tr id="6"><td>6</td><td>Six</td><td>some text</td></tr>
     </table>
+    <table id="table-2" cellspacing="0" cellpadding="2">
+        <tbody>
+        <tr id="1"><td>1</td><td>One</td><td>some text</td></tr>
+        <tr id="2"><td>2</td><td>Two</td><td>some text</td></tr>
+        <tr id="3"><td>3</td><td>Three</td><td>some text</td></tr>
+        <tr id="4"><td>4</td><td>Four</td><td>some text</td></tr>
+        <tr id="5"><td>5</td><td>Five</td><td>some text</td></tr>
+        <tr id="6"><td>6</td><td>Six</td><td>some text</td></tr>
+        </tbody>
+    </table>
 </div>
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
@@ -291,4 +312,9 @@ function fn_clearFilePath(val){
 
     return tmpStr;
 }
+
+// $(document).ready(function () {
+//     $("#table-1").tableDnD();
+//     $("#table-2").tableDnD();
+// });
 </script>
