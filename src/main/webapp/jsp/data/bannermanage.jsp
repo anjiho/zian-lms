@@ -8,6 +8,8 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
+        // tr 드래그앤드롭
+
 
     });
     //파일 선택시 파일명 보이게 하기
@@ -39,7 +41,7 @@
                         bannerNmaeHtml += '</div>';
                         $("#test").append(bannerNmaeHtml);
                     }
-                    var dragidText = "dragtable"+i;
+
                     var bannerContentHtml = "<table class='table'  id='dragtable_"+i+"' cellspacing='0' cellpadding='2'>";
                     bannerContentHtml += '<thead>';
                     bannerContentHtml += ' <tr>';
@@ -55,17 +57,55 @@
                     bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
                     bannerContentHtml += '</table>';
                     $('#'+result.ctgKey).append(bannerContentHtml);
+                    //$("#dragtable_0").tableDnD();
+                    $("#dragtable_0").tableDnD({
+                        onDrop: function(table, row) {
+                            var rows = table.tBodies[0].rows;
+                            var debugStr = "Row dropped was "+row.id+". New order: ";
+                            for (var i=0; i<rows.length; i++) {
+                                debugStr += rows[i].id+" ";
+                            }
+                            console.log(debugStr);
+                        }
+                    });
                     //$('#'+dragidText).tableDnD();
-                    //$("#dragtable1").tableDnD();
+                    /*$("#dragtable_0").tableDnD();
+                    $("#dragtable_1").tableDnD();
+                    $("#dragtable_2").tableDnD();
+                    $("#dragtable_3").tableDnD();
+                    $("#dragtable_4").tableDnD();*/
+                    //$("#dragtable_0").tableDnD();
+
+                   /*
+                   * $(document).ready(function() {
+                            // Initialise the second table specifying a dragClass and an onDrop function that will display an alert
+                            $("#table-1").tableDnD({
+                                onDragClass: "myDragClass",
+                                onDrop: function(table, row) {
+                                    var rows = table.tBodies[0].rows;
+                                    var debugStr = "Row dropped was "+row.id+". New order: ";
+                                    for (var i=0; i<rows.length; i++) {
+                                        debugStr += rows[i].id+" ";
+                                    }
+                                    $('#debugArea').html(debugStr);
+                                    console.log(debugStr);
+                                },
+                                onDragStart: function(table, row) {
+                                    $('#debugArea').html("Started dragging row "+row.id);
+                                }
+                            });
+                        });
+                   * */
 
                     var selList2 = cmpList.resultList;
                     var dataList =  "dataList"+i;
-                    $("#dragtable_"+i).tableDnD();
+                    //$("#dragtable_"+i).tableDnD();
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
 
                         var btn = '<button type="button" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')" class="btn btn-danger btn-sm">삭제</button>';
                         var bitText = "";
+                        var rowcnt = "rowcnt"+j;
                         if(cmpList1.valueBit1 == "1"){
                             bitText = "O";
                         }else {
@@ -82,7 +122,15 @@
                                 function(data) {return cmpList1.value4 == null ? "-" : cmpList1.value4;},
                                 function(data) {return btn;}
                             ];
-                            dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
+                            dwr.util.addRows(dataList, [0], cellData,{
+                                rowCreator:function(options) {
+                                    var row = document.createElement("tr");
+                                    var index = options.rowIndex * 50;
+                                    row.id = rowcnt;
+                                    return row;
+                                },
+                                escapeHtml:false});
+
                         }
                     }
                 }
@@ -274,30 +322,11 @@
              </div>
         </div>
     </form>
-    <table id="table-1" cellspacing="0" cellpadding="2">
-        <tr id="1"><td>1</td><td>One</td><td>some text</td></tr>
-        <tr id="2"><td>2</td><td>Two</td><td>some text</td></tr>
-        <tr id="3"><td>3</td><td>Three</td><td>some text</td></tr>
-        <tr id="4"><td>4</td><td>Four</td><td>some text</td></tr>
-        <tr id="5"><td>5</td><td>Five</td><td>some text</td></tr>
-        <tr id="6"><td>6</td><td>Six</td><td>some text</td></tr>
-    </table>
-    <table id="table-2" cellspacing="0" cellpadding="2">
-        <tbody>
-        <tr id="1"><td>1</td><td>One</td><td>some text</td></tr>
-        <tr id="2"><td>2</td><td>Two</td><td>some text</td></tr>
-        <tr id="3"><td>3</td><td>Three</td><td>some text</td></tr>
-        <tr id="4"><td>4</td><td>Four</td><td>some text</td></tr>
-        <tr id="5"><td>5</td><td>Five</td><td>some text</td></tr>
-        <tr id="6"><td>6</td><td>Six</td><td>some text</td></tr>
-        </tbody>
-    </table>
 </div>
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
 function fn_clearFilePath(val){
     var tmpStr = val;
-
     var cnt = 0;
     while(true){
         cnt = tmpStr.indexOf("/");
@@ -313,8 +342,4 @@ function fn_clearFilePath(val){
     return tmpStr;
 }
 
-// $(document).ready(function () {
-//     $("#table-1").tableDnD();
-//     $("#table-2").tableDnD();
-// });
 </script>
