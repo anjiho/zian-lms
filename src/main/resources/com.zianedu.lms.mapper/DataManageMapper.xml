@@ -42,6 +42,7 @@
 	<select id="selectTCategoryOtherInfoList" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
 		SELECT * FROM T_CATEGORY_OTHER_INFO
 		WHERE CTG_KEY = #{ctgKey}
+		ORDER BY POS ASC
 	</select>
 
 	<select id="selectTCategoryOtherInfo" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
