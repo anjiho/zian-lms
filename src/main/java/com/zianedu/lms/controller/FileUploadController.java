@@ -54,9 +54,13 @@ public class FileUploadController {
                                              @RequestParam(value = "value5") String value5, @RequestParam(value = "valueBit1") String valueBit1,
                                              @RequestParam(value = "ctgInfoKey") String ctgInfoKey, @RequestParam(value = "pos") String pos) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "BANNER");
+        String filePath = null;
+        if (uploadInfoMap.get("filePath")== null) filePath = "";
+
         TCategoryOtherInfoVO tCategoryOtherInfoVO = new TCategoryOtherInfoVO(
                 Integer.parseInt(ctgKey),
-                Util.isNullValue(String.valueOf(uploadInfoMap.get("filePath")), ""),
+                //Util.isNullValue(String.valueOf(uploadInfoMap.get("filePath")), ""),
+                filePath,
                 value3,
                 value4,
                 value5,
