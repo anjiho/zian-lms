@@ -4,9 +4,9 @@
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 <script>
-
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
+        changeBox2('216');
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -22,6 +22,7 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     var result = cmpList.result;
+                    var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0)'  class='btn btn-success btn-sm' style='float: right'>추가</button>";
                     if(result.name){
                         var bannerNmaeHtml = "<div class='card'>";
                         bannerNmaeHtml += '<div class=\'card-body\'>';
@@ -29,6 +30,7 @@
                         bannerNmaeHtml += "<label class=\'text-right control-label col-form-label\'>" + result.name + "</label>";
                         bannerNmaeHtml += '</div>';
                         bannerNmaeHtml += "<div id='"+result.ctgKey+"'>";
+                        bannerNmaeHtml += addBtn;
                         bannerNmaeHtml += '</div>';
                         bannerNmaeHtml += '</div>';
                         bannerNmaeHtml += '</div>';
@@ -54,7 +56,8 @@
                     var dataList =  "dataList"+i;
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
-                        var btn = '<button type="button" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-success btn-sm">수정</button><button type="button" class="btn btn-danger btn-sm">삭제</button>';
+                                           console.log(cmpList1);                        //'+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+'
+                        var btn = '<button type="button" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')" class="btn btn-danger btn-sm">삭제</button>';
                         if (cmpList1 != undefined) {
                             var cellData = [
                                 //return cmpList1.valueBit1 == null ? "-" : cmpList1.value1;
@@ -74,24 +77,36 @@
         });
     }
 
-    function popup(val,ctgKey,pos) {
+    function popup(val,ctgKey,pos) { //수정팝업
+            $('#myModal').show();
+            dataManageService.getBannerDetailInfo(val, function (selList) {
+                $("#bannerKey").val(val);
+                $("#ctgKey").val(ctgKey);
+                $("#pos").val(pos);
+                $("#title").val(selList.value5);
+                $("#bannerColor").val(selList.value3);
+                $("#bannerLink").val(selList.value4);
+                if (selList.valueBit1 == '1') $("#newPopYn").prop('checked', true);
+                else $("#newPopYn").prop('checked', false);
+
+                if (selList.value1 != null) { /*파일명보이게*/
+                    $(document).ready(function () {
+                        $('.custom-file-control').html(selList.value1);
+                    });
+                }
+            });
+    }
+    function popup_save(val,ctgKey,pos) { //추가팝업
         $('#myModal').show();
-        dataManageService.getBannerDetailInfo(val, function (selList) {
-            $("#bannerKey").val(val);
-            $("#ctgKey").val(ctgKey);
-            $("#pos").val(pos);
-            $("#title").val(selList.value5);
-            $("#bannerColor").val(selList.value3);
-            $("#newPopYn").val(selList.valueBit1);
-            $("#bannerLink").val(selList.value4);
+        $("#title").val("");
+        $("#bannerColor").val("");
+        $("#bannerLink").val("");
+        $('.custom-file-control').html("");
+        $("#newPopYn").prop('checked', false);
 
-            if (selList.value1 != null) { /*파일명보이게*/
-                $(document).ready(function() {
-                    $('.custom-file-control').html(selList.value1);
-                });
-            }
-
-        });
+        $("#bannerKey").val(val);
+        $("#ctgKey").val(ctgKey);
+        $("#pos").val(pos);
     }
     //팝업 Close 기능
     function close_pop(flag) {
@@ -99,6 +114,7 @@
     };
     
     function modify() {
+        //저장일경우 pos, ctgingoKey == 0 , ctgKey값만 넘김
         var data = new FormData();
         $.each($('#attachFile')[0].files, function(i, file) {
             data.append('file_name', file);
@@ -109,8 +125,13 @@
         var bannerKey= $("#bannerKey").val();
         var title = $("#title").val();
         var bannerColor = $("#bannerColor").val();
-        var newPopYn = $("#newPopYn").val();
+        var newPopYn =  $('input:checkbox[id="newPopYn"]').val();
         var bannerLink = $("#bannerLink").val();
+
+        alert(">>"+newPopYn);
+
+        if(newPopYn == 'on')  newPopYn = 1;
+        else newPopYn = 0;
 
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
@@ -134,6 +155,14 @@
                 });
         }
     }
+    
+  function bannerDelete(val,ctgKey,pos) {
+      if(confirm("삭제하시겠습니까?")) {
+          dataManageService.deleteBannerInfo(val, ctgKey, function () {
+              alert("삭제되었습니다.");
+          });
+      }
+  }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -220,7 +249,7 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                     <button type="button" class="btn btn-info" onclick="modify()">수정</button>
+                     <button type="button" class="btn btn-info" onclick="modify()">저장</button>
                      <button type="button" class="btn btn-info"   onClick="close_pop();">닫기</button>
                 </div>
              </div>
