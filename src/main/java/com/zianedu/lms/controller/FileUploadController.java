@@ -1,5 +1,9 @@
 package com.zianedu.lms.controller;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.VideoDetailInfoDTO;
@@ -7,10 +11,14 @@ import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.service.DataManageService;
 import com.zianedu.lms.service.ProductManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
+import com.zianedu.lms.utils.GsonUtil;
 import com.zianedu.lms.utils.JsonBuilder;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.TCategoryOtherInfoVO;
+import com.zianedu.lms.vo.TGoodsVO;
 import org.apache.http.HttpStatus;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -67,8 +75,17 @@ public class FileUploadController {
     }
 
     @RequestMapping(value = "/videoImgUpload", method = RequestMethod.POST)
-    public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestBody VideoDetailInfoDTO videoDetailInfoDTO) {
+    public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo) throws Exception {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
+
+        String imageList = uploadInfoMap.get("imageListFilePath").toString();
+        String imageView = uploadInfoMap.get("imageViewFilePath").toString();
+
+        JsonObject object = GsonUtil.conertStringToJsonObj(videoInfo);
+        Gson gson = new Gson();
+        TGoodsVO tGoodsVO = gson.fromJson(object, TGoodsVO.class);
+
+        productManageService.upsultGoodsInfo(tGoodsVO, imageList, imageView);
 
         return new JsonBuilder().add("result", ZianCoreManage.OK).build();
     }

@@ -13,7 +13,7 @@ public class TGoodsPriceOptionVO {
 
     private int ctgKey;
 
-    private String name;
+    private String name = "";
 
     private int price;
 

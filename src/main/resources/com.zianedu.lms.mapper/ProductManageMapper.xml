@@ -97,5 +97,19 @@
 		</selectKey>
 	</insert>
 
+	<insert id="insertTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		INSERT INTO T_GOODS_PRICE_OPTION
+		(
+			PRICE_KEY, G_KEY, KIND, CTG_KEY, NAME, PRICE, SELL_PRICE, POINT, EXTEND_PERCENT
+		)
+		VALUES
+		(
+			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, #{ctgKey}, #{name}, #{price}, #{sellPrice}, #{point}, #{extendPercent}
+		)
+		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
+			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	</insert>
+
 
 </mapper>
