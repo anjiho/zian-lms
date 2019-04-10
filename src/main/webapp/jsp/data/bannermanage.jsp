@@ -59,7 +59,7 @@
                     $('#'+result.ctgKey).append(bannerContentHtml);
 
 
-                    $( "#dragtable_" + i +" tbody" ).sortable( {
+                    $( "#dragtable_" + i +" tbody" ).sortable({
                         update: function( event, ui ) {
                             $(this).children().each(function(index) {
                                 $(this).find('tr').last().html(index + 1);
@@ -70,7 +70,6 @@
                     var selList2 = cmpList.resultList;
                     var dataList =  "dataList"+i;
 
-                    //$("#dragtable_"+i).tableDnD();
 
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
@@ -98,6 +97,7 @@
                                 rowCreator:function(options) {
                                     var row = document.createElement("tr");
                                     var index = options.rowIndex * 50;
+                                    row.id = cmpList1.ctgInfoKey;
                                     row.className = "ui-state-default even ui-sortable-handle";
                                     return row;
                                 },
@@ -196,7 +196,20 @@
   }
 
   function changeBannerList() {
-      //changeBannerPosition(List<TCategoryOtherInfoVO>list)
+      var arr = new Array();    // 배열 선언
+      $("#dragtable_0 tbody tr").each(function(index) {
+        var id = $(this).attr("id");
+        var ctgInfoKey = id;
+        var pos = index;
+        var data = {
+            ctgInfoKey : ctgInfoKey,
+            pos : pos
+        };
+        arr.push(data);
+      });
+      dataManageService.changeBannerPosition(arr, function () {
+          location.reload();
+      });
   }
 </script>
 <div class="page-breadcrumb">
