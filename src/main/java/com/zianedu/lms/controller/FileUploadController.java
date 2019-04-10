@@ -82,14 +82,17 @@ public class FileUploadController {
     public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo) throws Exception {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
 
-        String imageList = uploadInfoMap.get("imageListFilePath").toString();
-        String imageView = uploadInfoMap.get("imageViewFilePath").toString();
+        String imageListFilePath = null;
+        String imageViewFilePath = null;
+
+        if (uploadInfoMap.get("imageListFilePath")== null) imageListFilePath = "";
+        if (uploadInfoMap.get("imageViewFilePath")== null) imageViewFilePath = "";
 
         JsonObject object = GsonUtil.conertStringToJsonObj(videoInfo);
         Gson gson = new Gson();
         TGoodsVO tGoodsVO = gson.fromJson(object, TGoodsVO.class);
 
-        productManageService.upsultGoodsInfo(tGoodsVO, imageList, imageView);
+        productManageService.upsultGoodsInfo(tGoodsVO, imageListFilePath, imageListFilePath);
 
         return new JsonBuilder().add("result", ZianCoreManage.OK).build();
     }

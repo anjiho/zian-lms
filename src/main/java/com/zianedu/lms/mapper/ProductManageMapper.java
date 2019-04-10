@@ -40,5 +40,5 @@ public interface ProductManageMapper {
 
 
     /** UPDATE **/
-
+    void updateTGoods(TGoodsVO tGoodsVO);
 }

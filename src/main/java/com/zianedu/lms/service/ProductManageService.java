@@ -190,7 +190,7 @@ public class ProductManageService extends PagingSupport {
         tGoodsVO.setImageView(imageView);
 
         if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
-
+        else productManageMapper.updateTGoods(tGoodsVO);
 
         return tGoodsVO.getGKey() + 1;
     }

@@ -1,5 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
+
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
@@ -8,7 +10,7 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
-        $("#table-1").tableDnD();
+
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -20,6 +22,7 @@
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
+            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -38,8 +41,8 @@
                         bannerNmaeHtml += '</div>';
                         $("#test").append(bannerNmaeHtml);
                     }
-
-                    var bannerContentHtml = "<table class='table'  id='dragtable"+i+"' cellspacing='0' cellpadding='2'>";
+                    var dragidText = "dragtable"+i;
+                    var bannerContentHtml = "<table class='table'  id='dragtable_"+i+"' cellspacing='0' cellpadding='2'>";
                     bannerContentHtml += '<thead>';
                     bannerContentHtml += ' <tr>';
                     bannerContentHtml += '<th>타이틀</th>';
@@ -54,9 +57,21 @@
                     bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
                     bannerContentHtml += '</table>';
                     $('#'+result.ctgKey).append(bannerContentHtml);
-                    $("#dragtable0").tableDnD();
+
+
+                    $( "#dragtable_" + i +" tbody" ).sortable( {
+                        update: function( event, ui ) {
+                            $(this).children().each(function(index) {
+                                $(this).find('tr').last().html(index + 1);
+                            });
+                        }
+                    });
+
                     var selList2 = cmpList.resultList;
                     var dataList =  "dataList"+i;
+
+                    //$("#dragtable_"+i).tableDnD();
+
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
 
@@ -77,8 +92,16 @@
                                 function(data) {return cmpList1.valueBit1 == null ? "-" : bitText;},
                                 function(data) {return cmpList1.value4 == null ? "-" : cmpList1.value4;},
                                 function(data) {return btn;}
+
                             ];
-                            dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
+                            dwr.util.addRows(dataList, [0], cellData, {
+                                rowCreator:function(options) {
+                                    var row = document.createElement("tr");
+                                    var index = options.rowIndex * 50;
+                                    row.className = "ui-state-default even ui-sortable-handle";
+                                    return row;
+                                },
+                                escapeHtml:false});
                         }
                     }
                 }
@@ -121,7 +144,7 @@
     function close_pop(flag) {
         $('#myModal').hide();
     };
-    
+
     function modify() {
         //저장일경우 pos, ctgingoKey == 0 , ctgKey값만 넘김
         var data = new FormData();
@@ -163,13 +186,17 @@
                 });
         }
     }
-    
+
   function bannerDelete(val,ctgKey,pos) {
       if(confirm("삭제하시겠습니까?")) {
           dataManageService.deleteBannerInfo(val, ctgKey, function () {
                location.reload();
           });
       }
+  }
+
+  function changeBannerList() {
+      //changeBannerPosition(List<TCategoryOtherInfoVO>list)
   }
 </script>
 <div class="page-breadcrumb">
@@ -195,6 +222,9 @@
                 <select id="sel_subDomain" class="form-control" onChange="changeBox2(this.value);">
                     <option value="">선택</option>
                 </select>
+                </div>
+                    <button type="button" class="btn btn-info" onclick="changeBannerList();">순서변경저장</button>
+                <div>
             </div>
         </div>
     </div>
@@ -263,14 +293,6 @@
              </div>
         </div>
     </form>
-    <table id="table-1" cellspacing="0" cellpadding="2">
-        <tr id="1"><td>1</td><td>One</td><td>some text</td></tr>
-        <tr id="2"><td>2</td><td>Two</td><td>some text</td></tr>
-        <tr id="3"><td>3</td><td>Three</td><td>some text</td></tr>
-        <tr id="4"><td>4</td><td>Four</td><td>some text</td></tr>
-        <tr id="5"><td>5</td><td>Five</td><td>some text</td></tr>
-        <tr id="6"><td>6</td><td>Six</td><td>some text</td></tr>
-    </table>
 </div>
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
@@ -291,4 +313,17 @@ function fn_clearFilePath(val){
 
     return tmpStr;
 }
+
+$(document).ready(function() {
+    $( "#dragtable_0 tbody" ).sortable( {
+        update: function( event, ui ) {
+            alert("1");
+            $(this).children().each(function(index) {
+                $(this).find('tr').last().html(index + 1);
+            });
+        }
+    });
+})
+
+
 </script>

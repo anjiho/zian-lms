@@ -26,9 +26,12 @@ public class DataManageController {
             mvc.setViewName("data/subjectmanage");
         }else if("bannerSave".equals(page_gbn)) {
             mvc.setViewName("data/bannermanage");
-        }else if("sideBannerSave".equals(page_gbn)) {
-            mvc.setViewName("data/sidebannermanage");
+        }else if("examplanSave".equals(page_gbn)) {
+            mvc.setViewName("data/examplanmanage");
+        }else if("searchSave".equals(page_gbn)) {
+            mvc.setViewName("data/searchmanage");
         }
+
         return mvc;
     }
 }
