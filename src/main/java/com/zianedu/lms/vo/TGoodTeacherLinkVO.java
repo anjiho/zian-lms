@@ -9,6 +9,8 @@ public class TGoodTeacherLinkVO {
 
     private int gKey;
 
+    private int isPublicSubject;
+
     private int subjectCtgKey;
 
     private int teacherKey;

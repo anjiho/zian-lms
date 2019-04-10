@@ -70,6 +70,7 @@
     <script src="common/assets/extra-libs/multicheck/jquery.multicheck.js"></script>
     <script src="common/assets/extra-libs/DataTables/datatables.min.js"></script>
     <script type="text/javascript" src="common/js/jquery.tablednd.js"></script>
+    <script type="text/javascript" src="common/dist/js/jquery-sortable.js"></script>
 </head>
 <title>지안에듀관리자</title>
 <body>

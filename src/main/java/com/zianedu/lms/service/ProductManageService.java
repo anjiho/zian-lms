@@ -178,15 +178,33 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 상품기본정보 저장하기
+     * 상품기본정보 저장및 수정
      * @param tGoodsVO
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer saveGoodsInfo(TGoodsVO tGoodsVO) {
+    public Integer upsultGoodsInfo(TGoodsVO tGoodsVO, String imageList, String imageView) {
         if (tGoodsVO == null) return null;
-        productManageMapper.insertTGoods(tGoodsVO);
+
+        tGoodsVO.setImageList(imageList);
+        tGoodsVO.setImageView(imageView);
+
+        if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
+        else productManageMapper.updateTGoods(tGoodsVO);
+
         return tGoodsVO.getGKey() + 1;
+    }
+
+    /**
+     * 상품옵션정보 저장하기
+     * @param tGoodsPriceOptionVO
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer saveTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO) {
+        if (tGoodsPriceOptionVO == null) return null;
+        productManageMapper.insertTGoodsPriceOption(tGoodsPriceOptionVO);
+        return tGoodsPriceOptionVO.getPriceKey() + 1;
     }
 
 }

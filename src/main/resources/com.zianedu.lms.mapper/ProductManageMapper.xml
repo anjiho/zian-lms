@@ -97,5 +97,44 @@
 		</selectKey>
 	</insert>
 
+	<insert id="insertTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		INSERT INTO T_GOODS_PRICE_OPTION
+		(
+			PRICE_KEY, G_KEY, KIND, CTG_KEY, NAME, PRICE, SELL_PRICE, POINT, EXTEND_PERCENT
+		)
+		VALUES
+		(
+			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, #{ctgKey}, #{name}, #{price}, #{sellPrice}, #{point}, #{extendPercent}
+		)
+		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
+			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	</insert>
+
+	<update id="updateTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
+		UPDATE T_GOODS
+		<set>
+			<if test="cpKey > 0">CP_KEY = #{cpKey},</if>
+			<if test="name != '' or name != null">NAME = #{name},</if>
+			<if test="indate != '' or indate != null">INDATE = #{indate},</if>
+			<if test="sellstartdate != '' or indate != null">SELLSTARTDATE = #{sellstartdate},</if>
+			<if test="type != null">TYPE = #{type},</if>
+			<if test="isShow != null">IS_SHOW = #{isShow},</if>
+			<if test="isSell != null">IS_SELL = #{isSell},</if>
+			<if test="isFree != null">IS_FREE = #{isFree},</if>
+			<if test="isNodc != null">IS_NODC = #{isNodc},</if>
+			<if test="imageList != '' or imageList != null">IMAGE_LIST = #{imageList},</if>
+			<if test="imageView != '' or imageView != null">IMAGE_VIEW = #{imageView},</if>
+			<if test="emphasis != null">EMPHASIS = #{emphasis},</if>
+			<if test="tags != '' or tags != null">TAGS = #{tags},</if>
+			<if test="summary != '' or summary != null">SUMMARY = #{summary},</if>
+			<if test="description != '' or description != null">DESCRIPTION = #{description},</if>
+			<if test="calculateRate != null">CALCULATE_RATE = #{calculateRate},</if>
+			<if test="isFreebieDeliveryFree != null">IS_FREEBIE_DELIVERY_FREE = #{isFreebieDeliveryFree},</if>
+			<if test="isQuickDelivery != null">IS_QUICK_DELIVERY = #{isQuickDelivery},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+		</set>
+		WHERE G_KEY = #{gKey}
+	</update>
 
 </mapper>
