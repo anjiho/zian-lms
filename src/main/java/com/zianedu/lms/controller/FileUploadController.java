@@ -1,9 +1,6 @@
 package com.zianedu.lms.controller;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
 import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.VideoDetailInfoDTO;
@@ -79,7 +76,8 @@ public class FileUploadController {
     }
 
     @RequestMapping(value = "/videoImgUpload", method = RequestMethod.POST)
-    public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo) throws Exception {
+    public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo,
+                                               @RequestParam(value = "videoOptionInfo") String videoOptionInfo) throws Exception {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
 
         String imageListFilePath = null;
@@ -91,6 +89,11 @@ public class FileUploadController {
         JsonObject object = GsonUtil.conertStringToJsonObj(videoInfo);
         Gson gson = new Gson();
         TGoodsVO tGoodsVO = gson.fromJson(object, TGoodsVO.class);
+
+        JsonParser parser = new JsonParser();
+        JsonElement element = parser.parse(videoOptionInfo);
+        JsonArray jsonArray = element.getAsJsonArray();
+
 
         productManageService.upsultGoodsInfo(tGoodsVO, imageListFilePath, imageListFilePath);
 
