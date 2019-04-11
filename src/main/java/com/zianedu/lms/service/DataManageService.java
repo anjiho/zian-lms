@@ -118,6 +118,17 @@ public class DataManageService {
     }
 
     /**
+     * 검색어 상세정보 가져오기
+     * @param searchKeywordKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TSearchKeywordVO getSearchKeywordInfo(int searchKeywordKey) {
+        if (searchKeywordKey == 0) return null;
+        return dataManageMapper.selectTSearchKeywordInfo(searchKeywordKey);
+    }
+
+    /**
      * 마지막 카테고리 값 기준 4뎁스 목록 카테고리 목록 가져오기
      * @param ctgKey
      * @return

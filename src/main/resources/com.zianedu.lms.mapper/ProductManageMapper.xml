@@ -111,6 +111,59 @@
 		</selectKey>
 	</insert>
 
+	<insert id="insertTCategoryGoods" parameterType="com.zianedu.lms.vo.TCategoryGoods">
+		INSERT INTO T_CATEGORY_GOODS
+		(
+			CTG_G_KEY, CTG_KEY, G_KEY, POS
+		)
+		VALUES
+		(
+			T_CATEGORY_GOODS_SEQ.nextval, #{ctgKey}, #{gKey}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		INSERT INTO T_LEC
+		(
+			LEC_KEY, G_KEY, TEACHER_KEY, CLASS_GROUP_CTG_KEY, SUBJECT_CTG_KEY, STEP_CTG_KEY, STATUS, REGDATE, STARTDATE,
+			LIMIT_DAY, LIMIT_COUNT, LEC_TIME, MULTIPLE, LEC_DATE_YEAR, LEC_DATE_MONTH, EXAM_YEAR, IS_PACK, GOODS_ID
+		)
+		VALUES
+		(
+			T_LEC_SEQ.nextval, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, #{regdate}, #{startdate},
+			#{limitDay}, #{limitCount}, #{lecTime}, #{multiple}, #{lecDateYear}, #{lecDateMonth}, #{examYear}, #{isPacek}, #{goodsId}
+		)
+		<selectKey resultType="Integer" keyProperty="lecKey" order="BEFORE">
+			SELECT T_LEC_SEQ.nextval FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		INSERT INTO T_GOODS_TEACHER_LINK
+		(
+			G_TEACHER_KEY, G_KEY, IS_PUBLIC_SUBJECT, SUBJECT_CTG_KEY, TEACHER_KEY, CALCULATE_RATE
+		)
+		VALUES
+		(
+			T_GOODS_TEACHER_LINK_SEQ.nextval, #{gKey}, #{isPublicSubject}, #{subjectCtgKey}, #{teacherKey}, #{calculateRate}
+		)
+	</insert>
+
+	<insert id="insertTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		INSERT INTO T_LINK_KEY
+		(
+			LINK_KEY, REQ_KEY, RES_KEY, REQ_TYPE, RES_TYPE, POS, VALUE_BIT
+		)
+		VALUES
+		(
+			T_LINK_KEY_SEQ.nextval, #{reqKey}, #{resKey}, #{reqType}, #{resType}, 0, #{valueBit}
+		)
+	</insert>
+
+	<insert id="insertTLecCurri" parameterType="com.zianedu.lms.vo.TLecCurri">
+		INSERT INTO
+	</insert>
+
 	<update id="updateTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		UPDATE T_GOODS
 		<set>
@@ -149,5 +202,60 @@
 		</set>
 		WHERE PRICE_KEY = #{priceKey}
 	</update>
+
+	<update id="updateTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		UPDATE T_LEC
+		<set>
+			<if test="gKey > 0">G_KEY = #{gKey},</if>
+			<if test="teacherKey != null">TEACHER_KEY = #{teacherKey},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="stepCtgKey != null">STEP_CTG_KEY = #{stepCtgKey},</if>
+			<if test="status != null">STATUS = #{status},</if>
+			<if test="regdate != null or regdate != ''">REGDATE = #{regdate},</if>
+			<if test="startdate != null or startdate != ''">STARTDATE = #{startdate},</if>
+			<if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+			<if test="limitCount != null">LIMIT_COUNT = #{limitCount},</if>
+			<if test="lecTime != null">LEC_TIME = #{lecTime},</if>
+			<if test="multiple != null">MULTIPLE = #{multiple},</if>
+			<if test="lecDateYear != null">LEC_DATE_YEAR = #{lecDateYear},</if>
+			<if test="lecDateMonth != null">LEC_DATE_MONTH = #{lecDateMonth},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="isPack != null">IS_PACK = #{isPack},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+		</set>
+		WHERE LEC_KEY = #{lecKey}
+	</update>
+
+	<update id="updateTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		UPDATE T_GOODS_TEACHER_LINK
+		<set>
+			<if test="isPublicSubject != null">IS_PUBLIC_SUBJECT = #{isPublicSubject},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="teacherKey != null">TEACHER_KEY = #{teacherKey},</if>
+			<if test="calculateRate != null">CALCULATE_RATE = #{calculateRate},</if>
+		</set>
+		WHERE G_TEACHER_KEY = #{gTeacherKey}
+	</update>
+
+	<update id="updateTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		UPDATE T_LINK_KEY
+		<set>
+			<if test="reqKey > 0">REQ_KEY = #{reqKey},</if>
+			<if test="resKey > 0">RES_KEY = #{resKey},</if>
+			<if test="reqType > 0">RES_TYPE = #{reqType},</if>
+			<if test="resType > 0">RES_TYPE = #{resType},</if>
+			<if test="valueBit > 0">VALUE_BIT = #{valueBit},</if>
+		</set>
+		WHERE LINK_KEY = #{linkKey}
+	</update>
+
+	<delete id="deleteTCategoryGoods" parameterType="Integer">
+		DELETE FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
+	</delete>
+
+	<delete id="deleteTLinkKey" parameterType="Integer">
+		DELETE FROM T_LINK_KEY WHERE REQ_KEY = #{reqKey}
+	</delete>
 
 </mapper>

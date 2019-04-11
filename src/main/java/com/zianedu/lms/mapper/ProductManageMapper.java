@@ -36,13 +36,31 @@ public interface ProductManageMapper {
 
     int insertTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO);
 
+    void insertTCategoryGoods(TCategoryGoods tCategoryGoods);
+
+    int insertTLec(TLecVO tLecVO);
+
+    void insertTGoodsTeacherLink(TGoodTeacherLinkVO tGoodTeacherLinkVO);
+
+    void insertTLinkKey(TLinkKeyVO tLinkKeyVO);
+
+    void insertTLecCurri(TLecCurri tLecCurri);
 
 
     /** DELETE **/
+    void deleteTCategoryGoods(@Param("gKey") int gKey);
 
+    void deleteTLinkKey(@Param("reqKey") int reqKey);
 
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);
 
     void updateTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO);
+
+    void updateTLec(TLecVO tLecVO);
+
+    void updateTGoodsTeacherLink(TGoodTeacherLinkVO tGoodTeacherLinkVO);
+
+    void updateTLinkKey(TLinkKeyVO tLinkKeyVO);
+
 }
