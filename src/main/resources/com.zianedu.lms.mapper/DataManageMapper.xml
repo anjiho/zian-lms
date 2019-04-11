@@ -80,6 +80,10 @@
 		SELECT * FROM T_SCHEDULE ORDER BY START_DATE ASC
 	</select>
 
+	<select id="selectTScheduleInfo" resultType="com.zianedu.lms.vo.TScheduleVO">
+		SELECT * FROM T_SCHEDULE WHERE SCHEDULE_KEY = #{scheduleKey}
+	</select>
+
 	<select id="selectTSearchKeywordList" resultType="com.zianedu.lms.vo.TSearchKeywordVO">
 		SELECT * FROM T_SEARCH_KEYWORD
 		WHERE SITE_CLASS_NAME = #{className}

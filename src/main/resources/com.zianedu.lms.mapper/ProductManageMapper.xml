@@ -104,7 +104,7 @@
 		)
 		VALUES
 		(
-			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, #{ctgKey}, #{name}, #{price}, #{sellPrice}, #{point}, #{extendPercent}
+			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, "", "", #{price}, #{sellPrice}, #{point}, #{extendPercent}
 		)
 		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
 			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
@@ -135,6 +135,19 @@
 			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
 		</set>
 		WHERE G_KEY = #{gKey}
+	</update>
+
+	<update id="updateTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		UPDATE T_GOODS_PRICE_OPTION
+		<set>
+			<if test="gKey > 0">G_KEY = #{gKey},</if>
+			<if test="kind != null ">KIND = #{kind},</if>
+			<if test="price != null">PRICE = #{price},</if>
+			<if test="sellPrice != null">SELL_PRICE = #{sellPrice},</if>
+			<if test="point != null">POINT = #{point},</if>
+			<if test="extendPercent != null">EXTEND_PERCENT = #{extendPercent},</if>
+		</set>
+		WHERE PRICE_KEY = #{priceKey}
 	</update>
 
 </mapper>

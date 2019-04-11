@@ -36,9 +36,13 @@ public interface ProductManageMapper {
 
     int insertTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO);
 
+
+
     /** DELETE **/
 
 
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);
+
+    void updateTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO);
 }

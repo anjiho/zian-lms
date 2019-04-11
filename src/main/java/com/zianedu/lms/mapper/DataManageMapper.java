@@ -29,6 +29,8 @@ public interface DataManageMapper {
 
     List<TScheduleVO> selectTScheduleList();
 
+    TScheduleVO selectTScheduleInfo(@Param("scheduleKey") int scheduleKey);
+
     List<TSearchKeywordVO> selectTSearchKeywordList(@Param("className") String className);
 
     int selectTSearchKeywordLastPosNumber(@Param("className") String className);

@@ -98,6 +98,15 @@ public class DataManageService {
     }
 
     /**
+     * 시험일정 상세정보 가져오기
+     * @param scheduleKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TScheduleVO getExamScheduleDetailInfo(int scheduleKey) {
+        return dataManageMapper.selectTScheduleInfo(scheduleKey);
+    }
+    /**
      * 검색어 목록 가져오기
      * @param className
      * @return

@@ -196,14 +196,16 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 상품옵션정보 저장하기
+     * 상품옵션정보 저장및 수정
      * @param tGoodsPriceOptionVO
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer saveTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO) {
+    public Integer upsultTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO) {
         if (tGoodsPriceOptionVO == null) return null;
-        productManageMapper.insertTGoodsPriceOption(tGoodsPriceOptionVO);
+
+        if (tGoodsPriceOptionVO.getPriceKey() == 0) productManageMapper.insertTGoodsPriceOption(tGoodsPriceOptionVO);
+        else productManageMapper.updateTGoodsPriceOption(tGoodsPriceOptionVO);
         return tGoodsPriceOptionVO.getPriceKey() + 1;
     }
 
