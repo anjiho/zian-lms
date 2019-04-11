@@ -5,14 +5,14 @@ import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.VideoDetailInfoDTO;
 import com.zianedu.lms.mapper.DataManageMapper;
+import com.zianedu.lms.repository.ProductManageRepository;
 import com.zianedu.lms.service.DataManageService;
 import com.zianedu.lms.service.ProductManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
 import com.zianedu.lms.utils.GsonUtil;
 import com.zianedu.lms.utils.JsonBuilder;
 import com.zianedu.lms.utils.Util;
-import com.zianedu.lms.vo.TCategoryOtherInfoVO;
-import com.zianedu.lms.vo.TGoodsVO;
+import com.zianedu.lms.vo.*;
 import org.apache.http.HttpStatus;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -33,7 +33,7 @@ public class FileUploadController {
     private DataManageService dataManageService;
 
     @Autowired
-    private ProductManageService productManageService;
+    private ProductManageRepository productManageRepository;
 
     /**
      * 배너관리 등록및 수정
@@ -52,7 +52,11 @@ public class FileUploadController {
                                              @RequestParam(value = "ctgInfoKey") String ctgInfoKey, @RequestParam(value = "pos") String pos) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "BANNER");
         String filePath = null;
-        if (uploadInfoMap.get("filePath")== null) filePath = "";
+        if (uploadInfoMap.get("filePath")== null) {
+            filePath = "";
+        } else {
+            filePath = uploadInfoMap.get("filePath").toString();
+        }
 
         TCategoryOtherInfoVO tCategoryOtherInfoVO = new TCategoryOtherInfoVO(
                 Integer.parseInt(ctgKey),
@@ -77,7 +81,11 @@ public class FileUploadController {
 
     @RequestMapping(value = "/videoImgUpload", method = RequestMethod.POST)
     public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo,
-                                               @RequestParam(value = "videoOptionInfo") String videoOptionInfo) throws Exception {
+                                               @RequestParam(value = "videoOptionInfo") String videoOptionInfo,
+                                               @RequestParam(value = "videoCategoryInfo") String videoCategoryInfo,
+                                               @RequestParam(value = "videoLectureInfo") String videoLectureInfo,
+                                               @RequestParam(value = "videoTeacherInfo") String videoTeacherInfo,
+                                               @RequestParam(value = "videoOtherInfo") String videoOtherInfo) throws Exception {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
 
         String imageListFilePath = null;
@@ -85,18 +93,47 @@ public class FileUploadController {
 
         if (uploadInfoMap.get("imageListFilePath")== null) imageListFilePath = "";
         if (uploadInfoMap.get("imageViewFilePath")== null) imageViewFilePath = "";
-
-        JsonObject object = GsonUtil.conertStringToJsonObj(videoInfo);
+        //동영상 기본정보 정보
+        JsonObject videoInfoJson = GsonUtil.convertStringToJsonObj(videoInfo);
         Gson gson = new Gson();
-        TGoodsVO tGoodsVO = gson.fromJson(object, TGoodsVO.class);
+        TGoodsVO tGoodsVO = gson.fromJson(videoInfoJson, TGoodsVO.class);
 
-        JsonParser parser = new JsonParser();
-        JsonElement element = parser.parse(videoOptionInfo);
-        JsonArray jsonArray = element.getAsJsonArray();
+        //동영상 옵션 정보
+        JsonArray videoOptionInfoJson = GsonUtil.convertStringToJsonArray(videoOptionInfo);
+        List<TGoodsPriceOptionVO>tGoodsPriceOptionVOList = GsonUtil.getObjectFromJsonArray(videoOptionInfoJson, TGoodsPriceOptionVO.class);
+
+        //동영상 카테코리 정보
+        JsonArray videoCategoryInfoJson = GsonUtil.convertStringToJsonArray(videoCategoryInfo);
+        List<TCategoryGoods>tCategoryVOList = GsonUtil.getObjectFromJsonArray(videoCategoryInfoJson, TCategoryGoods.class);
+
+        //동영상 강좌 정보
+        JsonObject videoLectureInfoJson = GsonUtil.convertStringToJsonObj(videoLectureInfo);
+        Gson gson2 = new Gson();
+        TLecVO tLecVO = gson2.fromJson(videoLectureInfoJson, TLecVO.class);
+
+        //동영상 강사 정보
+        JsonArray videoTeacherInfoJson = GsonUtil.convertStringToJsonArray(videoTeacherInfo);
+        List<TGoodTeacherLinkVO>tGoodTeacherLinkVOS = GsonUtil.getObjectFromJsonArray(videoTeacherInfoJson, TGoodTeacherLinkVO.class);
+
+        //전범위, 기출문제, 강의교재, 사은품 정보
+        JsonArray videoOtherInfoJson = GsonUtil.convertStringToJsonArray(videoOtherInfo);
+        List<TLinkKeyVO>tLinkKeyVOList = GsonUtil.getObjectFromJsonArray(videoOtherInfoJson, TLinkKeyVO.class);
+
+        Integer gKey = productManageRepository.saveVideoInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
+                tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, imageListFilePath, imageViewFilePath);
 
 
-        productManageService.upsultGoodsInfo(tGoodsVO, imageListFilePath, imageListFilePath);
+        return new JsonBuilder().add("result", gKey).build();
+    }
 
-        return new JsonBuilder().add("result", ZianCoreManage.OK).build();
+    /**
+     * 동영상 강의 입력에서 강의자료 파일 업로드
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST)
+    public @ResponseBody String lectureCurriInfo(MultipartHttpServletRequest request) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
+        return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
     }
 }

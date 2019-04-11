@@ -98,6 +98,15 @@ public class DataManageService {
     }
 
     /**
+     * 시험일정 상세정보 가져오기
+     * @param scheduleKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TScheduleVO getExamScheduleDetailInfo(int scheduleKey) {
+        return dataManageMapper.selectTScheduleInfo(scheduleKey);
+    }
+    /**
      * 검색어 목록 가져오기
      * @param className
      * @return
@@ -106,6 +115,17 @@ public class DataManageService {
     public List<TSearchKeywordVO> getSearchKeywordList(String className) {
         if ("".equals(className)) return null;
         return dataManageMapper.selectTSearchKeywordList(className.toLowerCase());
+    }
+
+    /**
+     * 검색어 상세정보 가져오기
+     * @param searchKeywordKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TSearchKeywordVO getSearchKeywordInfo(int searchKeywordKey) {
+        if (searchKeywordKey == 0) return null;
+        return dataManageMapper.selectTSearchKeywordInfo(searchKeywordKey);
     }
 
     /**

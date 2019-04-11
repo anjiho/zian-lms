@@ -80,10 +80,19 @@
 		SELECT * FROM T_SCHEDULE ORDER BY START_DATE ASC
 	</select>
 
+	<select id="selectTScheduleInfo" resultType="com.zianedu.lms.vo.TScheduleVO">
+		SELECT * FROM T_SCHEDULE WHERE SCHEDULE_KEY = #{scheduleKey}
+	</select>
+
 	<select id="selectTSearchKeywordList" resultType="com.zianedu.lms.vo.TSearchKeywordVO">
 		SELECT * FROM T_SEARCH_KEYWORD
 		WHERE SITE_CLASS_NAME = #{className}
 		ORDER BY POS ASC
+	</select>
+
+	<select id="selectTSearchKeywordInfo" resultType="com.zianedu.lms.vo.TSearchKeywordVO">
+		SELECT * FROM T_SEARCH_KEYWORD
+		WHERE SEARCH_KEYWORD_KEY = #{searchKeywordKey}
 	</select>
 
     <select id="selectTSearchKeywordLastPosNumber" parameterType="String" resultType="Integer">
@@ -94,6 +103,13 @@
         ) Z
         WHERE ROWNUM = 1
     </select>
+
+	<select id="selectTeacherList" resultType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		SELECT A.TEACHER_KEY, B.NAME as TEACHER_NAME
+		FROM T_TEACHER A LEFT JOIN T_USER B
+		ON A.USER_KEY = B.USER_KEY
+		ORDER BY NAME ASC
+	</select>
 
 	<insert id="insertTCategoryInfo">
 		INSERT INTO T_CATEGORY

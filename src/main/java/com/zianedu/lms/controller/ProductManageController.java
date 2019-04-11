@@ -21,9 +21,9 @@ public class ProductManageController {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
         if("playSave".equals(page_gbn)) {
-            mvc.setViewName("product/playmanage");
+            mvc.setViewName("product/playManage");
         }else if("playList".equals(page_gbn)) {
-            mvc.setViewName("product/playlist");
+            mvc.setViewName("product/playList");
         }
         return mvc;
     }

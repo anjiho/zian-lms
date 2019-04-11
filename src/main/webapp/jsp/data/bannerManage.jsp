@@ -1,46 +1,61 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
-
 <script>
     $(document).ready(function() {
-        changeBox2();
-        //getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
-        //changeBox2('216');
-        //$("#dragtable0").empty();
+        getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
+        changeBox2('216');
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
         $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+
     });
-    $(document).on('change', '.custom-file-input1', function() {
+
+    function getThumbnailPrivew(html, $target) {
+        if (html.files && html.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $target.css('display', '');
+                //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
+                $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
+                alert(target.result);
+            }
+            reader.readAsDataURL(html.files[0]);
+        }
+    }
+    /*$(document).on('change', '.custom-file-input1', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
-    function changeBox2() {
+    });*/
+
+
+    function changeBox2(val) {
         $(".card").remove();
-        dataManageService.getSideBarBannerList(4200,function (selList) {
+        dataManageService.getBannerList(val,function (selList) {
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     var result = cmpList.result;
                     var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0)'  class='btn btn-success btn-sm' style='float: right'>추가</button>";
+                    var posListBtn = "  <button type=\"button\" class=\"btn btn-info\" onclick=\"changeBannerList("+i+");\">순서변경저장</button>";
                     if(result.name){
-                        var bannerNmaeHtml = "<div class='card'>";
-                        bannerNmaeHtml += '<div class=\'card-body\'>';
-                        bannerNmaeHtml += '<div class=\'row\'>';
-                        bannerNmaeHtml += "<label class=\'text-right control-label col-form-label\'>" + result.name + "</label>";
-                        bannerNmaeHtml += '</div>';
-                        bannerNmaeHtml += "<div id='"+result.ctgKey+"'>";
-                        bannerNmaeHtml += addBtn;
-                        bannerNmaeHtml += '</div>';
-                        bannerNmaeHtml += '</div>';
-                        bannerNmaeHtml += '</div>';
-                        $("#test").append(bannerNmaeHtml);
+                        var bannerNameHtml = "<div class='card'>";
+                        bannerNameHtml += '<div class=\'card-body\'>';
+                        bannerNameHtml += '<div class=\'row\'>';
+                        bannerNameHtml += "<label class=\'text-right control-label col-form-label\'>" + result.name + "</label>";
+                        bannerNameHtml += '</div>';
+                        bannerNameHtml += "<div id='"+result.ctgKey+"'>";
+                        bannerNameHtml += addBtn;
+                        bannerNameHtml += posListBtn;
+                        bannerNameHtml += '</div>';
+                        bannerNameHtml += '</div>';
+                        bannerNameHtml += '</div>';
+                        $("#bannerName").append(bannerNameHtml);
                     }
-                    var dragidText = "dragtable"+i;
-                    var bannerContentHtml = "<table class='table'  id='dragtable"+i+"' cellspacing='0' cellpadding='2'>";
+                    var bannerContentHtml = "<table class='table'  id='dragtable_"+i+"' cellspacing='0' cellpadding='2'>";
                     bannerContentHtml += '<thead>';
                     bannerContentHtml += ' <tr>';
                     bannerContentHtml += '<th>타이틀</th>';
@@ -55,22 +70,27 @@
                     bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
                     bannerContentHtml += '</table>';
                     $('#'+result.ctgKey).append(bannerContentHtml);
-                    $('#'+dragidText).tableDnD();
+
+                    $( "#dragtable_" + i +" tbody" ).sortable({
+                        update: function( event, ui ) {
+                            $(this).children().each(function(index) {
+                                $(this).find('tr').last().html(index + 1);
+                            });
+                        }
+                    });
+
                     var selList2 = cmpList.resultList;
                     var dataList =  "dataList"+i;
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
-
                         var btn = '<button type="button" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')" class="btn btn-danger btn-sm">삭제</button>';
                         var bitText = "";
-                        if(cmpList1.valueBit1 == "1"){
-                            bitText = "O";
-                        }else {
-                            bitText = "X";
-                        }
+
+                        if(cmpList1.valueBit1 == "1") bitText = "O";
+                        else bitText = "X";
+
                         if (cmpList1 != undefined) {
                             var cellData = [
-                                //return cmpList1.valueBit1 == null ? "-" : cmpList1.value1;
                                 function(data) {return cmpList1.value5 == null ? "-" : cmpList1.value5;},
                                 function(data) {return cmpList1.value1 == null ? "-" : cmpList1.value1;},
                                 function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
@@ -79,7 +99,15 @@
                                 function(data) {return cmpList1.value4 == null ? "-" : cmpList1.value4;},
                                 function(data) {return btn;}
                             ];
-                            dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
+                            dwr.util.addRows(dataList, [0], cellData, {
+                                rowCreator:function(options) {
+                                    var row = document.createElement("tr");
+                                    var index = options.rowIndex * 50;
+                                    row.id = cmpList1.ctgInfoKey;
+                                    row.className = "ui-state-default even ui-sortable-handle";
+                                    return row;
+                                },
+                                escapeHtml:false});
                         }
                     }
                 }
@@ -107,16 +135,16 @@
         });
     }
     function popup_save(val,ctgKey,pos) { //추가팝업
+        //팝업 value값 초기화
         $('#myModal').show();
         $("#title").val("");
         $("#bannerColor").val("");
         $("#bannerLink").val("");
         $('.custom-file-control').html("");
-        $("#newPopYn").prop('checked', false);
-
         $("#bannerKey").val(val);
         $("#ctgKey").val(ctgKey);
         $("#pos").val(pos);
+        $("#newPopYn").prop('checked', false) ;
     }
     //팝업 Close 기능
     function close_pop(flag) {
@@ -129,18 +157,28 @@
         $.each($('#attachFile')[0].files, function(i, file) {
             data.append('file_name', file);
         });
+
+        /*var reader = new FileReader();
+        reader.onload = function (e) {
+            $target.css('display', '');
+            //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
+            $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
+        }
+        reader.readAsDataURL(html.files[0]);
+        */
         var attachFile = fn_clearFilePath($('#attachFile').val());
-        var ctgKey= $("#ctgKey").val();
-        var pos = $("#pos").val();
-        var bannerKey= $("#bannerKey").val();
-        var title = $("#title").val();
-        var bannerColor = $("#bannerColor").val();
-        var newPopYn =  $('input:checkbox[id="newPopYn"]').val();
+        var ctgKey     = $("#ctgKey").val();
+        var pos        = $("#pos").val();
+        var bannerKey  = $("#bannerKey").val();
+        var title      = $("#title").val();
+        var bannerColor= $("#bannerColor").val();
         var bannerLink = $("#bannerLink").val();
-
-        if(newPopYn == 'on')  newPopYn = 1;
-        else newPopYn = 0;
-
+        var newPopYn = "";
+        if($('input:checkbox[name="newPopYn1"]').is(":checked") == true){
+            newPopYn = '1';
+        }else{
+            newPopYn = '0';
+        }
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
         data.append("ctgKey", ctgKey);
@@ -172,6 +210,84 @@
             });
         }
     }
+
+    function changeBannerList(val) {
+        var arr = new Array();    // 배열 선언
+        var tableName =  "dragtable_"+val;
+        if(val == '0'){
+            $("#dragtable_0 tbody tr").each(function(index) {
+                var id = $(this).attr("id");
+                var ctgInfoKey = id;
+                var pos = index;
+                var data = {
+                    ctgInfoKey : ctgInfoKey,
+                    pos : pos
+                };
+                arr.push(data);
+            });
+            dataManageService.changeBannerPosition(arr, function () {
+                location.reload();
+            });
+        }else if(val == "1"){
+            $("#dragtable_1 tbody tr").each(function(index) {
+                var id = $(this).attr("id");
+                var ctgInfoKey = id;
+                var pos = index;
+                var data = {
+                    ctgInfoKey : ctgInfoKey,
+                    pos : pos
+                };
+
+                arr.push(data);
+            });
+            dataManageService.changeBannerPosition(arr, function () {
+                location.reload();
+            });
+        }else if(val == "2"){
+            $("#dragtable_2 tbody tr").each(function(index) {
+                var id = $(this).attr("id");
+                var ctgInfoKey = id;
+                var pos = index;
+                var data = {
+                    ctgInfoKey : ctgInfoKey,
+                    pos : pos
+                };
+                arr.push(data);
+            });
+            dataManageService.changeBannerPosition(arr, function () {
+                location.reload();
+            });
+        }else if(val == "3"){
+            $("#dragtable_3 tbody tr").each(function(index) {
+                var id = $(this).attr("id");
+                var ctgInfoKey = id;
+                var pos = index;
+                var data = {
+                    ctgInfoKey : ctgInfoKey,
+                    pos : pos
+                };
+                arr.push(data);
+            });
+            dataManageService.changeBannerPosition(arr, function () {
+                location.reload();
+            });
+        }else if(val == "4"){
+            $("#dragtable_4 tbody tr").each(function(index) {
+                var id = $(this).attr("id");
+                var ctgInfoKey = id;
+                var pos = index;
+                var data = {
+                    ctgInfoKey : ctgInfoKey,
+                    pos : pos
+                };
+
+                arr.push(data);
+            });
+            dataManageService.changeBannerPosition(arr, function () {
+                location.reload();
+            });
+        }
+    }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -181,7 +297,7 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">배너관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">사이드배너관리</li>
+                        <li class="breadcrumb-item active" aria-current="page">배너관리</li>
                     </ol>
                 </nav>
             </div>
@@ -189,7 +305,17 @@
     </div>
 </div>
 <div class="container-fluid">
-    <div id="test"></div>
+    <div class="form-group">
+        <div class="row">
+            <label  class="text-right control-label col-form-label">서브도메인</label>
+            <div class="col-sm-5">
+                <select id="sel_subDomain" class="form-control" onChange="changeBox2(this.value);">
+                    <option value="">선택</option>
+                </select>
+            </div>
+        </div>
+    </div>
+    <div id="bannerName"></div>
     <!-- The Modal -->
     <form name="popupModal" id="popupModal">
         <div id="myModal" class="modal1">
@@ -207,13 +333,21 @@
                 <div class="form-group row">
                     <label class="text-right control-label col-form-label">이미지</label>
                     <div class="col-sm-9">
-                        <label class="custom-file">
-                            <input type="file" id="attachFile" class="custom-file-input" required>
+                        <!--<label class="custom-file">
+                            <input type="file" id="attachFile" class="custom-file-input" onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
                             <span class="custom-file-control"></span>
-                        </label>
+                            <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
+                        </label>-->
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="attachFile"  onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
+                                    <span class="custom-file-control custom-file-label"></span>
+                                     <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
+                                </div>
+
+
                     </div>
                 </div>
-                <div class="form-group row">
+                <!--<div class="form-group row">
                     <label class="text-right control-label col-form-label">배경이미지</label>
                     <div class="col-sm-9">
                         <label class="custom-file1">
@@ -221,7 +355,7 @@
                             <span class="custom-file-control1"></span>
                         </label>
                     </div>
-                </div>
+                </div>-->
                 <div class="form-group row">
                     <label class="text-right control-label col-form-label">배경색상</label>
                     <div class="col-sm-9">
@@ -234,7 +368,7 @@
                         <div style="margin-top: -23px;">
                             OFF
                             <label class="switch">
-                                <input type="checkbox" id="newPopYn">
+                                <input type="checkbox" id="newPopYn" name="newPopYn">
                                 <span class="slider"></span>
                             </label>
                             ON
@@ -274,4 +408,26 @@
 
         return tmpStr;
     }
+    /*
+    $(document).ready(function() {
+        $( "#dragtable_0 tbody" ).sortable( {
+            update: function( event, ui ) {
+                alert("1");
+                $(this).children().each(function(index) {
+                    $(this).find('tr').last().html(index + 1);
+                });
+            }
+        });
+    })
+    */
 </script>
+<style>
+    .sidebar-nav ul .sidebar-item.selected>.sidebar-link {
+        background: #27a9e3;
+        opacity: 1;
+    }
+    .collapse.in {
+        display: block;
+    }
+
+</style>

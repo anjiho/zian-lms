@@ -25,6 +25,27 @@
 		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
 	</select>
 
+	<select id="selectVideoListCount" resultType="Integer">
+		SELECT count(A.G_KEY) as CNT
+		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
+		ON A.G_KEY = B.G_KEY
+		LEFT JOIN T_TEACHER C
+		ON B.TEACHER_KEY = C.TEACHER_KEY
+		LEFT JOIN T_USER D
+		ON C.USER_KEY = D.USER_KEY
+		LEFT JOIN T_LEC E
+		ON A.G_KEY = E.G_KEY
+		WHERE 1=1
+		AND A.TYPE = 1
+		ORDER BY A.G_KEY DESC
+		<if test="searchType eq 'code'">
+			AND A.G_KEY = #{searchText}
+		</if>
+		<if test="searchType eq 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
 	<select id="selectTGoodsInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TGoodsVO">
 		SELECT * FROM T_GOODS WHERE G_KEY = #{gKey}
 	</select>
@@ -81,6 +102,20 @@
 		SELECT * FROM T_LINK_KEY WHERE req_key = #{reqKey}
 	</select>
 
+	<select id="selectTLecCurriLastPos" parameterType="Integer" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey}
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTExamList">
+		SELECT * FROM T_EXAM_MASTER
+		ORDER BY EXAM_KEY DESC
+		OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
+	</select>
+
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		INSERT INTO T_GOODS
 		(
@@ -104,10 +139,75 @@
 		)
 		VALUES
 		(
-			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, #{ctgKey}, #{name}, #{price}, #{sellPrice}, #{point}, #{extendPercent}
+			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, '', '', #{price}, #{sellPrice}, #{point}, #{extendPercent}
 		)
 		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
 			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertTCategoryGoods" parameterType="com.zianedu.lms.vo.TCategoryGoods">
+		INSERT INTO T_CATEGORY_GOODS
+		(
+			CTG_G_KEY, CTG_KEY, G_KEY, POS
+		)
+		VALUES
+		(
+			T_CATEGORY_GOODS_SEQ.nextval, #{ctgKey}, #{gKey}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		INSERT INTO T_LEC
+		(
+			LEC_KEY, G_KEY, TEACHER_KEY, CLASS_GROUP_CTG_KEY, SUBJECT_CTG_KEY, STEP_CTG_KEY, STATUS, REGDATE, STARTDATE,
+			LIMIT_DAY, LIMIT_COUNT, LEC_TIME, MULTIPLE, LEC_DATE_YEAR, LEC_DATE_MONTH, EXAM_YEAR, IS_PACK, GOODS_ID
+		)
+		VALUES
+		(
+			T_LEC_SEQ.nextval, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, #{regdate}, #{startdate},
+			#{limitDay}, #{limitCount}, #{lecTime}, #{multiple}, #{lecDateYear}, #{lecDateMonth}, #{examYear}, #{isPack}, #{goodsId}
+		)
+		<selectKey resultType="Integer" keyProperty="lecKey" order="BEFORE">
+			SELECT T_LEC_SEQ.nextval FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		INSERT INTO T_GOODS_TEACHER_LINK
+		(
+			G_TEACHER_KEY, G_KEY, IS_PUBLIC_SUBJECT, SUBJECT_CTG_KEY, TEACHER_KEY, CALCULATE_RATE
+		)
+		VALUES
+		(
+			T_GOODS_TEACHER_LINK_SEQ.nextval, #{gKey}, #{isPublicSubject}, #{subjectCtgKey}, #{teacherKey}, #{calculateRate}
+		)
+	</insert>
+
+	<insert id="insertTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		INSERT INTO T_LINK_KEY
+		(
+			LINK_KEY, REQ_KEY, RES_KEY, REQ_TYPE, RES_TYPE, POS, VALUE_BIT
+		)
+		VALUES
+		(
+			T_LINK_KEY_SEQ.nextval, #{reqKey}, #{resKey}, #{reqType}, #{resType}, 0, #{valueBit}
+		)
+	</insert>
+
+	<insert id="insertTLecCurri" parameterType="com.zianedu.lms.vo.TLecCurri">
+		INSERT INTO T_LEC_CURRI
+		(
+			CURRI_KEY, LEC_KEY, NAME, VOD_FILE_LOW, VOD_FILE_HIGH, VOD_FILE_MOBILE_LOW, VOD_FILE_MOBILE_HIGH,
+			VOD_TIME, DATA_FILE, IS_SHOW, IS_SAMPLE, POS
+		)
+		VALUES
+		(
+			T_LEC_CURRI_SEQ.nextval, #{lecKey}, #{name}, #{vodFileLow}, #{vodFileHigh}, #{vodFileMobileLow}, #{vodFileMobileHigh},
+			#{vodTime}, #{dataFile}, #{isShow}, #{isSample}, #{pos}
+		)
+		<selectKey resultType="Integer" keyProperty="curriKey" order="BEFORE">
+			SELECT T_LEC_CURRI_SEQ.nextval FROM DUAL
 		</selectKey>
 	</insert>
 
@@ -136,5 +236,106 @@
 		</set>
 		WHERE G_KEY = #{gKey}
 	</update>
+
+	<update id="updateTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		UPDATE T_GOODS_PRICE_OPTION
+		<set>
+			<if test="gKey > 0">G_KEY = #{gKey},</if>
+			<if test="kind != null ">KIND = #{kind},</if>
+			<if test="price != null">PRICE = #{price},</if>
+			<if test="sellPrice != null">SELL_PRICE = #{sellPrice},</if>
+			<if test="point != null">POINT = #{point},</if>
+			<if test="extendPercent != null">EXTEND_PERCENT = #{extendPercent},</if>
+		</set>
+		WHERE PRICE_KEY = #{priceKey}
+	</update>
+
+	<update id="updateTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		UPDATE T_LEC
+		<set>
+			<if test="gKey > 0">G_KEY = #{gKey},</if>
+			<if test="teacherKey != null">TEACHER_KEY = #{teacherKey},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="stepCtgKey != null">STEP_CTG_KEY = #{stepCtgKey},</if>
+			<if test="status != null">STATUS = #{status},</if>
+			<if test="regdate != null or regdate != ''">REGDATE = #{regdate},</if>
+			<if test="startdate != null or startdate != ''">STARTDATE = #{startdate},</if>
+			<if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+			<if test="limitCount != null">LIMIT_COUNT = #{limitCount},</if>
+			<if test="lecTime != null">LEC_TIME = #{lecTime},</if>
+			<if test="multiple != null">MULTIPLE = #{multiple},</if>
+			<if test="lecDateYear != null">LEC_DATE_YEAR = #{lecDateYear},</if>
+			<if test="lecDateMonth != null">LEC_DATE_MONTH = #{lecDateMonth},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="isPack != null">IS_PACK = #{isPack},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+		</set>
+		WHERE LEC_KEY = #{lecKey}
+	</update>
+
+	<update id="updateTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		UPDATE T_GOODS_TEACHER_LINK
+		<set>
+			<if test="isPublicSubject != null">IS_PUBLIC_SUBJECT = #{isPublicSubject},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="teacherKey != null">TEACHER_KEY = #{teacherKey},</if>
+			<if test="calculateRate != null">CALCULATE_RATE = #{calculateRate},</if>
+		</set>
+		WHERE G_TEACHER_KEY = #{gTeacherKey}
+	</update>
+
+	<update id="updateTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		UPDATE T_LINK_KEY
+		<set>
+			<if test="reqKey > 0">REQ_KEY = #{reqKey},</if>
+			<if test="resKey > 0">RES_KEY = #{resKey},</if>
+			<if test="reqType > 0">RES_TYPE = #{reqType},</if>
+			<if test="resType > 0">RES_TYPE = #{resType},</if>
+			<if test="valueBit > 0">VALUE_BIT = #{valueBit},</if>
+		</set>
+		WHERE LINK_KEY = #{linkKey}
+	</update>
+
+	<update id="updateTLecCurri" parameterType="com.zianedu.lms.vo.TLecCurri">
+		UPDATE T_LEC_CURRI
+		<set>
+			<if test="name != '' or name != null">NAME = #{name},</if>
+			<if test="vodFileLow != '' or vodFileLow != null">VOD_FILE_LOW = #{vodFileLow},</if>
+			<if test="vodFileHigh != '' or vodFileHigh != null">VOD_FILE_HIGH = #{vodFileHigh},</if>
+			<if test="vodFileMobileLow != '' or vodFileMobileLow != null">VOD_FILE_MOBILE_LOW = #{vodFileMobileLow},</if>
+			<if test="vodFileMobileHigh != '' or vodFileMobileHigh != null">VOD_FILE_MOBILE_HIGH = #{vodFileMobileHigh},</if>
+			<if test="vodTime > 0">VOD_TIME = #{vodTime},</if>
+			<if test="dataFile != '' or dataFile != null">DATA_FILE = #{dataFile},</if>
+			<if test="isShow != null">IS_SHOW = #{isShow},</if>
+			<if test="isSample != null">IS_SAMPLE = #{isSample},</if>
+			<if test="pos != null">POS = #{pos},</if>
+		</set>
+		WHERE CURRI_KEY = #{curriKey}
+	</update>
+
+	<delete id="deleteTCategoryGoods" parameterType="Integer">
+		DELETE FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
+	</delete>
+
+	<delete id="deleteTLinkKey" parameterType="Integer">
+		DELETE FROM T_LINK_KEY WHERE REQ_KEY = #{reqKey}
+	</delete>
+
+	<delete id="deleteTLinkKeyByLinkKey" parameterType="Integer">
+		DELETE FROM T_LINK_KEY WHERE LINK_KEY = #{linkKey}
+	</delete>
+
+	<delete id="deleteTGoodsTeacherLink" parameterType="Integer">
+		DELETE FROM T_GOODS_TEACHER_LINK WHERE G_TEACHER_KEY = #{gTeacherKey}
+	</delete>
+
+	<delete id="deleteTLecCurri" parameterType="Integer">
+		DELETE FROM T_LEC_CURRI WHERE CURRI_KEY #{curriKey}
+	</delete>
+
+	<delete id="deleteTCategoryGoodsByCtgGKey" parameterType="Integer">
+		DELETE FROM T_CATEGORY_GOODS WHERE CTG_G_KEY = #{ctgGKey}
+	</delete>
 
 </mapper>

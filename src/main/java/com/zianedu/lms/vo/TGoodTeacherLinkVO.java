@@ -15,7 +15,7 @@ public class TGoodTeacherLinkVO {
 
     private int teacherKey;
 
-    private int calcuateRate;
+    private int calculateRate;
 
     private String subjectName;
 
