@@ -9,6 +9,7 @@ import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.vo.*;
 import oracle.net.aso.g;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -197,16 +198,92 @@ public class ProductManageService extends PagingSupport {
 
     /**
      * 상품옵션정보 저장및 수정
-     * @param tGoodsPriceOptionVO
+     * @param tGoodsPriceOptionVOList
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer upsultTGoodsPriceOption(TGoodsPriceOptionVO tGoodsPriceOptionVO) {
-        if (tGoodsPriceOptionVO == null) return null;
+    public void upsultTGoodsPriceOption(List<TGoodsPriceOptionVO> tGoodsPriceOptionVOList, int gKey) {
+        if (tGoodsPriceOptionVOList.size() == 0) return;
 
-        if (tGoodsPriceOptionVO.getPriceKey() == 0) productManageMapper.insertTGoodsPriceOption(tGoodsPriceOptionVO);
-        else productManageMapper.updateTGoodsPriceOption(tGoodsPriceOptionVO);
-        return tGoodsPriceOptionVO.getPriceKey() + 1;
+        for (TGoodsPriceOptionVO optionVO : tGoodsPriceOptionVOList) {
+            optionVO.setGKey(gKey);
+            if (optionVO.getPriceKey() == 0) {
+                productManageMapper.insertTGoodsPriceOption(optionVO);
+            } else {
+                productManageMapper.updateTGoodsPriceOption(optionVO);
+            }
+        }
+    }
+
+    /**
+     * 동영상 카테고리 삭제 후 저장하기
+     * @param tCategoryGoodsList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultTCategoryGoods(List<TCategoryGoods>tCategoryGoodsList, int gKey) {
+        if (tCategoryGoodsList.size() == 0) return;
+
+        productManageMapper.deleteTCategoryGoods(tCategoryGoodsList.get(0).getGKey());
+        for (TCategoryGoods categoryGoods : tCategoryGoodsList) {
+            categoryGoods.setGKey(gKey);
+            categoryGoods.setPos(0);
+            productManageMapper.insertTCategoryGoods(categoryGoods);
+        }
+    }
+
+    /**
+     * 동영상 강좌정보 저장및 수정
+     * @param tLecVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultTLec(TLecVO tLecVO, int gKey) {
+        if (tLecVO == null) return;
+
+        tLecVO.setGKey(gKey);
+        if (tLecVO.getLecKey() == 0) productManageMapper.insertTLec(tLecVO);
+        else productManageMapper.updateTLec(tLecVO);
+    }
+
+    /**
+     * 동영상 강사목록 저장및 수정
+     * @param tGoodTeacherLinkVOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultTGoodTeacherLink(List<TGoodTeacherLinkVO> tGoodTeacherLinkVOList, int gKey) {
+        if (tGoodTeacherLinkVOList.size() == 0) return;
+
+        for (TGoodTeacherLinkVO teacherLinkVO : tGoodTeacherLinkVOList) {
+            teacherLinkVO.setGKey(gKey);
+            if (teacherLinkVO.getGTeacherKey() == 0) productManageMapper.insertTGoodsTeacherLink(teacherLinkVO);
+            else productManageMapper.updateTGoodsTeacherLink(teacherLinkVO);
+        }
+    }
+
+    /**
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 저장
+     * @param tLinkKeyVOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultTLinkKink(List<TLinkKeyVO>tLinkKeyVOList, int gKey) {
+        if (tLinkKeyVOList.size() == 0) return;
+
+        productManageMapper.deleteTLinkKey(tLinkKeyVOList.get(0).getReqKey());
+        for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
+            tLinkKeyVO.setReqKey(gKey);
+            productManageMapper.insertTLinkKey(tLinkKeyVO);
+        }
+    }
+
+    /**
+     * 강의교재 주교재, 부교재 설정하기
+     * @param linkKey
+     * @param valueBit
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateLectureBookStatus(int linkKey, int valueBit) {
+        if (linkKey == 0) return;
+        TLinkKeyVO tLinkKeyVO = new TLinkKeyVO(linkKey, valueBit);
+        productManageMapper.updateTLinkKey(tLinkKeyVO);
     }
 
 }

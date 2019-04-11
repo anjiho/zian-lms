@@ -90,6 +90,11 @@
 		ORDER BY POS ASC
 	</select>
 
+	<select id="selectTSearchKeywordInfo" resultType="com.zianedu.lms.vo.TSearchKeywordVO">
+		SELECT * FROM T_SEARCH_KEYWORD
+		WHERE SEARCH_KEYWORD_KEY = #{searchKeywordKey}
+	</select>
+
     <select id="selectTSearchKeywordLastPosNumber" parameterType="String" resultType="Integer">
         SELECT Z.* FROM (
             SELECT POS FROM T_SEARCH_KEYWORD

@@ -33,6 +33,8 @@ public interface DataManageMapper {
 
     List<TSearchKeywordVO> selectTSearchKeywordList(@Param("className") String className);
 
+    TSearchKeywordVO selectTSearchKeywordInfo(@Param("searchKeywordKey") int searchKeywordKey);
+
     int selectTSearchKeywordLastPosNumber(@Param("className") String className);
 
     /** INSERT **/

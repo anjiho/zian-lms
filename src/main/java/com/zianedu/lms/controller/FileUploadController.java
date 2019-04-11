@@ -103,7 +103,7 @@ public class FileUploadController {
 
         //동영상 카테코리 정보
         JsonArray videoCategoryInfoJson = GsonUtil.convertStringToJsonArray(videoCategoryInfo);
-        List<TCategoryVO>tCategoryVOList = GsonUtil.getObjectFromJsonArray(videoCategoryInfoJson, TCategoryVO.class);
+        List<TCategoryGoods>tCategoryVOList = GsonUtil.getObjectFromJsonArray(videoCategoryInfoJson, TCategoryGoods.class);
 
         //동영상 강좌 정보
         JsonObject videoLectureInfoJson = GsonUtil.convertStringToJsonObj(videoLectureInfo);
@@ -121,7 +121,11 @@ public class FileUploadController {
         Integer gKey = productManageService.upsultGoodsInfo(tGoodsVO, imageListFilePath, imageListFilePath);
 
         if (gKey != null || gKey > 0) {
-
+            productManageService.upsultTGoodsPriceOption(tGoodsPriceOptionVOList, gKey);
+            productManageService.upsultTCategoryGoods(tCategoryVOList, gKey);
+            productManageService.upsultTLec(tLecVO, gKey);
+            productManageService.upsultTGoodTeacherLink(tGoodTeacherLinkVOS, gKey);
+            productManageService.upsultTLinkKink(tLinkKeyVOList, gKey);
         }
 
 
