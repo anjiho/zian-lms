@@ -104,6 +104,13 @@
         WHERE ROWNUM = 1
     </select>
 
+	<select id="selectTeacherList" resultType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		SELECT A.TEACHER_KEY, B.NAME as TEACHER_NAME
+		FROM T_TEACHER A LEFT JOIN T_USER B
+		ON A.USER_KEY = B.USER_KEY
+		ORDER BY NAME ASC
+	</select>
+
 	<insert id="insertTCategoryInfo">
 		INSERT INTO T_CATEGORY
 		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME )

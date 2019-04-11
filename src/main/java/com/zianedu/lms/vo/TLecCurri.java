@@ -29,9 +29,8 @@ public class TLecCurri {
 
     private int isSample;
 
-    private int unitCtgKey;
+    private int unitCtgKey = 0;
 
     private int pos;
 
-    private int tmp;
 }

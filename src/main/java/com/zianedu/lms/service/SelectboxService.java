@@ -6,6 +6,7 @@ import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.SelectboxMapper;
 import com.zianedu.lms.vo.SearchKeywordDomainVO;
 import com.zianedu.lms.vo.TCategoryVO;
+import com.zianedu.lms.vo.TGoodTeacherLinkVO;
 import com.zianedu.lms.vo.TSiteVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -141,6 +142,15 @@ public class SelectboxService {
             list.add(i);
         }
         return list;
+    }
+
+    /**
+     * 선생님 전체 목록 셀렉트박스
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TGoodTeacherLinkVO>selectTeacherSelectbox() {
+        return dataManageMapper.selectTeacherList();
     }
 
 }

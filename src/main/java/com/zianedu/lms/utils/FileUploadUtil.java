@@ -35,6 +35,8 @@ public class FileUploadUtil {
                     } else {
                         filePath = "100/lec/";
                     }
+                } else if ("CURRI".equals(uploadType)) {
+                    filePath = "100/lec/";
                 }
 
                 if (uploadFileName != null || !"".equals(uploadFileName)) {
@@ -67,6 +69,9 @@ public class FileUploadUtil {
                             filePath = "100/lec/";
                             map.put("imageViewFilePath", filePath + fileName);
                         }
+                    } else if ("CURRI".equals(uploadType)) {
+                        filePath = "100/lec/";
+                        map.put("dataFilePath", filePath + fileName);
                     }
 
                 }
