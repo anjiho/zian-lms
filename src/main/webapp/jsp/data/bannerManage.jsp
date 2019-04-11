@@ -19,7 +19,6 @@
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
-            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];

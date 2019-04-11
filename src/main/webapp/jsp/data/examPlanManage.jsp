@@ -5,6 +5,13 @@
 <script>
     $( document ).ready(function() {
         examList(); //시험일정 리스트 불러오기
+        /*modal 초기화*/
+        $('.modal').on('hidden.bs.modal', function (e) {
+            $('form').each(function(){
+                this.reset();
+                $("#key").val("");
+            });
+        });
     });
     
     function examList() {
@@ -13,7 +20,7 @@
                 for (var i = 0; i < selList.length; i++) {
                     console.log(selList);
                     var cmpList = selList[i];
-                    var Btn = "<button type=\"button\" class=\"btn btn-outline-primary btn-sm\" onclick='examModify("+ cmpList.scheduleKey +");' data-toggle=\"modal\" data-target=\"#sModal\">수정</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick='examDelete("+ cmpList.scheduleKey +");'>삭제</button>";
+                    var Btn = "<button type=\"button\" class=\"btn btn-outline-primary btn-sm\" onclick='getExam("+ cmpList.scheduleKey +");' data-toggle=\"modal\" data-target=\"#sModal\">수정</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick='examDelete("+ cmpList.scheduleKey +");'>삭제</button>";
 
                     if (cmpList != undefined) {
                         var cellData = [
@@ -32,12 +39,27 @@
     function examSave() {
         var title = $("#title").val();
         var datetimepicker12 = $("#datetimepicker12").val();
-        alert(title);
-        alert(datetimepicker12);
-        if(confirm("일정 추가 하시겠습니까?")) {
-            dataManageService.saveExamSchedule(title, '2019-04-08', function () {
+        var scheduleKey =  $("#scheduleKey").val();
+        var link = $("#link").val();
+        //modifyExamSchedule
+        var key = $("#key").val();
+        if(key == "modify"){//수정
+            if(confirm("일정 수정 하시겠습니까?")) {
+                var data = {
+                    scheduleKey: scheduleKey,
+                    title: title,
+                    startDate: datetimepicker12
+                };
+            dataManageService.modifyExamSchedule(data, function () {
                 isReloadPage(true);
             });
+            }
+        }else{//저장
+            if(confirm("일정 추가 하시겠습니까?")) {
+                dataManageService.saveExamSchedule(title, '2019-04-08', function () {
+                    isReloadPage(true);
+                });
+            }
         }
     }
 
@@ -49,12 +71,15 @@
         }
     }
     
-    function examModify(val) {
-        if(confirm("삭제 하시겠습니까?")) {
-            dataManageService.modifyExamSchedule(val, function () {
-                isReloadPage(true);
-            });
-        }
+    function getExam(val) {
+        $("#key").val('modify');
+        dataManageService.getExamScheduleDetailInfo(val, function (selList) {
+            var startDate = split_minute_getDay(selList.startDate);
+            $("#scheduleKey").val(selList.scheduleKey);
+            $("#title").val(selList.title);
+            $("#datetimepicker12").val(startDate);
+            $("#link").val(selList.link);
+        });
     }
 </script>
 <!--순서-->
@@ -83,7 +108,7 @@
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">일정관리</h5>
-                    <button type="button" style="vertical-align: middle;display:inline-block;float:right" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sModal">추가</button>
+                    <button type="button" style="vertical-align: middle;display:inline-block;float:right" class="btn btn-info btn-sm examadd" data-toggle="modal" data-target="#sModal">추가</button>
                 </div>
                 <table class="table table-hover text-center">
                     <thead>
@@ -159,6 +184,8 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <form>
+                <input type="hidden" id="key" value="">
             <!-- modal body -->
             <div class="modal-body">
                 <div class="form-group row">
@@ -195,6 +222,7 @@
                 <button type="button" class="btn btn-info float-right m-l-2" onclick="examSave();">저장</button>
             </div>
             <!-- //modal body -->
+            </form>
         </div>
     </div>
 </div>
@@ -209,5 +237,4 @@
     var quill = new Quill('#editor', {
         theme: 'snow'
     });
-
 </script>
