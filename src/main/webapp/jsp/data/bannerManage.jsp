@@ -388,3 +388,13 @@
     })
     */
 </script>
+<style>
+    .sidebar-nav ul .sidebar-item.selected>.sidebar-link {
+        background: #27a9e3;
+        opacity: 1;
+    }
+    .collapse.in {
+        display: block;
+    }
+
+</style>
