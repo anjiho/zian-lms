@@ -219,7 +219,7 @@
     /****************************************
      *       Basic Table                   *
      ****************************************/
-    //$('#zero_config').DataTable();
+        //$('#zero_config').DataTable();
     var table = $('#zero_config').DataTable();
     var info = table.page.info();
     console.log(info);
