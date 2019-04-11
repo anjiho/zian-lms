@@ -1,9 +1,6 @@
 package com.zianedu.lms.mapper;
 
-import com.zianedu.lms.vo.TCategoryOtherInfoVO;
-import com.zianedu.lms.vo.TCategoryVO;
-import com.zianedu.lms.vo.TScheduleVO;
-import com.zianedu.lms.vo.TSearchKeywordVO;
+import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -36,6 +33,8 @@ public interface DataManageMapper {
     TSearchKeywordVO selectTSearchKeywordInfo(@Param("searchKeywordKey") int searchKeywordKey);
 
     int selectTSearchKeywordLastPosNumber(@Param("className") String className);
+
+    List<TGoodTeacherLinkVO> selectTeacherList();
 
     /** INSERT **/
     void insertTCategoryInfo(@Param("parentKey") int parentKey, @Param("name") String ctgName, @Param("pos") int pos);

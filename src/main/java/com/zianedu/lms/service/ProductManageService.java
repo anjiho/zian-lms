@@ -7,6 +7,7 @@ import com.zianedu.lms.dto.VideoListDTO;
 import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
+import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
 import oracle.net.aso.g;
 import org.apache.poi.ss.formula.functions.T;
@@ -83,6 +84,13 @@ public class ProductManageService extends PagingSupport {
                 startNumber, listLimit, searchType, searchText
         );
         return productManageMapper.selectVideoList(startNumber, listLimit, searchText, searchType);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer getVideoListCount(String searchType, String searchText) {
+        return productManageMapper.selectVideoListCount(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
     }
 
     /**
@@ -223,7 +231,7 @@ public class ProductManageService extends PagingSupport {
     public void upsultTCategoryGoods(List<TCategoryGoods>tCategoryGoodsList, int gKey) {
         if (tCategoryGoodsList.size() == 0) return;
 
-        productManageMapper.deleteTCategoryGoods(tCategoryGoodsList.get(0).getGKey());
+        //productManageMapper.deleteTCategoryGoods(tCategoryGoodsList.get(0).getGKey());
         for (TCategoryGoods categoryGoods : tCategoryGoodsList) {
             categoryGoods.setGKey(gKey);
             categoryGoods.setPos(0);
@@ -284,6 +292,55 @@ public class ProductManageService extends PagingSupport {
         if (linkKey == 0) return;
         TLinkKeyVO tLinkKeyVO = new TLinkKeyVO(linkKey, valueBit);
         productManageMapper.updateTLinkKey(tLinkKeyVO);
+    }
+
+    /**
+     * x표시가 있는 항목 삭제하기
+     * @param key
+     * @param menuType
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteVideoOtherInfo(int key, String menuType) {
+        if (key == 0 && "".equals(menuType)) return;
+
+        if ("TEACHER".equals(menuType)) {   //강사목록
+            productManageMapper.deleteTGoodsTeacherLink(key);
+        } else if ("CATE_GOODS".equals(menuType)) { //카테고리목록
+            productManageMapper.deleteTCategoryGoodsByCtgGKey(key);
+        } else if ("TLINK".equals(menuType)) {  // 강의교재, 사은품, 전범위모의고사, 기출문제 회차별
+            productManageMapper.deleteTLinkKeyByLinkKey(key);
+        } else if ("CURRI".equals(menuType)) {  // 강의목록
+            productManageMapper.deleteTLecCurri(key);
+        }
+    }
+
+    /**
+     * 동영상 강의 저장
+     * @param tLecCurri
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer saveVideoLectureInfo(TLecCurri tLecCurri) {
+        if (tLecCurri == null) return 0;
+
+        Integer lastPos = productManageMapper.selectTLecCurriLastPos(tLecCurri.getLecKey());
+        if (lastPos == null) lastPos = 0;
+
+        tLecCurri.setPos(lastPos);
+        productManageMapper.insertTLecCurri(tLecCurri);
+        return tLecCurri.getCurriKey() + 1;
+    }
+
+    /**
+     * 동영상 강의 순서 변경
+     * @param tLecCurriList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void changeNumberVideoLecture(List<TLecCurri> tLecCurriList) {
+        if (tLecCurriList.size() == 0) return;
+        for (TLecCurri tLecCurri : tLecCurriList) {
+            productManageMapper.updateTLecCurri(tLecCurri);
+        }
     }
 
 }

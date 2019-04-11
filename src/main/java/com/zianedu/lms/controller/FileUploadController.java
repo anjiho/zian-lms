@@ -5,6 +5,7 @@ import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.VideoDetailInfoDTO;
 import com.zianedu.lms.mapper.DataManageMapper;
+import com.zianedu.lms.repository.ProductManageRepository;
 import com.zianedu.lms.service.DataManageService;
 import com.zianedu.lms.service.ProductManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
@@ -32,7 +33,7 @@ public class FileUploadController {
     private DataManageService dataManageService;
 
     @Autowired
-    private ProductManageService productManageService;
+    private ProductManageRepository productManageRepository;
 
     /**
      * 배너관리 등록및 수정
@@ -118,17 +119,21 @@ public class FileUploadController {
         JsonArray videoOtherInfoJson = GsonUtil.convertStringToJsonArray(videoOtherInfo);
         List<TLinkKeyVO>tLinkKeyVOList = GsonUtil.getObjectFromJsonArray(videoOtherInfoJson, TLinkKeyVO.class);
 
-        Integer gKey = productManageService.upsultGoodsInfo(tGoodsVO, imageListFilePath, imageListFilePath);
-
-        if (gKey != null || gKey > 0) {
-            productManageService.upsultTGoodsPriceOption(tGoodsPriceOptionVOList, gKey);
-            productManageService.upsultTCategoryGoods(tCategoryVOList, gKey);
-            productManageService.upsultTLec(tLecVO, gKey);
-            productManageService.upsultTGoodTeacherLink(tGoodTeacherLinkVOS, gKey);
-            productManageService.upsultTLinkKink(tLinkKeyVOList, gKey);
-        }
+        Integer gKey = productManageRepository.saveVideoInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
+                tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, imageListFilePath, imageViewFilePath);
 
 
-        return new JsonBuilder().add("result", ZianCoreManage.OK).build();
+        return new JsonBuilder().add("result", gKey).build();
+    }
+
+    /**
+     * 동영상 강의 입력에서 강의자료 파일 업로드
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST)
+    public @ResponseBody String lectureCurriInfo(MultipartHttpServletRequest request) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
+        return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
     }
 }
