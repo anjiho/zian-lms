@@ -3,48 +3,48 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script>
-function saveClassfication(){ /* 분류저장 */
-    var subject =  getInputTextValue("subject");
-    alert(subject);
-    if(subject != ""){
-        if(confirm("과목추가 하시겠습니까?")) {
-            dataManageService.saveClassficationInfo("SUBJECT", subject, function () {
+    function saveClassfication(){ /* 분류저장 */
+        var subject =  getInputTextValue("subject");
+        alert(subject);
+        if(subject != ""){
+            if(confirm("과목추가 하시겠습니까?")) {
+                dataManageService.saveClassficationInfo("SUBJECT", subject, function () {
+                    isReloadPage(true);
+                });
+            }
+        }else{
+            alert("과목을 입력해 주세요.");
+            return false;
+        }
+    }
+    function deleteSubject(val) { /* 과목 삭제 */
+        if(confirm("삭제하시겠습니까?")) {
+            dataManageService.deleteClassSubject(val, function () {
                 isReloadPage(true);
             });
         }
-    }else{
-        alert("과목을 입력해 주세요.");
-        return false;
     }
-}
-function deleteSubject(val) { /* 과목 삭제 */
-    if(confirm("삭제하시겠습니까?")) {
-        dataManageService.deleteClassSubject(val, function () {
-            isReloadPage(true);
-        });
-    }
-}
-function categoryList() { /* 분류 리스트 */
-    dataManageService.getTcategoryList("SUBJECT", function (selList) {
-        if (selList.length > 0) {
-            for (var i = 0; i < selList.length; i++) {
-                var cmpList = selList[i];
-                if (cmpList != undefined) {
-                    console.log(cmpList);
-                    var cellData = [
-                        function(data) {return cmpList.name;},
-                        function(data) {return "<a href='javascript:void(0)' id='"+ cmpList.ctgKey + "' onclick='deleteSubject(this.id)' data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\" ></i><i class=\"mdi mdi-close\"></i></a>"}
-                    ];
-                    dwr.util.addRows("dataList", [0], cellData, {escapeHtml:false});
+    function categoryList() { /* 분류 리스트 */
+        dataManageService.getTcategoryList("SUBJECT", function (selList) {
+            if (selList.length > 0) {
+                for (var i = 0; i < selList.length; i++) {
+                    var cmpList = selList[i];
+                    if (cmpList != undefined) {
+                        console.log(cmpList);
+                        var cellData = [
+                            function(data) {return cmpList.name;},
+                            function(data) {return "<a href='javascript:void(0)' id='"+ cmpList.ctgKey + "' onclick='deleteSubject(this.id)' data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\" ></i><i class=\"mdi mdi-close\"></i></a>"}
+                        ];
+                        dwr.util.addRows("dataList", [0], cellData, {escapeHtml:false});
+                    }
                 }
             }
-        }
 
+        });
+    }
+    $( document ).ready(function() {
+        categoryList(); //분류 리스트 불러오기
     });
-}
-$( document ).ready(function() {
-    categoryList(); //분류 리스트 불러오기
-});
 </script>
 <div class="page-breadcrumb">
     <div class="row">

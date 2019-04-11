@@ -20,18 +20,19 @@ public class DataManageController {
     public ModelAndView dataManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
-        if("detachSave".equals(page_gbn)) {
-            mvc.setViewName("data/detachmanage");
+        if("classficationSave".equals(page_gbn)) {
+            mvc.setViewName("data/classficationManage");
         }else if("subjectSave".equals(page_gbn)) {
-            mvc.setViewName("data/subjectmanage");
+            mvc.setViewName("data/subjectManage");
         }else if("bannerSave".equals(page_gbn)) {
-            mvc.setViewName("data/bannermanage");
+            mvc.setViewName("data/bannerManage");
         }else if("examplanSave".equals(page_gbn)) {
-            mvc.setViewName("data/examplanmanage");
+            mvc.setViewName("data/examPlanManage");
         }else if("searchSave".equals(page_gbn)) {
-            mvc.setViewName("data/searchmanage");
+            mvc.setViewName("data/searchManage");
+        }else if("sideBannerSave".equals(page_gbn)) {
+            mvc.setViewName("data/sideBannerManage");
         }
-
         return mvc;
     }
 }

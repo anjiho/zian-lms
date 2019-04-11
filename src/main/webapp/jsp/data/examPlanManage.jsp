@@ -2,6 +2,61 @@
 <%@include file="/common/jsp/common.jsp" %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
+<script>
+    $( document ).ready(function() {
+        examList(); //시험일정 리스트 불러오기
+    });
+    
+    function examList() {
+        dataManageService.getExamSchedule( function (selList) {
+            if (selList.length > 0) {
+                for (var i = 0; i < selList.length; i++) {
+                    console.log(selList);
+                    var cmpList = selList[i];
+                    var Btn = "<button type=\"button\" class=\"btn btn-outline-primary btn-sm\" onclick='examModify("+ cmpList.scheduleKey +");' data-toggle=\"modal\" data-target=\"#sModal\">수정</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick='examDelete("+ cmpList.scheduleKey +");'>삭제</button>";
+
+                    if (cmpList != undefined) {
+                        var cellData = [
+                            function(data) {return cmpList.scheduleKey;},
+                            function(data) {return cmpList.title;},
+                            function(data) {return split_minute_getDay(cmpList.startDate);},
+                            function(data) {return Btn;}
+                        ];
+                        dwr.util.addRows("dataList", [0], cellData, {escapeHtml:false});
+                    }
+                }
+            }
+        });
+    }
+    
+    function examSave() {
+        var title = $("#title").val();
+        var datetimepicker12 = $("#datetimepicker12").val();
+        alert(title);
+        alert(datetimepicker12);
+        if(confirm("일정 추가 하시겠습니까?")) {
+            dataManageService.saveExamSchedule(title, '2019-04-08', function () {
+                isReloadPage(true);
+            });
+        }
+    }
+
+    function examDelete(val) {
+        if(confirm("삭제 하시겠습니까?")) {
+            dataManageService.deleteExamSchedule(val, function () {
+                isReloadPage(true);
+            });
+        }
+    }
+    
+    function examModify(val) {
+        if(confirm("삭제 하시겠습니까?")) {
+            dataManageService.modifyExamSchedule(val, function () {
+                isReloadPage(true);
+            });
+        }
+    }
+</script>
 <!--순서-->
 <div class="page-breadcrumb">
     <div class="row">
@@ -39,7 +94,8 @@
                         <th scope="col" style="width: 15%;">관리</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="dataList"></tbody>
+                    <!--<tbody>
                     <tr>
                         <th scope="row">96</th>
                         <td class="text-left">2019 지방직9급</td>
@@ -85,7 +141,7 @@
                             <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
                         </td>
                     </tr>
-                    </tbody>
+                    </tbody>-->
                 </table>
             </div>
         </div>
@@ -106,16 +162,16 @@
             <!-- modal body -->
             <div class="modal-body">
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">CODE</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">CODE</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control" id="scode">
+                        <input type="text" class="form-control" id="scheduleKey" readonly>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-3 text-right control-label col-form-label">일정이름</label>
                     <div class="col-md-9">
                         <div class="custom-file">
-                            <input type="text" class="form-control" id="sname">
+                            <input type="text" class="form-control" id="title">
                         </div>
                     </div>
                 </div>
@@ -123,7 +179,7 @@
                     <label class="col-sm-3 text-right control-label col-form-label">날짜</label>
                     <div class="col-sm-9">
                         <div class="input-group">
-                            <input type="text" class="form-control" placeholder="mm/dd/yyyy">
+                            <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" id="datetimepicker12">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
@@ -131,17 +187,27 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">링크</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">링크</label>
                     <div class="col-sm-9">
-                        <input type="text" class="form-control">
+                        <input type="text" class="form-control" id="link">
                     </div>
                 </div>
-                <button type="button" class="btn btn-info float-right m-l-2">확인</button>
+                <button type="button" class="btn btn-info float-right m-l-2" onclick="examSave();">저장</button>
             </div>
             <!-- //modal body -->
         </div>
     </div>
 </div>
-<!-- //시험일정 추가 팝업창 -->
 <!-- //form문 끝 -->
 <%@include file="/common/jsp/footer.jsp" %>
+<script>
+    $('.mydatepicker').datepicker();
+    $('#datepicker-autoclose').datepicker({
+        autoclose: true,
+        todayHighlight: true
+    });
+    var quill = new Quill('#editor', {
+        theme: 'snow'
+    });
+
+</script>
