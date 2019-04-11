@@ -36,11 +36,12 @@
     }
 
     function getSearch(val) { //상세정보 가져오기
+        alert(val);
         $("#key").val('modify');
         $("#searchKeywordKey").val(val);
-        /*dataManageService.getExamScheduleDetailInfo(val, function (selList) {
-            $("#searchText").val(selList.searchText);
-        });*/
+        dataManageService.getSearchKeywordInfo(val, function (selList) {
+            $("#searchText").val(selList.keyword);
+        });
     }
 
     function searchSave() {

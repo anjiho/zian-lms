@@ -12,10 +12,26 @@
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
         $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+
     });
-    $(document).on('change', '.custom-file-input1', function() {
+
+    function getThumbnailPrivew(html, $target) {
+        if (html.files && html.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $target.css('display', '');
+                //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
+                $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
+                alert(target.result);
+            }
+            reader.readAsDataURL(html.files[0]);
+        }
+    }
+    /*$(document).on('change', '.custom-file-input1', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
+    });*/
+
+
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
@@ -141,6 +157,15 @@
         $.each($('#attachFile')[0].files, function(i, file) {
             data.append('file_name', file);
         });
+
+        /*var reader = new FileReader();
+        reader.onload = function (e) {
+            $target.css('display', '');
+            //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
+            $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
+        }
+        reader.readAsDataURL(html.files[0]);
+        */
         var attachFile = fn_clearFilePath($('#attachFile').val());
         var ctgKey     = $("#ctgKey").val();
         var pos        = $("#pos").val();
@@ -308,13 +333,21 @@
                 <div class="form-group row">
                     <label class="text-right control-label col-form-label">이미지</label>
                     <div class="col-sm-9">
-                        <label class="custom-file">
-                            <input type="file" id="attachFile" class="custom-file-input" required>
+                        <!--<label class="custom-file">
+                            <input type="file" id="attachFile" class="custom-file-input" onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
                             <span class="custom-file-control"></span>
-                        </label>
+                            <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
+                        </label>-->
+                                <div class="custom-file">
+                                    <input type="file" class="custom-file-input" id="attachFile"  onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
+                                    <span class="custom-file-control custom-file-label"></span>
+                                     <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
+                                </div>
+
+
                     </div>
                 </div>
-                <div class="form-group row">
+                <!--<div class="form-group row">
                     <label class="text-right control-label col-form-label">배경이미지</label>
                     <div class="col-sm-9">
                         <label class="custom-file1">
@@ -322,7 +355,7 @@
                             <span class="custom-file-control1"></span>
                         </label>
                     </div>
-                </div>
+                </div>-->
                 <div class="form-group row">
                     <label class="text-right control-label col-form-label">배경색상</label>
                     <div class="col-sm-9">
