@@ -35,6 +35,18 @@ public interface ProductManageMapper {
 
     Integer selectTLecCurriLastPos(@Param("lecKey") int lecKey);
 
+    List<TExamMasterVO>selectTExamList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                       @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectTExamListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<TGoodsVO>selectTGoodsListByType(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                       @Param("searchText") String searchText, @Param("searchType") String searchType,
+                                         @Param("goodsTypeKey") int goodsTypeKey);
+
+    int selectTGoodsListByTypeCount(@Param("searchText") String searchText, @Param("searchType") String searchType,
+                                    @Param("goodsTypeKey") int goodsTypeKey);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 

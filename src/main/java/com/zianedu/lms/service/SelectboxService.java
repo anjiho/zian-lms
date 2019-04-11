@@ -153,4 +153,12 @@ public class SelectboxService {
         return dataManageMapper.selectTeacherList();
     }
 
+    /**
+     * 모의고사 검색시 검색 종류 셀렉트박스
+     * @return
+     */
+    public List<SelectboxDTO>selectExamSearchSelectbox() {
+        return ExamSearhType.getExamSearchTypeList();
+    }
+
 }

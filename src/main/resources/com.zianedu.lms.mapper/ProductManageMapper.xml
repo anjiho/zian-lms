@@ -14,7 +14,6 @@
 		ON A.G_KEY = E.G_KEY
 		WHERE 1=1
 		AND A.TYPE = 1
-		ORDER BY A.G_KEY DESC
 		<if test="searchType eq 'code'">
 			AND A.G_KEY = #{searchText}
 		</if>
@@ -110,10 +109,50 @@
 		WHERE ROWNUM = 1
 	</select>
 
-	<select id="selectTExamList">
+	<select id="selectTExamList" resultType="com.zianedu.lms.vo.TExamMasterVO">
 		SELECT * FROM T_EXAM_MASTER
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
 		ORDER BY EXAM_KEY DESC
-		OFFSET 0 ROWS FETCH NEXT 10 ROWS ONLY
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectTExamListCount" resultType="Integer">
+		SELECT COUNT(EXAM_KEY) FROM T_EXAM_MASTER
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'name'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+	<select id="selectTGoodsListByType" resultType="com.zianedu.lms.vo.TGoodsVO">
+		SELECT * FROM T_GOODS
+		WHERE TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY G_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectTGoodsListByTypeCount" resultType="Integer">
+		SELECT COUNT (G_KEY) FROM T_GOODS
+		WHERE TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
 	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">

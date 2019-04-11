@@ -17,7 +17,7 @@ public class TGoodsVO {
     private String indate;
 
     private String sellstartdate;
-
+    //1:동영상(온라인강좌), 3:책
     private int type;
 
     private int isShow;

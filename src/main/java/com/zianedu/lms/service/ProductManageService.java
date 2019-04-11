@@ -1,5 +1,6 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.PagingSearchDTO;
 import com.zianedu.lms.dto.VideoDetailInfoDTO;
@@ -80,12 +81,15 @@ public class ProductManageService extends PagingSupport {
     public List<VideoListDTO> getVideoList(int sPage, int listLimit, String searchType, String searchText) {
         if (sPage == 0) return null;
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-        PagingSearchDTO searchDTO = new PagingSearchDTO(
-                startNumber, listLimit, searchType, searchText
-        );
         return productManageMapper.selectVideoList(startNumber, listLimit, searchText, searchType);
     }
 
+    /**
+     * 동영상 목록 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
     @Transactional(readOnly = true)
     public Integer getVideoListCount(String searchType, String searchText) {
         return productManageMapper.selectVideoListCount(
@@ -184,6 +188,72 @@ public class ProductManageService extends PagingSupport {
     public List<TLecCurri>getLectureCurriList(int lecKey) {
         if (lecKey == 0) return null;
         return productManageMapper.selectTLecCurriList(lecKey);
+    }
+
+    /**
+     * 모의고사 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TExamMasterVO>getMockExamList(int sPage, int listLimit, String searchType, String searchText) {
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return productManageMapper.selectTExamList(
+                startNumber, listLimit, Util.isNullValue(searchText, ""),  Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 모의고사 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMockExamListCount(String searchType, String searchText) {
+        return productManageMapper.selectTExamListCount(
+                Util.isNullValue(searchText, ""),  Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 상품종류 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 책 : BOOK)
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TGoodsVO>getGoodList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return productManageMapper.selectTGoodsListByType(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchType, ""),
+                Util.isNullValue(searchText, ""),
+                GoodsType.getGoodsTypeKey(goodsTypeStr)
+        );
+    }
+
+    /**
+     * 상품종류 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @param goodsTypeStr
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getGoodListCount(String searchType, String searchText, String goodsTypeStr) {
+        return productManageMapper.selectTGoodsListByTypeCount(
+                Util.isNullValue(searchType, ""),
+                Util.isNullValue(searchText, ""),
+                GoodsType.getGoodsTypeKey(goodsTypeStr)
+        );
     }
 
     /**
