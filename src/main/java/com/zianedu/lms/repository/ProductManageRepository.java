@@ -15,8 +15,20 @@ public class ProductManageRepository {
     @Autowired
     private ProductManageService productManageService;
 
+    /**
+     * 동영상, 학원강의 저장하기
+     * @param tGoodsVO
+     * @param tGoodsPriceOptionVOList
+     * @param tCategoryVOList
+     * @param tLecVO
+     * @param tGoodTeacherLinkVOS
+     * @param tLinkKeyVOList
+     * @param imageListFilePath
+     * @param imageViewFilePath
+     * @return
+     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public Integer saveVideoInfo(TGoodsVO tGoodsVO,
+    public Integer saveProductInfo(TGoodsVO tGoodsVO,
                                  List<TGoodsPriceOptionVO> tGoodsPriceOptionVOList,
                                  List<TCategoryGoods>tCategoryVOList,
                                  TLecVO tLecVO,

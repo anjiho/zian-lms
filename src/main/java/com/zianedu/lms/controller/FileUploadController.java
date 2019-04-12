@@ -131,7 +131,7 @@ public class FileUploadController {
         JsonArray videoOtherInfoJson = GsonUtil.convertStringToJsonArray(videoOtherInfo);
         List<TLinkKeyVO>tLinkKeyVOList = GsonUtil.getObjectFromJsonArray(videoOtherInfoJson, TLinkKeyVO.class);
 
-        Integer gKey = productManageRepository.saveVideoInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
+        Integer gKey = productManageRepository.saveProductInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
                 tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, imageListFilePath, imageViewFilePath);
 
 
