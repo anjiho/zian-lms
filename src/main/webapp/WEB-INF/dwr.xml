@@ -52,6 +52,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TLecCurri"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TLinkKeyVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TGoodTeacherLinkVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamMasterVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
