@@ -12,7 +12,6 @@
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
         $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-
     });
 
     function getThumbnailPrivew(html, $target) {
@@ -30,7 +29,6 @@
     /*$(document).on('change', '.custom-file-input1', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });*/
-
 
     function changeBox2(val) {
         $(".card").remove();
@@ -119,9 +117,10 @@
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
             $("#bannerKey").val(val);
+            innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
             $("#pos").val(pos);
-            $("#title").val(selList.value5);
+            innerValue("title",value5);
             $("#bannerColor").val(selList.value3);
             $("#bannerLink").val(selList.value4);
             if (selList.valueBit1 == '1') $("#newPopYn").prop('checked', true);
@@ -167,18 +166,15 @@
         reader.readAsDataURL(html.files[0]);
         */
         var attachFile = fn_clearFilePath($('#attachFile').val());
-        var ctgKey     = $("#ctgKey").val();
-        var pos        = $("#pos").val();
-        var bannerKey  = $("#bannerKey").val();
-        var title      = $("#title").val();
-        var bannerColor= $("#bannerColor").val();
-        var bannerLink = $("#bannerLink").val();
+        var ctgKey     =  getInputTextValue("ctgKey");
+        var pos        = getInputTextValue("pos");
+        var bannerKey  = getInputTextValue("bannerKey");
+        var title      = getInputTextValue("title");
+        var bannerColor= getInputTextValue("bannerColor");
+        var bannerLink = getInputTextValue("bannerLink");
         var newPopYn = "";
-        if($('input:checkbox[name="newPopYn1"]').is(":checked") == true){
-            newPopYn = '1';
-        }else{
-            newPopYn = '0';
-        }
+        if($('input:checkbox[name="newPopYn1"]').is(":checked") == true) newPopYn = '1';
+        else{newPopYn = '0';}
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
         data.append("ctgKey", ctgKey);

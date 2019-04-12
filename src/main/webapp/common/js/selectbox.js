@@ -28,5 +28,69 @@ function getSearchKeywordDomainList(tag_id, val) {
         html += "</select>";
         innerHTML(tag_id, html);
     });
+}
 
+//동영상 저장 옵션명
+function getVideoOptionTypeList(tag_id, val) {
+    selectboxService.getVideoOptionTypeList(function (list) {
+        var html = "<select id='videoOptionSel' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].name == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//카테고리
+function getCategoryList(tag_id, val) {
+    selectboxService.getCategoryList(val, function (list) {
+        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].name == val) {
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            } else {
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//급수,과목,유형
+function getSelectboxListForCtgKey(tag_id, val) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].name == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//선생님 리스트
+function selectTeacherSelectbox(tag_id,val) {
+    selectboxService.selectTeacherSelectbox(function (list) {
+        console.log(list);
+       var html = "<select id='sel_1' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].name == val) {
+                html += "<option value="+list[i].teacherKey+" selected>"+ list[i].teacherName +"</option>";
+            } else {
+                html += "<option value="+list[i].teacherKey+">"+ list[i].teacherName +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
 }
