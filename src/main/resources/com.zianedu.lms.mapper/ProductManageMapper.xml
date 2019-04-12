@@ -3,7 +3,7 @@
 <mapper namespace="com.zianedu.lms.mapper.ProductManageMapper">
 
 	<select id="selectProductList" resultType="VideoListDTO">
-		SELECT A.G_KEY, A.NAME as GOODS_NANE, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
+		SELECT A.G_KEY, A.NAME as GOODS_NAME, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
 		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
 		ON A.G_KEY = B.G_KEY
 		LEFT JOIN T_TEACHER C
@@ -173,6 +173,16 @@
 
 	<select id="selectTBankSubjectExamLinkList" parameterType="Integer" resultType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
 		SELECT * FROM T_BANK_SUBJECT_EXAM_LINK WHERE exam_key = #{examKey}
+	</select>
+
+	<select id="">
+		SELECT A.*, B.name as ctg_name,
+				(SELECT count(T_BANK_SUBJECT_QUES_LINK.BANK_SUBJECT_QUES_LINK_KEY) from T_BANK_SUBJECT_QUES_LINK where EXAM_QUES_BANK_SUBJECT_KEY = A.EXAM_QUESTION_BANK_SUBJECT_KEY) as questionNumber
+		FROM T_EXAM_QUESTION_BANK_SUBJECT A
+		INNER JOIN T_CATEGORY B
+		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		order by A.EXAM_QUESTION_BANK_SUBJECT_KEY desc
+		OFFSET #{} ROWS FETCH NEXT 10 ROWS ONLY
 	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
