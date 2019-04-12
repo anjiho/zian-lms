@@ -79,7 +79,19 @@ public class FileUploadController {
         return new JsonBuilder().add("result", ZianCoreManage.OK).build();
     }
 
-    @RequestMapping(value = "/videoImgUpload", method = RequestMethod.POST)
+    /**
+     * 동영상 등록, 학원강의 등록
+     * @param request
+     * @param videoInfo
+     * @param videoOptionInfo
+     * @param videoCategoryInfo
+     * @param videoLectureInfo
+     * @param videoTeacherInfo
+     * @param videoOtherInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/productUpload", method = RequestMethod.POST)
     public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo,
                                                @RequestParam(value = "videoOptionInfo") String videoOptionInfo,
                                                @RequestParam(value = "videoCategoryInfo") String videoCategoryInfo,
