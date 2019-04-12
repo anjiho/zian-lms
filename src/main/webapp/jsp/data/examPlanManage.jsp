@@ -120,53 +120,6 @@
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>
-                    <!--<tbody>
-                    <tr>
-                        <th scope="row">96</th>
-                        <td class="text-left">2019 지방직9급</td>
-                        <td>2019.06.15</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">97</th>
-                        <td class="text-left">2019 서울시9급</td>
-                        <td>2019.06.15</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">98</th>
-                        <td class="text-left">2019 국가직7급</td>
-                        <td>2019.08.17</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">99</th>
-                        <td class="text-left">2019 지방직7급</td>
-                        <td>2019.10.12</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">100</th>
-                        <td class="text-left">2019 서울시7급</td>
-                        <td>2019.10.12</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    </tbody>-->
                 </table>
             </div>
         </div>

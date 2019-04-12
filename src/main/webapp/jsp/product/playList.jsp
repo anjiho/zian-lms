@@ -1,5 +1,67 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<script type='text/javascript' src='/dwr/engine.js'></script>
+<script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
+
+<script>
+    $( document ).ready(function() {
+
+    });
+    function fn_search(val) {
+        var paging = new Paging();
+        var sPage = $("#sPage").val();
+
+        if(val == "new")  sPage = "1";
+        dwr.util.removeAllRows("dataList");
+        gfn_emptyView("H", "");//페이징 예외사항처리
+
+        var searchType = getSelectboxValue("searchType");
+        var searchText = getInputTextValue("searchText");
+
+        productManageService.getProductListCount(searchType, searchText, "VIDEO", function(cnt) {
+            paging.count(sPage, cnt, '10', '10', comment.blank_list);
+            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링d
+            productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
+                console.log(selList);
+                if (selList.length > 0) {
+                    console.log(selList);
+                    for (var i = 0; i < selList.length; i++) {
+                        var cmpList = selList[i];
+                        var goosNameHtml = "<a href='javscript:void(0)' color='blue' style='float:left'>"+cmpList.goodsName+"</a>";
+                        if (cmpList != undefined) {
+                            var cellData = [
+                                function(data) {return i+1;},
+                                function(data) {return cmpList.GKey;},
+                                function(data) {return goosNameHtml;},
+                                function(data) {return split_minute_getDay(cmpList.indate);},
+                                function(data) {return contentYn(cmpList.isShow);},
+                                function(data) {return contentYn(cmpList.isSell);},
+                                function(data) {return contentYn(cmpList.isFree);},
+                                function(data) {return cmpList.teacherName == null ? "-" : cmpList.teacherName;},
+                                function(data) {return cmpList.statusStr;}
+                            ];
+                            dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
+                        }
+                    }
+                }else{
+                    gfn_emptyView("V", comment.blank_list2);
+                }
+            });
+        });
+    }
+
+    function contentYn(val) {
+        var content = "";
+        if(val == '1'){
+            content = 'O';
+        }else {
+            content = 'X';
+        }
+        return content;
+    }
+
+</script>
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
@@ -17,219 +79,56 @@
     </div>
 </div>
 <div class="container-fluid">
-    <div class="card">
-        <div class="card-body">
-            <div class="table-responsive">
-                <table id="zero_config" class="table table-striped table-bordered">
+    <div class="row">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">동영상 목록</h5>
+                </div>
+                <div style=" display:inline;">
+                    <div style=" float: left; width: 10%">
+                     <select class="form-control" id="searchType">
+                        <option>제목</option>
+                        <option>코드</option>
+                    </select>
+                    </div>
+                    <div style=" float: left; width: 33%">
+                        <input type="text" class="form-control" id="searchText">
+                    </div>
+                    <div style=" float: left; width: 33%">
+                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                    </div>
+                </div>
+                <input type="hidden" id="sPage" >
+                <table class="table table-hover text-center">
                     <thead>
                     <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
+                        <th scope="col" style="width: 5%;">No.</th>
+                        <th scope="col" style="width: 5%;">CODE</th>
+                        <th scope="col" style="width: 45%;">상품명</th>
+                        <th scope="col" style="width: 10%;">등록일</th>
+                        <th scope="col" style="width: 5%;">노출</th>
+                        <th scope="col" style="width: 5%;">판매</th>
+                        <th scope="col" style="width: 5%;">무료</th>
+                        <th scope="col" style="width: 10%;">강사</th>
+                        <th scope="col" style="width: 15%;">진행상태</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="dataList"></tbody>
                     <tr>
-                        <td>Jackson Bradshaw</td>
-                        <td>Director</td>
-                        <td>New York</td>
-                        <td>65</td>
-                        <td>2008/09/26</td>
-                        <td>$645,750</td>
+                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
                     </tr>
-                    <tr>
-                        <td>Olivia Liang</td>
-                        <td>Support Engineer</td>
-                        <td>Singapore</td>
-                        <td>64</td>
-                        <td>2011/02/03</td>
-                        <td>$234,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr> <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr> <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr> <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr> <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    <tr>
-                        <td>Bruno Nash</td>
-                        <td>Software Engineer</td>
-                        <td>London</td>
-                        <td>38</td>
-                        <td>2011/05/03</td>
-                        <td>$163,500</td>
-                    </tr>
-                    </tbody>
-                    <tfoot>
-                    <tr>
-                        <th>Name</th>
-                        <th>Position</th>
-                        <th>Office</th>
-                        <th>Age</th>
-                        <th>Start date</th>
-                        <th>Salary</th>
-                    </tr>
-                    </tfoot>
                 </table>
+                <%@ include file="/common/inc/com_pageNavi.inc" %>
             </div>
-
         </div>
     </div>
 </div>
-</div>
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
-    /****************************************
-     *       Basic Table                   *
-     ****************************************/
-        //$('#zero_config').DataTable();
     var table = $('#zero_config').DataTable();
     var info = table.page.info();
-    console.log(info);
-
-
     $('.page-link').click(function(){
         alert("1");
     });
-
-    // $('.page-link').onchange(function(){
-    //     alert("1");
-    // });
 </script>

@@ -34,6 +34,8 @@
     <link href="common/assets/libs/flot/css/float-chart.css" rel="stylesheet">
     <!-- Custom CSS -->
     <link href="common/dist/css/style.min.css" rel="stylesheet">
+    <link href="common/assets/libs/jquery-steps/jquery.steps.css" rel="stylesheet">
+    <link href="common/assets/libs/jquery-steps/steps.css" rel="stylesheet">
     <!-- datatable CSS -->
     <link rel="stylesheet" type="text/css" href="common/assets/extra-libs/multicheck/multicheck.css">
     <link href="common/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
@@ -46,6 +48,8 @@
     <script src="common/assets/libs/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="common/assets/libs/perfect-scrollbar/dist/perfect-scrollbar.jquery.min.js"></script>
     <script src="common/assets/extra-libs/sparkline/sparkline.js"></script>
+    <script src="common/assets/libs/jquery-steps/build/jquery.steps.min.js"></script>
+    <script src="common/assets/libs/jquery-validation/dist/jquery.validate.min.js"></script>
     <!--Wave Effects -->
     <script src="common/dist/js/waves.js"></script>
     <!--Menu sidebar -->
@@ -71,6 +75,13 @@
     <script src="common/assets/extra-libs/DataTables/datatables.min.js"></script>
     <script type="text/javascript" src="common/js/jquery.tablednd.js"></script>
     <script type="text/javascript" src="common/dist/js/jquery-sortable.js"></script>
+    <!--paging-->
+    <script src="common/js/paging-count-check.js"></script>
+    <!--comment-->
+    <script src="common/js/comment.js"></script>
+    <!---summernote js/css-->
+    <link href="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.css" rel="stylesheet">
+    <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
 </head>
 <title>지안에듀관리자</title>
 <body>
