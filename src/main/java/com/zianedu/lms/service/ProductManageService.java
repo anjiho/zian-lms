@@ -70,30 +70,40 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상 목록 가져오기
+     * 제품 목록 가져오기
      * @param sPage
      * @param listLimit
      * @param searchType
      * @param searchText
+     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 학원 : ACADEMY, 책 : BOOK)
      * @return
      */
     @Transactional(readOnly = true)
-    public List<VideoListDTO> getVideoList(int sPage, int listLimit, String searchType, String searchText) {
+    public List<VideoListDTO> getProductList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
         if (sPage == 0) return null;
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-        return productManageMapper.selectVideoList(startNumber, listLimit, searchText, searchType);
+        return productManageMapper.selectProductList(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), ""),
+                GoodsType.getGoodsTypeKey(goodsTypeStr)
+        );
     }
 
     /**
-     * 동영상 목록 개수
+     * 제품 목록 개수
      * @param searchType
      * @param searchText
+     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 학원 : ACADEMY, 책 : BOOK)
      * @return
      */
     @Transactional(readOnly = true)
-    public Integer getVideoListCount(String searchType, String searchText) {
-        return productManageMapper.selectVideoListCount(
-                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+    public Integer getProductListCount(String searchType, String searchText, String goodsTypeStr) {
+        return productManageMapper.selectProductListCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), ""),
+                GoodsType.getGoodsTypeKey(goodsTypeStr)
         );
     }
 
@@ -202,7 +212,10 @@ public class ProductManageService extends PagingSupport {
     public List<TExamMasterVO>getMockExamList(int sPage, int listLimit, String searchType, String searchText) {
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
         return productManageMapper.selectTExamList(
-                startNumber, listLimit, Util.isNullValue(searchText, ""),  Util.isNullValue(searchType, "")
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), "")
         );
     }
 
@@ -215,46 +228,47 @@ public class ProductManageService extends PagingSupport {
     @Transactional(readOnly = true)
     public int getMockExamListCount(String searchType, String searchText) {
         return productManageMapper.selectTExamListCount(
-                Util.isNullValue(searchText, ""),  Util.isNullValue(searchType, "")
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), "")
         );
     }
 
-    /**
-     * 상품종류 리스트
-     * @param sPage
-     * @param listLimit
-     * @param searchType
-     * @param searchText
-     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 책 : BOOK)
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<TGoodsVO>getGoodList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
-        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-        return productManageMapper.selectTGoodsListByType(
-                startNumber,
-                listLimit,
-                Util.isNullValue(searchType, ""),
-                Util.isNullValue(searchText, ""),
-                GoodsType.getGoodsTypeKey(goodsTypeStr)
-        );
-    }
-
-    /**
-     * 상품종류 리스트 개수
-     * @param searchType
-     * @param searchText
-     * @param goodsTypeStr
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public int getGoodListCount(String searchType, String searchText, String goodsTypeStr) {
-        return productManageMapper.selectTGoodsListByTypeCount(
-                Util.isNullValue(searchType, ""),
-                Util.isNullValue(searchText, ""),
-                GoodsType.getGoodsTypeKey(goodsTypeStr)
-        );
-    }
+//    /**
+//     * 상품종류 리스트
+//     * @param sPage
+//     * @param listLimit
+//     * @param searchType
+//     * @param searchText
+//     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 책 : BOOK)
+//     * @return
+//     */
+//    @Transactional(readOnly = true)
+//    public List<TGoodsVO>getGoodList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
+//        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+//        return productManageMapper.selectTGoodsListByType(
+//                startNumber,
+//                listLimit,
+//                Util.isNullValue(searchType, ""),
+//                Util.isNullValue(searchText, ""),
+//                GoodsType.getGoodsTypeKey(goodsTypeStr)
+//        );
+//    }
+//
+//    /**
+//     * 상품종류 리스트 개수
+//     * @param searchType
+//     * @param searchText
+//     * @param goodsTypeStr
+//     * @return
+//     */
+//    @Transactional(readOnly = true)
+//    public int getGoodListCount(String searchType, String searchText, String goodsTypeStr) {
+//        return productManageMapper.selectTGoodsListByTypeCount(
+//                Util.isNullValue(searchType, ""),
+//                Util.isNullValue(searchText, ""),
+//                GoodsType.getGoodsTypeKey(goodsTypeStr)
+//        );
+//    }
 
     /**
      * 상품기본정보 저장및 수정

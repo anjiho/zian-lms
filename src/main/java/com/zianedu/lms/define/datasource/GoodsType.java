@@ -3,6 +3,8 @@ package com.zianedu.lms.define.datasource;
 public enum GoodsType {
     //동영상(온라인강좌)
     VIDEO(1),
+    //학원
+    ACADEMY(2),
     //책
     BOOK(3);
 

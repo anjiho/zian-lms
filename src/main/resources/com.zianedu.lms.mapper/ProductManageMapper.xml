@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zianedu.lms.mapper.ProductManageMapper">
 
-	<select id="selectVideoList" resultType="VideoListDTO">
+	<select id="selectProductList" resultType="VideoListDTO">
 		SELECT A.G_KEY, A.NAME as GOODS_NANE, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
 		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
 		ON A.G_KEY = B.G_KEY
@@ -13,35 +13,28 @@
 		LEFT JOIN T_LEC E
 		ON A.G_KEY = E.G_KEY
 		WHERE 1=1
-		AND A.TYPE = 1
-		<if test="searchType eq 'code'">
+		AND A.TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
 			AND A.G_KEY = #{searchText}
 		</if>
-		<if test="searchType eq 'title'">
+		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		ORDER BY A.G_KEY DESC
 		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
 	</select>
 
-	<select id="selectVideoListCount" resultType="Integer">
-		SELECT count(A.G_KEY) as CNT
-		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
-		ON A.G_KEY = B.G_KEY
-		LEFT JOIN T_TEACHER C
-		ON B.TEACHER_KEY = C.TEACHER_KEY
-		LEFT JOIN T_USER D
-		ON C.USER_KEY = D.USER_KEY
-		LEFT JOIN T_LEC E
-		ON A.G_KEY = E.G_KEY
+	<select id="selectProductListCount" resultType="Integer">
+		SELECT count(G_KEY) as CNT
+		FROM T_GOODS
 		WHERE 1=1
-		AND A.TYPE = 1
-		ORDER BY A.G_KEY DESC
-		<if test="searchType eq 'code'">
-			AND A.G_KEY = #{searchText}
+		AND TYPE = #{goodsTypeKey}
+		ORDER BY G_KEY DESC
+		<if test="searchType == 'code'">
+			AND G_KEY = #{searchText}
 		</if>
-		<if test="searchType eq 'title'">
-			AND A.NAME LIKE '%'||#{searchText}||'%'
+		<if test="searchType == 'title'">
+			AND NAME LIKE '%'||#{searchText}||'%'
 		</if>
 	</select>
 
@@ -111,6 +104,7 @@
 
 	<select id="selectTExamList" resultType="com.zianedu.lms.vo.TExamMasterVO">
 		SELECT * FROM T_EXAM_MASTER
+		WHERE 1=1
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>

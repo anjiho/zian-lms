@@ -10,10 +10,12 @@ import java.util.List;
 public interface ProductManageMapper {
 
     /** SELECT **/
-    List<VideoListDTO> selectVideoList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                       @Param("searchText") String searchText, @Param("searchType") String searchType);
+    List<VideoListDTO> selectProductList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                       @Param("searchText") String searchText, @Param("searchType") String searchType,
+                                       @Param("goodsTypeKey") int goodsTypeKey);
 
-    int selectVideoListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectProductListCount(@Param("searchText") String searchText, @Param("searchType") String searchType,
+                               @Param("goodsTypeKey") int goodsTypeKey);
 
     TGoodsVO selectTGoodsInfo(@Param("gKey") int gKey);
 
