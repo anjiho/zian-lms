@@ -2,9 +2,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
-import com.zianedu.lms.dto.PagingSearchDTO;
-import com.zianedu.lms.dto.VideoDetailInfoDTO;
-import com.zianedu.lms.dto.VideoListDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
@@ -67,6 +65,43 @@ public class ProductManageService extends PagingSupport {
 
         );
         return videoDetailInfoDTO;
+    }
+
+    /**
+     * 도서정보 저장및 수정
+     * @param goodsInfo
+     * @param tGoodsPriceOptionVOList
+     * @param tCategoryVOList
+     * @param tBookVO
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer saveBook(TGoodsVO goodsInfo, List<TGoodsPriceOptionVO> tGoodsPriceOptionVOList,
+                            List<TCategoryGoods>tCategoryVOList, TBookVO tBookVO) {
+        Integer gKey = this.upsultGoodsInfo(goodsInfo, goodsInfo.getImageList(), goodsInfo.getImageView());
+        if (gKey != null || gKey > 0) {
+            this.upsultTGoodsPriceOption(tGoodsPriceOptionVOList, gKey);
+            this.upsultTCategoryGoods(tCategoryVOList, gKey);
+            this.upsultBookInfo(tBookVO, gKey);
+        }
+        return gKey;
+    }
+
+    /**
+     * 도서 상세정보 가져오기
+     * @param gKey
+     * @return
+     */
+    public BookDetailInfoDTO getBookDetailInfo(int gKey) {
+        TGoodsVO productInfo = this.getVideoBasicInfo(gKey);
+        List<TGoodsPriceOptionVO>productOptionInfo = this.getVideoOptionList(gKey);
+        List<List<TCategoryVO>>productCategoryInfo = this.getVideoCategoryList(gKey);
+        TBookVO bookInfo = productManageMapper.selectBookInfo(gKey);
+        List<TResVO> previewInfo = productManageMapper.selectTResList(gKey);
+
+        return new BookDetailInfoDTO(
+            productInfo, productOptionInfo, productCategoryInfo, bookInfo, previewInfo
+        );
     }
 
     /**
@@ -230,6 +265,20 @@ public class ProductManageService extends PagingSupport {
         return productManageMapper.selectTExamListCount(
                 Util.isNullValue(searchText, ""),
                 Util.isNullValue(searchType.toLowerCase(), "")
+        );
+    }
+
+    /**
+     * 모의고사 상세정보
+     * @param examKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public MokExamInfoDTO getMockExamInfo(int examKey) {
+        if (examKey == 0) return null;
+        return new MokExamInfoDTO(
+                productManageMapper.selectTExamMasterInfo(examKey),
+                productManageMapper.selectTBankSubjectExamLinkList(examKey)
         );
     }
 
@@ -425,6 +474,46 @@ public class ProductManageService extends PagingSupport {
         for (TLecCurri tLecCurri : tLecCurriList) {
             productManageMapper.updateTLecCurri(tLecCurri);
         }
+    }
+
+    /**
+     * T_BOOK 저장및 수정
+     * @param tBookVO
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultBookInfo(TBookVO tBookVO, int gKey) {
+        if (tBookVO == null) return;
+
+        if (tBookVO.getBookKey() == 0) {
+            tBookVO.setGKey(gKey);
+            productManageMapper.insertTBook(tBookVO);
+        } else {
+            productManageMapper.updateTBook(tBookVO);
+        }
+
+    }
+
+    /**
+     * 미리보기 이미지 저장
+     * @param tResVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveBookPreviewInfo(TResVO tResVO) {
+        if (tResVO == null)return;
+        productManageMapper.insertTRes(tResVO);
+    }
+
+    /**
+     * 모의고사 상세정보 저장및 수정
+     * @param tExamMasterVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultMokExamInfo(TExamMasterVO tExamMasterVO) {
+        if (tExamMasterVO == null) return;
+
+        if (tExamMasterVO.getExamKey() == 0) productManageMapper.insertTExamMaster(tExamMasterVO);
+        else productManageMapper.updateTExamMaster(tExamMasterVO);
     }
 
 }

@@ -148,4 +148,15 @@ public class FileUploadController {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
         return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
     }
+
+    /**
+     * 도서 미리보기 파일업로드
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST)
+    public @ResponseBody String previewFileUpload(MultipartHttpServletRequest request) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
+        return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();
+    }
 }

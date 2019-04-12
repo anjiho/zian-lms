@@ -53,6 +53,8 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TLinkKeyVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TGoodTeacherLinkVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TExamMasterVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TBookVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TResVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
@@ -60,7 +62,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.SelectboxDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PagingSearchDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.VideoDetailInfoDTO"/>
-
+		<convert converter="bean" match="com.zianedu.lms.dto.BookDetailInfoDTO"/>
 	</allow>
 
 </dwr>

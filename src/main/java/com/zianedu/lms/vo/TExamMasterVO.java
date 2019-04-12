@@ -12,8 +12,10 @@ public class TExamMasterVO {
     private String name;
 
     private String indate;
-
+    //분류
     private int classCtgKey;
+    //과목
+    private int subjectCtgKey;
 
     private int selectSubjectCount;
 
@@ -46,7 +48,7 @@ public class TExamMasterVO {
     private int isShowStaticTotalAvg;
 
     private int isShowFiles;
-
+    //급수
     private int classGroupCtgKey;
 
     private int examYear;
@@ -59,6 +61,6 @@ public class TExamMasterVO {
 
     private int isRealFree;
 
-    private int isGichul;
+    private int isGichul = 0;
 
 }

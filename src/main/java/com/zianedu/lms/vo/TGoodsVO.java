@@ -1,5 +1,6 @@
 package com.zianedu.lms.vo;
 
+import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import lombok.Data;
 
@@ -47,6 +48,8 @@ public class TGoodsVO {
     private int isQuickDelivery;
 
     private int goodsId;
+
+    private String goodsTypeName;
 
     public TGoodsVO() {}
 
