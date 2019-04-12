@@ -57,6 +57,11 @@ public interface ProductManageMapper {
 
     List<TBankSubjectExamLinkVO> selectTBankSubjectExamLinkList(@Param("examKey") int examKey);
 
+    List<TExamQuestionBankSubjectVO> selectMockExamQuestionBankSubjectList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                               @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectMockExamQuestionBankSubjectListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 

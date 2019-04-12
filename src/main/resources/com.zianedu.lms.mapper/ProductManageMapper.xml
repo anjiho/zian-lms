@@ -175,8 +175,8 @@
 		SELECT * FROM T_BANK_SUBJECT_EXAM_LINK WHERE exam_key = #{examKey}
 	</select>
 
-	<select id="selectMockExamSubjectList" resultType="com.zianedu.lms.vo.TExamMasterVO">
-		SELECT A.*, B.name as ctg_name,
+	<select id="selectMockExamQuestionBankSubjectList" resultType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		SELECT A.*, B.name as CTG_NAME,
 				(
 					SELECT count(T_BANK_SUBJECT_QUES_LINK.BANK_SUBJECT_QUES_LINK_KEY)
 					FROM T_BANK_SUBJECT_QUES_LINK
@@ -185,9 +185,30 @@
 		FROM T_EXAM_QUESTION_BANK_SUBJECT A
 		INNER JOIN T_CATEGORY B
 		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
-		order by A.EXAM_QUESTION_BANK_SUBJECT_KEY desc
+		<if test="searchType == 'code'">
+			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND B.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY A.EXAM_QUESTION_BANK_SUBJECT_KEY DESC
 		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
 	</select>
+
+	<select id="selectMockExamQuestionBankSubjectListCount" resultType="Integer">
+		SELECT count(A.EXAM_QUESTION_BANK_SUBJECT_KEY)
+		FROM T_EXAM_QUESTION_BANK_SUBJECT A
+		INNER JOIN T_CATEGORY B
+		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		<if test="searchType == 'code'">
+			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND B.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		INSERT INTO T_GOODS

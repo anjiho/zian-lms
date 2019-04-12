@@ -282,6 +282,40 @@ public class ProductManageService extends PagingSupport {
         );
     }
 
+    /**
+     * 모의고사 문제은행 - 과목선택리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TExamQuestionBankSubjectVO> getMockExamQuestionBankSubjectList(int sPage, int listLimit,
+                                                                               String searchType, String searchText) {
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return productManageMapper.selectMockExamQuestionBankSubjectList(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), "")
+        );
+    }
+
+    /**
+     * 모의고사 문제은행 - 과목선택리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMockExamQuestionBankSubjectListCount(String searchType, String searchText) {
+        return productManageMapper.selectMockExamQuestionBankSubjectListCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), "")
+        );
+    }
+
 //    /**
 //     * 상품종류 리스트
 //     * @param sPage

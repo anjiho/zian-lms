@@ -55,6 +55,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TExamMasterVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TBookVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TResVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankSubjectVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
@@ -63,6 +64,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.PagingSearchDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.VideoDetailInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.BookDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MokExamInfoDTO"/>
 	</allow>
 
 </dwr>
