@@ -28,17 +28,18 @@
                     console.log(selList);
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
+                        var goosNameHtml = "<a href='javscript:void(0)' color='blue' style='float:left'>"+cmpList.goodsName+"</a>";
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return i+1;},
                                 function(data) {return cmpList.GKey;},
-                                function(data) {return cmpList.goodsName;},
-                                function(data) {return cmpList.indate;},
-                                function(data) {return cmpList.isShow;},
-                                function(data) {return cmpList.isSell;},
-                                function(data) {return cmpList.isFree;},
-                                function(data) {return cmpList.teacherName;},
-                                function(data) {return cmpList.statusStr;},
+                                function(data) {return goosNameHtml;},
+                                function(data) {return split_minute_getDay(cmpList.indate);},
+                                function(data) {return contentYn(cmpList.isShow);},
+                                function(data) {return contentYn(cmpList.isSell);},
+                                function(data) {return contentYn(cmpList.isFree);},
+                                function(data) {return cmpList.teacherName == null ? "-" : cmpList.teacherName;},
+                                function(data) {return cmpList.statusStr;}
                             ];
                             dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
                         }
@@ -48,6 +49,16 @@
                 }
             });
         });
+    }
+
+    function contentYn(val) {
+        var content = "";
+        if(val == '1'){
+            content = 'O';
+        }else {
+            content = 'X';
+        }
+        return content;
     }
 
 </script>
