@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zianedu.lms.mapper.ProductManageMapper">
 
-	<select id="selectVideoList" resultType="VideoListDTO">
+	<select id="selectProductList" resultType="VideoListDTO">
 		SELECT A.G_KEY, A.NAME as GOODS_NANE, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
 		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
 		ON A.G_KEY = B.G_KEY
@@ -13,35 +13,28 @@
 		LEFT JOIN T_LEC E
 		ON A.G_KEY = E.G_KEY
 		WHERE 1=1
-		AND A.TYPE = 1
-		<if test="searchType eq 'code'">
+		AND A.TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
 			AND A.G_KEY = #{searchText}
 		</if>
-		<if test="searchType eq 'title'">
+		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		ORDER BY A.G_KEY DESC
 		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
 	</select>
 
-	<select id="selectVideoListCount" resultType="Integer">
-		SELECT count(A.G_KEY) as CNT
-		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
-		ON A.G_KEY = B.G_KEY
-		LEFT JOIN T_TEACHER C
-		ON B.TEACHER_KEY = C.TEACHER_KEY
-		LEFT JOIN T_USER D
-		ON C.USER_KEY = D.USER_KEY
-		LEFT JOIN T_LEC E
-		ON A.G_KEY = E.G_KEY
+	<select id="selectProductListCount" resultType="Integer">
+		SELECT count(G_KEY) as CNT
+		FROM T_GOODS
 		WHERE 1=1
-		AND A.TYPE = 1
-		ORDER BY A.G_KEY DESC
-		<if test="searchType eq 'code'">
-			AND A.G_KEY = #{searchText}
+		AND TYPE = #{goodsTypeKey}
+		ORDER BY G_KEY DESC
+		<if test="searchType == 'code'">
+			AND G_KEY = #{searchText}
 		</if>
-		<if test="searchType eq 'title'">
-			AND A.NAME LIKE '%'||#{searchText}||'%'
+		<if test="searchType == 'title'">
+			AND NAME LIKE '%'||#{searchText}||'%'
 		</if>
 	</select>
 
@@ -111,6 +104,7 @@
 
 	<select id="selectTExamList" resultType="com.zianedu.lms.vo.TExamMasterVO">
 		SELECT * FROM T_EXAM_MASTER
+		WHERE 1=1
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>
@@ -153,6 +147,32 @@
 		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
+	</select>
+
+	<select id="selectBookInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TBookVO">
+		SELECT
+			A.*,
+			( SELECT name FROM T_CATEGORY WHERE ctg_key = A.class_group_ctg_key) as classGroupName,
+			( SELECT name FROM T_CATEGORY WHERE ctg_key = A.subject_ctg_key) as subjectName,
+			B.cp_key, C.name as cpName
+		FROM T_BOOK A
+		INNER JOIN T_GOODS B
+		ON A.g_key = B.g_key
+		INNER JOIN T_CP C
+		ON B.cp_key = C.cp_key
+		WHERE A.G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTResList" parameterType="Integer" resultType="com.zianedu.lms.vo.TResVO">
+		SELECT * FROM T_RES WHERE key_00 = #{gKey}
+	</select>
+
+	<select id="selectTExamMasterInfo" resultType="com.zianedu.lms.vo.TExamMasterVO">
+		SELECT * FROM T_EXAM_MASTER WHERE EXAM_KEY = #{examKey}
+	</select>
+
+	<select id="selectTBankSubjectExamLinkList" parameterType="Integer" resultType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
+		SELECT * FROM T_BANK_SUBJECT_EXAM_LINK WHERE exam_key = #{examKey}
 	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
@@ -247,6 +267,52 @@
 		)
 		<selectKey resultType="Integer" keyProperty="curriKey" order="BEFORE">
 			SELECT T_LEC_CURRI_SEQ.nextval FROM DUAL
+		</selectKey>
+	</insert>
+
+	<insert id="insertTBook" parameterType="com.zianedu.lms.vo.TBookVO">
+		INSERT INTO T_BOOK
+		(
+			BOOK_KEY, G_KEY, STATUS, WRITER, PUBLISH_DATE, PAGE_CNT, ISBN, IS_DELIVERY_FREE,
+			IS_SET, CONTENT_LIST, SUBJECT_CTG_KEY, CLASS_GROUP_CTG_KEY, GOODS_ID, NEXT_G_KEY
+		)
+		VALUES
+		(
+			T_BOOK_SEQ.nextval, #{gKey}, #{status}, #{status}, #{writer}, #{publishDate}, #{pageCnt}, #{isbn}, #{isDeliveryFree},
+			#{isSet}, #{contentList}, #{subjectCtgKey}, #{classGroupCtgKey}, #{goodsId}, #{nextGKey}
+		)
+	</insert>
+
+	<insert id="insertTRes" parameterType="com.zianedu.lms.vo.TResVO">
+		INSERT INTO T_RES
+		(
+			RES_KEY, TYPE, DEVICE, KEY_00, KEY_01, KEY_02, KEY_00_TYPE, KEY_01_TYPE, KEY_02_TYPE, VALUE, VALUE_TEXT
+		)
+		VALUES
+		(
+			T_RES_SEQ.nextval, 0, 0, #{key00}, 0, 0, 0, 0, 0, #{value}, ''
+		)
+	</insert>
+
+	<insert id="insertTExamMaster" parameterType="com.zianedu.lms.vo.TExamMasterVO">
+		INSERT INTO T_EXAM_MASTER
+		(
+			EXAM_KEY, C_KEY, NAME, INDATE, CLASS_CTG_KEY, SUBJECT_CTG_KEY, SELECT_SUBJECT_COUNT, ACCEPT_START_DATE,
+			ACCEPT_END_DATE, ONLINE_START_DATE, ONLINE_END_DATE, ONLINE_TIME, OFFLINE_DATE, OFFLINE_TIME_PERIOD,
+			OFFLINE_TIME_PLACE, ANSWER_COUNT, QUESTION_COUNT, PRINT_QUESTION_FILE, PRINT_COMMENTARY_FILE,
+			IS_SHOW_STATIC_TOTAL_RANK, IS_SHOW_STATIC_TOTAL_AVG, IS_SHOW_FILES, CLASS_GROUP_CTG_KEY, EXAM_YEAR, UNIT_CTG_KEY,
+			DIVISION_CTG_KEY, REF_KEY, IS_REAL_FREE, IS_GICHUL
+		)
+		VALUES
+		(
+			T_EXAM_MASTER_SEQ.nextval, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, #{acceptStartDate},
+			#{acceptEndDate}, #{onlineStartDate}, #{onlineEndDate}, #{onlineTime}, #{offlineDate}, #{offlineTimePeriod},
+			#{offlineTimePlace}, #{answerCount}, #{questionCount}, #{printQuestionFile}, #{printCommentaryFile},
+			#{isShowStaticTotalRank}, #{isShowStaticTotalAvg}, #{isShowFiles}, #{classGroupCtgKey}, #{examYear}, #{unitCtgKey},
+			#{divisionCtgKey}, #{refKey}, #{isRealFree}, #{isGichul}
+		)
+		<selectKey resultType="Integer" keyProperty="examKey" order="BEFORE">
+			SELECT T_EXAM_MASTER_SEQ.nextval FROM DUAL
 		</selectKey>
 	</insert>
 
@@ -351,6 +417,59 @@
 			<if test="pos != null">POS = #{pos},</if>
 		</set>
 		WHERE CURRI_KEY = #{curriKey}
+	</update>
+
+	<update id="updateTBook" parameterType="com.zianedu.lms.vo.TBookVO">
+		UPDATE T_BOOK
+		<set>
+			<if test="status != null">STATUS = #{status},</if>
+			<if test="writer != '' or writer != null">WRITER = #{writer},</if>
+			<if test="publishDate != '' or publishDate != null">PUBLISH_DATE = #{publishDate},</if>
+			<if test="pageCnt != null">PAGE_CNT = #{pageCnt},</if>
+			<if test="isbn != '' or isbn != null">ISBN = #{isbn},</if>
+			<if test="isDeliveryFree != null">IS_DELIVERY_FREE = #{isDeliveryFree},</if>
+			<if test="isSet != null">IS_SET = #{isSet},</if>
+			<if test="contentList != '' or contentList != null">CONTENT_LIST = #{contentList},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+			<if test="nextGKey != null">NEXT_G_KEY = #{nextGKey},</if>
+		</set>
+		WHERE BOOK_KEY = #{bookKey}
+	</update>
+
+	<update id="updateTExamMaster" parameterType="com.zianedu.lms.vo.TExamMasterVO">
+		UPDATE T_EXAM_MASTER
+		<set>
+			<if test="name != '' or name != null">NAME = #{name},</if>
+			<if test="indate != '' or indate != null">INDATE = #{indate},</if>
+			<if test="classCtgKey != null">CLASS_CTG_KEY = #{classCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="selectSubjectCount != null">SELECT_SUBJECT_COUNT = #{selectSubjectCount},</if>
+			<if test="acceptStartDate != '' or acceptStartDate != null">ACCEPT_START_DATE = #{acceptStartDate},</if>
+			<if test="acceptEndDate != '' or acceptEndDate != null">ACCEPT_END_DATE = #{acceptEndDate},</if>
+			<if test="onlineStartDate != '' or onlineStartDate != null">ONLINE_START_DATE = #{onlineStartDate},</if>
+			<if test="onlineEndDate != '' or onlineEndDate != null">ONLINE_END_DATE = #{onlineEndDate},</if>
+			<if test="onlineTime != null">ONLINE_TIME = #{onlineTime},</if>
+			<if test="offlineDate != '' or offlineDate != null">OFFLINE_DATE = #{offlineDate},</if>
+			<if test="offlineTimePeriod != '' or offlineTimePeriod != null">OFFLINE_TIME_PERIOD = #{offlineTimePeriod},</if>
+			<if test="offlineTimePlace != '' or offlineTimePlace != null">OFFLINE_TIME_PLACE = #{offlineTimePlace},</if>
+			<if test="answerCount != null">ANSWER_COUNT = #{answerCount},</if>
+			<if test="questionCount != null">QUESTION_COUNT = #{questionCount},</if>
+			<if test="printQuestionFile != '' or printQuestionFile != null">PRINT_QUESTION_FILE = #{printQuestionFile},</if>
+			<if test="printCommentaryFile != '' or printCommentaryFile != null">PRINT_COMMENTARY_FILE = #{printCommentaryFile},</if>
+			<if test="isShowStaticTotalRank != null">IS_SHOW_STATIC_TOTAL_RANK = #{isShowStaticTotalRank},</if>
+			<if test="isShowStaticTotalAvg != null">IS_SHOW_STATIC_TOTAL_AVG = #{isShowStaticTotalAvg},</if>
+			<if test="isShowFiles != null">IS_SHOW_FILES = #{isShowFiles},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="unitCtgKey != null">UNIT_CTG_KEY = #{unitCtgKey},</if>
+			<if test="divisionCtgKey != null">DIVISION_CTG_KEY = #{divisionCtgKey},</if>
+			<if test="refKey != null">REF_KEY = #{refKey},</if>
+			<if test="isRealFree != null">IS_REAL_FREE = #{isRealFree},</if>
+			<if test="isGichul != null">IS_GICHUL = #{isGichul},</if>
+		</set>
+		WHERE EXAM_KEY = #{examKey}
 	</update>
 
 	<delete id="deleteTCategoryGoods" parameterType="Integer">

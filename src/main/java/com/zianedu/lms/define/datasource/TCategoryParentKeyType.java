@@ -11,8 +11,9 @@ public enum TCategoryParentKeyType {
     //급수
     RATE(4309),
     //유형
-    TYPE(202)
-
+    TYPE(202),
+    //분류(모의고사)
+    EXAM_TYPE(133)
 
     ;
 

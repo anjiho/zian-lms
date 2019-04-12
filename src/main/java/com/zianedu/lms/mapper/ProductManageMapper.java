@@ -10,10 +10,12 @@ import java.util.List;
 public interface ProductManageMapper {
 
     /** SELECT **/
-    List<VideoListDTO> selectVideoList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                       @Param("searchText") String searchText, @Param("searchType") String searchType);
+    List<VideoListDTO> selectProductList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                       @Param("searchText") String searchText, @Param("searchType") String searchType,
+                                       @Param("goodsTypeKey") int goodsTypeKey);
 
-    int selectVideoListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectProductListCount(@Param("searchText") String searchText, @Param("searchType") String searchType,
+                               @Param("goodsTypeKey") int goodsTypeKey);
 
     TGoodsVO selectTGoodsInfo(@Param("gKey") int gKey);
 
@@ -47,6 +49,14 @@ public interface ProductManageMapper {
     int selectTGoodsListByTypeCount(@Param("searchText") String searchText, @Param("searchType") String searchType,
                                     @Param("goodsTypeKey") int goodsTypeKey);
 
+    TBookVO selectBookInfo(@Param("gKey") int gKey);
+
+    List<TResVO> selectTResList(@Param("gKey") int gKey);
+
+    TExamMasterVO selectTExamMasterInfo(@Param("examKey") int examKey);
+
+    List<TBankSubjectExamLinkVO> selectTBankSubjectExamLinkList(@Param("examKey") int examKey);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 
@@ -61,6 +71,14 @@ public interface ProductManageMapper {
     void insertTLinkKey(TLinkKeyVO tLinkKeyVO);
 
     Integer insertTLecCurri(TLecCurri tLecCurri);
+
+    void insertTBook(TBookVO tBookVO);
+
+    void insertTRes(TResVO tResVO);
+
+    Integer insertTExamMaster(TExamMasterVO tExamMasterVO);
+
+    //void insertTBankSubjectExamLink(TBankSubjectExamLinkVO);
 
 
     /** DELETE **/
@@ -88,5 +106,9 @@ public interface ProductManageMapper {
     void updateTLinkKey(TLinkKeyVO tLinkKeyVO);
 
     void updateTLecCurri(TLecCurri tLecCurri);
+
+    void updateTBook(TBookVO tBookVO);
+
+    void updateTExamMaster(TExamMasterVO tExamMasterVO);
 
 }

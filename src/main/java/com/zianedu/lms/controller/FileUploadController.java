@@ -79,7 +79,19 @@ public class FileUploadController {
         return new JsonBuilder().add("result", ZianCoreManage.OK).build();
     }
 
-    @RequestMapping(value = "/videoImgUpload", method = RequestMethod.POST)
+    /**
+     * 동영상 등록, 학원강의 등록
+     * @param request
+     * @param videoInfo
+     * @param videoOptionInfo
+     * @param videoCategoryInfo
+     * @param videoLectureInfo
+     * @param videoTeacherInfo
+     * @param videoOtherInfo
+     * @return
+     * @throws Exception
+     */
+    @RequestMapping(value = "/productUpload", method = RequestMethod.POST)
     public @ResponseBody String videoImgUpload(MultipartHttpServletRequest request, @RequestParam(value = "videoInfo") String videoInfo,
                                                @RequestParam(value = "videoOptionInfo") String videoOptionInfo,
                                                @RequestParam(value = "videoCategoryInfo") String videoCategoryInfo,
@@ -119,7 +131,7 @@ public class FileUploadController {
         JsonArray videoOtherInfoJson = GsonUtil.convertStringToJsonArray(videoOtherInfo);
         List<TLinkKeyVO>tLinkKeyVOList = GsonUtil.getObjectFromJsonArray(videoOtherInfoJson, TLinkKeyVO.class);
 
-        Integer gKey = productManageRepository.saveVideoInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
+        Integer gKey = productManageRepository.saveProductInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
                 tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, imageListFilePath, imageViewFilePath);
 
 
@@ -135,5 +147,16 @@ public class FileUploadController {
     public @ResponseBody String lectureCurriInfo(MultipartHttpServletRequest request) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
         return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
+    }
+
+    /**
+     * 도서 미리보기 파일업로드
+     * @param request
+     * @return
+     */
+    @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST)
+    public @ResponseBody String previewFileUpload(MultipartHttpServletRequest request) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
+        return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();
     }
 }
