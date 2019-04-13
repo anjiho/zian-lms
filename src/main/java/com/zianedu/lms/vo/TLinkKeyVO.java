@@ -12,7 +12,7 @@ public class TLinkKeyVO {
     private int resKey;
 
     private int reqType;
-
+    //모의고사 정보 -> 온/오프라인여부 (2:온라인, 3:오프라인)
     private int resType;
 
     private int pos;

@@ -172,7 +172,18 @@
 	</select>
 
 	<select id="selectTBankSubjectExamLinkList" parameterType="Integer" resultType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
-		SELECT * FROM T_BANK_SUBJECT_EXAM_LINK WHERE exam_key = #{examKey}
+		SELECT A.*, B.name, C.name as CTG_NAME,
+				(
+						SELECT count(T_BANK_SUBJECT_QUES_LINK.BANK_SUBJECT_QUES_LINK_KEY)
+						FROM T_BANK_SUBJECT_QUES_LINK
+						WHERE EXAM_QUES_BANK_SUBJECT_KEY = B.EXAM_QUESTION_BANK_SUBJECT_KEY
+				) as QUESTION_NUMBER
+		FROM T_BANK_SUBJECT_EXAM_LINK A
+		INNER JOIN T_EXAM_QUESTION_BANK_SUBJECT B
+		ON A.EXAM_QUESTION_BANK_SUBJECT_KEY = B.EXAM_QUESTION_BANK_SUBJECT_KEY
+		INNER JOIN T_CATEGORY C
+		ON B.SUBJECT_CTG_KEY = C.CTG_KEY
+		WHERE A.exam_key = #{examKey}
 	</select>
 
 	<select id="selectMockExamQuestionBankSubjectList" resultType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
@@ -185,6 +196,7 @@
 		FROM T_EXAM_QUESTION_BANK_SUBJECT A
 		INNER JOIN T_CATEGORY B
 		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		WHERE 1=1
 		<if test="searchType == 'code'">
 			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
 		</if>
@@ -200,6 +212,7 @@
 		FROM T_EXAM_QUESTION_BANK_SUBJECT A
 		INNER JOIN T_CATEGORY B
 		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		WHERE 1=1
 		<if test="searchType == 'code'">
 			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
 		</if>
@@ -507,6 +520,15 @@
 		WHERE EXAM_KEY = #{examKey}
 	</update>
 
+    <update id="updateTBankSubjectExamLink" parameterType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
+        UPDATE T_BANK_SUBJECT_EXAM_LINK
+        <set>
+            <if test="examQuestionBankSubjectKey != null">EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey},</if>
+            <if test="required != null">REQUIRED = #{required},</if>
+        </set>
+        WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
+    </update>
+
 	<delete id="deleteTCategoryGoods" parameterType="Integer">
 		DELETE FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
 	</delete>
@@ -530,5 +552,9 @@
 	<delete id="deleteTCategoryGoodsByCtgGKey" parameterType="Integer">
 		DELETE FROM T_CATEGORY_GOODS WHERE CTG_G_KEY = #{ctgGKey}
 	</delete>
+
+    <delete id="deleteTBankSubjectExamLink" parameterType="Integer">
+        DELETE FROM T_BANK_SUBJECT_EXAM_LINK WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
+    </delete>
 
 </mapper>

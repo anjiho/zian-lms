@@ -1,15 +1,11 @@
 package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.GoodsType;
-import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.*;
-import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
-import oracle.net.aso.g;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,39 +28,43 @@ public class ProductManageService extends PagingSupport {
     private DataManageService dataManageService;
 
     /**
-     * 동영상 상세정보 가져오기
+     * 제품 상세정보 가져오기(동영상, 학원강의)
      * @param gKey
      * @return
      */
-    public VideoDetailInfoDTO getVideoDetailInfo(int gKey) {
+    public ProductDetailInfoDTO getProductDetailInfo(int gKey, String goodsTypeStr) {
         if (gKey == 0) return null;
 
-        TGoodsVO videoInfo = this.getVideoBasicInfo(gKey);
-        List<TGoodsPriceOptionVO>videoOptionInfo = this.getVideoOptionList(gKey);
-        List<List<TCategoryVO>>videoCategoryInfo = this.getVideoCategoryList(gKey);
-        TLecVO videoLectureInfo = this.getVideoLecInfo(gKey);
-        List<TGoodTeacherLinkVO> videoTeacherInfo = this.getTeacherListByVideoInfo(gKey);
-        List<TLecCurri> videoLectureCurriInfo = this.getLectureCurriList(videoLectureInfo.getLecKey());
+        TGoodsVO productInfo = this.getVideoBasicInfo(gKey);
+        List<TGoodsPriceOptionVO>productOptionInfo = this.getVideoOptionList(gKey);
+        List<List<TCategoryVO>>productCategoryInfo = this.getVideoCategoryList(gKey);
+        TLecVO productLectureInfo = this.getVideoLecInfo(gKey);
+        List<TGoodTeacherLinkVO> productTeacherInfo = this.getTeacherListByVideoInfo(gKey);
+
+        List<TLecCurri> videoLectureCurriInfo = new ArrayList<>();
+        if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 1) {
+            videoLectureCurriInfo = this.getLectureCurriList(productLectureInfo.getLecKey());
+        }
 
         List<TLinkKeyVO>tLinkKeyVOList = productManageMapper.selectTLinkKeyList(gKey);
-        List<TLinkKeyVO>videoOtherInfo = new ArrayList<>();
+        List<TLinkKeyVO>productOtherInfo = new ArrayList<>();
         if (tLinkKeyVOList.size() > 0) {
             for (TLinkKeyVO linkKeyVO : tLinkKeyVOList) {
-                videoOtherInfo = this.getGoodsListFromTLinkKey(gKey, linkKeyVO.getResType());
+                productOtherInfo = this.getGoodsListFromTLinkKey(gKey, linkKeyVO.getResType());
             }
         }
 
-        VideoDetailInfoDTO videoDetailInfoDTO = new VideoDetailInfoDTO(
-                videoInfo,
-                videoOptionInfo,
-                videoCategoryInfo,
-                videoLectureInfo,
-                videoTeacherInfo,
-                videoOtherInfo,
+        ProductDetailInfoDTO productDetailInfoDTO = new ProductDetailInfoDTO(
+                productInfo,
+                productOptionInfo,
+                productCategoryInfo,
+                productLectureInfo,
+                productTeacherInfo,
+                productOtherInfo,
                 videoLectureCurriInfo
 
         );
-        return videoDetailInfoDTO;
+        return productDetailInfoDTO;
     }
 
     /**
@@ -102,6 +102,23 @@ public class ProductManageService extends PagingSupport {
         return new BookDetailInfoDTO(
             productInfo, productOptionInfo, productCategoryInfo, bookInfo, previewInfo
         );
+    }
+
+    /**
+     * 모의고사 상품 상세정보
+     * @param gKey
+     * @return
+     */
+    public ExamDetailInfoDTO getExamProductDetailInfo(int gKey) {
+        TGoodsVO productInfo = this.getVideoBasicInfo(gKey);
+        List<TGoodsPriceOptionVO>productOptionInfo = this.getVideoOptionList(gKey);
+        List<List<TCategoryVO>>productCategoryInfo = this.getVideoCategoryList(gKey);
+        List<TLinkKeyVO>productOtherInfo = this.getGoodsListFromTLinkKey(gKey, 0);
+
+        ExamDetailInfoDTO examDetailInfoDTO = new ExamDetailInfoDTO(
+                productInfo, productOptionInfo, productCategoryInfo, productOtherInfo
+        );
+        return examDetailInfoDTO;
     }
 
     /**
@@ -206,9 +223,9 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보, 모의고사 정보
      * @param gKey
-     * @param resType {@link com.zianedu.lms.define.datasource.LinkKeyReqType} 정의 (4: 사은품, 5 : 강의교재)
+     * @param resType {@link com.zianedu.lms.define.datasource.LinkKeyReqType} 정의 (4: 사은품, 5 : 강의교재), 모의고사 정보는 0
      *
      * @return
      */
@@ -283,7 +300,7 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 모의고사 문제은행 - 과목선택리스트
+     * 모의고사 관리 > 모의고사 목록 > 상세화면 > 시험과목 추가버튼 > 모의고사 문제은행 - 과목선택리스트
      * @param sPage
      * @param listLimit
      * @param searchType
@@ -435,7 +452,7 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 저장
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별, 모의고사 정보 저장
      * @param tLinkKeyVOList
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -548,6 +565,33 @@ public class ProductManageService extends PagingSupport {
 
         if (tExamMasterVO.getExamKey() == 0) productManageMapper.insertTExamMaster(tExamMasterVO);
         else productManageMapper.updateTExamMaster(tExamMasterVO);
+    }
+
+   /**
+     * 모의고사 상세 > 시험과목 목록 > 필수과목 여부 변경하기
+     * @param tBankSubjectExamLinkVOS
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateRequireSubject(List<TBankSubjectExamLinkVO>tBankSubjectExamLinkVOS) {
+        if (tBankSubjectExamLinkVOS.size() == 0)return;
+
+        for (TBankSubjectExamLinkVO examLinkVO : tBankSubjectExamLinkVOS) {
+            if (examLinkVO.getBankSubjectExamLinkKey() == 0) return;
+            TBankSubjectExamLinkVO tBankSubjectExamLinkVO = new TBankSubjectExamLinkVO(
+                    examLinkVO.getBankSubjectExamLinkKey(), examLinkVO.getRequired()
+            );
+            productManageMapper.updateTBankSubjectExamLink(tBankSubjectExamLinkVO);
+        }
+    }
+
+    /**
+     * 모의고사 상세 > 시험과목 목록 > 과목삭제하기
+     * @param bankSubjectExamLinkKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteExamSubject(int bankSubjectExamLinkKey) {
+        if (bankSubjectExamLinkKey == 0)return;
+        productManageMapper.deleteTBankSubjectExamLink(bankSubjectExamLinkKey);
     }
 
 }

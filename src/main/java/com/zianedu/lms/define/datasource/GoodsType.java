@@ -6,7 +6,10 @@ public enum GoodsType {
     //학원
     ACADEMY(2, "학원강의"),
     //책
-    BOOK(3, "도서");
+    BOOK(3, "도서"),
+    //모의고사
+    EXAM(4, "모의고사")
+    ;
 
     int goodsTypeKey;
 

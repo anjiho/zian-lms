@@ -3,25 +3,17 @@ package com.zianedu.lms.controller;
 import com.google.gson.*;
 import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
-import com.zianedu.lms.dto.VideoDetailInfoDTO;
-import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.repository.ProductManageRepository;
 import com.zianedu.lms.service.DataManageService;
-import com.zianedu.lms.service.ProductManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
 import com.zianedu.lms.utils.GsonUtil;
 import com.zianedu.lms.utils.JsonBuilder;
-import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
-import org.apache.http.HttpStatus;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 

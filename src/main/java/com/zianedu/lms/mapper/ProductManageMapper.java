@@ -99,6 +99,8 @@ public interface ProductManageMapper {
 
     void deleteTCategoryGoodsByCtgGKey(@Param("ctgGKey") int ctgGKey);
 
+    void deleteTBankSubjectExamLink(@Param("bankSubjectExamLinkKey") int bankSubjectExamLinkKey);
+
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);
 
@@ -115,5 +117,7 @@ public interface ProductManageMapper {
     void updateTBook(TBookVO tBookVO);
 
     void updateTExamMaster(TExamMasterVO tExamMasterVO);
+
+    void updateTBankSubjectExamLink(TBankSubjectExamLinkVO tBankSubjectExamLinkVO);
 
 }
