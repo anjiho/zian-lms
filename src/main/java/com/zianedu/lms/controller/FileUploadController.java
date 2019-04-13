@@ -8,6 +8,7 @@ import com.zianedu.lms.service.DataManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
 import com.zianedu.lms.utils.GsonUtil;
 import com.zianedu.lms.utils.JsonBuilder;
+import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -130,12 +131,21 @@ public class FileUploadController {
         return new JsonBuilder().add("result", gKey).build();
     }
 
+    @RequestMapping(value = "/imageFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
+    public @ResponseBody String productFileUpload(MultipartHttpServletRequest request,
+                                                  @RequestParam(value = "uploadType") String uploadType) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(
+                request, ConfigHolder.getFileUploadPath(), Util.isNullValue(uploadType, "")
+        );
+        return new JsonBuilder().add("result", uploadInfoMap).build();
+    }
+
     /**
      * 동영상 강의 입력에서 강의자료 파일 업로드
      * @param request
      * @return
      */
-    @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String lectureCurriInfo(MultipartHttpServletRequest request) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
         return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
@@ -146,7 +156,7 @@ public class FileUploadController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String previewFileUpload(MultipartHttpServletRequest request) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
         return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();

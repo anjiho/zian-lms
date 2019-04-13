@@ -111,6 +111,12 @@
 		ORDER BY NAME ASC
 	</select>
 
+	<select id="selectTypeList" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
+		WHERE PARENT_KEY IN ( #{parentKey1}, #{parentKey2}, #{parentKey3})
+		ORDER BY PARENT_KEY ASC, POS ASC
+	</select>
+
 	<insert id="insertTCategoryInfo">
 		INSERT INTO T_CATEGORY
 		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME )

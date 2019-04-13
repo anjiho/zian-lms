@@ -39,6 +39,14 @@ public class FileUploadUtil {
                     filePath = "100/lec/";
                 } else if ("PREVIEW".equals(uploadType)) {
                     filePath = "100/res/";
+                } else if ("ACADEMY".equals(uploadType)) {
+                    if("imageListFile".equals(uploadFileName)) {
+                        filePath = "100/promotion/";
+                    } else {
+                        filePath = "100/lec/";
+                    }
+                } else if ("BOOK".equals(uploadType)) {
+                    filePath = "100/book/";
                 }
 
                 if (uploadFileName != null || !"".equals(uploadFileName)) {
@@ -63,7 +71,7 @@ public class FileUploadUtil {
                     }
                     if ("BANNER".equals(uploadType)) {
                         map.put("filePath", filePath + fileName);
-                    } else if ("VIDEO".equals(uploadType)) {
+                    } else if ("VIDEO".equals(uploadType)) {    //동영상 상품 파일 업로드 시
                         if("imageListFile".equals(uploadFileName)) {
                             filePath = "100/book/";
                             map.put("imageListFilePath", filePath + fileName);
@@ -71,12 +79,27 @@ public class FileUploadUtil {
                             filePath = "100/lec/";
                             map.put("imageViewFilePath", filePath + fileName);
                         }
-                    } else if ("CURRI".equals(uploadType)) {
+                    } else if ("CURRI".equals(uploadType)) {    //동영상 상품 > 강의입력 > 강의자료 파일 업로드 시
                         filePath = "100/lec/";
                         map.put("dataFilePath", filePath + fileName);
-                    } else if ("PREVIEW".equals(uploadType)) {
+                    } else if ("PREVIEW".equals(uploadType)) {  //도서등록 > 미리보기 이미지 업로드 시
                         filePath = "100/res/";
                         map.put("previewFilePath", filePath + fileName);
+                    } else if ("ACADEMY".equals(uploadType)) {  //학원강의 등록 파일 업로드 시
+                        if("imageListFile".equals(uploadFileName)) {
+                            filePath = "100/promotion/";
+                            map.put("imageListFilePath", filePath + fileName);
+                        } else {
+                            filePath = "100/lec/";
+                            map.put("imageViewFilePath", filePath + fileName);
+                        }
+                    } else if ("BOOK".equals(uploadType)) { //도서상품 파일 업로드 시
+                        filePath = "100/book/";
+                        if("imageListFile".equals(uploadFileName)) {
+                            map.put("imageListFilePath", filePath + fileName);
+                        } else {
+                            map.put("imageViewFilePath", filePath + fileName);
+                        }
                     }
 
                 }

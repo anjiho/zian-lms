@@ -36,6 +36,9 @@ public interface DataManageMapper {
 
     List<TGoodTeacherLinkVO> selectTeacherList();
 
+    List<TCategoryVO> selectTypeList(@Param("parentKey1") int parentKey1, @Param("parentKey2") int parentKey2,
+                                     @Param("parentKey3") int parentKey3);
+
     /** INSERT **/
     void insertTCategoryInfo(@Param("parentKey") int parentKey, @Param("name") String ctgName, @Param("pos") int pos);
 

@@ -1,6 +1,7 @@
 package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.PagingSearchDTO;
+import com.zianedu.lms.dto.ProblemBankListDTO;
 import com.zianedu.lms.dto.VideoListDTO;
 import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
@@ -61,6 +62,10 @@ public interface ProductManageMapper {
                                                                @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     int selectMockExamQuestionBankSubjectListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<ProblemBankListDTO>selectTExamQuestionBankList(ProblemBankSearchVO problemBankSearchVO);
+
+    int selectTExamQuestionBankListCount(ProblemBankSearchVO problemBankSearchVO);
 
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);

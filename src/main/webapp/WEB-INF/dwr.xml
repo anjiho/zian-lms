@@ -57,6 +57,8 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TResVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankSubjectVO"/>.
 		<convert converter="bean" match="com.zianedu.lms.vo.TBankSubjectExamLinkVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankVO"/>
+        <convert converter="bean" match="com.zianedu.lms.vo.ProblemBankSearchVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
@@ -67,6 +69,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.BookDetailInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.MokExamInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ExamDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankListDTO"/>
 
 	</allow>
 

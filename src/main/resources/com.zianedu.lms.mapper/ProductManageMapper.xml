@@ -221,7 +221,69 @@
 		</if>
 	</select>
 
+    <select id="selectTExamQuestionBankList" parameterType="map" resultType="ProblemBankListDTO">
+        SELECT
+            A.EXAM_QUESTION_BANK_KEY,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.DIVISION_CTG_KEY) as class_name,
+            A.EXAM_YEAR,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.SUBJECT_CTG_KEY) as subject_name,
+            A.EXAM_LEVEL,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.STEP_CTG_KEY) as type_name,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.PATTERN_CTG_KEY) as pattern_name,
+            UNIT_CTG_KEY
+        FROM T_EXAM_QUESTION_BANK A
+        WHERE 1=1
+        <if test="examYear != '' and examYear != null">
+            AND A.EXAM_YEAR = #{examYear}
+        </if>
+        <if test="divisionCtgKey > 0">
+            AND A.DIVISION_CTG_KEY = #{divisionCtgKey}
+        </if>
+        <if test="subjectCtgKey > 0">
+            AND A.SUBJECT_CTG_KEY = #{subjectCtgKey}
+        </if>
+        <if test="stepCtgKey > 0">
+            AND A.STEP_CTG_KEY = #{stepCtgKey}
+        </if>
+        <if test="patternCtgKey > 0">
+            AND A.PATTERN_CTG_KEY = #{patternCtgKey}
+        </if>
+        <if test="unitCtgKey > 0">
+            AND A.UNIT_CTG_KEY = #{unitCtgKey}
+        </if>
+        <if test="subjectCode != '' and subjectCode != null">
+            AND A.SUBJECT_CODE = #{subjectCode}
+        </if>
+        ORDER BY A.EXAM_QUESTION_BANK_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
 
+	<select id="selectTExamQuestionBankListCount" parameterType="map" resultType="Integer">
+		SELECT count (EXAM_QUESTION_BANK_KEY)
+		FROM T_EXAM_QUESTION_BANK
+		WHERE 1=1
+		<if test="examYear != '' and examYear != null">
+			AND EXAM_YEAR = #{examYear}
+		</if>
+		<if test="divisionCtgKey > 0">
+			AND DIVISION_CTG_KEY = #{divisionCtgKey}
+		</if>
+		<if test="subjectCtgKey > 0">
+			AND SUBJECT_CTG_KEY = #{subjectCtgKey}
+		</if>
+		<if test="stepCtgKey > 0">
+			AND STEP_CTG_KEY = #{stepCtgKey}
+		</if>
+		<if test="patternCtgKey > 0">
+			AND PATTERN_CTG_KEY = #{patternCtgKey}
+		</if>
+		<if test="unitCtgKey > 0">
+			AND UNIT_CTG_KEY = #{unitCtgKey}
+		</if>
+		<if test="subjectCode != '' and subjectCode != null">
+			AND SUBJECT_CODE = #{subjectCode}
+		</if>
+	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		INSERT INTO T_GOODS

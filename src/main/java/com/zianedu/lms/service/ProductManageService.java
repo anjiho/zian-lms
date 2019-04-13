@@ -1,5 +1,6 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.define.datasource.ExamLevelType;
 import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.ProductManageMapper;
@@ -331,6 +332,39 @@ public class ProductManageService extends PagingSupport {
                 Util.isNullValue(searchText, ""),
                 Util.isNullValue(searchType.toLowerCase(), "")
         );
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록 리스트
+     * @param searchVO
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<ProblemBankListDTO> getProblemBankList(ProblemBankSearchVO searchVO) {
+        int startNumber = PagingSupport.getPagingStartNumber(searchVO.getStartPage(), searchVO.getListLimitNumber());
+        searchVO.setStartNumber(startNumber);
+
+        List<ProblemBankListDTO>list = productManageMapper.selectTExamQuestionBankList(searchVO);
+
+        if (list.size() == 0) return null;
+        for (ProblemBankListDTO bankListDTO : list) {
+            if (bankListDTO.getUnitCtgKey() > 0) {
+                String unitName = dataManageService.getMakeUnitName(bankListDTO.getUnitCtgKey());
+                bankListDTO.setUnitName(unitName);
+            }
+            bankListDTO.setLevelName(ExamLevelType.getExamLevelStr(bankListDTO.getExamLevel()));
+        }
+        return list;
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록 리스트 개수
+     * @param searchVO
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getProblemBankListCount(ProblemBankSearchVO searchVO) {
+        return productManageMapper.selectTExamQuestionBankListCount(searchVO);
     }
 
 //    /**
