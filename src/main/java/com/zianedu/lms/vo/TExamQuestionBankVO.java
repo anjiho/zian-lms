@@ -2,6 +2,8 @@ package com.zianedu.lms.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class TExamQuestionBankVO {
 
@@ -51,7 +53,18 @@ public class TExamQuestionBankVO {
 
     private String answer5Reason;
 
+    private String questionImageUrl;
+
+    private String commentaryImageUrl;
+
+    private List<TCategoryVO>stepList;
+
+    private List<TCategoryVO>patternList;
+
+    private List<TCategoryVO>unitList;
+
     private int startNumber;
 
     private int listLimitNumber;
+
 }

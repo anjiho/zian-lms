@@ -1,5 +1,10 @@
 package com.zianedu.lms.define.datasource;
 
+import com.zianedu.lms.dto.SelectboxDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public enum ExamLevelType {
 
     HIGH(0, "상"),
@@ -23,5 +28,17 @@ public enum ExamLevelType {
             }
         }
         return null;
+    }
+
+    public static List<SelectboxDTO> getExamLevelStrSelectbox() {
+        List<SelectboxDTO>list = new ArrayList<>();
+        for (ExamLevelType levelType : ExamLevelType.values()) {
+            SelectboxDTO selectboxDTO = new SelectboxDTO(
+                    levelType.examLevelKey,
+                    levelType.examLevelStr
+            );
+            list.add(selectboxDTO);
+        }
+        return list;
     }
 }

@@ -2,6 +2,7 @@ package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.PagingSearchDTO;
 import com.zianedu.lms.dto.ProblemBankListDTO;
+import com.zianedu.lms.dto.ProblemBankSubjectDTO;
 import com.zianedu.lms.dto.VideoListDTO;
 import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
@@ -67,6 +68,14 @@ public interface ProductManageMapper {
 
     int selectTExamQuestionBankListCount(ProblemBankSearchVO problemBankSearchVO);
 
+    TExamQuestionBankVO selectTExamQuestionBankInfo(@Param("examQuestionBankKey") int examQuestionBankKey);
+
+    TExamQuestionBankSubjectVO selectTExamQuestionBankSubjectDetailInfo(@Param("examQuestionBankSubjectKey") int examQuestionBankSubjectKey);
+
+    List<ProblemBankSubjectDTO>selectTBankSubjectQuesLinkList(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey);
+
+    Integer selectTBankSubjectQuesLinkLastPos(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 
@@ -88,6 +97,13 @@ public interface ProductManageMapper {
 
     Integer insertTExamMaster(TExamMasterVO tExamMasterVO);
 
+    void insertTExamQuestionBank(TExamQuestionBankVO tExamQuestionBankVO);
+
+    void insertTBankSubjectQuesLink(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey, @Param("examQuesBankKey") int examQuesBankKey,
+                                    @Param("pos") int pos);
+
+    void insertTExamQuestionBankSubject(@Param("name") String name, @Param("subjectCtgKey") int subjectCtgKey);
+
     //void insertTBankSubjectExamLink(TBankSubjectExamLinkVO);
 
 
@@ -105,6 +121,8 @@ public interface ProductManageMapper {
     void deleteTCategoryGoodsByCtgGKey(@Param("ctgGKey") int ctgGKey);
 
     void deleteTBankSubjectExamLink(@Param("bankSubjectExamLinkKey") int bankSubjectExamLinkKey);
+
+    void deleteTBankSubjectQuesLink(@Param("bankSubjectQuesLinkKey") int bankSubjectQuesLinkKey);
 
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);
@@ -124,5 +142,14 @@ public interface ProductManageMapper {
     void updateTExamMaster(TExamMasterVO tExamMasterVO);
 
     void updateTBankSubjectExamLink(TBankSubjectExamLinkVO tBankSubjectExamLinkVO);
+
+    void updateTExamQuestionBank(TExamQuestionBankVO tExamQuestionBankVO);
+
+    void updateTExamQuestionBankImage(@Param("examQuestionBankKey") int examQuestionBankKey, @Param("imageType") String imageType);
+
+    void updateTBankSubjectQuesLinkPos(@Param("bankSubjectQuesLinkKey") int bankSubjectQuesLinkKey, @Param("pos") int pos);
+
+    void updateTExamQuestionBankSubject(@Param("examQuestionBankSubjectKey") int examQuestionBankSubjectKey,
+                                        @Param("name") String name, @Param("subjectCtgKey") int subjectCtgKey);
 
 }

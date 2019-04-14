@@ -285,6 +285,43 @@
 		</if>
 	</select>
 
+	<select id="selectTExamQuestionBankInfo" resultType="com.zianedu.lms.vo.TExamQuestionBankVO">
+		SELECT * FROM T_EXAM_QUESTION_BANK
+		WHERE T_EXAM_QUESTION_BANK.EXAM_QUESTION_BANK_KEY = #{examQuestionBankKey}
+	</select>
+
+	<select id="selectTExamQuestionBankSubjectDetailInfo" resultType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		SELECT * FROM T_EXAM_QUESTION_BANK_SUBJECT WHERE EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey}
+	</select>
+
+    <select id="selectTBankSubjectQuesLinkList" resultType="ProblemBankSubjectDTO">
+        SELECT
+			A.EXAM_QUES_BANK_KEY,
+			(SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.DIVISION_CTG_KEY) as class_name,
+            B.EXAM_YEAR,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.SUBJECT_CTG_KEY) as subject_name,
+            B.EXAM_LEVEL,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.STEP_CTG_KEY) as type_name,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.PATTERN_CTG_KEY) as pattern_name,
+            B.UNIT_CTG_KEY,
+            B.QUESTION_IMAGE
+        FROM T_BANK_SUBJECT_QUES_LINK A
+        INNER JOIN T_EXAM_QUESTION_BANK B
+        ON A.EXAM_QUES_BANK_KEY = B.EXAM_QUESTION_BANK_KEY
+        WHERE A.EXAM_QUES_BANK_SUBJECT_KEY = #{examQuesBankSubjectKey}
+        ORDER BY A.POS ASC
+    </select>
+
+	<select id="selectTBankSubjectQuesLinkLastPos" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS + 1 as pos
+			FROM T_BANK_SUBJECT_QUES_LINK
+			WHERE EXAM_QUES_BANK_SUBJECT_KEY = #{examQuesBankSubjectKey}
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		INSERT INTO T_GOODS
 		(
@@ -424,6 +461,43 @@
 		<selectKey resultType="Integer" keyProperty="examKey" order="BEFORE">
 			SELECT T_EXAM_MASTER_SEQ.nextval FROM DUAL
 		</selectKey>
+	</insert>
+
+    <insert id="insertTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">
+        INSERT INTO T_EXAM_QUESTION_BANK
+        (
+            EXAM_QUESTION_BANK_KEY, DSP_DATE, QUESTION_IMAGE, COMMENTARY_IMAGE, BOOK_IMAGE, ANSWER, TAG, DIVISION_CTG_KEY,
+            SUBJECT_CTG_KEY, STEP_CTG_KEY, PATTERN_CTG_KEY, UNIT_CTG_KEY, EXAM_YEAR, EXAM_LEVEL, SUBJECT_CODE, REVIEW, COMMENTARY_URL,
+            ANSWER_1_REASON, ANSWER_2_REASON, ANSWER_3_REASON, ANSWER_4_REASON, ANSWER_5_REASON
+        )
+        VALUES
+        (
+            T_EXAM_QUESTION_BANK_SEQ.nextval, #{dspDate}, #{questionImage}, #{commentaryImage}, #{bookImage}, #{answer}, #{tag}, #{divisionCtgKey},
+            #{subjectCtgKey}, #{stepCtgKey}, #{patternCtgKey}, #{unitCtgKey}, #{examYear}, #{examLevel}, #{subjectCode}, #{review}, #{commentaryUrl},
+            #{answer1Reason}, #{answer2Reason}, #{answer3Reason}, #{answer4Reason}, #{answer5Reason}
+        )
+    </insert>
+
+	<insert id="insertTBankSubjectQuesLink">
+		INSERT INTO T_BANK_SUBJECT_QUES_LINK
+		(
+			BANK_SUBJECT_QUES_LINK_KEY, EXAM_QUES_BANK_SUBJECT_KEY, EXAM_QUES_BANK_KEY, POS
+		)
+		VALUES
+		(
+			T_BANK_SUBJECT_QUES_LINK_SEQ.nextval, #{examQuesBankSubjectKey}, #{examQuesBankKey}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTExamQuestionBankSubject" parameterType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		INSERT INTO T_EXAM_QUESTION_BANK_SUBJECT
+		(
+			EXAM_QUESTION_BANK_SUBJECT_KEY, C_KEY, SUBJECT_CTG_KEY, NAME
+		)
+		VALUES
+		(
+			T_EXAM_QUESTION_BANK_SUB_SEQ.nextval, 100, #{subjectCtgKey}, #{name}
+		)
 	</insert>
 
 	<update id="updateTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
@@ -591,6 +665,66 @@
         WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
     </update>
 
+	<update id="updateTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">
+		UPDATE T_EXAM_QUESTION_BANK
+		<set>
+			<if test="dspDate != '' and dspDate != null">DSP_DATE = #{dspDate},</if>
+			<if test="questionImage != '' and questionImage != null">QUESTION_IMAGE = #{questionImage},</if>
+			<if test="commentaryImage != '' and commentaryImage != null">COMMENTARY_IMAGE = #{commentaryImage},</if>
+			<if test="bookImage != '' and bookImage != null">BOOK_IMAGE = #{bookImage},</if>
+			<if test="answer > 0">ANSWER = #{answer},</if>
+			<if test="tag != '' and tag != null">TAG = #{tag},</if>
+			<if test="divisionCtgKey != null">DIVISION_CTG_KEY = #{divisionCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="stepCtgKey != null">STEP_CTG_KEY = #{stepCtgKey},</if>
+			<if test="patternCtgKey != null">PATTERN_CTG_KEY = #{patternCtgKey},</if>
+			<if test="unitCtgKey != null">UNIT_CTG_KEY = #{unitCtgKey},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="examLevel != null">EXAM_LEVEL = #{examLevel},</if>
+			<if test="subjectCode != '' and subjectCode != null">SUBJECT_CODE = #{subjectCode},</if>
+			<if test="commentaryUrl != '' and commentaryUrl != null">COMMENTARY_URL = #{commentaryUrl},</if>
+			<if test="answer1Reason != '' and answer1Reason != null">ANSWER_1_REASON = #{answer1Reason},</if>
+			<if test="answer2Reason != '' and answer2Reason != null">ANSWER_2_REASON = #{answer2Reason},</if>
+			<if test="answer3Reason != '' and answer3Reason != null">ANSWER_3_REASON = #{answer3Reason},</if>
+			<if test="answer4Reason != '' and answer4Reason != null">ANSWER_4_REASON = #{answer4Reason},</if>
+			<if test="answer5Reason != '' and answer5Reason != null">ANSWER_5_REASON = #{answer5Reason},</if>
+		</set>
+		WHERE EXAM_QUESTION_BANK_KEY = #{examQuestionBankKey}
+	</update>
+
+    <update id="updateTExamQuestionBankImage">
+        UPDATE T_EXAM_QUESTION_BANK
+        <set>
+            <if test="imageType != '' and imageType != null">
+                <if test="imageType == 'QUESTION'">
+                    QUESTION_IMAGE = ''
+                </if>
+                <if test="imageType == 'COMMENTARY'">
+                    COMMENTARY_IMAGE = ''
+                </if>
+                <if test="imageType == 'BOOK'">
+                    BOOK_IMAGE = ''
+                </if>
+            </if>
+        </set>
+        WHERE EXAM_QUESTION_BANK_KEY = #{examQuestionBankKey}
+    </update>
+
+	<update id="updateTBankSubjectQuesLinkPos">
+		UPDATE T_BANK_SUBJECT_QUES_LINK
+		SET POS = #{pos}
+		WHERE BANK_SUBJECT_QUES_LINK_KEY = #{bankSubjectQuesLinkKey}
+	</update>
+
+	<update id="updateTExamQuestionBankSubject">
+		UPDATE T_EXAM_QUESTION_BANK_SUBJECT
+		<set>
+			<if test="subjectCtgKey > 0">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="name != ''">NAME = #{name},</if>
+		</set>
+		WHERE EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey}
+	</update>
+
 	<delete id="deleteTCategoryGoods" parameterType="Integer">
 		DELETE FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
 	</delete>
@@ -618,5 +752,9 @@
     <delete id="deleteTBankSubjectExamLink" parameterType="Integer">
         DELETE FROM T_BANK_SUBJECT_EXAM_LINK WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
     </delete>
+
+	<delete id="deleteTBankSubjectQuesLink" parameterType="Integer">
+		DELETE FROM T_BANK_SUBJECT_QUES_LINK WHERE BANK_SUBJECT_QUES_LINK_KEY = #{bankSubjectQuesLinkKey}
+	</delete>
 
 </mapper>

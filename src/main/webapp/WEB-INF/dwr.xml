@@ -60,6 +60,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankVO"/>
         <convert converter="bean" match="com.zianedu.lms.vo.ProblemBankSearchVO"/>
 
+
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.VideoListDTO"/>
@@ -70,6 +71,8 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.MokExamInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ExamDetailInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDetailDTO"/>
 
 	</allow>
 
