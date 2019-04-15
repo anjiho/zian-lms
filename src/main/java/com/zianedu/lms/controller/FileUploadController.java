@@ -5,6 +5,7 @@ import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.repository.ProductManageRepository;
 import com.zianedu.lms.service.DataManageService;
+import com.zianedu.lms.service.PromotionManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
 import com.zianedu.lms.utils.GsonUtil;
 import com.zianedu.lms.utils.JsonBuilder;
@@ -27,6 +28,9 @@ public class FileUploadController {
 
     @Autowired
     private ProductManageRepository productManageRepository;
+
+    @Autowired
+    private PromotionManageService promotionManageService;
 
     /**
      * 배너관리 등록및 수정
@@ -160,5 +164,61 @@ public class FileUploadController {
     public @ResponseBody String previewFileUpload(MultipartHttpServletRequest request) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
         return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();
+    }
+
+
+
+
+
+
+
+
+    @RequestMapping(value = "/test", method = RequestMethod.POST)
+    public @ResponseBody String test(MultipartHttpServletRequest request, @RequestParam(value = "productInfo") String videoInfo,
+                                               @RequestParam(value = "productOptionInfo") String videoOptionInfo,
+                                               @RequestParam(value = "productCategoryInfo") String productCategoryInfo,
+                                               @RequestParam(value = "productPromotionInfo") String productPromotionInfo,
+                                               @RequestParam(value = "productOnlineLectureInfo") String productOnlineLectureInfo) throws Exception {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
+
+        String imageListFilePath = null;
+        String imageViewFilePath = null;
+
+        if (uploadInfoMap.get("imageListFilePath")== null) imageListFilePath = "";
+        if (uploadInfoMap.get("imageViewFilePath")== null) imageViewFilePath = "";
+        //동영상 기본정보 정보
+        JsonObject videoInfoJson = GsonUtil.convertStringToJsonObj(videoInfo);
+        Gson gson = new Gson();
+        TGoodsVO tGoodsVO = gson.fromJson(videoInfoJson, TGoodsVO.class);
+
+        //동영상 옵션 정보
+        JsonArray videoOptionInfoJson = GsonUtil.convertStringToJsonArray(videoOptionInfo);
+        List<TGoodsPriceOptionVO>tGoodsPriceOptionVOList = GsonUtil.getObjectFromJsonArray(videoOptionInfoJson, TGoodsPriceOptionVO.class);
+
+        //동영상 카테코리 정보
+        JsonArray videoCategoryInfoJson = GsonUtil.convertStringToJsonArray(productCategoryInfo);
+        List<TCategoryGoods>tCategoryVOList = GsonUtil.getObjectFromJsonArray(videoCategoryInfoJson, TCategoryGoods.class);
+
+        //동영상 강좌 정보
+        JsonObject videoLectureInfoJson = GsonUtil.convertStringToJsonObj(productPromotionInfo);
+        Gson gson2 = new Gson();
+        TPromotionVO tLecVO = gson2.fromJson(videoLectureInfoJson, TPromotionVO.class);
+
+        //동영상 강사 정보
+//        JsonArray videoTeacherInfoJson = GsonUtil.convertStringToJsonArray(videoTeacherInfo);
+//        List<TGoodTeacherLinkVO>tGoodTeacherLinkVOS = GsonUtil.getObjectFromJsonArray(videoTeacherInfoJson, TGoodTeacherLinkVO.class);
+
+        //전범위, 기출문제, 강의교재, 사은품 정보
+        JsonArray videoOtherInfoJson = GsonUtil.convertStringToJsonArray(productOnlineLectureInfo);
+        List<TLinkKeyVO>tLinkKeyVOList = GsonUtil.getObjectFromJsonArray(videoOtherInfoJson, TLinkKeyVO.class);
+
+//        Integer gKey = productManageRepository.saveProductInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
+//                tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, imageListFilePath, imageViewFilePath);
+
+        promotionManageService.savePackage(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
+                tLecVO, tLinkKeyVOList);
+
+
+        return new JsonBuilder().add("result", "OK").build();
     }
 }

@@ -14,7 +14,7 @@ public interface ProductManageMapper {
     /** SELECT **/
     List<VideoListDTO> selectProductList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                        @Param("searchText") String searchText, @Param("searchType") String searchType,
-                                       @Param("goodsTypeKey") int goodsTypeKey);
+                                         @Param("goodsTypeKey") int goodsTypeKey);
 
     int selectProductListCount(@Param("searchText") String searchText, @Param("searchType") String searchType,
                                @Param("goodsTypeKey") int goodsTypeKey);

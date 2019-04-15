@@ -1,6 +1,8 @@
 package com.zianedu.lms.define.datasource;
 
 public enum LinkKeyReqType {
+    //포함된 온라인강좌
+    ONLINE_LECTURE(1),
     //사은품
     GIFT(4),
     //강의교재

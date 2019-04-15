@@ -3,8 +3,10 @@ package com.zianedu.lms.service;
 import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ExamLevelType;
 import com.zianedu.lms.define.datasource.GoodsType;
+import com.zianedu.lms.define.datasource.PromotionPmType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.ProductManageMapper;
+import com.zianedu.lms.mapper.PromotionManageMapper;
 import com.zianedu.lms.utils.FileUtil;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.StringUtils;
@@ -27,6 +29,9 @@ public class ProductManageService extends PagingSupport {
 
     @Autowired
     private ProductManageMapper productManageMapper;
+
+    @Autowired
+    private PromotionManageMapper promotionManageMapper;
 
     @Autowired
     private DataManageService dataManageService;
@@ -131,36 +136,69 @@ public class ProductManageService extends PagingSupport {
      * @param listLimit
      * @param searchType
      * @param searchText
-     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 학원 : ACADEMY, 책 : BOOK)
+     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 학원 : ACADEMY, 책 : BOOK, 패키지 : PACKAGE)
      * @return
      */
     @Transactional(readOnly = true)
     public List<VideoListDTO> getProductList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
         if (sPage == 0) return null;
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-        return productManageMapper.selectProductList(
-                startNumber,
-                listLimit,
-                Util.isNullValue(searchText, ""),
-                Util.isNullValue(searchType.toLowerCase(), ""),
-                GoodsType.getGoodsTypeKey(goodsTypeStr)
-        );
+
+        if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 5) {
+            if (PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 1
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 101
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 100
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 51
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 50) {
+                return promotionManageMapper.selectPromotionProductList(
+                        startNumber,
+                        listLimit,
+                        Util.isNullValue(searchText, ""),
+                        Util.isNullValue(searchType.toLowerCase(), ""),
+                        PromotionPmType.getPromotionPmTypeKey(goodsTypeStr)
+                );
+            }
+        } else {
+            return productManageMapper.selectProductList(
+                    startNumber,
+                    listLimit,
+                    Util.isNullValue(searchText, ""),
+                    Util.isNullValue(searchType.toLowerCase(), ""),
+                    GoodsType.getGoodsTypeKey(goodsTypeStr)
+            );
+        }
+        return null;
     }
 
     /**
      * 제품 목록 개수
      * @param searchType
      * @param searchText
-     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 학원 : ACADEMY, 책 : BOOK)
+     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 학원 : ACADEMY, 책 : BOOK, 패키지 : PACKAGE)
      * @return
      */
     @Transactional(readOnly = true)
     public Integer getProductListCount(String searchType, String searchText, String goodsTypeStr) {
-        return productManageMapper.selectProductListCount(
-                Util.isNullValue(searchText, ""),
-                Util.isNullValue(searchType.toLowerCase(), ""),
-                GoodsType.getGoodsTypeKey(goodsTypeStr)
-        );
+        if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 5) {
+            if (PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 1
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 101
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 100
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 51
+                    || PromotionPmType.getPromotionPmTypeKey(goodsTypeStr) == 50) {
+                return promotionManageMapper.selectPromotionProductListCount(
+                        Util.isNullValue(searchText, ""),
+                        Util.isNullValue(searchType.toLowerCase(), ""),
+                        PromotionPmType.getPromotionPmTypeKey(goodsTypeStr)
+                );
+            }
+        } else {
+            return productManageMapper.selectProductListCount(
+                    Util.isNullValue(searchText, ""),
+                    Util.isNullValue(searchType.toLowerCase(), ""),
+                    GoodsType.getGoodsTypeKey(goodsTypeStr)
+            );
+        }
+        return null;
     }
 
     /**
@@ -227,7 +265,7 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보, 모의고사 정보
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보, 모의고사 정보, 포함된 온라인 강좌
      * @param gKey
      * @param resType {@link com.zianedu.lms.define.datasource.LinkKeyReqType} 정의 (4: 사은품, 5 : 강의교재), 모의고사 정보는 0
      *
@@ -237,7 +275,7 @@ public class ProductManageService extends PagingSupport {
     public List<TLinkKeyVO>getGoodsListFromTLinkKey(int gKey, int resType) {
         if (gKey == 0) return null;
         List<TLinkKeyVO>list = new ArrayList<>();
-        if (resType == 4 || resType == 5) {
+        if (resType == 1 || resType == 4 || resType == 5) {
             list = productManageMapper.selectTGoodsFromTLinkKeyRel(gKey, resType);
         } else {
             list = productManageMapper.selectTExamMasterFromTLinkKeyRel(gKey, resType);
@@ -561,7 +599,7 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별, 모의고사 정보 저장
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별, 모의고사 정보, 포함된 온라인 강좌 저장
      * @param tLinkKeyVOList
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -600,7 +638,7 @@ public class ProductManageService extends PagingSupport {
             productManageMapper.deleteTGoodsTeacherLink(key);
         } else if ("CATE_GOODS".equals(menuType)) { //카테고리목록
             productManageMapper.deleteTCategoryGoodsByCtgGKey(key);
-        } else if ("TLINK".equals(menuType)) {  // 강의교재, 사은품, 전범위모의고사, 기출문제 회차별
+        } else if ("TLINK".equals(menuType)) {  // 강의교재, 사은품, 전범위모의고사, 기출문제 회차별, 포함된 온라인 강좌
             productManageMapper.deleteTLinkKeyByLinkKey(key);
         } else if ("CURRI".equals(menuType)) {  // 강의목록
             productManageMapper.deleteTLecCurri(key);

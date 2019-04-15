@@ -47,6 +47,12 @@ public class FileUploadUtil {
                     }
                 } else if ("BOOK".equals(uploadType)) {
                     filePath = "100/book/";
+                } else if ("PACKAGE".equals(uploadType)) {
+                    if("imageListFile".equals(uploadFileName)) {
+                        filePath = "100/promotion/";
+                    } else {
+                        filePath = "100/promotion/";
+                    }
                 }
 
                 if (uploadFileName != null || !"".equals(uploadFileName)) {
@@ -95,6 +101,13 @@ public class FileUploadUtil {
                         }
                     } else if ("BOOK".equals(uploadType)) { //도서상품 파일 업로드 시
                         filePath = "100/book/";
+                        if("imageListFile".equals(uploadFileName)) {
+                            map.put("imageListFilePath", filePath + fileName);
+                        } else {
+                            map.put("imageViewFilePath", filePath + fileName);
+                        }
+                    } else if ("PACKAGE".equals(uploadType)) { //패키지 상품 파일 업로드 시
+                        filePath = "100/promotion/";
                         if("imageListFile".equals(uploadFileName)) {
                             map.put("imageListFilePath", filePath + fileName);
                         } else {
