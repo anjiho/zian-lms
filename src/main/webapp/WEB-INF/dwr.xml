@@ -36,6 +36,12 @@
 			<param name="beanName" value="productManageService" />
 		</create>
 
+		<convert converter="bean" match="com.zianedu.lms.service.PromotionManageService"/>
+		<create creator="spring" javascript="promotionManageService">
+			<param name="class" value="com.zianedu.lms.service.PromotionManageService"/>
+			<param name="beanName" value="promotionManageService" />
+		</create>
+
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->
@@ -55,10 +61,11 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TExamMasterVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TBookVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TResVO"/>
-		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankSubjectVO"/>.
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankSubjectVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TBankSubjectExamLinkVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankVO"/>
         <convert converter="bean" match="com.zianedu.lms.vo.ProblemBankSearchVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TPromotionVO"/>
 
 
 		<!--  dto 선언 -->
@@ -73,7 +80,10 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PromotionDetailDTO"/>
 
 	</allow>
+
+
 
 </dwr>

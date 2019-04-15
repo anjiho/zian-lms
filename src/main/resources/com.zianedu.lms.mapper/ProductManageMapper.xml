@@ -29,7 +29,9 @@
 		FROM T_GOODS
 		WHERE 1=1
 		AND TYPE = #{goodsTypeKey}
-		ORDER BY G_KEY DESC
+		<if test="goodsTypeKey == 5">
+			AND A.SELLSTARTDATE IS NOT NULL
+		</if>
 		<if test="searchType == 'code'">
 			AND G_KEY = #{searchText}
 		</if>

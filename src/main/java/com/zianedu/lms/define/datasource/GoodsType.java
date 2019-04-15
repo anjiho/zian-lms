@@ -8,7 +8,17 @@ public enum GoodsType {
     //책
     BOOK(3, "도서"),
     //모의고사
-    EXAM(4, "모의고사")
+    EXAM(4, "모의고사"),
+    //패키지
+    PACKAGE(5, "패키지"),
+    //지안페이지
+    ZIAN_PASS_PAGE(5, "지안페이지"),
+    //지안패스
+    ZIAN_PASS(5, "지안패스"),
+    //연간회원제 페이지
+    YEAR_MEMBER_PAGE(5, "연간회원제 페이지"),
+    //연간회원제
+    YEAR_MEMBER(5, "연간회원제")
     ;
 
     int goodsTypeKey;

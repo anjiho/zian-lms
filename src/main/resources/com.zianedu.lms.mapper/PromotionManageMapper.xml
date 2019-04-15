@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.PromotionManageMapper">
+
+    <select id="selectTPromotion" resultType="com.zianedu.lms.vo.TPromotionVO">
+        SELECT * FROM T_PROMOTION WHERE G_KEY = #{gKey}
+    </select>
+
+    <select id="selectPromotionProductList" resultType="VideoListDTO">
+        SELECT A.G_KEY, A.NAME as GOODS_NAME, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE
+        FROM T_GOODS A LEFT JOIN T_PROMOTION B
+        ON A.G_KEY = B.G_KEY
+        WHERE 1=1
+        AND B.PM_TYPE = #{pmType}
+        <if test="searchType == 'code'">
+            AND A.G_KEY = #{searchText}
+        </if>
+        <if test="searchType == 'title'">
+            AND A.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.G_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectPromotionProductListCount" resultType="Integer">
+        SELECT COUNT (A.G_KEY)
+        FROM T_GOODS A LEFT JOIN T_PROMOTION B
+        ON A.G_KEY = B.G_KEY
+        WHERE 1=1
+        AND B.PM_TYPE = #{pmType}
+        <if test="searchType == 'code'">
+            AND A.G_KEY = #{searchText}
+        </if>
+        <if test="searchType == 'title'">
+            AND A.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <insert id="insertTPromotion" parameterType="com.zianedu.lms.vo.TPromotionVO">
+        INSERT INTO T_PROMOTION
+        (
+            PM_KEY, G_KEY, PM_TYPE, EXAM_YEAR, LIMIT_DAY, DEVICE_LIMIT_COUNT, AFFILIATION_CTG_KEY, CLASS_GROUP_CTG_KEY
+        )
+        VALUES
+        (
+            T_PROMOTION_SEQ.nextval, #{gKey}, #{pmType}, #{examYear}, #{limitDay}, #{deviceLimitCount}, #{affiliationCtgKey}, #{classGroupCtgKey}
+        )
+    </insert>
+
+    <update id="updateTPromotion" parameterType="com.zianedu.lms.vo.TPromotionVO">
+        UPDATE T_PROMOTION
+        <set>
+            <if test="pmType != null">PM_TYPE = #{pmType},</if>
+            <if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+            <if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+            <if test="deviceLimitCount != null">DEVICE_LIMIT_COUNT = #{deviceLimitCount},</if>
+            <if test="affiliationCtgKey != null">AFFILIATION_CTG_KEY = #{affiliationCtgKey},</if>
+            <if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+        </set>
+        WHERE PM_KEY = #{pmKey}
+    </update>
+
+</mapper>

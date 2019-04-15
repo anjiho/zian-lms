@@ -17,7 +17,9 @@ public enum TCategoryParentKeyType {
     //단원
     UNIT_TYPE(4405),
     //출제구분
-    DIVISION_TYPE(4390)
+    DIVISION_TYPE(4390),
+    //직렬
+    AFFILIATION_TYPE(133)
     ;
 
     int parentKey;
