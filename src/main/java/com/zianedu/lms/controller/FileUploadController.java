@@ -3,25 +3,18 @@ package com.zianedu.lms.controller;
 import com.google.gson.*;
 import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
-import com.zianedu.lms.dto.VideoDetailInfoDTO;
-import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.repository.ProductManageRepository;
 import com.zianedu.lms.service.DataManageService;
-import com.zianedu.lms.service.ProductManageService;
 import com.zianedu.lms.utils.FileUploadUtil;
 import com.zianedu.lms.utils.GsonUtil;
 import com.zianedu.lms.utils.JsonBuilder;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
-import org.apache.http.HttpStatus;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -138,12 +131,21 @@ public class FileUploadController {
         return new JsonBuilder().add("result", gKey).build();
     }
 
+    @RequestMapping(value = "/imageFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
+    public @ResponseBody String productFileUpload(MultipartHttpServletRequest request,
+                                                  @RequestParam(value = "uploadType") String uploadType) {
+        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(
+                request, ConfigHolder.getFileUploadPath(), Util.isNullValue(uploadType, "")
+        );
+        return new JsonBuilder().add("result", uploadInfoMap).build();
+    }
+
     /**
      * 동영상 강의 입력에서 강의자료 파일 업로드
      * @param request
      * @return
      */
-    @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String lectureCurriInfo(MultipartHttpServletRequest request) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
         return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
@@ -154,7 +156,7 @@ public class FileUploadController {
      * @param request
      * @return
      */
-    @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST)
+    @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String previewFileUpload(MultipartHttpServletRequest request) {
         Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
         return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();

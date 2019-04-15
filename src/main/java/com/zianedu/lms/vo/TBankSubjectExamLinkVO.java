@@ -14,4 +14,17 @@ public class TBankSubjectExamLinkVO {
     private int examQuestionBankSubjectKey;
 
     private int required;
+
+    private String name;
+
+    private String ctgName;
+
+    private int questionNumber;
+
+    public TBankSubjectExamLinkVO(){}
+
+    public TBankSubjectExamLinkVO(int bankSubjectExamLinkKey, int required) {
+        this.bankSubjectExamLinkKey = bankSubjectExamLinkKey;
+        this.required = required;
+    }
 }

@@ -26,7 +26,7 @@ public class StringUtils {
      * @param paths
      * @return
      */
-    public String concatURI(String... paths) {
+    public static String concatURI(String... paths) {
         StringBuilder sb = new StringBuilder();
         for (String path : paths) {
             if (path == null) continue;

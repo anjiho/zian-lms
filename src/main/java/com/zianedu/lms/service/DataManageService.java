@@ -152,6 +152,30 @@ public class DataManageService {
     }
 
     /**
+     * 모의고사 문제은행 문제 목록에서 단원 필드명 만들기
+     * @param ctgKey
+     * @return
+     */
+    public String getMakeUnitName(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        int j = 0;
+        for (int i=0; i<3; i++) {
+            TCategoryVO tCategoryVO = new TCategoryVO();
+
+            if (i == 0) tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+            else tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(j);
+
+            j = tCategoryVO.getParentKey();
+
+            list.add(tCategoryVO);
+        }
+        String unitName = "";
+        unitName = list.get(2).getName() + " > " + list.get(1).getName() + " > " + list.get(0).getName();
+        return unitName;
+    }
+
+    /**
      * 카테고리 저장하기
      * @param categoryTypeStr (분류관리 : CLASSFICATION(202), 과목관리 : SUBJECT(70))
      * @param ctgName

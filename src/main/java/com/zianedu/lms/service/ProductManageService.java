@@ -1,15 +1,15 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.config.ConfigHolder;
+import com.zianedu.lms.define.datasource.ExamLevelType;
 import com.zianedu.lms.define.datasource.GoodsType;
-import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.dto.*;
-import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
+import com.zianedu.lms.utils.FileUtil;
 import com.zianedu.lms.utils.PagingSupport;
+import com.zianedu.lms.utils.StringUtils;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
-import oracle.net.aso.g;
-import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,39 +32,43 @@ public class ProductManageService extends PagingSupport {
     private DataManageService dataManageService;
 
     /**
-     * 동영상 상세정보 가져오기
+     * 제품 상세정보 가져오기(동영상, 학원강의)
      * @param gKey
      * @return
      */
-    public VideoDetailInfoDTO getVideoDetailInfo(int gKey) {
+    public ProductDetailInfoDTO getProductDetailInfo(int gKey, String goodsTypeStr) {
         if (gKey == 0) return null;
 
-        TGoodsVO videoInfo = this.getVideoBasicInfo(gKey);
-        List<TGoodsPriceOptionVO>videoOptionInfo = this.getVideoOptionList(gKey);
-        List<List<TCategoryVO>>videoCategoryInfo = this.getVideoCategoryList(gKey);
-        TLecVO videoLectureInfo = this.getVideoLecInfo(gKey);
-        List<TGoodTeacherLinkVO> videoTeacherInfo = this.getTeacherListByVideoInfo(gKey);
-        List<TLecCurri> videoLectureCurriInfo = this.getLectureCurriList(videoLectureInfo.getLecKey());
+        TGoodsVO productInfo = this.getVideoBasicInfo(gKey);
+        List<TGoodsPriceOptionVO>productOptionInfo = this.getVideoOptionList(gKey);
+        List<List<TCategoryVO>>productCategoryInfo = this.getVideoCategoryList(gKey);
+        TLecVO productLectureInfo = this.getVideoLecInfo(gKey);
+        List<TGoodTeacherLinkVO> productTeacherInfo = this.getTeacherListByVideoInfo(gKey);
+
+        List<TLecCurri> videoLectureCurriInfo = new ArrayList<>();
+        if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 1) {
+            videoLectureCurriInfo = this.getLectureCurriList(productLectureInfo.getLecKey());
+        }
 
         List<TLinkKeyVO>tLinkKeyVOList = productManageMapper.selectTLinkKeyList(gKey);
-        List<TLinkKeyVO>videoOtherInfo = new ArrayList<>();
+        List<TLinkKeyVO>productOtherInfo = new ArrayList<>();
         if (tLinkKeyVOList.size() > 0) {
             for (TLinkKeyVO linkKeyVO : tLinkKeyVOList) {
-                videoOtherInfo = this.getGoodsListFromTLinkKey(gKey, linkKeyVO.getResType());
+                productOtherInfo = this.getGoodsListFromTLinkKey(gKey, linkKeyVO.getResType());
             }
         }
 
-        VideoDetailInfoDTO videoDetailInfoDTO = new VideoDetailInfoDTO(
-                videoInfo,
-                videoOptionInfo,
-                videoCategoryInfo,
-                videoLectureInfo,
-                videoTeacherInfo,
-                videoOtherInfo,
+        ProductDetailInfoDTO productDetailInfoDTO = new ProductDetailInfoDTO(
+                productInfo,
+                productOptionInfo,
+                productCategoryInfo,
+                productLectureInfo,
+                productTeacherInfo,
+                productOtherInfo,
                 videoLectureCurriInfo
 
         );
-        return videoDetailInfoDTO;
+        return productDetailInfoDTO;
     }
 
     /**
@@ -102,6 +106,23 @@ public class ProductManageService extends PagingSupport {
         return new BookDetailInfoDTO(
             productInfo, productOptionInfo, productCategoryInfo, bookInfo, previewInfo
         );
+    }
+
+    /**
+     * 모의고사 상품 상세정보
+     * @param gKey
+     * @return
+     */
+    public ExamDetailInfoDTO getExamProductDetailInfo(int gKey) {
+        TGoodsVO productInfo = this.getVideoBasicInfo(gKey);
+        List<TGoodsPriceOptionVO>productOptionInfo = this.getVideoOptionList(gKey);
+        List<List<TCategoryVO>>productCategoryInfo = this.getVideoCategoryList(gKey);
+        List<TLinkKeyVO>productOtherInfo = this.getGoodsListFromTLinkKey(gKey, 0);
+
+        ExamDetailInfoDTO examDetailInfoDTO = new ExamDetailInfoDTO(
+                productInfo, productOptionInfo, productCategoryInfo, productOtherInfo
+        );
+        return examDetailInfoDTO;
     }
 
     /**
@@ -206,9 +227,9 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 정보, 모의고사 정보
      * @param gKey
-     * @param resType {@link com.zianedu.lms.define.datasource.LinkKeyReqType} 정의 (4: 사은품, 5 : 강의교재)
+     * @param resType {@link com.zianedu.lms.define.datasource.LinkKeyReqType} 정의 (4: 사은품, 5 : 강의교재), 모의고사 정보는 0
      *
      * @return
      */
@@ -280,6 +301,145 @@ public class ProductManageService extends PagingSupport {
                 productManageMapper.selectTExamMasterInfo(examKey),
                 productManageMapper.selectTBankSubjectExamLinkList(examKey)
         );
+    }
+
+    /**
+     * 모의고사 관리 > 모의고사 목록 > 상세화면 > 시험과목 추가버튼 > 모의고사 문제은행 - 과목선택리스트, 모의고사 문제은행 과목 목록 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TExamQuestionBankSubjectVO> getMockExamQuestionBankSubjectList(int sPage, int listLimit,
+                                                                               String searchType, String searchText) {
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return productManageMapper.selectMockExamQuestionBankSubjectList(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), "")
+        );
+    }
+
+    /**
+     * 모의고사 문제은행 - 과목선택리스트 개수, 모의고사 문제은행 과목 목록 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMockExamQuestionBankSubjectListCount(String searchType, String searchText) {
+        return productManageMapper.selectMockExamQuestionBankSubjectListCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType.toLowerCase(), "")
+        );
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록 리스트
+     * @param searchVO
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<ProblemBankListDTO> getProblemBankList(ProblemBankSearchVO searchVO) {
+        int startNumber = PagingSupport.getPagingStartNumber(searchVO.getStartPage(), searchVO.getListLimitNumber());
+        searchVO.setStartNumber(startNumber);
+
+        List<ProblemBankListDTO>list = productManageMapper.selectTExamQuestionBankList(searchVO);
+
+        if (list.size() == 0) return null;
+        for (ProblemBankListDTO bankListDTO : list) {
+            if (bankListDTO.getUnitCtgKey() > 0) {
+                String unitName = dataManageService.getMakeUnitName(bankListDTO.getUnitCtgKey());
+                bankListDTO.setUnitName(unitName);
+            }
+            bankListDTO.setLevelName(ExamLevelType.getExamLevelStr(bankListDTO.getExamLevel()));
+        }
+        return list;
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록 리스트 개수
+     * @param searchVO
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getProblemBankListCount(ProblemBankSearchVO searchVO) {
+        return productManageMapper.selectTExamQuestionBankListCount(searchVO);
+    }
+
+    /**
+     * 모의고사 문제은행 문제 상세정보
+     * @param examQuestionBankKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TExamQuestionBankVO getProblemBankDetailInfo(int examQuestionBankKey) {
+        TExamQuestionBankVO questionBankVO = productManageMapper.selectTExamQuestionBankInfo(examQuestionBankKey);
+
+        if (questionBankVO != null) {
+            //정답 첫번째 문자 가져오기(3000 --> 3)
+            String firstAnswer = Util.subStrStartEnd(String.valueOf(questionBankVO.getAnswer()), 0, 1);
+            questionBankVO.setAnswer(Integer.parseInt(firstAnswer));
+            //이미지 URL만들기
+            questionBankVO.setCommentaryImageUrl(
+                    FileUtil.concatPath(ConfigHolder.getFileDomainUrl(), questionBankVO.getCommentaryImage())
+            );
+            //이미지 URL만들기
+            questionBankVO.setQuestionImageUrl(
+                    FileUtil.concatPath(ConfigHolder.getFileDomainUrl(), questionBankVO.getQuestionImage())
+            );
+            //유형정보 가져오기
+            if (questionBankVO.getStepCtgKey() > 0) {
+                List<TCategoryVO>stepList = dataManageService.getSequentialCategoryList(questionBankVO.getStepCtgKey());
+                questionBankVO.setStepList(stepList);
+            }
+            //패턴정보 가져오기
+            if (questionBankVO.getPatternCtgKey() > 0) {
+                List<TCategoryVO>patternList = dataManageService.getSequentialCategoryList(questionBankVO.getPatternCtgKey());
+                questionBankVO.setPatternList(patternList);
+            }
+            //단원정보 가져오기
+            if (questionBankVO.getUnitCtgKey() > 0) {
+                List<TCategoryVO>unitList = dataManageService.getSequentialCategoryList(questionBankVO.getUnitCtgKey());
+                questionBankVO.setUnitList(unitList);
+            }
+        }
+        return questionBankVO;
+    }
+
+    /**
+     * 모의고사 문제은행 과목 수정 상세화면
+     * @param examQuesBankSubjectKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public ProblemBankSubjectDetailDTO getProblemBankSubjectList(int examQuesBankSubjectKey) {
+        if (examQuesBankSubjectKey == 0) return null;
+
+        TExamQuestionBankSubjectVO subjectVO = productManageMapper.selectTExamQuestionBankSubjectDetailInfo(examQuesBankSubjectKey);
+        List<ProblemBankSubjectDTO>list = productManageMapper.selectTBankSubjectQuesLinkList(examQuesBankSubjectKey);
+
+        if (list.size() > 0) {
+            for (ProblemBankSubjectDTO subjectDTO : list) {
+                if (subjectDTO.getUnitCtgKey() > 0) {
+                    String unitName = dataManageService.getMakeUnitName(subjectDTO.getUnitCtgKey());
+                    subjectDTO.setUnitName(unitName);
+                }
+                if (!"".equals(subjectDTO.getQuestionImage())) {
+                    subjectDTO.setQuestionImageUrl(
+                            FileUtil.concatPath(ConfigHolder.getFileDomainUrl(), subjectDTO.getQuestionImage())
+                    );
+                }
+                subjectDTO.setLevelName(ExamLevelType.getExamLevelStr(subjectDTO.getExamLevel()));
+            }
+        }
+        ProblemBankSubjectDetailDTO subjectDetailDTO = new ProblemBankSubjectDetailDTO(
+                subjectVO, list
+        );
+        return subjectDetailDTO;
     }
 
 //    /**
@@ -401,7 +561,7 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
-     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별 저장
+     * 동영상의 강의교재, 사은품, 전범위모의고사, 기출문제 회차별, 모의고사 정보 저장
      * @param tLinkKeyVOList
      */
     @Transactional(propagation = Propagation.REQUIRED)
@@ -514,6 +674,114 @@ public class ProductManageService extends PagingSupport {
 
         if (tExamMasterVO.getExamKey() == 0) productManageMapper.insertTExamMaster(tExamMasterVO);
         else productManageMapper.updateTExamMaster(tExamMasterVO);
+    }
+
+   /**
+     * 모의고사 상세 > 시험과목 목록 > 필수과목 여부 변경하기
+     * @param tBankSubjectExamLinkVOS
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateRequireSubject(List<TBankSubjectExamLinkVO>tBankSubjectExamLinkVOS) {
+        if (tBankSubjectExamLinkVOS.size() == 0)return;
+
+        for (TBankSubjectExamLinkVO examLinkVO : tBankSubjectExamLinkVOS) {
+            if (examLinkVO.getBankSubjectExamLinkKey() == 0) return;
+            TBankSubjectExamLinkVO tBankSubjectExamLinkVO = new TBankSubjectExamLinkVO(
+                    examLinkVO.getBankSubjectExamLinkKey(), examLinkVO.getRequired()
+            );
+            productManageMapper.updateTBankSubjectExamLink(tBankSubjectExamLinkVO);
+        }
+    }
+
+    /**
+     * 모의고사 문제은행 입력및 수정
+     * @param tExamQuestionBankVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultProblemBank(TExamQuestionBankVO tExamQuestionBankVO) {
+        if (tExamQuestionBankVO == null) return;
+        if (tExamQuestionBankVO.getExamQuestionBankKey() == 0) {
+            productManageMapper.insertTExamQuestionBank(tExamQuestionBankVO);
+        } else {
+            productManageMapper.updateTExamQuestionBank(tExamQuestionBankVO);
+        }
+    }
+
+    /**
+     * 모의고사 상세 > 시험과목 목록 > 과목삭제하기
+     * @param bankSubjectExamLinkKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteExamSubject(int bankSubjectExamLinkKey) {
+        if (bankSubjectExamLinkKey == 0)return;
+        productManageMapper.deleteTBankSubjectExamLink(bankSubjectExamLinkKey);
+    }
+
+    /**
+     * 모의고사 문제은행 문제 상세정보 > 이미지 삭제하기
+     * @param examQuestionBankKey
+     * @param imageType {QUESTION:questionImage, COMMENTARY:commentaryImage, BOOK:bookImage}
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteProblemBankImage(int examQuestionBankKey, String imageType) {
+        if (examQuestionBankKey == 0 && "".equals(imageType)) return;
+        productManageMapper.updateTExamQuestionBankImage(
+                examQuestionBankKey, Util.isNullValue(imageType, "")
+        );
+    }
+
+    /**
+     * 모의고사 문제은행 과목 수정 > 문제 저장
+     * @param examQuesBankSubjectKey
+     * @param examQuesBankKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveProblemBankSubject(int examQuesBankSubjectKey, int examQuesBankKey) {
+        if (examQuesBankSubjectKey == 0 && examQuesBankKey == 0) return;
+
+        Integer lastPos = productManageMapper.selectTBankSubjectQuesLinkLastPos(examQuesBankSubjectKey);
+        if (lastPos == null) lastPos = 0;
+
+        productManageMapper.insertTBankSubjectQuesLink(examQuesBankSubjectKey, examQuesBankKey, lastPos);
+    }
+
+    /**
+     * 모의고사 문제은행 과목 수정 목록 > "x"표시로 항목 삭제
+     * @param bankSubjectQuesLinkKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteProblemBankSubjectList(int bankSubjectQuesLinkKey) {
+        if (bankSubjectQuesLinkKey == 0) return;
+        productManageMapper.deleteTBankSubjectQuesLink(bankSubjectQuesLinkKey);
+    }
+
+    /**
+     * 모의고사 문제은행 과목 > 순서변경
+     * @param list
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void changeNumberProblemBankSubjectList(List<ChangeNumberDTO>list) {
+        if (list.size() == 0)return;
+        for (ChangeNumberDTO numberDTO : list) {
+            productManageMapper.updateTBankSubjectQuesLinkPos(
+                    numberDTO.getKey(), numberDTO.getPos());
+        }
+    }
+
+    /**
+     * 모의고사 문제은행 과목 등록 > 상단 내용 등록및 수정
+     * @param subjectName
+     * @param subjectCtgKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void upsultProblemBankTitleInfo(int examQuestionBankSubjectKey, String subjectName, int subjectCtgKey) {
+        if ("".equals(subjectName) && subjectCtgKey == 0) return;
+
+        if (examQuestionBankSubjectKey == 0) {
+            productManageMapper.insertTExamQuestionBankSubject(subjectName, subjectCtgKey);
+        } else {
+            productManageMapper.updateTExamQuestionBankSubject(examQuestionBankSubjectKey, subjectName, subjectCtgKey);
+        }
     }
 
 }

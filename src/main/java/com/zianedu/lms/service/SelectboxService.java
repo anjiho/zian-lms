@@ -161,4 +161,39 @@ public class SelectboxService {
         return ExamSearhType.getExamSearchTypeList();
     }
 
+    /**
+     * 모의고사 문제은행 문제 목록 > "유형" 셀렉트박스
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCategoryVO>selectTypeSelectbox() {
+        return dataManageMapper.selectTypeList(4397, 4399, 4400);
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록 > "패턴" 셀렉트박스
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCategoryVO>selectPatternSelectbox() {
+        return dataManageMapper.selectTypeList(4406, 4407, 4408);
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록 > "단원" > 대단원 선택 셀렉트박스
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCategoryVO>selectUnitSelectbox() {
+        return dataManageMapper.selectUnitList();
+    }
+
+    /**
+     * 모의고사 문제은행 문제 > 난이도 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectExamLevelSelectbox() {
+        return ExamLevelType.getExamLevelStrSelectbox();
+    }
+
 }
