@@ -129,6 +129,7 @@ function getClassRegistraionDaySelectbox(tag_id,val) {
 //모의고사 검색 셀렉트박스
 function selectExamSearchSelectbox(tag_id,val) {
     selectboxService.selectExamSearchSelectbox(function (list) {
+        console.log(list);
         var html = "<select id='sel_1' onchange='' class='form-control'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].value == val) {

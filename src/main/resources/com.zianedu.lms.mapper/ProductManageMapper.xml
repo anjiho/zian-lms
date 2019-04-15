@@ -108,8 +108,8 @@
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>
-		<if test="searchType == 'title'">
-			AND A.NAME LIKE '%'||#{searchText}||'%'
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		ORDER BY EXAM_KEY DESC
 		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -117,11 +117,12 @@
 
 	<select id="selectTExamListCount" resultType="Integer">
 		SELECT COUNT(EXAM_KEY) FROM T_EXAM_MASTER
+		WHERE 1=1
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>
 		<if test="searchType == 'name'">
-			AND A.NAME LIKE '%'||#{searchText}||'%'
+			AND NAME LIKE '%'||#{searchText}||'%'
 		</if>
 	</select>
 
