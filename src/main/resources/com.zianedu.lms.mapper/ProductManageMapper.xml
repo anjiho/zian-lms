@@ -110,7 +110,7 @@
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>
-		<if test="searchType == 'title'">
+		<if test="searchType == 'name'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		ORDER BY EXAM_KEY DESC
