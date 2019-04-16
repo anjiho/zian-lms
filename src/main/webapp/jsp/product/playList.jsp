@@ -21,7 +21,7 @@
 
         productManageService.getProductListCount(searchType, searchText, "VIDEO", function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링d
+            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
                 console.log(selList);
                 if (selList.length > 0) {

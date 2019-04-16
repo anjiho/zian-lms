@@ -81,13 +81,61 @@ function getSelectboxListForCtgKey(tag_id, val) {
 //선생님 리스트
 function selectTeacherSelectbox(tag_id,val) {
     selectboxService.selectTeacherSelectbox(function (list) {
-        console.log(list);
        var html = "<select id='sel_1' onchange='' class='form-control'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].name == val) {
                 html += "<option value="+list[i].teacherKey+" selected>"+ list[i].teacherName +"</option>";
             } else {
                 html += "<option value="+list[i].teacherKey+">"+ list[i].teacherName +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//강좌수, 강좌시간 리스트
+function getLectureCountSelectbox(tag_id,val) {
+    selectboxService.getLectureCountSelectbox(function (list) {
+        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i] == val) {
+                html += "<option value="+list[i]+" selected>"+ list[i]+"</option>";
+            } else {
+                html += "<option value="+list[i]+">"+ list[i]+"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//수강일수
+function getClassRegistraionDaySelectbox(tag_id,val) {
+    selectboxService.getLectureCountSelectbox(function (list) {
+        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i] == val) {
+                html += "<option value="+list[i]+" selected>"+ list[i]+"</option>";
+            } else {
+                html += "<option value="+list[i]+">"+ list[i]+"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//모의고사 검색 셀렉트박스
+function selectExamSearchSelectbox(tag_id,val) {
+    selectboxService.selectExamSearchSelectbox(function (list) {
+        console.log(list);
+        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].value == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value+"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value+"</option>";
             }
         }
         html += "</select>";
