@@ -17,6 +17,8 @@
         getLectureCountSelectbox("lectureCnt","");
         getClassRegistraionDaySelectbox("lectureDayCnt","");
         selectExamSearchSelectbox("searchType","");
+        selectExamSearchSelectbox("examsearchType","");
+        selectExamSearchSelectbox("booksearchType","");
         $('#summernote').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
@@ -59,6 +61,8 @@
             $('#examQuestionList > tbody:last > tr:last').remove();
         }else if(val == 'setOptionDelete'){
             $('#optionTable > tbody:last > tr:last').remove();
+        }else if(val == 'bookTitleDelete'){
+            $('#bookList > tbody:last > tr:last').remove();
         }
     }
     
@@ -188,7 +192,7 @@
     }
 
     //기출문제 리스트 불러오기
-    function fn_search3(val) {
+    function fn_search2(val) {
         var paging = new Paging();
         var sPage = $("#sPage2").val();
         var searchType = getSelectboxValue("examsearchType");
@@ -210,6 +214,8 @@
             paging.count2(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getMockExamList(sPage, '10',searchType, searchText, function (selList) {
+                console.log("기추룬제 리스트");
+                console.log(selList);
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -237,7 +243,57 @@
         });
     }
 
-    function sendChildValue(examKey,set) { // 전범위 모의고사 / 기출문제 선택시 값전달
+    //강의교재 리스트 불러오기
+    function fn_search3(val) {
+        var paging = new Paging();
+        var sPage = $("#sPage3").val();
+        var searchType = getSelectboxValue("booksearchType");
+        var searchText = getInputTextValue("booksearchType");
+
+        if(val == "new") {
+            sPage = "1";
+        }
+        if (searchType == undefined) {
+            searchType = "";
+        }
+        if (searchText == undefined) {
+            searchText = "";
+        }
+
+        dwr.util.removeAllRows("dataList3");
+        gfn_emptyView3("H", "");//페이징 예외사항처리
+        productManageService.getProductListCount(searchType, searchText, 'BOOK', function(cnt) {
+            paging.count2(sPage, cnt, '10', '10', comment.blank_list);
+            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+            productManageService.getProductList(sPage, '10',searchType, searchText, 'BOOK', function (selList) {
+                if (selList.length > 0) {
+                    for (var i = 0; i < selList.length; i++) {
+                        var cmpList = selList[i];
+                        var text = "'bookBtn'";
+                        var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
+                        console.log(selList);
+                        if (cmpList != undefined) {
+                            var cellData = [
+                                function(data) {return i+1;},
+                                function(data) {return cmpList.goodsName;},
+                                function(data) {return cmpList.isShow;},
+                                function(data) {return cmpList.isSell;},
+                                function(data) {return cmpList.isFree;},
+                                function(data) {return bookSelBtn;}
+                            ];
+                            dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});
+                        }
+                    }
+                }else{
+                    gfn_emptyView3("V", comment.blank_list2);
+                }
+            });
+        });
+    }
+
+
+    // 전범위 모의고사 / 기출문제 선택시 값전달
+    function sendChildValue(examKey,set) {
         productManageService.getMockExamInfo(examKey, function (selList) {
             var allMockCnt = $("#allMockList tr").length-1; //모의고사
             var examQuestionListCnt = $("#examQuestionList tr").length-1;//기출문제
@@ -275,57 +331,58 @@
         });
     }
 
-    <!--강의교재 사은품 스크립트-->
-    /*
-    function fn_search2(val) { //기출문제리스트불러오기
-        var paging = new Paging();
-        var sPage = $("#sPage").val();
-        var searchType = getSelectboxValue("searchTypeBook");
-        var searchText = getInputTextValue("searchTypeBook");
+    //강의교재 , 사은품 선택시 전달값
+    function sendChildValue_2(GKey,set) {
+        productManageService.getProductDetailInfo(GKey, 'BOOK', function (selList) {
+            var bookkCnt = $("#bookList tr").length-1; //강의교재
+            //var examQuestionListCnt = $("#examQuestionList tr").length-1;//기출문제
 
-        if(val == "new") {
-            sPage = "1";
-        }
-        if (searchType == undefined) {
-            searchType = "";
-        }
-        if (searchText == undefined) {
-            searchText = "";
-        }
+            var deleteSel = "";
+            var bookOption = "";
+            if(set == 'bookBtn'){
+                bookOption = "bookName_"+bookkCnt;
+                deleteSel = "bookTitleDelete";
+            }/*else if(set == 'examBtn'){
+                getallMockOption = "examName_"+examQuestionListCnt;
+                deleteSel = "examQuestionDelete";
+            }*/
+            console.log(selList);
 
-        dwr.util.removeAllRows("dataList");
-        gfn_emptyView("H", "");//페이징 예외사항처리
-        productManageService.getMockExamListCount(searchType, searchText, function(cnt) {
-            paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getMockExamList(sPage, '10',searchType, searchText, function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var acceptDateHtml = "<td style='vertical-align:middle'>"+split_minute_getDay(cmpList.acceptStartDate)+" "+split_minute_getDay(cmpList.acceptEndDate)+"</td>";
-                        var onlineDateHtml = "<td style='vertical-align:middle'>"+split_minute_getDay(cmpList.onlineStartDate)+" "+split_minute_getDay(cmpList.onlineEndDate)+"</td>";
-                        var onlineTimeHtml = cmpList.onlineTime+'분';
-                        var text = "'examBtn'";
-                        var lectureSelBtn = '<button type="button" onclick="sendChildValue('+cmpList.examKey+","+text+')"    class="btn btn-outline-info mx-auto">선택</button>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return i+1;},
-                                function(data) {return cmpList.name;},
-                                function(data) {return acceptDateHtml;},
-                                function(data) {return onlineDateHtml;},
-                                function(data) {return onlineTimeHtml;},
-                                function(data) {return lectureSelBtn;}
-                            ];
-                            dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
-                        }
-                    }
-                }else{
-                    gfn_emptyView("V", comment.blank_list2);
-                }
-            });
+            if (selList.productInfo) {
+                var title =  selList.productInfo.name;
+                var bookkListHtml = "<tr>";
+                bookkListHtml     += " <td class=\"text-left\" style=\"padding:0.3rem;vertical-align: middle;width: 65%\">";
+                bookkListHtml     += "<span id='"+bookOption+"'></span>"; //name
+                bookkListHtml     += "</td>";
+                bookkListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem; vertical-align: middle;width: 30%\">";
+                bookkListHtml     += " <div class='col-sm-10'>";
+                bookkListHtml     += " <div style=\"margin-top: -23px;\">";
+                bookkListHtml     += "부교재";
+                bookkListHtml     += " <label class=\"switch\">";
+                bookkListHtml     += " <input type=\"checkbox\" style=\"display:none;\">";
+                bookkListHtml     += "<span class=\"slider\"></span>";
+                bookkListHtml     += "</label>";
+                bookkListHtml     += "주교재";
+                bookkListHtml     += "  </div>";
+                bookkListHtml     += "</div>";
+                bookkListHtml     += "</td>";
+                bookkListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
+                bookkListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
+                bookkListHtml     += "</td>";
+                bookkListHtml     += " </tr>";
+
+
+                if(set == 'bookBtn'){ //전범위 모의고사
+                    $('#bookList > tbody:first').append(bookkListHtml);//선택 모의고사 리스트 뿌리기
+                    $("#"+bookOption).html(title);//모의고사 제목 뿌리기
+                }/*else if(set == 'examBtn'){ //기출문제
+                    $('#examQuestionList > tbody:first').append(MockListHtml);//선택 기출문제 리스트 뿌리기
+                    $("#"+getallMockOption).html(title);//기출문제 제목 뿌리기
+                }*/
+                //$("#lecturePopupClose").click();
+            }
         });
     }
-*/
 
 
 </script>
@@ -693,7 +750,7 @@
                             <tbody id="examQuestionTitle"></tbody>
                         </table>
                         <div class="mx-auto mb-5" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search3('new');">추가</button>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
                         </div>
                         <table class="table text-center table-hover" id="bookList">
                             <thead>
@@ -725,7 +782,7 @@
                             </tbody>
                         </table>
                         <div class="mx-auto mb-5" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="book_search('new');">추가</button>
+                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                         </div>
                         <table class="table text-center table-hover">
                             <thead>
@@ -929,10 +986,7 @@
 <!-- //기출문제 회차별 팝업창 -->
 
 
-
-
-
-<!-- 6.선택 강의교재 / 사은품 팝업창 -->
+<!-- 6.선택 강의교재  팝업창 -->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 900px">
         <div class="modal-content">
@@ -947,15 +1001,15 @@
                 <div class="modal-body">
                     <div style=" display:inline;">
                         <div style=" float: left; width: 10%">
-                            <select class="form-control" id="searchTypeBook">
+                            <select class="form-control" id="booksearchType">
                                 <option>선택</option>
                             </select>
                         </div>
                         <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="searchTextBook">
+                            <input type="text" class="form-control" id="booksearchTextBook">
                         </div>
                         <div style=" float: left; width: 33%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="">검색</button>
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -964,11 +1018,11 @@
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:2%">No.</th>
-                                <th style="width:20%">CODE</th>
                                 <th style="width:45%">상품명</th>
                                 <th style="width:15%">노출</th>
                                 <th style="width:15%">판매</th>
                                 <th style="width:15%">무료</th>
+                                <th style="width:15%"></th>
                             </tr>
                             </thead>
                             <tbody id="dataList3"></tbody>
