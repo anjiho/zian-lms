@@ -82,13 +82,13 @@
                     optionHtml += "</select>";
                 optionHtml += "</td>";
                     optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" class=\"form-control\" id=\"price\" name=\"price\">";
+                    optionHtml += "<input type=\"text\" class=\"form-control\">";
                 optionHtml += "</td>";
                     optionHtml += "<td style=\"padding: 0.3rem;\">";
                     optionHtml += " <input type=\"text\" class=\"form-control\" id=\"sellPrice\" name=\"sellPrice\">";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" class=\"form-control\" id=\"point\" name=\"point\">";
+                    optionHtml += "<input type=\"text\" class=\"form-control\" >";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
                      optionHtml += "<input type=\"text\" style=\"display: inline-block\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange=\"saleInputPrice(this.value)\">";
