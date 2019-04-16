@@ -2,6 +2,5 @@
 </div>
 </div>
 <!--End main-wrapper-->
-</form>
 </body>
 </html>

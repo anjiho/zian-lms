@@ -2327,4 +2327,16 @@ var paging = function() {
 
 }
 
+function getJsonObjectFromDiv(divId) {
+    var formdata = serializeDiv($('#' + divId), 'serializeArray');
+    var data = {};
+    $(formdata ).each(function(index, obj){
+        data[obj.name] = obj.value;
+    });
+    return data;
+}
+
+
+
+
 

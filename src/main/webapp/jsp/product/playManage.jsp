@@ -5,6 +5,10 @@
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 
 <script>
+    function test() {
+        var obj = getJsonObjectFromDiv("section1");
+    }
+
     $( document ).ready(function() {
         getVideoOptionTypeList("videoOptionSel_0","");
         getCategoryList("sel_1","214");
@@ -61,7 +65,7 @@
             $('#optionTable > tbody:last > tr:last').remove();
         }
     }
-    
+
     function addOption(){ //옵션명 추가
         var optionCnt = $("#optionTable tr").length-1;
         var getOption = "videoOptionSel_"+optionCnt;
@@ -348,28 +352,31 @@
 <!--//순서-->
 
 <!-- 기본 소스-->
+<form id="basic">
 <div class="container-fluid">
     <div class="card">
         <div class="card-body wizard-content">
             <h4 class="card-title"></h4>
             <h6 class="card-subtitle"></h6>
-            <div id="playForm" naem="frm" method="" action="" class="m-t-40">
+            <div id="playForm" method="" action="" class="m-t-40">
                 <div>
                     <!-- 1.기본정보 Tab -->
                     <h3>기본정보</h3>
                     <section class="col-md-6">
+                        <div id="section1">
+                        <input type="button" value="1234" onclick="test()">
                         <div class="form-group">
                             <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                             <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" readonly>
                         </div>
                         <div class="form-group">
                             <label for="lname" class="control-label col-form-label" style="margin-bottom: 0">이름</label>
-                            <input type="text" class="form-control" id="lname">
+                            <input type="text" class="form-control" id="lname" name="name">
                         </div>
                         <div class="form-group">
                             <label class="control-label col-form-label" style="margin-bottom: 0">등록일</label>
                             <div class="input-group">
-                                <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd">
+                                <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
@@ -469,6 +476,7 @@
                             <div>
                                 <textarea name="content" id="summernote" value=""></textarea>
                             </div>
+                        </div>
                         </div>
                     </section>
                     <!-- // 1.기본정보 Tab -->
@@ -819,6 +827,7 @@
     </div>
     <!-- //div.card -->
 </div>
+</form>
 <!-- // 기본소스-->
 <!-- 6.선택 전범위 모의고사 팝업창 -->
 <div class="modal fade" id="sModal3" tabindex="-1" role="dialog" aria-hidden="true">

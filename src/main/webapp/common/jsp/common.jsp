@@ -90,7 +90,7 @@
 <!-- form 시작-->
 <form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
-
+</form>
 <%
     if (authority == 4) {
 %>
@@ -114,3 +114,24 @@
 <%
 }
 %>
+<script>
+    function serializeDiv( $div, serialize_method ) {
+        // Accepts 'serialize', 'serializeArray'; Implicit 'serialize'
+        serialize_method = serialize_method || 'serialize';
+
+        // Unique selector for wrapper forms
+        var inner_wrapper_class = 'any_unique_class_for_wrapped_content';
+
+        // Wrap content with a form
+        $div.wrapInner( "<form class='"+inner_wrapper_class+"'></form>" );
+
+        // Serialize inputs
+        var result = $('.'+inner_wrapper_class, $div)[serialize_method]();
+
+        // Eliminate newly created form
+        $('.script_wrap_inner_div_form', $div).contents().unwrap();
+
+        // Return result
+        return result;
+    }
+</script>
