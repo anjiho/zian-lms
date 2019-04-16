@@ -19,6 +19,8 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -114,7 +116,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 쿠폰 상세안의 카테코리 리스트
+     * 쿠폰 상세안의 카테고리 리스트
      * @param couponKey
      * @return
      */
@@ -124,7 +126,8 @@ public class PopupCouponManageService {
         List<List<TCategoryVO>>couponCategoryList = new ArrayList<>();
         if (tLinkKeyVOList.size() > 0) {
             for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
-                List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryListTwo(tLinkKeyVO.getReqKey());
+                List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryListBy4DepthUnder(tLinkKeyVO.getReqKey());
+                Collections.reverse(tCategoryVOList);
                 couponCategoryList.add(tCategoryVOList);
             }
         }

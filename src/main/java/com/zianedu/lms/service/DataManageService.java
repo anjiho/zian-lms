@@ -169,8 +169,13 @@ public class DataManageService {
         return list;
     }
 
+    /**
+     * 4뎁스 이하의 카테고리 사용
+     * @param ctgKey
+     * @return
+     */
     @Transactional(readOnly = true)
-    public List<TCategoryVO> getSequentialCategoryList2(int ctgKey) {
+    public List<TCategoryVO> getSequentialCategoryListBy4DepthUnder(int ctgKey) {
         if (ctgKey == 0) return null;
         List<TCategoryVO>list = new ArrayList<>();
         TCategoryVO tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
@@ -184,10 +189,17 @@ public class DataManageService {
                 TCategoryVO tCategoryVO3 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO2.getParentKey());
 
                 if (tCategoryVO3 != null) {
-                    list.add(tCategoryVO3);
+                    if (tCategoryVO3.getCtgKey() > 1) {
+                        list.add(tCategoryVO3);
+                    }
+
                     if (tCategoryVO3.getParentKey() > 0) {
                         TCategoryVO tCategoryVO4 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO3.getParentKey());
-                        if (tCategoryVO4 != null) list.add(tCategoryVO4);
+                        if (tCategoryVO4 != null) {
+                            if (tCategoryVO4.getCtgKey() > 1) {
+                                list.add(tCategoryVO4);
+                            }
+                        }
                     }
 //                    if (tCategoryVO4 != null) {
 //                        list.add(tCategoryVO4);
