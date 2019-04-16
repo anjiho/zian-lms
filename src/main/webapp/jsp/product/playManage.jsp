@@ -6,6 +6,11 @@
 
 <script>
     function test() {
+        var obj = getJsonObjectFromDiv("section1");
+        console.log(obj)
+    }
+
+    function test2() {
         var array = new Array();
         $('#optionTable tbody tr').each(function(index){
             var kind = $(this).find("td input").eq(0).val();
@@ -29,7 +34,7 @@
     }
 
     $( document ).ready(function() {
-        getVideoOptionTypeList("videoOptionSel_0","");
+        getVideoOptionTypeList("kind_0","");
         getCategoryList("sel_1","214");
         getSelectboxListForCtgKey("set_1","4309");//급수 셀렉트박스
         getSelectboxListForCtgKey("set_2","70");//과목 셀렉트박스
@@ -42,7 +47,7 @@
         selectExamSearchSelectbox("searchType","");
         selectExamSearchSelectbox("examsearchType","");
         selectExamSearchSelectbox("booksearchType","");
-        $('#summernote').summernote({ //기본정보-에디터
+        $('#description').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
             focus: true,
@@ -91,28 +96,28 @@
 
     function addOption(){ //옵션명 추가
         var optionCnt = $("#optionTable tr").length-1;
-        var getOption = "videoOptionSel_"+optionCnt;
+        var getOption = "kind_"+optionCnt;
         getVideoOptionTypeList(getOption, "");
         var optionHtml = "<tr>";
                 optionHtml += "<td style=\"padding: 0.3rem;text-align: center;\">";
-                    optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='videoOptionSel_"+optionCnt+"'>";
+                    optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\"  id='kind_"+optionCnt+"'  name='kind_"+optionCnt+"'>";
                         optionHtml += "<option>선택</option>";
                     optionHtml += "</select>";
                 optionHtml += "</td>";
                     optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" class=\"form-control\">";
+                    optionHtml += "<input type=\"text\" class=\"form-control\" id=\"price\" name=\"price\">";
                 optionHtml += "</td>";
                     optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" class=\"form-control\">";
+                    optionHtml += " <input type=\"text\" class=\"form-control\" id=\"sellPrice\" name=\"sellPrice\">";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" style=\"display: inline-block\" class=\"form-control\">";
+                    optionHtml += "<input type=\"text\" class=\"form-control\" id=\"point\" name=\"point\">";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                     optionHtml += "<input type=\"text\" style=\"display: inline-block\" class=\"form-control\">";
+                     optionHtml += "<input type=\"text\" style=\"display: inline-block\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange=\"saleInputPrice(this.value)\">";
                 optionHtml += "</td>";
                 optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += " <input type=\"text\" class=\"form-control\">";
+                    optionHtml += "<input type=\"text\" class=\"form-control\" id=\"resultPrice\" readonly>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
                     optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class=\"btn btn-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
@@ -442,6 +447,13 @@
         });
     }
 
+
+    function saleInputPrice(val) {
+        var sellPrice = getInputTextValue("sellPrice");
+        totalprice = Math.round(sellPrice -((sellPrice * val) / 100));
+        $("#resultPrice").val(totalprice);
+    }
+
     //저장
     function playSave() {
 
@@ -478,118 +490,119 @@
                     <h3>기본정보</h3>
                     <section class="col-md-6">
                         <div id="section1">
-                        <div class="form-group">
-                            <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                            <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="lname" class="control-label col-form-label" style="margin-bottom: 0">이름</label>
-                            <input type="text" class="form-control" id="lname" name="name">
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            <input type="button" value="1234" onclick="test()">
+                            <div class="form-group">
+                                <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
+                                <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" readonly>
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-form-label" style="margin-bottom: 0">이름</label>
+                                <input type="text" class="form-control" id="name" name="name">
+                            </div>
+                            <div class="form-group">
+                                <label class="control-label col-form-label" style="margin-bottom: 0">등록일</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate" id="indate">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
-                            <div class="input-group">
-                                <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            <div class="form-group">
+                                <label class="control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
+                                <div class="input-group">
+                                    <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row mt-4" style="">
-                            <label class="col-sm-2 text-left control-label col-form-label">노출</label>
-                            <div class="col-sm-10">
-                                <div style="margin-top: -23px;">
-                                    OFF
-                                    <label class="switch">
-                                        <input type="checkbox" id="newPopYn" name="newPopYn" style="display:none;">
-                                        <span class="slider"></span>
-                                    </label>
-                                    ON
+                            <div class="form-group row mt-4" style="">
+                                <label class="col-sm-2 text-left control-label col-form-label">노출</label>
+                                <div class="col-sm-10">
+                                    <div style="margin-top: -23px;">
+                                        OFF
+                                        <label class="switch">
+                                            <input type="checkbox" id="is_show" name="is_show" style="display:none;">
+                                            <span class="slider"></span>
+                                        </label>
+                                        ON
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 text-left control-label col-form-label">판매</label>
-                            <div class="col-sm-10">
-                                <div style="margin-top: -23px;">
-                                    OFF
-                                    <label class="switch">
-                                        <input type="checkbox" style="display:none;">
-                                        <span class="slider"></span>
-                                    </label>
-                                    ON
+                            <div class="form-group row">
+                                <label class="col-sm-2 text-left control-label col-form-label">판매</label>
+                                <div class="col-sm-10">
+                                    <div style="margin-top: -23px;">
+                                        OFF
+                                        <label class="switch">
+                                            <input type="checkbox" id="is_sell" name="is_sell" style="display:none;">
+                                            <span class="slider"></span>
+                                        </label>
+                                        ON
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 text-left control-label col-form-label">무료</label>
-                            <div class="col-sm-10">
-                                <div style="margin-top: -23px;">
-                                    OFF
-                                    <label class="switch">
-                                        <input type="checkbox" style="display:none;">
-                                        <span class="slider"></span>
-                                    </label>
-                                    ON
+                            <div class="form-group row">
+                                <label class="col-sm-2 text-left control-label col-form-label">무료</label>
+                                <div class="col-sm-10">
+                                    <div style="margin-top: -23px;">
+                                        OFF
+                                        <label class="switch">
+                                            <input type="checkbox" id="is_free" name="is_free" style="display:none;">
+                                            <span class="slider"></span>
+                                        </label>
+                                        ON
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                            <div>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="attachFile"  required>
-                                    <span class="custom-file-control custom-file-label"></span>
+                            <div class="form-group">
+                                <label class="control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
+                                <div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input" id="image_list"  name="image_list" required>
+                                        <span class="custom-file-control custom-file-label"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                            <div>
-                                <div class="custom-file">
-                                    <input type="file" class="custom-file-input addFile" id="attachFile1" required>
-                                    <span class="custom-file-control1 custom-file-label"></span>
+                            <div class="form-group">
+                                <label class="control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
+                                <div>
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input addFile" id="image_view" name="image_view" required>
+                                        <span class="custom-file-control1 custom-file-label"></span>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label  class="control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                            <div>
-                                <select class="col-sm-6 select2 form-control custom-select">
-                                    <option>없음</option>
-                                    <option value="best">BEST</option>
-                                    <option value="new">NEW</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-form-label">사은품 배송비 무료</label>
-                            <div>
-                                <div style="margin-top: -23px;">
-                                    OFF
-                                    <label class="switch">
-                                        <input type="checkbox" style="display:none;">
-                                        <span class="slider"></span>
-                                    </label>
-                                    ON
+                            <div class="form-group">
+                                <label  class="control-label col-form-label" style="margin-bottom: 0">강조표시</label>
+                                <div>
+                                    <select class="col-sm-6 select2 form-control custom-select" id="emphasis" name="emphasis">
+                                        <option>없음</option>
+                                        <option value="best">BEST</option>
+                                        <option value="new">NEW</option>
+                                    </select>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <label class="control-label col-form-label">상세설명</label>
-                            <div>
-                                <textarea name="content" id="summernote" value=""></textarea>
+                            <div class="form-group">
+                                <label class="control-label col-form-label">사은품 배송비 무료</label>
+                                <div>
+                                    <div style="margin-top: -23px;">
+                                        OFF
+                                        <label class="switch">
+                                            <input type="checkbox" style="display:none;" id="is_freebie_delivery_free" name="is_freebie_delivery_free">
+                                            <span class="slider"></span>
+                                        </label>
+                                        ON
+                                    </div>
+                                </div>
                             </div>
-                        </div>
+                            <div class="form-group">
+                                <label class="control-label col-form-label">상세설명</label>
+                                <div>
+                                    <textarea name="content"  value="" id="description" name="description"></textarea>
+                                </div>
+                            </div>
                         </div>
                     </section>
                     <!-- // 1.기본정보 Tab -->
@@ -597,50 +610,49 @@
                     <!-- 2.옵션 Tab -->
                     <h3>옵션</h3>
                     <section>
-                        <input type="button" value="1234" onclick="test()">
                         <div id="section2">
-                        <table class="table" id="optionTable">
-                            <thead>
-                            <tr style="border-top:0">
-                                <th scope="col" style="text-align:center;width:30%">옵션명</th>
-                                <th scope="col" style="text-align:center;">원가</th>
-                                <th scope="col" style="text-align:center;">판매가</th>
-                                <th scope="col" style="text-align:center;">포인트</th>
-                                <th scope="col" colspan="2" style="text-align:center;">재수강</th>
-                                <th scope="col" style="text-align:center;"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td style="padding: 0.3rem;text-align: center;">
-                                    <select class="select2 form-control custom-select" style="height:36px;" id="videoOptionSel_0">
-                                        <option>선택</option>
-                                    </select>
-                                </td>
-                                <td style="padding: 0.3rem;"><!--원가-->
-                                    <input type="text" class="form-control" name="price">
-                                </td>
-                                <td style="padding: 0.3rem;"><!--판매가-->
-                                    <input type="text" class="form-control">
-                                </td>
-                                <td style="padding: 0.3rem;"><!--포인트-->
-                                    <input type="text" class="form-control">
-                                </td>
-                                <td style="padding: 0.3rem;"><!--재수강1-->
-                                    <input type="text" style="display: inline-block" class="form-control">
-                                </td>
-                                <td style="padding: 0.3rem;"><!--재수강2-->
-                                    <input type="text" class="form-control">
-                                </td>
-                                <td style="padding: 0.3rem;">
-                                    <button type="button" onclick="optionDelete('optionDelete');" class="btn btn-danger btn-sm" style="margin-top:8%;">삭제</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="mx-auto" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="addOption();">추가</button>
-                        </div>
+                            <table class="table" id="optionTable">
+                                <thead>
+                                <tr style="border-top:0">
+                                    <th scope="col" style="text-align:center;width:30%">옵션명</th>
+                                    <th scope="col" style="text-align:center;">원가</th>
+                                    <th scope="col" style="text-align:center;">판매가</th>
+                                    <th scope="col" style="text-align:center;">포인트</th>
+                                    <th scope="col" colspan="2" style="text-align:center;">재수강</th>
+                                    <th scope="col" style="text-align:center;"></th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td style="padding: 0.3rem;text-align: center;"><!--옵션명selbox-->
+                                        <select class="select2 form-control custom-select" style="height:36px;" id="kind_0" name="kind_0">
+                                            <option>선택</option>
+                                        </select>
+                                    </td>
+                                    <td style="padding: 0.3rem;"><!--원가-->
+                                        <input type="text" class="form-control" id="price" name="price">
+                                    </td>
+                                    <td style="padding: 0.3rem;"><!--판매가-->
+                                        <input type="text" class="form-control" id="sellPrice" name="sellPrice">
+                                    </td>
+                                    <td style="padding: 0.3rem;"><!--포인트-->
+                                        <input type="text" class="form-control" id="point" name="point">
+                                    </td>
+                                    <td style="padding: 0.3rem;"><!--재수강1-->
+                                        <input type="text" style="display: inline-block" class="form-control" id="extendPercent" name="extendPercent" onchange="saleInputPrice(this.value)">
+                                    </td>
+                                    <td style="padding: 0.3rem;"><!--재수강2-->
+                                        <input type="text" class="form-control" id="resultPrice" readonly>
+                                    </td>
+                                    <td style="padding: 0.3rem;">
+                                        <button type="button" onclick="optionDelete('optionDelete');" class="btn btn-danger btn-sm" style="margin-top:8%;">삭제</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="mx-auto" style="width:5.5%">
+                                <button type="button" class="btn btn-outline-info mx-auto" onclick="addOption();">추가</button>
+                            </div>
                         </div>
                     </section>
                     <!-- //2.옵션 Tab -->
@@ -683,7 +695,7 @@
                             <input type="text" class="form-control" value="" readonly>
                         </div>
                         <div class="form-group">
-                            <label for="lname" class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
+                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
                             <select class="col-sm-3 select2 form-control custom-select" id="set_1">
                                 <option>선택</option>
                             </select>
@@ -729,7 +741,7 @@
                         </div>
                         <div class="form-group">
                             <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
-                            <input type="number" class="col-sm-3 form-control" style="    display: inline-block;" id="" placeholder="2"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
+                            <input type="number" class="col-sm-3 form-control" style="display: inline-block;" id="" placeholder="2"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
                         </div>
                         <div class="form-group">
                             <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
@@ -1173,19 +1185,19 @@
             <!-- modal body -->
             <div class="modal-body">
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">강좌 CODE</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">강좌 CODE</label>
                     <div class="col-sm-9">
                         <span style="display: block;padding-top:5px">0</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">강의 CODE</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">강의 CODE</label>
                     <div class="col-sm-9">
                         <span style="display: block;padding-top:5px">0</span>
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">강의 이름</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">강의 이름</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control">
                     </div>
@@ -1217,25 +1229,25 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">동영상 저화질 경로</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">동영상 저화질 경로</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">동영상 고화지 경로</label>
+                    <label  class="col-sm-3 text-right control-label col-form-label">동영상 고화지 경로</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">모바일용 동영상 저화질 경로</label>
+                    <label  class="col-sm-3 text-right control-label col-form-label">모바일용 동영상 저화질 경로</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">모바일용 동영상 고화질 경로</label>
+                    <label  class="col-sm-3 text-right control-label col-form-label">모바일용 동영상 고화질 경로</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control">
                     </div>
@@ -1251,13 +1263,13 @@
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">강의 시간 (분단위)</label>
+                    <label  class="col-sm-3 text-right control-label col-form-label">강의 시간 (분단위)</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="scode">
                     </div>
                 </div>
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">단원 선택</label>
+                    <label  class="col-sm-3 text-right control-label col-form-label">단원 선택</label>
                     <div class="col-sm-9">
                         <div>
                             <select class="select2 form-control custom-select" style="width:24%">
@@ -1303,7 +1315,7 @@
             <!-- modal body -->
             <div class="modal-body">
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">텍스트</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">텍스트</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control">
                     </div>
