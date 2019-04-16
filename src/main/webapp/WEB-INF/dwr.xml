@@ -81,6 +81,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDetailDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PromotionDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PopupListDTO"/>
 
 	</allow>
 

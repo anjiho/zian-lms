@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.PopupCouponManageMapper">
+
+    <select id="selectTPopupList" resultType="PopupListDTO">
+        SELECT
+            POPUP_KEY, NAME, WIDTH, HEIGHT, X as LEFT, Y as TOP, START_DATE, END_DATE, IS_SHOW
+        FROM T_POPUP
+        ORDER BY POPUP_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTPopupListCount" resultType="Integer">
+        SELECT COUNT (POPUP_KEY) FROM T_POPUP
+    </select>
+
+</mapper>
