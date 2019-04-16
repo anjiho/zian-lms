@@ -10,6 +10,29 @@
         console.log(obj)
     }
 
+    function test2() {
+        var array = new Array();
+        $('#optionTable tbody tr').each(function(index){
+            var kind = $(this).find("td input").eq(0).val();
+            var price = $(this).find("td input").eq(1).val();
+            // var statinNames = $(this).find("td input").eq(1).val();
+            // var firstTimes = $(this).find("td input").eq(2).val();
+            // var secondTimes = $(this).find("td input").eq(3).val();
+            // var thirdTimes = $(this).find("td input").eq(4).val();
+            // var fourthTimes = $(this).find("td input").eq(5).val();
+            // var fifthTimes = $(this).find("td input").eq(6).val();
+            // var sixthTimes = $(this).find("td input").eq(7).val();
+            // var sortNums = index + 1;
+
+            var data = {
+                kind:kind,
+                price:price
+            };
+            array.push(data);
+        });
+        console.log(array)
+    }
+
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
         getCategoryList("sel_1","214");
@@ -433,7 +456,7 @@
 
     //저장
     function playSave() {
-        
+
     }
 </script>
 <div class="page-breadcrumb">
