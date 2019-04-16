@@ -131,6 +131,7 @@ function selectExamSearchSelectbox(tag_id,val) {
     selectboxService.selectExamSearchSelectbox(function (list) {
         console.log(list);
         var html = "<select id='sel_1' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].value == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value+"</option>";
