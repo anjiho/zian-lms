@@ -6,7 +6,26 @@
 
 <script>
     function test() {
-        var obj = getJsonObjectFromDiv("section1");
+        var array = new Array();
+        $('#optionTable tbody tr').each(function(index){
+            var kind = $(this).find("td input").eq(0).val();
+            var price = $(this).find("td input").eq(1).val();
+            // var statinNames = $(this).find("td input").eq(1).val();
+            // var firstTimes = $(this).find("td input").eq(2).val();
+            // var secondTimes = $(this).find("td input").eq(3).val();
+            // var thirdTimes = $(this).find("td input").eq(4).val();
+            // var fourthTimes = $(this).find("td input").eq(5).val();
+            // var fifthTimes = $(this).find("td input").eq(6).val();
+            // var sixthTimes = $(this).find("td input").eq(7).val();
+            // var sortNums = index + 1;
+
+            var data = {
+                kind:kind,
+                price:price
+            };
+            array.push(data);
+        });
+        console.log(array)
     }
 
     $( document ).ready(function() {
@@ -425,7 +444,7 @@
 
     //저장
     function playSave() {
-        
+
     }
 </script>
 <div class="page-breadcrumb">
@@ -459,7 +478,6 @@
                     <h3>기본정보</h3>
                     <section class="col-md-6">
                         <div id="section1">
-                        <input type="button" value="1234" onclick="test()">
                         <div class="form-group">
                             <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                             <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" readonly>
@@ -579,6 +597,8 @@
                     <!-- 2.옵션 Tab -->
                     <h3>옵션</h3>
                     <section>
+                        <input type="button" value="1234" onclick="test()">
+                        <div id="section2">
                         <table class="table" id="optionTable">
                             <thead>
                             <tr style="border-top:0">
@@ -598,7 +618,7 @@
                                     </select>
                                 </td>
                                 <td style="padding: 0.3rem;"><!--원가-->
-                                    <input type="text" class="form-control">
+                                    <input type="text" class="form-control" name="price">
                                 </td>
                                 <td style="padding: 0.3rem;"><!--판매가-->
                                     <input type="text" class="form-control">
@@ -620,6 +640,7 @@
                         </table>
                         <div class="mx-auto" style="width:5.5%">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="addOption();">추가</button>
+                        </div>
                         </div>
                     </section>
                     <!-- //2.옵션 Tab -->
