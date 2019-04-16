@@ -326,6 +326,9 @@
 	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
+		<selectKey resultType="Integer" keyProperty="gKey" order="BEFORE">
+			SELECT T_GOODS_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
 		INSERT INTO T_GOODS
 		(
 			G_KEY, C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, TYPE, IS_SHOW, IS_SELL, IS_FREE, IS_NODC, IMAGE_LIST, IMAGE_VIEW,
@@ -333,26 +336,23 @@
 		)
 		VALUES
 		(
-			T_GOODS_SEQ.NEXTVAL, #{cKey}, #{cpKey}, #{name}, #{indate}, #{sellstartdate}, #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
+			#{gKey}, #{cKey}, #{cpKey}, #{name}, #{indate}, #{sellstartdate}, #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
 			#{emphasis}, #{tags}, #{summary}, #{description}, #{calculateRate}, #{isFreebieDeliveryFree}, #{isQuickDelivery}, #{goodsId}
 		)
-		<selectKey resultType="Integer" keyProperty="gKey" order="BEFORE">
-			SELECT T_GOODS_SEQ.NEXTVAL FROM DUAL
-		</selectKey>
 	</insert>
 
 	<insert id="insertTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
+			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
 		INSERT INTO T_GOODS_PRICE_OPTION
 		(
 			PRICE_KEY, G_KEY, KIND, CTG_KEY, NAME, PRICE, SELL_PRICE, POINT, EXTEND_PERCENT
 		)
 		VALUES
 		(
-			T_GOODS_PRICE_OPTION_SEQ.nextval, #{gKey}, #{kind}, '', '', #{price}, #{sellPrice}, #{point}, #{extendPercent}
+			#{priceKey}, #{gKey}, #{kind}, '', '', #{price}, #{sellPrice}, #{point}, #{extendPercent}
 		)
-		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
-			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
-		</selectKey>
 	</insert>
 
 	<insert id="insertTCategoryGoods" parameterType="com.zianedu.lms.vo.TCategoryGoods">
@@ -367,6 +367,9 @@
 	</insert>
 
 	<insert id="insertTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		<selectKey resultType="Integer" keyProperty="lecKey" order="BEFORE">
+			SELECT T_LEC_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_LEC
 		(
 			LEC_KEY, G_KEY, TEACHER_KEY, CLASS_GROUP_CTG_KEY, SUBJECT_CTG_KEY, STEP_CTG_KEY, STATUS, REGDATE, STARTDATE,
@@ -374,12 +377,9 @@
 		)
 		VALUES
 		(
-			T_LEC_SEQ.nextval, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, #{regdate}, #{startdate},
+			#{lecKey}, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, #{regdate}, #{startdate},
 			#{limitDay}, #{limitCount}, #{lecTime}, #{multiple}, #{lecDateYear}, #{lecDateMonth}, #{examYear}, #{isPack}, #{goodsId}
 		)
-		<selectKey resultType="Integer" keyProperty="lecKey" order="BEFORE">
-			SELECT T_LEC_SEQ.nextval FROM DUAL
-		</selectKey>
 	</insert>
 
 	<insert id="insertTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
@@ -405,6 +405,9 @@
 	</insert>
 
 	<insert id="insertTLecCurri" parameterType="com.zianedu.lms.vo.TLecCurri">
+		<selectKey resultType="Integer" keyProperty="curriKey" order="BEFORE">
+			SELECT T_LEC_CURRI_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_LEC_CURRI
 		(
 			CURRI_KEY, LEC_KEY, NAME, VOD_FILE_LOW, VOD_FILE_HIGH, VOD_FILE_MOBILE_LOW, VOD_FILE_MOBILE_HIGH,
@@ -412,12 +415,9 @@
 		)
 		VALUES
 		(
-			T_LEC_CURRI_SEQ.nextval, #{lecKey}, #{name}, #{vodFileLow}, #{vodFileHigh}, #{vodFileMobileLow}, #{vodFileMobileHigh},
+			#{curriKey}, #{lecKey}, #{name}, #{vodFileLow}, #{vodFileHigh}, #{vodFileMobileLow}, #{vodFileMobileHigh},
 			#{vodTime}, #{dataFile}, #{isShow}, #{isSample}, #{pos}
 		)
-		<selectKey resultType="Integer" keyProperty="curriKey" order="BEFORE">
-			SELECT T_LEC_CURRI_SEQ.nextval FROM DUAL
-		</selectKey>
 	</insert>
 
 	<insert id="insertTBook" parameterType="com.zianedu.lms.vo.TBookVO">
@@ -445,6 +445,9 @@
 	</insert>
 
 	<insert id="insertTExamMaster" parameterType="com.zianedu.lms.vo.TExamMasterVO">
+		<selectKey resultType="Integer" keyProperty="examKey" order="BEFORE">
+			SELECT T_EXAM_MASTER_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_EXAM_MASTER
 		(
 			EXAM_KEY, C_KEY, NAME, INDATE, CLASS_CTG_KEY, SUBJECT_CTG_KEY, SELECT_SUBJECT_COUNT, ACCEPT_START_DATE,
@@ -455,15 +458,12 @@
 		)
 		VALUES
 		(
-			T_EXAM_MASTER_SEQ.nextval, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, #{acceptStartDate},
+			#{examKey}, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, #{acceptStartDate},
 			#{acceptEndDate}, #{onlineStartDate}, #{onlineEndDate}, #{onlineTime}, #{offlineDate}, #{offlineTimePeriod},
 			#{offlineTimePlace}, #{answerCount}, #{questionCount}, #{printQuestionFile}, #{printCommentaryFile},
 			#{isShowStaticTotalRank}, #{isShowStaticTotalAvg}, #{isShowFiles}, #{classGroupCtgKey}, #{examYear}, #{unitCtgKey},
 			#{divisionCtgKey}, #{refKey}, #{isRealFree}, #{isGichul}
 		)
-		<selectKey resultType="Integer" keyProperty="examKey" order="BEFORE">
-			SELECT T_EXAM_MASTER_SEQ.nextval FROM DUAL
-		</selectKey>
 	</insert>
 
     <insert id="insertTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">

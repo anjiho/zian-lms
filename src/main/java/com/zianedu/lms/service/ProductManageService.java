@@ -532,7 +532,7 @@ public class ProductManageService extends PagingSupport {
         if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
         else productManageMapper.updateTGoods(tGoodsVO);
 
-        return tGoodsVO.getGKey() + 1;
+        return tGoodsVO.getGKey();
     }
 
     /**
@@ -659,7 +659,7 @@ public class ProductManageService extends PagingSupport {
 
         tLecCurri.setPos(lastPos);
         productManageMapper.insertTLecCurri(tLecCurri);
-        return tLecCurri.getCurriKey() + 1;
+        return tLecCurri.getCurriKey();
     }
 
     /**

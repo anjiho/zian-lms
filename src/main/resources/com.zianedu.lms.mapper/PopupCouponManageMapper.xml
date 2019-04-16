@@ -19,6 +19,7 @@
         INNER JOIN T_CATEGORY B
         ON A.REQ_KEY = B.CTG_KEY
         WHERE A.REQ_TYPE = 100
+        AND A.RES_TYPE = 300
         AND A.RES_KEY = #{popupKey}
     </select>
 
@@ -26,18 +27,70 @@
         SELECT * FROM T_POPUP WHERE POPUP_KEY = #{popupKey}
     </select>
 
+    <select id="selectTCouponMaterList" resultType="CouponListDTO">
+        SELECT
+            COUPON_MASTER_KEY, TYPE, NAME, DC_TYPE, DC_VALUE,
+            TO_CHAR(START_DATE, 'YYYY-MM-DD') as ISSUE_DATE,
+            TO_CHAR(START_DATE, 'YYYY-MM-DD')|| ' ~ ' || TO_CHAR(END_DATE, 'YYYY-MM-DD') DATE_USE
+        FROM T_COUPON_MASTER
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'code'">
+            AND COUPON_MASTER_KEY = #{searchText}
+        </if>
+        ORDER BY COUPON_MASTER_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTCouponMaterListCount" resultType="Integer">
+        SELECT COUNT (COUPON_MASTER_KEY)
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'code'">
+            AND COUPON_MASTER_KEY = #{searchText}
+        </if>
+    </select>
+
+    <select id="selectTCouponLinkKey" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+        SELECT A.*
+        FROM T_LINK_KEY A
+        WHERE A.REQ_TYPE = 100
+        AND A.RES_TYPE = 400
+        AND A.RES_KEY = #{couponKey}
+    </select>
+
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
+        <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
+            SELECT T_POPUP_SEQ FROM DUAL
+        </selectKey>
         INSERT INTO T_POPUP
         (
             POPUP_KEY, C_KEY, INDATE, NAME, TYPE, IS_SHOW, POS, WIDTH, HEIGHT, X, Y, START_DATE, END_DATE, CONTENTS
         )
         VALUES
         (
-            T_POPUP_SEQ.nextval, 100, '', #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y}, #{startDate}, #{endDate}, #{contents}
+            #{popupKey}, 100, '', #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y}, #{startDate}, #{endDate}, #{contents}
         )
-        <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
-            SELECT T_POPUP_SEQ.NEXTVAL FROM DUAL
+    </insert>
+
+    <insert id="insertTCouponMaster" parameterType="com.zianedu.lms.vo.TCouponMasterVO">
+        <selectKey resultType="Integer" keyProperty="couponMasterKey" order="BEFORE">
+            SELECT T_COUPON_MASTER_SEQ.nextval FROM DUAL
         </selectKey>
+        INSERT INTO T_COUPON_MASTER
+        (
+            COUPON_MASTER_KEY, C_KEY, INDATE, TYPE, NAME, DC_TYPE, DC_VALUE, CONTENTS, TARGET_TYPE, PERIOD_TYPE, LIMIT_DAY,
+            START_DATE, END_DATE, LIMIT_PRICE_MIN, IS_SHOW, DEVICE
+        )
+        VALUES
+        (
+            #{couponMasterKey}, 100, #{indate}, #{type}, #{name}, #{dcType}, #{dcValue}, #{contents}, #{targetType}, #{periodType}, #{limitDay},
+            #{startDate}, #{endDate}, #{limitPriceMin}, #{isShow}, #{device}
+        )
     </insert>
 
     <update id="updateTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">

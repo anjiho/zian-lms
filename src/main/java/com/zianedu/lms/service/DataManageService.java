@@ -151,6 +151,62 @@ public class DataManageService {
         return list;
     }
 
+    @Transactional(readOnly = true)
+    public List<TCategoryVO> getSequentialCategoryListTwo(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        int j = 0;
+        for (int i=0; i<2; i++) {
+            TCategoryVO tCategoryVO = new TCategoryVO();
+
+            if (i == 0) tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+            else tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(j);
+
+            j = tCategoryVO.getParentKey();
+
+            list.add(tCategoryVO);
+        }
+        return list;
+    }
+
+    @Transactional(readOnly = true)
+    public List<TCategoryVO> getSequentialCategoryList2(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        TCategoryVO tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+
+        if (tCategoryVO != null) {
+            list.add(tCategoryVO);
+
+            TCategoryVO tCategoryVO2 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO.getParentKey());
+            if (tCategoryVO2 != null) {
+                list.add(tCategoryVO2);
+                TCategoryVO tCategoryVO3 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO2.getParentKey());
+
+                if (tCategoryVO3 != null) {
+                    list.add(tCategoryVO3);
+                    if (tCategoryVO3.getParentKey() > 0) {
+                        TCategoryVO tCategoryVO4 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO3.getParentKey());
+                        if (tCategoryVO4 != null) list.add(tCategoryVO4);
+                    }
+//                    if (tCategoryVO4 != null) {
+//                        list.add(tCategoryVO4);
+//                    } else {
+//                        return list;
+//                    }
+                } else {
+                    return list;
+                }
+
+            } else {
+                return list;
+            }
+        } else {
+            return list;
+        }
+        return list;
+    }
+
     /**
      * 모의고사 문제은행 문제 목록에서 단원 필드명 만들기
      * @param ctgKey
