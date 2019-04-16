@@ -14,4 +14,50 @@
         SELECT COUNT (POPUP_KEY) FROM T_POPUP
     </select>
 
+    <select id="selectTPopupLinkKey" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+        SELECT A.LINK_KEY, B.NAME as GoodsName FROM T_LINK_KEY A
+        INNER JOIN T_CATEGORY B
+        ON A.REQ_KEY = B.CTG_KEY
+        WHERE A.REQ_TYPE = 100
+        AND A.RES_KEY = #{popupKey}
+    </select>
+
+    <select id="selectTPopupInfo" resultType="com.zianedu.lms.vo.TPopupVO">
+        SELECT * FROM T_POPUP WHERE POPUP_KEY = #{popupKey}
+    </select>
+
+    <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
+        INSERT INTO T_POPUP
+        (
+            POPUP_KEY, C_KEY, INDATE, NAME, TYPE, IS_SHOW, POS, WIDTH, HEIGHT, X, Y, START_DATE, END_DATE, CONTENTS
+        )
+        VALUES
+        (
+            T_POPUP_SEQ.nextval, 100, '', #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y}, #{startDate}, #{endDate}, #{contents}
+        )
+        <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
+            SELECT T_POPUP_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+    </insert>
+
+    <update id="updateTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
+        UPDATE T_POPUP
+        <set>
+            <if test="name !='' and name != null">NAME = #{name},</if>
+            <if test="isShow != null">IS_SHOW = #{isShow},</if>
+            <if test="width !='' and width != null">WIDTH = #{width},</if>
+            <if test="height !='' and height != null">HEIGHT = #{height},</if>
+            <if test="x !='' and x != null">X = #{x},</if>
+            <if test="y !='' and y != null">Y = #{y},</if>
+            <if test="startDate !='' and startDate != null">START_DATE = #{startDate},</if>
+            <if test="endDate !='' and endDate != null">END_DATE = #{endDate},</if>
+            <if test="contents !='' and contents != null">CONTENTS = #{contents},</if>
+        </set>
+        WHERE POPUP_KEY = #{popupKey}
+    </update>
+
+    <update id="updateTPopupIsShow">
+        UPDATE T_POPUP SET IS_SHOW = #{isShow} WHERE POPUP_KEY = #{popupKey}
+    </update>
+
 </mapper>
