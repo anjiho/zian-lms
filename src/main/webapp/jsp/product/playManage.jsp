@@ -202,8 +202,6 @@
             paging.count2(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getMockExamList(sPage, '10',searchType, searchText, function (selList) {
-                console.log("기추룬제 리스트");
-                console.log(selList);
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -258,7 +256,6 @@
                         var cmpList = selList[i];
                         var text = "'bookBtn'";
                         var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        console.log(selList);
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.goodsName;},
@@ -305,7 +302,6 @@
                         var cmpList = selList[i];
                         var text = "'giftBtn'";
                         var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        console.log(selList);
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.goodsName;},
@@ -379,7 +375,6 @@
                 bookgiftOption = "giftName_"+giftCnt;
                 deleteSel = "giftDelete";
             }
-            console.log(selList);
 
             if (selList.productInfo) {
                 var title =  selList.productInfo.name;
@@ -421,7 +416,8 @@
 
     //저장
     function playSave() {
-        
+        alert('저장');
+        console.log($('#section1 :input').serialize());
     }
 </script>
 <div class="page-breadcrumb">
@@ -453,13 +449,14 @@
                     <!-- 1.기본정보 Tab -->
                     <h3>기본정보</h3>
                     <section class="col-md-6">
+                        <div id="section1">
                         <div class="form-group">
                             <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                             <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" readonly>
                         </div>
                         <div class="form-group">
                             <label for="lname" class="control-label col-form-label" style="margin-bottom: 0">이름</label>
-                            <input type="text" class="form-control" id="lname">
+                            <input type="text" class="form-control" id="lname" name="lname">
                         </div>
                         <div class="form-group">
                             <label class="control-label col-form-label" style="margin-bottom: 0">등록일</label>
@@ -564,6 +561,7 @@
                             <div>
                                 <textarea name="content" id="summernote" value=""></textarea>
                             </div>
+                        </div>
                         </div>
                     </section>
                     <!-- // 1.기본정보 Tab -->
@@ -736,7 +734,6 @@
                                 <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
                                     <select class="select2 form-control custom-select" style="height:36px;" id="SubjectList_0">
                                         <option>선택</option>
-
                                     </select>
                                 </td>
                                 <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
@@ -768,7 +765,7 @@
                     <!-- 6.선택 Tab -->
                     <h3>선택</h3>
                     <section>
-                        <button type="button" class="btn btn-danger btn-lg" style="float:right;" onclick="playSave();">저장</button>
+                        <!-- 전범위 모의고사 -->
                             <table class="table text-center table-hover" id="allMockList">
                                 <thead>
                                 <tr>
@@ -780,6 +777,9 @@
                         <div class="mx-auto mb-5" style="width:5.5%">
                             <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
                         </div>
+                        <!-- 전범위 모의고사 -->
+
+                        <!--기출문제 회차별 -->
                         <table class="table table-hover text-center" id="examQuestionList">
                             <thead>
                             <tr>
@@ -791,62 +791,39 @@
                         <div class="mx-auto mb-5" style="width:5.5%">
                             <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
                         </div>
+                        <!--기출문제 회차별 -->
+
+                        <!--강의교재-->
                         <table class="table text-center table-hover" id="bookList">
                             <thead>
                             <tr>
                                 <th scope="col" colspan="3">강의교재</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <!--<tr>
-                               <td class="text-left" style="padding:0.3rem;vertical-align: middle;width: 65%">
-                                    <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem; vertical-align: middle;width: 30%">
-                                    <div class="col-sm-10">
-                                        <div style="margin-top: -23px;">
-                                            부교재
-                                            <label class="switch">
-                                                <input type="checkbox" style="display:none;">
-                                                <span class="slider"></span>
-                                            </label>
-                                            주교재
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="text-left" style="padding:0.3rem;vertical-align:middle;">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>-->
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                         <div class="mx-auto mb-5" style="width:5.5%">
                             <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                         </div>
+                        <!--강의교재-->
+
+                        <!--사은품-->
                         <table class="table text-center table-hover" id="giftList">
                             <thead>
                             <tr>
                                 <th scope="col" colspan="2">사은품</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <!-- <tr>
-                                <td class="text-left" style="padding:0.3rem;vertical-align:middle;width: 95%">
-                                    <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem;vertical-align:middle;">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>-->
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                         <div class="mx-auto mb-5" style="width:5.5%">
                             <button type="button" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
                         </div>
+                        <!--사은품-->
                     </section>
                     <!-- //6.선택 Tab -->
 
-                    <!-- 7.강의 목록 Tab -->
+                    <!-- 7.강의 목록 Tab
                     <h3>강의목록</h3>
                     <section>
                         <div class="mb-3 float-right">
@@ -908,7 +885,7 @@
                             </tbody>
                         </table>
                     </section>
-                    <!-- //7.강의 목록 Tab -->
+                  //7.강의 목록 Tab -->
                 </div>
             </div>
         </div>
@@ -916,6 +893,14 @@
     <!-- //div.card -->
 </div>
 <!-- // 기본소스-->
+
+<!--
+*
+*
+* 팝업창 소스
+*
+*
+-->
 <!-- 6.선택 전범위 모의고사 팝업창 -->
 <div class="modal fade" id="sModal3" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 900px">
@@ -1294,21 +1279,10 @@
             headerTag: "h3",
             bodyTag: "section",
             transitionEffect: "slideLeft",
-            /*onStepChanging: function(event, currentIndex, newIndex) {
-               // form.validate().settings.ignore = ":disabled,:hidden";
-                //return form.valid();
-            },
-            onFinishing: function(event, currentIndex) {
-                //form.validate().settings.ignore = ":disabled";
-                //return form.valid();
-            },
             onFinished: function(event, currentIndex) {
-                //alert("Submitted!");
-            }*/
-            // aria-selected:"false"
+                playSave();
+            }
         });
-
-
     </script>
 <style>
 
