@@ -336,7 +336,7 @@
 		)
 		VALUES
 		(
-			#{gKey}, #{cKey}, #{cpKey}, #{name}, #{indate}, #{sellstartdate}, #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
+			#{gKey}, #{cKey}, #{cpKey}, #{name}, TO_DATE(#{indate}, 'YYYY-mm-dd'), TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'), #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
 			#{emphasis}, #{tags}, #{summary}, #{description}, #{calculateRate}, #{isFreebieDeliveryFree}, #{isQuickDelivery}, #{goodsId}
 		)
 	</insert>

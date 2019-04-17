@@ -687,7 +687,7 @@
                             <input type="hidden" value="0" name="tags">
                             <input type="hidden" value="0" name="calculateRate">
                             <input type="hidden" value="0" name="isQuickDelivery">
-                            <input type="hidden" value="" name="goodsId">
+                            <input type="hidden" value="0" name="goodsId">
                             <input type="hidden" value="" name="goodsTypeName">
                             <input type="hidden" value="" name="summary">
                             <input type="hidden" value="" name="description">
