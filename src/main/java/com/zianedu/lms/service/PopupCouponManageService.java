@@ -123,7 +123,7 @@ public class PopupCouponManageService {
         if (tLinkKeyVOList.size() > 0) {
             for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
                 List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryListBy4DepthUnder(tLinkKeyVO.getReqKey());
-                Collections.reverse(tCategoryVOList);
+                //Collections.reverse(tCategoryVOList);
                 couponCategoryList.add(tCategoryVOList);
             }
         }
@@ -138,9 +138,16 @@ public class PopupCouponManageService {
     @Transactional(readOnly = true)
     public CouponDetailDTO getCouponDetailInfo(int couponMasterKey) {
         if (couponMasterKey == 0) return null;
+        TCouponMasterVO tCouponMasterVO = popupCouponManageMapper.selectTCouponMaterInfo(couponMasterKey);
+        List<List<TCategoryVO>>categoryList = this.getCouponCategory(couponMasterKey);
+        int issuedOfflineCouponCount = 0;
+
+        if (tCouponMasterVO.getType() == 1) {
+            //총 생성된 오프라인 쿠폰 개수 가져오기
+            issuedOfflineCouponCount = popupCouponManageMapper.selectIssuedOfflineCouponCount(couponMasterKey);
+        }
         CouponDetailDTO couponDetailDTO = new CouponDetailDTO(
-                popupCouponManageMapper.selectTCouponMaterInfo(couponMasterKey),
-                this.getCouponCategory(couponMasterKey)
+            tCouponMasterVO, categoryList, issuedOfflineCouponCount
         );
         return couponDetailDTO;
     }
@@ -294,6 +301,15 @@ public class PopupCouponManageService {
     }
 
     /**
+     * 쿠폰 기본 정보 수정하기
+     * @param tCouponMasterVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateCouponMasterInfo(TCouponMasterVO tCouponMasterVO) {
+        popupCouponManageMapper.updateTCouponMaster(tCouponMasterVO);
+    }
+
+    /**
      * 쿠폰 정보 저장하기
      * @param tCouponMasterVO
      * @param categoryCtgKeyList(카테고리 키 값 리스트)
@@ -321,7 +337,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 쿠폰 발급하기
+     * 오프라인 쿠폰 발급하기
      * @param couponMasterKey
      * @param userKey
      */

@@ -20,6 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -236,6 +237,7 @@ public class ProductManageService extends PagingSupport {
         if (categoryGoodsList.size() > 0) {
             for (TCategoryGoods tCategoryGoods : categoryGoodsList) {
                 List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryList(tCategoryGoods.getCtgKey());
+                //Collections.reverse(tCategoryVOList);
                 videoCategoryList.add(tCategoryVOList);
             }
         }

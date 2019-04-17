@@ -158,6 +158,12 @@
         </if>
     </select>
 
+    <select id="selectIssuedOfflineCouponCount" resultType="Integer">
+      SELECT COUNT(COUPON_OFFLINE_KEY)
+      FROM T_COUPON_OFFLINE
+      WHERE COUPON_MASTER_KEY = #{couponMasterKey}
+    </select>
+
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
         <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
             SELECT T_POPUP_SEQ FROM DUAL
@@ -228,6 +234,26 @@
 
     <update id="updateTPopupIsShow">
         UPDATE T_POPUP SET IS_SHOW = #{isShow} WHERE POPUP_KEY = #{popupKey}
+    </update>
+
+    <update id="updateTCouponMaster" parameterType="com.zianedu.lms.vo.TCouponMasterVO">
+        UPDATE T_COUPON_MASTER
+        <set>
+            <if test="indate != '' and indate != null">INDATE = #{indate},</if>
+            <if test="type != null">TYPE = #{type},</if>
+            <if test="name != '' and name != null">NAME = #{name},</if>
+            <if test="dcType != null">DC_TYPE = #{dcType},</if>
+            <if test="dcValue != null">DC_VALUE = #{dcValue},</if>
+            <if test="contents != '' and contents != null">CONTENTS = #{contents},</if>
+            <if test="periodType != null">PERIOD_TYPE = #{periodType},</if>
+            <if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+            <if test="startDate != '' and startDate != null">START_DATE = #{startDate},</if>
+            <if test="endDate != '' and endDate != null">END_DATE = #{endDate},</if>
+            <if test="limitPriceMin != null">LIMIT_PRICE_MIN = #{limitPriceMin},</if>
+            <if test="isShow != null">IS_SHOW = #{isShow},</if>
+            <if test="device != null">DEVICE = #{device},</if>
+        </set>
+        WHERE COUPON_MASTER_KEY = #{couponMasterKey}
     </update>
 
 <!--    <update id="updateTCouponMaster" parameterType="com.zianedu.lms.vo.TCouponMasterVO">-->

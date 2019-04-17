@@ -41,7 +41,7 @@ public interface PopupCouponManageMapper {
     int selectOfflineCouponUserListCount(@Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText,
                                          @Param("searchType") String searchType);
 
-
+    int selectIssuedOfflineCouponCount(@Param("couponMasterKey") int couponMasterKey);
 
     /** INSERT **/
     Integer insertTPopupInfo(TPopupVO tPopupVO);
@@ -59,5 +59,7 @@ public interface PopupCouponManageMapper {
     void updateTPopupInfo(TPopupVO tPopupVO);
 
     void updateTPopupIsShow(@Param("popupKey") int popupKey, @Param("isShow") int isShow);
+
+    void updateTCouponMaster(TCouponMasterVO tCouponMasterVO);
 
 }

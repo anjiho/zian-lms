@@ -13,10 +13,13 @@ public class CouponDetailDTO {
 
     private List<List<TCategoryVO>> couponCategoryList;
 
+    private int couponCount;
+
     public CouponDetailDTO() {}
 
-    public CouponDetailDTO(TCouponMasterVO couponInfo, List<List<TCategoryVO>> couponCategoryList) {
+    public CouponDetailDTO(TCouponMasterVO couponInfo, List<List<TCategoryVO>> couponCategoryList, int couponCount) {
         this.couponInfo = couponInfo;
         this.couponCategoryList = couponCategoryList;
+        this.couponCount = couponCount;
     }
 }

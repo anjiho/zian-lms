@@ -32,7 +32,7 @@ public class TCouponIssueVO {
         this.couponOfflineKey = 0;
         this.jGKey = 0;
         this.useDate = "";
-        this.description = "";
+        this.description = "관리자 발급";
     }
 
 }
