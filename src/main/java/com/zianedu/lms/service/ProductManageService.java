@@ -528,6 +528,8 @@ public class ProductManageService extends PagingSupport {
 
         tGoodsVO.setImageList(imageList);
         tGoodsVO.setImageView(imageView);
+        tGoodsVO.setIndate(tGoodsVO.getIndate() + " 00:00:00");
+        tGoodsVO.setSellstartdate(tGoodsVO.getSellstartdate() + " 00:00:00");
 
         if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
         else productManageMapper.updateTGoods(tGoodsVO);

@@ -201,20 +201,9 @@ public class DataManageService {
                             }
                         }
                     }
-//                    if (tCategoryVO4 != null) {
-//                        list.add(tCategoryVO4);
-//                    } else {
-//                        return list;
-//                    }
-                } else {
-                    return list;
                 }
 
-            } else {
-                return list;
             }
-        } else {
-            return list;
         }
         return list;
     }
