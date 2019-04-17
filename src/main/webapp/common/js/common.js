@@ -2338,5 +2338,3 @@ function getJsonObjectFromDiv(divId) {
 
 
 
-
-

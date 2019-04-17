@@ -3,39 +3,10 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
-
 <script>
-    function test() {
-        var obj = getJsonObjectFromDiv("section1");
-        console.log(obj)
-    }
-
-    function test2() {
-        var array = new Array();
-        $('#optionTable tbody tr').each(function(index){
-            var kind = $(this).find("td input").eq(0).val();
-            var price = $(this).find("td input").eq(1).val();
-            // var statinNames = $(this).find("td input").eq(1).val();
-            // var firstTimes = $(this).find("td input").eq(2).val();
-            // var secondTimes = $(this).find("td input").eq(3).val();
-            // var thirdTimes = $(this).find("td input").eq(4).val();
-            // var fourthTimes = $(this).find("td input").eq(5).val();
-            // var fifthTimes = $(this).find("td input").eq(6).val();
-            // var sixthTimes = $(this).find("td input").eq(7).val();
-            // var sortNums = index + 1;
-
-            var data = {
-                kind:kind,
-                price:price
-            };
-            array.push(data);
-        });
-        console.log(array)
-    }
-
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
-        getCategoryList("sel_1","214");
+        getCategoryList("selCate1","214");
         getSelectboxListForCtgKey("set_1","4309");//급수 셀렉트박스
         getSelectboxListForCtgKey("set_2","70");//과목 셀렉트박스
         getSelectboxListForCtgKey("set_3","202");//유형 셀렉트박스
@@ -47,6 +18,7 @@
         selectExamSearchSelectbox("searchType","");
         selectExamSearchSelectbox("examsearchType","");
         selectExamSearchSelectbox("booksearchType","");
+        getExamPrepareSelectbox("examYearSel","");//시험대비년도 셀렉트박스
         $('#description').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
@@ -72,12 +44,12 @@
     });
 
     function changesel(id, val){ //카테고리 셀렉트박스 불러오기
-        var idNum = 0;
+       /* var idNum = 0;
         if (id != undefined) {
             var split = gfn_split(id, "_");
             var idNum = "sel_" + (Number(split[1]) + 1) ;
-        }
-        getCategoryList(idNum, val);
+        }*/
+        getCategoryList(id, val);
     }
 
     function optionDelete(val) {
@@ -105,19 +77,19 @@
                     optionHtml += "</select>";
                 optionHtml += "</td>";
                     optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" class=\"form-control\">";
+                    optionHtml += "<input type=\"number\" class=\"form-control\">";
                 optionHtml += "</td>";
                     optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += " <input type=\"text\" class=\"form-control\" id=\"sellPrice\" name=\"sellPrice\">";
+                    optionHtml += "<input type=\"number\" class=\"form-control\"  id='sellPrice_"+optionCnt+"'  name='sellPrice_"+optionCnt+"'>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
                     optionHtml += "<input type=\"text\" class=\"form-control\" >";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                     optionHtml += "<input type=\"text\" style=\"display: inline-block\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange=\"saleInputPrice(this.value)\">";
+                     optionHtml += "<input type=\"number\" style=\"display: inline-block\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange='saleInputPrice(this.value"+","+optionCnt+")' >";
                 optionHtml += "</td>";
                 optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"text\" class=\"form-control\" id=\"resultPrice\" readonly>";
+                    optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
                     optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class=\"btn btn-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
@@ -373,7 +345,8 @@
                 var title =  selList.mokExamInfo.name;
                 var MockListHtml = "<tr>";
                      MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
-                         MockListHtml     += "<span id='"+getallMockOption+"'></span>";
+                         //MockListHtml     += "<span id='"+getallMockOption+"'></span>";
+                            MockListHtml     += "<input type='text'  id='"+getallMockOption+"' value='' readonly>";
                      MockListHtml     += "</td>";
                     MockListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
                          MockListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
@@ -382,10 +355,10 @@
 
                 if(set == 'mockBtn'){ //전범위 모의고사
                     $('#allMockList > tbody:first').append(MockListHtml);//선택 모의고사 리스트 뿌리기
-                    $("#"+getallMockOption).html(title);//모의고사 제목 뿌리기
+                    $("#"+getallMockOption).val(title);//모의고사 제목 뿌리기
                 }else if(set == 'examBtn'){ //기출문제
                     $('#examQuestionList > tbody:first').append(MockListHtml);//선택 기출문제 리스트 뿌리기
-                    $("#"+getallMockOption).html(title);//기출문제 제목 뿌리기
+                    $("#"+getallMockOption).val(title);//기출문제 제목 뿌리기
                 }
                 //$("#lecturePopupClose").click();
             }
@@ -447,17 +420,91 @@
         });
     }
 
-
-    function saleInputPrice(val) {
-        var sellPrice = getInputTextValue("sellPrice");
+    //옵션 - 판매가 재수강시 할인율적용 함수
+    function saleInputPrice(val,cnt) {
+        selPriceCnt = "sellPrice_"+cnt;
+        resultPirceCnt = "resultPrice_"+cnt;
+        var sellPrice = getInputTextValue(selPriceCnt);
         totalprice = Math.round(sellPrice -((sellPrice * val) / 100));
-        $("#resultPrice").val(totalprice);
+        innerValue(resultPirceCnt,totalprice);
+    }
+
+    //카테고리 리스트 추가
+    function addCategory() {
+        var categoryCnt = $("#categoryTable tr").length-1;
+
+        var selOption = "sel_"+categoryCnt;
+
+        getCategoryList(selOption, 214);
+
+        var categoryHtml = "<tr>";
+        categoryHtml += "<td>";                                                                                                 //saleInputPrice(this.value"+","+optionCnt+")' >"
+        categoryHtml += "<select class=\"col-sm-8 form-control custom-select\"  id='sel_"+categoryCnt+"' onchange='changesel("+'"'+'2sel_'+categoryCnt+'"'+","+"this.value)' >";
+        categoryHtml += " <option>선택</option>";
+        categoryHtml += " </select>";
+        categoryHtml += "<td>";
+        categoryHtml += " <select class=\"col-sm-8 form-control custom-select\" id='2sel_"+categoryCnt+"' onchange='changesel("+'"'+'3sel_'+categoryCnt+'"'+","+"this.value)' >";
+        categoryHtml += "<option>선택</option>";
+        categoryHtml += "</select>";
+        categoryHtml += "</td>";
+        categoryHtml += " <td>";
+        categoryHtml += "<select class=\"col-sm-8 form-control custom-select\" id='3sel_"+categoryCnt+"' onchange='changesel("+'"'+'4sel_'+categoryCnt+'"'+","+"this.value)' >";
+        categoryHtml += " <option>선택</option>";
+        categoryHtml += " </select>";
+        categoryHtml += "</td>";
+        categoryHtml += "<td>";
+        categoryHtml += " <select class=\"col-sm-8 form-control custom-select\"  id='4sel_"+categoryCnt+"' onchange='changesel("+'"'+'5sel_'+categoryCnt+'"'+","+"this.value)' >";
+        categoryHtml += "<option>선택</option>";
+        categoryHtml += " </select>";
+        categoryHtml += "</td>";
+        categoryHtml += "<td>";
+        categoryHtml += " <select class=\"col-sm-8 form-control custom-select\"  id='5sel_"+categoryCnt+"' name=\"ctgKey\" >";
+        categoryHtml += " <option>선택</option>";
+        categoryHtml += "  </select>";
+        categoryHtml += " </td>";
+        categoryHtml += "</tr>";
+        $('#categoryTable > tbody:first').append(categoryHtml);
     }
 
     //저장
     function playSave() {
+        var obj = getJsonObjectFromDiv("section1"); //기본정보
+        console.log(obj);
 
+        /* function test() {
+             var obj = getJsonObjectFromDiv("section4");
+             console.log(obj)
+         }
+
+         function test2() {
+             var array = new Array();
+             var array1 = new Array();
+             var array2 = new Array();
+             var array3 = new Array();
+             $('#allMockList tbody tr').each(function(index){
+                 var i =0;
+                 var kind = $(this).find("td input").eq(0).val();
+                 //var price = $(this).find("td input").eq(1).val();
+                 // var statinNames = $(this).find("td input").eq(1).val();
+                 // var firstTimes = $(this).find("td input").eq(2).val();
+                 // var secondTimes = $(this).find("td input").eq(3).val();
+                 // var thirdTimes = $(this).find("td input").eq(4).val();
+                 // var fourthTimes = $(this).find("td input").eq(5).val();
+                 // var fifthTimes = $(this).find("td input").eq(6).val();
+                 // var sixthTimes = $(this).find("td input").eq(7).val();
+                 // var sortNums = index + 1;
+
+                 var data = {
+                     kind:kind,
+                 };
+                 array.push(data);
+             });
+             console.log(array);
+
+         }*/
     }
+
+
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -490,10 +537,15 @@
                     <h3>기본정보</h3>
                     <section class="col-md-6">
                         <div id="section1">
-                            <input type="button" value="1234" onclick="test()">
+                            <input type="hidden" value="0" name="gKey">
+                            <input type="hidden" value="0" name="cpKey">
+                            <input type="hidden" value="0" name="isNodc">
+                            <input type="hidden" value="0" name="tags">
+                            <input type="hidden" value="0" name="isQuickDelivery">
+                            <input type="hidden" value="0" name="calculateRate">
                             <div class="form-group">
                                 <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                                <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" readonly>
+                                <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" name="type" readonly>
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -523,7 +575,7 @@
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" id="is_show" name="is_show" style="display:none;">
+                                            <input type="checkbox" id="is_show" name="isShow" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -536,7 +588,7 @@
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" id="is_sell" name="is_sell" style="display:none;">
+                                            <input type="checkbox" id="is_sell" name="isSell" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -549,7 +601,7 @@
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" id="is_free" name="is_free" style="display:none;">
+                                            <input type="checkbox" id="is_free" name="isFree" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -560,7 +612,7 @@
                                 <label class="control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
                                 <div>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="image_list"  name="image_list" required>
+                                        <input type="file" class="custom-file-input" id="image_list"  name="imageList" required>
                                         <span class="custom-file-control custom-file-label"></span>
                                     </div>
                                 </div>
@@ -569,7 +621,7 @@
                                 <label class="control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
                                 <div>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input addFile" id="image_view" name="image_view" required>
+                                        <input type="file" class="custom-file-input addFile" id="image_view" name="imageView" required>
                                         <span class="custom-file-control1 custom-file-label"></span>
                                     </div>
                                 </div>
@@ -590,7 +642,7 @@
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" style="display:none;" id="is_freebie_delivery_free" name="is_freebie_delivery_free">
+                                            <input type="checkbox" style="display:none;" id="is_freebie_delivery_free" name="isFreebieDeliveryFree">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -630,19 +682,19 @@
                                         </select>
                                     </td>
                                     <td style="padding: 0.3rem;"><!--원가-->
-                                        <input type="text" class="form-control" id="price" name="price">
+                                        <input type="number" class="form-control" id="price" name="price">
                                     </td>
                                     <td style="padding: 0.3rem;"><!--판매가-->
-                                        <input type="text" class="form-control" id="sellPrice" name="sellPrice">
+                                        <input type="number" class="form-control" id="sellPrice_0" name="sellPrice_0">
                                     </td>
                                     <td style="padding: 0.3rem;"><!--포인트-->
                                         <input type="text" class="form-control" id="point" name="point">
                                     </td>
                                     <td style="padding: 0.3rem;"><!--재수강1-->
-                                        <input type="text" style="display: inline-block" class="form-control" id="extendPercent" name="extendPercent" onchange="saleInputPrice(this.value)">
+                                        <input type="number" style="display: inline-block" class="form-control" id="extendPercent" name="extendPercent" onchange="saleInputPrice(this.value,0)">
                                     </td>
                                     <td style="padding: 0.3rem;"><!--재수강2-->
-                                        <input type="text" class="form-control" id="resultPrice" readonly>
+                                        <input type="number" class="form-control" id="resultPrice_0" readonly>
                                     </td>
                                     <td style="padding: 0.3rem;">
                                         <button type="button" onclick="optionDelete('optionDelete');" class="btn btn-danger btn-sm" style="margin-top:8%;">삭제</button>
@@ -660,29 +712,53 @@
                     <!-- 3.카테고리 목록 Tab -->
                     <h3>카테고리</h3>
                     <section>
-                        <div class="form-group">
-                            <label  class="control-label col-form-label" style="margin-bottom: 0">카테고리</label>
-                            <div>
-                                    <select class="col-sm-2 select2 form-control custom-select" id="sel_1" onchange="changesel(this.id, this.value);">
-                                        <option>선택</option>
-                                    </select>
-                                    <i class="m-r-10 mdi mdi-chevron-right" style="color:darkblue;vertical-align: middle;font-size:28px;"></i>
-                                    <select class="col-sm-2 select2 form-control custom-select" id="sel_2"  onchange="changesel(this.id, this.value);">
-                                        <option>선택</option>
-                                    </select>
-                                    <i class="m-r-10 mdi mdi-chevron-right" style="vertical-align: middle;font-size:28px;"></i>
-                                    <select class="col-sm-3 select2 form-control custom-select" id="sel_3" onchange="changesel(this.id, this.value);">
-                                        <option>선택</option>
-                                    </select>
-                                    <i class="m-r-10 mdi mdi-chevron-right" style="vertical-align: middle;font-size:28px;"></i>
-                                    <select class="col-sm-3 select2 form-control custom-select" id="sel_4" onchange="changesel(this.id, this.value);">
-                                        <option>선택</option>
-                                </select>
-                                <i class="m-r-10 mdi mdi-chevron-right" style="vertical-align: middle;font-size:28px;"></i>
-                                <select class="col-sm-3 select2 form-control custom-select" id="sel_5" onchange="changesel(this.id, this.value);">
-                                    <option>선택</option>
-                                </select>
-                            </div>
+                        <div id="section3">
+                                <table class="table" id="categoryTable">
+                                    <input type="hidden" name="ctgGKey" value="0">
+                                    <input type="hidden" name="gKey" value="0">
+                                    <input type="hidden" name="pos" value="0">
+                                    <thead>
+                                    <tr style="border-top:0">
+                                        <th scope="col" style="text-align:center;width:20%"></th>
+                                        <th scope="col" style="text-align:center;"></th>
+                                        <th scope="col" style="text-align:center;width:20%"></th>
+                                        <th scope="col" style="text-align:center;width:20%"></th>
+                                        <th scope="col" colspan="2" style="text-align:center;width:20%"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td><!--옵션명selbox-->
+                                                <select class="col-sm-8 form-control custom-select" id="selCate1" onchange="changesel('selCate2', this.value);">
+                                                    <option>선택</option>
+                                                </select>
+                                            </td>
+                                            <td><!--원가-->
+                                                <select class="col-sm-8 form-control custom-select" id="selCate2"  onchange="changesel('selCate3', this.value);">
+                                                    <option>선택</option>
+                                                </select>
+                                            </td>
+                                            <td><!--판매가-->
+                                                <select class="col-sm-8 form-control custom-select" id="selCate3" onchange="changesel('selCate4', this.value);">
+                                                    <option>선택</option>
+                                                </select>
+                                            </td>
+                                            <td><!--포인트-->
+                                                <select class="col-sm-8 form-control custom-select" id="selCate4" onchange="changesel('selCate5', this.value);">
+                                                    <option>선택</option>
+                                                </select>
+                                            </td>
+                                            <td><!--재수강1-->
+                                                <select class="col-sm-8 form-control custom-select" id="selCate5" name="ctgKey">
+                                                    <option>선택</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <div class="mx-auto" style="width:5.5%">
+                                    <button type="button" class="btn btn-outline-info mx-auto" onclick="addCategory();">추가</button>
+                                </div>
                         </div>
                     </section>
                     <!-- //3.카테고리 목록 Tab -->
@@ -690,75 +766,75 @@
                     <!-- 4.강좌 정보 Tab -->
                     <h3>강좌정보</h3>
                     <section>
-                        <div class="form-group">
+                        <!--<div class="form-group">
                             <label class="control-label col-form-label" style="margin-bottom: 0">강좌 CODE</label>
                             <input type="text" class="form-control" value="" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
-                            <select class="col-sm-3 select2 form-control custom-select" id="set_1">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">과목</label>
-                            <select class="col-sm-3 select2 form-control custom-select" id="set_2">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">유형</label>
-                            <select class="col-sm-3 select2 form-control custom-select" id="set_3">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
-                            <select class="col-sm-3 select2 form-control custom-select">
-                                <option>준비중</option>
-                                <option value="#">진행중</option>
-                                <option value="#">완강</option>
-                                <option value="#">폐강</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>
-                            <select  class="col-sm-3 select2 form-control custom-select"  id="lectureCnt">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
-                            <select class="col-sm-3 select2 form-control custom-select"  id="lectureDayCnt">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>
-                            <select class="col-sm-3 select2 form-control custom-select"  id="lectureTimeCnt">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
-                            <input type="number" class="col-sm-3 form-control" style="display: inline-block;" id="" placeholder="2"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
-                        </div>
-                        <div class="form-group">
-                            <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
-                            <select class="col-sm-3 select2 form-control custom-select">
-                                <option>준비중</option>
-                                <option value="#">2010</option>
-                                <option value="#">2011</option>
-                                <option value="#">2012</option>
-                                <option value="#">2013</option>
-                                <option value="#">2014</option>
-                                <option value="#">2015</option>
-                                <option value="#">2016</option>
-                                <option value="#">2017</option>
-                                <option value="#">2018</option>
-                                <option value="#">2019</option>
-                                <option value="#">2020</option>
-                            </select>
+                        </div>-->
+                        <div id="section4">
+
+                            <input type="hidden" name="lecKey" value="0">
+                            <input type="hidden" name="gKey" value="0">
+                            <input type="hidden" name="teacherKey" value="0">
+                            <input type="hidden" name="regdate" value="0">
+                            <input type="hidden" name="startdate" value="0">
+                            <input type="hidden" name="isPack" value="0">
+                            <input type="hidden" name="goodsId" value="0">
+                            <input type="hidden" name="lecDateYear" value="0">
+                            <input type="hidden" name="lecDateMonth" value="0">
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
+                                <select class="col-sm-3 select2 form-control custom-select" id="set_1" name="classGroupCtgKey">
+                                    <option>선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">과목</label>
+                                <select class="col-sm-3 select2 form-control custom-select" id="set_2" name="subjectCtgKey">
+                                    <option>선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">유형</label>
+                                <select class="col-sm-3 select2 form-control custom-select" id="set_3" name="stepCtgKey">
+                                    <option>선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
+                                <select class="col-sm-3 select2 form-control custom-select" name="status">
+                                    <option>준비중</option>
+                                    <option value="#">진행중</option>
+                                    <option value="#">완강</option>
+                                    <option value="#">폐강</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>
+                                <select  class="col-sm-3 select2 form-control custom-select"  id="lectureCnt" name="limitCount">
+                                    <option>선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
+                                <select class="col-sm-3 select2 form-control custom-select"  id="lectureDayCnt" name="limitDay">
+                                    <option>선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>
+                                <select class="col-sm-3 select2 form-control custom-select"  id="lectureTimeCnt" name="lecTime">
+                                    <option>선택</option>
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
+                                <input type="number" class="col-sm-3 form-control" style="display: inline-block;" placeholder="2" name="multiple"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
+                            </div>
+                            <div class="form-group">
+                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>
+                                <select class="col-sm-3 select2 form-control custom-select" id="examYearSel" name="examYear">
+                                </select>
+                            </div>
                         </div>
                     </section>
                     <!-- //4.강좌 정보 Tab -->
@@ -766,42 +842,46 @@
                     <!-- 5.강사 목록 Tab -->
                     <h3>강사목록</h3>
                     <section>
-                        <table class="table" id="teacherTabel">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="5" style="text-align:center;width:30%">강사목록</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
-                                    <select class="select2 form-control custom-select" style="height:36px;" id="SubjectList_0">
-                                        <option>선택</option>
-
-                                    </select>
-                                </td>
-                                <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
-                                    <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
-                                </td>
-                                <td style="padding: 0.3rem;width: 20%">
-                                    <select class="select2 form-control custom-select" style="height:36px;" id="teacherList_0">
-                                        <option>선택</option>
-                                    </select>
-                                </td>
-                                <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
-                                    <label style="display: inline-block">조건 : </label>
-                                    <input type="text" class="form-control" style="display: inline-block;width:60%"> %
-                                </td>
-                                <td style="width:3%;vertical-align: middle">
-                                    <a href="#" data-toggle="tooltip" data-placement="top" title="삭제">
-                                        <i class="mdi mdi-close"></i>
-                                    </a>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                        <div class="mx-auto" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info mx-auto" style="margin-bottom:18px;" onclick="addTeacher();">추가</button>
+                        <div id="section5">
+                            <input type="button" value="1234" onclick="test2()">
+                            <table class="table" id="teacherTabel">
+                                <input type="hidden" name="gTeacherKey" value="0">
+                                <input type="hidden" name="gKey" value="0">
+                                <thead>
+                                <tr>
+                                    <th scope="col" colspan="5" style="text-align:center;width:30%">강사목록</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
+                                        <select class="select2 form-control custom-select" style="height:36px;" id="SubjectList_0" >
+                                            <option>선택</option>
+                                        </select>
+                                    </td>
+                                    <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
+                                        <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                    </td>
+                                    <td style="padding: 0.3rem;width: 20%">
+                                        <select class="select2 form-control custom-select" style="height:36px;" id="teacherList_0">
+                                            <option>선택</option>
+                                        </select>
+                                    </td>
+                                    <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
+                                        <label style="display: inline-block">조건 : </label>
+                                        <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculate_rate"> %
+                                    </td>
+                                    <td style="width:3%;vertical-align: middle">
+                                        <a href="#" data-toggle="tooltip" data-placement="top" title="삭제">
+                                            <i class="mdi mdi-close"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                            <div class="mx-auto" style="width:5.5%">
+                                <button type="button" class="btn btn-outline-info mx-auto" style="margin-bottom:18px;" onclick="addTeacher();">추가</button>
+                            </div>
                         </div>
                     </section>
                     <!-- //5.강사 목록 Tab -->
@@ -809,7 +889,8 @@
                     <!-- 6.선택 Tab -->
                     <h3>선택</h3>
                     <section>
-                        <button type="button" class="btn btn-danger btn-lg" style="float:right;" onclick="playSave();">저장</button>
+                        <div id="section6">
+                            <input type="button" value="1234" onclick="test2()">
                             <table class="table text-center table-hover" id="allMockList">
                                 <thead>
                                 <tr>
@@ -818,71 +899,72 @@
                                 </thead>
                                 <tbody id="MockTitle"></tbody>
                             </table>
-                        <div class="mx-auto mb-5" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
-                        </div>
-                        <table class="table table-hover text-center" id="examQuestionList">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="2">기출문제 회차별</th>
-                            </tr>
-                            </thead>
-                            <tbody id="examQuestionTitle"></tbody>
-                        </table>
-                        <div class="mx-auto mb-5" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
-                        </div>
-                        <table class="table text-center table-hover" id="bookList">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="3">강의교재</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!--<tr>
-                               <td class="text-left" style="padding:0.3rem;vertical-align: middle;width: 65%">
-                                    <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem; vertical-align: middle;width: 30%">
-                                    <div class="col-sm-10">
-                                        <div style="margin-top: -23px;">
-                                            부교재
-                                            <label class="switch">
-                                                <input type="checkbox" style="display:none;">
-                                                <span class="slider"></span>
-                                            </label>
-                                            주교재
+                            <div class="mx-auto mb-5" style="width:5.5%">
+                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
+                            </div>
+                            <table class="table table-hover text-center" id="examQuestionList">
+                                <thead>
+                                <tr>
+                                    <th scope="col" colspan="2">기출문제 회차별</th>
+                                </tr>
+                                </thead>
+                                <tbody id="examQuestionTitle"></tbody>
+                            </table>
+                            <div class="mx-auto mb-5" style="width:5.5%">
+                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
+                            </div>
+                            <table class="table text-center table-hover" id="bookList">
+                                <thead>
+                                <tr>
+                                    <th scope="col" colspan="3">강의교재</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!--<tr>
+                                   <td class="text-left" style="padding:0.3rem;vertical-align: middle;width: 65%">
+                                        <span>빅주간(전범위)모의고사_공통과목 12회</span>
+                                    </td>
+                                    <td class="text-left" style="padding: 0.3rem; vertical-align: middle;width: 30%">
+                                        <div class="col-sm-10">
+                                            <div style="margin-top: -23px;">
+                                                부교재
+                                                <label class="switch">
+                                                    <input type="checkbox" style="display:none;">
+                                                    <span class="slider"></span>
+                                                </label>
+                                                주교재
+                                            </div>
                                         </div>
-                                    </div>
-                                </td>
-                                <td class="text-left" style="padding:0.3rem;vertical-align:middle;">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>-->
-                            </tbody>
-                        </table>
-                        <div class="mx-auto mb-5" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
-                        </div>
-                        <table class="table text-center table-hover" id="giftList">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="2">사은품</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <!-- <tr>
-                                <td class="text-left" style="padding:0.3rem;vertical-align:middle;width: 95%">
-                                    <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem;vertical-align:middle;">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>-->
-                            </tbody>
-                        </table>
-                        <div class="mx-auto mb-5" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
+                                    </td>
+                                    <td class="text-left" style="padding:0.3rem;vertical-align:middle;">
+                                        <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
+                                    </td>
+                                </tr>-->
+                                </tbody>
+                            </table>
+                            <div class="mx-auto mb-5" style="width:5.5%">
+                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                            </div>
+                            <table class="table text-center table-hover" id="giftList">
+                                <thead>
+                                <tr>
+                                    <th scope="col" colspan="2">사은품</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- <tr>
+                                    <td class="text-left" style="padding:0.3rem;vertical-align:middle;width: 95%">
+                                        <span>빅주간(전범위)모의고사_공통과목 12회</span>
+                                    </td>
+                                    <td class="text-left" style="padding: 0.3rem;vertical-align:middle;">
+                                        <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
+                                    </td>
+                                </tr>-->
+                                </tbody>
+                            </table>
+                            <div class="mx-auto mb-5" style="width:5.5%">
+                                <button type="button" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
+                            </div>
                         </div>
                     </section>
                     <!-- //6.선택 Tab -->
@@ -1336,6 +1418,9 @@
             headerTag: "h3",
             bodyTag: "section",
             transitionEffect: "slideLeft",
+            onFinished: function(event, currentIndex) {
+                playSave();
+            }
             /*onStepChanging: function(event, currentIndex, newIndex) {
                // form.validate().settings.ignore = ":disabled,:hidden";
                 //return form.valid();

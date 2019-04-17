@@ -49,6 +49,7 @@ function getVideoOptionTypeList(tag_id, val) {
 //카테고리
 function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
+        console.log(list);
         var html = "<select id='sel_1' onchange='' class='form-control'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].name == val) {
@@ -129,7 +130,6 @@ function getClassRegistraionDaySelectbox(tag_id,val) {
 //모의고사 검색 셀렉트박스
 function selectExamSearchSelectbox(tag_id,val) {
     selectboxService.selectExamSearchSelectbox(function (list) {
-        console.log(list);
         var html = "<select id='sel_1' onchange='' class='form-control'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
@@ -137,6 +137,24 @@ function selectExamSearchSelectbox(tag_id,val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value+"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value+"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//시험대비년도 셀레긑박스
+function getExamPrepareSelectbox(tag_id,val) {
+    selectboxService.getExamPrepareSelectbox(function (list) {
+        console.log(list);
+        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i] == val) {
+                html += "<option value="+list[i]+" selected>"+ list[i]+"</option>";
+            } else {
+                html += "<option value="+list[i]+">"+ list[i]+"</option>";
             }
         }
         html += "</select>";
