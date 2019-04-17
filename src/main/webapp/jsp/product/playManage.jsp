@@ -553,7 +553,7 @@
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                <div class="input-group">
+                                <div class="input-group" id="dateRangePicker">
                                     <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate" id="indate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -1433,6 +1433,15 @@
                 //alert("Submitted!");
             }*/
             // aria-selected:"false"
+        });
+
+        $('#indate').datepicker({
+            format: "yyyy-mm-dd",
+            language: "kr"
+        });
+        $('#sellstartdate').datepicker({
+            format: "yyyy-mm-dd",
+            language: "kr"
         });
 
 

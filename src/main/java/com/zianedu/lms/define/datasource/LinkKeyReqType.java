@@ -12,7 +12,12 @@ public enum LinkKeyReqType {
     //전벙위 모의고사
     LEC_ALL_RANGE_EXAM(8),
     //기출문제 회차별
-    LEC_OUTFLOW_TURN(9);
+    LEC_OUTFLOW_TURN(9),
+    //쿠폰
+    COUPON(100),
+    //팝업
+    POPUP(100),
+    ;
 
     int linkKeyReq;
 

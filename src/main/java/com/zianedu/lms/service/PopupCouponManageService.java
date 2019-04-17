@@ -1,10 +1,16 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.define.datasource.CouponDcType;
+import com.zianedu.lms.define.datasource.CouponIssueType;
+import com.zianedu.lms.dto.CouponListDTO;
 import com.zianedu.lms.dto.PopupInfoDTO;
 import com.zianedu.lms.dto.PopupListDTO;
 import com.zianedu.lms.mapper.PopupCouponManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
+import com.zianedu.lms.utils.Util;
+import com.zianedu.lms.vo.TCategoryVO;
+import com.zianedu.lms.vo.TCouponMasterVO;
 import com.zianedu.lms.vo.TLinkKeyVO;
 import com.zianedu.lms.vo.TPopupVO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -22,6 +31,9 @@ public class PopupCouponManageService {
 
     @Autowired
     private ProductManageMapper productManageMapper;
+
+    @Autowired
+    private DataManageService dataManageService;
 
     /**
      * 팝업 목록 리스트
@@ -59,6 +71,67 @@ public class PopupCouponManageService {
                 popupCouponManageMapper.selectTPopupLinkKey(popupKey)
         );
         return popupInfoDTO;
+    }
+
+    /**
+     * 쿠폰 목록 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CouponListDTO> getCouponList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        List<CouponListDTO> list = popupCouponManageMapper.selectTCouponMaterList(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+        if (list.size() > 0) {
+            for (CouponListDTO couponListDTO : list) {
+                couponListDTO.setDcTypeName(CouponDcType.getCouponDcTypeStr(couponListDTO.getDcType()));
+                couponListDTO.setIssueTypeName(CouponIssueType.getCouponIssueTypeStr(couponListDTO.getType()));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 쿠폰 목록 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getCouponListCount(String searchType, String searchText) {
+        return popupCouponManageMapper.selectTCouponMaterListCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 쿠폰 상세안의 카테고리 리스트
+     * @param couponKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<List<TCategoryVO>> getCouponCategory(int couponKey) {
+        List<TLinkKeyVO>tLinkKeyVOList = popupCouponManageMapper.selectTCouponLinkKey(couponKey);
+        List<List<TCategoryVO>>couponCategoryList = new ArrayList<>();
+        if (tLinkKeyVOList.size() > 0) {
+            for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
+                List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryListBy4DepthUnder(tLinkKeyVO.getReqKey());
+                Collections.reverse(tCategoryVOList);
+                couponCategoryList.add(tCategoryVOList);
+            }
+        }
+        return couponCategoryList;
     }
 
     /**
@@ -123,6 +196,12 @@ public class PopupCouponManageService {
     public void changePopupViewStatus(int popupKey, int isShow) {
         if (popupKey == 0) return;
         popupCouponManageMapper.updateTPopupIsShow(popupKey, isShow);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int saveCouponInfo(TCouponMasterVO tCouponMasterVO) {
+        popupCouponManageMapper.insertTCouponMaster(tCouponMasterVO);
+        return tCouponMasterVO.getCouponMasterKey();
     }
 
 }

@@ -73,6 +73,7 @@
         <convert converter="bean" match="com.zianedu.lms.vo.ProblemBankSearchVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TPromotionVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TPopupVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCouponMasterVO"/>
 
 
 		<!--  dto 선언 -->
@@ -90,7 +91,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.PromotionDetailDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PopupListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PopupInfoDTO"/>
-
+		<convert converter="bean" match="com.zianedu.lms.dto.CouponListDTO"/>
 
 	</allow>
 
