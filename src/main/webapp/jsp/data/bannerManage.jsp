@@ -120,7 +120,7 @@
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
             $("#pos").val(pos);
-            innerValue("title",value5);
+            innerValue("title",selList.value5);
             $("#bannerColor").val(selList.value3);
             $("#bannerLink").val(selList.value4);
             if (selList.valueBit1 == '1') $("#newPopYn").prop('checked', true);
@@ -156,6 +156,7 @@
         $.each($('#attachFile')[0].files, function(i, file) {
             data.append('file_name', file);
         });
+        console.log(data);
 
         /*var reader = new FileReader();
         reader.onload = function (e) {

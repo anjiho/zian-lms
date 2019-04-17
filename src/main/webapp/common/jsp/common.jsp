@@ -98,7 +98,6 @@
 <!-- form 시작-->
 <form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
-</form>
 <%
     if (authority == 4) {
 %>

@@ -161,3 +161,20 @@ function getExamPrepareSelectbox(tag_id,val) {
         innerHTML(tag_id, html);
     });
 }
+
+
+//진행상태 셀렉트박스
+function getLectureStatusSelectbox(tag_id,val) {
+    selectboxService.getLectureStatusSelectbox(function (list) {
+        var html = "<select id='sel_subDomain' onchange='' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].value == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}

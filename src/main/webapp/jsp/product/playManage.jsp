@@ -19,6 +19,7 @@
         selectExamSearchSelectbox("examsearchType","");
         selectExamSearchSelectbox("booksearchType","");
         getExamPrepareSelectbox("examYearSel","");//시험대비년도 셀렉트박스
+        getLectureStatusSelectbox("status","");//강좌정보- 진행상태
         $('#description').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
@@ -202,8 +203,6 @@
             paging.count2(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getMockExamList(sPage, '10',searchType, searchText, function (selList) {
-                console.log("기추룬제 리스트");
-                console.log(selList);
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -258,7 +257,6 @@
                         var cmpList = selList[i];
                         var text = "'bookBtn'";
                         var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        console.log(selList);
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.goodsName;},
@@ -305,7 +303,6 @@
                         var cmpList = selList[i];
                         var text = "'giftBtn'";
                         var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        console.log(selList);
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.goodsName;},
@@ -347,7 +344,10 @@
                      MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
                          //MockListHtml     += "<span id='"+getallMockOption+"'></span>";
                             MockListHtml     += "<input type='text'  id='"+getallMockOption+"' value='' readonly>";
-                     MockListHtml     += "</td>";
+                     MockListHtml     += "</td>";//examKey
+                    MockListHtml     += "<td>";
+                        MockListHtml     += "<input type='hidden'  value='"+selList.mokExamInfo.examKey+"' readonly>";
+                    MockListHtml     += "</td>";//examKey
                     MockListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
                          MockListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
                     MockListHtml     += "</td>";
@@ -380,13 +380,17 @@
                 bookgiftOption = "giftName_"+giftCnt;
                 deleteSel = "giftDelete";
             }
-            console.log(selList);
+
 
             if (selList.productInfo) {
+
                 var title =  selList.productInfo.name;
                 var bookkListHtml = "<tr>";
                 bookkListHtml     += " <td class=\"text-left\" style=\"padding:0.3rem;vertical-align: middle;width: 65%\">";
-                bookkListHtml     += "<span id='"+bookgiftOption+"'></span>"; //name
+                bookkListHtml     += "<input type='text'  id='"+bookgiftOption+"' value='' readonly>";
+                bookkListHtml     += "</td>";
+                bookkListHtml     += " <td>";
+                bookkListHtml     += "<input type='hidden'  value='"+selList.productInfo.GKey+"' readonly>";
                 bookkListHtml     += "</td>";
                 if(set == 'bookBtn'){
                     bookkListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem; vertical-align: middle;width: 30%\">";
@@ -410,10 +414,10 @@
 
                 if(set == 'bookBtn'){ //전범위 모의고사
                     $('#bookList > tbody:first').append(bookkListHtml);//선택 모의고사 리스트 뿌리기
-                    $("#"+bookgiftOption).html(title);//모의고사 제목 뿌리기
+                    $("#"+bookgiftOption).val(title);//모의고사 제목 뿌리기
                 }else if(set == 'giftBtn'){ //기출문제
                     $('#giftList > tbody:first').append(bookkListHtml);//선택 기출문제 리스트 뿌리기
-                    $("#"+bookgiftOption).html(title);//기출문제 제목 뿌리기
+                    $("#"+bookgiftOption).val(title);//기출문제 제목 뿌리기
                 }
                 //$("#lecturePopupClose").click();
             }
@@ -468,40 +472,179 @@
 
     //저장
     function playSave() {
-        var obj = getJsonObjectFromDiv("section1"); //기본정보
-        console.log(obj);
 
-        /* function test() {
-             var obj = getJsonObjectFromDiv("section4");
-             console.log(obj)
-         }
 
-         function test2() {
-             var array = new Array();
-             var array1 = new Array();
-             var array2 = new Array();
-             var array3 = new Array();
-             $('#allMockList tbody tr').each(function(index){
-                 var i =0;
-                 var kind = $(this).find("td input").eq(0).val();
-                 //var price = $(this).find("td input").eq(1).val();
-                 // var statinNames = $(this).find("td input").eq(1).val();
-                 // var firstTimes = $(this).find("td input").eq(2).val();
-                 // var secondTimes = $(this).find("td input").eq(3).val();
-                 // var thirdTimes = $(this).find("td input").eq(4).val();
-                 // var fourthTimes = $(this).find("td input").eq(5).val();
-                 // var fifthTimes = $(this).find("td input").eq(6).val();
-                 // var sixthTimes = $(this).find("td input").eq(7).val();
-                 // var sortNums = index + 1;
+        var data = new FormData();
+        $.each($('#imageListFile')[0].files, function(i, file) {
 
-                 var data = {
-                     kind:kind,
-                 };
-                 array.push(data);
-             });
-             console.log(array);
+            data.append('imageListFile', file);
+        });
 
-         }*/
+        $.each($('#imageViewFile')[0].files, function(i, file) {
+
+            data.append('imageViewFile', file);
+        });
+
+        /* 1. 기본정보 obj */
+        var obj = getJsonObjectFromDiv("section1");
+        if(obj.isShow == 'on')  obj.isShow = '1';//노출 checkbox
+        else obj.isShow = '0';
+        if(obj.isSell == 'on')  obj.isSell = '1';//판매
+        else obj.isSell = '0';
+        if(obj.isFree == 'on')  obj.isFree = '1';//무료
+        else obj.isFree = '0';
+        if(obj.isFreebieDeliveryFree == 'on')  obj.isFreebieDeliveryFree = '1';//사은품배송비무료
+        else obj.isFreebieDeliveryFree = '0';
+        /*  //기본정보 obj */
+
+        /*  2.옵션 obj */
+        var array = new Array();
+        $('#optionTable tbody tr').each(function(index){
+            var i =0;
+            var kind = $(this).find("td select").eq(0).val();
+            var kind1 = $(this).find("td input").eq(1).val();
+            var kind2 = $(this).find("td input").eq(2).val();
+            var kind3 = $(this).find("td input").eq(3).val();
+            var kind4 = $(this).find("td input").eq(4).val();
+            var kind5 = $(this).find("td input").eq(5).val();
+
+            var data = {
+                priceKey:'0',
+                gKey:'0',
+                kind:kind,
+                ctgKey:'0',
+                name:'0',
+                price:kind1,
+                sellPrice:kind2,
+                point:kind3,
+                extendPercent:kind4
+            };
+            array.push(data);
+        });
+        /* //옵션 obj */
+
+        /*  3.카테고리 obj  */
+        var array1 = new Array();
+        $('#categoryTable tbody tr').each(function(index){
+            var cate4 = $(this).find("td select").eq(4).val();
+            if(cate4 == '선택')  cate4 = "";
+            var data = {
+                ctgGKey:0,
+                ctgKey:cate4,
+                gKey:0,
+                pos:0
+            };
+            array1.push(data);
+        });
+        /*  //카테고리 obj  */
+
+
+        /*  4.강좌정보 obj  */
+        var lectureObj = getJsonObjectFromDiv("section4");
+        console.log(lectureObj);
+        /*  //강좌정보 obj  */
+
+        /*  5.강사정보 obj  */
+        var array2 = new Array();
+        $('#teacherTabel tbody tr').each(function(index){
+            var teacher = $(this).find("td select").eq(0).val();
+            var teacher1 = $(this).find("td select").eq(1).val();
+            var teacher2 = $(this).find("td input").eq(2).val();
+            var data = {
+                gTeacherKey:'0',
+                gKey:'0',
+                isPublicSubject:'0',
+                subjectCtgKey:teacher,
+                teacherKey:teacher1,
+                calculateRate:teacher2,
+                subjectName: "",
+                teacherName: ""
+            };
+            array2.push(data);
+        });
+        /*  //강사정보 obj  */
+
+        /*  6.선택 obj  */
+        var array3 = new Array();
+        $('#allMockList tbody tr').each(function(index){
+            var mockTitle = $(this).find("td input").eq(0).val();
+            var mockKey = $(this).find("td input").eq(1).val();
+            var data = {
+                linkKey: 0,
+                reqKey: 0,
+                resKey:mockKey,
+                resType: 8,
+                resType:1,
+                pos: 0,
+                valueBit: 0
+            };
+            array3.push(data);
+        });
+        $('#examQuestionList tbody tr').each(function(index){
+            var examQuestionTitle = $(this).find("td input").eq(0).val()
+            var examKey = $(this).find("td input").eq(1).val();
+            var data = {
+                linkKey: 0,
+                reqKey: 0,
+                resKey:examKey,
+                resType: 9,
+                resType:1,
+                pos: 0,
+                valueBit: 0
+            };
+            array3.push(data);
+        });
+        $('#bookList tbody tr').each(function(index){
+            var bookTitle = $(this).find("td input").eq(0).val();
+            var bookKey = $(this).find("td input").eq(1).val();
+            var data = {
+                linkKey: 0,
+                reqKey: 0,
+                resKey:bookKey,
+                resType: 5,
+                resType:1,
+                pos: 0,
+                valueBit: 0
+            };
+            array3.push(data);
+        });
+        $('#giftList tbody tr').each(function(index){
+            var giftTitle = $(this).find("td input").eq(0).val();
+            var gifyKey = $(this).find("td input").eq(1).val();
+            var data = {
+                linkKey: 0,
+                reqKey: 0,
+                resKey:gifyKey,
+                resType: 4,
+                resType:1,
+                pos: 0,
+                valueBit: 0
+            };
+            array3.push(data);
+        });
+        data.append("videoInfo", JSON.stringify(obj));
+        data.append("videoOptionInfo",JSON.stringify(array));
+        data.append("videoCategoryInfo",JSON.stringify(array1));
+        data.append("videoLectureInfo",JSON.stringify(lectureObj));
+        data.append("videoTeacherInfo",JSON.stringify(array2));
+        data.append("videoOtherInfo",JSON.stringify(array3));
+        console.log("123123123");
+        console.log(data);
+        if(confirm("저장하시겠습니까?")) {
+            $.ajax({
+                url: "/file/productUpload",
+                method: "post",
+                dataType: "JSON",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
     }
 
 
@@ -527,6 +670,7 @@
 <!-- 기본 소스-->
 <form id="basic">
 <div class="container-fluid">
+    <input type="button" value="1234" onclick="playSave()">
     <div class="card">
         <div class="card-body wizard-content">
             <h4 class="card-title"></h4>
@@ -541,11 +685,16 @@
                             <input type="hidden" value="0" name="cpKey">
                             <input type="hidden" value="0" name="isNodc">
                             <input type="hidden" value="0" name="tags">
-                            <input type="hidden" value="0" name="isQuickDelivery">
                             <input type="hidden" value="0" name="calculateRate">
+                            <input type="hidden" value="0" name="isQuickDelivery">
+                            <input type="hidden" value="0" name="goodsId">
+                            <input type="hidden" value="" name="goodsTypeName">
+                            <input type="hidden" value="" name="summary">
+                            <input type="hidden" value="" name="description">
                             <div class="form-group">
                                 <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                                <input type="text" class="form-control" id="scheduleKey" value="온라인강좌" name="type" readonly>
+                                <span>온라인강좌</span>
+                                <input type="hidden" class="form-control" id="type" name='type' value="1">
                             </div>
                             <div class="form-group">
                                 <label class="control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -575,7 +724,7 @@
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" id="is_show" name="isShow" style="display:none;">
+                                            <input type="checkbox" id="isShow" name="isShow" style="display:none;" value="0">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -612,7 +761,7 @@
                                 <label class="control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
                                 <div>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="image_list"  name="imageList" required>
+                                        <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
                                         <span class="custom-file-control custom-file-label"></span>
                                     </div>
                                 </div>
@@ -621,7 +770,7 @@
                                 <label class="control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
                                 <div>
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input addFile" id="image_view" name="imageView" required>
+                                        <input type="file" class="custom-file-input addFile" id="imageViewFile" name="imageViewFile" required>
                                         <span class="custom-file-control1 custom-file-label"></span>
                                     </div>
                                 </div>
@@ -630,9 +779,9 @@
                                 <label  class="control-label col-form-label" style="margin-bottom: 0">강조표시</label>
                                 <div>
                                     <select class="col-sm-6 select2 form-control custom-select" id="emphasis" name="emphasis">
-                                        <option>없음</option>
-                                        <option value="best">BEST</option>
-                                        <option value="new">NEW</option>
+                                        <option  value="0">없음</option>
+                                        <option value="1">BEST</option>
+                                        <option value="2">NEW</option>
                                     </select>
                                 </div>
                             </div>
@@ -664,6 +813,7 @@
                     <section>
                         <div id="section2">
                             <table class="table" id="optionTable">
+                                <input type="hidden" value="0" name="goodsTypeName">
                                 <thead>
                                 <tr style="border-top:0">
                                     <th scope="col" style="text-align:center;width:30%">옵션명</th>
@@ -784,51 +934,48 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
                                 <select class="col-sm-3 select2 form-control custom-select" id="set_1" name="classGroupCtgKey">
-                                    <option>선택</option>
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">과목</label>
                                 <select class="col-sm-3 select2 form-control custom-select" id="set_2" name="subjectCtgKey">
-                                    <option>선택</option>
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">유형</label>
                                 <select class="col-sm-3 select2 form-control custom-select" id="set_3" name="stepCtgKey">
-                                    <option>선택</option>
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
-                                <select class="col-sm-3 select2 form-control custom-select" name="status">
-                                    <option>준비중</option>
-                                    <option value="#">진행중</option>
-                                    <option value="#">완강</option>
-                                    <option value="#">폐강</option>
+                                <select class="col-sm-3 select2 form-control custom-select" name="status" id="status">
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>
                                 <select  class="col-sm-3 select2 form-control custom-select"  id="lectureCnt" name="limitCount">
-                                    <option>선택</option>
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
                                 <select class="col-sm-3 select2 form-control custom-select"  id="lectureDayCnt" name="limitDay">
-                                    <option>선택</option>
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>
                                 <select class="col-sm-3 select2 form-control custom-select"  id="lectureTimeCnt" name="lecTime">
-                                    <option>선택</option>
+                                    <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
-                                <input type="number" class="col-sm-3 form-control" style="display: inline-block;" placeholder="2" name="multiple"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
+                                <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="multiple"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>
@@ -843,7 +990,6 @@
                     <h3>강사목록</h3>
                     <section>
                         <div id="section5">
-                            <input type="button" value="1234" onclick="test2()">
                             <table class="table" id="teacherTabel">
                                 <input type="hidden" name="gTeacherKey" value="0">
                                 <input type="hidden" name="gKey" value="0">
@@ -890,7 +1036,6 @@
                     <h3>선택</h3>
                     <section>
                         <div id="section6">
-                            <input type="button" value="1234" onclick="test2()">
                             <table class="table text-center table-hover" id="allMockList">
                                 <thead>
                                 <tr>
