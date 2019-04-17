@@ -24,6 +24,8 @@ public class ProductManageController {
             mvc.setViewName("product/playManage");
         }else if("playList".equals(page_gbn)) {
             mvc.setViewName("product/playList");
+        }else if("modifyPlayList".equals(page_gbn)) {
+            mvc.setViewName("product/modifyPlayList");
         }
         return mvc;
     }
