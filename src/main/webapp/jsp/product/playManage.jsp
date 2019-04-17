@@ -641,7 +641,8 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                        goPage("productManage","modifyPlayList")
+                        alert(data.result); //107003
+                        goPage('productManage', 'playList');
                     }else{
                         alert("result 값이없음, 에러 ");
                     }
@@ -1566,7 +1567,6 @@
         form.children("div").steps({
             headerTag: "h3",
             bodyTag: "section",
-            transitionEffect: "slideLeft",
             enableAllSteps: true,
             startIndex : 0,
             saveState : true, //현재 단계 쿠키저장
