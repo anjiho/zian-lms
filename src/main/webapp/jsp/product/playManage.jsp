@@ -687,7 +687,7 @@
                             <input type="hidden" value="0" name="tags">
                             <input type="hidden" value="0" name="calculateRate">
                             <input type="hidden" value="0" name="isQuickDelivery">
-                            <input type="hidden" value="0" name="goodsId">
+                            <input type="hidden" value="" name="goodsId">
                             <input type="hidden" value="" name="goodsTypeName">
                             <input type="hidden" value="" name="summary">
                             <input type="hidden" value="" name="description">
@@ -925,8 +925,8 @@
                             <input type="hidden" name="lecKey" value="0">
                             <input type="hidden" name="gKey" value="0">
                             <input type="hidden" name="teacherKey" value="0">
-                            <input type="hidden" name="regdate" value="0">
-                            <input type="hidden" name="startdate" value="0">
+                            <input type="hidden" name="regdate" value="">
+                            <input type="hidden" name="startdate" value="">
                             <input type="hidden" name="isPack" value="0">
                             <input type="hidden" name="goodsId" value="0">
                             <input type="hidden" name="lecDateYear" value="0">

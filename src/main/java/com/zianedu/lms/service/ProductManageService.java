@@ -614,6 +614,7 @@ public class ProductManageService extends PagingSupport {
         productManageMapper.deleteTLinkKey(tLinkKeyVOList.get(0).getReqKey());
         for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
             tLinkKeyVO.setReqKey(gKey);
+            tLinkKeyVO.setGoodsName("");
             productManageMapper.insertTLinkKey(tLinkKeyVO);
         }
     }
