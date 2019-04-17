@@ -20,7 +20,7 @@ public class TLecVO {
 
     private int status;
 
-    private String regdate = Util.returnNowDateByYYMMDD();
+    private String regdate;
 
     private String startdate;
     //수강일수 (학원등록에서는 무조건 0값)

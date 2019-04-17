@@ -279,7 +279,7 @@ public class PopupCouponManageService {
     public void produceOfflineCoupon(int couponMasterKey, int produceCount) {
         if (couponMasterKey == 0 && produceCount == 0) return;
         for (int i=0; i<produceCount; i++) {
-            String offlineCouponCode = RandomUtil.getRandomAlphaNumber(13);
+            String offlineCouponCode = RandomUtil.getRandomAlphaNumber(16);
             TCouponOfflineVO couponOfflineVO = new TCouponOfflineVO(couponMasterKey, offlineCouponCode);
             popupCouponManageMapper.insertTCouponOffline(couponOfflineVO);
         }
