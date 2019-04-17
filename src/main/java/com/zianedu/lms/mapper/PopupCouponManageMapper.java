@@ -1,6 +1,7 @@
 package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.CouponListDTO;
+import com.zianedu.lms.dto.OfflineCouponListDTO;
 import com.zianedu.lms.dto.PopupListDTO;
 import com.zianedu.lms.dto.VideoListDTO;
 import com.zianedu.lms.vo.*;
@@ -27,6 +28,20 @@ public interface PopupCouponManageMapper {
     List<TLinkKeyVO>selectTCouponLinkKey(@Param("couponKey") int couponKey);
 
     TCouponMasterVO selectTCouponMaterInfo(@Param("couponMasterKey") int couponMasterKey);
+
+    List<OfflineCouponListDTO>selectOfflineCouponList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                      @Param("couponMasterKey") int couponMasterKey);
+
+    int selectOfflineCouponListCount(@Param("couponMasterKey") int couponMasterKey);
+
+    List<OfflineCouponListDTO>selectOfflineCouponUserList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                      @Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText,
+                                                          @Param("searchType") String searchType);
+
+    int selectOfflineCouponUserListCount(@Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText,
+                                         @Param("searchType") String searchType);
+
+
 
     /** INSERT **/
     Integer insertTPopupInfo(TPopupVO tPopupVO);

@@ -2,10 +2,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.CouponDcType;
 import com.zianedu.lms.define.datasource.CouponIssueType;
-import com.zianedu.lms.dto.CouponDetailDTO;
-import com.zianedu.lms.dto.CouponListDTO;
-import com.zianedu.lms.dto.PopupInfoDTO;
-import com.zianedu.lms.dto.PopupListDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.PopupCouponManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
@@ -149,6 +146,71 @@ public class PopupCouponManageService {
     }
 
     /**
+     * 쿠폰 상세 > 오프라인 쿠폰 목록 조회 리스트
+     * @param couponMasterKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OfflineCouponListDTO> getOfflineCouponList(int sPage, int listLimit, int couponMasterKey) {
+        if (couponMasterKey == 0 && sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return popupCouponManageMapper.selectOfflineCouponList(startNumber, listLimit, couponMasterKey);
+    }
+
+    /**
+     * 쿠폰 상세 > 오프라인 쿠폰 목록 조회 리스트 개수
+     * @param couponMasterKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getOfflineCouponListCount(int couponMasterKey) {
+        if (couponMasterKey == 0) return 0;
+        return popupCouponManageMapper.selectOfflineCouponListCount(couponMasterKey);
+    }
+
+    /**
+     * 쿠폰 상세 > 쿠폰 소시자 조회 리스트
+     * @param sPage
+     * @param listLimit
+     * @param couponMasterKey
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OfflineCouponListDTO> getOfflineCouponUserList(int sPage, int listLimit, int couponMasterKey,
+                                                               String searchType, String searchText) {
+        if (couponMasterKey == 0 && sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return popupCouponManageMapper.selectOfflineCouponUserList(
+                startNumber,
+                listLimit,
+                couponMasterKey,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 쿠폰 상세 > 쿠폰 소시자 조회 리스트 개수
+     * @param couponMasterKey
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getOfflineCouponListUserCount(int couponMasterKey, String searchType, String searchText) {
+        if (couponMasterKey == 0) return 0;
+        return popupCouponManageMapper.selectOfflineCouponUserListCount(
+                couponMasterKey,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
      * 팝업 정보, 카테고리 정보 저장하기
      * @param tPopupVO
      * @param ctgKeyList
@@ -271,7 +333,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 오프라인 쿠폰 생성하기
+     * 쿠폰 상세정보 > 오프라인쿠폰 생성
      * @param couponMasterKey
      * @param produceCount
      */

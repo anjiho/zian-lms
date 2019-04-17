@@ -5,9 +5,12 @@
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 
 <script>
-    $( document ).ready(function() {
 
-    });
+    function play_modify(gKey) {
+        innerValue("gKey", gKey);
+        goPage("productManage","modifyPlayManage");
+    }
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = $("#sPage").val();
@@ -28,7 +31,7 @@
                     console.log(selList);
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
-                        var goosNameHtml = "<a href='javscript:void(0)' color='blue' style='float:left'>"+cmpList.goodsName+"</a>";
+                        var goosNameHtml = "<a href='javascript:void(0);' color='blue' style='float:left' onclick='play_modify(" + cmpList.GKey + ");'>"+cmpList.goodsName +"</a>";
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return i+1;},
@@ -100,6 +103,7 @@
                     </div>
                 </div>
                 <input type="hidden" id="sPage" >
+                <input type="hidden" id="gKey"  name="gKey">
                 <table class="table table-hover text-center">
                     <thead>
                     <tr>

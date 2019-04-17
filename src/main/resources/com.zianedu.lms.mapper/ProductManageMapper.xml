@@ -428,7 +428,7 @@
 		)
 		VALUES
 		(
-			T_BOOK_SEQ.nextval, #{gKey}, #{status}, #{status}, #{writer}, #{publishDate}, #{pageCnt}, #{isbn}, #{isDeliveryFree},
+			T_BOOK_SEQ.nextval, #{gKey}, #{status}, #{status}, #{writer}, TO_DATE(#{publishDate}, 'YYYY-mm-dd'), #{pageCnt}, #{isbn}, #{isDeliveryFree},
 			#{isSet}, #{contentList}, #{subjectCtgKey}, #{classGroupCtgKey}, #{goodsId}, #{nextGKey}
 		)
 	</insert>
@@ -458,8 +458,8 @@
 		)
 		VALUES
 		(
-			#{examKey}, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, #{acceptStartDate},
-			#{acceptEndDate}, #{onlineStartDate}, #{onlineEndDate}, #{onlineTime}, #{offlineDate}, #{offlineTimePeriod},
+			#{examKey}, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh:mi:ss'),
+            TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{onlineTime}, TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'), #{offlineTimePeriod},
 			#{offlineTimePlace}, #{answerCount}, #{questionCount}, #{printQuestionFile}, #{printCommentaryFile},
 			#{isShowStaticTotalRank}, #{isShowStaticTotalAvg}, #{isShowFiles}, #{classGroupCtgKey}, #{examYear}, #{unitCtgKey},
 			#{divisionCtgKey}, #{refKey}, #{isRealFree}, #{isGichul}
@@ -475,7 +475,7 @@
         )
         VALUES
         (
-            T_EXAM_QUESTION_BANK_SEQ.nextval, #{dspDate}, #{questionImage}, #{commentaryImage}, #{bookImage}, #{answer}, #{tag}, #{divisionCtgKey},
+            T_EXAM_QUESTION_BANK_SEQ.nextval, TO_DATE(#{dspDate}, 'YYYY-mm-dd'), #{questionImage}, #{commentaryImage}, #{bookImage}, #{answer}, #{tag}, #{divisionCtgKey},
             #{subjectCtgKey}, #{stepCtgKey}, #{patternCtgKey}, #{unitCtgKey}, #{examYear}, #{examLevel}, #{subjectCode}, #{review}, #{commentaryUrl},
             #{answer1Reason}, #{answer2Reason}, #{answer3Reason}, #{answer4Reason}, #{answer5Reason}
         )
@@ -508,8 +508,8 @@
 		<set>
 			<if test="cpKey > 0">CP_KEY = #{cpKey},</if>
 			<if test="name != '' or name != null">NAME = #{name},</if>
-			<if test="indate != '' or indate != null">INDATE = #{indate},</if>
-			<if test="sellstartdate != '' or indate != null">SELLSTARTDATE = #{sellstartdate},</if>
+			<if test="indate != '' or indate != null">INDATE = TO_DATE(#{indate}, 'YYYY-mm-dd'),</if>
+			<if test="sellstartdate != '' or indate != null">SELLSTARTDATE = TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'),</if>
 			<if test="type != null">TYPE = #{type},</if>
 			<if test="isShow != null">IS_SHOW = #{isShow},</if>
 			<if test="isSell != null">IS_SELL = #{isSell},</if>
@@ -611,7 +611,7 @@
 		<set>
 			<if test="status != null">STATUS = #{status},</if>
 			<if test="writer != '' or writer != null">WRITER = #{writer},</if>
-			<if test="publishDate != '' or publishDate != null">PUBLISH_DATE = #{publishDate},</if>
+			<if test="publishDate != '' or publishDate != null">PUBLISH_DATE = TO_DATE(#{publishDate}, 'YYYY-mm-dd'),</if>
 			<if test="pageCnt != null">PAGE_CNT = #{pageCnt},</if>
 			<if test="isbn != '' or isbn != null">ISBN = #{isbn},</if>
 			<if test="isDeliveryFree != null">IS_DELIVERY_FREE = #{isDeliveryFree},</if>
@@ -633,12 +633,12 @@
 			<if test="classCtgKey != null">CLASS_CTG_KEY = #{classCtgKey},</if>
 			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
 			<if test="selectSubjectCount != null">SELECT_SUBJECT_COUNT = #{selectSubjectCount},</if>
-			<if test="acceptStartDate != '' or acceptStartDate != null">ACCEPT_START_DATE = #{acceptStartDate},</if>
-			<if test="acceptEndDate != '' or acceptEndDate != null">ACCEPT_END_DATE = #{acceptEndDate},</if>
-			<if test="onlineStartDate != '' or onlineStartDate != null">ONLINE_START_DATE = #{onlineStartDate},</if>
-			<if test="onlineEndDate != '' or onlineEndDate != null">ONLINE_END_DATE = #{onlineEndDate},</if>
+			<if test="acceptStartDate != '' or acceptStartDate != null">ACCEPT_START_DATE = TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="acceptEndDate != '' or acceptEndDate != null">ACCEPT_END_DATE =TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="onlineStartDate != '' or onlineStartDate != null">ONLINE_START_DATE = TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="onlineEndDate != '' or onlineEndDate != null">ONLINE_END_DATE = TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
 			<if test="onlineTime != null">ONLINE_TIME = #{onlineTime},</if>
-			<if test="offlineDate != '' or offlineDate != null">OFFLINE_DATE = #{offlineDate},</if>
+			<if test="offlineDate != '' or offlineDate != null">OFFLINE_DATE = TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
 			<if test="offlineTimePeriod != '' or offlineTimePeriod != null">OFFLINE_TIME_PERIOD = #{offlineTimePeriod},</if>
 			<if test="offlineTimePlace != '' or offlineTimePlace != null">OFFLINE_TIME_PLACE = #{offlineTimePlace},</if>
 			<if test="answerCount != null">ANSWER_COUNT = #{answerCount},</if>
@@ -671,7 +671,7 @@
 	<update id="updateTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">
 		UPDATE T_EXAM_QUESTION_BANK
 		<set>
-			<if test="dspDate != '' and dspDate != null">DSP_DATE = #{dspDate},</if>
+			<if test="dspDate != '' and dspDate != null">DSP_DATE = TO_DATE(#{dspDate}, 'YYYY-mm-dd'),</if>
 			<if test="questionImage != '' and questionImage != null">QUESTION_IMAGE = #{questionImage},</if>
 			<if test="commentaryImage != '' and commentaryImage != null">COMMENTARY_IMAGE = #{commentaryImage},</if>
 			<if test="bookImage != '' and bookImage != null">BOOK_IMAGE = #{bookImage},</if>

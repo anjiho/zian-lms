@@ -640,7 +640,12 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    console.log(data);
+                    if(data.result){
+                        alert(data.result); //107003
+                        goPage('productManage', 'playList');
+                    }else{
+                        alert("result 값이없음, 에러 ");
+                    }
                 }
             });
         }
@@ -1115,7 +1120,7 @@
                     <!-- //6.선택 Tab -->
 
                     <!-- 7.강의 목록 Tab -->
-                    <h3>강의목록</h3>
+                    <!--<h3>강의목록</h3>
                     <section>
                         <div class="mb-3 float-right">
                             <button type="button" class="btn btn-outline-info btn-sm">순서변경</button>
@@ -1176,7 +1181,7 @@
                             </tbody>
                         </table>
                     </section>
-                    <!-- //7.강의 목록 Tab -->
+                 //7.강의 목록 Tab -->
                 </div>
             </div>
         </div>
@@ -1562,15 +1567,16 @@
         form.children("div").steps({
             headerTag: "h3",
             bodyTag: "section",
-            transitionEffect: "slideLeft",
+            enableAllSteps: true,
+            startIndex : 0,
+            saveState : true, //현재 단계 쿠키저장
             onFinished: function(event, currentIndex) {
                 playSave();
-            }
-            /*onStepChanging: function(event, currentIndex, newIndex) {
-               // form.validate().settings.ignore = ":disabled,:hidden";
-                //return form.valid();
             },
-            onFinishing: function(event, currentIndex) {
+            onContentLoaded: function (event, currentIndex) {
+                alert("currentIndex : "+currentIndex);
+            }
+            /*onFinishing: function(event, currentIndex) {
                 //form.validate().settings.ignore = ":disabled";
                 //return form.valid();
             },

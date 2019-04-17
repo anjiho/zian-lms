@@ -148,7 +148,7 @@
 		)
 		VALUES
 		(
-			T_SCHEDULE_SEQ.nextval, #{cKey}, #{type}, #{title}, #{startDate}, #{endDate}, #{contents}, #{color}, #{link}
+			T_SCHEDULE_SEQ.nextval, #{cKey}, #{type}, #{title}, TO_DATE(#{startDate}, 'YYYY-mm-dd'), TO_DATE(#{endDate}, 'YYYY-mm-dd'), #{contents}, #{color}, #{link}
 		)
 	</insert>
 
