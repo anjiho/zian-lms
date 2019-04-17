@@ -16,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -47,7 +48,7 @@ public class FileUploadController {
                                              @RequestParam(value = "value3") String value3, @RequestParam(value = "value4") String value4,
                                              @RequestParam(value = "value5") String value5, @RequestParam(value = "valueBit1") String valueBit1,
                                              @RequestParam(value = "ctgInfoKey") String ctgInfoKey, @RequestParam(value = "pos") String pos) {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "BANNER");
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "BANNER");
         String filePath = null;
         if (uploadInfoMap.get("filePath")== null) {
             filePath = "";
@@ -95,13 +96,13 @@ public class FileUploadController {
                                                @RequestParam(value = "videoLectureInfo") String videoLectureInfo,
                                                @RequestParam(value = "videoTeacherInfo") String videoTeacherInfo,
                                                @RequestParam(value = "videoOtherInfo") String videoOtherInfo) throws Exception {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
 
-        String imageListFilePath = null;
-        String imageViewFilePath = null;
+//        String imageListFilePath = null;
+//        String imageViewFilePath = null;
 
-        if (uploadInfoMap.get("imageListFilePath")== null) imageListFilePath = "";
-        if (uploadInfoMap.get("imageViewFilePath")== null) imageViewFilePath = "";
+//        if (uploadInfoMap.get("imageListFilePath") == null) imageListFilePath = "";
+//        if (uploadInfoMap.get("imageViewFilePath")== null) imageViewFilePath = "";
         //동영상 기본정보 정보
         JsonObject videoInfoJson = GsonUtil.convertStringToJsonObj(videoInfo);
         Gson gson = new Gson();
@@ -129,7 +130,7 @@ public class FileUploadController {
         List<TLinkKeyVO>tLinkKeyVOList = GsonUtil.getObjectFromJsonArray(videoOtherInfoJson, TLinkKeyVO.class);
 
         Integer gKey = productManageRepository.saveProductInfo(tGoodsVO, tGoodsPriceOptionVOList, tCategoryVOList,
-                tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, imageListFilePath, imageViewFilePath);
+                tLecVO, tGoodTeacherLinkVOS, tLinkKeyVOList, uploadInfoMap.get("imageListFilePath"), uploadInfoMap.get("imageViewFilePath"));
 
 
         return new JsonBuilder().add("result", gKey).build();
@@ -138,7 +139,7 @@ public class FileUploadController {
     @RequestMapping(value = "/imageFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String productFileUpload(MultipartHttpServletRequest request,
                                                   @RequestParam(value = "uploadType") String uploadType) {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(
                 request, ConfigHolder.getFileUploadPath(), Util.isNullValue(uploadType, "")
         );
         return new JsonBuilder().add("result", uploadInfoMap).build();
@@ -151,7 +152,7 @@ public class FileUploadController {
      */
     @RequestMapping(value = "/videoDataFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String lectureCurriInfo(MultipartHttpServletRequest request) {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "CURRI");
         return new JsonBuilder().add("result", uploadInfoMap.get("dataFilePath")).build();
     }
 
@@ -162,7 +163,7 @@ public class FileUploadController {
      */
     @RequestMapping(value = "/previewFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String previewFileUpload(MultipartHttpServletRequest request) {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
         return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();
     }
 
@@ -179,7 +180,7 @@ public class FileUploadController {
                                                @RequestParam(value = "productCategoryInfo") String productCategoryInfo,
                                                @RequestParam(value = "productPromotionInfo") String productPromotionInfo,
                                                @RequestParam(value = "productOnlineLectureInfo") String productOnlineLectureInfo) throws Exception {
-        Map<String, Object> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "VIDEO");
 
         String imageListFilePath = null;
         String imageViewFilePath = null;

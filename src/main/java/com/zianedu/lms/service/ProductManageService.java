@@ -526,8 +526,8 @@ public class ProductManageService extends PagingSupport {
     public Integer upsultGoodsInfo(TGoodsVO tGoodsVO, String imageList, String imageView) {
         if (tGoodsVO == null) return null;
 
-        tGoodsVO.setImageList(imageList);
-        tGoodsVO.setImageView(imageView);
+        tGoodsVO.setImageList(Util.isNullValue(imageList, ""));
+        tGoodsVO.setImageView(Util.isNullValue(imageView, ""));
         tGoodsVO.setIndate(tGoodsVO.getIndate() + " 00:00:00");
         tGoodsVO.setSellstartdate(tGoodsVO.getSellstartdate() + " 00:00:00");
 

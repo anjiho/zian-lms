@@ -17,8 +17,8 @@ public class FileUploadUtil {
 
     protected final static Logger logger = LoggerFactory.getLogger(FileUploadUtil.class);
 
-    public static Map<String, Object> fileUpload(MultipartHttpServletRequest request, String savePath, String uploadType) {
-        Map<String, Object> map = new HashMap<>();
+    public static HashMap<String, String> fileUpload(MultipartHttpServletRequest request, String savePath, String uploadType) {
+        HashMap<String, String> map = new HashMap<>();
         String fileName = "";
 
         Iterator<String> it = request.getFileNames();
