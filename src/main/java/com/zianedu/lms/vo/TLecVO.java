@@ -1,5 +1,6 @@
 package com.zianedu.lms.vo;
 
+import com.zianedu.lms.utils.Util;
 import lombok.Data;
 
 @Data
@@ -19,7 +20,7 @@ public class TLecVO {
 
     private int status;
 
-    private String regdate;
+    private String regdate = Util.returnNowDateByYYMMDD();
 
     private String startdate;
     //수강일수 (학원등록에서는 무조건 0값)

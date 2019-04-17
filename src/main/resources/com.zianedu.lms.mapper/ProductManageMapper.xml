@@ -377,7 +377,7 @@
 		)
 		VALUES
 		(
-			#{lecKey}, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, #{regdate}, #{startdate},
+			#{lecKey}, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, TO_DATE(#{regdate}, 'YYYY-mm-dd'), #{startdate},
 			#{limitDay}, #{limitCount}, #{lecTime}, #{multiple}, #{lecDateYear}, #{lecDateMonth}, #{examYear}, #{isPack}, #{goodsId}
 		)
 	</insert>

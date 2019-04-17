@@ -581,6 +581,8 @@ public class ProductManageService extends PagingSupport {
         if (tLecVO == null) return;
 
         tLecVO.setGKey(gKey);
+        tLecVO.setStartdate(Util.isNullValue(tLecVO.getStartdate(), ""));
+
         if (tLecVO.getLecKey() == 0) productManageMapper.insertTLec(tLecVO);
         else productManageMapper.updateTLec(tLecVO);
     }

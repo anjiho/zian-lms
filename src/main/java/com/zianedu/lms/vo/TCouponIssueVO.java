@@ -28,7 +28,7 @@ public class TCouponIssueVO {
     public TCouponIssueVO(int couponMasterKey, int userKey) {
         this.couponMasterKey = couponMasterKey;
         this.userKey = userKey;
-        this.indate = Util.returnNow();
+        this.indate = Util.returnNowDateByYYMMDD();
         this.couponOfflineKey = 0;
         this.jGKey = 0;
         this.useDate = "";

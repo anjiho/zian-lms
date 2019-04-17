@@ -20,7 +20,7 @@ public class TCouponOfflineVO {
 
     public TCouponOfflineVO(int couponMasterKey, String code) {
         this.couponMasterKey = couponMasterKey;
-        this.indate = Util.returnNow();
+        this.indate = Util.returnNowDateByYYMMDD();
         this.code = code;
         this.isIssue = 0;
     }

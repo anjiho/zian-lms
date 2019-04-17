@@ -132,7 +132,7 @@
         )
         VALUES
         (
-            T_COUPON_OFFLINE_SEQ.nextval, #{couponMasterKey}, #{indate}, #{code}, #{isIssue}
+            T_COUPON_OFFLINE_SEQ.nextval, #{couponMasterKey}, TO_DATE(#{indate}, 'YYYY-mm-dd'), #{code}, #{isIssue}
         )
     </insert>
 
