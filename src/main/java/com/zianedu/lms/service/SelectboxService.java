@@ -196,4 +196,36 @@ public class SelectboxService {
         return ExamLevelType.getExamLevelStrSelectbox();
     }
 
+    /**
+     * 쿠폰 목록 > 할인설정 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectCouponDiscountSelectbox() {
+        return CouponDcType.getCouponDcTypeSelectbox();
+    }
+
+    /**
+     * 쿠폰 목록 > 지급방식 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectCouponIssueSelectbox() {
+        return CouponIssueType.getCouponIssueTypeSelectbox();
+    }
+
+    /**
+     * 쿠폰 목록 > 사용기간 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectCouponPeriodTypeSelectbox() {
+        return CouponPeriodType.getCouponPeriodTypeSelectbox();
+    }
+
+    /**
+     * 쿠폰 목록 > 사용가능 디바이스 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectDeviceTypeSelectbox() {
+        return DeviceType.getDeviceTypeSelectbox();
+    }
+
 }

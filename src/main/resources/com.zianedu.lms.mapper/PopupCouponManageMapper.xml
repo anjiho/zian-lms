@@ -63,6 +63,27 @@
         AND A.RES_KEY = #{couponKey}
     </select>
 
+    <select id="selectTCouponMaterInfo" resultType="com.zianedu.lms.vo.TCouponMasterVO">
+        SELECT
+            COUPON_MASTER_KEY,
+            NAME,
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as INDATE,
+            TYPE,
+            NAME,
+            DC_TYPE,
+            DC_VALUE,
+            CONTENTS,
+            PERIOD_TYPE,
+            TO_CHAR(START_DATE, 'YYYY-MM-DD') as START_DATE,
+            TO_CHAR(END_DATE, 'YYYY-MM-DD') as END_DATE,
+            LIMIT_PRICE_MIN,
+            LIMIT_DAY,
+            IS_SHOW,
+            DEVICE
+        FROM T_COUPON_MASTER
+        WHERE coupon_master_key = #{couponMasterKey}
+    </select>
+
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
         <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
             SELECT T_POPUP_SEQ FROM DUAL
@@ -90,6 +111,28 @@
         (
             #{couponMasterKey}, 100, #{indate}, #{type}, #{name}, #{dcType}, #{dcValue}, #{contents}, #{targetType}, #{periodType}, #{limitDay},
             #{startDate}, #{endDate}, #{limitPriceMin}, #{isShow}, #{device}
+        )
+    </insert>
+
+    <insert id="insertTCouponIssue" parameterType="com.zianedu.lms.vo.TCouponIssueVO">
+        INSERT INTO T_COUPON_ISSUE
+        (
+            COUPON_ISSUE_KEY, COUPON_MASTER_KEY, USER_KEY, INDATE, COUPON_OFFLINE_KEY, J_G_KEY, USE_DATE, DESCRIPTION
+        )
+        VALUES
+        (
+            T_COUPON_ISSUE_SEQ.nextval, #{couponMasterKey}, #{userKey}, #{indate}, #{couponOfflineKey}, #{jGKey}, #{useDate}, #{description}
+        )
+    </insert>
+
+    <insert id="insertTCouponOffline" parameterType="com.zianedu.lms.vo.TCouponOfflineVO">
+        INSERT INTO T_COUPON_OFFLINE
+        (
+            COUPON_OFFLINE_KEY, COUPON_MASTER_KEY, INDATE, CODE, IS_ISSUE
+        )
+        VALUES
+        (
+            T_COUPON_OFFLINE_SEQ.nextval, #{couponMasterKey}, #{indate}, #{code}, #{isIssue}
         )
     </insert>
 

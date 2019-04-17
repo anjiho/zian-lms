@@ -2,17 +2,16 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.CouponDcType;
 import com.zianedu.lms.define.datasource.CouponIssueType;
+import com.zianedu.lms.dto.CouponDetailDTO;
 import com.zianedu.lms.dto.CouponListDTO;
 import com.zianedu.lms.dto.PopupInfoDTO;
 import com.zianedu.lms.dto.PopupListDTO;
 import com.zianedu.lms.mapper.PopupCouponManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
+import com.zianedu.lms.utils.RandomUtil;
 import com.zianedu.lms.utils.Util;
-import com.zianedu.lms.vo.TCategoryVO;
-import com.zianedu.lms.vo.TCouponMasterVO;
-import com.zianedu.lms.vo.TLinkKeyVO;
-import com.zianedu.lms.vo.TPopupVO;
+import com.zianedu.lms.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -135,6 +134,21 @@ public class PopupCouponManageService {
     }
 
     /**
+     * 쿠폰 상세정보 가져오기 (쿠폰 상세정보 + 쿠폰 적용 카테고리)
+     * @param couponMasterKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public CouponDetailDTO getCouponDetailInfo(int couponMasterKey) {
+        if (couponMasterKey == 0) return null;
+        CouponDetailDTO couponDetailDTO = new CouponDetailDTO(
+                popupCouponManageMapper.selectTCouponMaterInfo(couponMasterKey),
+                this.getCouponCategory(couponMasterKey)
+        );
+        return couponDetailDTO;
+    }
+
+    /**
      * 팝업 정보, 카테고리 정보 저장하기
      * @param tPopupVO
      * @param ctgKeyList
@@ -188,6 +202,25 @@ public class PopupCouponManageService {
     }
 
     /**
+     * 쿠폰 상세정보 > 쿠폰 적용 카테고리 추가
+     * @param couponMasterKey
+     * @param ctgKeyList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateCouponCategoryInfo(int couponMasterKey, List<Integer>ctgKeyList) {
+        if (ctgKeyList.size() == 0) return;
+        for (Integer ctgKey : ctgKeyList) {
+            TLinkKeyVO tLinkKeyVO = new TLinkKeyVO();
+            tLinkKeyVO.setReqKey(ctgKey);
+            tLinkKeyVO.setResKey(couponMasterKey);
+            tLinkKeyVO.setReqType(100);
+            tLinkKeyVO.setResType(400);
+            tLinkKeyVO.setValueBit(0);
+            productManageMapper.insertTLinkKey(tLinkKeyVO);
+        }
+    }
+
+    /**
      * 팝업 상세 > 노출 상태 값 변경
      * @param popupKey
      * @param isShow
@@ -198,10 +231,58 @@ public class PopupCouponManageService {
         popupCouponManageMapper.updateTPopupIsShow(popupKey, isShow);
     }
 
+    /**
+     * 쿠폰 정보 저장하기
+     * @param tCouponMasterVO
+     * @param categoryCtgKeyList(카테고리 키 값 리스트)
+     * @return
+     */
     @Transactional(propagation = Propagation.REQUIRED)
-    public int saveCouponInfo(TCouponMasterVO tCouponMasterVO) {
+    public int saveCouponInfo(TCouponMasterVO tCouponMasterVO, List<Integer>categoryCtgKeyList) {
         popupCouponManageMapper.insertTCouponMaster(tCouponMasterVO);
+        if (tCouponMasterVO.getCouponMasterKey() != null) {
+            if (categoryCtgKeyList.size() > 0) {
+                for (Integer ctgKey : categoryCtgKeyList) {
+                    TLinkKeyVO tLinkKeyVO = new TLinkKeyVO();
+                    tLinkKeyVO.setReqKey(ctgKey);
+                    tLinkKeyVO.setResKey(tCouponMasterVO.getCouponMasterKey());
+                    tLinkKeyVO.setReqType(100);
+                    tLinkKeyVO.setResType(400);
+                    tLinkKeyVO.setPos(0);
+                    tLinkKeyVO.setValueBit(0);
+
+                    productManageMapper.insertTLinkKey(tLinkKeyVO);
+                }
+            }
+        }
         return tCouponMasterVO.getCouponMasterKey();
+    }
+
+    /**
+     * 쿠폰 발급하기
+     * @param couponMasterKey
+     * @param userKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void issueCouponToUser(int couponMasterKey, int userKey) {
+        if (couponMasterKey == 0 && userKey == 0) return;
+        TCouponIssueVO couponIssueVO = new TCouponIssueVO(couponMasterKey, userKey);
+        popupCouponManageMapper.insertTCouponIssue(couponIssueVO);
+    }
+
+    /**
+     * 오프라인 쿠폰 생성하기
+     * @param couponMasterKey
+     * @param produceCount
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void produceOfflineCoupon(int couponMasterKey, int produceCount) {
+        if (couponMasterKey == 0 && produceCount == 0) return;
+        for (int i=0; i<produceCount; i++) {
+            String offlineCouponCode = RandomUtil.getRandomAlphaNumber(13);
+            TCouponOfflineVO couponOfflineVO = new TCouponOfflineVO(couponMasterKey, offlineCouponCode);
+            popupCouponManageMapper.insertTCouponOffline(couponOfflineVO);
+        }
     }
 
 }

@@ -8,6 +8,7 @@ import java.util.Date;
 public class DateUtils {
 
     public final static DateTimeZone UTC_TIME_ZONE = DateTimeZone.UTC;
+    public final static DateTimeZone KOR_TIME_ZONE = DateTimeZone.UTC;
     public final static String DF_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
     public final static String DF_YMD_PATTERN = "yyyy-MM-dd";
 
@@ -35,9 +36,9 @@ public class DateUtils {
         return dateTime.toDate();
     }
 
-    public static String nowToStrUTC(String pattern) {
+    public static String nowToStrUTC() {
         DateTime dt = new DateTime(now(), UTC_TIME_ZONE);
-        return dt.toString(pattern);
+        return dt.toString(DF_TIME_PATTERN);
     }
 
     public static String nowToStrUTCNoHms(String pattern) {
@@ -46,7 +47,7 @@ public class DateUtils {
     }
 
     public static void main(String[] args) {
-        System.out.println(nowToStrUTCNoHms(DF_YMD_PATTERN));
+        System.out.println(nowToStrUTC());
         //System.out.println(dateToStr(d));
     }
 }

@@ -3,10 +3,7 @@ package com.zianedu.lms.mapper;
 import com.zianedu.lms.dto.CouponListDTO;
 import com.zianedu.lms.dto.PopupListDTO;
 import com.zianedu.lms.dto.VideoListDTO;
-import com.zianedu.lms.vo.TCouponMasterVO;
-import com.zianedu.lms.vo.TLinkKeyVO;
-import com.zianedu.lms.vo.TPopupVO;
-import com.zianedu.lms.vo.TPromotionVO;
+import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -29,10 +26,16 @@ public interface PopupCouponManageMapper {
 
     List<TLinkKeyVO>selectTCouponLinkKey(@Param("couponKey") int couponKey);
 
+    TCouponMasterVO selectTCouponMaterInfo(@Param("couponMasterKey") int couponMasterKey);
+
     /** INSERT **/
     Integer insertTPopupInfo(TPopupVO tPopupVO);
 
     Integer insertTCouponMaster(TCouponMasterVO tCouponMasterVO);
+
+    void insertTCouponIssue(TCouponIssueVO tCouponIssueVO);
+
+    void insertTCouponOffline(TCouponOfflineVO tCouponOfflineVO);
 
     /** DELETE **/
 
