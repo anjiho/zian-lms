@@ -1011,7 +1011,12 @@ public class Util {
 //        mimeMessage.setSubject(subject); //제목셋팅
 //        mimeMessage.setText(body); //내용셋팅
 //        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
-        System.out.println(plusDate("2019-04-01", 5));
+        String str = "c7684301";
+        SecurityUtil securityUtil = new SecurityUtil();
+
+
+        System.out.println(securityUtil.encryptSHA256(str));
+
 
     }
 }

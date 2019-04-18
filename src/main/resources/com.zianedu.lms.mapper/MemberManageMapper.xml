@@ -45,6 +45,98 @@
         </if>
     </select>
 
+    <select id="selectTUserList" resultType="MemberListDTO">
+        SELECT
+                USER_KEY, USER_ID, NAME, TELEPHONE_MOBILE, EMAIL, INDATE,
+                (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = T_USER.interest_ctg_key_0) as AFFILIATION_NAME,
+                GRADE,
+                AUTHORITY,
+                TO_CHAR(GRADE_DATE, 'YYYY-MM-DD') as GRADE_DATE,
+                IS_MOBILE_REG
+        FROM T_USER
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND USER_KEY = #{searchText}
+        </if>
+        <if test="regStartDate != '' and regEndDate != ''">
+            <![CDATA[
+                AND INDATE >= TO_DATE(#{regStartDate}, 'YYYY-MM-DD')
+            ]]>
+            <![CDATA[
+                AND INDATE < TO_DATE(#{regEndDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        </if>
+        <if test="grade != null">
+            AND GRADE = #{grade}
+        </if>
+        <if test="affiliationCtgKey > 0">
+            AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey} OR INTEREST_CTG_KEY_1 = #{affiliationCtgKey}
+        </if>
+        ORDER BY INDATE DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
 
+    <select id="selectTUserListCount" resultType="Integer">
+        SELECT COUNT (USER_KEY) FROM T_USER
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND USER_KEY = #{searchText}
+        </if>
+        <if test="regStartDate != '' and regEndDate != ''">
+            <![CDATA[
+                AND INDATE >= TO_DATE(#{regStartDate}, 'YYYY-MM-DD')
+            ]]>
+            <![CDATA[
+                AND INDATE < TO_DATE(#{regEndDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        </if>
+        <if test="grade != null">
+            AND GRADE = #{grade}
+        </if>
+        <if test="affiliationCtgKey > 0">
+            AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey} OR INTEREST_CTG_KEY_1 = #{affiliationCtgKey}
+        </if>
+    </select>
+
+    <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
+        INSERT INTO T_USER
+        (
+            USER_KEY, C_KEY, USER_ID, INDATE, NAME, AUTHORITY, STATUS, PWD, BIRTH, LUNAR, GENDER, TELEPHONE,
+            TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, ADDRESS_NUMBER, ADDRESS, EMAIL, RECV_SMS, RECV_EMAIL,
+            WELFARE_DC_PERCENT, CERT_CODE, GRADE, INTEREST_CTG_KEY_0, INTEREST_CTG_KEY_1, IS_MOBILE_REG,
+            ADMIN_AUTHORITY_KEY, GRADE_G_KEY, GRADE_PRICE, NOTE
+        )
+        VALUES
+        (
+            T_USER_SEQ.nextval, 100, #{userId}, #{indate}, #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
+            #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{addressNumber}, #{address}, #{email}, #{recvSms}, #{recvEmail},
+            0, #{certCode}, #{grade}, 0, 0, #{isMobileReg},
+            0, 0, #{gradePrice}, #{note}
+        )
+    </insert>
 
 </mapper>

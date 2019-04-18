@@ -18,7 +18,7 @@ public class ProductDetailInfoDTO {
 
     private List<TGoodTeacherLinkVO> productTeacherInfo;
 
-    private List<TLinkKeyVO> productOtherInfo;
+    private List<List<TLinkKeyVO>> productOtherInfo;
 
     private List<TLecCurri> videoLectureCurriInfo;
 
@@ -26,7 +26,7 @@ public class ProductDetailInfoDTO {
 
     public ProductDetailInfoDTO(TGoodsVO productInfo, List<TGoodsPriceOptionVO>productOptionInfo,
                                 List<List<TCategoryVO>>productCategoryInfo, TLecVO productLectureInfo,
-                                List<TGoodTeacherLinkVO> productTeacherInfo, List<TLinkKeyVO> productOtherInfo,
+                                List<TGoodTeacherLinkVO> productTeacherInfo, List<List<TLinkKeyVO>> productOtherInfo,
                                 List<TLecCurri> videoLectureCurriInfo) {
         this.productInfo = productInfo;
         this.productOptionInfo = productOptionInfo;

@@ -18,7 +18,7 @@ public enum MemberAuthorityType {
         this.memberAuthorityStr = memberAuthorityStr;
     }
 
-    public static String getMemberAuthoriTypeStr(int memberAuthorityKey) {
+    public static String getMemberAuthorityTypeStr(int memberAuthorityKey) {
         for (MemberAuthorityType authorityType : MemberAuthorityType.values()) {
             if (memberAuthorityKey == authorityType.memberAuthorityKey) {
                 return authorityType.memberAuthorityStr;

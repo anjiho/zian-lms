@@ -37,4 +37,13 @@ public enum MemberGradeType {
         }
         return list;
     }
+
+    public static String getMemberGradeStr(int gradeKey) {
+        for (MemberGradeType memberGradeType : MemberGradeType.values()) {
+            if (gradeKey == memberGradeType.gradeKey) {
+                return memberGradeType.gradeStr;
+            }
+        }
+        return null;
+    }
 }
