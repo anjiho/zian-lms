@@ -252,4 +252,20 @@ public class SelectboxService {
         return MemberMainSearchType.getMemberMainSearchTypeList();
     }
 
+    /**
+     * 상담내역 > 상담구분 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectCounselTypeSelectbox(){
+        return CounselType.getCounselTypeList();
+    }
+
+    /**
+     * 상담내역 > 진행상태 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectCounselStatusTypeSelectbox(){
+        return CounselStatusType.getCounselStatusTypeList();
+    }
+
 }

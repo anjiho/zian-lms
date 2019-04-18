@@ -1,14 +1,19 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.define.datasource.CounselType;
 import com.zianedu.lms.define.datasource.MemberGradeType;
 import com.zianedu.lms.dto.MemberAuthorityType;
 import com.zianedu.lms.dto.MemberListDTO;
 import com.zianedu.lms.dto.MemberSelectListDTO;
+import com.zianedu.lms.dto.UserConsultListDTO;
 import com.zianedu.lms.mapper.MemberManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
+import com.zianedu.lms.vo.TUserSecessionVO;
+import com.zianedu.lms.vo.TUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -119,5 +124,72 @@ public class MemberManageService {
                 affiliationCtgKey
         );
     }
+
+    /**
+     * 회원관리 > 회원탈퇴 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TUserSecessionVO> getMemeberSecessionList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<TUserSecessionVO> list = memberManageMapper.selectTUserSecessionList(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+        return list;
+    }
+
+    /**
+     * 회원관리 > 회원탈퇴 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMemeberSecessionListCount(String searchType, String searchText) {
+        return memberManageMapper.selectTUserSecessionListCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 회원관리 > 회원 상세 > 상담내역 리스트
+     * @param userKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<UserConsultListDTO> getUserCounselList(int userKey) {
+        if (userKey == 0) return null;
+
+        List<UserConsultListDTO>list = memberManageMapper.selectTCounselList(userKey);
+        if (list.size() > 0) {
+            for (UserConsultListDTO consultListDTO : list) {
+                consultListDTO.setConsultTypeName(CounselType.getCounselTypeStr(consultListDTO.getType()));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 회원 추가
+     * @param tUserVO
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int saveMember(TUserVO tUserVO) throws Exception {
+        TUserVO userVO = new TUserVO(tUserVO);
+        return memberManageMapper.insertTUSer(userVO);
+    }
+
+
 
 }

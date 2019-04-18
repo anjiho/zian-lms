@@ -80,6 +80,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TPromotionVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TPopupVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCouponMasterVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TUserSecessionVO"/>
 
 
 		<!--  dto 선언 -->
@@ -103,6 +104,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.AdminCouponListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.MemberSelectListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.MemberListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.UserConsultListDTO"/>
 
 	</allow>
 
