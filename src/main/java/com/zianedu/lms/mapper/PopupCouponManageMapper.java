@@ -1,9 +1,6 @@
 package com.zianedu.lms.mapper;
 
-import com.zianedu.lms.dto.CouponListDTO;
-import com.zianedu.lms.dto.OfflineCouponListDTO;
-import com.zianedu.lms.dto.PopupListDTO;
-import com.zianedu.lms.dto.VideoListDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -42,6 +39,12 @@ public interface PopupCouponManageMapper {
                                          @Param("searchType") String searchType);
 
     int selectIssuedOfflineCouponCount(@Param("couponMasterKey") int couponMasterKey);
+
+    List<AdminCouponListDTO>selectIssuedAdminCouponUserList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                            @Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText,
+                                                            @Param("searchType") String searchType);
+
+    int selectIssuedAdminCouponUserListCount(@Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     /** INSERT **/
     Integer insertTPopupInfo(TPopupVO tPopupVO);

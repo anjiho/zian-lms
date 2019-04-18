@@ -148,7 +148,7 @@ public class DataManageService {
             j = tCategoryVO.getParentKey();
 
             list.add(tCategoryVO);
-            Collections.reverse(list);
+            //Collections.reverse(list);
         }
         return list;
     }
@@ -207,7 +207,7 @@ public class DataManageService {
 
             }
         }
-        Collections.reverse(list);
+        //Collections.reverse(list);
         return list;
     }
 

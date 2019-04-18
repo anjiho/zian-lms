@@ -912,6 +912,16 @@ public class Util {
 
     }
 
+    public static String plusDate(String fromDate, int plusDay) throws Exception {
+        DateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+        Date date = df.parse(fromDate);
+        // 날짜 더하기
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(date);
+        cal.add(Calendar.DATE, plusDay);
+        return (df.format(cal.getTime()));
+    }
+
     public static HttpResponse http(String url, String body) {
 
         try (CloseableHttpClient httpClient = HttpClientBuilder.create().build()) {
@@ -1001,7 +1011,8 @@ public class Util {
 //        mimeMessage.setSubject(subject); //제목셋팅
 //        mimeMessage.setText(body); //내용셋팅
 //        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
-        System.out.println(returnNow());
+        System.out.println(plusDate("2019-04-01", 5));
+
     }
 }
 

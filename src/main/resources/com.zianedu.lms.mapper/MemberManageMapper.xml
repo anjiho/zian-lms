@@ -2,4 +2,49 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="com.zianedu.lms.mapper.MemberManageMapper">
 
+    <select id="selectMemberListBySelect" resultType="com.zianedu.lms.dto.MemberSelectListDTO">
+        SELECT USER_KEY, USER_ID, NAME, TELEPHONE_MOBILE, AUTHORITY
+        FROM T_USER
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND USER_KEY = #{searchText}
+        </if>
+        ORDER BY USER_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectMemberListBySelectCount" resultType="Integer">
+        SELECT COUNT(USER_KEY) FROM T_USER
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND USER_KEY = #{searchText}
+        </if>
+    </select>
+
+
+
 </mapper>

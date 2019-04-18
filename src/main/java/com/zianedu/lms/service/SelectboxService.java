@@ -228,4 +228,28 @@ public class SelectboxService {
         return DeviceType.getDeviceTypeSelectbox();
     }
 
+    /**
+     * 쿠폰 > 회원 검색 시 조건 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectMemberSearchTypeSelectbox() {
+        return MemberSearchType.getMemberSearchTypeList();
+    }
+
+    /**
+     * 회원 목록 > 회원등급 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectMemberGradeTypeSelectbox() {
+        return MemberGradeType.getMemberGradeTypeList();
+    }
+
+    /**
+     * 회원 목록 > 검색어 조건 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectMemberMainSearchTypeSelectbox() {
+        return MemberMainSearchType.getMemberMainSearchTypeList();
+    }
+
 }
