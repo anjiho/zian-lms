@@ -567,21 +567,19 @@
                 reqKey: 0,
                 resKey:mockKey,
                 resType: 8,
-                resType:1,
                 pos: 0,
                 valueBit: 0
             };
             array3.push(data);
         });
         $('#examQuestionList tbody tr').each(function(index){
-            var examQuestionTitle = $(this).find("td input").eq(0).val()
+            var examQuestionTitle = $(this).find("td input").eq(0).val();
             var examKey = $(this).find("td input").eq(1).val();
             var data = {
                 linkKey: 0,
                 reqKey: 0,
                 resKey:examKey,
                 resType: 9,
-                resType:1,
                 pos: 0,
                 valueBit: 0
             };
@@ -595,7 +593,6 @@
                 reqKey: 0,
                 resKey:bookKey,
                 resType: 5,
-                resType:1,
                 pos: 0,
                 valueBit: 0
             };
@@ -609,7 +606,6 @@
                 reqKey: 0,
                 resKey:gifyKey,
                 resType: 4,
-                resType:1,
                 pos: 0,
                 valueBit: 0
             };
@@ -621,8 +617,6 @@
         data.append("videoLectureInfo",JSON.stringify(lectureObj));
         data.append("videoTeacherInfo",JSON.stringify(array2));
         data.append("videoOtherInfo",JSON.stringify(array3));
-        console.log("123123123");
-        console.log(data);
         if(confirm("저장하시겠습니까?")) {
             $.ajax({
                 url: "/file/productUpload",

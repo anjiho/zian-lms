@@ -49,7 +49,6 @@ function getVideoOptionTypeList(tag_id, val) {
 //카테고리
 function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
-        console.log(list);
         var html = "<select id='sel_1' onchange='' class='form-control'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].name == val) {
@@ -147,7 +146,6 @@ function selectExamSearchSelectbox(tag_id,val) {
 //시험대비년도 셀레긑박스
 function getExamPrepareSelectbox(tag_id,val) {
     selectboxService.getExamPrepareSelectbox(function (list) {
-        console.log(list);
         var html = "<select id='sel_1' onchange='' class='form-control'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {

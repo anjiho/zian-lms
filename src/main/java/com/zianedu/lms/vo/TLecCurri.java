@@ -5,32 +5,32 @@ import lombok.Data;
 @Data
 public class TLecCurri {
 
-    private int curriKey;
+    private int curriKey;//강의 KEY
 
-    private int lecKey;
+    private int lecKey;//강좌 Key
 
-    private String name;
+    private String name;//강의명
 
-    private String vodFileLow;
+    private String vodFileLow;//동영상 저화질 파일
 
-    private String vodFileHigh;
+    private String vodFileHigh;//동영상 과화질 파일
 
-    private String vodFileMobileLow;
+    private String vodFileMobileLow;//모바일 동영상 저화질 파일
 
-    private String vodFileMobileHigh;
+    private String vodFileMobileHigh;//모바일 동영상 과화질 파일
 
-    private int vodTime;
+    private int vodTime;//강의 시간
 
-    private String dataFile;
+    private String dataFile;//자료 파일
 
-    private int dataPage;
+    private int dataPage;//데이터 자료 페이지 수
 
-    private int isShow;
+    private int isShow;//노출여부
 
-    private int isSample;
+    private int isSample;//샘플 여부
 
     private int unitCtgKey = 0;
 
-    private int pos;
+    private int pos;//정렬
 
 }
