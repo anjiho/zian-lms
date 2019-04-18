@@ -177,7 +177,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 쿠폰 상세 > 쿠폰 소시자 조회 리스트
+     * 쿠폰 상세 > 오프라인 쿠폰 소시자 조회 리스트
      * @param sPage
      * @param listLimit
      * @param couponMasterKey
@@ -201,7 +201,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 쿠폰 상세 > 쿠폰 소시자 조회 리스트 개수
+     * 쿠폰 상세 > 오프라인 쿠폰 소지자 조회 리스트 개수
      * @param couponMasterKey
      * @param searchType
      * @param searchText
@@ -211,6 +211,56 @@ public class PopupCouponManageService {
     public int getOfflineCouponListUserCount(int couponMasterKey, String searchType, String searchText) {
         if (couponMasterKey == 0) return 0;
         return popupCouponManageMapper.selectOfflineCouponUserListCount(
+                couponMasterKey,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 쿠폰 목록 > 운영자 발급 > 쿠폰 소지자 조회 리스트
+     * @param sPage
+     * @param listLimit
+     * @param couponMasterKey
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<AdminCouponListDTO> getAdminCouponIssueUserList(int sPage, int listLimit, int couponMasterKey,
+                                                                String searchType, String searchText) throws Exception {
+        if (couponMasterKey == 0 && sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<AdminCouponListDTO> list = popupCouponManageMapper.selectIssuedAdminCouponUserList(
+                startNumber,
+                listLimit,
+                couponMasterKey,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+        if (list.size() > 0) {
+            for (AdminCouponListDTO adminCouponListDTO : list) {
+                adminCouponListDTO.setValIdDate(
+                        adminCouponListDTO.getStartDate() + " ~ " + Util.plusDate(adminCouponListDTO.getStartDate(), adminCouponListDTO.getLimitDay())
+                );
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 쿠폰 목록 > 운영자 발급 > 쿠폰 소지자 조회 리스트 개수
+     * @param couponMasterKey
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getAdminCouponIssueUserListCount(int couponMasterKey, String searchType, String searchText) {
+        if (couponMasterKey == 0) return 0;
+        return popupCouponManageMapper.selectIssuedAdminCouponUserListCount(
                 couponMasterKey,
                 Util.isNullValue(searchText, ""),
                 Util.isNullValue(searchType, "")
@@ -337,7 +387,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 오프라인 쿠폰 발급하기
+     * 쿠폰 발급하기
      * @param couponMasterKey
      * @param userKey
      */

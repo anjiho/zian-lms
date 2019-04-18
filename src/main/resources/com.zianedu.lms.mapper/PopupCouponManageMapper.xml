@@ -164,6 +164,43 @@
       WHERE COUPON_MASTER_KEY = #{couponMasterKey}
     </select>
 
+    <select id="selectIssuedAdminCouponUserList" resultType="AdminCouponListDTO">
+        SELECT C.USER_ID, C.USER_KEY, C.NAME, B.LIMIT_DAY,
+               TO_CHAR(B.INDATE, 'YYYY-MM-DD') as INDATE,
+               TO_CHAR(B.START_DATE, 'YYYY-MM-DD') as START_DATE,
+               A.DESCRIPTION
+        FROM T_COUPON_ISSUE A
+        INNER JOIN T_COUPON_MASTER B
+        ON A.COUPON_MASTER_KEY = B.COUPON_MASTER_KEY
+        INNER JOIN T_USER C
+        ON A.USER_KEY = C.USER_KEY
+        WHERE A.COUPON_MASTER_KEY = #{couponMasterKey}
+        <if test="searchType == 'name'">
+            AND C.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND C.USER_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.INDATE DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectIssuedAdminCouponUserListCount" resultType="Integer">
+        SELECT COUNT(C.USER_ID)
+        FROM T_COUPON_ISSUE A
+        INNER JOIN T_COUPON_MASTER B
+        ON A.COUPON_MASTER_KEY = B.COUPON_MASTER_KEY
+        INNER JOIN T_USER C
+        ON A.USER_KEY = C.USER_KEY
+        WHERE A.COUPON_MASTER_KEY = #{couponMasterKey}
+        <if test="searchType == 'name'">
+            AND C.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND C.USER_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
         <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
             SELECT T_POPUP_SEQ FROM DUAL
@@ -255,12 +292,5 @@
         </set>
         WHERE COUPON_MASTER_KEY = #{couponMasterKey}
     </update>
-
-<!--    <update id="updateTCouponMaster" parameterType="com.zianedu.lms.vo.TCouponMasterVO">-->
-<!--        UPDATE T_COUPON_MASTER-->
-<!--        <set>-->
-<!--            <if test=""></if>-->
-<!--        </set>-->
-<!--    </update>-->
 
 </mapper>

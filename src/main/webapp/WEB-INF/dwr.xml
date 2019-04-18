@@ -48,6 +48,12 @@
 			<param name="beanName" value="popupCouponManageService" />
 		</create>
 
+		<convert converter="bean" match="com.zianedu.lms.service.MemberManageService"/>
+		<create creator="spring" javascript="memberManageService">
+			<param name="class" value="com.zianedu.lms.service.MemberManageService"/>
+			<param name="beanName" value="memberManageService" />
+		</create>
+
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->
@@ -94,6 +100,8 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.CouponListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.CouponDetailDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OfflineCouponListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.AdminCouponListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MemberSelectListDTO"/>
 
 	</allow>
 
