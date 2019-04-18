@@ -3,6 +3,7 @@ package com.zianedu.lms.utils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtils {
@@ -46,8 +47,14 @@ public class DateUtils {
         return dt.toString(pattern + " 00:00:00");
     }
 
-    public static void main(String[] args) {
-        System.out.println(nowToStrUTC());
+    public static Date stringToDate(String yyyymmdd) throws Exception {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date to = transFormat.parse(yyyymmdd);
+        return to;
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(stringToDate("2019-01-01"));
         //System.out.println(dateToStr(d));
     }
 }

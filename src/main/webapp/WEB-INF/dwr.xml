@@ -93,6 +93,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.PopupInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.CouponListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.CouponDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.OfflineCouponListDTO"/>
 
 	</allow>
 

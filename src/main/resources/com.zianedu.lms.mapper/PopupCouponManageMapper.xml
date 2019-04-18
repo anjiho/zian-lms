@@ -84,6 +84,86 @@
         WHERE coupon_master_key = #{couponMasterKey}
     </select>
 
+    <select id="selectOfflineCouponList" resultType="com.zianedu.lms.dto.OfflineCouponListDTO">
+        SELECT
+            A.CODE,
+            A.INDATE as PRODUCE_DATE,
+            B.INDATE as ISSUE_DATE,
+            C.USER_ID,
+            E.J_ID
+        FROM T_COUPON_OFFLINE A
+        LEFT JOIN T_COUPON_ISSUE B
+        ON A.COUPON_OFFLINE_KEY = B.COUPON_OFFLINE_KEY
+        LEFT OUTER JOIN T_USER C
+        ON B.USER_KEY = C.USER_KEY
+        LEFT OUTER JOIN T_ORDER_GOODS D
+        ON B.J_G_KEY = D.J_G_KEY
+        LEFT OUTER JOIN T_ORDER E
+        ON D.j_key = E.j_key
+        WHERE A.COUPON_MASTER_KEY = #{couponMasterKey}
+        ORDER BY A.COUPON_OFFLINE_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectOfflineCouponListCount" resultType="Integer">
+        SELECT COUNT (COUPON_OFFLINE_KEY)
+        FROM T_COUPON_OFFLINE
+        WHERE COUPON_MASTER_KEY = #{couponMasterKey}
+    </select>
+
+    <select id="selectOfflineCouponUserList" resultType="com.zianedu.lms.dto.OfflineCouponListDTO">
+        SELECT B.USER_ID, B.NAME, C.CODE,
+               TO_CHAR(A.INDATE, 'YYYY-MM-DD') as ISSUE_DATE,
+               TO_CHAR(D.START_DATE, 'YYYY-MM-DD') as START_DATE,
+               TO_CHAR(D.END_DATE, 'YYYY-MM-DD') as END_DATE
+        FROM T_COUPON_ISSUE A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        INNER JOIN T_COUPON_OFFLINE C
+        ON A.COUPON_OFFLINE_KEY = C.COUPON_OFFLINE_KEY
+        INNER JOIN T_COUPON_MASTER D
+        ON A.COUPON_MASTER_KEY = D.COUPON_MASTER_KEY
+        WHERE 1=1
+        AND A.COUPON_MASTER_KEY = #{couponMasterKey}
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'code'">
+            AND C.CODE LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectOfflineCouponUserListCount" resultType="Integer">
+        SELECT COUNT (A.COUPON_ISSUE_KEY)
+        FROM T_COUPON_ISSUE A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        INNER JOIN T_COUPON_OFFLINE C
+        ON A.COUPON_OFFLINE_KEY = C.COUPON_OFFLINE_KEY
+        INNER JOIN T_COUPON_MASTER D
+        ON A.COUPON_MASTER_KEY = D.COUPON_MASTER_KEY
+        WHERE 1=1
+        AND A.COUPON_MASTER_KEY = #{couponMasterKey}
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'code'">
+            AND C.CODE LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectIssuedOfflineCouponCount" resultType="Integer">
+      SELECT COUNT(COUPON_OFFLINE_KEY)
+      FROM T_COUPON_OFFLINE
+      WHERE COUPON_MASTER_KEY = #{couponMasterKey}
+    </select>
+
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
         <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
             SELECT T_POPUP_SEQ FROM DUAL
@@ -155,5 +235,32 @@
     <update id="updateTPopupIsShow">
         UPDATE T_POPUP SET IS_SHOW = #{isShow} WHERE POPUP_KEY = #{popupKey}
     </update>
+
+    <update id="updateTCouponMaster" parameterType="com.zianedu.lms.vo.TCouponMasterVO">
+        UPDATE T_COUPON_MASTER
+        <set>
+            <if test="indate != '' and indate != null">INDATE = #{indate},</if>
+            <if test="type != null">TYPE = #{type},</if>
+            <if test="name != '' and name != null">NAME = #{name},</if>
+            <if test="dcType != null">DC_TYPE = #{dcType},</if>
+            <if test="dcValue != null">DC_VALUE = #{dcValue},</if>
+            <if test="contents != '' and contents != null">CONTENTS = #{contents},</if>
+            <if test="periodType != null">PERIOD_TYPE = #{periodType},</if>
+            <if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+            <if test="startDate != '' and startDate != null">START_DATE = #{startDate},</if>
+            <if test="endDate != '' and endDate != null">END_DATE = #{endDate},</if>
+            <if test="limitPriceMin != null">LIMIT_PRICE_MIN = #{limitPriceMin},</if>
+            <if test="isShow != null">IS_SHOW = #{isShow},</if>
+            <if test="device != null">DEVICE = #{device},</if>
+        </set>
+        WHERE COUPON_MASTER_KEY = #{couponMasterKey}
+    </update>
+
+<!--    <update id="updateTCouponMaster" parameterType="com.zianedu.lms.vo.TCouponMasterVO">-->
+<!--        UPDATE T_COUPON_MASTER-->
+<!--        <set>-->
+<!--            <if test=""></if>-->
+<!--        </set>-->
+<!--    </update>-->
 
 </mapper>
