@@ -561,8 +561,18 @@
 
             if(selList.productOtherInfo){
                 for(var i = 0; i < selList.productOtherInfo.length; i++){
-                    for(var j = 0; j < selList.productOtherInfo[i].length; j++){
-                            console.log(selList.productOtherInfo[i]);
+                    var selList2 = selList.productOtherInfo[i];
+
+                    for(var j = 0; j < selList2.length; j++){
+                        var MockListHtml = "<tr>";
+                        MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
+                        MockListHtml     += "<input type='text'  id='"+ selList2[j].goodsName +"' value='' readonly>";
+                        MockListHtml     += "</td>";//examKey
+                        MockListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
+                        //MockListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
+                        MockListHtml     += "</td>";
+                        MockListHtml     += "</tr>";
+                        $('#allMockList > tbody:first').append(MockListHtml);//선택 모의고사 리스트 뿌리기
                     }
 
                         /*전범위 모의괏*/
