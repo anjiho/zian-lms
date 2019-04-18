@@ -7,18 +7,18 @@
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
         getCategoryList("selCate1","214");
-        getSelectboxListForCtgKey("set_1","4309");//급수 셀렉트박스
-        getSelectboxListForCtgKey("set_2","70");//과목 셀렉트박스
-        getSelectboxListForCtgKey("set_3","202");//유형 셀렉트박스
+        getSelectboxListForCtgKey("classGroupCtgKey","4309");//급수 셀렉트박스
+        getSelectboxListForCtgKey("subjectCtgKey","70");//과목 셀렉트박스
+        getSelectboxListForCtgKey("stepCtgKey","202");//유형 셀렉트박스
         getSelectboxListForCtgKey("SubjectList_0","70");//과목 셀렉트박스
         selectTeacherSelectbox("teacherList_0","");//선생님 셀렉트박스
-        getLectureCountSelectbox("lectureTimeCnt","");
-        getLectureCountSelectbox("lectureCnt","");
-        getClassRegistraionDaySelectbox("lectureDayCnt","");
+        getLectureCountSelectbox("lectureTimeCnt","");//강좌시간
+        getLectureCountSelectbox("lectureCnt","");//강좌정보 강좌수
+        getClassRegistraionDaySelectbox("lectureDayCnt","");//수강일수
         selectExamSearchSelectbox("searchType","");
         selectExamSearchSelectbox("examsearchType","");
         selectExamSearchSelectbox("booksearchType","");
-        getExamPrepareSelectbox("examYearSel","");//시험대비년도 셀렉트박스
+        getExamPrepareSelectbox("examYear","");//시험대비년도 셀렉트박스
         getLectureStatusSelectbox("status","");//강좌정보- 진행상태
         $('#description').summernote({ //기본정보-에디터
             width: 750,
@@ -26,7 +26,7 @@
             focus: true,
             theme: 'cerulean'
         });
-        $('.sModal3').on('hidden.bs.modal', function (e) {
+        $('.sModal3').on('hidden.bs.modal', function (e) { /*modal 초기화*/
             $('form').each(function(){
                 this.reset();
             });
@@ -41,15 +41,9 @@
                 this.reset();
             });
         });
-
     });
 
     function changesel(id, val){ //카테고리 셀렉트박스 불러오기
-       /* var idNum = 0;
-        if (id != undefined) {
-            var split = gfn_split(id, "_");
-            var idNum = "sel_" + (Number(split[1]) + 1) ;
-        }*/
         getCategoryList(id, val);
     }
 
@@ -501,23 +495,21 @@
         var array = new Array();
         $('#optionTable tbody tr').each(function(index){
             var i =0;
-            var kind = $(this).find("td select").eq(0).val();
-            var kind1 = $(this).find("td input").eq(1).val();
-            var kind2 = $(this).find("td input").eq(2).val();
-            var kind3 = $(this).find("td input").eq(3).val();
-            var kind4 = $(this).find("td input").eq(4).val();
-            var kind5 = $(this).find("td input").eq(5).val();
-
+            var optionName = $(this).find("td select").eq(0).val();
+            var price = $(this).find("td input").eq(0).val();
+            var sellPrice = $(this).find("td input").eq(1).val();
+            var point = $(this).find("td input").eq(2).val();
+            var extendPercent = $(this).find("td input").eq(3).val();
             var data = {
                 priceKey:'0',
                 gKey:'0',
-                kind:kind,
+                kind:optionName,
                 ctgKey:'0',
                 name:'0',
-                price:kind1,
-                sellPrice:kind2,
-                point:kind3,
-                extendPercent:kind4
+                price:price,
+                sellPrice:sellPrice,
+                point:point,
+                extendPercent:extendPercent
             };
             array.push(data);
         });
@@ -541,7 +533,7 @@
 
         /*  4.강좌정보 obj  */
         var lectureObj = getJsonObjectFromDiv("section4");
-        console.log(lectureObj);
+
         /*  //강좌정보 obj  */
 
         /*  5.강사정보 obj  */
@@ -549,7 +541,8 @@
         $('#teacherTabel tbody tr').each(function(index){
             var teacher = $(this).find("td select").eq(0).val();
             var teacher1 = $(this).find("td select").eq(1).val();
-            var teacher2 = $(this).find("td input").eq(2).val();
+            var teacher2 = $(this).find("td input").eq(0).val();
+            console.log(teacher+","+teacher1+","+teacher2);
             var data = {
                 gTeacherKey:'0',
                 gKey:'0',
@@ -675,7 +668,6 @@
 <!-- 기본 소스-->
 <form id="basic">
 <div class="container-fluid">
-    <input type="button" value="1234" onclick="playSave()">
     <div class="card">
         <div class="card-body wizard-content">
             <h4 class="card-title"></h4>
@@ -938,19 +930,19 @@
                             <input type="hidden" name="lecDateMonth" value="0">
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="set_1" name="classGroupCtgKey">
+                                <select class="col-sm-3 select2 form-control custom-select" id="classGroupCtgKey" name="classGroupCtgKey">
                                     <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">과목</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="set_2" name="subjectCtgKey">
+                                <select class="col-sm-3 select2 form-control custom-select" id="subjectCtgKey" name="subjectCtgKey">
                                     <option value="">선택</option>
                                 </select>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">유형</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="set_3" name="stepCtgKey">
+                                <select class="col-sm-3 select2 form-control custom-select" id="stepCtgKey" name="stepCtgKey">
                                     <option value="">선택</option>
                                 </select>
                             </div>
@@ -980,11 +972,11 @@
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
-                                <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="multiple"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
+                                <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="multiple" name="multiple"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="examYearSel" name="examYear">
+                                <select class="col-sm-3 select2 form-control custom-select" id="examYear" name="examYear">
                                 </select>
                             </div>
                         </div>
