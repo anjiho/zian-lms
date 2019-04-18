@@ -57,12 +57,16 @@ public class ProductManageService extends PagingSupport {
         }
 
         List<TLinkKeyVO>tLinkKeyVOList = productManageMapper.selectTLinkKeyList(gKey);
-        List<TLinkKeyVO>productOtherInfo = new ArrayList<>();
+        List<List<TLinkKeyVO>>productOtherInfo = new ArrayList<>();
         if (tLinkKeyVOList.size() > 0) {
             for (TLinkKeyVO linkKeyVO : tLinkKeyVOList) {
-                productOtherInfo = this.getGoodsListFromTLinkKey(gKey, linkKeyVO.getResType());
+                List<TLinkKeyVO>list = new ArrayList<>();
+                list = this.getGoodsListFromTLinkKey(gKey, linkKeyVO.getResType());
+                productOtherInfo.add(list);
             }
         }
+
+
 
         ProductDetailInfoDTO productDetailInfoDTO = new ProductDetailInfoDTO(
                 productInfo,
@@ -283,6 +287,17 @@ public class ProductManageService extends PagingSupport {
             list = productManageMapper.selectTExamMasterFromTLinkKeyRel(gKey, resType);
         }
         return list;
+    }
+
+    @Transactional(readOnly = true)
+    public TLinkKeyVO getGoodsFromTLinkKey(int gKey, int resType) {
+        TLinkKeyVO tLinkKeyVO = new TLinkKeyVO();
+        if (resType == 1 || resType == 4 || resType == 5) {
+            tLinkKeyVO = productManageMapper.selectTGoodsFromTLinkKeyRelSingle(gKey, resType);
+        } else {
+            tLinkKeyVO = productManageMapper.selectTExamMasterFromTLinkKeyRelSingle(gKey, resType);
+        }
+        return tLinkKeyVO;
     }
 
     /**

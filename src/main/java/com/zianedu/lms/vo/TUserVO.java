@@ -10,23 +10,23 @@ public class TUserVO implements Serializable {
     private Long userKey;
 
     private Long cKey;
-
+    //아이디
     private String userId;
-
+    //등록일
     private String inDate;
-
+    //이름
     private String name;
-
+    //권한
     private int authority;
-
+    //가입상태 0 - 가입대기, 1 - 오프라인에서 가입후 대기중, 10 - 회원가입된 상태, 20 - 탈퇴대기, 21 - 탈퇴완료
     private int status;
-
+    //비밀번호
     private String pwd;
-
+    //생년월일
     private String birth;
-
+    //음력
     private String lunar;
-
+    //성별
     private String gender;
 
     private String telephone;

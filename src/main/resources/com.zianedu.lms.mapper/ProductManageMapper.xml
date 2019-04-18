@@ -88,12 +88,32 @@
 		</if>
 	</select>
 
+	<select id="selectTGoodsFromTLinkKeyRelSingle" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_GOODS B
+		ON A.res_key = B.g_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTExamMasterFromTLinkKeyRelSingle" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_EXAM_MASTER B
+		ON A.res_key = B.exam_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
 	<select id="selectTLecCurriList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecCurri">
 		SELECT * FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey} ORDER BY POS ASC
 	</select>
 
 	<select id="selectTLinkKeyList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLinkKeyVO">
-		SELECT * FROM T_LINK_KEY WHERE req_key = #{reqKey}
+		SELECT DISTINCT RES_TYPE FROM T_LINK_KEY WHERE req_key = #{reqKey}
 	</select>
 
 	<select id="selectTLecCurriLastPos" parameterType="Integer" resultType="Integer">

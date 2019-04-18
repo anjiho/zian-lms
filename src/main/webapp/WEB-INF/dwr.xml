@@ -102,6 +102,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.OfflineCouponListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.AdminCouponListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.MemberSelectListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MemberListDTO"/>
 
 	</allow>
 

@@ -33,6 +33,10 @@ public interface ProductManageMapper {
 
     List<TLinkKeyVO>selectTExamMasterFromTLinkKeyRel(@Param("reqKey") int reqKey, @Param("resType") int resType);
 
+    TLinkKeyVO selectTGoodsFromTLinkKeyRelSingle(@Param("reqKey") int reqKey, @Param("resType") int resType);
+
+    TLinkKeyVO selectTExamMasterFromTLinkKeyRelSingle(@Param("reqKey") int reqKey, @Param("resType") int resType);
+
     List<TLecCurri>selectTLecCurriList(@Param("lecKey") int lecKey);
 
     List<TLinkKeyVO>selectTLinkKeyList(@Param("reqKey") int reqKey);
