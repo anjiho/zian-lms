@@ -560,11 +560,13 @@
             }
 
             if(selList.productOtherInfo){
-                //addTeacher(selList.productOtherInfo.length);
-                console.log(selList.productOtherInfo);
                 for(var i = 0; i < selList.productOtherInfo.length; i++){
+                    for(var j = 0; j < selList.productOtherInfo[i].length; j++){
+                            console.log(selList.productOtherInfo[i]);
+                    }
+
                         /*전범위 모의괏*/
-                        var title =  selList.productOtherInfo[i].goodsName;
+                        /*var title =  selList.productOtherInfo[i].goodsName;
                         var deleteSel = 'allMockTitleDelete';
                         getallMockOption = "MockName_"+i; //전범위모의고사
 
@@ -586,6 +588,7 @@
                             $('#examQuestionList > tbody:first').append(MockListHtml);//선택 기출문제 리스트 뿌리기
                             $("#"+getallMockOption).val(title);//기출문제 제목 뿌리기
                         }
+                        */
 
 
                 }
