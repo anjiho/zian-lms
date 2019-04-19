@@ -912,7 +912,6 @@
                             <input type="text" class="form-control" value="" readonly>
                         </div>-->
                         <div id="section4">
-
                             <input type="hidden" name="lecKey" value="0">
                             <input type="hidden" name="gKey" value="0">
                             <input type="hidden" name="teacherKey" value="0">

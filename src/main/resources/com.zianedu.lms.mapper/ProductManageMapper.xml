@@ -765,7 +765,7 @@
 	</delete>
 
 	<delete id="deleteTLecCurri" parameterType="Integer">
-		DELETE FROM T_LEC_CURRI WHERE CURRI_KEY #{curriKey}
+		DELETE FROM T_LEC_CURRI WHERE CURRI_KEY = #{curriKey}
 	</delete>
 
 	<delete id="deleteTCategoryGoodsByCtgGKey" parameterType="Integer">
