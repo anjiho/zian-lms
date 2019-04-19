@@ -327,9 +327,21 @@
     </select>
 
 <!--    <select id="select">-->
-<!--        &lt;!&ndash; req_key ==> 1086 : 계리직동영상 순서 // 1080 : 계리직학원 순서 // 829 : 기술직 동영상 순서 // 832 : 행정직강사 순서 // 788, 행정직 동영상 &ndash;&gt;-->
+<!--        &lt;!&ndash; req_key ==> 1086 : 계리직동영상 순서 // 1080 : 계리직학원 순서 // 829 : 기술직 동영상 순서 //
+                                     823 : 기술직 학원 순서 // 794 : 행정직동영상 순서 // 788, 행정직학원 순서 -->
 <!--        SELECT * FROM T_LINK_KEY where req_key = 1086-->
 <!--    </select>-->
+
+    <select id="selectNumberExposureTeacherList" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+        SELECT
+            A.LINK_KEY, A.REQ_KEY, A.POS, C.NAME
+        FROM T_LINK_KEY A
+        INNER JOIN T_TEACHER B ON A.RES_KEY = B.TEACHER_KEY
+        INNER JOIN T_USER C
+        ON B.USER_KEY = C.USER_KEY
+        WHERE A.REQ_KEY = #{reqKey}
+        ORDER By POS ASC
+    </select>
 
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
@@ -383,6 +395,12 @@
             <if test="contents != '' and contents != ''">CONTENTS = #{contents},</if>
         </set>
         WHERE COUNSEL_KEY = #{counselKey}
+    </update>
+
+    <update id="updateTLinkKeyPos">
+        UPDATE T_LINK_KEY
+        SET POS = #{pos}
+        WHERE LINK_KEY = #{linkKey}
     </update>
 
 </mapper>

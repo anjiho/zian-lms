@@ -57,6 +57,8 @@ public interface MemberManageMapper {
 
     List<TLinkKeyVO> selectTLinkKeyByTeacher(@Param("teacherKey") int teacherKey);
 
+    List<TLinkKeyVO> selectNumberExposureTeacherList(@Param("reqKey") int reqKey);
+
 
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
@@ -67,4 +69,6 @@ public interface MemberManageMapper {
 
     /** UPDATE **/
     void updateTCounsel(TCounselVO tCounselVO);
+
+    void updateTLinkKeyPos(@Param("linkKey") int linkKey, @Param("pos") int pos);
 }

@@ -350,6 +350,17 @@ public class MemberManageService {
     }
 
     /**
+     * 강사 노출순서 리스트
+     * @param academyKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TLinkKeyVO> getTeacherExposureNumberList(int academyKey) {
+        if (academyKey == 0) return null;
+        return memberManageMapper.selectNumberExposureTeacherList(academyKey);
+    }
+
+    /**
      * 회원 추가( 권한이 강사면 강사 테이블 추가 입력 )
      * @param tUserVO
      * @return
@@ -413,5 +424,22 @@ public class MemberManageService {
         TCounselVO counselVO = new TCounselVO(tCounselVO);
         memberManageMapper.updateTCounsel(counselVO);
     }
+
+    /**
+     * 강사 노출순서 순서변경하기
+     * @param tLinkKeyVOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateTeacherExposurePos(List<TLinkKeyVO>tLinkKeyVOList) {
+        if (tLinkKeyVOList.size() > 0) {
+            for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
+                memberManageMapper.updateTLinkKeyPos(
+                        tLinkKeyVO.getLinkKey(), tLinkKeyVO.getPos()
+                );
+            }
+        }
+    }
+
+
 
 }

@@ -276,4 +276,11 @@ public class SelectboxService {
         return CounselSearchType.getCounselSearchTypeList();
     }
 
+    /**
+     * 강사 노출순서 > 학원종류 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectAcademyTypeSelectbox(){
+        return TeacherExposureType.getAcademyTypeSelectbox();
+    }
 }
