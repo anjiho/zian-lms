@@ -132,7 +132,7 @@ public interface ProductManageMapper {
 
     void deleteTBankSubjectQuesLink(@Param("bankSubjectQuesLinkKey") int bankSubjectQuesLinkKey);
 
-    void deleteTGoodsPriceOpition(@Param("gKey") int gKey);
+    void deleteTGoodsPriceOption(@Param("gKey") int gKey);
 
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);
