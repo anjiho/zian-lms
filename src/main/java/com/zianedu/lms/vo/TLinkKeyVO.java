@@ -17,7 +17,7 @@ public class TLinkKeyVO {
 
     private int pos;
     //주교재 여부
-    private Object valueBit;
+    private int valueBit;
 
     private String goodsName;
 

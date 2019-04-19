@@ -86,20 +86,20 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">동영상 목록</h5>
-                </div>
-                <div style=" display:inline;">
-                    <div style=" float: left; width: 10%">
-                     <select class="form-control" id="searchType">
-                        <option>제목</option>
-                        <option>코드</option>
-                    </select>
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <input type="text" class="form-control" id="searchText">
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:10px;">동영상 목록</h5>
+                    <div>
+                        <div style=" float: left; width: 10%">
+                         <select class="form-control" id="searchType">
+                            <option>제목</option>
+                            <option>코드</option>
+                        </select>
+                        </div>
+                        <div style=" float: left; width: 33%">
+                            <input type="text" class="form-control" id="searchText">
+                        </div>
+                        <div style=" float: left; width: 33%">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="sPage" >
