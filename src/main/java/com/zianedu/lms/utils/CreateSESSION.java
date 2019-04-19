@@ -16,7 +16,7 @@ public class CreateSESSION {
 	final static Logger logger = LoggerFactory.getLogger(CreateSESSION.class);
 
 	public static TUserVO createSession(HttpServletRequest request) throws Exception {
-		Long userKey = Long.parseLong(request.getParameter("userKey"));
+		int userKey = Integer.parseInt(request.getParameter("userKey"));
 		String userName = new String(request.getParameter("userName").getBytes("ISO-8859-1"), "UTF-8");
 		String authority = request.getParameter("authority");
 

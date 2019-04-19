@@ -121,7 +121,7 @@
             AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey} OR INTEREST_CTG_KEY_1 = #{affiliationCtgKey}
         </if>
     </select>
-    
+
     <select id="selectTUserSecessionList" resultType="com.zianedu.lms.vo.TUserSecessionVO">
         SELECT * FROM T_USER_SECESSION
         WHERE OBTAIN_DATE IS NOT NULL
@@ -147,8 +147,178 @@
     </select>
 
     <select id="selectTCounselList" resultType="UserConsultListDTO">
-      SELECT COUNSEL_KEY, TYPE, INDATE, PROC_START_DATE, PROC_END_DATE
+      SELECT COUNSEL_KEY, TYPE,
+             TO_CHAR(INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
+             TO_CHAR(PROC_START_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_START_DATE,
+             TO_CHAR(PROC_END_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_END_DATE
       FROM T_COUNSEL WHERE USER_KEY = #{userKey}
+    </select>
+
+    <select id="selectTUserSecessionApplyList" resultType="com.zianedu.lms.vo.TUserSecessionVO">
+        SELECT * FROM T_USER_SECESSION
+        WHERE OBTAIN_DATE IS NULL
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND USER_ID = #{searchText}
+        </if>
+        ORDER BY SECESSION_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTUserSecessionApplyListCount" resultType="Integer">
+        SELECT * FROM T_USER_SECESSION
+        WHERE OBTAIN_DATE IS NULL
+        <if test="searchType == 'name'">
+            AND NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND USER_ID = #{searchText}
+        </if>
+    </select>
+
+    <select id="selectTUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
+        SELECT
+            USER_KEY,
+            USER_ID,
+            NAME,
+            AUTHORITY,
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as INDATE,
+            TO_CHAR(BIRTH, 'YYYY-MM-DD') as BIRTH,
+            TELEPHONE,
+            TELEPHONE_MOBILE,
+            EMAIL,
+            RECV_EMAIL,
+            RECV_SMS,
+            ZIPCODE,
+            ADDRESS_ROAD,
+            ADDRESS,
+            WELFARE_DC_PERCENT,
+            INTEREST_CTG_KEY_0,
+            GRADE,
+            GRADE_DATE,
+            GRADE_PRICE,
+            NOTE,
+            CERT_CODE,
+            IS_MOBILE_REG
+        FROM T_USER WHERE USER_KEY = #{userKey}
+    </select>
+
+    <select id="selectTCounselListByPaging" resultType="CounselListDTO">
+         SELECT A.COUNSEL_KEY,
+                B.NAME,
+                A.TYPE,
+                B.TELEPHONE,
+                B.TELEPHONE_MOBILE,
+                TO_CHAR(A.INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
+                TO_CHAR(A.PROC_START_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_START_DATE,
+                TO_CHAR(A.PROC_END_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_END_DATE
+        FROM T_COUNSEL A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        <if test="searchType == 'number'">
+            AND A.COUNSEL_KEY = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        ORDER BY A.COUNSEL_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTCounselListByPagingCount" resultType="Integer">
+        SELECT COUNT (A.COUNSEL_KEY)
+        FROM T_COUNSEL A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        <if test="searchType == 'number'">
+            AND A.COUNSEL_KEY = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+    </select>
+
+    <select id="selectTeacherList" resultType="MemberListDTO">
+        SELECT
+            B.USER_KEY, B.NAME, B.TELEPHONE_MOBILE, B.EMAIL, B.INDATE,
+            (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as affiliationName,
+            B.GRADE, TO_CHAR(B.GRADE_DATE, 'YYYY-MM-DD') as GRADE_DATE, B.AUTHORITY
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.AUTHORITY = 5
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND B.TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND B.TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND B.USER_KEY = #{searchText}
+        </if>
+        <if test="regStartDate != '' and regEndDate != ''">
+            <![CDATA[
+                AND B.INDATE >= TO_DATE(#{regStartDate}, 'YYYY-MM-DD')
+            ]]>
+            <![CDATA[
+                AND B.INDATE < TO_DATE(#{regEndDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        </if>
+        ORDER BY B.INDATE DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTeacherListCount" resultType="Integer">
+        SELECT COUNT (A.TEACHER_KEY)
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.AUTHORITY = 5
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND B.TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND B.TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND B.USER_KEY = #{searchText}
+        </if>
+        <if test="regStartDate != '' and regEndDate != ''">
+            <![CDATA[
+                AND B.INDATE >= TO_DATE(#{regStartDate}, 'YYYY-MM-DD')
+            ]]>
+            <![CDATA[
+                AND B.INDATE < TO_DATE(#{regEndDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        </if>
+    </select>
+
+    <select id="selectTTeacherInfo" resultType="com.zianedu.lms.vo.TTeacherVO">
+        SELECT * FROM T_TEACHER WHERE USER_KEY = #{userKey}
+    </select>
+
+    <select id="selectTResBY">
+
     </select>
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
@@ -158,17 +328,50 @@
         INSERT INTO T_USER
         (
             USER_KEY, C_KEY, USER_ID, INDATE, NAME, AUTHORITY, STATUS, PWD, BIRTH, LUNAR, GENDER, TELEPHONE,
-            TELEPHONE_MOBILE, ZIPCODE, ADDRESS, EMAIL, RECV_SMS, RECV_EMAIL,
+            TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, EMAIL, RECV_SMS, RECV_EMAIL,
             WELFARE_DC_PERCENT, GRADE, INTEREST_CTG_KEY_0, INTEREST_CTG_KEY_1, IS_MOBILE_REG,
             ADMIN_AUTHORITY_KEY, GRADE_G_KEY, GRADE_PRICE, NOTE
         )
         VALUES
         (
             #{userKey}, 100, #{userId}, #{indate}, #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
-            #{telephoneMobile}, #{zipcode}, #{address}, #{email}, #{recvSms}, #{recvEmail},
+            #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{email}, #{recvSms}, #{recvEmail},
             0, #{grade}, #{interestCtgKey0}, 0, #{isMobileReg},
-            0, 0, #{gradePrice}, #{note}
+            #{adminAuthorityKey}, 0, #{gradePrice}, #{note}
         )
     </insert>
+
+    <insert id="insertTCounsel" parameterType="com.zianedu.lms.vo.TCounselVO">
+        INSERT INTO T_COUNSEL
+        (
+            COUNSEL_KEY, C_KEY, USER_KEY, WRITE_USER_KEY, TYPE, STATUS, INDATE,
+            PROC_START_DATE, PROC_END_DATE, TELEPHONE, TELEPHONE_MOBILE, MEMO, CONTENTS
+        )
+        VALUES
+        (
+            T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status}, TO_DATE(#{indate}, 'YYYY-mm-dd hh:mi:ss'),
+            TO_DATE(#{procStartDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{procEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
+        )
+    </insert>
+
+    <insert id="insertTTeacher" parameterType="Integer">
+        INSERT INTO T_TEACHER
+        ( TEACHER_KEY, USER_KEY )
+        VALUES
+        ( T_TEACHER_SEQ.nextval, #{userKey})
+    </insert>
+
+    <update id="updateTCounsel" parameterType="com.zianedu.lms.vo.TCounselVO">
+        UPDATE T_COUNSEL
+        <set>
+            <if test="type != null">TYPE = #{type},</if>
+            <if test="status != null">STATUS = #{status},</if>
+            <if test="procStartDate != '' and procStartDate != ''">PROC_START_DATE = #{procStartDate},</if>
+            <if test="procEndDate != '' and procEndDate != ''">PROC_END_DATE = #{procEndDate},</if>
+            <if test="memo != '' and memo != ''">MEMO = #{memo},</if>
+            <if test="contents != '' and contents != ''">CONTENTS = #{contents},</if>
+        </set>
+        WHERE COUNSEL_KEY = #{counselKey}
+    </update>
 
 </mapper>

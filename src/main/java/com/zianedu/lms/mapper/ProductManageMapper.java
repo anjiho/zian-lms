@@ -59,6 +59,8 @@ public interface ProductManageMapper {
 
     List<TResVO> selectTResList(@Param("gKey") int gKey);
 
+    List<TResVO> selectTResListByTeacherKey(@Param("teacherKey") int teacherKey);
+
     TExamMasterVO selectTExamMasterInfo(@Param("examKey") int examKey);
 
     List<TBankSubjectExamLinkVO> selectTBankSubjectExamLinkList(@Param("examKey") int examKey);
@@ -99,6 +101,8 @@ public interface ProductManageMapper {
 
     void insertTRes(TResVO tResVO);
 
+    void insertTResAtTeacherSubject(TResVO tResVO);
+
     Integer insertTExamMaster(TExamMasterVO tExamMasterVO);
 
     void insertTExamQuestionBank(TExamQuestionBankVO tExamQuestionBankVO);
@@ -127,6 +131,8 @@ public interface ProductManageMapper {
     void deleteTBankSubjectExamLink(@Param("bankSubjectExamLinkKey") int bankSubjectExamLinkKey);
 
     void deleteTBankSubjectQuesLink(@Param("bankSubjectQuesLinkKey") int bankSubjectQuesLinkKey);
+
+    void deleteTGoodsPriceOption(@Param("gKey") int gKey);
 
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);

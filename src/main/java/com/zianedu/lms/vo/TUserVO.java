@@ -10,7 +10,7 @@ import java.io.Serializable;
 @Data
 public class TUserVO implements Serializable {
 
-    private Long userKey;
+    private int userKey;
 
     private Long cKey;
     //아이디
@@ -61,13 +61,13 @@ public class TUserVO implements Serializable {
     private String recvSnsTwiter;
 
     private String recvSnsGoogleplus;
-
+    //복지 할인률
     private int welfareDcPercent;
 
     private String certCode;
 
     private int grade;
-
+    //직렬 카테고리 키
     private int interestCtgKey0;
 
     private int interestCtgKey1;
@@ -75,7 +75,7 @@ public class TUserVO implements Serializable {
     private int isMobileReg;
 
     private int adminAuthorityKey;
-
+    //등급변경일
     private String gradeDate;
 
     private int gradeGKey;
@@ -90,7 +90,7 @@ public class TUserVO implements Serializable {
 
     public TUserVO() {}
 
-    public TUserVO(Long userKey, String userName, int authority) {
+    public TUserVO(int userKey, String userName, int authority) {
         this.userKey = userKey;
         this.name = userName;
         this.authority = authority;
@@ -114,9 +114,9 @@ public class TUserVO implements Serializable {
         this.recvEmail = tUserVO.getRecvEmail();
         this.grade = tUserVO.getGrade();
         this.interestCtgKey0 = tUserVO.getInterestCtgKey0();
+        this.adminAuthorityKey = tUserVO.getAdminAuthorityKey();
         this.isMobileReg = tUserVO.getIsMobileReg();
         this.gradePrice = tUserVO.getGradePrice();
         this.note = Util.isNullValue(tUserVO.getNote(), "");
     }
-
 }

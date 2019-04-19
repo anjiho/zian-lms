@@ -268,4 +268,12 @@ public class SelectboxService {
         return CounselStatusType.getCounselStatusTypeList();
     }
 
+    /**
+     * 상담내역 > 상담내역 검색 종류 셀렉트 박스
+     * @return
+     */
+    public List<SelectboxDTO>selectCounselSearchTypeSelectbox() {
+        return CounselSearchType.getCounselSearchTypeList();
+    }
+
 }

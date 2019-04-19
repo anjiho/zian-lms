@@ -1015,7 +1015,7 @@ public class Util {
         SecurityUtil securityUtil = new SecurityUtil();
 
 
-        System.out.println(securityUtil.encryptSHA256(str));
+        System.out.println(returnNow());
 
 
     }

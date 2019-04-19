@@ -66,8 +66,6 @@ public class ProductManageService extends PagingSupport {
             }
         }
 
-
-
         ProductDetailInfoDTO productDetailInfoDTO = new ProductDetailInfoDTO(
                 productInfo,
                 productOptionInfo,
@@ -563,6 +561,7 @@ public class ProductManageService extends PagingSupport {
     public void upsultTGoodsPriceOption(List<TGoodsPriceOptionVO> tGoodsPriceOptionVOList, int gKey) {
         if (tGoodsPriceOptionVOList.size() == 0) return;
 
+        productManageMapper.deleteTGoodsPriceOption(gKey);
         for (TGoodsPriceOptionVO optionVO : tGoodsPriceOptionVOList) {
             optionVO.setGKey(gKey);
             if (optionVO.getPriceKey() == 0) {
@@ -678,7 +677,11 @@ public class ProductManageService extends PagingSupport {
         if (tLecCurri == null) return 0;
 
         Integer lastPos = productManageMapper.selectTLecCurriLastPos(tLecCurri.getLecKey());
-        if (lastPos == null) lastPos = 0;
+        if (lastPos == null) {
+            lastPos = 0;
+        } else {
+            lastPos = lastPos + 1;
+        }
 
         tLecCurri.setPos(lastPos);
 
