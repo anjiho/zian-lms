@@ -156,16 +156,6 @@
         $.each($('#attachFile')[0].files, function(i, file) {
             data.append('file_name', file);
         });
-        console.log(data);
-
-        /*var reader = new FileReader();
-        reader.onload = function (e) {
-            $target.css('display', '');
-            //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
-            $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
-        }
-        reader.readAsDataURL(html.files[0]);
-        */
         var attachFile = fn_clearFilePath($('#attachFile').val());
         var ctgKey     =  getInputTextValue("ctgKey");
         var pos        = getInputTextValue("pos");
