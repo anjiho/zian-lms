@@ -190,6 +190,13 @@
 		SELECT * FROM T_RES WHERE key_00 = #{gKey}
 	</select>
 
+	<select id="selectTResListByTeacherKey" parameterType="Integer" resultType="com.zianedu.lms.vo.TResVO">
+		SELECT A.RES_KEY, A.DEVICE,
+			   (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = A.KEY_01) as ctg_name, VALUE_TEXT
+		FROM T_RES A
+		WHERE TYPE = 2 AND A.KEY_00 = #{teacherKey} ORDER BY A.DEVICE ASC
+	</select>
+
 	<select id="selectTExamMasterInfo" resultType="com.zianedu.lms.vo.TExamMasterVO">
 		SELECT * FROM T_EXAM_MASTER WHERE EXAM_KEY = #{examKey}
 	</select>
@@ -461,6 +468,17 @@
 		VALUES
 		(
 			T_RES_SEQ.nextval, 0, 0, #{key00}, 0, 0, 0, 0, 0, #{value}, ''
+		)
+	</insert>
+
+	<insert id="insertTResAtTeacherSubject" parameterType="com.zianedu.lms.vo.TResVO">
+		INSERT INTO T_RES
+		(
+			RES_KEY, TYPE, DEVICE, KEY_00, KEY_01, KEY_02, KEY_00_TYPE, KEY_01_TYPE, KEY_02_TYPE, VALUE, VALUE_TEXT
+		)
+		VALUES
+		(
+			T_RES_SEQ.nextval, 2, #{device}, #{teacherKey}, #{ctgKey}, 0, 200, 100, 0, '', #{valueText}
 		)
 	</insert>
 
@@ -778,6 +796,10 @@
 
 	<delete id="deleteTBankSubjectQuesLink" parameterType="Integer">
 		DELETE FROM T_BANK_SUBJECT_QUES_LINK WHERE BANK_SUBJECT_QUES_LINK_KEY = #{bankSubjectQuesLinkKey}
+	</delete>
+
+	<delete id="deleteTGoodsPriceOpition" parameterType="Integer">
+		DELETE FROM T_GOODS_PRICE_OPTION WHERE G_KEY = #{gKey}
 	</delete>
 
 </mapper>

@@ -561,6 +561,7 @@ public class ProductManageService extends PagingSupport {
     public void upsultTGoodsPriceOption(List<TGoodsPriceOptionVO> tGoodsPriceOptionVOList, int gKey) {
         if (tGoodsPriceOptionVOList.size() == 0) return;
 
+        productManageMapper.deleteTGoodsPriceOption(gKey);
         for (TGoodsPriceOptionVO optionVO : tGoodsPriceOptionVOList) {
             optionVO.setGKey(gKey);
             if (optionVO.getPriceKey() == 0) {

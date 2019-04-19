@@ -114,9 +114,9 @@ public class TUserVO implements Serializable {
         this.recvEmail = tUserVO.getRecvEmail();
         this.grade = tUserVO.getGrade();
         this.interestCtgKey0 = tUserVO.getInterestCtgKey0();
+        this.adminAuthorityKey = tUserVO.getAdminAuthorityKey();
         this.isMobileReg = tUserVO.getIsMobileReg();
         this.gradePrice = tUserVO.getGradePrice();
         this.note = Util.isNullValue(tUserVO.getNote(), "");
     }
-
 }

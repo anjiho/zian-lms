@@ -26,4 +26,6 @@ public class TResVO {
     private String value;
 
     private String valueText;
+
+    private String ctgName;
 }

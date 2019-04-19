@@ -4,11 +4,10 @@ import com.zianedu.lms.define.datasource.CounselType;
 import com.zianedu.lms.define.datasource.MemberGradeType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.MemberManageMapper;
+import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
-import com.zianedu.lms.vo.TCounselVO;
-import com.zianedu.lms.vo.TUserSecessionVO;
-import com.zianedu.lms.vo.TUserVO;
+import com.zianedu.lms.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -21,6 +20,9 @@ public class MemberManageService {
 
     @Autowired
     private MemberManageMapper memberManageMapper;
+
+    @Autowired
+    private ProductManageMapper productManageMapper;
 
     /**
      * 회원 선택 리스트 ( 쿠폰 목록 > 운영자 발급 > 회원에게 쿠폰 발급 시 )
@@ -229,14 +231,117 @@ public class MemberManageService {
     }
 
     /**
-     * 회원 추가
+     * 회원관리 > 상담내역 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<CounselListDTO> getCounselList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        List<CounselListDTO> list = memberManageMapper.selectTCounselListByPaging(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+        return list;
+    }
+
+    /**
+     * 회원관리 > 상담내역 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getCounselListCount(String searchType, String searchText) {
+        return memberManageMapper.selectTCounselListByPagingCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+    /**
+     * 강사목록 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @param regStartDate
+     * @param regEndDate
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<MemberListDTO> getTeacherList(int sPage, int listLimit, String searchType, String searchText,
+                                              String regStartDate, String regEndDate) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<MemberListDTO> list = memberManageMapper.selectTeacherList(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, ""),
+                Util.isNullValue(regStartDate, ""),
+                Util.isNullValue(regEndDate, "")
+        );
+        if (list.size() > 0) {
+            for (MemberListDTO memberListDTO : list) {
+                memberListDTO.setGradeName(MemberGradeType.getMemberGradeStr(memberListDTO.getGrade()));
+                memberListDTO.setAuthorityName(MemberAuthorityType.getMemberAuthorityTypeStr(memberListDTO.getAuthority()));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 강사목록 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @param regStartDate
+     * @param regEndDate
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getTeacherListCount(String searchType, String searchText, String regStartDate, String regEndDate) {
+        return memberManageMapper.selectTeacherListCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, ""),
+                Util.isNullValue(regStartDate, ""),
+                Util.isNullValue(regEndDate, "")
+        );
+    }
+
+    @Transactional(readOnly = true)
+    public ResultDTO getTeacherDetailInfo(int userKey) {
+        if (userKey == 0) return null;
+
+        TTeacherVO teacherVO = memberManageMapper.selectTTeacherInfo(userKey);
+        List<TResVO>list = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
+
+        return null;
+    }
+
+    /**
+     * 회원 추가( 권한이 강사면 강사 테이블 추가 입력 )
      * @param tUserVO
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public int saveMember(TUserVO tUserVO) throws Exception {
         TUserVO userVO = new TUserVO(tUserVO);
-        return memberManageMapper.insertTUSer(userVO);
+        Integer userKey = memberManageMapper.insertTUSer(userVO);
+        if (userKey != null) {
+            //강사면 강사 테이블 저장
+            if (tUserVO.getAuthority() == 5) {
+                memberManageMapper.insertTTeacher(userKey);
+            }
+        }
+        return userKey;
     }
 
     /**
@@ -265,6 +370,27 @@ public class MemberManageService {
             memberManageMapper.insertTCounsel(counselVO);
         }
     }
+
+    /**
+     * 상담내역 수정하기
+     * @param tCounselVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateCounselInfo(TCounselVO tCounselVO) {
+        if (tCounselVO.getCounselKey() == 0) return;
+
+        if (tCounselVO.getStatus() == 1) {
+            tCounselVO.setProcStartDate(Util.returnNow());
+            tCounselVO.setProcEndDate("");
+        } else if (tCounselVO.getStatus() == 2) {
+            tCounselVO.setProcStartDate("");
+            tCounselVO.setProcEndDate(Util.returnNow());
+        }
+
+        TCounselVO counselVO = new TCounselVO(tCounselVO);
+        memberManageMapper.updateTCounsel(counselVO);
+    }
+
 
 
 
