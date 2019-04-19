@@ -681,6 +681,7 @@ public class ProductManageService extends PagingSupport {
         if (lastPos == null) lastPos = 0;
 
         tLecCurri.setPos(lastPos);
+
         productManageMapper.insertTLecCurri(tLecCurri);
         return tLecCurri.getCurriKey();
     }

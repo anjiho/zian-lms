@@ -22,7 +22,7 @@
     $(document).on('change', '.custom-file-input', function() {
         $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-    $(document).on('change', '.custom-file-input2', function() {
+    $(document).on('change', '.dataAddFile', function() {
         $(this).parent().find('.custom-file-control2').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 
@@ -458,7 +458,7 @@
         $('#categoryTable > tbody:first').append(categoryHtml);
     }
 
-    function playDetailList() {
+    function playDetailList() { //동영상정보
         productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
             console.log(selList);
             if(selList.productInfo){/*---기본정보---*/
@@ -562,47 +562,58 @@
             if(selList.productOtherInfo){
                 for(var i = 0; i < selList.productOtherInfo.length; i++){
                     var selList2 = selList.productOtherInfo[i];
-
                     for(var j = 0; j < selList2.length; j++){
-                        var MockListHtml = "<tr>";
-                        MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
-                        MockListHtml     += "<input type='text'  id='"+ selList2[j].goodsName +"' value='' readonly>";
-                        MockListHtml     += "</td>";//examKey
-                        MockListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
-                        //MockListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
-                        MockListHtml     += "</td>";
-                        MockListHtml     += "</tr>";
-                        $('#allMockList > tbody:first').append(MockListHtml);//선택 모의고사 리스트 뿌리기
-                    }
-
-                        /*전범위 모의괏*/
-                        /*var title =  selList.productOtherInfo[i].goodsName;
-                        var deleteSel = 'allMockTitleDelete';
-                        getallMockOption = "MockName_"+i; //전범위모의고사
-
-
-                        var MockListHtml = "<tr>";
+                        if(selList2[j].resType == '8'){
+                            var MockListHtml = "<tr>";
                             MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
-                            //MockListHtml     += "<span id='"+getallMockOption+"'></span>";
-                            MockListHtml     += "<input type='text'  id='"+title+"' value='' readonly>";
+                            MockListHtml     += "<input type='text'  id='"+ selList2[j].linkKey +"' value='"+ selList2[j].goodsName +"' readonly>";
                             MockListHtml     += "</td>";//examKey
                             MockListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
-                            MockListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
                             MockListHtml     += "</td>";
                             MockListHtml     += "</tr>";
-
-                        if(deleteSel == 'mockBtn'){ //전범위 모의고사
-                            $('#allMockList > tbody:first').append(MockListHtml);//선택 모의고사 리스트 뿌리기
-                            $("#"+getallMockOption).val(title);//모의고사 제목 뿌리기
-                        }else if(deleteSel == 'examBtn'){ //기출문제
-                            $('#examQuestionList > tbody:first').append(MockListHtml);//선택 기출문제 리스트 뿌리기
-                            $("#"+getallMockOption).val(title);//기출문제 제목 뿌리기
+                            $('#allMockList > tbody:first').append(MockListHtml);
+                        }else if(selList2[j].resType == '9'){
+                            var examListHtml = "<tr>";
+                            examListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
+                            examListHtml     += "<input type='text'  id='"+ selList2[j].linkKey +"' value='"+ selList2[j].goodsName +"' readonly>";
+                            examListHtml     += "</td>";//examKey
+                            examListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
+                            examListHtml     += "</td>";
+                            examListHtml     += "</tr>";
+                            $('#examQuestionList > tbody:first').append(examListHtml);
+                        }else if(selList2[j].resType == '5'){
+                            var bookListHtml = "<tr>";
+                            bookListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
+                            bookListHtml     += "<input type='text'  id='"+ selList2[j].linkKey +"' value='"+ selList2[j].goodsName +"' readonly>";
+                            bookListHtml     += "</td>";//examKey
+                            bookListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
+                            bookListHtml     += "</td>";
+                            bookListHtml     += "</tr>";
+                            $('#bookList > tbody:first').append(bookListHtml);
+                        }else if(selList2[j].resType == '4'){
+                            var giftListtHtml = "<tr>";
+                            giftListtHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
+                            giftListtHtml     += "<input type='text'  id='"+ selList2[j].linkKey +"' value='"+ selList2[j].goodsName +"' readonly>";
+                            giftListtHtml     += "</td>";//examKey
+                            giftListtHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
+                            giftListtHtml     += "</td>";
+                            giftListtHtml     += "</tr>";
+                            $('#giftList > tbody:first').append(giftListtHtml);
                         }
-                        */
-
-
+                    }
                 }
             }
+        });
+
+        //동영상 - 강의목록 불러오기
+        productManageService.getLectureCurriList(gKey, function (selList) {
+            console.log(">>>");
+            console.log(selList);
+            //console.log("불러오기");
+            //console.log(selList);
+            /*var optionHtml = "<tr>";
+
+            $('#optionTable > tbody:first').append(optionHtml);*/
 
         });
     }
@@ -616,14 +627,63 @@
         innerValue(resultPirceCnt,totalprice);
     }
 
+    
     //강의목록- 입력 저장
     function videoLectureSave() {
-       // var lecKey = getInputTextValue("")
-
-
-        productManageService.saveVideoLectureInfo(gKey, 'VIDEO', function (selList) {
-
+        var data = new FormData();
+        $.each($('#dataFile')[0].files, function(i, file) {
+            data.append('file_name', file);
         });
+            $.ajax({
+                url: "/file/videoDataFileUpload",
+                method: "post",
+                dataType: "JSON",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    var name = getInputTextValue("lectureName");
+                    var isShow = "";
+                    if($('input:checkbox[name="lectureIsShow"]').is(":checked") == true) isShow = '1';
+                    else{isShow = '0';}
+                    var isSample = "";
+                    if($('input:checkbox[name="isSample"]').is(":checked") == true) isSample = '1';
+                    else{isSample = '0';}
+                    var vodFileLow = getInputTextValue("vodFileLow");
+                    var vodFileHigh = getInputTextValue("vodFileHigh");
+                    var vodFileMobileLow = getInputTextValue("vodFileMobileLow");
+                    var vodFileMobileHigh = getInputTextValue("vodFileMobileHigh");
+                    var vodTime = getInputTextValue("vodTime");
+                    var dataFile = "";
+                    if(data.result != null) dataFile = data.result;
+                    var data = {
+                        curriKey:0,
+                        lecKey:gKey,
+                        name:name,
+                        isShow:isShow,
+                        isSample:isSample,
+                        vodFileLow:vodFileLow,
+                        vodFileHigh:vodFileHigh,
+                        vodFileMobileLow:vodFileMobileLow,
+                        vodFileMobileHigh:vodFileMobileHigh,
+                        vodTime:vodTime,
+                        dataPage:0,
+                        pos:0,
+                        dataFile: dataFile
+                    };
+                    productManageService.saveVideoLectureInfo(data, function (data) {
+                        if(data){//lectureListPopup
+                            innerValue("");
+                            innerValue("vodFileHigh");
+                            innerValue("vodFileMobileLow");
+                            innerValue("vodFileMobileHigh");
+                            innerValue("vodTime");
+                        }
+                    });
+                }
+            });
+
     }
 </script>
 <div class="page-breadcrumb">
@@ -1084,7 +1144,7 @@
                                 <button type="button" class="btn btn-outline-info btn-sm">순서변경</button>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#lectureListPopup">추가</button>
                             </div>
-                            <table class="table text-center table-hover">
+                            <table class="table text-center table-hover"  id="lectureCurriTabel">
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="1" style="width:8%">번호</th>
@@ -1095,8 +1155,8 @@
                                     <th scope="col" colspan="1" style="width:7%"></th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
+                                <tbody id="lectureCurriList">
+                                <!--<tr>
                                     <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
                                         <span>1</span>
                                     </td>
@@ -1115,27 +1175,7 @@
                                     <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
                                         <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
                                     </td>
-                                </tr>
-                                <tr>
-                                    <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
-                                        <span>2</span>
-                                    </td>
-                                    <td class="text-left" style="padding: 0.3rem; vertical-align: middle;">
-                                        <span>text</span>
-                                    </td>
-                                    <td style="padding: 0.3rem;vertical-align: middle">
-                                        <span>120</span>
-                                    </td>
-                                    <td style="padding: 0.3rem;vertical-align: middle">
-                                        <i class="mdi mdi-check" style="color:green;"></i>
-                                    </td>
-                                    <td style="vertical-align: middle">
-                                        <i class="mdi mdi-check" style="color:green;"></i>
-                                    </td>
-                                    <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                        <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                    </td>
-                                </tr>
+                                </tr>-->
                                 </tbody>
                             </table>
                         </section>
@@ -1376,13 +1416,13 @@
                 <div class="form-group row">
                     <label class="col-sm-3 text-right control-label col-form-label">강좌 CODE</label>
                     <div class="col-sm-9">
-                        <input type="hidden" id="lecKey">
+                        <input type="text" id="lecKey" value="<%=gKey%>" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="form-group row">
                     <label class="col-sm-3 text-right control-label col-form-label">강의 CODE</label>
                     <div class="col-sm-9">
-                        <input type="hidden" id="curriKey">
+                        <input type="text" id="curriKey" class="form-control" readonly>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -1397,7 +1437,7 @@
                         <div style="margin-top: -23px;">
                             OFF
                             <label class="switch">
-                                <input type="checkbox" id="lectureIsShow"/>
+                                <input type="checkbox" id="lectureIsShow" name="lectureIsShow"/>
                                 <span class="slider"></span>
                             </label>
                             ON
@@ -1410,7 +1450,7 @@
                         <div style="margin-top: -23px;">
                             OFF
                             <label class="switch">
-                                <input type="checkbox" id="isSample"/>
+                                <input type="checkbox" id="isSample" name="isSample"/>
                                 <span class="slider"></span>
                             </label>
                             ON
@@ -1445,7 +1485,7 @@
                     <label class="col-sm-3 text-right control-label col-form-label" style="margin-bottom: 0">강의 자료</label>
                     <div class="col-sm-9">
                         <div class="custom-file">
-                            <input type="file" class="custom-file-input2" id="dataFile"  name="dataFile" required>
+                            <input type="file" class="custom-file-input dataAddFile" id="dataFile" name="dataFile" required>
                             <span class="custom-file-control2 custom-file-label"></span>
                         </div>
                     </div>
