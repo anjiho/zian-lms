@@ -81,6 +81,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TPopupVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCouponMasterVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TUserSecessionVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCounselVO"/>
 
 
 		<!--  dto 선언 -->

@@ -7,7 +7,7 @@ public enum MemberAuthorityType {
     ADMIN(0, "관리자"),
     TEACHER(5, "강사"),
     USER(10, "회원"),
-    DISMISS(19, "탈퇴자");
+    DISMISS(19, "방문객");
 
     int memberAuthorityKey;
 

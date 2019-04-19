@@ -3,6 +3,7 @@ package com.zianedu.lms.mapper;
 import com.zianedu.lms.dto.MemberListDTO;
 import com.zianedu.lms.dto.MemberSelectListDTO;
 import com.zianedu.lms.dto.UserConsultListDTO;
+import com.zianedu.lms.vo.TCounselVO;
 import com.zianedu.lms.vo.TUserSecessionVO;
 import com.zianedu.lms.vo.TUserVO;
 import org.apache.ibatis.annotations.Param;
@@ -34,9 +35,17 @@ public interface MemberManageMapper {
 
     List<UserConsultListDTO> selectTCounselList(@Param("userKey") int userKey);
 
+    List<TUserSecessionVO> selectTUserSecessionApplyList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                         @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectTUserSecessionApplyListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    TUserVO selectTUserInfo(@Param("userKey") int userKey);
+
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
 
+    void insertTCounsel(TCounselVO tCounselVO);
+
     /** UPDATE **/
-    void updateTUser(TUserVO tUserVO);
 }

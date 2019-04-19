@@ -24,4 +24,8 @@ public class UserSession {
     public static int getAuthority() {
         return local.get().getAuthority();
     }
+
+    public static int getUserKey() {
+        return local.get().getUserKey();
+    }
 }
