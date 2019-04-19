@@ -4,10 +4,7 @@ import com.zianedu.lms.dto.CounselListDTO;
 import com.zianedu.lms.dto.MemberListDTO;
 import com.zianedu.lms.dto.MemberSelectListDTO;
 import com.zianedu.lms.dto.UserConsultListDTO;
-import com.zianedu.lms.vo.TCounselVO;
-import com.zianedu.lms.vo.TTeacherVO;
-import com.zianedu.lms.vo.TUserSecessionVO;
-import com.zianedu.lms.vo.TUserVO;
+import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -57,6 +54,8 @@ public interface MemberManageMapper {
                              @Param("regStartDate") String regStartDate, @Param("regEndDate") String regEndDate);
 
     TTeacherVO selectTTeacherInfo(@Param("userKey") int userKey);
+
+    List<TLinkKeyVO> selectTLinkKeyByTeacher(@Param("teacherKey") int teacherKey);
 
 
     /** INSERT **/

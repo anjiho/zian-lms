@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +24,9 @@ public class MemberManageService {
 
     @Autowired
     private ProductManageMapper productManageMapper;
+
+    @Autowired
+    private DataManageService dataManageService;
 
     /**
      * 회원 선택 리스트 ( 쿠폰 목록 > 운영자 발급 > 회원에게 쿠폰 발급 시 )
@@ -316,14 +320,33 @@ public class MemberManageService {
         );
     }
 
+    /**
+     * 강사 상세정보 가져오기
+     * @param userKey
+     * @return
+     */
     @Transactional(readOnly = true)
-    public ResultDTO getTeacherDetailInfo(int userKey) {
+    public TeacherDetailDTO getTeacherDetailInfo(int userKey) {
         if (userKey == 0) return null;
 
         TTeacherVO teacherVO = memberManageMapper.selectTTeacherInfo(userKey);
-        List<TResVO>list = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
+        List<TResVO>subjectGroupInfo = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
+        List<TLinkKeyVO>linkKeyList = memberManageMapper.selectTLinkKeyByTeacher(teacherVO.getTeacherKey());
 
-        return null;
+        List<List<TCategoryVO>> teacherCategoryInfo = new ArrayList<>();
+        if (linkKeyList.size() > 0) {
+            for (TLinkKeyVO tLinkKeyVO : linkKeyList) {
+                List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryList(tLinkKeyVO.getReqKey());
+                //Collections.reverse(tCategoryVOList);
+                teacherCategoryInfo.add(tCategoryVOList);
+            }
+        }
+        TeacherDetailDTO teacherDetailDTO = new TeacherDetailDTO(
+                teacherVO,
+                subjectGroupInfo,
+                teacherCategoryInfo
+        );
+        return teacherDetailDTO;
     }
 
     /**
@@ -390,8 +413,5 @@ public class MemberManageService {
         TCounselVO counselVO = new TCounselVO(tCounselVO);
         memberManageMapper.updateTCounsel(counselVO);
     }
-
-
-
 
 }

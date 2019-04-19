@@ -317,9 +317,20 @@
         SELECT * FROM T_TEACHER WHERE USER_KEY = #{userKey}
     </select>
 
-    <select id="selectTResBY">
-
+    <select id="selectTLinkKeyByTeacher" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+        SELECT A.LINK_KEY, A.REQ_KEY FROM T_LINK_KEY A
+        INNER JOIN T_CATEGORY B
+        ON A.REQ_KEY = B.CTG_KEY
+        WHERE A.REQ_TYPE = 100
+        AND A.RES_TYPE = 200
+        AND A.RES_KEY = #{teacherKey}
     </select>
+
+<!--    <select id="select">-->
+<!--        &lt;!&ndash; req_key ==> 1086 : 계리직동영상 순서 // 1080 : 계리직학원 순서 // 829 : 기술직 동영상 순서 // 832 : 행정직강사 순서 // 788, 행정직 동영상 &ndash;&gt;-->
+<!--        SELECT * FROM T_LINK_KEY where req_key = 1086-->
+<!--    </select>-->
+
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">
