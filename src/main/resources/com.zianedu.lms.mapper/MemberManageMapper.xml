@@ -149,8 +149,8 @@
     <select id="selectTCounselList" resultType="UserConsultListDTO">
       SELECT COUNSEL_KEY, TYPE,
              TO_CHAR(INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
-             TO_CHAR(PROC_START_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_START_DATE,
-             TO_CHAR(PROC_END_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_END_DATE
+             TO_CHAR(PROC_START_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_START_DATE,
+             TO_CHAR(PROC_END_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_END_DATE
       FROM T_COUNSEL WHERE USER_KEY = #{userKey}
     </select>
 
@@ -212,8 +212,8 @@
                 B.TELEPHONE,
                 B.TELEPHONE_MOBILE,
                 TO_CHAR(A.INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
-                TO_CHAR(A.PROC_START_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_START_DATE,
-                TO_CHAR(A.PROC_END_DATE, 'YYYY-MM-DD HH:mi:ss') as PROC_END_DATE
+                TO_CHAR(A.PROC_START_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_START_DATE,
+                TO_CHAR(A.PROC_END_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_END_DATE
         FROM T_COUNSEL A
         INNER JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
@@ -326,12 +326,6 @@
         AND A.RES_KEY = #{teacherKey}
     </select>
 
-<!--    <select id="select">-->
-<!--        &lt;!&ndash; req_key ==> 1086 : 계리직동영상 순서 // 1080 : 계리직학원 순서 // 829 : 기술직 동영상 순서 //
-                                     823 : 기술직 학원 순서 // 794 : 행정직동영상 순서 // 788, 행정직학원 순서 -->
-<!--        SELECT * FROM T_LINK_KEY where req_key = 1086-->
-<!--    </select>-->
-
     <select id="selectNumberExposureTeacherList" resultType="com.zianedu.lms.vo.TLinkKeyVO">
         SELECT
             A.LINK_KEY, A.REQ_KEY, A.POS, C.NAME
@@ -341,6 +335,56 @@
         ON B.USER_KEY = C.USER_KEY
         WHERE A.REQ_KEY = #{reqKey}
         ORDER By POS ASC
+    </select>
+
+    <select id="selectSmsSendLogList" parameterType="SmsSearchParamDTO" resultType="SmsSendListDTO">
+        SELECT
+            TO_CHAR(A.TR_SENDDATE, 'YYYY-MM-DD HH24:MI:SS') as SEND_DATE,
+            A.TR_PHONE  as RECEIVE_NUMBER,
+            A.TR_CALLBACK as SEND_NUMBER,
+            A.TR_ETC2 as USER_KEY,
+            A.TR_ETC3 as RECEIVER_NAME,
+            B.USER_ID as RECEIVER_ID,
+            A.TR_RSLTSTAT as SEND_RESULT,
+            A.TR_MSG as SEND_MESSAGE
+        FROM ${tableName} A
+        LEFT OUTER JOIN T_USER B
+        ON A.TR_ETC2 = B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND A.TR_ETC3 LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND A.TR_PHONE = #{searchText}
+        </if>
+        <if test="searchType == 'content'">
+            AND A.TR_MSG LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.TR_NUM DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectSmsSendLogListCount" parameterType="SmsSearchParamDTO" resultType="Integer">
+        SELECT COUNT( A.TR_NUM )
+        FROM ${tableName} A
+        LEFT OUTER JOIN T_USER B
+        ON A.TR_ETC2 = B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND A.TR_ETC3 LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND A.TR_PHONE = #{searchText}
+        </if>
+        <if test="searchType == 'content'">
+            AND A.TR_MSG LIKE '%'||#{searchText}||'%'
+        </if>
     </select>
 
 
@@ -382,6 +426,21 @@
         ( TEACHER_KEY, USER_KEY )
         VALUES
         ( T_TEACHER_SEQ.nextval, #{userKey})
+    </insert>
+
+    <insert id="insertScTran" parameterType="com.zianedu.lms.vo.ScTranVO">
+        INSERT INTO SC_TRAN
+        (
+            TR_NUM, TR_SENDDATE, TR_ID, TR_SENDSTAT, TR_RSLTSTAT, TR_MSGTYPE, TR_PHONE, TR_CALLBACK,
+            TR_RSLTDATE, TR_MODIFIED, TR_MSG, TR_NET, TR_ETC1, TR_ETC2, TR_ETC3, TR_ETC4, TR_ETC5, TR_ETC6,
+            TR_REALSENDDATE, TR_ROUTEID
+        )
+        VALUES
+        (
+            SC_TRAN_SEQ.nextval, #{trSenddate}, #{trId}, #{trSendstat}, #{trRsltstat}, #{trMsgtype}, #{trPhone}, #{trCallback},
+            #{trRsltdate}, #{trModified}, #{trMsg}, #{trNet}, #{trEtc1}, #{trEtc2}, #{trEtc3}, #{trEtc4}, #{trEtc5}, #{trEtc6},
+            #{trRealsenddate}, #{trRouteid}
+        )
     </insert>
 
     <update id="updateTCounsel" parameterType="com.zianedu.lms.vo.TCounselVO">

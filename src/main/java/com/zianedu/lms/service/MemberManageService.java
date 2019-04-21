@@ -2,6 +2,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.CounselType;
 import com.zianedu.lms.define.datasource.MemberGradeType;
+import com.zianedu.lms.define.datasource.SmsSendResultType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.MemberManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
@@ -321,6 +322,52 @@ public class MemberManageService {
     }
 
     /**
+     * SMS 발송 리스트
+     * @param sPage
+     * @param listLimit
+     * @param yyyyMM
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SmsSendListDTO> getSmsSendList(int sPage, int listLimit, String yyyyMM, String searchType, String searchText) {
+        if (sPage == 0 && "".equals(yyyyMM)) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        String tableName = "SC_LOG_" + yyyyMM;
+
+        SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
+                startNumber, listLimit, Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+        );
+        List<SmsSendListDTO>list = memberManageMapper.selectSmsSendLogList(paramDTO);
+        if (list.size() > 0) {
+            for (SmsSendListDTO smsSendListDTO : list) {
+                smsSendListDTO.setReceiverName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * SMS 발송 리스트 개수
+     * @param yyyyMM
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getSmsSendListCount(String yyyyMM, String searchType, String searchText) {
+        if ("".equals(yyyyMM)) return 0;
+
+        String tableName = "SC_LOG_" + yyyyMM;
+        SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
+                Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+        );
+        return memberManageMapper.selectSmsSendLogListCount(paramDTO);
+    }
+
+    /**
      * 강사 상세정보 가져오기
      * @param userKey
      * @return
@@ -402,6 +449,41 @@ public class MemberManageService {
             }
             TCounselVO counselVO = new TCounselVO(tCounselVO);
             memberManageMapper.insertTCounsel(counselVO);
+        }
+    }
+
+    /**
+     * SMS 발송하기
+     * @param sendDTOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void sendSms(List<SmsSendDTO>sendDTOList) {
+        if (sendDTOList.size() > 0) {
+            for (SmsSendDTO sendDTO : sendDTOList) {
+                String userName = "";
+                String userId = "";
+                //발송자의 키가 있을 때
+                if (sendDTO.getUserKey() > 0) {
+                    //발송자의 정보 조회
+                    TUserVO userVO = memberManageMapper.selectTUserInfo(sendDTO.getUserKey());
+                    if (userVO != null) {
+                        //발송자의 이름, 아이디 객체에 담기
+                        userName = userVO.getName();
+                        userId = userVO.getUserId();
+                    }
+                }
+                //입력 객체 생성
+                ScTranVO scTranVO = new ScTranVO(
+                        Util.isNullValue(sendDTO.getReceiverPhoneNumber(), ""),
+                        Util.isNullValue(sendDTO.getSendNumber(), ""),
+                        Util.isNullValue(sendDTO.getMsg(), ""),
+                        Util.isNullValue(String.valueOf(sendDTO.getUserKey()), ""),
+                        Util.isNullValue(userName, ""),
+                        Util.isNullValue(userId, "")
+                );
+                //SMS발송 테이블 입력
+                memberManageMapper.insertScTran(scTranVO);
+            }
         }
     }
 
