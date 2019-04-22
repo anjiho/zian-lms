@@ -14,10 +14,31 @@
         playDetailList();//정보불러오기
         getCategoryList("sel_0",214);
         $('#description').summernote({ //기본정보-에디터
-            width: 750,
-            height: 300,
-            focus: true,
-            theme: 'cerulean'
+            height: 430,
+            minHeight: null,
+            maxHeight: null,
+            focus: false,
+            lang: 'ko-KR',
+            placeholder: '내용을 적어주세요.'
+            ,hint: {
+                match: /:([\-+\w]+)$/,
+                search: function (keyword, callback) {
+                    callback($.grep(emojis, function (item) {
+                        return item.indexOf(keyword) === 0;
+                    }));
+                },
+                template: function (item) {
+                    var content = emojiUrls[item];
+                    return '<img src="' + content + '" width="20" /> :' + item + ':';
+                },
+                content: function (item) {
+                    var url = emojiUrls[item];
+                    if (url) {
+                        return $('<img />').attr('src', url).css('width', 20)[0];
+                    }
+                    return '';
+                }
+            }
         });
     });
 
@@ -522,13 +543,19 @@
                 isCheckbox("isShow", false);//노출
                 isCheckbox("isSell", true);//판매
                 isCheckbox("isFree", true);//무료
-                $('.custom-file-control').html(fn_clearFilePath(selList.productInfo.imageList));//리스트이미지
-                $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
+                if (selList.productInfo.imageList != null) {
+                    $('.custom-file-control').html(fn_clearFilePath(selList.productInfo.imageList));//리스트이미지
+                }
+                if (selList.productInfo.imageView != null) {
+                    $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
+                }
                 $("#emphasis").val(selList.productInfo.emphasis);//강조표시
                 isCheckbox("isFreebieDeliveryFree", true);//사은품 배송비무료
-                innerValue("description", selList.productInfo.description);//상세설명
+                //innerValue("description", selList.productInfo.description);//상세설명
+                $("#description").summernote("code", selList.productInfo.description);
+                //console.log(">>" + selList.productInfo.description);
             }
-            if (selList.productOptionInfo) {/*---옵션---*/
+            if (selList.productOptionInfo != null) {/*---옵션---*/
                 addOption(selList.productOptionInfo.length);
                 for (var i = 0; i < selList.productOptionInfo.length; i++) {
                     var selName = "kind_" + i;

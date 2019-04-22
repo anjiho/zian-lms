@@ -1,4 +1,17 @@
 //배너관리 - 서브도메인 셀렉트박스
+function getProductSearchSelectbox (tagId) {
+    selectboxService.getVideoSearchTypeList(function (list) {
+        var html = "<select id='searchType' class='form-control'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+//배너관리 - 서브도메인 셀렉트박스
 function getSubDomainList (tag_id, val) {
     selectboxService.getSubDomainList(function (list) {
         var html = "<select id='sel_subDomain' onchange='' class='form-control'>";

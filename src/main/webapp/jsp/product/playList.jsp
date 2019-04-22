@@ -6,17 +6,20 @@
 
 <script>
 
+    function init() {
+        getProductSearchSelectbox("l_searchSel");
+    }
+
     function play_modify(gKey) {
         innerValue("gKey", gKey);
         goPage("productManage","modifyPlayManage");
     }
 
-    function enterkey() {
-
-        if (window.event.keyCode == 13) {
-           fn_search('new');
-        }
-    }
+    // function enterkey() {
+    //     if (window.event.keyCode == 13) {
+    //        fn_search('new');
+    //     }
+    // }
 
 
     function fn_search(val) {
@@ -97,15 +100,12 @@
                     <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:10px;">동영상 목록</h5>
                     <div>
                         <div style=" float: left; width: 10%">
-                         <select class="form-control" id="searchType">
-                            <option>제목</option>
-                            <option>코드</option>
-                        </select>
+                            <span id="l_searchSel"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="searchText" onkeyup="enterkey();">
+                        <div style=" float: left; width: 33%; margin-left: 10px">
+                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 10px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
