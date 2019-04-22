@@ -39,6 +39,8 @@ public interface ProductManageMapper {
 
     List<TLecCurri>selectTLecCurriList(@Param("lecKey") int lecKey);
 
+    TLecCurri selectTLecCurriInfo(@Param("curriKey") int curriKey);
+
     List<TLinkKeyVO>selectTLinkKeyList(@Param("reqKey") int reqKey);
 
     Integer selectTLecCurriLastPos(@Param("lecKey") int lecKey);
@@ -150,6 +152,8 @@ public interface ProductManageMapper {
     void updateTLinkKey(TLinkKeyVO tLinkKeyVO);
 
     void updateTLecCurri(TLecCurri tLecCurri);
+
+    void updateTLecCurriPos(TLecCurri tLecCurri);
 
     void updateTBook(TBookVO tBookVO);
 

@@ -114,6 +114,10 @@
 		SELECT * FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey} ORDER BY POS ASC
 	</select>
 
+	<select id="selectTLecCurriInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecCurri">
+		SELECT * FROM T_LEC_CURRI WHERE CURRI_KEY = #{curriKey}
+	</select>
+
 	<select id="selectTLinkKeyList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLinkKeyVO">
 		SELECT DISTINCT RES_TYPE FROM T_LINK_KEY WHERE req_key = #{reqKey}
 	</select>
@@ -557,20 +561,20 @@
 		UPDATE T_GOODS
 		<set>
 			<if test="cpKey > 0">CP_KEY = #{cpKey},</if>
-			<if test="name != '' or name != null">NAME = #{name},</if>
-			<if test="indate != '' or indate != null">INDATE = TO_DATE(#{indate}, 'YYYY-mm-dd'),</if>
-			<if test="sellstartdate != '' or indate != null">SELLSTARTDATE = TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'),</if>
+			<if test="name != '' and name != null">NAME = #{name},</if>
+			<if test="indate != '' and indate != null">INDATE = TO_DATE(#{indate}, 'YYYY-mm-dd'),</if>
+			<if test="sellstartdate != '' and indate != null">SELLSTARTDATE = TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'),</if>
 			<if test="type != null">TYPE = #{type},</if>
 			<if test="isShow != null">IS_SHOW = #{isShow},</if>
 			<if test="isSell != null">IS_SELL = #{isSell},</if>
 			<if test="isFree != null">IS_FREE = #{isFree},</if>
 			<if test="isNodc != null">IS_NODC = #{isNodc},</if>
-			<if test="imageList != '' or imageList != null">IMAGE_LIST = #{imageList},</if>
-			<if test="imageView != '' or imageView != null">IMAGE_VIEW = #{imageView},</if>
+			<if test="imageList != '' and imageList != null">IMAGE_LIST = #{imageList},</if>
+			<if test="imageView != '' and imageView != null">IMAGE_VIEW = #{imageView},</if>
 			<if test="emphasis != null">EMPHASIS = #{emphasis},</if>
-			<if test="tags != '' or tags != null">TAGS = #{tags},</if>
-			<if test="summary != '' or summary != null">SUMMARY = #{summary},</if>
-			<if test="description != '' or description != null">DESCRIPTION = #{description},</if>
+			<if test="tags != '' and tags != null">TAGS = #{tags},</if>
+			<if test="summary != '' and summary != null">SUMMARY = #{summary},</if>
+			<if test="description != '' and description != null">DESCRIPTION = #{description},</if>
 			<if test="calculateRate != null">CALCULATE_RATE = #{calculateRate},</if>
 			<if test="isFreebieDeliveryFree != null">IS_FREEBIE_DELIVERY_FREE = #{isFreebieDeliveryFree},</if>
 			<if test="isQuickDelivery != null">IS_QUICK_DELIVERY = #{isQuickDelivery},</if>
@@ -655,6 +659,14 @@
 		</set>
 		WHERE CURRI_KEY = #{curriKey}
 	</update>
+
+    <update id="updateTLecCurriPos" parameterType="com.zianedu.lms.vo.TLecCurri">
+        UPDATE T_LEC_CURRI
+        <set>
+            <if test="pos != null">POS = #{pos},</if>
+        </set>
+        WHERE CURRI_KEY = #{curriKey}
+    </update>
 
 	<update id="updateTBook" parameterType="com.zianedu.lms.vo.TBookVO">
 		UPDATE T_BOOK

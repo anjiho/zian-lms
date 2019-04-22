@@ -89,7 +89,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TUserSecessionVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCounselVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TTeacherVO"/>
-
+		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryGoods"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>

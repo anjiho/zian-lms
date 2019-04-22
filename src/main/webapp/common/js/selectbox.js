@@ -52,8 +52,25 @@ function getVideoOptionTypeList(tag_id, val) {
 function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
+            html += "<option value=''>선택하세요</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].ctgKey == val) {
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            } else {
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//카테고리
+function getNewCategoryList(tag_id, val, val2) {
+    selectboxService.getCategoryList(val, function (list) {
+        var html = "<select id='sel_1' class='form-control'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].ctgKey == val2) {
                 html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
             } else {
                 html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
@@ -68,7 +85,7 @@ function getCategoryList(tag_id, val) {
 function getSelectboxListForCtgKey(tag_id, val) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
-        html += "<optiongetSelectboxListForCtgKey value='' selected>선택</optiongetSelectboxListForCtgKey>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -80,6 +97,58 @@ function getSelectboxListForCtgKey(tag_id, val) {
         innerHTML(tag_id, html);
     });
 }
+
+//급수,과목,유형
+function getNewSelectboxListForCtgKey(tag_id, val, val2) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='selClassGroupCtgKey' name='classGroupCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//급수,과목,유형
+function getNewSelectboxListForCtgKey2(tag_id, val, val2) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='selSubjectCtgKey' name='subjectCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//급수,과목,유형
+function getNewSelectboxListForCtgKey3(tag_id, val, val2) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='selStepCtgKey' name='stepCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
 
 //선생님 리스트
 function selectTeacherSelectbox(tag_id,val) {

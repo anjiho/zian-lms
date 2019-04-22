@@ -136,6 +136,14 @@ public class FileUploadController {
         return new JsonBuilder().add("result", gKey).build();
     }
 
+    @RequestMapping(value = "/updateVideoInfo", method = RequestMethod.POST, produces = "application/json; charset=utf8")
+    public @ResponseBody String productFileUpload(MultipartHttpServletRequest request) {
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(
+                request, ConfigHolder.getFileUploadPath(), "VIDEO"
+        );
+        return new JsonBuilder().add("result", uploadInfoMap).build();
+    }
+
     @RequestMapping(value = "/imageFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String productFileUpload(MultipartHttpServletRequest request,
                                                   @RequestParam(value = "uploadType") String uploadType) {

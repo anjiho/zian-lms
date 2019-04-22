@@ -325,6 +325,17 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
+     * 동영상 상세안의 강의 목록
+     * @param curriKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TLecCurri getLectureCurriInfo(int curriKey) {
+        if (curriKey == 0) return null;
+        return productManageMapper.selectTLecCurriInfo(curriKey);
+    }
+
+    /**
      * 모의고사 리스트
      * @param sPage
      * @param listLimit
@@ -560,6 +571,24 @@ public class ProductManageService extends PagingSupport {
         tGoodsVO.setImageView(Util.isNullValue(imageView, ""));
         tGoodsVO.setIndate(Util.isNullValue(tGoodsVO.getIndate(), ""));
         tGoodsVO.setSellstartdate(Util.isNullValue(tGoodsVO.getSellstartdate(), ""));
+        tGoodsVO.setDescription(Util.isNullValue(tGoodsVO.getDescription(), ""));
+
+        if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
+        else productManageMapper.updateTGoods(tGoodsVO);
+
+        return tGoodsVO.getGKey();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public Integer updateGoodsInfo(TGoodsVO tGoodsVO, int gKey, String imageList, String imageView) {
+        if (tGoodsVO == null) return null;
+
+        tGoodsVO.setGKey(gKey);
+        tGoodsVO.setImageList(Util.isNullValue(imageList, ""));
+        tGoodsVO.setImageView(Util.isNullValue(imageView, ""));
+        tGoodsVO.setIndate(Util.isNullValue(tGoodsVO.getIndate(), ""));
+        tGoodsVO.setSellstartdate(Util.isNullValue(tGoodsVO.getSellstartdate(), ""));
+        tGoodsVO.setDescription(Util.isNullValue(tGoodsVO.getDescription(), ""));
 
         if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
         else productManageMapper.updateTGoods(tGoodsVO);
@@ -595,7 +624,7 @@ public class ProductManageService extends PagingSupport {
     public void upsultTCategoryGoods(List<TCategoryGoods>tCategoryGoodsList, int gKey) {
         if (tCategoryGoodsList.size() == 0) return;
 
-        //productManageMapper.deleteTCategoryGoods(tCategoryGoodsList.get(0).getGKey());
+        productManageMapper.deleteTCategoryGoods(gKey);
         for (TCategoryGoods categoryGoods : tCategoryGoodsList) {
             categoryGoods.setGKey(gKey);
             categoryGoods.setPos(0);
@@ -713,7 +742,7 @@ public class ProductManageService extends PagingSupport {
     public void changeNumberVideoLecture(List<TLecCurri> tLecCurriList) {
         if (tLecCurriList.size() == 0) return;
         for (TLecCurri tLecCurri : tLecCurriList) {
-            productManageMapper.updateTLecCurri(tLecCurri);
+            productManageMapper.updateTLecCurriPos(tLecCurri);
         }
     }
 
