@@ -12,7 +12,7 @@ public class TLinkKeyVO {
     private int resKey;
     // LinkKeyReqType 정의
     private int reqType;
-    //모의고사 정보 -> 온/오프라인여부 (2:온라인, 3:오프라인), 300 : 팝업, 400 : 쿠폰
+    //모의고사 정보 -> 온/오프라인여부 (2:온라인, 3:오프라인), 300 : 팝업, 400 : 쿠폰, 200 : 강사
     private int resType;
 
     private int pos;
@@ -20,6 +20,8 @@ public class TLinkKeyVO {
     private int valueBit;
 
     private String goodsName;
+
+    private String name;
 
     public TLinkKeyVO(){}
 

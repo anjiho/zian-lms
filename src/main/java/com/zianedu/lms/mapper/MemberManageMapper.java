@@ -1,13 +1,7 @@
 package com.zianedu.lms.mapper;
 
-import com.zianedu.lms.dto.CounselListDTO;
-import com.zianedu.lms.dto.MemberListDTO;
-import com.zianedu.lms.dto.MemberSelectListDTO;
-import com.zianedu.lms.dto.UserConsultListDTO;
-import com.zianedu.lms.vo.TCounselVO;
-import com.zianedu.lms.vo.TTeacherVO;
-import com.zianedu.lms.vo.TUserSecessionVO;
-import com.zianedu.lms.vo.TUserVO;
+import com.zianedu.lms.dto.*;
+import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -58,6 +52,14 @@ public interface MemberManageMapper {
 
     TTeacherVO selectTTeacherInfo(@Param("userKey") int userKey);
 
+    List<TLinkKeyVO> selectTLinkKeyByTeacher(@Param("teacherKey") int teacherKey);
+
+    List<TLinkKeyVO> selectNumberExposureTeacherList(@Param("reqKey") int reqKey);
+
+    List<SmsSendListDTO> selectSmsSendLogList(SmsSearchParamDTO smsSearchParamDTO);
+
+    Integer selectSmsSendLogListCount(SmsSearchParamDTO smsSearchParamDTO);
+
 
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
@@ -66,6 +68,10 @@ public interface MemberManageMapper {
 
     void insertTTeacher(@Param("userKey") int userKey);
 
+    void insertScTran(ScTranVO scTranVO);
+
     /** UPDATE **/
     void updateTCounsel(TCounselVO tCounselVO);
+
+    void updateTLinkKeyPos(@Param("linkKey") int linkKey, @Param("pos") int pos);
 }

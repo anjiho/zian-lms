@@ -2,6 +2,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.CounselType;
 import com.zianedu.lms.define.datasource.MemberGradeType;
+import com.zianedu.lms.define.datasource.SmsSendResultType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.MemberManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,6 +25,9 @@ public class MemberManageService {
 
     @Autowired
     private ProductManageMapper productManageMapper;
+
+    @Autowired
+    private DataManageService dataManageService;
 
     /**
      * 회원 선택 리스트 ( 쿠폰 목록 > 운영자 발급 > 회원에게 쿠폰 발급 시 )
@@ -316,14 +321,90 @@ public class MemberManageService {
         );
     }
 
+    /**
+     * SMS 발송 리스트
+     * @param sPage
+     * @param listLimit
+     * @param yyyyMM
+     * @param searchType
+     * @param searchText
+     * @return
+     */
     @Transactional(readOnly = true)
-    public ResultDTO getTeacherDetailInfo(int userKey) {
+    public List<SmsSendListDTO> getSmsSendList(int sPage, int listLimit, String yyyyMM, String searchType, String searchText) {
+        if (sPage == 0 && "".equals(yyyyMM)) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        String tableName = "SC_LOG_" + yyyyMM;
+
+        SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
+                startNumber, listLimit, Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+        );
+        List<SmsSendListDTO>list = memberManageMapper.selectSmsSendLogList(paramDTO);
+        if (list.size() > 0) {
+            for (SmsSendListDTO smsSendListDTO : list) {
+                smsSendListDTO.setReceiverName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
+            }
+        }
+        return list;
+    }
+
+    /**
+     * SMS 발송 리스트 개수
+     * @param yyyyMM
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getSmsSendListCount(String yyyyMM, String searchType, String searchText) {
+        if ("".equals(yyyyMM)) return 0;
+
+        String tableName = "SC_LOG_" + yyyyMM;
+        SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
+                Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+        );
+        return memberManageMapper.selectSmsSendLogListCount(paramDTO);
+    }
+
+    /**
+     * 강사 상세정보 가져오기
+     * @param userKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TeacherDetailDTO getTeacherDetailInfo(int userKey) {
         if (userKey == 0) return null;
 
         TTeacherVO teacherVO = memberManageMapper.selectTTeacherInfo(userKey);
-        List<TResVO>list = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
+        List<TResVO>subjectGroupInfo = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
+        List<TLinkKeyVO>linkKeyList = memberManageMapper.selectTLinkKeyByTeacher(teacherVO.getTeacherKey());
 
-        return null;
+        List<List<TCategoryVO>> teacherCategoryInfo = new ArrayList<>();
+        if (linkKeyList.size() > 0) {
+            for (TLinkKeyVO tLinkKeyVO : linkKeyList) {
+                List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryList(tLinkKeyVO.getReqKey());
+                //Collections.reverse(tCategoryVOList);
+                teacherCategoryInfo.add(tCategoryVOList);
+            }
+        }
+        TeacherDetailDTO teacherDetailDTO = new TeacherDetailDTO(
+                teacherVO,
+                subjectGroupInfo,
+                teacherCategoryInfo
+        );
+        return teacherDetailDTO;
+    }
+
+    /**
+     * 강사 노출순서 리스트
+     * @param academyKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TLinkKeyVO> getTeacherExposureNumberList(int academyKey) {
+        if (academyKey == 0) return null;
+        return memberManageMapper.selectNumberExposureTeacherList(academyKey);
     }
 
     /**
@@ -372,6 +453,41 @@ public class MemberManageService {
     }
 
     /**
+     * SMS 발송하기
+     * @param sendDTOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void sendSms(List<SmsSendDTO>sendDTOList) {
+        if (sendDTOList.size() > 0) {
+            for (SmsSendDTO sendDTO : sendDTOList) {
+                String userName = "";
+                String userId = "";
+                //발송자의 키가 있을 때
+                if (sendDTO.getUserKey() > 0) {
+                    //발송자의 정보 조회
+                    TUserVO userVO = memberManageMapper.selectTUserInfo(sendDTO.getUserKey());
+                    if (userVO != null) {
+                        //발송자의 이름, 아이디 객체에 담기
+                        userName = userVO.getName();
+                        userId = userVO.getUserId();
+                    }
+                }
+                //입력 객체 생성
+                ScTranVO scTranVO = new ScTranVO(
+                        Util.isNullValue(sendDTO.getReceiverPhoneNumber(), ""),
+                        Util.isNullValue(sendDTO.getSendNumber(), ""),
+                        Util.isNullValue(sendDTO.getMsg(), ""),
+                        Util.isNullValue(String.valueOf(sendDTO.getUserKey()), ""),
+                        Util.isNullValue(userName, ""),
+                        Util.isNullValue(userId, "")
+                );
+                //SMS발송 테이블 입력
+                memberManageMapper.insertScTran(scTranVO);
+            }
+        }
+    }
+
+    /**
      * 상담내역 수정하기
      * @param tCounselVO
      */
@@ -391,6 +507,20 @@ public class MemberManageService {
         memberManageMapper.updateTCounsel(counselVO);
     }
 
+    /**
+     * 강사 노출순서 순서변경하기
+     * @param tLinkKeyVOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateTeacherExposurePos(List<TLinkKeyVO>tLinkKeyVOList) {
+        if (tLinkKeyVOList.size() > 0) {
+            for (TLinkKeyVO tLinkKeyVO : tLinkKeyVOList) {
+                memberManageMapper.updateTLinkKeyPos(
+                        tLinkKeyVO.getLinkKey(), tLinkKeyVO.getPos()
+                );
+            }
+        }
+    }
 
 
 
