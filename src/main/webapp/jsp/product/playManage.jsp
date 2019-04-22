@@ -20,7 +20,7 @@
         selectExamSearchSelectbox("booksearchType","");
         getExamPrepareSelectbox("examYear","");//시험대비년도 셀렉트박스
         getLectureStatusSelectbox("status","");//강좌정보- 진행상태
-        $('#description').summernote({ //기본정보-에디터
+        $('#summary').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
             focus: true,
@@ -58,6 +58,10 @@
             $('#optionTable > tbody:last > tr:last').remove();
         }else if(val == 'bookTitleDelete'){
             $('#bookList > tbody:last > tr:last').remove();
+        }else if(val == 'categoryDelete'){//teacherDelete
+            $('#categoryTable > tbody:last > tr:last').remove();
+        }else if(val == 'teacherDelete'){//teacherDelete
+            $('#teacherTabel > tbody:last > tr:last').remove();
         }
     }
 
@@ -87,7 +91,7 @@
                     optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class=\"btn btn-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+                    optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
                 optionHtml += "</a>";
                 optionHtml += "</td>";
         optionHtml += "</tr>";
@@ -120,9 +124,7 @@
          optionHtml  += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\"> %";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
-         optionHtml  += "<a href=\"#\" data-toggle=\"tooltip\" data-placement=\"top\" title=\"삭제\">";
-         optionHtml  += "<i class=\"mdi mdi-close\"></i>";
-         optionHtml  += "</a>";
+         optionHtml += "<button type=\"button\" onclick=\"optionDelete('teacherDelete')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
          optionHtml  += "</td>";
          optionHtml  += "</tr>";
         $('#teacherTabel > tbody:first').append(optionHtml);
@@ -336,8 +338,7 @@
                 var title =  selList.mokExamInfo.name;
                 var MockListHtml = "<tr>";
                      MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
-                         //MockListHtml     += "<span id='"+getallMockOption+"'></span>";
-                            MockListHtml     += "<input type='text'  id='"+getallMockOption+"' value='' readonly>";
+                            MockListHtml     += "<input type='text'  class=\"col-sm-8 form-control\" id='"+getallMockOption+"' value='' readonly>";
                      MockListHtml     += "</td>";//examKey
                     MockListHtml     += "<td>";
                         MockListHtml     += "<input type='hidden'  value='"+selList.mokExamInfo.examKey+"' readonly>";
@@ -381,10 +382,10 @@
                 var title =  selList.productInfo.name;
                 var bookkListHtml = "<tr>";
                 bookkListHtml     += " <td class=\"text-left\" style=\"padding:0.3rem;vertical-align: middle;width: 65%\">";
-                bookkListHtml     += "<input type='text'  id='"+bookgiftOption+"' value='' readonly>";
+                    bookkListHtml     += "<input type='text'   class=\"col-sm-8 form-control\" id='"+bookgiftOption+"' value='' readonly>";
                 bookkListHtml     += "</td>";
                 bookkListHtml     += " <td>";
-                bookkListHtml     += "<input type='hidden'  value='"+selList.productInfo.GKey+"' readonly>";
+                    bookkListHtml     += "<input type='hidden'  value='"+selList.productInfo.GKey+"' readonly>";
                 bookkListHtml     += "</td>";
                 if(set == 'bookBtn'){
                     bookkListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem; vertical-align: middle;width: 30%\">";
@@ -401,7 +402,7 @@
                     bookkListHtml     += "</td>";
                 }
                 bookkListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
-                bookkListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
+                    bookkListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
                 bookkListHtml     += "</td>";
                 bookkListHtml     += " </tr>";
 
@@ -460,6 +461,9 @@
         categoryHtml += " <option>선택</option>";
         categoryHtml += "  </select>";
         categoryHtml += " </td>";
+        categoryHtml += "<td>";
+        categoryHtml += "<button type=\"button\" onclick=\"optionDelete('categoryDelete')\" class='btn btn-outline-danger btn-sm' style=\"margin-top:8%;\">삭제</button>";
+        categoryHtml += "</td>";
         categoryHtml += "</tr>";
         $('#categoryTable > tbody:first').append(categoryHtml);
     }
@@ -490,7 +494,7 @@
         if(obj.isFreebieDeliveryFree == 'on')  obj.isFreebieDeliveryFree = '1';//사은품배송비무료
         else obj.isFreebieDeliveryFree = '0';
         /*  //기본정보 obj */
-
+            console.log(obj);
         /*  2.옵션 obj */
         var array = new Array();
         $('#optionTable tbody tr').each(function(index){
@@ -680,7 +684,6 @@
                             <input type="hidden" value="0" name="isQuickDelivery">
                             <input type="hidden" value="0" name="goodsId">
                             <input type="hidden" value="" name="goodsTypeName">
-                            <input type="hidden" value="" name="summary">
                             <input type="hidden" value="" name="description">
                             <div class="form-group">
                                 <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
@@ -715,7 +718,7 @@
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" id="isShow" name="isShow" style="display:none;" value="0">
+                                            <input type="checkbox" id="isShow" name="isShow" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -792,7 +795,7 @@
                             <div class="form-group">
                                 <label class="control-label col-form-label">상세설명</label>
                                 <div>
-                                    <textarea name="content"  value="" id="description" name="description"></textarea>
+                                    <textarea name="content"  value="" id="summary" name="summary"></textarea>
                                 </div>
                             </div>
                         </div>
@@ -838,7 +841,7 @@
                                         <input type="number" class="form-control" id="resultPrice_0" readonly>
                                     </td>
                                     <td style="padding: 0.3rem;">
-                                        <button type="button" onclick="optionDelete('optionDelete');" class="btn btn-danger btn-sm" style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="optionDelete('optionDelete');" class="btn btn-outline-danger btn-sm" style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -893,6 +896,9 @@
                                                 <select class="col-sm-8 form-control custom-select" id="selCate5" name="ctgKey">
                                                     <option>선택</option>
                                                 </select>
+                                            </td>
+                                            <td>
+                                            <button type="button" onclick="optionDelete('categoryDelete')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -1008,9 +1014,7 @@
                                         <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculate_rate"> %
                                     </td>
                                     <td style="width:3%;vertical-align: middle">
-                                        <a href="#" data-toggle="tooltip" data-placement="top" title="삭제">
-                                            <i class="mdi mdi-close"></i>
-                                        </a>
+                                        <button type="button" onclick="optionDelete('teacherDelete')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -1029,77 +1033,48 @@
                             <table class="table text-center table-hover" id="allMockList">
                                 <thead>
                                 <tr>
-                                    <th scope="col" colspan="2">전범위 모의고사</th>
+                                    <th scope="col" colspan="2">전범위 모의고사
+                                    <button type="button"  style="float: right;" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody id="MockTitle"></tbody>
                             </table>
-                            <div class="mx-auto mb-5" style="width:5.5%">
+                            <!--<div class="mx-auto mb-5" style="width:5.5%">
                                 <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
-                            </div>
+                            </div>-->
                             <table class="table table-hover text-center" id="examQuestionList">
                                 <thead>
                                 <tr>
-                                    <th scope="col" colspan="2">기출문제 회차별</th>
+                                    <th scope="col" colspan="2">기출문제 회차별
+                                        <button type="button" style="float: right;"  class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody id="examQuestionTitle"></tbody>
                             </table>
-                            <div class="mx-auto mb-5" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
-                            </div>
                             <table class="table text-center table-hover" id="bookList">
                                 <thead>
                                 <tr>
-                                    <th scope="col" colspan="3">강의교재</th>
+                                    <th scope="col" colspan="3">강의교재
+                                        <button type="button" style="float: right;" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!--<tr>
-                                   <td class="text-left" style="padding:0.3rem;vertical-align: middle;width: 65%">
-                                        <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                    </td>
-                                    <td class="text-left" style="padding: 0.3rem; vertical-align: middle;width: 30%">
-                                        <div class="col-sm-10">
-                                            <div style="margin-top: -23px;">
-                                                부교재
-                                                <label class="switch">
-                                                    <input type="checkbox" style="display:none;">
-                                                    <span class="slider"></span>
-                                                </label>
-                                                주교재
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="text-left" style="padding:0.3rem;vertical-align:middle;">
-                                        <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                    </td>
-                                </tr>-->
                                 </tbody>
                             </table>
-                            <div class="mx-auto mb-5" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
-                            </div>
                             <table class="table text-center table-hover" id="giftList">
                                 <thead>
                                 <tr>
-                                    <th scope="col" colspan="2">사은품</th>
+                                    <th scope="col" colspan="2">사은품
+                                        <button type="button"  style="float: right;" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
+                                    </th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- <tr>
-                                    <td class="text-left" style="padding:0.3rem;vertical-align:middle;width: 95%">
-                                        <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                    </td>
-                                    <td class="text-left" style="padding: 0.3rem;vertical-align:middle;">
-                                        <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                    </td>
-                                </tr>-->
                                 </tbody>
                             </table>
-                            <div class="mx-auto mb-5" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
-                            </div>
                         </div>
                     </section>
                     <!-- //6.선택 Tab -->
@@ -1553,14 +1528,10 @@
             headerTag: "h3",
             bodyTag: "section",
             enableAllSteps: true,
-            startIndex : 0,
             saveState : true, //현재 단계 쿠키저장
             onFinished: function(event, currentIndex) {
                 playSave();
             },
-            onContentLoaded: function (event, currentIndex) {
-                alert("currentIndex : "+currentIndex);
-            }
             /*onFinishing: function(event, currentIndex) {
                 //form.validate().settings.ignore = ":disabled";
                 //return form.valid();
@@ -1570,7 +1541,6 @@
             }*/
             // aria-selected:"false"
         });
-
         $('#indate').datepicker({
             format: "yyyy-mm-dd",
             language: "kr"

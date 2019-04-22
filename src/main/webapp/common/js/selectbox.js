@@ -2,8 +2,9 @@
 function getSubDomainList (tag_id, val) {
     selectboxService.getSubDomainList(function (list) {
         var html = "<select id='sel_subDomain' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].name == val) {
+            if (list[i].ctgKey == val) {
                 html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
             } else {
                 html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
@@ -18,8 +19,9 @@ function getSubDomainList (tag_id, val) {
 function getSearchKeywordDomainList(tag_id, val) {
     selectboxService.getSearchKeywordDomainList(function (list) {
         var html = "<select id='sel_subDomain' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].name == val) {
+            if (list[i].className == val) {
                 html += "<option value="+list[i].className+" selected>"+ list[i].domainName +"</option>";
             } else {
                 html += "<option value="+list[i].className+">"+ list[i].domainName +"</option>";
@@ -35,7 +37,7 @@ function getVideoOptionTypeList(tag_id, val) {
     selectboxService.getVideoOptionTypeList(function (list) {
         var html = "<select id='videoOptionSel' onchange='' class='form-control'>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].name == val) {
+            if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
@@ -51,7 +53,7 @@ function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].name == val) {
+            if (list[i].ctgKey == val) {
                 html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
             } else {
                 html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
@@ -66,8 +68,9 @@ function getCategoryList(tag_id, val) {
 function getSelectboxListForCtgKey(tag_id, val) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
+        html += "<optiongetSelectboxListForCtgKey value='' selected>선택</optiongetSelectboxListForCtgKey>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].name == val) {
+            if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
@@ -82,8 +85,9 @@ function getSelectboxListForCtgKey(tag_id, val) {
 function selectTeacherSelectbox(tag_id,val) {
     selectboxService.selectTeacherSelectbox(function (list) {
        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].name == val) {
+            if (list[i].teacherKey == val) {
                 html += "<option value="+list[i].teacherKey+" selected>"+ list[i].teacherName +"</option>";
             } else {
                 html += "<option value="+list[i].teacherKey+">"+ list[i].teacherName +"</option>";
@@ -98,6 +102,7 @@ function selectTeacherSelectbox(tag_id,val) {
 function getLectureCountSelectbox(tag_id,val) {
     selectboxService.getLectureCountSelectbox(function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i] == val) {
                 html += "<option value="+list[i]+" selected>"+ list[i]+"</option>";
@@ -114,6 +119,7 @@ function getLectureCountSelectbox(tag_id,val) {
 function getClassRegistraionDaySelectbox(tag_id,val) {
     selectboxService.getLectureCountSelectbox(function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i] == val) {
                 html += "<option value="+list[i]+" selected>"+ list[i]+"</option>";
@@ -165,8 +171,9 @@ function getExamPrepareSelectbox(tag_id,val) {
 function getLectureStatusSelectbox(tag_id,val) {
     selectboxService.getLectureStatusSelectbox(function (list) {
         var html = "<select id='sel_subDomain' onchange='' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].value == val) {
+            if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value +"</option>";

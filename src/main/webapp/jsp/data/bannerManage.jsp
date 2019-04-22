@@ -26,9 +26,6 @@
             reader.readAsDataURL(html.files[0]);
         }
     }
-    /*$(document).on('change', '.custom-file-input1', function() {
-        $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });*/
 
     function changeBox2(val) {
         $(".card").remove();
@@ -334,15 +331,6 @@
 
                     </div>
                 </div>
-                <!--<div class="form-group row">
-                    <label class="text-right control-label col-form-label">배경이미지</label>
-                    <div class="col-sm-9">
-                        <label class="custom-file1">
-                            <input type="file" id="attachFile1" class="custom-file-input1" required>
-                            <span class="custom-file-control1"></span>
-                        </label>
-                    </div>
-                </div>-->
                 <div class="form-group row">
                     <label class="text-right control-label col-form-label">배경색상</label>
                     <div class="col-sm-9">
