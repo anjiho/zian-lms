@@ -3,13 +3,17 @@
 <%
     String gKey = request.getParameter("gKey");
 %>
+<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 <script>
     var gKey = '<%=gKey%>';
     $( document ).ready(function() {
+        getSelectboxListForCtgKey("SubjectList_0","70");//과목 셀렉트박스
+        selectTeacherSelectbox("teacherList_0","");//선생님 셀렉트박스
         playDetailList();//정보불러오기
+        getCategoryList("sel_0",214);
         $('#description').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
@@ -104,15 +108,15 @@
     function addTeacher(val){ //강사 추가
         if(val == 'new'){
             var optionCnt = $("#teacherTabel tr").length-1;
-            addTeacherCnt(optionCnt);
+            addTeacherCnt(optionCnt,"new");
         }else{
             var optionCnt =  val-1;
             for(var i = 0; i < optionCnt; i++){
-                addTeacherCnt(i+1);
+                addTeacherCnt(i+1,"old");
             }
         }
     }
-    function addTeacherCnt(val) {
+    function addTeacherCnt(val, option) {
         var optionCnt = val;
         var SubjectCnt = "SubjectList_"+optionCnt;
         var teacherCnt = "teacherList_"+optionCnt;
@@ -121,27 +125,40 @@
         selectTeacherSelectbox(teacherCnt,"");//선생님 셀렉트박스
         var optionHtml  = "<tr>";
         optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='GTeacherKey_"+optionCnt+"' name='GTeacherKey_"+optionCnt+"'>";
+        optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='subjectHidden_"+optionCnt+"' name='subjectHidden_"+optionCnt+"'>";
+        optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='teacherHidden_"+optionCnt+"' name='teacherHidden_"+optionCnt+"'>";
         optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
+       if(option == 'new'){
         optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='SubjectList_"+optionCnt+"'>";
         optionHtml  += "<option>선택</option>";
         optionHtml  += "</select>";
+       }else{
+       optionHtml  += "<input type='text' id='SubjectList_"+optionCnt+"' class='form-control' readonly>";
+       }
         optionHtml  += "</td>";
         optionHtml  += "<td style=\"padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;\">";
         optionHtml  += "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
         optionHtml  += "</td>";
         optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
-        optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_"+optionCnt+"'>";
-        optionHtml  += " <option>선택</option>";
-        optionHtml  += "</select>";
+        if(option == 'new'){
+        optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_" + optionCnt + "'>";
+        optionHtml += " <option>선택</option>";
+        optionHtml += "</select>";
+        }else{
+            optionHtml  += "<input type='text' id='teacherList_" + optionCnt + "' class='form-control' readonly>";
+        }
         optionHtml  += "</td>";
         optionHtml  += "<td style=\"padding: 0.3rem;width:60%;text-align:right;vertical-align: middle\">";
-        optionHtml  += "<label style=\"display: inline-block\">조건 : </label>";
-        optionHtml  += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_"+optionCnt+"' name='calculateRate_"+optionCnt+"'> %";
+        if(option == 'new'){
+        optionHtml += "<label style=\"display: inline-block\">조건 : </label>";
+        optionHtml += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_" + optionCnt + "' name='calculateRate_" + optionCnt + "'> %";
+        }else{
+            optionHtml += "<label style=\"display: inline-block\">조건 : </label>";
+            optionHtml += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_" + optionCnt + "' name='calculateRate_" + optionCnt + "' readonly> %";
+        }
         optionHtml  += "</td>";
         optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
         optionHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
-        optionHtml  += "<i class=\"mdi mdi-close\"></i>";
-        optionHtml  += "</a>";
         optionHtml  += "</td>";
         optionHtml  += "</tr>";
         $('#teacherTabel > tbody:first').append(optionHtml);
@@ -498,8 +515,7 @@
                 for (var i = 0; i < selList.productOptionInfo.length; i++) {
                     var selName = "kind_" + i;
                     var selVal = selList.productOptionInfo[i].kind;
-                    getVideoOptionTypeList(selName, "");
-                    $("#" + selName).val(selVal);
+                    getVideoOptionTypeList(selName, selList.productOptionInfo[i].kind);
 
                     var priceId = "price_" + i;
                     var priceVal = selList.productOptionInfo[i].price;
@@ -531,8 +547,8 @@
                     var ctgSelFive = "5sel_" + i;
                     getCategoryList(ctgSelOne, 214);
                     for (var j = 0; j < selList.productCategoryInfo[i].length; j++) {
-                        getCategoryList(ctgSelTwo, selList.productCategoryInfo[i][3].ctgKey);
-                        getCategoryList(ctgSelThr, selList.productCategoryInfo[i][2].ctgKey);
+                        getCategoryList(ctgSelTwo, selList.productCategoryInfo[i][3].parentKey);
+                        getCategoryList(ctgSelThr, selList.productCategoryInfo[i][2].parentKey);
                         getCategoryList(ctgSelFour, selList.productCategoryInfo[i][1].ctgKey);
                         getCategoryList(ctgSelFive, selList.productCategoryInfo[i][0].ctgKey);
                     }
@@ -543,15 +559,16 @@
                 getSelectboxListForCtgKey("classGroupCtgKey", "4309");//급수 셀렉트박스
                 getSelectboxListForCtgKey("subjectCtgKey", "70");//과목 셀렉트박스
                 getSelectboxListForCtgKey("stepCtgKey", "202");//유형 셀렉트박스
-                getLectureStatusSelectbox("status", "");//강좌정보- 진행상태
-                getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
-                getClassRegistraionDaySelectbox("limitDay", "");//수강일수
-                getLectureCountSelectbox("lecTime", "");//강좌시간
-                getExamPrepareSelectbox("examYear", "");//시험대비년도 셀렉트박스
+                getLectureStatusSelectbox("status", selList.productLectureInfo.status);//강좌정보- 진행상태
+                getLectureCountSelectbox("limitCount",selList.productLectureInfo.limitCount);//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", selList.productLectureInfo.limitDay);//수강일수
+                getLectureCountSelectbox("lecTime", selList.productLectureInfo.lecTime);//강좌시간
+                getExamPrepareSelectbox("examYear", selList.productLectureInfo.examYear);//시험대비년도 셀렉트박스
                 getLectureCountSelectbox("limitCount", selList.productLectureInfo.limitCount);//강좌정보 강좌수
                 getClassRegistraionDaySelectbox("limitDay", selList.productLectureInfo.limitDay);//수강일수
                 getLectureCountSelectbox("lecTime", selList.productLectureInfo.lecTime);//강좌시간
 
+                $("#classGroupCtgKey").val(selList.productLectureInfo.classGroupCtgKey).prop("selected", true);
                 $("#classGroupCtgKey").val(selList.productLectureInfo.classGroupCtgKey);
                 $("#subjectCtgKey").val(selList.productLectureInfo.subjectCtgKey);
                 $("#stepCtgKey").val(selList.productLectureInfo.stepCtgKey);
@@ -568,21 +585,23 @@
                 addTeacher(selList.productTeacherInfo.length);
                 for (var i = 0; i < selList.productTeacherInfo.length; i++) {
                     var productTeacherId = "SubjectList_" + i;
-                    var subjectNameVal = selList.productTeacherInfo[i].subjectName;
-                    innerValue(productTeacherId, subjectNameVal);
-
-                    console.log(selList.productTeacherInfo);
-                    var GTeacherKey = "gTeacherKey_" + i;
-                    var GTeacherKeyVal = selList.productTeacherInfo[i].GTeacherKey;
-                    innerValue(GTeacherKey, GTeacherKeyVal);
+                    var subjectHiddenId = "subjectHidden_" + i;
+                    $("#"+productTeacherId).val(selList.productTeacherInfo[i].subjectName);
+                    $("#"+subjectHiddenId).val(selList.productTeacherInfo[i].subjectCtgKey);
+                    //$("#SubjectList_1").val(4282);
 
                     var teacherNameId = "teacherList_" + i;
-                    var teacherNameVal = selList.productTeacherInfo[i].teacherName;
-                    innerValue(teacherNameId, teacherNameVal);
+                    var teacherHiddenId = "teacherHidden_" + i;
+                    $("#"+teacherNameId).val(selList.productTeacherInfo[i].teacherName);
+                    $("#"+teacherHiddenId).val(selList.productTeacherInfo[i].teacherKey);
 
                     var calculateRateId = "calculateRate_" + i;
                     var calculateRateNameVal = selList.productTeacherInfo[i].calculateRate;
                     innerValue(calculateRateId, calculateRateNameVal);
+
+                    var GTeacherKey = "gTeacherKey_" + i;
+                    var GTeacherKeyVal = selList.productTeacherInfo[i].GTeacherKey;
+                    innerValue(GTeacherKey, GTeacherKeyVal);
                 }
             }
 
@@ -650,13 +669,21 @@
 
         //동영상 - 강의목록 불러오기
         productManageService.getLectureCurriList(gKey, function (selList) {
-            console.log(selList);
+            $( "#lectureCurriTabel tbody" ).sortable({
+                update: function( event, ui ) {
+                    $(this).children().each(function(index) {
+                        $(this).find('tr').last().html(index + 1);
+                    });
+                }
+            });
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
+                    console.log(selList);
                     var cmpList = selList[i];
                     if (cmpList != undefined) {
                         var text = "'CURRI'";
                         var btn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
+                        var deleteBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+","+cmpList.lecKey+","+cmpList.pos+')"  class="btn btn-success btn-sm">수정</button>';
                         var textYn = "";
                         if(cmpList.isShow == '1' ||  cmpList.isSample =='1'){
                             textYn = 'O';
@@ -668,15 +695,43 @@
                             function (data) {return cmpList.vodTime;},
                             function (data) {return textYn;},
                             function (data) {return textYn;},
-                            function (data) {return btn;}
+                            function (data) {return btn+deleteBtn;}
                         ];
-                        dwr.util.addRows("lectureCurriList", [0], cellData, {escapeHtml: false});
+                        //dwr.util.addRows("lectureCurriList", [0], cellData, {escapeHtml: false});
+                        dwr.util.addRows(lectureCurriList, [0], cellData, {
+                            rowCreator:function(options) {
+                                var row = document.createElement("tr");
+                                var index = options.rowIndex * 50;
+                                row.id = cmpList.curriKey;
+                                row.className = "ui-state-default even ui-sortable-handle";
+                                return row;
+                            },
+                            escapeHtml:false});
                     }
                 }
             }
         });
     }
 
+    //강의목록 순서변경저장
+    function changelectureListSave() {
+        var arr = new Array();    // 배열 선언
+        $("#lectureCurriTabel tbody tr").each(function(index) {
+            var id = $(this).attr("id");
+            var curriKey = id;
+            var pos = index;
+            var data = {
+                curriKey : curriKey,
+                pos : pos
+            };
+            arr.push(data);
+        });
+        productManageService.changeNumberVideoLecture(arr, function () {
+            location.reload();
+        });
+    }
+
+    //강의목록 삭제
     function deleteOtherInfo(key, val) {
         if(confirm("삭제하시겠습니까?")) {
             productManageService.deleteVideoOtherInfo(key, val, function () {
@@ -685,10 +740,30 @@
                 }else if(val == 'CATE_GOODS'){
                    $('#categoryTable > tbody:last > tr:last').remove(); //여기
                 }
+                location.reload();
             });
         }
     }
 
+    //강의목록 수정 팝업
+    function LectureCurriPopup() {
+        $('#lectureListPopup').show();
+        productManageService.getProductDetailInfo(gKey, "1", function (selList) {
+            innerValue("lectureName",);//강의이름
+            //노출여부,샘플여부
+            isCheckbox("lectureIsShow", false);//노출
+            isCheckbox("isSample", true);//판매
+            innerValue("vodFileLow",);//동영상 저화질 경로
+            innerValue("vodFileHigh",);//동영상 저화질 경로
+            innerValue("vodFileMobileLow",);//모바일 동영상 저화질 경로
+            innerValue("vodFileMobileHigh",);//모바일동영상 저화질 경로
+            //강의자료
+
+            innerValue("vodTime",);//모바일동영상 저화질 경로
+
+
+        });
+    }
     //옵션 - 할인률 계산
     function saleInputPrice(val,cnt) {
         selPriceCnt = "sellPrice_"+cnt;
@@ -766,8 +841,17 @@
     function basicModify() {
         if(confirm("기본정보를 수정 하시겠습니까?")){
             var data = getJsonObjectFromDiv("section1");
+            if(data.isShow == 'on')  data.isShow = '1';//노출 checkbox
+            else data.isShow = '0';
+            if(data.isSell == 'on')  data.isSell = '1';//판매
+            else data.isSell = '0';
+            if(data.isFree == 'on')  data.isFree = '1';//무료
+            else data.isFree = '0';
+            if(data.isFreebieDeliveryFree == 'on')  data.isFreebieDeliveryFree = '1';//사은품배송비무료
+            else data.isFreebieDeliveryFree = '0';
             var imageListFile = $(".custom-file-control").text();
             var imageViewFile = $(".custom-file-control2").text();
+
             productManageService.upsultGoodsInfo(data, imageListFile, imageViewFile,function (data) {
                 location.reload();
             });
@@ -817,13 +901,14 @@
                 };
                 categoryArray.push(data);
             });
-            console.log(categoryArray);
+
             productManageService.upsultTCategoryGoods(categoryArray, gKey,function () {
                 location.reload();
             });
         }
     }
-    
+
+
     function lectureInfoModify() {
         if(confirm("강좌정보를 수정 하시겠습니까?")){
             var lectureObj = getJsonObjectFromDiv("section4");
@@ -833,30 +918,35 @@
         }
     }
 
+    //강사목록 수정
     function techerModify() {
         if(confirm("강사정보를 수정 하시겠습니까?")){
             var teacherArray = new Array();
             $('#teacherTabel tbody tr').each(function(index){
                 var gTeacherKey = $("#gTeacherKey_" + index).val();
                 if(gTeacherKey == "") gTeacherKey == '0';
-                var teacher = $(this).find("td select").eq(0).val();
+                var subject = $(this).find("td select").eq(0).val();
                 var teacher1 = $(this).find("td select").eq(1).val();
-                var teacher2 = $(this).find("td input").eq(1).val();
+                //var subject = $(this).find("td input").eq(1).val();
+                //var teacher = $(this).find("td input").eq(2).val();
+                var calculateRate = $(this).find("td input").eq(1).val();
                 var data = {
                     gTeacherKey: gTeacherKey,
                     gKey:'0',
                     isPublicSubject:'0',
-                    subjectCtgKey:teacher,
+                    subjectCtgKey:subject,
                     teacherKey:teacher1,
-                    calculateRate:teacher2,
+                    calculateRate:calculateRate,
                     subjectName: "",
                     teacherName: ""
                 };
                 teacherArray.push(data);
             });
+            console.log(teacherArray);
+            /*
             productManageService.upsultTGoodTeacherLink(teacherArray, gKey,function () {
                 location.reload();
-            });
+            });*/
         }
     }
     
@@ -916,7 +1006,6 @@
                 };
                 array3.push(data);
             });
-            console.log(array3);
             productManageService.upsultTLinkKink(array3, gKey,function () {
 
             });
@@ -976,7 +1065,7 @@
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label col-form-label"  style="margin-bottom: 0">등록일</label>
-                                    <div class="input-group col-sm-3" id="dateRangePicker" >
+                                    <div class="input-group col-sm-10" id="dateRangePicker">
                                         <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate" id="indate">
                                         <div class="input-group-append">
                                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -998,7 +1087,7 @@
                                         <div style="margin-top: -23px;">
                                             OFF
                                             <label class="switch">
-                                                <input type="checkbox" id="isShow" name="isShow" style="display:none;" value="0">
+                                                <input type="checkbox" id="isShow" name="isShow" style="display:none;">
                                                 <span class="slider"></span>
                                             </label>
                                             ON
@@ -1177,6 +1266,9 @@
                                                 <option>선택</option>
                                             </select>
                                         </td>
+                                        <td style="width:3%;vertical-align: middle">
+                                            <button type="button"  onclick="optionDelete('categoryDelete')"  class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                        </td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -1255,6 +1347,7 @@
                                 <div class="form-group">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>
                                     <select class="col-sm-3 select2 form-control custom-select" id="examYear" name="examYear">
+                                        <option value="">선택</option>
                                     </select>
                                 </div>
                             </div>
@@ -1268,6 +1361,8 @@
                             <div id="section5">
                                 <table class="table" id="teacherTabel">
                                     <input type="hidden" id="gTeacherKey_0" >
+                                    <input type="hidden" id="subjectHidden_0" >
+                                    <input type="hidden" id="teacherHidden_0" >
                                     <input type="hidden" name="gKey" value="0">
                                     <thead>
                                     <tr>
@@ -1277,20 +1372,26 @@
                                     <tbody>
                                     <tr>
                                         <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
-                                            <input type="text" class="form-control" id="SubjectList_0" name="SubjectList_0" >
+                                            <!--<select  class="select2 form-control custom-select"  id="SubjectList_0" name="SubjectList_0" readonly>
+                                                <option value="">선택</option>
+                                            </select>-->
+                                            <input type="text" id="SubjectList_0" name="SubjectList_0" class="form-control"  readonly>
                                         </td>
                                         <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
                                             <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                         </td>
                                         <td style="padding: 0.3rem;width: 20%">
-                                            <input type="text" class="form-control" id="teacherList_0" name="teacherList_0" >
+                                           <!--<select  class="select2 form-control custom-select"  id="teacherList_0" name="teacherList_0" readonly>
+                                                <option value="">선택</option>
+                                            </select>-->
+                                            <input type="text" id="teacherList_0" name="teacherList_0" class="form-control"  readonly>
                                         </td>
                                         <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
                                             <label style="display: inline-block">조건 : </label>
-                                            <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculateRate_0" id="calculateRate_0"> %
+                                            <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculateRate_0" id="calculateRate_0" readonly> %
                                         </td>
                                         <td style="width:3%;vertical-align: middle">
-                                            <button type="button"  class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                            <button type="button"  class='btn btn-outline-danger btn-sm' onclick="optionDelete('teacherDelete')" style="margin-top:8%;">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -1310,77 +1411,45 @@
                                 <table class="table text-center table-hover" id="allMockList">
                                     <thead>
                                     <tr>
-                                        <th scope="col" colspan="2">전범위 모의고사</th>
+                                        <th scope="col" colspan="2">전범위 모의고사
+                                        <button type="button" style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody id="MockTitle"></tbody>
                                 </table>
-                                <div class="mx-auto mb-5" style="width:5.5%">
-                                    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
-                                </div>
                                 <table class="table table-hover text-center" id="examQuestionList">
                                     <thead>
                                     <tr>
-                                        <th scope="col" colspan="2">기출문제 회차별</th>
+                                        <th scope="col" colspan="2">기출문제 회차별
+                                            <button type="button" style="float: right"  class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody id="examQuestionTitle"></tbody>
                                 </table>
-                                <div class="mx-auto mb-5" style="width:5.5%">
-                                    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
-                                </div>
                                 <table class="table text-center table-hover" id="bookList">
                                     <thead>
                                     <tr>
-                                        <th scope="col" colspan="3">강의교재</th>
+                                        <th scope="col" colspan="3">강의교재
+                                        <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!--<tr>
-                                       <td class="text-left" style="padding:0.3rem;vertical-align: middle;width: 65%">
-                                            <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                        </td>
-                                        <td class="text-left" style="padding: 0.3rem; vertical-align: middle;width: 30%">
-                                            <div class="col-sm-10">
-                                                <div style="margin-top: -23px;">
-                                                    부교재
-                                                    <label class="switch">
-                                                        <input type="checkbox" style="display:none;">
-                                                        <span class="slider"></span>
-                                                    </label>
-                                                    주교재
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="text-left" style="padding:0.3rem;vertical-align:middle;">
-                                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                        </td>
-                                    </tr>-->
                                     </tbody>
                                 </table>
-                                <div class="mx-auto mb-5" style="width:5.5%">
-                                    <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
-                                </div>
                                 <table class="table text-center table-hover" id="giftList">
                                     <thead>
                                     <tr>
-                                        <th scope="col" colspan="2">사은품</th>
+                                        <th scope="col" colspan="2">사은품
+                                        <button type="button" style="float: right"  class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
+                                        </th>
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <!-- <tr>
-                                        <td class="text-left" style="padding:0.3rem;vertical-align:middle;width: 95%">
-                                            <span>빅주간(전범위)모의고사_공통과목 12회</span>
-                                        </td>
-                                        <td class="text-left" style="padding: 0.3rem;vertical-align:middle;">
-                                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                        </td>
-                                    </tr>-->
                                     </tbody>
                                 </table>
-                                <div class="mx-auto mb-5" style="width:5.5%">
-                                    <button type="button" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
-                                </div>
                             </div>
                         </section>
                         <!-- //6.선택 Tab -->
@@ -1389,7 +1458,7 @@
                         <h3>강의목록</h3>
                         <section>
                             <div class="mb-3 float-right">
-                                <button type="button" class="btn btn-outline-info btn-sm">순서변경</button>
+                                <button type="button" class="btn btn-outline-info btn-sm" onclick="changelectureListSave();">순서변경저장</button>
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#lectureListPopup">추가</button>
                             </div>
                             <table class="table text-center table-hover"  id="lectureCurriTabel">
@@ -1403,26 +1472,6 @@
                                 </tr>
                                 </thead>
                                 <tbody id="lectureCurriList">
-                                <!--<tr>
-                                    <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
-                                        <span>1</span>
-                                    </td>
-                                    <td class="text-left" style="padding: 0.3rem; vertical-align: middle;">
-                                        <span>text</span>
-                                    </td>
-                                    <td style="padding: 0.3rem;vertical-align: middle">
-                                        <span>10</span>
-                                    </td>
-                                    <td style="padding: 0.3rem;vertical-align: middle">
-                                        <i class="mdi mdi-close" style="color: red"></i>
-                                    </td>
-                                    <td style="vertical-align: middle">
-                                        <i class="mdi mdi-check" style="color:green;"></i>
-                                    </td>
-                                    <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                        <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                    </td>
-                                </tr>-->
                                 </tbody>
                             </table>
                         </section>

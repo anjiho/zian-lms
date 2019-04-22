@@ -11,6 +11,14 @@
         goPage("productManage","modifyPlayManage");
     }
 
+    function enterkey() {
+
+        if (window.event.keyCode == 13) {
+           fn_search('new');
+        }
+    }
+
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = $("#sPage").val();
@@ -95,7 +103,7 @@
                         </select>
                         </div>
                         <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="searchText">
+                            <input type="text" class="form-control" id="searchText" onkeyup="enterkey();">
                         </div>
                         <div style=" float: left; width: 33%">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
