@@ -674,6 +674,52 @@
                                         $("#examYear").val(selList.productLectureInfo.examYear);
                                         innerValue("multiple", gfn_zeroToZero(selList.productLectureInfo.multiple));
                                         innerValue("lecKey",selList.productLectureInfo.lecKey);
+                                        innerValue("curri_lecKey", selList.productLectureInfo.lecKey);
+                                        //동영상 - 강의목록 불러오기
+                                        productManageService.getLectureCurriList(selList.productLectureInfo.lecKey, function (selList) {
+
+                                            $( "#lectureCurriTabel tbody" ).sortable({
+                                                update: function( event, ui ) {
+                                                    $(this).children().each(function(index) {
+                                                        $(this).find('tr').last().html(index + 1);
+                                                    });
+                                                }
+                                            });
+                                            if (selList.length > 0) {
+                                                for (var i = 0; i < selList.length; i++) {
+                                                    console.log(selList);
+                                                    var cmpList = selList[i];
+                                                    if (cmpList != undefined) {
+                                                        var text = "'CURRI'";
+                                                        var btn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
+                                                        var deleteBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+')"  class="btn btn-success btn-sm" data-toggle="modal" data-target="#lectureListPopup">수정</button>';
+                                                        var textYn = "";
+                                                        if(cmpList.isShow == '1' ||  cmpList.isSample =='1'){
+                                                            textYn = 'O';
+                                                        }else{
+                                                            textYn = 'X';
+                                                        }
+                                                        var cellData = [
+                                                            function (data) {return cmpList.name;},
+                                                            function (data) {return cmpList.vodTime;},
+                                                            function (data) {return textYn;},
+                                                            function (data) {return textYn;},
+                                                            function (data) {return btn+deleteBtn;}
+                                                        ];
+                                                        //dwr.util.addRows("lectureCurriList", [0], cellData, {escapeHtml: false});
+                                                        dwr.util.addRows(lectureCurriList, [0], cellData, {
+                                                            rowCreator:function(options) {
+                                                                var row = document.createElement("tr");
+                                                                var index = options.rowIndex * 50;
+                                                                row.id = cmpList.curriKey;
+                                                                row.className = "ui-state-default even ui-sortable-handle";
+                                                                return row;
+                                                            },
+                                                            escapeHtml:false});
+                                                    }
+                                                }
+                                            }
+                                        });
                                     }
 
                                     if (selList.productTeacherInfo) { /* 강사목록 불러오기 */
@@ -762,50 +808,6 @@
                                     }
                                 });
 
-                                //동영상 - 강의목록 불러오기
-                                productManageService.getLectureCurriList(gKey, function (selList) {
-                                    $( "#lectureCurriTabel tbody" ).sortable({
-                                        update: function( event, ui ) {
-                                            $(this).children().each(function(index) {
-                                                $(this).find('tr').last().html(index + 1);
-                                            });
-                                        }
-                                    });
-                                    if (selList.length > 0) {
-                                        for (var i = 0; i < selList.length; i++) {
-                                            console.log(selList);
-                                            var cmpList = selList[i];
-                                            if (cmpList != undefined) {
-                                                var text = "'CURRI'";
-                                                var btn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
-                                                var deleteBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+')"  class="btn btn-success btn-sm" data-toggle="modal" data-target="#lectureListPopup">수정</button>';
-                                                var textYn = "";
-                                                if(cmpList.isShow == '1' ||  cmpList.isSample =='1'){
-                                                    textYn = 'O';
-                                                }else{
-                                                    textYn = 'X';
-                                                }
-                                                var cellData = [
-                                                    function (data) {return cmpList.name;},
-                                                    function (data) {return cmpList.vodTime;},
-                                                    function (data) {return textYn;},
-                                                    function (data) {return textYn;},
-                                                    function (data) {return btn+deleteBtn;}
-                                                ];
-                                                //dwr.util.addRows("lectureCurriList", [0], cellData, {escapeHtml: false});
-                                                dwr.util.addRows(lectureCurriList, [0], cellData, {
-                                                    rowCreator:function(options) {
-                                                        var row = document.createElement("tr");
-                                                        var index = options.rowIndex * 50;
-                                                        row.id = cmpList.curriKey;
-                                                        row.className = "ui-state-default even ui-sortable-handle";
-                                                        return row;
-                                                    },
-                                                    escapeHtml:false});
-                                            }
-                                        }
-                                    }
-                                });
                             }
 
                             //강의목록 순서변경저장
@@ -873,6 +875,7 @@
 
                             //강의목록- 입력 저장
                             function videoLectureSave() {
+                                var lecKey = getInputTextValue("curri_lecKey");
                                 var data = new FormData();
                                 $.each($('#dataFile')[0].files, function(i, file) {
                                     data.append('file_name', file);
@@ -903,7 +906,7 @@
                                             if(data.result != null) dataFile = data.result;
                                             var data = {
                                                 curriKey:curriKey == undefined ? 0 : curriKey,
-                                                lecKey:gKey,
+                                                lecKey:lecKey,
                                                 name:name,
                                                 isShow:isShow,
                                                 isSample:isSample,
@@ -1866,6 +1869,7 @@
             </div>
             <!-- modal body -->
             <div class="modal-body">
+                <input type="hidden" id="curri_lecKey">
                 <input type="hidden" id="curriKey">
 <%--                <div class="form-group row">--%>
 <%--                    <label class="col-sm-3 text-right control-label col-form-label">강좌 CODE</label>--%>
