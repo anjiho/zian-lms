@@ -10,8 +10,8 @@
 <script>
     var gKey = '<%=gKey%>';
     $( document ).ready(function() {
-        getSelectboxListForCtgKey("SubjectList_0","70");//과목 셀렉트박스
-        selectTeacherSelectbox("teacherList_0","");//선생님 셀렉트박스
+        //getSelectboxListForCtgKey("SubjectList_0","70");//과목 셀렉트박스
+        //selectTeacherSelectbox("teacherList_0","");//선생님 셀렉트박스
         playDetailList();//정보불러오기
         getCategoryList("sel_0",214);
         $('#description').summernote({ //기본정보-에디터
@@ -61,7 +61,7 @@
     function addOption(val){ //옵션명 추가
         if(val == 'new'){//옵션새로추가
             var optionCnt = $("#optionTable tr").length-1;
-                AddOptionCnt(optionCnt);
+            AddOptionCnt(optionCnt);
         }else{//기존옵션 배열
             var optionCnt =  val-1;
             for(var i = 0; i < optionCnt; i++){
@@ -71,36 +71,36 @@
     }
 
     function AddOptionCnt(val) {
-            var optionCnt = val;
-            var getOption = "kind_"+optionCnt;
-            getVideoOptionTypeList(getOption, "");
-            var optionHtml = "<tr>";
-            optionHtml += "<td style=\"padding: 0.3rem;text-align: center;\">";
-            optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\"  id='kind_"+optionCnt+"'  name='kind_"+optionCnt+"'>";
-            optionHtml += "<option>선택</option>";
-            optionHtml += "</select>";
-            optionHtml += "</td>";
-            optionHtml += "<td style=\"padding: 0.3rem;\">";
-            optionHtml += "<input type=\"number\" class=\"form-control\" id='price_"+optionCnt+"'  name='price_"+optionCnt+"'>";
-            optionHtml += "</td>";
-            optionHtml += "<td style=\"padding: 0.3rem;\">";
-            optionHtml += "<input type=\"number\" class=\"form-control\"  id='sellPrice_"+optionCnt+"'  name='sellPrice_"+optionCnt+"'>";
-            optionHtml += "</td>";
-            optionHtml += " <td style=\"padding: 0.3rem;\">";
-            optionHtml += "<input type=\"text\" class=\"form-control\" id='point_"+optionCnt+"'  name='point_"+optionCnt+"'>";
-            optionHtml += "</td>";
-            optionHtml += " <td style=\"padding: 0.3rem;\">";
-            optionHtml += "<input type=\"number\" style=\"display: inline-block\" class=\"form-control\" id='extendPercent_"+optionCnt+"'  name='extendPercent_"+optionCnt+"' onchange='saleInputPrice(this.value"+","+optionCnt+")' >";
-            optionHtml += "</td>";
-            optionHtml += "<td style=\"padding: 0.3rem;\">";
-            optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
-            optionHtml += "</td>";
-            optionHtml += " <td style=\"padding: 0.3rem;\">";
-            optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class='btn btn-outline-danger btn-sm' style=\"margin-top:8%;\">삭제</button>";
-            optionHtml += "</a>";
-            optionHtml += "</td>";
-            optionHtml += "</tr>";
-            $('#optionTable > tbody:first').append(optionHtml);
+        var optionCnt = val;
+        var getOption = "kind_"+optionCnt;
+        getVideoOptionTypeList(getOption, "");
+        var optionHtml = "<tr>";
+        optionHtml += "<td style=\"padding: 0.3rem;text-align: center;\">";
+        optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\"  id='kind_"+optionCnt+"'  name='kind_"+optionCnt+"'>";
+        optionHtml += "<option>선택</option>";
+        optionHtml += "</select>";
+        optionHtml += "</td>";
+        optionHtml += "<td style=\"padding: 0.3rem;\">";
+        optionHtml += "<input type=\"number\" class=\"form-control\" id='price_"+optionCnt+"'  name='price_"+optionCnt+"'>";
+        optionHtml += "</td>";
+        optionHtml += "<td style=\"padding: 0.3rem;\">";
+        optionHtml += "<input type=\"number\" class=\"form-control\"  id='sellPrice_"+optionCnt+"'  name='sellPrice_"+optionCnt+"'>";
+        optionHtml += "</td>";
+        optionHtml += " <td style=\"padding: 0.3rem;\">";
+        optionHtml += "<input type=\"text\" class=\"form-control\" id='point_"+optionCnt+"'  name='point_"+optionCnt+"'>";
+        optionHtml += "</td>";
+        optionHtml += " <td style=\"padding: 0.3rem;\">";
+        optionHtml += "<input type=\"number\" style=\"display: inline-block\" class=\"form-control\" id='extendPercent_"+optionCnt+"'  name='extendPercent_"+optionCnt+"' onchange='saleInputPrice(this.value"+","+optionCnt+")' >";
+        optionHtml += "</td>";
+        optionHtml += "<td style=\"padding: 0.3rem;\">";
+        optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
+        optionHtml += "</td>";
+        optionHtml += " <td style=\"padding: 0.3rem;\">";
+        optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class='btn btn-outline-danger btn-sm' style=\"margin-top:8%;\">삭제</button>";
+        optionHtml += "</a>";
+        optionHtml += "</td>";
+        optionHtml += "</tr>";
+        $('#optionTable > tbody:first').append(optionHtml);
     }
 
 
@@ -116,53 +116,54 @@
             }
         }
     }
-    function addTeacherCnt(val, option) {
-        var optionCnt = val;
-        var SubjectCnt = "SubjectList_"+optionCnt;
-        var teacherCnt = "teacherList_"+optionCnt;
-        var deleteSel = "teacherDelete";
-        getSelectboxListForCtgKey(SubjectCnt,"70");//과목 셀렉트박스
-        selectTeacherSelectbox(teacherCnt,"");//선생님 셀렉트박스
-        var optionHtml  = "<tr>";
-        optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='GTeacherKey_"+optionCnt+"' name='GTeacherKey_"+optionCnt+"'>";
-        optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='subjectHidden_"+optionCnt+"' name='subjectHidden_"+optionCnt+"'>";
-        optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='teacherHidden_"+optionCnt+"' name='teacherHidden_"+optionCnt+"'>";
-        optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
-       if(option == 'new'){
-        optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='SubjectList_"+optionCnt+"'>";
-        optionHtml  += "<option>선택</option>";
-        optionHtml  += "</select>";
-       }else{
-       optionHtml  += "<input type='text' id='SubjectList_"+optionCnt+"' class='form-control' readonly>";
-       }
-        optionHtml  += "</td>";
-        optionHtml  += "<td style=\"padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;\">";
-        optionHtml  += "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-        optionHtml  += "</td>";
-        optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
-        if(option == 'new'){
-        optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_" + optionCnt + "'>";
-        optionHtml += " <option>선택</option>";
-        optionHtml += "</select>";
-        }else{
-            optionHtml  += "<input type='text' id='teacherList_" + optionCnt + "' class='form-control' readonly>";
-        }
-        optionHtml  += "</td>";
-        optionHtml  += "<td style=\"padding: 0.3rem;width:60%;text-align:right;vertical-align: middle\">";
-        if(option == 'new'){
-        optionHtml += "<label style=\"display: inline-block\">조건 : </label>";
-        optionHtml += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_" + optionCnt + "' name='calculateRate_" + optionCnt + "'> %";
-        }else{
-            optionHtml += "<label style=\"display: inline-block\">조건 : </label>";
-            optionHtml += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_" + optionCnt + "' name='calculateRate_" + optionCnt + "' readonly> %";
-        }
-        optionHtml  += "</td>";
-        optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
-        optionHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
-        optionHtml  += "</td>";
-        optionHtml  += "</tr>";
-        $('#teacherTabel > tbody:first').append(optionHtml);
-    }
+
+    // function addTeacherCnt(val, option) {
+    //     var optionCnt = val;
+    //     var SubjectCnt = "SubjectList_"+optionCnt;
+    //     var teacherCnt = "teacherList_"+optionCnt;
+    //     var deleteSel = "teacherDelete";
+    //     getSelectboxListForCtgKey(SubjectCnt,"70");//과목 셀렉트박스
+    //     selectTeacherSelectbox(teacherCnt,"");//선생님 셀렉트박스
+    //     var optionHtml  = "<tr>";
+    //     optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='GTeacherKey_"+optionCnt+"' name='GTeacherKey_"+optionCnt+"'>";
+    //     optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='subjectHidden_"+optionCnt+"' name='subjectHidden_"+optionCnt+"'>";
+    //     optionHtml  += "<input type=\"hidden\" class=\"form-control\" id='teacherHidden_"+optionCnt+"' name='teacherHidden_"+optionCnt+"'>";
+    //     optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
+    //    if(option == 'new'){
+    //     optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='SubjectList_"+optionCnt+"'>";
+    //     optionHtml  += "<option>선택</option>";
+    //     optionHtml  += "</select>";
+    //    }else{
+    //    optionHtml  += "<input type='text' id='SubjectList_"+optionCnt+"' class='form-control' readonly>";
+    //    }
+    //     optionHtml  += "</td>";
+    //     optionHtml  += "<td style=\"padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;\">";
+    //     optionHtml  += "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+    //     optionHtml  += "</td>";
+    //     optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
+    //     if(option == 'new'){
+    //     optionHtml += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_" + optionCnt + "'>";
+    //     optionHtml += " <option>선택</option>";
+    //     optionHtml += "</select>";
+    //     }else{
+    //         optionHtml  += "<input type='text' id='teacherList_" + optionCnt + "' class='form-control' readonly>";
+    //     }
+    //     optionHtml  += "</td>";
+    //     optionHtml  += "<td style=\"padding: 0.3rem;width:60%;text-align:right;vertical-align: middle\">";
+    //     if(option == 'new'){
+    //     optionHtml += "<label style=\"display: inline-block\">조건 : </label>";
+    //     optionHtml += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_" + optionCnt + "' name='calculateRate_" + optionCnt + "'> %";
+    //     }else{
+    //         optionHtml += "<label style=\"display: inline-block\">조건 : </label>";
+    //         optionHtml += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\" id='calculateRate_" + optionCnt + "' name='calculateRate_" + optionCnt + "' readonly> %";
+    //     }
+    //     optionHtml  += "</td>";
+    //     optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
+    //     optionHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
+    //     optionHtml  += "</td>";
+    //     optionHtml  += "</tr>";
+    //     $('#teacherTabel > tbody:first').append(optionHtml);
+    // }
 
     //전범위 모의고사 리스트불러오기
     function fn_search(val) {
@@ -448,7 +449,7 @@
     function addCategory(val) {
         if(val == 'new'){//옵션새로추가
             var categoryCnt = $("#categoryTable tr").length-1;
-                addCategoryCnt(categoryCnt);
+            addCategoryCnt(categoryCnt);
         }else{//기존옵션 배열
             var categoryCnt =  val-1;
             for(var i = 0; i < categoryCnt; i++){
@@ -582,26 +583,53 @@
             }
 
             if (selList.productTeacherInfo) { /* 강사목록 불러오기 */
-                addTeacher(selList.productTeacherInfo.length);
+                //addTeacher(selList.productTeacherInfo.length);
                 for (var i = 0; i < selList.productTeacherInfo.length; i++) {
-                    var productTeacherId = "SubjectList_" + i;
-                    var subjectHiddenId = "subjectHidden_" + i;
-                    $("#"+productTeacherId).val(selList.productTeacherInfo[i].subjectName);
-                    $("#"+subjectHiddenId).val(selList.productTeacherInfo[i].subjectCtgKey);
-                    //$("#SubjectList_1").val(4282);
+                    var cmpList = selList.productTeacherInfo[i];
+                    var inputHidden = "<input type='hidden' style='display: none;' id='gTeacherKey_" + i +"' value='" + cmpList.GTeacherKey + "'>";
+                    var cellData = [
+                        function(data) {return inputHidden},
+                        function(data) {return cmpList.subjectName},
+                        function(data) {return cmpList.teacherName},
+                        function(data) {return cmpList.calculateRate}
+                    ];
+                    dwr.util.addRows("teacherListTbody", [0], cellData, {escapeHtml: false});
 
-                    var teacherNameId = "teacherList_" + i;
-                    var teacherHiddenId = "teacherHidden_" + i;
-                    $("#"+teacherNameId).val(selList.productTeacherInfo[i].teacherName);
-                    $("#"+teacherHiddenId).val(selList.productTeacherInfo[i].teacherKey);
+                    // var productTeacherId = "SubjectList_" + i;
+                    // var subjectHiddenId = "subjectHidden_" + i;
 
-                    var calculateRateId = "calculateRate_" + i;
-                    var calculateRateNameVal = selList.productTeacherInfo[i].calculateRate;
-                    innerValue(calculateRateId, calculateRateNameVal);
+                    // $("#SubjectList_" + i).val(selList.productTeacherInfo[i].subjectName);
+                    // $("#subjectHidden_" + i).val(selList.productTeacherInfo[i].subjectCtgKey);
+                    // //$("#SubjectList_1").val(4282);
+                    //
+                    // var teacherNameId = "teacherList_" + i;
+                    // var teacherHiddenId = "teacherHidden_" + i;
+                    //
+                    // $("#"+teacherNameId).val(selList.productTeacherInfo[i].teacherName);
+                    // $("#"+teacherHiddenId).val(selList.productTeacherInfo[i].teacherKey);
+                    //
+                    // var calculateRateId = "calculateRate_" + i;
+                    // var calculateRateNameVal = selList.productTeacherInfo[i].calculateRate;
+                    // innerValue(calculateRateId, calculateRateNameVal);
+                    //
+                    // var GTeacherKey = "gTeacherKey_" + i;
+                    // var GTeacherKeyVal = selList.productTeacherInfo[i].GTeacherKey;
+                    // innerValue(GTeacherKey, GTeacherKeyVal);
+                    $("#lectureCurriTabel tbody tr").each(function(index) {
+                        var id = $(this).attr("id");
+                        var curriKey = id;
+                        var pos = index;
+                        var data = {
+                            curriKey : curriKey,
+                            pos : pos
+                        };
+                        arr.push(data);
+                    });
 
-                    var GTeacherKey = "gTeacherKey_" + i;
-                    var GTeacherKeyVal = selList.productTeacherInfo[i].GTeacherKey;
-                    innerValue(GTeacherKey, GTeacherKeyVal);
+                    $("#teacherListTbody > tr").each(function(idx) {
+                        var id = idx;
+
+                    });
                 }
             }
 
@@ -736,9 +764,9 @@
         if(confirm("삭제하시겠습니까?")) {
             productManageService.deleteVideoOtherInfo(key, val, function () {
                 if(val == 'CURRI'){
-                  $('#lectureCurriTabel > tbody:last > tr:last').remove(); //여기
+                    $('#lectureCurriTabel > tbody:last > tr:last').remove(); //여기
                 }else if(val == 'CATE_GOODS'){
-                   $('#categoryTable > tbody:last > tr:last').remove(); //여기
+                    $('#categoryTable > tbody:last > tr:last').remove(); //여기
                 }
                 location.reload();
             });
@@ -773,67 +801,67 @@
         innerValue(resultPirceCnt,totalprice);
     }
 
-    
+
     //강의목록- 입력 저장
     function videoLectureSave() {
         var data = new FormData();
         $.each($('#dataFile')[0].files, function(i, file) {
             data.append('file_name', file);
         });
-            $.ajax({
-                url: "/file/videoDataFileUpload",
-                method: "post",
-                dataType: "JSON",
-                data: data,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    var name = getInputTextValue("lectureName");
-                    var isShow = "";
-                    if($('input:checkbox[name="lectureIsShow"]').is(":checked") == true) isShow = '1';
-                    else{isShow = '0';}
-                    var isSample = "";
-                    if($('input:checkbox[name="isSample"]').is(":checked") == true) isSample = '1';
-                    else{isSample = '0';}
-                    var vodFileLow = getInputTextValue("vodFileLow");
-                    var vodFileHigh = getInputTextValue("vodFileHigh");
-                    var vodFileMobileLow = getInputTextValue("vodFileMobileLow");
-                    var vodFileMobileHigh = getInputTextValue("vodFileMobileHigh");
-                    var vodTime = getInputTextValue("vodTime");
-                    var dataFile = "";
-                    if(data.result != null) dataFile = data.result;
-                    var data = {
-                        curriKey:0,
-                        lecKey:gKey,
-                        name:name,
-                        isShow:isShow,
-                        isSample:isSample,
-                        vodFileLow:vodFileLow,
-                        vodFileHigh:vodFileHigh,
-                        vodFileMobileLow:vodFileMobileLow,
-                        vodFileMobileHigh:vodFileMobileHigh,
-                        vodTime:vodTime,
-                        dataPage:0,
-                        pos:0,
-                        dataFile: dataFile
-                    };
-                    productManageService.saveVideoLectureInfo(data, function (data) {
-                        if(data){//lectureListPopup
-                            alert("저장되었습니다.");
-                            innerValue("lectureName",'');
-                            isCheckbox("lectureIsShow", false);//노출
-                            isCheckbox("isSample", false);//노출
-                            innerValue("vodFileLow",'');
-                            innerValue("vodFileHigh",'');
-                            innerValue("vodFileMobileLow",'');
-                            innerValue("vodFileMobileHigh",'');
-                            innerValue("vodTime",'');
-                            $('.custom-file-control2').html('');
-                        }
-                    });
-                }
-            });
+        $.ajax({
+            url: "/file/videoDataFileUpload",
+            method: "post",
+            dataType: "JSON",
+            data: data,
+            cache: false,
+            processData: false,
+            contentType: false,
+            success: function (data) {
+                var name = getInputTextValue("lectureName");
+                var isShow = "";
+                if($('input:checkbox[name="lectureIsShow"]').is(":checked") == true) isShow = '1';
+                else{isShow = '0';}
+                var isSample = "";
+                if($('input:checkbox[name="isSample"]').is(":checked") == true) isSample = '1';
+                else{isSample = '0';}
+                var vodFileLow = getInputTextValue("vodFileLow");
+                var vodFileHigh = getInputTextValue("vodFileHigh");
+                var vodFileMobileLow = getInputTextValue("vodFileMobileLow");
+                var vodFileMobileHigh = getInputTextValue("vodFileMobileHigh");
+                var vodTime = getInputTextValue("vodTime");
+                var dataFile = "";
+                if(data.result != null) dataFile = data.result;
+                var data = {
+                    curriKey:0,
+                    lecKey:gKey,
+                    name:name,
+                    isShow:isShow,
+                    isSample:isSample,
+                    vodFileLow:vodFileLow,
+                    vodFileHigh:vodFileHigh,
+                    vodFileMobileLow:vodFileMobileLow,
+                    vodFileMobileHigh:vodFileMobileHigh,
+                    vodTime:vodTime,
+                    dataPage:0,
+                    pos:0,
+                    dataFile: dataFile
+                };
+                productManageService.saveVideoLectureInfo(data, function (data) {
+                    if(data){//lectureListPopup
+                        alert("저장되었습니다.");
+                        innerValue("lectureName",'');
+                        isCheckbox("lectureIsShow", false);//노출
+                        isCheckbox("isSample", false);//노출
+                        innerValue("vodFileLow",'');
+                        innerValue("vodFileHigh",'');
+                        innerValue("vodFileMobileLow",'');
+                        innerValue("vodFileMobileHigh",'');
+                        innerValue("vodTime",'');
+                        $('.custom-file-control2').html('');
+                    }
+                });
+            }
+        });
 
     }
 
@@ -857,7 +885,7 @@
             });
         }
     }
-    
+
     function optionTapModify() {
         if(confirm("옵션정보를 수정 하시겠습니까?")){
             var optionArray = new Array();
@@ -881,12 +909,12 @@
                 optionArray.push(data);
             });
 
-           productManageService.upsultTGoodsPriceOption(optionArray, gKey,function () {
-                 location.reload();
+            productManageService.upsultTGoodsPriceOption(optionArray, gKey,function () {
+                location.reload();
             });
         }
     }
-    
+
     function categoryModify() {
         if(confirm("카테고리를 수정 하시겠습니까?")){
             var categoryArray = new Array();
@@ -932,7 +960,7 @@
                 var calculateRate = $(this).find("td input").eq(1).val();
                 var data = {
                     gTeacherKey: gTeacherKey,
-                    gKey:'0',
+                    gKey:gKey,
                     isPublicSubject:'0',
                     subjectCtgKey:subject,
                     teacherKey:teacher1,
@@ -943,13 +971,13 @@
                 teacherArray.push(data);
             });
             console.log(teacherArray);
-            /*
-            productManageService.upsultTGoodTeacherLink(teacherArray, gKey,function () {
-                location.reload();
-            });*/
+
+            // productManageService.upsultTGoodTeacherLink(teacherArray, gKey,function () {
+            //     location.reload();
+            // });
         }
     }
-    
+
     function mocklISTModify() {
         if(confirm("수정 하시겠습니까?")){
             /*  6.선택 obj  */
@@ -1140,11 +1168,11 @@
                                 </div>
                                 <div class="form-group">
                                     <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                                        <select class="col-sm-3 select2 form-control custom-select" id="emphasis" name="emphasis">
-                                            <option  value="0">없음</option>
-                                            <option value="1">BEST</option>
-                                            <option value="2">NEW</option>
-                                        </select>
+                                    <select class="col-sm-3 select2 form-control custom-select" id="emphasis" name="emphasis">
+                                        <option  value="0">없음</option>
+                                        <option value="1">BEST</option>
+                                        <option value="2">NEW</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">사은품 배송비 무료</label>
@@ -1360,40 +1388,40 @@
                             <input type="button" value="수정" onclick="techerModify();">
                             <div id="section5">
                                 <table class="table" id="teacherTabel">
-                                    <input type="hidden" id="gTeacherKey_0" >
-                                    <input type="hidden" id="subjectHidden_0" >
-                                    <input type="hidden" id="teacherHidden_0" >
-                                    <input type="hidden" name="gKey" value="0">
+                                    <%--                                    <input type="hidden" id="gTeacherKey_0" >--%>
+                                    <%--                                    <input type="hidden" id="subjectHidden_0" >--%>
+                                    <%--                                    <input type="hidden" id="teacherHidden_0" >--%>
+                                    <%--                                    <input type="hidden" name="gKey" value="0">--%>
                                     <thead>
                                     <tr>
                                         <th scope="col" colspan="5" style="text-align:center;width:30%">강사목록</th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                    <tr>
-                                        <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
-                                            <!--<select  class="select2 form-control custom-select"  id="SubjectList_0" name="SubjectList_0" readonly>
-                                                <option value="">선택</option>
-                                            </select>-->
-                                            <input type="text" id="SubjectList_0" name="SubjectList_0" class="form-control"  readonly>
-                                        </td>
-                                        <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
-                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
-                                        </td>
-                                        <td style="padding: 0.3rem;width: 20%">
-                                           <!--<select  class="select2 form-control custom-select"  id="teacherList_0" name="teacherList_0" readonly>
-                                                <option value="">선택</option>
-                                            </select>-->
-                                            <input type="text" id="teacherList_0" name="teacherList_0" class="form-control"  readonly>
-                                        </td>
-                                        <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
-                                            <label style="display: inline-block">조건 : </label>
-                                            <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculateRate_0" id="calculateRate_0" readonly> %
-                                        </td>
-                                        <td style="width:3%;vertical-align: middle">
-                                            <button type="button"  class='btn btn-outline-danger btn-sm' onclick="optionDelete('teacherDelete')" style="margin-top:8%;">삭제</button>
-                                        </td>
-                                    </tr>
+                                    <tbody id="teacherListTbody">
+                                    <%--                                    <tr>--%>
+                                    <%--                                        <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">--%>
+                                    <%--                                            <!--<select  class="select2 form-control custom-select"  id="SubjectList_0" name="SubjectList_0" readonly>--%>
+                                    <%--                                                <option value="">선택</option>--%>
+                                    <%--                                            </select>-->--%>
+                                    <%--                                            <input type="text" id="SubjectList_0" name="SubjectList_0" class="form-control"  readonly>--%>
+                                    <%--                                        </td>--%>
+                                    <%--                                        <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">--%>
+                                    <%--                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>--%>
+                                    <%--                                        </td>--%>
+                                    <%--                                        <td style="padding: 0.3rem;width: 20%">--%>
+                                    <%--                                           <!--<select  class="select2 form-control custom-select"  id="teacherList_0" name="teacherList_0" readonly>--%>
+                                    <%--                                                <option value="">선택</option>--%>
+                                    <%--                                            </select>-->--%>
+                                    <%--                                            <input type="text" id="teacherList_0" name="teacherList_0" class="form-control"  readonly>--%>
+                                    <%--                                        </td>--%>
+                                    <%--                                        <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">--%>
+                                    <%--                                            <label style="display: inline-block">조건 : </label>--%>
+                                    <%--                                            <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculateRate_0" id="calculateRate_0" readonly> %--%>
+                                    <%--                                        </td>--%>
+                                    <%--                                        <td style="width:3%;vertical-align: middle">--%>
+                                    <%--                                            <button type="button"  class='btn btn-outline-danger btn-sm' onclick="optionDelete('teacherDelete')" style="margin-top:8%;">삭제</button>--%>
+                                    <%--                                        </td>--%>
+                                    <%--                                    </tr>--%>
                                     </tbody>
                                 </table>
                                 <div class="mx-auto" style="width:5.5%">
@@ -1412,7 +1440,7 @@
                                     <thead>
                                     <tr>
                                         <th scope="col" colspan="2">전범위 모의고사
-                                        <button type="button" style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
+                                            <button type="button" style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
                                         </th>
                                     </tr>
                                     </thead>
@@ -1432,7 +1460,7 @@
                                     <thead>
                                     <tr>
                                         <th scope="col" colspan="3">강의교재
-                                        <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                                            <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                                         </th>
                                     </tr>
                                     </thead>
@@ -1443,7 +1471,7 @@
                                     <thead>
                                     <tr>
                                         <th scope="col" colspan="2">사은품
-                                        <button type="button" style="float: right"  class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
+                                            <button type="button" style="float: right"  class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
                                         </th>
                                     </tr>
                                     </thead>

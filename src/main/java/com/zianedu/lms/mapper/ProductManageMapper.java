@@ -82,6 +82,8 @@ public interface ProductManageMapper {
 
     Integer selectTBankSubjectQuesLinkLastPos(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey);
 
+    List<String> selectTeacherNameListByVideoProduct(@Param("gKey") int gKey);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 

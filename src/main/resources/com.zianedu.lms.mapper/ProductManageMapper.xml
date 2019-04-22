@@ -3,13 +3,15 @@
 <mapper namespace="com.zianedu.lms.mapper.ProductManageMapper">
 
 	<select id="selectProductList" resultType="VideoListDTO">
-		SELECT A.G_KEY, A.NAME as GOODS_NAME, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE, D.NAME as TEACHER_NAME, E.STATUS
-		FROM T_GOODS A LEFT JOIN T_GOODS_TEACHER_LINK B
-		ON A.G_KEY = B.G_KEY
-		LEFT JOIN T_TEACHER C
-		ON B.TEACHER_KEY = C.TEACHER_KEY
-		LEFT JOIN T_USER D
-		ON C.USER_KEY = D.USER_KEY
+		SELECT
+			A.G_KEY,
+			A.NAME AS GOODS_NAME,
+			A.INDATE,
+			A.IS_SHOW,
+			A.IS_SELL,
+			A.IS_FREE,
+			E.STATUS
+		FROM T_GOODS A
 		LEFT JOIN T_LEC E
 		ON A.G_KEY = E.G_KEY
 		WHERE 1=1
@@ -350,6 +352,16 @@
 			ORDER BY POS DESC
 		) Z
 		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTeacherNameListByVideoProduct" resultType="String">
+		SELECT C.name
+		FROM t_goods_teacher_link A
+		INNER JOIN t_teacher B
+		ON A.teacher_key = B.teacher_key
+		INNER JOIN t_user C
+		ON B.user_key = C.user_key
+		WHERE A.g_key = #{gKey}
 	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">

@@ -162,13 +162,28 @@ public class ProductManageService extends PagingSupport {
                 );
             }
         } else {
-            return productManageMapper.selectProductList(
+            List<VideoListDTO> videoListDTOList = productManageMapper.selectProductList(
                     startNumber,
                     listLimit,
                     Util.isNullValue(searchText, ""),
                     Util.isNullValue(searchType.toLowerCase(), ""),
                     GoodsType.getGoodsTypeKey(goodsTypeStr)
             );
+            if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 1) {
+                for (VideoListDTO listDTO : videoListDTOList) {
+                    int gKey = listDTO.getGKey();
+                    List<String>teacherNameList = productManageMapper.selectTeacherNameListByVideoProduct(gKey);
+                    String[] teacherNames = null;
+                    String teacherName = "";
+                    if (teacherNameList.size() > 0) {
+                        teacherNames = StringUtils.arrayListToStringArray(teacherNameList);
+                        teacherName = StringUtils.stringArrayToString(teacherNames, ",");
+                    }
+
+                    listDTO.setTeacherName(Util.isNullValue(teacherName, ""));
+                }
+            }
+            return videoListDTOList;
         }
         return null;
     }

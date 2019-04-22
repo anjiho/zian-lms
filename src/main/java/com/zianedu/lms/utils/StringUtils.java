@@ -194,7 +194,8 @@ public class StringUtils {
         for (String str :  arrayStr) {
             sb.append(str).append(regx);
         }
-        return sb.toString();
+        String str = sb.toString().substring(0, sb.toString().length() - 1);
+        return str;
     }
 
     /**
@@ -284,16 +285,8 @@ public class StringUtils {
     }
 
     public static void main(String[] args) {
-        StringUtils lotto = new StringUtils();
-        Scanner sc = new Scanner(System.in);
-
-        System.out.print("로또번호 추출 개수 입력: ");
-        int gameCnt = sc.nextInt();
-
-        for (int i = 1; i <= gameCnt; i++) {
-            System.out.println(
-                    i + "번째 로또번호: " + lotto.lottoNumbers());
-        }
+        String[] strs = {"1","2","3"};
+        System.out.println(stringArrayToString(strs, ","));
     }
 
     String lottoNumbers() {
@@ -317,6 +310,15 @@ public class StringUtils {
         Arrays.sort(lottoNums);
 
         return Arrays.toString(lottoNums);
+    }
+
+    public static String convertStringFromStringArrays(String[] arr) {
+        StringBuilder builder = new StringBuilder();
+        for(String s : arr) {
+            builder.append(s);
+        }
+        String str = builder.toString();
+        return str;
     }
 
 }
