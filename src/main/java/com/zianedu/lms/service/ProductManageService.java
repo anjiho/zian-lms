@@ -703,6 +703,16 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
+     * 동영상 강의 수정
+     * @param tLecCurri
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateTLecCurri(TLecCurri tLecCurri) {
+        if (tLecCurri == null) return;
+        productManageMapper.updateTLecCurri(tLecCurri);
+    }
+
+    /**
      * T_BOOK 저장및 수정
      * @param tBookVO
      * @return

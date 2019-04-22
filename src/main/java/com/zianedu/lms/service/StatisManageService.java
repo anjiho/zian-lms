@@ -1,6 +1,7 @@
 package com.zianedu.lms.service;
 
 import com.google.common.primitives.Ints;
+import com.google.common.primitives.Longs;
 import com.zianedu.lms.dto.StatisResultDTO;
 import com.zianedu.lms.mapper.StatisManageMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,16 +38,16 @@ public class StatisManageService {
     }
 
     @Transactional(readOnly = true)
-    public int[] getTotalStatisAtYear() {
-        List<Integer>result = new ArrayList<>();
+    public long[] getTotalStatisAtYear() {
+        List<Long>result = new ArrayList<>();
         List<StatisResultDTO> list = statisManageMapper.selectTotalStatisAtYear();
         if (list.size() > 0) {
             for (StatisResultDTO resultDTO : list) {
-                Integer price = Integer.parseInt(resultDTO.getPrice());
+                Long price = Long.parseLong(resultDTO.getPrice());
                 result.add(price);
             }
         }
-        int[] arr = Ints.toArray(result);
+        long[] arr = Longs.toArray(result);
         return arr;
     }
 
