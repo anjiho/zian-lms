@@ -54,6 +54,12 @@
 			<param name="beanName" value="memberManageService" />
 		</create>
 
+		<convert converter="bean" match="com.zianedu.lms.service.StatisManageService"/>
+		<create creator="spring" javascript="statisManageService">
+			<param name="class" value="com.zianedu.lms.service.StatisManageService"/>
+			<param name="beanName" value="statisManageService" />
+		</create>
+
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->

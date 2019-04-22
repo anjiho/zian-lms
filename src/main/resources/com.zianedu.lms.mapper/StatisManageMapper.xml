@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.StatisManageMapper">
+
+
+    <select id="selectTotalStatisAtMonth" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM') as DAY,
+            SUM(A.PRICE_PAY) as PRICE
+        FROM T_ORDER A
+        WHERE 1=1
+        AND A.PAY_STATUS = 2
+        AND TO_CHAR(A.INDATE, 'YYYY') = #{year}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectTotalStatisAtYear" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY') as DAY,
+            SUM(A.PRICE_PAY) as PRICE
+        FROM T_ORDER A
+        WHERE 1=1
+        and A.PAY_STATUS = 2
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectTotalStatisAtYearDay" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM-DD') as DAY,
+            SUM(A.PRICE_PAY) as PRICE
+        FROM T_ORDER A
+        WHERE 1=1
+        AND A.PAY_STATUS = 2
+        AND TO_CHAR(A.INDATE, 'YYYY-MM') = #{month}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM-DD')
+        ORDER BY DAY ASC
+    </select>
+
+</mapper>

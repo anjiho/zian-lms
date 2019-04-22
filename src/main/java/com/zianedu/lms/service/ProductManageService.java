@@ -612,6 +612,7 @@ public class ProductManageService extends PagingSupport {
     public void upsultTGoodTeacherLink(List<TGoodTeacherLinkVO> tGoodTeacherLinkVOList, int gKey) {
         if (tGoodTeacherLinkVOList.size() == 0) return;
 
+        productManageMapper.deleteTGoodsTeacherLinkByGkey(gKey);
         for (TGoodTeacherLinkVO teacherLinkVO : tGoodTeacherLinkVOList) {
             teacherLinkVO.setGKey(gKey);
             if (teacherLinkVO.getGTeacherKey() == 0) productManageMapper.insertTGoodsTeacherLink(teacherLinkVO);

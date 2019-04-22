@@ -124,6 +124,8 @@ public interface ProductManageMapper {
 
     void deleteTGoodsTeacherLink(@Param("gTeacherKey") int gTeacherKey);
 
+    void deleteTGoodsTeacherLinkByGkey(@Param("gKey") int gKey);
+
     void deleteTLecCurri(@Param("curriKey") int curriKey);
 
     void deleteTCategoryGoodsByCtgGKey(@Param("ctgGKey") int ctgGKey);

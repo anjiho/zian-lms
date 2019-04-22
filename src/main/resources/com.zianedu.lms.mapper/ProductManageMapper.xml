@@ -782,6 +782,10 @@
 		DELETE FROM T_GOODS_TEACHER_LINK WHERE G_TEACHER_KEY = #{gTeacherKey}
 	</delete>
 
+	<delete id="deleteTGoodsTeacherLinkByGkey" parameterType="Integer">
+		DELETE FROM T_GOODS_TEACHER_LINK WHERE G_KEY = #{gKey}
+	</delete>
+
 	<delete id="deleteTLecCurri" parameterType="Integer">
 		DELETE FROM T_LEC_CURRI WHERE CURRI_KEY = #{curriKey}
 	</delete>
