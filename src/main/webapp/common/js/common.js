@@ -1481,6 +1481,20 @@ function isCheckbox(checkbox_id, boolean) {
 }
 
 /**
+ * 체크박스 체크상태 변경하기
+ * @param checkbox_id
+ * @param boolean(true:체크상태로, false:체크안한 상태로)
+ */
+function isCheckboxByNumber(checkbox_id, number) {
+    var boolean = false;
+    if (number == "1") boolean = true;
+
+    if (checkbox_id != "") {
+        $("#"+checkbox_id).attr("checked", boolean);
+    }
+}
+
+/**
  * 페이지 새로고침 하기
  * @param boolean(true:새로고침, false:새로고침 안하기)
  */
@@ -2334,6 +2348,10 @@ function getJsonObjectFromDiv(divId) {
         data[obj.name] = obj.value;
     });
     return data;
+}
+
+function pagingListCount() {
+    return "10";
 }
 
 

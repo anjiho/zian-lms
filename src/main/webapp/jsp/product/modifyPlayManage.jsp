@@ -968,7 +968,6 @@
                                         processData: false,
                                         contentType: false,
                                         success: function (data) {
-                                            console.log(">>>>>>>>>>>>" + JSON.stringify(data.result));
                                             var result = JSON.stringify(data.result);
                                             var data = getJsonObjectFromDiv("section1");
                                             if(data.isShow == 'on')  data.isShow = '1';//노출 checkbox

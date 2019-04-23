@@ -37,7 +37,6 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
-                console.log(selList);
                 if (selList.length > 0) {
                     console.log(selList);
                     for (var i = 0; i < selList.length; i++) {
@@ -45,7 +44,8 @@
                         var goosNameHtml = "<a href='javascript:void(0);' color='blue' style='float:left' onclick='play_modify(" + cmpList.GKey + ");'>"+cmpList.goodsName +"</a>";
                         if (cmpList != undefined) {
                             var cellData = [
-                                function(data) {return i+1;},
+                                function(data) {return listNum--;},
+                                // function(data) {return i+1;},
                                 function(data) {return cmpList.GKey;},
                                 function(data) {return goosNameHtml;},
                                 function(data) {return split_minute_getDay(cmpList.indate);},
