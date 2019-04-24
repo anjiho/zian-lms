@@ -6,10 +6,42 @@
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<script src="common/js/bookGiftListPopup.js"></script>
 <script>
     var gKey = '<%=gKey%>';
+    $( document ).ready(function() {
+        $('#description').summernote({ //기본정보-에디터
+            height: 430,
+            minHeight: null,
+            maxHeight: null,
+            focus: false,
+            lang: 'ko-KR',
+            placeholder: '내용을 적어주세요.'
+            ,hint: {
+                match: /:([\-+\w]+)$/,
+                search: function (keyword, callback) {
+                    callback($.grep(emojis, function (item) {
+                        return item.indexOf(keyword) === 0;
+                    }));
+                },
+                template: function (item) {
+                    var content = emojiUrls[item];
+                    return '<img src="' + content + '" width="20" /> :' + item + ':';
+                },
+                content: function (item) {
+                    var url = emojiUrls[item];
+                    if (url) {
+                        return $('<img />').attr('src', url).css('width', 20)[0];
+                    }
+                    return '';
+                }
+            }
+        });
+    });
 
     function init() {
+        getProductSearchTypeSelectbox("l_productSearch");
+
         productManageService.getProductDetailInfo(gKey, "ACADEMY", function(info) {
             console.log(info);
             /**
@@ -18,13 +50,13 @@
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);   //상품이름
             innerValue("indate", split_minute_getDay(productInfo.indate));   //등록일
-            innerValue("sellStartDate", split_minute_getDay(productInfo.sellstartdate)); //판매일
+            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate)); //판매일
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             isCheckboxByNumber("isFree", productInfo.isFree);//무료
 
             if (productInfo.imageList != null) {
-                ('.custom-file-control').html(fn_clearFilePath(productInfo.imageList));//리스트이미지
+                $('.custom-file-control').html(fn_clearFilePath(productInfo.imageList));//리스트이미지
             }
             if (productInfo.imageView != null) {
                 $('.custom-file-control1').html(fn_clearFilePath(productInfo.imageView));//상세이미지
@@ -103,6 +135,8 @@
             for (var i = 0; i < productTeacherInfo.length; i++) {
                 var cmpList = productTeacherInfo[i]
                 var cellData = [
+                    function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
+                    function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
                     function() {return cmpList.subjectName},
                     function() {return nextIcon},
                     function() {return cmpList.teacherName},
@@ -110,6 +144,25 @@
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+            }
+            $('#teacherList tr').each(function(){
+                var tr = $(this);
+                tr.children().eq(0).attr("style", "display:none");
+                tr.children().eq(1).attr("style", "display:none");
+            });
+
+            /**
+             * 그외 선택 항목 가져오기
+             */
+            var productOtherInfo = info.productOtherInfo;
+            //MockTitle
+            for (var i=0; i<productOtherInfo.length; i++) {
+                var cmpList = productOtherInfo[i];
+                for (var j=0; j<cmpList.length; j++) {
+                    if (cmpList[j].resType == "8") {
+
+                    }
+                }
             }
         });
     }
@@ -154,15 +207,112 @@
             $trNew = $trLast.clone();
         $trLast.after($trNew);
 
-        $trNew.find("td").eq(0).html("");
-        $trNew.find("td").eq(2).html("");
         $trNew.find("td input").eq(0).val("");
-        getSelectboxListForCtgKeyNoTag('teacherTable', '70', 0);
-        selectTeacherSelectboxNoTag('teacherTable', 2);
+        $trNew.find("td input").eq(1).val("");
+        $trNew.find("td input").eq(2).val("");
+
+        getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);
+        selectTeacherSelectboxNoTag('teacherTable', 4);
     }
 
     function test() {
         var arr = get_array_values_by_name("input", "inputCtgKey[]");
+    }
+
+    //기본정보 수정
+    function updateBasicInfo() {
+        var fileData = new FormData();
+        $.each($('#imageListFile')[0].files, function(i, file) {
+            fileData.append('imageListFile', file);
+        });
+
+        $.each($('#imageViewFile')[0].files, function(i, file) {
+            fileData.append('imageViewFile', file);
+        });
+        if(confirm("기본정보를 수정 하시겠습니까?")){
+            $.ajax({
+                url: "/file/updateVideoInfo",
+                method: "post",
+                dataType: "JSON",
+                data: fileData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    var result = JSON.stringify(data.result);
+                    var data = getJsonObjectFromDiv("section1");
+                    if(data.isShow == 'on')  data.isShow = '1';//노출 checkbox
+                    else data.isShow = '0';
+                    if(data.isSell == 'on')  data.isSell = '1';//판매
+                    else data.isSell = '0';
+                    if(data.isFree == 'on')  data.isFree = '1';//무료
+                    else data.isFree = '0';
+                    if(data.isFreebieDeliveryFree == 'on')  data.isFreebieDeliveryFree = '1';//사은품배송비무료
+                    else data.isFreebieDeliveryFree = '0';
+
+                    var imageListFile = "";
+                    var imageViewFile = "";
+                    if(result != "") {
+                        var parse = JSON.parse(result);
+                        imageListFile = parse.imageListFilePath;
+                        imageViewFile = parse.imageViewFilePath;
+                    }
+                    productManageService.updateGoodsInfo(data, data.gKey, imageListFile, imageViewFile,function (data) {
+                        location.reload();
+                    });
+                }
+            });
+        }
+    }
+
+    function updateOptionInfo() {
+
+    }
+
+
+
+    //강사목록 수정 버튼
+    function updateTeacherList() {
+        var teacherKeys = get_array_values_by_name("input", "teacherKeys[]");
+        var subjectKeys = get_array_values_by_name("input", "subjectKeys[]");
+        var calcRates = get_array_values_by_name("input", "calcRate[]");
+
+        var dataArr = new Array();
+        for (var i=0; i<teacherKeys.length; i++) {
+            var data = {
+                teacherKey : teacherKeys[i],
+                subjectKey : subjectKeys[i],
+                calcRate : calcRates[i]
+            }
+            console.log(data);
+            dataArr.push(data);
+        }
+    }
+
+    //강의교재 수정 버튼
+    function updateLectureBookList() {
+        var bookKeys = get_array_values_by_name("input", "res_key[]");
+        var dataArr = new Array();
+
+        for (var i=0; i<bookKeys.length; i++) {
+            var valueBit;
+            var isBookMainId = "isBookMain_" + bookKeys[i];
+            var isBookMain = $("input:checkbox[id=" + "'" + isBookMainId + "'" + "]").is(":checked");
+            //주교재 여부 값 변환
+            if (isBookMain) valueBit = 1;
+            else valueBit = 0;
+
+            var data = {
+                linkKey : 0,
+                reqKey : gKey,
+                resKey : bookKeys[i],
+                resType : 5,
+                pos : 0,
+                valueBit : valueBit
+            }
+            dataArr.push(data);
+        }
+
     }
 
     //테이블 로우 삭제
@@ -173,6 +323,14 @@
             $('#categoryTable > tbody:last > tr:last').remove();
         } else if (tableId == "productTeacher") {
             $('#teacherTable > tbody:last > tr:last').remove();
+        } else if(tableId == 'allMockTitleDelete'){
+            $('#allMockList > tbody:last > tr:last').remove();
+        } else if(tableId == 'examQuestionDelete'){
+            $('#examQuestionList > tbody:last > tr:last').remove();
+        } else if(tableId == 'bookTitleDelete'){
+            $('#bookList > tbody:last > tr:last').remove();
+        } else if(tableId == 'giftDelete'){
+            $('#giftList > tbody:last > tr:last').remove();
         }
     }
 
@@ -186,7 +344,18 @@
     function changeCategory(tableId, val, tdNum) {
         getCategoryNoTag(val, tableId, tdNum);
     }
+
+    //강사목록 새로 등록하는 값 주입하기(강사키)
+    function injectSubjectKey(val) {
+        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(1).val(val);
+    }
+
+    //강사목록 새로 등록하는 값 주입하기(과목키)
+    function injectTeacherKey(val) {
+        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
+    }
 </script>
+<input type="hidden" name="sPage3" id="sPage3">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
@@ -227,11 +396,10 @@
                                 <input type="hidden" value="0" name="isQuickDelivery">
                                 <input type="hidden" value="" name="goodsId">
                                 <input type="hidden" value="" name="goodsTypeName">
-                                <input type="hidden" value="" name="summary">
+<%--                                <input type="hidden" value="" name="summary">--%>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                     <span>온라인강좌</span>
-                                    <input type="hidden" class="form-control" id="type" name='type' value="1">
                                 </div>
                                 <div class="form-group">
                                     <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -249,7 +417,7 @@
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label"  style="margin-bottom: 0">판매시작일</label>
                                 <div class="input-group col-sm-3">
-                                    <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellStartDate">
+                                    <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
@@ -332,11 +500,11 @@
                             <div class="form-group">
                                 <label class="control-label col-form-label">상세설명</label>
                                 <div>
-                                    <textarea name="content"  value="" id="description" name="description"></textarea>
+                                    <textarea name="description"  value="" id="description"></textarea>
                                 </div>
                             </div>
                             <div style="float: right">
-                                <input type="button" class="btn btn-default" value="수정" onclick="basicModify();">
+                                <input type="button" class="btn btn-default" value="수정" onclick="updateBasicInfo();">
                             </div>
                         </div>
                     </section>
@@ -466,7 +634,7 @@
                 <!-- 5.강사 목록 Tab -->
                 <h3>강사목록</h3>
                 <section>
-                    <input type="button" value="수정" onclick="techerModify();">
+                    <input type="button" value="수정" onclick="updateTeacherList();">
                     <span></span>
                     <div id="section5">
                         <table class="table"id="teacherTable">
@@ -497,78 +665,20 @@
                 </section>
                 <!-- //5.강사 목록 Tab -->
 
-                <!-- 6.선택 Tab -->
-                <h3>선택</h3>
+                <!-- 6.강의 교재선택 Tab -->
+                <h3>강의 교재선택</h3>
                 <section>
-                    <input type="button" value="수정" onclick="mocklISTModify();">
+                    <input type="button" value="수정" onclick="updateLectureBookList();">
                     <div id="section6">
-                        <table class="table text-center table-hover" id="allMockList">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="2">전범위 모의고사
-                                <button type="button" style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody id="MockTitle"></tbody>
-                        </table>
-                        <table class="table table-hover text-center" id="examQuestionList">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="2">기출문제 회차별
-                                    <button type="button" style="float: right"  class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody id="examQuestionTitle"></tbody>
-                        </table>
+                        <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                         <table class="table text-center table-hover" id="bookList">
                             <thead>
-                            <tr>
-                                <th scope="col" colspan="3">강의교재
-                                <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
-                                </th>
-                            </tr>
                             </thead>
-                            <tbody>
-                            </tbody>
-                        </table>
-                        <table class="table text-center table-hover" id="giftList">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="2">사은품
-                                <button type="button" style="float: right"  class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
-                                </th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            </tbody>
+                            <tbody></tbody>
                         </table>
                     </div>
                 </section>
-                <!-- //6.선택 Tab -->
-
-                <!-- 7.강의 목록 Tab -->
-                <h3>강의목록</h3>
-                <section>
-                    <div class="mb-3 float-right">
-                        <button type="button" class="btn btn-outline-info btn-sm" onclick="changelectureListSave();">순서변경저장</button>
-                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#lectureListPopup">추가</button>
-                    </div>
-                    <table class="table text-center table-hover"  id="lectureCurriTabel">
-                        <thead>
-                        <tr>
-                            <th scope="col" colspan="1" style="width:40%">강의제목</th>
-                            <th scope="col" colspan="1" style="width:20%">시간</th>
-                            <th scope="col" colspan="1" style="width:10%">출력</th>
-                            <th scope="col" colspan="1" style="width:10%">샘플사용</th>
-                            <th scope="col" colspan="1" style="width:7%"></th>
-                        </tr>
-                        </thead>
-                        <tbody id="lectureCurriList">
-                        </tbody>
-                    </table>
-                </section>
+                <!-- //6.강의 교재선택 Tab -->
             </div>
         </div>
     </div>
@@ -577,111 +687,6 @@
 </div>
 </form>
 <!-- // 기본소스-->
-<!-- 6.선택 전범위 모의고사 팝업창 -->
-<div class="modal fade" id="sModal3" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">강의 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="searchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="searchText">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">시험명</th>
-                        <th style="width:15%">시험신청기간</th>
-                        <th style="width:15%">시험기간</th>
-                        <th style="width:15%">진행시간</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList"></tbody>
-                    <tr>
-                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //선택 전범위 모의고사 추가 팝업창 -->
-
-<!-- 기출문제 회차별 팝업창 -->
-<div class="modal fade" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">강의 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="examPopupClose">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="examsearchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="examsearchText">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search2('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage2" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">시험명</th>
-                        <th style="width:15%">시험신청기간</th>
-                        <th style="width:15%">시험기간</th>
-                        <th style="width:15%">진행시간</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList2"></tbody>
-                    <tr>
-                        <td id="emptys2" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi2.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //기출문제 회차별 팝업창 -->
 
 <!-- 6.선택 강의교재  팝업창 -->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -698,19 +703,16 @@
         <div class="modal-body">
             <div style=" display:inline;">
                 <div style=" float: left; width: 10%">
-                    <select class="form-control" id="booksearchType">
-                        <option>선택</option>
-                    </select>
+                    <span id="l_productSearch"></span>
                 </div>
                 <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="booksearchTextBook">
+                    <input type="text" class="form-control" id="productSearchType">
                 </div>
                 <div style=" float: left; width: 33%">
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                 </div>
             </div>
             <div class="table-responsive">
-                <input type="hidden" id="sPage3" >
                 <table id="zero_config" class="table table-hover text-center">
                     <thead class="thead-light">
                     <tr>
@@ -735,63 +737,6 @@
 </div>
 </div>
 <!-- //선택 추가 팝업창 -->
-
-
-<!-- 6.선택 사은품  팝업창 -->
-<div class="modal fade" id="giftModal" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">상품선택</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="giftsearchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="giftsearchTextBook">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage4" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">상품명</th>
-                        <th style="width:15%">노출</th>
-                        <th style="width:15%">판매</th>
-                        <th style="width:15%">무료</th>
-                        <th style="width:15%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList4"></tbody>
-                    <tr>
-                        <td id="emptys4" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi4.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //선택 추가 팝업창 -->
-
-
-
 
 <!-- 강의목록 강의입력 추가 팝업창 -->
 <div class="modal fade" id="lectureListPopup" tabindex="-1" role="dialog" aria-hidden="true">
@@ -918,7 +863,7 @@
                 </div>
             </div>
         </div>-->
-        <button type="button" class="mt-3 mb-1 btn btn-info float-right" onclick="videoLectureSave();">저장</button>
+<%--        <button type="button" class="mt-3 mb-1 btn btn-info float-right" onclick="videoLectureSave();">저장</button>--%>
     </div>
     <!-- //modal body -->
 </div>
@@ -961,6 +906,7 @@
         enableAllSteps: true,
         startIndex : 0,
         saveState : true, //현재 단계 쿠키저장
+        enablePagination : false,
         onFinished: function(event, currentIndex) {
             playSave();
         },
@@ -986,35 +932,17 @@
         language: "kr"
     });
 
-    $('#description').summernote({ //기본정보-에디터
-        height: 430,
-        minHeight: null,
-        maxHeight: null,
-        focus: false,
-        lang: 'ko-KR',
-        placeholder: '내용을 적어주세요.'
-        ,hint: {
-            match: /:([\-+\w]+)$/,
-            search: function (keyword, callback) {
-                callback($.grep(emojis, function (item) {
-                    return item.indexOf(keyword) === 0;
-                }));
-            },
-            template: function (item) {
-                var content = emojiUrls[item];
-                return '<img src="' + content + '" width="20" /> :' + item + ':';
-            },
-            content: function (item) {
-                var url = emojiUrls[item];
-                if (url) {
-                    return $('<img />').attr('src', url).css('width', 20)[0];
-                }
-                return '';
-            }
-        }
+    //파일 선택시 파일명 보이게 하기
+    $(document).on('change', '.custom-file-input', function() {
+        $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.dataAddFile', function() {
+        $(this).parent().find('.custom-file-control2').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 
-
+    $(document).on('change', '.addFile', function() {
+        $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
 
 </script>
 <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>

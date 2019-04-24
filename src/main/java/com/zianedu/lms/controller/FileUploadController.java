@@ -144,6 +144,15 @@ public class FileUploadController {
         return new JsonBuilder().add("result", uploadInfoMap).build();
     }
 
+    @RequestMapping(value = "/updateBookInfo", method = RequestMethod.POST, produces = "application/json; charset=utf8")
+    public @ResponseBody String bookInfoFileUpload(MultipartHttpServletRequest request) {
+        HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(
+                request, ConfigHolder.getFileUploadPath(), "BOOK"
+        );
+        return new JsonBuilder().add("result", uploadInfoMap).build();
+    }
+
+
     @RequestMapping(value = "/imageFileUpload", method = RequestMethod.POST, produces = "application/json; charset=utf8")
     public @ResponseBody String productFileUpload(MultipartHttpServletRequest request,
                                                   @RequestParam(value = "uploadType") String uploadType) {
