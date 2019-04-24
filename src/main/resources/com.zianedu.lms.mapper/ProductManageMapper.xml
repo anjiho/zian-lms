@@ -563,8 +563,7 @@
 			<if test="cpKey > 0">CP_KEY = #{cpKey},</if>
 			<if test="name != '' and name != null">NAME = #{name},</if>
 			<if test="indate != '' and indate != null">INDATE = TO_DATE(#{indate}, 'YYYY-mm-dd'),</if>
-			<if test="sellstartdate != '' and indate != null">SELLSTARTDATE = TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'),</if>
-			<if test="type != null">TYPE = #{type},</if>
+			<if test="sellstartdate != '' and sellstartdate != null">SELLSTARTDATE = TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'),</if>
 			<if test="isShow != null">IS_SHOW = #{isShow},</if>
 			<if test="isSell != null">IS_SELL = #{isSell},</if>
 			<if test="isFree != null">IS_FREE = #{isFree},</if>

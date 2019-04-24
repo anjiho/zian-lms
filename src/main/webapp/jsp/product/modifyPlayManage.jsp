@@ -422,62 +422,6 @@
         });
     }
 
-    //강의교재 , 사은품 선택시 전달값
-    function sendChildValue_2(GKey,set) {
-        productManageService.getProductDetailInfo(GKey, 'BOOK', function (selList) {
-            var bookkCnt = $("#bookList tr").length-1; //강의교재
-            var giftCnt = $("#giftList tr").length-1;//기출문제
-
-            var deleteSel = "";
-            var bookgiftOption = "";
-            if(set == 'bookBtn'){
-                bookgiftOption = "bookName_"+bookkCnt;
-                deleteSel = "bookTitleDelete";
-            }else if(set == 'giftBtn'){
-                bookgiftOption = "giftName_"+giftCnt;
-                deleteSel = "giftDelete";
-            }
-            if (selList.productInfo) {
-
-                var title =  selList.productInfo.name;
-                var bookkListHtml = "<tr>";
-                bookkListHtml     += " <td class=\"text-left\" style=\"padding:0.3rem;vertical-align: middle;width: 65%\">";
-                bookkListHtml     += "<input type='text' class=\"form-control\" id='"+bookgiftOption+"' value='' readonly>";
-                bookkListHtml     += "</td>";
-                bookkListHtml     += " <td>";
-                bookkListHtml     += "<input type='hidden'  value='"+selList.productInfo.GKey+"' name='res_key[]'>";
-                bookkListHtml     += "</td>";
-                if(set == 'bookBtn'){
-                    bookkListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem; vertical-align: middle;width: 30%\">";
-                    bookkListHtml     += " <div class='col-sm-10'>";
-                    bookkListHtml     += " <div style=\"margin-top: -23px;\">";
-                    bookkListHtml     += "부교재";
-                    bookkListHtml     += " <label class=\"switch\">";
-                    bookkListHtml     += " <input type=\"checkbox\" style=\"display:none;\">";
-                    bookkListHtml     += "<span class=\"slider\"></span>";
-                    bookkListHtml     += "</label>";
-                    bookkListHtml     += "주교재";
-                    bookkListHtml     += "  </div>";
-                    bookkListHtml     += "</div>";
-                    bookkListHtml     += "</td>";
-                }
-                bookkListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
-                bookkListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
-                bookkListHtml     += "</td>";
-                bookkListHtml     += " </tr>";
-
-                if(set == 'bookBtn'){ //전범위 모의고사
-                    $('#bookList > tbody:first').append(bookkListHtml);//선택 모의고사 리스트 뿌리기
-                    $("#"+bookgiftOption).val(title);//모의고사 제목 뿌리기
-                }else if(set == 'giftBtn'){ //기출문제
-                    $('#giftList > tbody:first').append(bookkListHtml);//선택 기출문제 리스트 뿌리기
-                    $("#"+bookgiftOption).val(title);//기출문제 제목 뿌리기
-                }
-                //$("#lecturePopupClose").click();
-            }
-        });
-    }
-
     //카테고리 리스트 추가
     function addCategory(val) {
         if(val == 'new'){//옵션새로추가
