@@ -179,6 +179,7 @@
             });
         }
     }
+
     function changeBannerList(val) {
         var arr = new Array();    // 배열 선언
         var tableName =  "dragtable_"+val;
@@ -192,9 +193,7 @@
                     pos : pos
                 };
                 arr.push(data);
-                console.log(arr);
             });
-            return;
             dataManageService.changeBannerPosition(arr, function () {
                 location.reload();
             });
@@ -208,9 +207,7 @@
                     pos : pos
                 };
                 arr.push(data);
-                console.log(arr);
             });
-            return;
             dataManageService.changeBannerPosition(arr, function () {
                 location.reload();
             });
