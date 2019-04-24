@@ -360,7 +360,7 @@ public class DataManageService {
     public void changeBannerPosition(List<TCategoryOtherInfoVO>list) {
         if (list.size() == 0) return;
         for (TCategoryOtherInfoVO vo : list) {
-            dataManageMapper.updateTCategoryOtherInfo(vo);
+            dataManageMapper.changeBannerPosition(vo);
         }
     }
 

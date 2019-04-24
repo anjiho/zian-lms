@@ -62,6 +62,8 @@ public interface DataManageMapper {
     /** UPDATE **/
     void updateTCategoryOtherInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 
+    void changeBannerPosition(TCategoryOtherInfoVO tCategoryOtherInfoVO);
+
     void updateTSchedule(TScheduleVO tScheduleVO);
 
     void updateTSearchKeyword(@Param("searchKeywordKey") int searchKeywordKey, @Param("keyword") String keyword);

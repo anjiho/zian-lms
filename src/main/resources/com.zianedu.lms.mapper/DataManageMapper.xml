@@ -199,6 +199,12 @@
 		</where>
 	</update>
 
+	<update id="changeBannerPosition" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		UPDATE T_CATEGORY_OTHER_INFO
+		SET POS = #{pos}
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
+	</update>
+
 	<update id="updateTSchedule" parameterType="com.zianedu.lms.vo.TScheduleVO">
 		UPDATE T_SCHEDULE
 		<set>
