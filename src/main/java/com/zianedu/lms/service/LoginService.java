@@ -24,7 +24,7 @@ public class LoginService {
         return userMapper.getUserInfo(userId, userPass);
     }
 
-    public TUserVO getUserInfoByUserKey(Long userKey) {
+    public TUserVO getUserInfoByUserKey(int userKey) {
         return userMapper.getUserInfoByUserKey(userKey);
     }
 

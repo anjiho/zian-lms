@@ -79,28 +79,15 @@
 </script>
 <body>
 <div class="main-wrapper">
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
     <div class="preloader">
         <div class="lds-ripple">
             <div class="lds-pos"></div>
             <div class="lds-pos"></div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- Preloader - style you can find in spinners.css -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Login box.scss -->
-    <!-- ============================================================== -->
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
         <div class="auth-box bg-dark border-top border-secondary">
             <div id="loginform">
-                <%--<div class="text-center p-t-20 p-b-20">--%>
-                <%--<span class="db"><img src="common/assets/images/logo.png" alt="logo" /></span>--%>
-                <%--</div>--%>
-                <!-- Form -->
                 <form class="form-horizontal m-t-20" name="frm">
 
                     <input type="hidden" id="page_bgn" name="page_gbn">
@@ -162,21 +149,6 @@
             </div>
         </div>
     </div>
-    <!-- ============================================================== -->
-    <!-- Login box.scss -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page wrapper scss in scafholding.scss -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Page wrapper scss in scafholding.scss -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Right Sidebar -->
-    <!-- ============================================================== -->
-    <!-- ============================================================== -->
-    <!-- Right Sidebar -->
-    <!-- ============================================================== -->
 </div>
 <script src="common/assets/libs/jquery/dist/jquery.min.js"></script>
 <script src="common/assets/libs/popper.js/dist/umd/popper.min.js"></script>

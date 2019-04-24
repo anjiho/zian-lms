@@ -3,12 +3,15 @@ package com.zianedu.lms.utils;
 import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class DateUtils {
 
     public final static DateTimeZone UTC_TIME_ZONE = DateTimeZone.UTC;
+    public final static DateTimeZone KOR_TIME_ZONE = DateTimeZone.UTC;
     public final static String DF_TIME_PATTERN = "yyyy-MM-dd HH:mm:ss";
+    public final static String DF_YMD_PATTERN = "yyyy-MM-dd";
 
     /**
      * 데이트 객체를 패턴에 따라 문자로 변환한다.
@@ -39,8 +42,19 @@ public class DateUtils {
         return dt.toString(DF_TIME_PATTERN);
     }
 
-    public static void main(String[] args) {
-        System.out.println(nowToStrUTC());
+    public static String nowToStrUTCNoHms(String pattern) {
+        DateTime dt = new DateTime(now(), UTC_TIME_ZONE);
+        return dt.toString(pattern + " 00:00:00");
+    }
+
+    public static Date stringToDate(String yyyymmdd) throws Exception {
+        SimpleDateFormat transFormat = new SimpleDateFormat("yyyy-MM-dd");
+        Date to = transFormat.parse(yyyymmdd);
+        return to;
+    }
+
+    public static void main(String[] args) throws Exception {
+        System.out.println(stringToDate("2019-01-01"));
         //System.out.println(dateToStr(d));
     }
 }

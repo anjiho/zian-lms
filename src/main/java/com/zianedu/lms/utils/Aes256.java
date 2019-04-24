@@ -10,7 +10,7 @@ import java.security.NoSuchAlgorithmException;
 
 public class Aes256 {
 	@SuppressWarnings("unused")
-	public static SecretKeySpec getKeySpec() throws IOException, NoSuchAlgorithmException {
+	public static SecretKeySpec getKeySpec() {
 		String iv = "sofo123456789012";
 
 		SecretKeySpec keyspec;

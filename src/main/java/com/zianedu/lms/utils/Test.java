@@ -1,12 +1,11 @@
 package com.zianedu.lms.utils;
 
-import com.zianedu.lms.define.datasource.SearchKeywordType;
-import com.zianedu.lms.define.datasource.TCategoryKeyType;
+import com.zianedu.lms.define.datasource.*;
 
 public class Test {
 
     public static void main(String[] args) {
-
-        System.out.println(SearchKeywordType.getSearchKeywordDomainList());
+        int i = 3000;
+        System.out.println(Util.subStrStartEnd(String.valueOf(i), 0, 1));
     }
 }

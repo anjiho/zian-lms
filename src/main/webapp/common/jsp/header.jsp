@@ -18,37 +18,22 @@
             <div class="navbar-header" data-logobg="skin5">
                 <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
                 <a class="navbar-brand" href="index.html">
-                    <b class="logo-icon p-l-10">
-                        <img src="common/assets/images/logo.png" alt="homepage" class="light-logo" />
-                    </b>
+                    <img src="img/logo.png" alt="user" class="rounded-circle" width="31">
                     <span class="logo-text">
-                        zianedu
+                        지안에듀
                     </span>
                 </a>
-                <a class="topbartoggler d-block d-md-none waves-effect waves-light" href="javascript:void(0)" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><i class="ti-more"></i></a>
             </div>
             <div class="navbar-collapse collapse" id="navbarSupportedContent" data-navbarbg="skin5">
                 <ul class="navbar-nav float-left mr-auto"></ul>
                 <ul class="navbar-nav float-right">
                     <li class="nav-item">
-                        <input type="button" value="로그아웃" onclick="goPage('login', 'logout')">
-                        <a  class="nav-link text-muted waves-effect waves-dark pro-pic">LoginTEST</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle text-muted waves-effect waves-dark pro-pic" href="" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><img src="common/assets/images/users/1.jpg" alt="user" class="rounded-circle" width="31"></a>
-                        <div class="dropdown-menu dropdown-menu-right user-dd animated">
-                            <a class="dropdown-item" href="javascript:void(0)"><i class="ti-user m-r-5 m-l-5"></i> My Profile</a>
-                            <a class="dropdown-item" href="javascript:void(0)"><i class="ti-wallet m-r-5 m-l-5"></i> My Balance</a>
-                            <a class="dropdown-item" href="javascript:void(0)"><i class="ti-email m-r-5 m-l-5"></i> Inbox</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="javascript:void(0)"><i class="ti-settings m-r-5 m-l-5"></i> Account Setting</a>
-                            <div class="dropdown-divider"></div>
-                            <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-power-off m-r-5 m-l-5"></i> Logout</a>
-                            <div class="dropdown-divider"></div>
-                            <div class="p-l-30 p-10"><a href="javascript:void(0)" class="btn btn-sm btn-success btn-rounded">View Profile</a></div>
-                        </div>
+                        <span class=" nav-link text-muted waves-effect waves-dark pro-pic"><%=name%></span>
+                        <button type="button" class="btn btn-outline-secondary" onclick="goPage('login', 'logout')"><i class="fa fa-power-off m-r-5 m-l-5"></i>  로그아웃</button>
+                        <button type="button" class="btn btn-outline-warning">사이트이동</button>
                     </li>
                 </ul>
             </div>
         </nav>
     </header>
+

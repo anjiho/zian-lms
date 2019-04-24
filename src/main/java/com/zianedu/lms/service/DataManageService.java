@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -98,6 +99,15 @@ public class DataManageService {
     }
 
     /**
+     * 시험일정 상세정보 가져오기
+     * @param scheduleKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TScheduleVO getExamScheduleDetailInfo(int scheduleKey) {
+        return dataManageMapper.selectTScheduleInfo(scheduleKey);
+    }
+    /**
      * 검색어 목록 가져오기
      * @param className
      * @return
@@ -106,6 +116,123 @@ public class DataManageService {
     public List<TSearchKeywordVO> getSearchKeywordList(String className) {
         if ("".equals(className)) return null;
         return dataManageMapper.selectTSearchKeywordList(className.toLowerCase());
+    }
+
+    /**
+     * 검색어 상세정보 가져오기
+     * @param searchKeywordKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TSearchKeywordVO getSearchKeywordInfo(int searchKeywordKey) {
+        if (searchKeywordKey == 0) return null;
+        return dataManageMapper.selectTSearchKeywordInfo(searchKeywordKey);
+    }
+
+    /**
+     * 마지막 카테고리 값 기준 4뎁스 목록 카테고리 목록 가져오기
+     * @param ctgKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCategoryVO> getSequentialCategoryList(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        int j = 0;
+        for (int i=0; i<4; i++) {
+            TCategoryVO tCategoryVO = new TCategoryVO();
+
+            if (i == 0) tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+            else tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(j);
+
+            j = tCategoryVO.getParentKey();
+
+            list.add(tCategoryVO);
+            //Collections.reverse(list);
+        }
+        return list;
+    }
+
+    @Transactional(readOnly = true)
+    public List<TCategoryVO> getSequentialCategoryListTwo(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        int j = 0;
+        for (int i=0; i<2; i++) {
+            TCategoryVO tCategoryVO = new TCategoryVO();
+
+            if (i == 0) tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+            else tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(j);
+
+            j = tCategoryVO.getParentKey();
+
+            list.add(tCategoryVO);
+        }
+        return list;
+    }
+
+    /**
+     * 4뎁스 이하의 카테고리 사용
+     * @param ctgKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCategoryVO> getSequentialCategoryListBy4DepthUnder(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        TCategoryVO tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+
+        if (tCategoryVO != null) {
+            list.add(tCategoryVO);
+
+            TCategoryVO tCategoryVO2 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO.getParentKey());
+            if (tCategoryVO2 != null) {
+                list.add(tCategoryVO2);
+                TCategoryVO tCategoryVO3 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO2.getParentKey());
+
+                if (tCategoryVO3 != null) {
+                    if (tCategoryVO3.getCtgKey() > 1) {
+                        list.add(tCategoryVO3);
+                    }
+
+                    if (tCategoryVO3.getParentKey() > 0) {
+                        TCategoryVO tCategoryVO4 = dataManageMapper.selectTCategoryInfoByCtgKey(tCategoryVO3.getParentKey());
+                        if (tCategoryVO4 != null) {
+                            if (tCategoryVO4.getCtgKey() > 1) {
+                                list.add(tCategoryVO4);
+                            }
+                        }
+                    }
+                }
+
+            }
+        }
+        //Collections.reverse(list);
+        return list;
+    }
+
+    /**
+     * 모의고사 문제은행 문제 목록에서 단원 필드명 만들기
+     * @param ctgKey
+     * @return
+     */
+    public String getMakeUnitName(int ctgKey) {
+        if (ctgKey == 0) return null;
+        List<TCategoryVO>list = new ArrayList<>();
+        int j = 0;
+        for (int i=0; i<3; i++) {
+            TCategoryVO tCategoryVO = new TCategoryVO();
+
+            if (i == 0) tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(ctgKey);
+            else tCategoryVO = dataManageMapper.selectTCategoryInfoByCtgKey(j);
+
+            j = tCategoryVO.getParentKey();
+
+            list.add(tCategoryVO);
+        }
+        String unitName = "";
+        unitName = list.get(2).getName() + " > " + list.get(1).getName() + " > " + list.get(0).getName();
+        return unitName;
     }
 
     /**
@@ -118,7 +245,8 @@ public class DataManageService {
     public List<TCategoryVO> saveClassficationInfo(String categoryTypeStr, String ctgName) {
         if ("".equals(ctgName)) return null;
         int lastPosNum = dataManageMapper.selectTCategoryLastPosNumber(TCategoryParentKeyType.getParentKey(categoryTypeStr));
-        dataManageMapper.insertClassficationTCategoryInfo(ctgName, lastPosNum + 1);
+        dataManageMapper.insertTCategoryInfo(
+                TCategoryParentKeyType.getParentKey(categoryTypeStr), ctgName, lastPosNum + 1);
         return dataManageMapper.selectTCategoryList(TCategoryParentKeyType.getParentKey(categoryTypeStr));
     }
 
@@ -196,6 +324,16 @@ public class DataManageService {
     public void deleteSearchkeyword(int searchKeywordKey) {
         if (searchKeywordKey == 0) return;
         dataManageMapper.deleteTSearchKeyword(searchKeywordKey);
+    }
+
+    /**
+     * 분류관리, 과목관리 삭제
+     * @param ctgKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteClassSubject(int ctgKey) {
+        if (ctgKey == 0) return;
+        dataManageMapper.deleteTCategory(ctgKey);
     }
 
     /**

@@ -30,6 +30,36 @@
 			<param name="beanName" value="selectboxService" />
 		</create>
 
+		<convert converter="bean" match="com.zianedu.lms.service.ProductManageService"/>
+		<create creator="spring" javascript="productManageService">
+			<param name="class" value="com.zianedu.lms.service.ProductManageService"/>
+			<param name="beanName" value="productManageService" />
+		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.PromotionManageService"/>
+		<create creator="spring" javascript="promotionManageService">
+			<param name="class" value="com.zianedu.lms.service.PromotionManageService"/>
+			<param name="beanName" value="promotionManageService" />
+		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.PopupCouponManageService"/>
+		<create creator="spring" javascript="popupCouponManageService">
+			<param name="class" value="com.zianedu.lms.service.PopupCouponManageService"/>
+			<param name="beanName" value="popupCouponManageService" />
+		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.MemberManageService"/>
+		<create creator="spring" javascript="memberManageService">
+			<param name="class" value="com.zianedu.lms.service.MemberManageService"/>
+			<param name="beanName" value="memberManageService" />
+		</create>
+
+		<convert converter="bean" match="com.zianedu.lms.service.StatisManageService"/>
+		<create creator="spring" javascript="statisManageService">
+			<param name="class" value="com.zianedu.lms.service.StatisManageService"/>
+			<param name="beanName" value="statisManageService" />
+		</create>
+
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->
@@ -40,10 +70,54 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TScheduleVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.SearchKeywordDomainVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TSearchKeywordVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TGoodsPriceOptionVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TLecVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TLecCurri"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TLinkKeyVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TGoodTeacherLinkVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamMasterVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TBookVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TResVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankSubjectVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TBankSubjectExamLinkVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TExamQuestionBankVO"/>
+        <convert converter="bean" match="com.zianedu.lms.vo.ProblemBankSearchVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TPromotionVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TPopupVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCouponMasterVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TUserSecessionVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCounselVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TTeacherVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryGoods"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.VideoListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.SelectboxDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PagingSearchDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProductDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.BookDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MokExamInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ExamDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.ProblemBankSubjectDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PromotionDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PopupListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PopupInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.CouponListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.CouponDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.OfflineCouponListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.AdminCouponListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MemberSelectListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MemberListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.UserConsultListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.TeacherDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.SmsSendListDTO"/>
 
 	</allow>
+
+
 
 </dwr>

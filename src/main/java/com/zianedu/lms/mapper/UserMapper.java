@@ -7,6 +7,6 @@ public interface UserMapper {
 
     TUserVO getUserInfo(@Param("userId") String userId, @Param("userPass") String userPass);
 
-    TUserVO getUserInfoByUserKey(@Param("userKey") Long userKey);
+    TUserVO getUserInfoByUserKey(@Param("userKey") int userKey);
 
 }

@@ -1,5 +1,6 @@
 package com.zianedu.lms.vo;
 
+import com.zianedu.lms.utils.Util;
 import lombok.Data;
 
 @Data
@@ -28,4 +29,17 @@ public class TCategoryOtherInfoVO {
     private int valueBit1;
 
     private int pos;
+
+    public TCategoryOtherInfoVO() {}
+
+    public TCategoryOtherInfoVO(int ctgKey, String value1, String value3,
+                                String value4, String value5, int valueBit1, int pos) {
+        this.ctgKey = ctgKey;
+        this.value1 = Util.isNullValue(value1, "");
+        this.value3 = value3;
+        this.value4 = value4;
+        this.value5 = value5;
+        this.valueBit1 = valueBit1;
+        this.pos = pos;
+    }
 }

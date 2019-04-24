@@ -1,0 +1,833 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.ProductManageMapper">
+
+	<select id="selectProductList" resultType="VideoListDTO">
+		SELECT
+			A.G_KEY,
+			A.NAME AS GOODS_NAME,
+			A.INDATE,
+			A.IS_SHOW,
+			A.IS_SELL,
+			A.IS_FREE,
+			E.STATUS
+		FROM T_GOODS A
+		LEFT JOIN T_LEC E
+		ON A.G_KEY = E.G_KEY
+		WHERE 1=1
+		AND A.TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
+			AND A.G_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY A.G_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectProductListCount" resultType="Integer">
+		SELECT count(G_KEY) as CNT
+		FROM T_GOODS
+		WHERE 1=1
+		AND TYPE = #{goodsTypeKey}
+		<if test="goodsTypeKey == 5">
+			AND A.SELLSTARTDATE IS NOT NULL
+		</if>
+		<if test="searchType == 'code'">
+			AND G_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+	<select id="selectTGoodsInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TGoodsVO">
+		SELECT * FROM T_GOODS WHERE G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTGoodsPriceOptionList" resultType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		SELECT * FROM T_GOODS_PRICE_OPTION WHERE G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTCategoryGoodsList" parameterType="Integer" resultType="com.zianedu.lms.vo.TCategoryGoods">
+		SELECT * FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTLecInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecVO">
+		SELECT * FROM T_LEC WHERE G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTeacherListByTeacherLink" parameterType="Integer" resultType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		SELECT A.*, B.name as subject_name, D.name as teacher_name
+		FROM T_GOODS_TEACHER_LINK A
+		LEFT JOIN T_CATEGORY B
+		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		LEFT JOIN T_TEACHER C
+		ON C.TEACHER_KEY = A.TEACHER_KEY
+		INNER JOIN T_USER D
+		ON D.USER_KEY = C.USER_KEY
+		WHERE A.G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTGoodsFromTLinkKeyRel" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_GOODS B
+		ON A.res_key = B.g_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTExamMasterFromTLinkKeyRel" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_EXAM_MASTER B
+		ON A.res_key = B.exam_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTGoodsFromTLinkKeyRelSingle" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_GOODS B
+		ON A.res_key = B.g_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTExamMasterFromTLinkKeyRelSingle" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT A.*, B.name as goods_name
+		FROM T_LINK_KEY A INNER JOIN T_EXAM_MASTER B
+		ON A.res_key = B.exam_key
+		WHERE A.req_key = #{reqKey}
+		<if test="resType > 0 and resType != null">
+			AND A.res_type = #{resType}
+		</if>
+	</select>
+
+	<select id="selectTLecCurriList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecCurri">
+		SELECT * FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey} ORDER BY POS ASC
+	</select>
+
+	<select id="selectTLecCurriInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecCurri">
+		SELECT * FROM T_LEC_CURRI WHERE CURRI_KEY = #{curriKey}
+	</select>
+
+	<select id="selectTLinkKeyList" parameterType="Integer" resultType="com.zianedu.lms.vo.TLinkKeyVO">
+		SELECT DISTINCT RES_TYPE FROM T_LINK_KEY WHERE req_key = #{reqKey}
+	</select>
+
+	<select id="selectTLecCurriLastPos" parameterType="Integer" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS FROM T_LEC_CURRI WHERE LEC_KEY = #{lecKey}
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTExamList" resultType="com.zianedu.lms.vo.TExamMasterVO">
+		SELECT * FROM T_EXAM_MASTER
+		WHERE 1=1
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY EXAM_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectTExamListCount" resultType="Integer">
+		SELECT COUNT(EXAM_KEY) FROM T_EXAM_MASTER
+		WHERE 1=1
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+	<select id="selectTGoodsListByType" resultType="com.zianedu.lms.vo.TGoodsVO">
+		SELECT * FROM T_GOODS
+		WHERE TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY G_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectTGoodsListByTypeCount" resultType="Integer">
+		SELECT COUNT (G_KEY) FROM T_GOODS
+		WHERE TYPE = #{goodsTypeKey}
+		<if test="searchType == 'code'">
+			AND EXAM_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+	<select id="selectBookInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TBookVO">
+		SELECT
+			A.*,
+			( SELECT name FROM T_CATEGORY WHERE ctg_key = A.class_group_ctg_key) as classGroupName,
+			( SELECT name FROM T_CATEGORY WHERE ctg_key = A.subject_ctg_key) as subjectName,
+			B.cp_key, C.name as cpName
+		FROM T_BOOK A
+		INNER JOIN T_GOODS B
+		ON A.g_key = B.g_key
+		INNER JOIN T_CP C
+		ON B.cp_key = C.cp_key
+		WHERE A.G_KEY = #{gKey}
+	</select>
+
+	<select id="selectTResList" parameterType="Integer" resultType="com.zianedu.lms.vo.TResVO">
+		SELECT * FROM T_RES WHERE key_00 = #{gKey}
+	</select>
+
+	<select id="selectTResListByTeacherKey" parameterType="Integer" resultType="com.zianedu.lms.vo.TResVO">
+		SELECT A.RES_KEY, A.DEVICE,
+			   (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = A.KEY_01) as ctg_name, VALUE_TEXT
+		FROM T_RES A
+		WHERE TYPE = 2 AND A.KEY_00 = #{teacherKey} ORDER BY A.DEVICE ASC
+	</select>
+
+	<select id="selectTExamMasterInfo" resultType="com.zianedu.lms.vo.TExamMasterVO">
+		SELECT * FROM T_EXAM_MASTER WHERE EXAM_KEY = #{examKey}
+	</select>
+
+	<select id="selectTBankSubjectExamLinkList" parameterType="Integer" resultType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
+		SELECT A.*, B.name, C.name as CTG_NAME,
+				(
+						SELECT count(T_BANK_SUBJECT_QUES_LINK.BANK_SUBJECT_QUES_LINK_KEY)
+						FROM T_BANK_SUBJECT_QUES_LINK
+						WHERE EXAM_QUES_BANK_SUBJECT_KEY = B.EXAM_QUESTION_BANK_SUBJECT_KEY
+				) as QUESTION_NUMBER
+		FROM T_BANK_SUBJECT_EXAM_LINK A
+		INNER JOIN T_EXAM_QUESTION_BANK_SUBJECT B
+		ON A.EXAM_QUESTION_BANK_SUBJECT_KEY = B.EXAM_QUESTION_BANK_SUBJECT_KEY
+		INNER JOIN T_CATEGORY C
+		ON B.SUBJECT_CTG_KEY = C.CTG_KEY
+		WHERE A.exam_key = #{examKey}
+	</select>
+
+	<select id="selectMockExamQuestionBankSubjectList" resultType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		SELECT A.*, B.name as CTG_NAME,
+				(
+					SELECT count(T_BANK_SUBJECT_QUES_LINK.BANK_SUBJECT_QUES_LINK_KEY)
+					FROM T_BANK_SUBJECT_QUES_LINK
+					WHERE EXAM_QUES_BANK_SUBJECT_KEY = A.EXAM_QUESTION_BANK_SUBJECT_KEY
+				) as QUESTION_NUMBER
+		FROM T_EXAM_QUESTION_BANK_SUBJECT A
+		INNER JOIN T_CATEGORY B
+		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		WHERE 1=1
+		<if test="searchType == 'code'">
+			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND B.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY A.EXAM_QUESTION_BANK_SUBJECT_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectMockExamQuestionBankSubjectListCount" resultType="Integer">
+		SELECT count(A.EXAM_QUESTION_BANK_SUBJECT_KEY)
+		FROM T_EXAM_QUESTION_BANK_SUBJECT A
+		INNER JOIN T_CATEGORY B
+		ON A.SUBJECT_CTG_KEY = B.CTG_KEY
+		WHERE 1=1
+		<if test="searchType == 'code'">
+			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
+		</if>
+		<if test="searchType == 'title'">
+			AND B.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
+    <select id="selectTExamQuestionBankList" parameterType="map" resultType="ProblemBankListDTO">
+        SELECT
+            A.EXAM_QUESTION_BANK_KEY,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.DIVISION_CTG_KEY) as class_name,
+            A.EXAM_YEAR,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.SUBJECT_CTG_KEY) as subject_name,
+            A.EXAM_LEVEL,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.STEP_CTG_KEY) as type_name,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = A.PATTERN_CTG_KEY) as pattern_name,
+            UNIT_CTG_KEY
+        FROM T_EXAM_QUESTION_BANK A
+        WHERE 1=1
+        <if test="examYear != '' and examYear != null">
+            AND A.EXAM_YEAR = #{examYear}
+        </if>
+        <if test="divisionCtgKey > 0">
+            AND A.DIVISION_CTG_KEY = #{divisionCtgKey}
+        </if>
+        <if test="subjectCtgKey > 0">
+            AND A.SUBJECT_CTG_KEY = #{subjectCtgKey}
+        </if>
+        <if test="stepCtgKey > 0">
+            AND A.STEP_CTG_KEY = #{stepCtgKey}
+        </if>
+        <if test="patternCtgKey > 0">
+            AND A.PATTERN_CTG_KEY = #{patternCtgKey}
+        </if>
+        <if test="unitCtgKey > 0">
+            AND A.UNIT_CTG_KEY = #{unitCtgKey}
+        </if>
+        <if test="subjectCode != '' and subjectCode != null">
+            AND A.SUBJECT_CODE = #{subjectCode}
+        </if>
+        ORDER BY A.EXAM_QUESTION_BANK_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+	<select id="selectTExamQuestionBankListCount" parameterType="map" resultType="Integer">
+		SELECT count (EXAM_QUESTION_BANK_KEY)
+		FROM T_EXAM_QUESTION_BANK
+		WHERE 1=1
+		<if test="examYear != '' and examYear != null">
+			AND EXAM_YEAR = #{examYear}
+		</if>
+		<if test="divisionCtgKey > 0">
+			AND DIVISION_CTG_KEY = #{divisionCtgKey}
+		</if>
+		<if test="subjectCtgKey > 0">
+			AND SUBJECT_CTG_KEY = #{subjectCtgKey}
+		</if>
+		<if test="stepCtgKey > 0">
+			AND STEP_CTG_KEY = #{stepCtgKey}
+		</if>
+		<if test="patternCtgKey > 0">
+			AND PATTERN_CTG_KEY = #{patternCtgKey}
+		</if>
+		<if test="unitCtgKey > 0">
+			AND UNIT_CTG_KEY = #{unitCtgKey}
+		</if>
+		<if test="subjectCode != '' and subjectCode != null">
+			AND SUBJECT_CODE = #{subjectCode}
+		</if>
+	</select>
+
+	<select id="selectTExamQuestionBankInfo" resultType="com.zianedu.lms.vo.TExamQuestionBankVO">
+		SELECT * FROM T_EXAM_QUESTION_BANK
+		WHERE T_EXAM_QUESTION_BANK.EXAM_QUESTION_BANK_KEY = #{examQuestionBankKey}
+	</select>
+
+	<select id="selectTExamQuestionBankSubjectDetailInfo" resultType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		SELECT * FROM T_EXAM_QUESTION_BANK_SUBJECT WHERE EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey}
+	</select>
+
+    <select id="selectTBankSubjectQuesLinkList" resultType="ProblemBankSubjectDTO">
+        SELECT
+			A.EXAM_QUES_BANK_KEY,
+			(SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.DIVISION_CTG_KEY) as class_name,
+            B.EXAM_YEAR,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.SUBJECT_CTG_KEY) as subject_name,
+            B.EXAM_LEVEL,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.STEP_CTG_KEY) as type_name,
+            (SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.PATTERN_CTG_KEY) as pattern_name,
+            B.UNIT_CTG_KEY,
+            B.QUESTION_IMAGE
+        FROM T_BANK_SUBJECT_QUES_LINK A
+        INNER JOIN T_EXAM_QUESTION_BANK B
+        ON A.EXAM_QUES_BANK_KEY = B.EXAM_QUESTION_BANK_KEY
+        WHERE A.EXAM_QUES_BANK_SUBJECT_KEY = #{examQuesBankSubjectKey}
+        ORDER BY A.POS ASC
+    </select>
+
+	<select id="selectTBankSubjectQuesLinkLastPos" resultType="Integer">
+		SELECT Z.* FROM (
+			SELECT POS + 1 as pos
+			FROM T_BANK_SUBJECT_QUES_LINK
+			WHERE EXAM_QUES_BANK_SUBJECT_KEY = #{examQuesBankSubjectKey}
+			ORDER BY POS DESC
+		) Z
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectTeacherNameListByVideoProduct" resultType="String">
+		SELECT C.name
+		FROM t_goods_teacher_link A
+		INNER JOIN t_teacher B
+		ON A.teacher_key = B.teacher_key
+		INNER JOIN t_user C
+		ON B.user_key = C.user_key
+		WHERE A.g_key = #{gKey}
+	</select>
+
+	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
+		<selectKey resultType="Integer" keyProperty="gKey" order="BEFORE">
+			SELECT T_GOODS_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO T_GOODS
+		(
+			G_KEY, C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, TYPE, IS_SHOW, IS_SELL, IS_FREE, IS_NODC, IMAGE_LIST, IMAGE_VIEW,
+			EMPHASIS, TAGS, SUMMARY, DESCRIPTION, CALCULATE_RATE, IS_FREEBIE_DELIVERY_FREE, IS_QUICK_DELIVERY, GOODS_ID
+		)
+		VALUES
+		(
+			#{gKey}, #{cKey}, #{cpKey}, #{name}, TO_DATE(#{indate}, 'YYYY-mm-dd'), TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'), #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
+			#{emphasis}, #{tags}, #{summary}, #{description}, #{calculateRate}, #{isFreebieDeliveryFree}, #{isQuickDelivery}, #{goodsId}
+		)
+	</insert>
+
+	<insert id="insertTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		<selectKey resultType="Integer" keyProperty="priceKey" order="BEFORE">
+			SELECT T_GOODS_PRICE_OPTION_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
+		INSERT INTO T_GOODS_PRICE_OPTION
+		(
+			PRICE_KEY, G_KEY, KIND, CTG_KEY, NAME, PRICE, SELL_PRICE, POINT, EXTEND_PERCENT
+		)
+		VALUES
+		(
+			#{priceKey}, #{gKey}, #{kind}, '', '', #{price}, #{sellPrice}, #{point}, #{extendPercent}
+		)
+	</insert>
+
+	<insert id="insertTCategoryGoods" parameterType="com.zianedu.lms.vo.TCategoryGoods">
+		INSERT INTO T_CATEGORY_GOODS
+		(
+			CTG_G_KEY, CTG_KEY, G_KEY, POS
+		)
+		VALUES
+		(
+			T_CATEGORY_GOODS_SEQ.nextval, #{ctgKey}, #{gKey}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		<selectKey resultType="Integer" keyProperty="lecKey" order="BEFORE">
+			SELECT T_LEC_SEQ.nextval FROM DUAL
+		</selectKey>
+		INSERT INTO T_LEC
+		(
+			LEC_KEY, G_KEY, TEACHER_KEY, CLASS_GROUP_CTG_KEY, SUBJECT_CTG_KEY, STEP_CTG_KEY, STATUS, REGDATE, STARTDATE,
+			LIMIT_DAY, LIMIT_COUNT, LEC_TIME, MULTIPLE, LEC_DATE_YEAR, LEC_DATE_MONTH, EXAM_YEAR, IS_PACK, GOODS_ID
+		)
+		VALUES
+		(
+			#{lecKey}, #{gKey}, #{teacherKey}, #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{status}, TO_DATE(#{regdate}, 'YYYY-mm-dd'), #{startdate},
+			#{limitDay}, #{limitCount}, #{lecTime}, #{multiple}, #{lecDateYear}, #{lecDateMonth}, #{examYear}, #{isPack}, #{goodsId}
+		)
+	</insert>
+
+	<insert id="insertTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		INSERT INTO T_GOODS_TEACHER_LINK
+		(
+			G_TEACHER_KEY, G_KEY, IS_PUBLIC_SUBJECT, SUBJECT_CTG_KEY, TEACHER_KEY, CALCULATE_RATE
+		)
+		VALUES
+		(
+			T_GOODS_TEACHER_LINK_SEQ.nextval, #{gKey}, #{isPublicSubject}, #{subjectCtgKey}, #{teacherKey}, #{calculateRate}
+		)
+	</insert>
+
+	<insert id="insertTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		INSERT INTO T_LINK_KEY
+		(
+			LINK_KEY, REQ_KEY, RES_KEY, REQ_TYPE, RES_TYPE, POS, VALUE_BIT
+		)
+		VALUES
+		(
+			T_LINK_KEY_SEQ.nextval, #{reqKey}, #{resKey}, #{reqType}, #{resType}, 0, #{valueBit}
+		)
+	</insert>
+
+	<insert id="insertTLecCurri" parameterType="com.zianedu.lms.vo.TLecCurri">
+		<selectKey resultType="Integer" keyProperty="curriKey" order="BEFORE">
+			SELECT T_LEC_CURRI_SEQ.nextval FROM DUAL
+		</selectKey>
+		INSERT INTO T_LEC_CURRI
+		(
+			CURRI_KEY, LEC_KEY, NAME, VOD_FILE_LOW, VOD_FILE_HIGH, VOD_FILE_MOBILE_LOW, VOD_FILE_MOBILE_HIGH,
+			VOD_TIME, DATA_FILE, IS_SHOW, IS_SAMPLE, POS
+		)
+		VALUES
+		(
+			#{curriKey}, #{lecKey}, #{name}, #{vodFileLow}, #{vodFileHigh}, #{vodFileMobileLow}, #{vodFileMobileHigh},
+			#{vodTime}, #{dataFile}, #{isShow}, #{isSample}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTBook" parameterType="com.zianedu.lms.vo.TBookVO">
+		INSERT INTO T_BOOK
+		(
+			BOOK_KEY, G_KEY, STATUS, WRITER, PUBLISH_DATE, PAGE_CNT, ISBN, IS_DELIVERY_FREE,
+			IS_SET, CONTENT_LIST, SUBJECT_CTG_KEY, CLASS_GROUP_CTG_KEY, GOODS_ID, NEXT_G_KEY
+		)
+		VALUES
+		(
+			T_BOOK_SEQ.nextval, #{gKey}, #{status}, #{status}, #{writer}, TO_DATE(#{publishDate}, 'YYYY-mm-dd'), #{pageCnt}, #{isbn}, #{isDeliveryFree},
+			#{isSet}, #{contentList}, #{subjectCtgKey}, #{classGroupCtgKey}, #{goodsId}, #{nextGKey}
+		)
+	</insert>
+
+	<insert id="insertTRes" parameterType="com.zianedu.lms.vo.TResVO">
+		INSERT INTO T_RES
+		(
+			RES_KEY, TYPE, DEVICE, KEY_00, KEY_01, KEY_02, KEY_00_TYPE, KEY_01_TYPE, KEY_02_TYPE, VALUE, VALUE_TEXT
+		)
+		VALUES
+		(
+			T_RES_SEQ.nextval, 0, 0, #{key00}, 0, 0, 0, 0, 0, #{value}, ''
+		)
+	</insert>
+
+	<insert id="insertTResAtTeacherSubject" parameterType="com.zianedu.lms.vo.TResVO">
+		INSERT INTO T_RES
+		(
+			RES_KEY, TYPE, DEVICE, KEY_00, KEY_01, KEY_02, KEY_00_TYPE, KEY_01_TYPE, KEY_02_TYPE, VALUE, VALUE_TEXT
+		)
+		VALUES
+		(
+			T_RES_SEQ.nextval, 2, #{device}, #{teacherKey}, #{ctgKey}, 0, 200, 100, 0, '', #{valueText}
+		)
+	</insert>
+
+	<insert id="insertTExamMaster" parameterType="com.zianedu.lms.vo.TExamMasterVO">
+		<selectKey resultType="Integer" keyProperty="examKey" order="BEFORE">
+			SELECT T_EXAM_MASTER_SEQ.nextval FROM DUAL
+		</selectKey>
+		INSERT INTO T_EXAM_MASTER
+		(
+			EXAM_KEY, C_KEY, NAME, INDATE, CLASS_CTG_KEY, SUBJECT_CTG_KEY, SELECT_SUBJECT_COUNT, ACCEPT_START_DATE,
+			ACCEPT_END_DATE, ONLINE_START_DATE, ONLINE_END_DATE, ONLINE_TIME, OFFLINE_DATE, OFFLINE_TIME_PERIOD,
+			OFFLINE_TIME_PLACE, ANSWER_COUNT, QUESTION_COUNT, PRINT_QUESTION_FILE, PRINT_COMMENTARY_FILE,
+			IS_SHOW_STATIC_TOTAL_RANK, IS_SHOW_STATIC_TOTAL_AVG, IS_SHOW_FILES, CLASS_GROUP_CTG_KEY, EXAM_YEAR, UNIT_CTG_KEY,
+			DIVISION_CTG_KEY, REF_KEY, IS_REAL_FREE, IS_GICHUL
+		)
+		VALUES
+		(
+			#{examKey}, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh:mi:ss'),
+            TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{onlineTime}, TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'), #{offlineTimePeriod},
+			#{offlineTimePlace}, #{answerCount}, #{questionCount}, #{printQuestionFile}, #{printCommentaryFile},
+			#{isShowStaticTotalRank}, #{isShowStaticTotalAvg}, #{isShowFiles}, #{classGroupCtgKey}, #{examYear}, #{unitCtgKey},
+			#{divisionCtgKey}, #{refKey}, #{isRealFree}, #{isGichul}
+		)
+	</insert>
+
+    <insert id="insertTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">
+        INSERT INTO T_EXAM_QUESTION_BANK
+        (
+            EXAM_QUESTION_BANK_KEY, DSP_DATE, QUESTION_IMAGE, COMMENTARY_IMAGE, BOOK_IMAGE, ANSWER, TAG, DIVISION_CTG_KEY,
+            SUBJECT_CTG_KEY, STEP_CTG_KEY, PATTERN_CTG_KEY, UNIT_CTG_KEY, EXAM_YEAR, EXAM_LEVEL, SUBJECT_CODE, REVIEW, COMMENTARY_URL,
+            ANSWER_1_REASON, ANSWER_2_REASON, ANSWER_3_REASON, ANSWER_4_REASON, ANSWER_5_REASON
+        )
+        VALUES
+        (
+            T_EXAM_QUESTION_BANK_SEQ.nextval, TO_DATE(#{dspDate}, 'YYYY-mm-dd'), #{questionImage}, #{commentaryImage}, #{bookImage}, #{answer}, #{tag}, #{divisionCtgKey},
+            #{subjectCtgKey}, #{stepCtgKey}, #{patternCtgKey}, #{unitCtgKey}, #{examYear}, #{examLevel}, #{subjectCode}, #{review}, #{commentaryUrl},
+            #{answer1Reason}, #{answer2Reason}, #{answer3Reason}, #{answer4Reason}, #{answer5Reason}
+        )
+    </insert>
+
+	<insert id="insertTBankSubjectQuesLink">
+		INSERT INTO T_BANK_SUBJECT_QUES_LINK
+		(
+			BANK_SUBJECT_QUES_LINK_KEY, EXAM_QUES_BANK_SUBJECT_KEY, EXAM_QUES_BANK_KEY, POS
+		)
+		VALUES
+		(
+			T_BANK_SUBJECT_QUES_LINK_SEQ.nextval, #{examQuesBankSubjectKey}, #{examQuesBankKey}, #{pos}
+		)
+	</insert>
+
+	<insert id="insertTExamQuestionBankSubject" parameterType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		INSERT INTO T_EXAM_QUESTION_BANK_SUBJECT
+		(
+			EXAM_QUESTION_BANK_SUBJECT_KEY, C_KEY, SUBJECT_CTG_KEY, NAME
+		)
+		VALUES
+		(
+			T_EXAM_QUESTION_BANK_SUB_SEQ.nextval, 100, #{subjectCtgKey}, #{name}
+		)
+	</insert>
+
+	<update id="updateTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
+		UPDATE T_GOODS
+		<set>
+			<if test="cpKey > 0">CP_KEY = #{cpKey},</if>
+			<if test="name != '' and name != null">NAME = #{name},</if>
+			<if test="indate != '' and indate != null">INDATE = TO_DATE(#{indate}, 'YYYY-mm-dd'),</if>
+			<if test="sellstartdate != '' and indate != null">SELLSTARTDATE = TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'),</if>
+			<if test="type != null">TYPE = #{type},</if>
+			<if test="isShow != null">IS_SHOW = #{isShow},</if>
+			<if test="isSell != null">IS_SELL = #{isSell},</if>
+			<if test="isFree != null">IS_FREE = #{isFree},</if>
+			<if test="isNodc != null">IS_NODC = #{isNodc},</if>
+			<if test="imageList != '' and imageList != null">IMAGE_LIST = #{imageList},</if>
+			<if test="imageView != '' and imageView != null">IMAGE_VIEW = #{imageView},</if>
+			<if test="emphasis != null">EMPHASIS = #{emphasis},</if>
+			<if test="tags != '' and tags != null">TAGS = #{tags},</if>
+			<if test="summary != '' and summary != null">SUMMARY = #{summary},</if>
+			<if test="description != '' and description != null">DESCRIPTION = #{description},</if>
+			<if test="calculateRate != null">CALCULATE_RATE = #{calculateRate},</if>
+			<if test="isFreebieDeliveryFree != null">IS_FREEBIE_DELIVERY_FREE = #{isFreebieDeliveryFree},</if>
+			<if test="isQuickDelivery != null">IS_QUICK_DELIVERY = #{isQuickDelivery},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+		</set>
+		WHERE G_KEY = #{gKey}
+	</update>
+
+	<update id="updateTGoodsPriceOption" parameterType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		UPDATE T_GOODS_PRICE_OPTION
+		<set>
+			<if test="gKey > 0">G_KEY = #{gKey},</if>
+			<if test="kind != null ">KIND = #{kind},</if>
+			<if test="price != null">PRICE = #{price},</if>
+			<if test="sellPrice != null">SELL_PRICE = #{sellPrice},</if>
+			<if test="point != null">POINT = #{point},</if>
+			<if test="extendPercent != null">EXTEND_PERCENT = #{extendPercent},</if>
+		</set>
+		WHERE PRICE_KEY = #{priceKey}
+	</update>
+
+	<update id="updateTLec" parameterType="com.zianedu.lms.vo.TLecVO">
+		UPDATE T_LEC
+		<set>
+			<if test="gKey > 0">G_KEY = #{gKey},</if>
+			<if test="teacherKey != null">TEACHER_KEY = #{teacherKey},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="stepCtgKey != null">STEP_CTG_KEY = #{stepCtgKey},</if>
+			<if test="status != null">STATUS = #{status},</if>
+			<if test="regdate != null or regdate != ''">REGDATE = #{regdate},</if>
+			<if test="startdate != null or startdate != ''">STARTDATE = #{startdate},</if>
+			<if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+			<if test="limitCount != null">LIMIT_COUNT = #{limitCount},</if>
+			<if test="lecTime != null">LEC_TIME = #{lecTime},</if>
+			<if test="multiple != null">MULTIPLE = #{multiple},</if>
+			<if test="lecDateYear != null">LEC_DATE_YEAR = #{lecDateYear},</if>
+			<if test="lecDateMonth != null">LEC_DATE_MONTH = #{lecDateMonth},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="isPack != null">IS_PACK = #{isPack},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+		</set>
+		WHERE LEC_KEY = #{lecKey}
+	</update>
+
+	<update id="updateTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		UPDATE T_GOODS_TEACHER_LINK
+		<set>
+			<if test="isPublicSubject != null">IS_PUBLIC_SUBJECT = #{isPublicSubject},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="teacherKey != null">TEACHER_KEY = #{teacherKey},</if>
+			<if test="calculateRate != null">CALCULATE_RATE = #{calculateRate},</if>
+		</set>
+		WHERE G_TEACHER_KEY = #{gTeacherKey}
+	</update>
+
+	<update id="updateTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		UPDATE T_LINK_KEY
+		<set>
+			<if test="reqKey > 0">REQ_KEY = #{reqKey},</if>
+			<if test="resKey > 0">RES_KEY = #{resKey},</if>
+			<if test="reqType > 0">RES_TYPE = #{reqType},</if>
+			<if test="resType > 0">RES_TYPE = #{resType},</if>
+			<if test="valueBit > 0">VALUE_BIT = #{valueBit},</if>
+		</set>
+		WHERE LINK_KEY = #{linkKey}
+	</update>
+
+	<update id="updateTLecCurri" parameterType="com.zianedu.lms.vo.TLecCurri">
+		UPDATE T_LEC_CURRI
+		<set>
+			<if test="name != '' or name != null">NAME = #{name},</if>
+			<if test="vodFileLow != '' or vodFileLow != null">VOD_FILE_LOW = #{vodFileLow},</if>
+			<if test="vodFileHigh != '' or vodFileHigh != null">VOD_FILE_HIGH = #{vodFileHigh},</if>
+			<if test="vodFileMobileLow != '' or vodFileMobileLow != null">VOD_FILE_MOBILE_LOW = #{vodFileMobileLow},</if>
+			<if test="vodFileMobileHigh != '' or vodFileMobileHigh != null">VOD_FILE_MOBILE_HIGH = #{vodFileMobileHigh},</if>
+			<if test="vodTime > 0">VOD_TIME = #{vodTime},</if>
+			<if test="dataFile != '' or dataFile != null">DATA_FILE = #{dataFile},</if>
+			<if test="isShow != null">IS_SHOW = #{isShow},</if>
+			<if test="isSample != null">IS_SAMPLE = #{isSample},</if>
+			<if test="pos != null">POS = #{pos},</if>
+		</set>
+		WHERE CURRI_KEY = #{curriKey}
+	</update>
+
+    <update id="updateTLecCurriPos" parameterType="com.zianedu.lms.vo.TLecCurri">
+        UPDATE T_LEC_CURRI
+        <set>
+            <if test="pos != null">POS = #{pos},</if>
+        </set>
+        WHERE CURRI_KEY = #{curriKey}
+    </update>
+
+	<update id="updateTBook" parameterType="com.zianedu.lms.vo.TBookVO">
+		UPDATE T_BOOK
+		<set>
+			<if test="status != null">STATUS = #{status},</if>
+			<if test="writer != '' or writer != null">WRITER = #{writer},</if>
+			<if test="publishDate != '' or publishDate != null">PUBLISH_DATE = TO_DATE(#{publishDate}, 'YYYY-mm-dd'),</if>
+			<if test="pageCnt != null">PAGE_CNT = #{pageCnt},</if>
+			<if test="isbn != '' or isbn != null">ISBN = #{isbn},</if>
+			<if test="isDeliveryFree != null">IS_DELIVERY_FREE = #{isDeliveryFree},</if>
+			<if test="isSet != null">IS_SET = #{isSet},</if>
+			<if test="contentList != '' or contentList != null">CONTENT_LIST = #{contentList},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="goodsId != null">GOODS_ID = #{goodsId},</if>
+			<if test="nextGKey != null">NEXT_G_KEY = #{nextGKey},</if>
+		</set>
+		WHERE BOOK_KEY = #{bookKey}
+	</update>
+
+	<update id="updateTExamMaster" parameterType="com.zianedu.lms.vo.TExamMasterVO">
+		UPDATE T_EXAM_MASTER
+		<set>
+			<if test="name != '' or name != null">NAME = #{name},</if>
+			<if test="indate != '' or indate != null">INDATE = #{indate},</if>
+			<if test="classCtgKey != null">CLASS_CTG_KEY = #{classCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="selectSubjectCount != null">SELECT_SUBJECT_COUNT = #{selectSubjectCount},</if>
+			<if test="acceptStartDate != '' or acceptStartDate != null">ACCEPT_START_DATE = TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="acceptEndDate != '' or acceptEndDate != null">ACCEPT_END_DATE =TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="onlineStartDate != '' or onlineStartDate != null">ONLINE_START_DATE = TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="onlineEndDate != '' or onlineEndDate != null">ONLINE_END_DATE = TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="onlineTime != null">ONLINE_TIME = #{onlineTime},</if>
+			<if test="offlineDate != '' or offlineDate != null">OFFLINE_DATE = TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="offlineTimePeriod != '' or offlineTimePeriod != null">OFFLINE_TIME_PERIOD = #{offlineTimePeriod},</if>
+			<if test="offlineTimePlace != '' or offlineTimePlace != null">OFFLINE_TIME_PLACE = #{offlineTimePlace},</if>
+			<if test="answerCount != null">ANSWER_COUNT = #{answerCount},</if>
+			<if test="questionCount != null">QUESTION_COUNT = #{questionCount},</if>
+			<if test="printQuestionFile != '' or printQuestionFile != null">PRINT_QUESTION_FILE = #{printQuestionFile},</if>
+			<if test="printCommentaryFile != '' or printCommentaryFile != null">PRINT_COMMENTARY_FILE = #{printCommentaryFile},</if>
+			<if test="isShowStaticTotalRank != null">IS_SHOW_STATIC_TOTAL_RANK = #{isShowStaticTotalRank},</if>
+			<if test="isShowStaticTotalAvg != null">IS_SHOW_STATIC_TOTAL_AVG = #{isShowStaticTotalAvg},</if>
+			<if test="isShowFiles != null">IS_SHOW_FILES = #{isShowFiles},</if>
+			<if test="classGroupCtgKey != null">CLASS_GROUP_CTG_KEY = #{classGroupCtgKey},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="unitCtgKey != null">UNIT_CTG_KEY = #{unitCtgKey},</if>
+			<if test="divisionCtgKey != null">DIVISION_CTG_KEY = #{divisionCtgKey},</if>
+			<if test="refKey != null">REF_KEY = #{refKey},</if>
+			<if test="isRealFree != null">IS_REAL_FREE = #{isRealFree},</if>
+			<if test="isGichul != null">IS_GICHUL = #{isGichul},</if>
+		</set>
+		WHERE EXAM_KEY = #{examKey}
+	</update>
+
+    <update id="updateTBankSubjectExamLink" parameterType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
+        UPDATE T_BANK_SUBJECT_EXAM_LINK
+        <set>
+            <if test="examQuestionBankSubjectKey != null">EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey},</if>
+            <if test="required != null">REQUIRED = #{required},</if>
+        </set>
+        WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
+    </update>
+
+	<update id="updateTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">
+		UPDATE T_EXAM_QUESTION_BANK
+		<set>
+			<if test="dspDate != '' and dspDate != null">DSP_DATE = TO_DATE(#{dspDate}, 'YYYY-mm-dd'),</if>
+			<if test="questionImage != '' and questionImage != null">QUESTION_IMAGE = #{questionImage},</if>
+			<if test="commentaryImage != '' and commentaryImage != null">COMMENTARY_IMAGE = #{commentaryImage},</if>
+			<if test="bookImage != '' and bookImage != null">BOOK_IMAGE = #{bookImage},</if>
+			<if test="answer > 0">ANSWER = #{answer},</if>
+			<if test="tag != '' and tag != null">TAG = #{tag},</if>
+			<if test="divisionCtgKey != null">DIVISION_CTG_KEY = #{divisionCtgKey},</if>
+			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="stepCtgKey != null">STEP_CTG_KEY = #{stepCtgKey},</if>
+			<if test="patternCtgKey != null">PATTERN_CTG_KEY = #{patternCtgKey},</if>
+			<if test="unitCtgKey != null">UNIT_CTG_KEY = #{unitCtgKey},</if>
+			<if test="examYear != null">EXAM_YEAR = #{examYear},</if>
+			<if test="examLevel != null">EXAM_LEVEL = #{examLevel},</if>
+			<if test="subjectCode != '' and subjectCode != null">SUBJECT_CODE = #{subjectCode},</if>
+			<if test="commentaryUrl != '' and commentaryUrl != null">COMMENTARY_URL = #{commentaryUrl},</if>
+			<if test="answer1Reason != '' and answer1Reason != null">ANSWER_1_REASON = #{answer1Reason},</if>
+			<if test="answer2Reason != '' and answer2Reason != null">ANSWER_2_REASON = #{answer2Reason},</if>
+			<if test="answer3Reason != '' and answer3Reason != null">ANSWER_3_REASON = #{answer3Reason},</if>
+			<if test="answer4Reason != '' and answer4Reason != null">ANSWER_4_REASON = #{answer4Reason},</if>
+			<if test="answer5Reason != '' and answer5Reason != null">ANSWER_5_REASON = #{answer5Reason},</if>
+		</set>
+		WHERE EXAM_QUESTION_BANK_KEY = #{examQuestionBankKey}
+	</update>
+
+    <update id="updateTExamQuestionBankImage">
+        UPDATE T_EXAM_QUESTION_BANK
+        <set>
+            <if test="imageType != '' and imageType != null">
+                <if test="imageType == 'QUESTION'">
+                    QUESTION_IMAGE = ''
+                </if>
+                <if test="imageType == 'COMMENTARY'">
+                    COMMENTARY_IMAGE = ''
+                </if>
+                <if test="imageType == 'BOOK'">
+                    BOOK_IMAGE = ''
+                </if>
+            </if>
+        </set>
+        WHERE EXAM_QUESTION_BANK_KEY = #{examQuestionBankKey}
+    </update>
+
+	<update id="updateTBankSubjectQuesLinkPos">
+		UPDATE T_BANK_SUBJECT_QUES_LINK
+		SET POS = #{pos}
+		WHERE BANK_SUBJECT_QUES_LINK_KEY = #{bankSubjectQuesLinkKey}
+	</update>
+
+	<update id="updateTExamQuestionBankSubject">
+		UPDATE T_EXAM_QUESTION_BANK_SUBJECT
+		<set>
+			<if test="subjectCtgKey > 0">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
+			<if test="name != ''">NAME = #{name},</if>
+		</set>
+		WHERE EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey}
+	</update>
+
+	<delete id="deleteTCategoryGoods" parameterType="Integer">
+		DELETE FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
+	</delete>
+
+	<delete id="deleteTLinkKey" parameterType="Integer">
+		DELETE FROM T_LINK_KEY WHERE REQ_KEY = #{reqKey}
+	</delete>
+
+	<delete id="deleteTLinkKeyByLinkKey" parameterType="Integer">
+		DELETE FROM T_LINK_KEY WHERE LINK_KEY = #{linkKey}
+	</delete>
+
+	<delete id="deleteTGoodsTeacherLink" parameterType="Integer">
+		DELETE FROM T_GOODS_TEACHER_LINK WHERE G_TEACHER_KEY = #{gTeacherKey}
+	</delete>
+
+	<delete id="deleteTGoodsTeacherLinkByGkey" parameterType="Integer">
+		DELETE FROM T_GOODS_TEACHER_LINK WHERE G_KEY = #{gKey}
+	</delete>
+
+	<delete id="deleteTLecCurri" parameterType="Integer">
+		DELETE FROM T_LEC_CURRI WHERE CURRI_KEY = #{curriKey}
+	</delete>
+
+	<delete id="deleteTCategoryGoodsByCtgGKey" parameterType="Integer">
+		DELETE FROM T_CATEGORY_GOODS WHERE CTG_G_KEY = #{ctgGKey}
+	</delete>
+
+    <delete id="deleteTBankSubjectExamLink" parameterType="Integer">
+        DELETE FROM T_BANK_SUBJECT_EXAM_LINK WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
+    </delete>
+
+	<delete id="deleteTBankSubjectQuesLink" parameterType="Integer">
+		DELETE FROM T_BANK_SUBJECT_QUES_LINK WHERE BANK_SUBJECT_QUES_LINK_KEY = #{bankSubjectQuesLinkKey}
+	</delete>
+
+	<delete id="deleteTGoodsPriceOption" parameterType="Integer">
+		DELETE FROM T_GOODS_PRICE_OPTION WHERE G_KEY = #{gKey}
+	</delete>
+
+</mapper>

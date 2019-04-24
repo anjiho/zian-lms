@@ -20,7 +20,17 @@ public class ProductManageController {
     public ModelAndView productManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
-
+        if("playSave".equals(page_gbn)) {
+            mvc.setViewName("product/playManage");
+        }else if("playList".equals(page_gbn)) {
+            mvc.setViewName("product/playList");
+        }else if("modifyPlayManage".equals(page_gbn)) {
+            mvc.setViewName("product/modifyPlayManage");
+        }else if("academyLectureList".equals(page_gbn)) {
+            mvc.setViewName("product/academyLectureList");
+        }else if("modifyAcademyLecture".equals(page_gbn)) {
+            mvc.setViewName("product/modifyAcademyLecture");
+        }
         return mvc;
     }
 }
