@@ -28,34 +28,34 @@ var webRoot = "";
 //--------------------------------------------------
 // 빈 결과값 메인 리스트  처리
 //--------------------------------------------------
-function gfn_emptyView(gubun,str){
+function gfn_emptyView(gubun, str) {
     if (gubun == "H") {
         emptys.innerHTML = "<td colspan='30'></td>";
         emptys.style.height = "0";
         emptys.style.visibility = "hidden";
         emptys.style.display = "none";
-    }else{
+    } else {
         emptys.style.display = "";
         emptys.style.visibility = "visible";
         emptys.style.height = "100px";
-        emptys.innerHTML = "<b>"+str+"</b>";
+        emptys.innerHTML = "<b>" + str + "</b>";
     }
 }
 
 // 파일 패스 제거후 파일명 추출
-function fn_clearFilePath(val){
+function fn_clearFilePath(val) {
     var tmpStr = val;
 
     var cnt = 0;
-    while(true){
+    while (true) {
         cnt = tmpStr.indexOf("/");
-        if(cnt == -1) break;
-        tmpStr = tmpStr.substring(cnt+1);
+        if (cnt == -1) break;
+        tmpStr = tmpStr.substring(cnt + 1);
     }
-    while(true){
+    while (true) {
         cnt = tmpStr.indexOf("\\");
-        if(cnt == -1) break;
-        tmpStr = tmpStr.substring(cnt+1);
+        if (cnt == -1) break;
+        tmpStr = tmpStr.substring(cnt + 1);
     }
 
     return tmpStr;
@@ -64,58 +64,58 @@ function fn_clearFilePath(val){
 //--------------------------------------------------
 //빈 결과값 메인 리스트  처리
 //--------------------------------------------------
-function gfn_emptyView2(gubun,str){
+function gfn_emptyView2(gubun, str) {
     if (gubun == "H") {
         emptys2.innerHTML = "<td colspan='30'></td>";
         emptys2.style.height = "0";
         emptys2.style.visibility = "hidden";
         emptys2.style.display = "none";
-    }else{
+    } else {
         emptys2.style.display = "";
         emptys2.style.visibility = "visible";
         emptys2.style.height = "125px";
-        emptys2.innerHTML = "<b>"+str+"</b>";
+        emptys2.innerHTML = "<b>" + str + "</b>";
     }
 }
 
 //--------------------------------------------------
 //빈 결과값 메인 리스트  처리
 //--------------------------------------------------
-function gfn_emptyView3(gubun,str){
+function gfn_emptyView3(gubun, str) {
     if (gubun == "H") {
         emptys3.innerHTML = "<td colspan='30'></td>";
         emptys3.style.height = "0";
         emptys3.style.visibility = "hidden";
         emptys3.style.display = "none";
-    }else{
+    } else {
         emptys3.style.display = "";
         emptys3.style.visibility = "visible";
         emptys3.style.height = "125px";
-        emptys3.innerHTML = "<b>"+str+"</b>";
+        emptys3.innerHTML = "<b>" + str + "</b>";
     }
 }
 
 //--------------------------------------------------
 //빈 결과값 메인 리스트  처리
 //--------------------------------------------------
-function gfn_emptyView4(gubun,str){
+function gfn_emptyView4(gubun, str) {
     if (gubun == "H") {
         emptys4.innerHTML = "<td colspan='30'></td>";
         emptys4.style.height = "0";
         emptys4.style.visibility = "hidden";
         emptys4.style.display = "none";
-    }else{
+    } else {
         emptys4.style.display = "";
         emptys4.style.visibility = "visible";
         emptys4.style.height = "125px";
-        emptys4.innerHTML = "<b>"+str+"</b>";
+        emptys4.innerHTML = "<b>" + str + "</b>";
     }
 }
 
 //--------------------------------------------------
 // 빈 결과값 메인 리스트  처리 (한페이지에 두개의 리스트가 같이 나올경우 )
 //--------------------------------------------------
-function gfn_emptyView_new(gubun,str){
+function gfn_emptyView_new(gubun, str) {
     if (gubun == "H") {
         emptys.innerHTML = "<td colspan='30'></td>";
         emptys.style.height = "0";
@@ -125,11 +125,11 @@ function gfn_emptyView_new(gubun,str){
         emptys.style.display = "";
         emptys.style.visibility = "visible";
         emptys.style.height = "150px";
-        emptys.innerHTML = "<b>"+str+"!</b>";
+        emptys.innerHTML = "<b>" + str + "!</b>";
     }
 }
 
-function gfn_emptyView_alarm(gubun,str){
+function gfn_emptyView_alarm(gubun, str) {
     if (gubun == "H") {
         emptys_alarm.innerHTML = "<td colspan='30'></td>";
         emptys_alarm.style.height = "0";
@@ -139,11 +139,11 @@ function gfn_emptyView_alarm(gubun,str){
         emptys_alarm.style.display = "";
         emptys_alarm.style.visibility = "visible";
         emptys_alarm.style.height = "200px";
-        emptys_alarm.innerHTML = "<b>"+str+"!</b>";
+        emptys_alarm.innerHTML = "<b>" + str + "!</b>";
     }
 }
 
-function gfn_emptyView_kanje(gubun,str){
+function gfn_emptyView_kanje(gubun, str) {
     if (gubun == "H") {
         emptys_kanje.innerHTML = "<td colspan='30'></td>";
         emptys_kanje.style.height = "0";
@@ -153,11 +153,11 @@ function gfn_emptyView_kanje(gubun,str){
         emptys_kanje.style.display = "";
         emptys_kanje.style.visibility = "visible";
         emptys_kanje.style.height = "150px";
-        emptys_kanje.innerHTML = "<b>"+str+"!</b>";
+        emptys_kanje.innerHTML = "<b>" + str + "!</b>";
     }
 }
 
-function gfn_emptyView_set(gubun,str){
+function gfn_emptyView_set(gubun, str) {
     if (gubun == "H") {
         emptys_set.innerHTML = "<td colspan='30'></td>";
         emptys_set.style.height = "0";
@@ -167,11 +167,11 @@ function gfn_emptyView_set(gubun,str){
         emptys_set.style.display = "";
         emptys_set.style.visibility = "visible";
         emptys_set.style.height = "120px";
-        emptys_set.innerHTML = "<b>"+str+"!</b>";
+        emptys_set.innerHTML = "<b>" + str + "!</b>";
     }
 }
 
-function gfn_emptyView_name(gubun,str){
+function gfn_emptyView_name(gubun, str) {
     if (gubun == "H") {
         emptys_name.innerHTML = "<td colspan='30'></td>";
         emptys_name.style.height = "0";
@@ -181,25 +181,26 @@ function gfn_emptyView_name(gubun,str){
         emptys_name.style.display = "";
         emptys_name.style.visibility = "visible";
         emptys_name.style.height = "480px";
-        emptys_name.innerHTML = "<b>"+str+"!</b>";
+        emptys_name.innerHTML = "<b>" + str + "!</b>";
     }
 }
 
 
-function gfn_setTot(str){
+function gfn_setTot(str) {
     tot = str;
 }
+
 //--------------------------------------------------
 // 빈 결과값 서브 리스트  처리
 //--------------------------------------------------
-function gfn_emptySubView(gubun,str){
+function gfn_emptySubView(gubun, str) {
     if (gubun == "H") {
         emptysSub.innerHTML = "<td colspan='13'></td>";
         emptysSub.style.visibility = "hidden";
         emptysSub.style.height = "0";
     } else {
         emptysSub.style.visibility = "visible";
-        emptysSub.innerHTML = "<b>"+str+"!</b>";
+        emptysSub.innerHTML = "<b>" + str + "!</b>";
         emptysSub.style.height = "80";
     }
 }
@@ -213,21 +214,22 @@ function gfn_substr(str, start, end) {
     }
     return substr;
 }
+
 //--------------------------------------------------
 // 구분자로 문장 자르기 - 단일문장
 //--------------------------------------------------
-function gfn_split(str,delim){
+function gfn_split(str, delim) {
     var array = new Array();
     var len = str.lastIndexOf(delim);
-    array[0] = str.substring(0,len);
-    array[1] = str.substring(len+1,str.length);
+    array[0] = str.substring(0, len);
+    array[1] = str.substring(len + 1, str.length);
     return array;
 }
 
 //--------------------------------------------------
 // 구분자로 문장 자르기 - 복수문장
 //--------------------------------------------------
-function gfn_csplit(str,delim){
+function gfn_csplit(str, delim) {
     var array = new Array();
     if (str == "") return "";
 
@@ -238,8 +240,8 @@ function gfn_csplit(str,delim){
 //--------------------------------------------------
 // 파라미터 자르기
 //--------------------------------------------------
-function gfn_strcut(str, len){
-    if (str == ""){
+function gfn_strcut(str, len) {
+    if (str == "") {
         return "";
     } else {
         return str.substring(len);
@@ -249,14 +251,14 @@ function gfn_strcut(str, len){
 //--------------------------------------------------
 //  문자치환
 //--------------------------------------------------
-function gfn_replaceStr(str,fromStr,toStr ){
+function gfn_replaceStr(str, fromStr, toStr) {
     var idx;
-    var dst="";
-    if (str=="") return str;
+    var dst = "";
+    if (str == "") return str;
     if (!str.substring) return str;
-    while((idx = str.indexOf(fromStr))>=0){
-        dst += str.substring(0,idx) + toStr;
-        str  = str.substring(idx+fromStr.length);
+    while ((idx = str.indexOf(fromStr)) >= 0) {
+        dst += str.substring(0, idx) + toStr;
+        str = str.substring(idx + fromStr.length);
     }
     return dst + str;
 }
@@ -264,13 +266,13 @@ function gfn_replaceStr(str,fromStr,toStr ){
 //--------------------------------------------------
 //  문자 존재 여부 체크
 //--------------------------------------------------
-function gfn_CheckStr(str,fromStr){
+function gfn_CheckStr(str, fromStr) {
     var idx;
-    if (str=="" || str == null) return true;
+    if (str == "" || str == null) return true;
     idx = str.indexOf(fromStr);
-    if (idx == "-1"){
+    if (idx == "-1") {
         return true;
-    } else{
+    } else {
         return false;
     }
 }
@@ -278,26 +280,26 @@ function gfn_CheckStr(str,fromStr){
 //--------------------------------------------------
 // 로딩 이미지 처리
 //--------------------------------------------------
-function gfn_Loading(str){
-    if (str == "Y"){
+function gfn_Loading(str) {
+    if (str == "Y") {
         try {
             loading.style.visibility = "visible";
-            loading.style.width="230";
-            loading.style.height="66";
-        } catch (e){
+            loading.style.width = "230";
+            loading.style.height = "66";
+        } catch (e) {
             parent.loading.style.visibility = "visible";
-            parent.loading.style.width="230";
-            parent.loading.style.height="66";
+            parent.loading.style.width = "230";
+            parent.loading.style.height = "66";
         }
     } else {
         try {
             loading.style.visibility = "hidden";
-            loading.style.width="0";
-            loading.style.height="0";
-        } catch (e){
+            loading.style.width = "0";
+            loading.style.height = "0";
+        } catch (e) {
             parent.loading.style.visibility = "hidden";
-            parent.loading.style.width="0";
-            parent.loading.style.height="0";
+            parent.loading.style.width = "0";
+            parent.loading.style.height = "0";
         }
     }
 }
@@ -305,69 +307,69 @@ function gfn_Loading(str){
 //--------------------------------------------------
 // 팝업 처리
 //--------------------------------------------------
-function gfn_winPop(xs,ys,urls,param){
+function gfn_winPop(xs, ys, urls, param) {
     var targeturl = urls + param;
     var winX = 0;
     var winY = 0;
-    if (screen.width < 1025){
-        winX=0;
-        winY=0;
+    if (screen.width < 1025) {
+        winX = 0;
+        winY = 0;
     } else {
-        winX=(screen.width)?(screen.width-xs)/2:100;
-        winY=(screen.height)?(screen.height-ys)/2:100;
+        winX = (screen.width) ? (screen.width - xs) / 2 : 100;
+        winY = (screen.height) ? (screen.height - ys) / 2 : 100;
     }
-    var features = 'width='+xs+',height='+ys+',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=no,resizable=yes,status=yes';
-    var winda = window.open(targeturl,'winc',features);
+    var features = 'width=' + xs + ',height=' + ys + ',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=no,resizable=yes,status=yes';
+    var winda = window.open(targeturl, 'winc', features);
     winda.focus();
 }
 
-function gfn_winPops(xs,ys,urls,param, sid){
+function gfn_winPops(xs, ys, urls, param, sid) {
     var targeturl = urls + param;
     var winX = 0;
     var winY = 0;
-    if (screen.width < 1025){
-        winX=0;
-        winY=0;
+    if (screen.width < 1025) {
+        winX = 0;
+        winY = 0;
     } else {
-        winX=(screen.width)?(screen.width-xs)/2:100;
-        winY=(screen.height)?(screen.height-ys)/2:100;
+        winX = (screen.width) ? (screen.width - xs) / 2 : 100;
+        winY = (screen.height) ? (screen.height - ys) / 2 : 100;
     }
-    var features = 'width='+xs+',height='+ys+',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=auto,resizable=yes,status=yes';
+    var features = 'width=' + xs + ',height=' + ys + ',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=auto,resizable=yes,status=yes';
     //var winda = window.open(targeturl,sid,features);
-    window.open(targeturl,sid,features);
+    window.open(targeturl, sid, features);
     //winda.focus();
 }
 
-function gfn_winScrollPops(xs,ys,urls,param, sid){
+function gfn_winScrollPops(xs, ys, urls, param, sid) {
     var targeturl = urls + param;
     var winX = 0;
     var winY = 0;
-    if (screen.width < 1025){
-        winX=0;
-        winY=0;
+    if (screen.width < 1025) {
+        winX = 0;
+        winY = 0;
     } else {
-        winX=(screen.width)?(screen.width-xs)/2:100;
-        winY=(screen.height)?(screen.height-ys)/2:100;
+        winX = (screen.width) ? (screen.width - xs) / 2 : 100;
+        winY = (screen.height) ? (screen.height - ys) / 2 : 100;
     }
-    var features = 'width='+xs+',height='+ys+',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=yes,resizable=yes,status=yes';
+    var features = 'width=' + xs + ',height=' + ys + ',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=yes,resizable=yes,status=yes';
     //var winda = window.open(targeturl,sid,features);
-    window.open(targeturl,sid,features);
+    window.open(targeturl, sid, features);
     //winda.focus();
 }
 
-function gfn_winResizeNoPops(xs,ys,urls,param, sid){
+function gfn_winResizeNoPops(xs, ys, urls, param, sid) {
     var targeturl = urls + param;
     var winX = 0;
     var winY = 0;
-    if (screen.width < 1025){
-        winX=0;
-        winY=0;
+    if (screen.width < 1025) {
+        winX = 0;
+        winY = 0;
     } else {
-        winX=(screen.width)?(screen.width-xs)/2:100;
-        winY=(screen.height)?(screen.height-ys)/2:100;
+        winX = (screen.width) ? (screen.width - xs) / 2 : 100;
+        winY = (screen.height) ? (screen.height - ys) / 2 : 100;
     }
-    var features = 'width='+xs+',height='+ys+',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=no,resizable=no,status=yes';
-    var winda = window.open(targeturl,sid,features);
+    var features = 'width=' + xs + ',height=' + ys + ',left=' + winX + ',top=' + winY + ',location=no,toolbar=no,scrollbars=no,resizable=no,status=yes';
+    var winda = window.open(targeturl, sid, features);
     winda.focus();
 }
 
@@ -375,14 +377,14 @@ function gfn_winResizeNoPops(xs,ys,urls,param, sid){
 //--------------------------------------------------
 //  문자 존재 여부 체크  - str의 빈값 제외
 //--------------------------------------------------
-function gfn_CheckNullStr(str,fromStr){
+function gfn_CheckNullStr(str, fromStr) {
     var idx = "-1";
     if (str != "") {
         idx = str.indexOf(fromStr);
     }
-    if (idx == "-1"){
+    if (idx == "-1") {
         return false;
-    } else{
+    } else {
         return true;
     }
 }
@@ -390,8 +392,8 @@ function gfn_CheckNullStr(str,fromStr){
 //--------------------------------------------------
 //  null 을 빈값으로처리
 //--------------------------------------------------
-function gfn_isnull(str){
-    if (str == null){
+function gfn_isnull(str) {
+    if (str == null) {
         return "";
     } else {
         return str;
@@ -401,8 +403,8 @@ function gfn_isnull(str){
 //--------------------------------------------------
 //null 을 문자 치환
 //--------------------------------------------------
-function gfn_isnullvalue(str, fromStr){
-    if (str == null || str == ""){
+function gfn_isnullvalue(str, fromStr) {
+    if (str == null || str == "") {
         return fromStr;
     } else {
         return str;
@@ -412,8 +414,8 @@ function gfn_isnullvalue(str, fromStr){
 //--------------------------------------------------
 //  숫자 여부 체크
 //--------------------------------------------------
-function gfn_isnum(str){
-    if (str == ""){
+function gfn_isnum(str) {
+    if (str == "") {
         return true;
     } else {
         return !isNaN(Number(str));
@@ -423,16 +425,16 @@ function gfn_isnum(str){
 //--------------------------------------------------
 //  좌우측여백삭제
 //--------------------------------------------------
-function gfn_trim(str){
+function gfn_trim(str) {
     return gfn_ltrim(gfn_rtrim(str));
 }
 
 //--------------------------------------------------
 //  좌측여백삭제
 //--------------------------------------------------
-function gfn_ltrim(str){
+function gfn_ltrim(str) {
     var s = new String(str);
-    if (s.substr(0,1) == " "){
+    if (s.substr(0, 1) == " ") {
         return gfn_ltrim(s.substr(1));
     } else {
         return s;
@@ -442,10 +444,10 @@ function gfn_ltrim(str){
 //--------------------------------------------------
 //  우측여백삭제
 //--------------------------------------------------
-function gfn_rtrim(str){
+function gfn_rtrim(str) {
     var s = new String(str);
-    if(s.substr(s.length-1,1) == " "){
-        return gfn_rtrim(s.substring(0, s.length-1));
+    if (s.substr(s.length - 1, 1) == " ") {
+        return gfn_rtrim(s.substring(0, s.length - 1));
     } else {
         return s;
     }
@@ -462,41 +464,38 @@ function roundMarks(pval) {
 //--------------------------------------------------
 // 팝업 윈도우 닫기
 //--------------------------------------------------
-function gfn_close(){
+function gfn_close() {
     self.close();
 }
 
 //--------------------------------------------------
 //날자 포맷 변경처리
 //--------------------------------------------------
-function gfn_dateFormat(str,len,gu){
+function gfn_dateFormat(str, len, gu) {
     var rdate = "";
-    if (len == "8"){
-        rdate = str.substring(0,4)+"."+str.substring(4,6)+"."+str.substring(6,8);
-    } else if (len == "10"){
-        if(gu == "C"){
+    if (len == "8") {
+        rdate = str.substring(0, 4) + "." + str.substring(4, 6) + "." + str.substring(6, 8);
+    } else if (len == "10") {
+        if (gu == "C") {
             rdate = str.substring(0, 4) + "년" + str.substring(5, 7) + "월" + str.substring(8, 10) + "일";
+        } else {
+            rdate = str.substring(0, 10);
         }
-        else{
-            rdate = str.substring(0,10);
+    } else if (len == "14") {
+        if (gu == "C") {
+            rdate = str.substring(0, 4) + "." + str.substring(4, 6) + "." + str.substring(6, 8);
+        } else if (gu == "F") {
+            rdate = str.substring(0, 4) + "-" + str.substring(4, 6) + "-" + str.substring(6, 8);
+        } else {
+            rdate = str.substring(0, 4) + "." + str.substring(4, 6) + "." + str.substring(6, 8);
+            rdate += " " + str.substring(8, 10) + ":" + str.substring(10, 12) + ":" + str.substring(12, 14);
         }
-    } else if (len == "14"){
-        if (gu == "C"){
-            rdate  = str.substring(0,4)+"."+str.substring(4,6)+"."+str.substring(6,8);
-        }
-        else if (gu == "F"){
-            rdate  = str.substring(0,4)+"-"+str.substring(4,6)+"-"+str.substring(6,8);
-        }
-        else {
-            rdate  = str.substring(0,4)+"."+str.substring(4,6)+"."+str.substring(6,8);
-            rdate += " "+str.substring(8,10)+":"+str.substring(10,12)+":"+str.substring(12,14);
-        }
-    } else if (len == "18"){
-        rdate  = str.substring(0,4)+str.substring(5,7)+str.substring(8,10);
-        rdate += str.substring(11,13)+str.substring(14,15)+str.substring(17,18);
+    } else if (len == "18") {
+        rdate = str.substring(0, 4) + str.substring(5, 7) + str.substring(8, 10);
+        rdate += str.substring(11, 13) + str.substring(14, 15) + str.substring(17, 18);
     } else {
-        rdate  = str.substring(0,4)+"-"+str.substring(5,7)+"-"+str.substring(8,10)+" ";
-        rdate += str.substring(11,13)+":"+str.substring(14,16)+":"+str.substring(17,19);
+        rdate = str.substring(0, 4) + "-" + str.substring(5, 7) + "-" + str.substring(8, 10) + " ";
+        rdate += str.substring(11, 13) + ":" + str.substring(14, 16) + ":" + str.substring(17, 19);
     }
     return rdate;
 }
@@ -505,21 +504,20 @@ function gfn_dateFormat(str,len,gu){
 //--------------------------------------------------
 // 동일 문자 체크   : 길이만큼의 동일문자 존제시 true 없을시 false
 //--------------------------------------------------
-function gfn_strCheck(str, len){
+function gfn_strCheck(str, len) {
     var rdate = false;
-    if(str.length < len){
+    if (str.length < len) {
         return str;
-    }
-    else{
-        for(var i = 0; i < str.length; i++){
+    } else {
+        for (var i = 0; i < str.length; i++) {
             var astr = str.substring(i, i + len);
-            var bstr = str.substring(i, i+1);
+            var bstr = str.substring(i, i + 1);
             var cstr = "";
-            for(var j = 0; j < len; j++){
+            for (var j = 0; j < len; j++) {
                 cstr = cstr + bstr;
             }
 
-            if(cstr == astr){
+            if (cstr == astr) {
                 rdate = true;
                 return rdate;
                 break;
@@ -532,26 +530,19 @@ function gfn_strCheck(str, len){
 
 
 //검색 프로그레스 호출 및 숨기기
-function loadSearch(topPadding)
-{
-    if (document.getElementById)
-    {
-        document.getElementById('progress').style.left = document.body.clientWidth/2 - 150 + "px";
+function loadSearch(topPadding) {
+    if (document.getElementById) {
+        document.getElementById('progress').style.left = document.body.clientWidth / 2 - 150 + "px";
         //document.getElementById('progress').style.top = document.body.scrollTop + (document.body.clientHeight/2) + "px";
         document.getElementById('progress').style.top = document.body.scrollTop + topPadding + "px";  //320
         document.getElementById('progress').style.visibility = 'visible';
-    }
-    else
-    {
-        if (document.layers)
-        {
-            document.progress.left = document.body.clientWidth/2 - 150;
+    } else {
+        if (document.layers) {
+            document.progress.left = document.body.clientWidth / 2 - 150;
             document.progress.visibility = 'visible';
-        }
-        else
-        {
-            document.all.progress.style.left = document.body.clientWidth/2 - 150;
-            document.all.progress.style.top = document.body.scrollTop + (document.body.clientHeight/2);
+        } else {
+            document.all.progress.style.left = document.body.clientWidth / 2 - 150;
+            document.all.progress.style.top = document.body.scrollTop + (document.body.clientHeight / 2);
             document.all.progress.style.visibility = 'visible';
         }
     }
@@ -559,44 +550,30 @@ function loadSearch(topPadding)
 
 
 //검색 프로그레스 호출 및 숨기기
-function loadSearch2()
-{
-    if (document.getElementById)
-    {
-        document.getElementById('progress').style.left = document.body.clientWidth/2 - 150 + "px";
-        document.getElementById('progress').style.top = document.body.scrollTop + (document.body.clientHeight/2) + "px";
+function loadSearch2() {
+    if (document.getElementById) {
+        document.getElementById('progress').style.left = document.body.clientWidth / 2 - 150 + "px";
+        document.getElementById('progress').style.top = document.body.scrollTop + (document.body.clientHeight / 2) + "px";
         document.getElementById('progress').style.visibility = 'visible';
-    }
-    else
-    {
-        if (document.layers)
-        {
-            document.progress.left = document.body.clientWidth/2 - 150;
+    } else {
+        if (document.layers) {
+            document.progress.left = document.body.clientWidth / 2 - 150;
             document.progress.visibility = 'visible';
-        }
-        else
-        {
-            document.all.progress.style.left = document.body.clientWidth/2 - 150;
-            document.all.progress.style.top = document.body.scrollTop + (document.body.clientHeight/2);
+        } else {
+            document.all.progress.style.left = document.body.clientWidth / 2 - 150;
+            document.all.progress.style.top = document.body.scrollTop + (document.body.clientHeight / 2);
             document.all.progress.style.visibility = 'visible';
         }
     }
 }
 
-function HideSearch()
-{
-    if (document.getElementById)
-    {
+function HideSearch() {
+    if (document.getElementById) {
         document.getElementById('progress').style.visibility = 'hidden';
-    }
-    else
-    {
-        if (document.layers)
-        {
+    } else {
+        if (document.layers) {
             document.progress.visibility = 'hidden';
-        }
-        else
-        {
+        } else {
             document.all.progress.style.visibility = 'hidden';
         }
     }
@@ -604,27 +581,27 @@ function HideSearch()
 
 // 전화번호 구분별 입력
 function fnSetPhoneNo(obj1, obj2, obj3, phoneNo) {
-    if(phoneNo == null){
+    if (phoneNo == null) {
         return;
     }
-    if(phoneNo.length == 0){
+    if (phoneNo.length == 0) {
         return;
     }
 
-    var chkHandPhone = phoneNo.substring(0,2);
+    var chkHandPhone = phoneNo.substring(0, 2);
 
     var phoneNo1 = "";
     var phoneNo2 = "";
     var phoneNo3 = "";
 
-    if(chkHandPhone == "02"){
+    if (chkHandPhone == "02") {
         phoneNo1 = chkHandPhone;
-        phoneNo2 = phoneNo.substring(2, phoneNo.length-4);
-        phoneNo3 = phoneNo.substring(phoneNo.length-4);
-    }else{
-        phoneNo1 = phoneNo.substring(0,3);
-        phoneNo2 = phoneNo.substring(3, phoneNo.length-4);
-        phoneNo3 = phoneNo.substring(phoneNo.length-4);
+        phoneNo2 = phoneNo.substring(2, phoneNo.length - 4);
+        phoneNo3 = phoneNo.substring(phoneNo.length - 4);
+    } else {
+        phoneNo1 = phoneNo.substring(0, 3);
+        phoneNo2 = phoneNo.substring(3, phoneNo.length - 4);
+        phoneNo3 = phoneNo.substring(phoneNo.length - 4);
     }
 
     dwr.util.setValue(obj1, phoneNo1);
@@ -633,17 +610,17 @@ function fnSetPhoneNo(obj1, obj2, obj3, phoneNo) {
 }
 
 //사업자 번호 자르기
-function fn_business_cut(obj1, obj2, obj3, business_no){
-    if(business_no == null){
+function fn_business_cut(obj1, obj2, obj3, business_no) {
+    if (business_no == null) {
         return;
     }
-    if(business_no.length == 0){
+    if (business_no.length == 0) {
         return;
     }
 
-    var business_no1 = business_no.substring(0,3);
-    var business_no2 = business_no.substring(3,5);
-    var business_no3 = business_no.substring(5,10);
+    var business_no1 = business_no.substring(0, 3);
+    var business_no2 = business_no.substring(3, 5);
+    var business_no3 = business_no.substring(5, 10);
 
     dwr.util.setValue(obj1, business_no1);
     dwr.util.setValue(obj2, business_no2);
@@ -651,12 +628,12 @@ function fn_business_cut(obj1, obj2, obj3, business_no){
 }
 
 //이메일 자르기
-function fn_mail_cut(obj1, obj2, email){
-    if(email == null){
+function fn_mail_cut(obj1, obj2, email) {
+    if (email == null) {
         return;
     }
 
-    if(email.length == 0){
+    if (email.length == 0) {
         return;
     }
 
@@ -667,31 +644,31 @@ function fn_mail_cut(obj1, obj2, email){
 }
 
 //전화번호 태그 붙이기
-function fn_tel_tag(tel_no){
-    if(tel_no == ""){
+function fn_tel_tag(tel_no) {
+    if (tel_no == "") {
         tel_no = null;
     }
-    if(tel_no == null){
+    if (tel_no == null) {
         return "";
     }
-    if(tel_no.length == 0){
+    if (tel_no.length == 0) {
         return "";
     }
 
-    var chkHandPhone = tel_no.substring(0,2);
+    var chkHandPhone = tel_no.substring(0, 2);
 
     var phoneNo1 = "";
     var phoneNo2 = "";
     var phoneNo3 = "";
 
-    if(chkHandPhone == "02"){
+    if (chkHandPhone == "02") {
         phoneNo1 = chkHandPhone;
-        phoneNo2 = tel_no.substring(2, tel_no.length-4);
-        phoneNo3 = tel_no.substring(tel_no.length-4);
-    }else{
-        phoneNo1 = tel_no.substring(0,3);
-        phoneNo2 = tel_no.substring(3, tel_no.length-4);
-        phoneNo3 = tel_no.substring(tel_no.length-4);
+        phoneNo2 = tel_no.substring(2, tel_no.length - 4);
+        phoneNo3 = tel_no.substring(tel_no.length - 4);
+    } else {
+        phoneNo1 = tel_no.substring(0, 3);
+        phoneNo2 = tel_no.substring(3, tel_no.length - 4);
+        phoneNo3 = tel_no.substring(tel_no.length - 4);
     }
 
     var rtnTel = phoneNo1 + "-" + phoneNo2 + "-" + phoneNo3;
@@ -700,14 +677,14 @@ function fn_tel_tag(tel_no){
 }
 
 //주민번호 태그 붙이기
-function fn_res_tag(res_no){
-    if(res_no == null){
+function fn_res_tag(res_no) {
+    if (res_no == null) {
         return;
     }
-    if(res_no.length == 0){
+    if (res_no.length == 0) {
         return;
     }
-    var res1 = res_no.substring(0,6);
+    var res1 = res_no.substring(0, 6);
     var res2 = "*******";
     var rtnRes = res1 + " - " + res2;
 
@@ -715,17 +692,17 @@ function fn_res_tag(res_no){
 }
 
 //사업자번호 태그 붙이기
-function fn_business_tag(business_no){
-    if(business_no == null){
+function fn_business_tag(business_no) {
+    if (business_no == null) {
         return;
     }
-    if(business_no.length == 0){
+    if (business_no.length == 0) {
         return;
     }
 
-    var business_no1 = business_no.substring(0,3);
-    var business_no2 = business_no.substring(3,5);
-    var business_no3 = business_no.substring(5,10);
+    var business_no1 = business_no.substring(0, 3);
+    var business_no2 = business_no.substring(3, 5);
+    var business_no3 = business_no.substring(5, 10);
 
     var rtnBusiness = business_no1 + "-" + business_no2 + "-" + business_no3;
 
@@ -734,27 +711,27 @@ function fn_business_tag(business_no){
 }
 
 // 파일 확장자 체크
-function fileCheck(file_gubun, file_nm){
+function fileCheck(file_gubun, file_nm) {
     // 허용 가능 확장자 선택
-    if(file_gubun == "service" && /.*\.(gif)|(jpeg)|(jpg)|(png)$/.test(file_nm.toLowerCase())){
+    if (file_gubun == "service" && /.*\.(gif)|(jpeg)|(jpg)|(png)$/.test(file_nm.toLowerCase())) {
         return false;
     }
-    if(file_gubun == "ctn" && /.*\.(text)|(txt)$/.test(file_nm.toLowerCase()) ){
+    if (file_gubun == "ctn" && /.*\.(text)|(txt)$/.test(file_nm.toLowerCase())) {
         return false;
     }
-    if(file_gubun == "bbs" && /.*\.(text)|(txt)$/.test(file_nm.toLowerCase()) ){
+    if (file_gubun == "bbs" && /.*\.(text)|(txt)$/.test(file_nm.toLowerCase())) {
         return false;
     }
-    if(file_gubun == "frmwr" && /.*\.(text)|(txt)|(exe)|(bin)|(zip)$/.test(file_nm.toLowerCase()) ){
+    if (file_gubun == "frmwr" && /.*\.(text)|(txt)|(exe)|(bin)|(zip)$/.test(file_nm.toLowerCase())) {
         return false;
     }
-    if(file_gubun == "test" && /.*\.(xls)$/.test(file_nm.toLowerCase()) ){
+    if (file_gubun == "test" && /.*\.(xls)$/.test(file_nm.toLowerCase())) {
         return false;
     }
     return true;
 }
 
-function checkv4 (obj) {
+function checkv4(obj) {
     var IPvalue = obj.value;
     errorString = "";
     theName = "IPaddress";
@@ -763,42 +740,42 @@ function checkv4 (obj) {
     var ipArray = IPvalue.match(ipPattern);
 
     if (IPvalue == "0.0.0.0")
-        errorString = errorString + theName + ': '+IPvalue+'는 특수IP로 사용할 수 없습니다.';
+        errorString = errorString + theName + ': ' + IPvalue + '는 특수IP로 사용할 수 없습니다.';
     else if (IPvalue == "255.255.255.255")
-        errorString = errorString + theName + ': '+IPvalue+'는 특수IP로 사용할 수 없습니다.';
+        errorString = errorString + theName + ': ' + IPvalue + '는 특수IP로 사용할 수 없습니다.';
 
     if (ipArray == null)
-        errorString = errorString + theName + ': '+IPvalue+'는 올바른 IP가 아닙니다.';
+        errorString = errorString + theName + ': ' + IPvalue + '는 올바른 IP가 아닙니다.';
     else {
         for (var i = 0; i < 4; i++) {
             thisSegment = ipArray[i];
             if (thisSegment > 255) {
-                errorString = errorString + theName + ': '+IPvalue+'는 올바른 IP가 아닙니다.';
+                errorString = errorString + theName + ': ' + IPvalue + '는 올바른 IP가 아닙니다.';
                 i = 4;
             }
             if ((i == 0) && (thisSegment > 255)) {
-                errorString = errorString + theName + ': '+IPvalue+'는 특수IP로 사용할 수 없습니다.';
+                errorString = errorString + theName + ': ' + IPvalue + '는 특수IP로 사용할 수 없습니다.';
                 i = 4;
             }
         }
     }
 
     extensionLength = 3;
-    if (errorString == ""){
+    if (errorString == "") {
         //alert ("That is a valid IP address.");
         return true;
-    }else{
-        alert (errorString);
+    } else {
+        alert(errorString);
         obj.select();
         return false;
     }
 }
 
-function checkv6 (elem){
+function checkv6(elem) {
     var v6Expression = /^(([A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4})$|^([A-Fa-f0-9]{1,4}::([A-Fa-f0-9]{1,4}:){0,5}[A-Fa-f0-9]{1,4})$|^(([A-Fa-f0-9]{1,4}:){2}:([A-Fa-f0-9]{1,4}:){0,4}[A-Fa-f0-9]{1,4})$|^(([A-Fa-f0-9]{1,4}:){3}:([A-Fa-f0-9]{1,4}:){0,3}[A-Fa-f0-9]{1,4})$|^(([A-Fa-f0-9]{1,4}:){4}:([A-Fa-f0-9]{1,4}:){0,2}[A-Fa-f0-9]{1,4})$|^(([A-Fa-f0-9]{1,4}:){5}:([A-Fa-f0-9]{1,4}:){0,1}[A-Fa-f0-9]{1,4})$|^(([A-Fa-f0-9]{1,4}:){6}:[A-Fa-f0-9]{1,4})$/;
-    if(elem.value.match(v6Expression)){
+    if (elem.value.match(v6Expression)) {
         return true;
-    }else{
+    } else {
         alert("올바른 IP가 아닙니다. ");
         return false;
     }
@@ -812,49 +789,45 @@ function checkv6 (elem){
 ' Return      :
 ' ------------------------------------------------------------------
 */
-function fc_chk_byte(aro_name,ari_max){
+function fc_chk_byte(aro_name, ari_max) {
 
-    var ls_str     = aro_name.value; // 이벤트가 일어난 컨트롤의 value 값
+    var ls_str = aro_name.value; // 이벤트가 일어난 컨트롤의 value 값
     var li_str_len = ls_str.length;  // 전체길이
 
     // 변수초기화
-    var li_max      = ari_max; // 제한할 글자수 크기
-    var i           = 0;  // for문에 사용
-    var li_byte     = 0;  // 한글일경우는 3 그밗에는 1을 더함
-    var li_len      = 0;  // substring하기 위해서 사용
+    var li_max = ari_max; // 제한할 글자수 크기
+    var i = 0;  // for문에 사용
+    var li_byte = 0;  // 한글일경우는 3 그밗에는 1을 더함
+    var li_len = 0;  // substring하기 위해서 사용
     var ls_one_char = ""; // 한글자씩 검사한다
-    var ls_str2     = ""; // 글자수를 초과하면 제한할수 글자전까지만 보여준다.
+    var ls_str2 = ""; // 글자수를 초과하면 제한할수 글자전까지만 보여준다.
 
-    for(i=0; i< li_str_len; i++)
-    {
+    for (i = 0; i < li_str_len; i++) {
         // 한글자추출
         ls_one_char = ls_str.charAt(i);
 
         // 한글이면 3을 더한다.
-        if (escape(ls_one_char).length > 4)
-        {
-            li_byte = li_byte+3;
+        if (escape(ls_one_char).length > 4) {
+            li_byte = li_byte + 3;
         }
         // 그외의 경우는 1을 더한다.
-        else
-        {
+        else {
             li_byte++;
         }
 
         // 전체 크기가 li_max를 넘지않으면
-        if(li_byte <= li_max)
-        {
+        if (li_byte <= li_max) {
             li_len = i + 1;
         }
     }
 
     // 전체길이를 초과하면
-    if(li_byte > li_max){
-        alert( li_max + " 글자를 초과 입력할수 없습니다. \n 초과된 내용은 자동으로 삭제 됩니다. ");
+    if (li_byte > li_max) {
+        alert(li_max + " 글자를 초과 입력할수 없습니다. \n 초과된 내용은 자동으로 삭제 됩니다. ");
         ls_str2 = ls_str.substr(0, li_len);
         aro_name.value = ls_str2;
         return true;
-    }else{
+    } else {
         return false;
     }
     aro_name.focus();
@@ -862,12 +835,12 @@ function fc_chk_byte(aro_name,ari_max){
 
 
 //문자의 갯수 리턴
-function fn_charChk(pw){
+function fn_charChk(pw) {
     var cnt = 0;
-    var pass_regx=/^[a-zA-Z]/;
+    var pass_regx = /^[a-zA-Z]/;
 
     for (var i = 0; i < pw.length; i++) {
-        if(pass_regx.test(pw.charAt(i))) {
+        if (pass_regx.test(pw.charAt(i))) {
             cnt = cnt + 1;
         }
     }
@@ -875,24 +848,25 @@ function fn_charChk(pw){
 }
 
 //숫자의 갯수 리턴
-function fn_numberChk(pw){
+function fn_numberChk(pw) {
     var cnt = 0;
-    var pass_regx=/^[0-9]/;
+    var pass_regx = /^[0-9]/;
 
     for (var i = 0; i < pw.length; i++) {
-        if(pass_regx.test(pw.charAt(i))) {
+        if (pass_regx.test(pw.charAt(i))) {
             cnt = cnt + 1;
         }
     }
     return cnt;
 }
+
 //특수 문자의 갯수리턴
-function fn_speChk(pw){
+function fn_speChk(pw) {
     var cnt = 0;
-    var pass_regx= /[^a-zA-Z0-9]/;
+    var pass_regx = /[^a-zA-Z0-9]/;
 
     for (var i = 0; i < pw.length; i++) {
-        if(pass_regx.test(pw.charAt(i))) {
+        if (pass_regx.test(pw.charAt(i))) {
             cnt = cnt + 1;
         }
     }
@@ -900,26 +874,26 @@ function fn_speChk(pw){
 }
 
 //비밀번호 체크
-function fn_chkUserPw(pw){
+function fn_chkUserPw(pw) {
     var n_char = fn_charChk(pw);
-    var n_num  = fn_numberChk(pw);
-    var n_spe  = fn_speChk(pw);
+    var n_num = fn_numberChk(pw);
+    var n_spe = fn_speChk(pw);
     var n_cnt = 0;
-    if(n_char > 0){
-        n_cnt = n_cnt+1;
+    if (n_char > 0) {
+        n_cnt = n_cnt + 1;
     }
-    if(n_num > 0){
-        n_cnt = n_cnt+1;
+    if (n_num > 0) {
+        n_cnt = n_cnt + 1;
     }
-    if(n_spe > 0){
-        n_cnt = n_cnt+1;
+    if (n_spe > 0) {
+        n_cnt = n_cnt + 1;
     }
 
-    if(n_cnt < 2){
+    if (n_cnt < 2) {
         alert("문자 종류(영문, 숫자, 특수문자) 중 최소 2종류를 포함하고 있어야 합니다.");
         return false;
     }
-    if(pw.length < 10 ){
+    if (pw.length < 10) {
         alert("자리수가 최소 10자리 이상이어야 합니다.");
         return false;
     }
@@ -930,20 +904,18 @@ function fn_chkUserPw(pw){
 function gfn_getByteLength(str) {
     var len = 0;
 
-    if(str == null){
+    if (str == null) {
         return 0;
     }
 
-    for(var i = 0; i < str.length; i++){
+    for (var i = 0; i < str.length; i++) {
         var c = escape(str.charAt(i));
 
-        if(c.length == 1){
+        if (c.length == 1) {
             len++;
-        }
-        else if(c.indexOf("%u") != -1){
+        } else if (c.indexOf("%u") != -1) {
             len += 2;
-        }
-        else if(c.indexOf("%") != -1){
+        } else if (c.indexOf("%") != -1) {
             len += c.length / 3;
         }
     }
@@ -963,32 +935,32 @@ function gfn_chkStrLen(str, len) {
  * BASE64 암호화
  * @param str
  */
-function gfn_base64Encode(str){
+function gfn_base64Encode(str) {
     var keyStr = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
 
     var output = "";
     var chr1, chr2, chr3;
     var enc1, enc2, enc3, enc4;
-    var i =0;
+    var i = 0;
 
-    do{
+    do {
         chr1 = str.charCodeAt(i++);
         chr2 = str.charCodeAt(i++);
         chr3 = str.charCodeAt(i++);
 
         enc1 = chr1 >> 2;
-        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4 );
-        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6 );
+        enc2 = ((chr1 & 3) << 4) | (chr2 >> 4);
+        enc3 = ((chr2 & 15) << 2) | (chr3 >> 6);
         enc4 = chr3 & 63;
 
-        if(isNaN(chr2)){
-            enc3 = enc4 =64;
-        }else if(isNaN(chr3)){
+        if (isNaN(chr2)) {
+            enc3 = enc4 = 64;
+        } else if (isNaN(chr3)) {
             enc4 = 64;
         }
 
         output = output + keyStr.charAt(enc1) + keyStr.charAt(enc2) + keyStr.charAt(enc3) + keyStr.charAt(enc4);
-    }while(i<str.length);
+    } while (i < str.length);
 
     return output;
 }
@@ -998,15 +970,14 @@ function gfn_base64Encode(str){
  * @param str : 변환할 문자열
  * @param len : 변환할 길이
  */
-function gfn_stringTrans(str, len){
-    if(str.length < 1){
+function gfn_stringTrans(str, len) {
+    if (str.length < 1) {
         return str;
-    }
-    else{
+    } else {
         var strLen = str.length;
         var rtnStr = str.substring(0, (strLen - len));
 
-        for(var i = strLen; i > (strLen - len); i--){
+        for (var i = strLen; i > (strLen - len); i--) {
             rtnStr += "*";
         }
 
@@ -1018,7 +989,7 @@ function gfn_stringTrans(str, len){
  * 자바 스크립트 MAP 생성자
  * @returns {Map}
  */
-Map = function(){
+Map = function () {
     this.map = new Object();
 };
 
@@ -1030,47 +1001,47 @@ Map = function(){
  * map.get(key);
  */
 Map.prototype = {
-    put : function(key, value){
+    put: function (key, value) {
         this.map[key] = value;
     },
-    get : function(key){
+    get: function (key) {
         return this.map[key];
     },
-    containsKey : function(key){
+    containsKey: function (key) {
         return key in this.map;
     },
-    containsValue : function(value){
-        for(var prop in this.map){
-            if(this.map[prop] == value) return true;
+    containsValue: function (value) {
+        for (var prop in this.map) {
+            if (this.map[prop] == value) return true;
         }
         return false;
     },
-    isEmpty : function(key){
+    isEmpty: function (key) {
         return (this.size() == 0);
     },
-    clear : function(){
-        for(var prop in this.map){
+    clear: function () {
+        for (var prop in this.map) {
             delete this.map[prop];
         }
     },
-    remove : function(key){
+    remove: function (key) {
         delete this.map[key];
     },
-    keys : function(){
+    keys: function () {
         var keys = new Array();
-        for(var prop in this.map){
+        for (var prop in this.map) {
             keys.push(prop);
         }
         return keys;
     },
-    values : function(){
+    values: function () {
         var values = new Array();
-        for(var prop in this.map){
+        for (var prop in this.map) {
             values.push(this.map[prop]);
         }
         return values;
     },
-    size : function(){
+    size: function () {
         var count = 0;
         for (var prop in this.map) {
             count++;
@@ -1079,12 +1050,12 @@ Map.prototype = {
     }
 };
 
-function fn_clear(val1, val2){
+function fn_clear(val1, val2) {
     document.getElementById(val1).value = "";
     document.getElementById(val2).value = "";
 }
 
-function fn_CheckStrLength(sourceID,cnt,str){
+function fn_CheckStrLength(sourceID, cnt, str) {
     //변수의 초기화
     var obj = document.getElementById(sourceID);
     var now_str = obj.value;                     //이벤트가 발생한 컨트롤의 value값
@@ -1095,25 +1066,22 @@ function fn_CheckStrLength(sourceID,cnt,str){
     var cnt_byte = 0;                            //한글일 경우 2 그외에는 1바이트 수 저장
     var chk_letter = "";                         //현재 한/영 체크할 letter를 저장
 
-    for (i=0; i<now_len; i++)
-    {
+    for (i = 0; i < now_len; i++) {
         //1글자만 추출
         chk_letter = now_str.charAt(i);
 
         // 체크문자가 한글일 경우 2byte 그 외의 경우 1byte 증가
-        if (escape(chk_letter).length > 4)
-        {
+        if (escape(chk_letter).length > 4) {
             //한글인 경우 2byte (UTF-8인 경우 3byte로...)
             cnt_byte += 2;
-        }else{
+        } else {
             //그외의 경우 1byte 증가
             cnt_byte++;
         }
     }
 
     // 만약 전체 크기가 제한 글자 수를 넘으면
-    if (cnt_byte > max_len)
-    {
+    if (cnt_byte > max_len) {
         alert(str + " " + max_len + "자 이내로 입력하세요.");
         obj.focus();
         return true;
@@ -1121,10 +1089,10 @@ function fn_CheckStrLength(sourceID,cnt,str){
 }
 
 //숫자인지 체크
-function fn_numberCheck(ids, str){
+function fn_numberCheck(ids, str) {
     var temp = document.getElementById(ids).value;
 
-    if(isNaN(temp) == true){
+    if (isNaN(temp) == true) {
         alert(str + "는 숫자만 입력하세요.");
         document.getElementById(ids).focus();
         return true;
@@ -1132,23 +1100,23 @@ function fn_numberCheck(ids, str){
 }
 
 // 이메일 형식체크
-function fn_isemail(str){
+function fn_isemail(str) {
     var regExp = /[0-9a-zA-Z][_0-9a-zA-Z-]*@[_0-9a-zA-Z-]+(\.[_0-9a-zA-Z-]+){1,2}$/;
 
-    if(!str.match(regExp)){
+    if (!str.match(regExp)) {
         alert("지원되지 않는 이메일 형식입니다. 다시 입력해 주세요.");
         return true;
     }
 }
 
 // 비밀번호 정귝식
-function fn_pwdcheck(str){
+function fn_pwdcheck(str) {
     var refExp = /([a-zA-Z0-9].*[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"])|([\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"].*[a-zA-Z0-9])/;
-    if (str.length < 8 || str.length > 16 ) {
+    if (str.length < 8 || str.length > 16) {
         alert("8~16자리로 입력해주세요.");
         return true;
     }
-    if(!str.match(refExp)){
+    if (!str.match(refExp)) {
         alert("패스워드는 영문자,숫자,특수문자 조합으로 8~16자리로 입력해주세요.");
         return true;
     }
@@ -1159,11 +1127,10 @@ function fn_pwdcheck(str){
  * @param str
  * @returnsd
  */
-function gfn_htmlEntityEnc(str){
-    if(str == "" || str == null){
+function gfn_htmlEntityEnc(str) {
+    if (str == "" || str == null) {
         return str;
-    }
-    else{
+    } else {
         return str.replace("&", "&amp;").replace("#", "&#35;").replace("<", "&lt;").replace(">", "&gt;").replace(/"/g, "&quot;").replace('\\', "&#39;").replace('%', "&#37;").replace('(', "&#40;").replace(')', "&#41;").replace('+', "&#43;").replace('/', "&#47;").replace('.', "&#46;");
     }
 }
@@ -1173,11 +1140,10 @@ function gfn_htmlEntityEnc(str){
  * @param str
  * @returns
  */
-function gfn_htmlEntityDec(str){
-    if(str == "" || str == null){
+function gfn_htmlEntityDec(str) {
+    if (str == "" || str == null) {
         return str;
-    }
-    else{
+    } else {
         return str.replace(/&amp;/gi, "&").replace(/&#35;/gi, "#").replace(/&lt;/gi, "<").replace(/&gt;/gi, ">").replace(/&quot;/gi, "'").replace(/&#39;/gi, '\\').replace(/&#37;/gi, '%').replace(/&#40;/gi, '(').replace(/&#41;/gi, ')').replace(/&#43;/gi, '+').replace(/&#47;/gi, '/').replace(/&#46;/gi, '.').replace(/&#59;/g, ";");
     }
 }
@@ -1216,7 +1182,7 @@ function genderTrans(sex) {
  * @param tagName
  */
 function checkall(checkBoxId) {
-    if ($("#"+checkBoxId).prop("checked")) {
+    if ($("#" + checkBoxId).prop("checked")) {
         $("input[type=checkbox]").prop("checked", true);
     } else {
         $("input[type=checkbox]").prop("checked", false);
@@ -1245,10 +1211,10 @@ function ellipsis(text, length) {
     var ellipsisString = "....";
     var outputString = text;
 
-    if (text.length>0 && length>0) {
+    if (text.length > 0 && length > 0) {
         if (text.length > length) {
             outputString = text.substring(0, length);
-            outputString+= ellipsisString;
+            outputString += ellipsisString;
         }
     }
     return outputString;
@@ -1262,12 +1228,12 @@ function ellipsis(text, length) {
  */
 function preViewImage(input, imageId, tagId) {
     if (tagId != "")
-        $("#"+tagId).show();
+        $("#" + tagId).show();
 
     if (input.files && input.files[0]) {
         var reader = new FileReader();
-        reader.onload = function(e) {
-            $("#"+imageId).attr("src", e.target.result);
+        reader.onload = function (e) {
+            $("#" + imageId).attr("src", e.target.result);
         },
             reader.readAsDataURL(input.files[0]);
     }
@@ -1281,10 +1247,10 @@ function preViewImage(input, imageId, tagId) {
  */
 function addTime(dateTime, time) {
     var dt = new Date(dateTime);
-    var krTime = new Date(Date.parse(dt) + (time*1000) * 60 * 60);
+    var krTime = new Date(Date.parse(dt) + (time * 1000) * 60 * 60);
 
     var year = parseInt(krTime.getFullYear());
-    var month = parseInt(krTime.getMonth()+1);
+    var month = parseInt(krTime.getMonth() + 1);
     var day = parseInt(krTime.getDate());
     var hour = parseInt(krTime.getHours());
     var minutes = parseInt(krTime.getMinutes());
@@ -1296,23 +1262,23 @@ function addTime(dateTime, time) {
     if (minutes == "0") minutes += "0";
     if (second == "0") second += "0";
 
-    var makeKorDateTime = year+"-"+month+"-"+day+" "+hour+":"+minutes+":"+second;
+    var makeKorDateTime = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + second;
 
     return makeKorDateTime;
 
 }
 
-function dateSub(day){
+function dateSub(day) {
     var d = new Date();
-    var dt = d - day*24*60*60*1000;
+    var dt = d - day * 24 * 60 * 60 * 1000;
     var nd = new Date(dt);
     var year = nd.getFullYear();
-    var month = nd.getMonth()+1;
+    var month = nd.getMonth() + 1;
     var day = nd.getDate();
-    if (month <10) {
-        month = "0"+month;
+    if (month < 10) {
+        month = "0" + month;
     }
-    var yyyymmdd = year+month+day;
+    var yyyymmdd = year + month + day;
     return yyyymmdd;
 }
 
@@ -1328,11 +1294,11 @@ function getAge(birthDay) {
         if (checkNull == 0) {
             var preBirth = birthDay.split(" ");
             var birth = preBirth[0].split("-");
-            var d1 = new Date(birth[0], birth[1]-1, birth[2]);
+            var d1 = new Date(birth[0], birth[1] - 1, birth[2]);
             var d2 = new Date();
             var diff = d2.getTime() - d1.getTime();
             var daysPast = Math.floor(diff / (1000 * 60 * 60 * 24));
-            var age = Math.floor(daysPast / 365.25)+1;
+            var age = Math.floor(daysPast / 365.25) + 1;
         }
     }
     return age;
@@ -1366,32 +1332,36 @@ function makeYYYY_MM_DD(val) {
         var month = valSplit[1];
         var day = valSplit[2];
         if (month < 10) {
-            month = "0"+month;
+            month = "0" + month;
         }
         if (day < 10) {
-            day = "0"+day;
+            day = "0" + day;
         }
-        yyyy_mm_dd = year+"-"+month+"-"+day;
+        yyyy_mm_dd = year + "-" + month + "-" + day;
         return yyyy_mm_dd;
     }
 }
 
-function today(){
+function today() {
     var date = new Date();
 
-    var year  = date.getFullYear();
+    var year = date.getFullYear();
     var month = date.getMonth() + 1; // 0부터 시작하므로 1더함 더함
-    var day   = date.getDate();
+    var day = date.getDate();
 
-    if (("" + month).length == 1) { month = "0" + month; }
-    if (("" + day).length   == 1) { day   = "0" + day;   }
+    if (("" + month).length == 1) {
+        month = "0" + month;
+    }
+    if (("" + day).length == 1) {
+        day = "0" + day;
+    }
 
     return year + "-" + month + "-" + day;
 }
 
-function getYear(){
+function getYear() {
     var date = new Date();
-    var year  = date.getFullYear();
+    var year = date.getFullYear();
     return year
 }
 
@@ -1413,7 +1383,7 @@ function getMonthCount(count) {
 function getDayCount(count) {
     var date = new Date();
 
-    var day = date.getDate()  + count;
+    var day = date.getDate() + count;
     if (day < 10) {
         day = "0" + day;
     }
@@ -1453,19 +1423,19 @@ function getDateTimeSplitComma(date_time) {
 
 function innerHTML(tagId, val) {
     if (val != "" && tagId != "") {
-        $("#"+tagId).html(val);
+        $("#" + tagId).html(val);
     }
 }
 
 function innerHTMLAddColor(tagId, color) {
     if ((tagId != "") && (color != "")) {
-        $("#"+tagId).css("color", color);
+        $("#" + tagId).css("color", color);
     }
 }
 
 function innerValue(tagId, val) {
     if (val != "" && tagId != "") {
-        $("#"+tagId).val(val);
+        $("#" + tagId).val(val);
     }
 }
 
@@ -1476,7 +1446,7 @@ function innerValue(tagId, val) {
  */
 function isCheckbox(checkbox_id, boolean) {
     if (checkbox_id != "") {
-        $("#"+checkbox_id).attr("checked",boolean);
+        $("#" + checkbox_id).attr("checked", boolean);
     }
 }
 
@@ -1490,7 +1460,7 @@ function isCheckboxByNumber(checkbox_id, number) {
     if (number == "1") boolean = true;
 
     if (checkbox_id != "") {
-        $("#"+checkbox_id).attr("checked", boolean);
+        $("#" + checkbox_id).attr("checked", boolean);
     }
 }
 
@@ -1518,11 +1488,11 @@ function isCheckedCheckbox(checkboxId, type) {
     var boolean = false;
     if (checkboxId != "") {
         if (type == "ID") {
-            if ($("#"+checkboxId).is(":checked")) {
+            if ($("#" + checkboxId).is(":checked")) {
                 boolean = true;
             }
         } else if (type == "NAME") {
-            if ($("input[name="+checkboxId+"]").is(":checked")) {
+            if ($("input[name=" + checkboxId + "]").is(":checked")) {
                 boolean = true;
             }
         }
@@ -1533,7 +1503,7 @@ function isCheckedCheckbox(checkboxId, type) {
 function getSelectboxValue(tagId) {
     var selectedvalue = "";
     if (tagId != "") {
-        selectedvalue = $("#"+tagId+" option:selected").val();
+        selectedvalue = $("#" + tagId + " option:selected").val();
     }
     return selectedvalue;
 }
@@ -1541,7 +1511,7 @@ function getSelectboxValue(tagId) {
 function getInputTextValue(tagId) {
     var inputValue = "";
     if (tagId != "") {
-        inputValue = $("#"+tagId).val();
+        inputValue = $("#" + tagId).val();
     }
     return inputValue;
 }
@@ -1549,14 +1519,14 @@ function getInputTextValue(tagId) {
 function getInnerHtmlValue(tagId) {
     var innerHtmlValue = "";
     if (tagId != "") {
-        innerHtmlValue = $("#"+tagId).html();
+        innerHtmlValue = $("#" + tagId).html();
     }
     return innerHtmlValue;
 }
 
 function focusInputText(tagId) {
     if (tagId != "") {
-        $("#"+tagId).focus();
+        $("#" + tagId).focus();
     }
 }
 
@@ -1632,8 +1602,8 @@ function gfn_isData(val, if_data, true_data, false_data) {
 }
 
 function form_submit(form_id, action_url) {
-    $("#"+form_id).attr("action", action_url);
-    $("#"+form_id).submit();
+    $("#" + form_id).attr("action", action_url);
+    $("#" + form_id).submit();
 }
 
 function convertUnixTime(YYYY_MM_DD_HH_MM_SS) {
@@ -1652,7 +1622,7 @@ function compareTime(now, afterTime) {
 
 function compareTime_startend(now, start, end) {
     var boolean = false;
-    if( (now >= start) && (now <= end)) {
+    if ((now >= start) && (now <= end)) {
         boolean = true;
     }
     return boolean;
@@ -1673,9 +1643,9 @@ function isAfterToday(today, compareTime) {
 
 function gfn_display(tagId, showYn) {
     if (showYn == true) {
-        $("#"+tagId).show();
+        $("#" + tagId).show();
     } else if (showYn == false) {
-        $("#"+tagId).hide();
+        $("#" + tagId).hide();
     }
 }
 
@@ -1685,32 +1655,32 @@ function gfn_display(tagId, showYn) {
  * @param strLen(제한길이 수)
  */
 function gfn_chkStrLength(inputId, strLen) {
-    if ($("#"+inputId).val().length > strLen) {
-        alert("알림 내용은 "+ strLen + "자까지 입력가능합니다.");
-        $("#"+inputId).val($("#"+inputId).val().substring(0, strLen));
+    if ($("#" + inputId).val().length > strLen) {
+        alert("알림 내용은 " + strLen + "자까지 입력가능합니다.");
+        $("#" + inputId).val($("#" + inputId).val().substring(0, strLen));
         return;
     }
 }
 
 //주별일때 주별 날짜 계산
-var getStartDayAndEndDay = function(val1, val2) {
+var getStartDayAndEndDay = function (val1, val2) {
     var str;
 
     if (40 <= val2 && val2 <= 52) {
-        val1 = val1-1;
+        val1 = val1 - 1;
     }
-    if (val2 >= 1 && val2 <= 12)  {
+    if (val2 >= 1 && val2 <= 12) {
         val2 = val2 - 1;
     }
 
     var startDate = makeYYYY_MM_DD(find_start_week(val1, val2));
     var splitStartDate = startDate.split("-");
-    var startDay = splitStartDate[1]+"-"+splitStartDate[2];
+    var startDay = splitStartDate[1] + "-" + splitStartDate[2];
 
     var endDate = makeYYYY_MM_DD(find_end_week(val1, val2));
     var splitEndDate = endDate.split("-");
-    var endDay = splitEndDate[1]+"-"+splitEndDate[2]
-    str = startDay+" ~ "+endDay;
+    var endDay = splitEndDate[1] + "-" + splitEndDate[2]
+    str = startDay + " ~ " + endDay;
     return str;
 }
 
@@ -1719,15 +1689,15 @@ var getStartDayAndEndDay = function(val1, val2) {
  * @example
  * <pre>
  * var display = new Display();
- * display.show("html id");		html영역 보여주기
- * display.hide("html id");		html영역 숨기기
+ * display.show("html id");        html영역 보여주기
+ * display.hide("html id");        html영역 숨기기
  * </pre>
  */
-var Display = function() {
-    this.show = function(tagId) {
+var Display = function () {
+    this.show = function (tagId) {
         $("#" + tagId).show();
     };
-    this.hide = function(tagId) {
+    this.hide = function (tagId) {
         $("#" + tagId).hide();
     };
 }
@@ -1735,7 +1705,7 @@ var Display = function() {
 function getClassValues(className) {
     var values = [];
     if (className != "") {
-        $("." + className).each(function() {
+        $("." + className).each(function () {
             values.push($(this).val());
         });
     }
@@ -1745,7 +1715,7 @@ function getClassValues(className) {
 function getClassValue(className) {
     var value;
     if (className != "") {
-        $("." + className).each(function() {
+        $("." + className).each(function () {
             value = $(this).val();
         });
     }
@@ -1756,34 +1726,37 @@ function getClassValue(className) {
 function viewLoadingMessage() {
     dwr.util.useLoadingMessage(comment.load_data);
 }
+
 //input file 값 받아오기
 function getFileData(fileId) {
     var data = new FormData();
-    $.each($("#" + fileId)[0].files, function(i, file) {
+    $.each($("#" + fileId)[0].files, function (i, file) {
         data.append(fileId, file);
     });
     return data;
 }
+
 //input file 배열값 받아오기
 function getFileDatas(tagName) {
     var data = new FormData();
-    var cnt = $("input[name="+tagName+"]").length;
-    for (var i=0; i<cnt; i++) {
-        data.append(fileId+"-"+i, $("input[name="+tagName+"]")[i].files[0]);
+    var cnt = $("input[name=" + tagName + "]").length;
+    for (var i = 0; i < cnt; i++) {
+        data.append(fileId + "-" + i, $("input[name=" + tagName + "]")[i].files[0]);
     }
     return data;
 }
+
 //ajax 파일 전송
 function ajaxFileUpload(callUrl, fileData, pageReloadYn) {
     $.ajax({
-        url : callUrl,
-        method : "post",
-        dataType : "json",
-        data : fileData,
-        cache : false,
-        processData : false,
-        contentType : false,
-        success : function (data) {
+        url: callUrl,
+        method: "post",
+        dataType: "json",
+        data: fileData,
+        cache: false,
+        processData: false,
+        contentType: false,
+        success: function (data) {
             if (data.result == "1") {
                 alert(comment.success_process);
                 if (pageReloadYn == true) {
@@ -1793,7 +1766,7 @@ function ajaxFileUpload(callUrl, fileData, pageReloadYn) {
                 alert(comment.error);
             }
         },
-        error : function (request, status, error) {
+        error: function (request, status, error) {
             alert(comment.error);
             return;
         }
@@ -1810,71 +1783,62 @@ function ajaxFileUpload(callUrl, fileData, pageReloadYn) {
  * var map = new SOFOHashMap();
  * map.put("key","value");
  * map.get("key");
- * map.length;			길이 반환
- * map.keys();			모든 키 객체반환
- * map.values():		    모든 값 객체반환
+ * map.length;            길이 반환
+ * map.keys();            모든 키 객체반환
+ * map.values():            모든 값 객체반환
  * map.toQuaryString([option]);   key=value[option] 문자열반환
- * map.clear();			초기화
- * map.next();			다음 객체 반환
+ * map.clear();            초기화
+ * map.next();            다음 객체 반환
  * map.indexValue(index);위치로 값 찾기
- * map.splice(key);		key 삭제
- * map.point(key);		key 의 위치반환
+ * map.splice(key);        key 삭제
+ * map.point(key);        key 의 위치반환
  * </pre>
  */
-var SOFOHashMap = function()
-{
+var SOFOHashMap = function () {
     this.obj = [];
     this.length = 0;
 
-    this.put = function(key, value)
-    {
-        if( this.obj[key] == null )this.length++;
+    this.put = function (key, value) {
+        if (this.obj[key] == null) this.length++;
         this.obj[key] = value;
     };
 
-    this.get = function(key)
-    {
+    this.get = function (key) {
         return this.obj[key];
     };
 
-    this.keys = function()
-    {
+    this.keys = function () {
         var keys = [];
-        for ( var property in this.obj ) keys.push(property);
+        for (var property in this.obj) keys.push(property);
         return keys;
     };
 
-    this.values = function()
-    {
+    this.values = function () {
         var values = [];
-        for ( var property in this.obj ) values.push(this.obj[property]);
+        for (var property in this.obj) values.push(this.obj[property]);
         return values;
     };
 
-    this.toQueryString = function(divMark)
-    {
+    this.toQueryString = function (divMark) {
         var divMark = (typeof divMark == "undefined") ? "&" : divMark;
         var quaryString = "";
         var key = this.keys();
         var value = this.values();
-        if ( this.length < 1 ) return "";
+        if (this.length < 1) return "";
 
-        for( var i = 0 ; i < this.length ; i++ )
-        {
-            if ( quaryString != "" )
+        for (var i = 0; i < this.length; i++) {
+            if (quaryString != "")
                 quaryString += divMark;
-            quaryString += 	key[i] +"="+ value[i];
+            quaryString += key[i] + "=" + value[i];
         }
         return quaryString;
     };
 
-    this.remove = function(index)
-    {
+    this.remove = function (index) {
         var keys = this.keys();
         keys.splice(index, 1);
-        var temp =[];
-        for ( var i = 0 ; i < keys.length ; i++ )
-        {
+        var temp = [];
+        for (var i = 0; i < keys.length; i++) {
             temp[keys[i]] = this.obj[keys[i]];
         }
         this.obj = temp;
@@ -1882,24 +1846,20 @@ var SOFOHashMap = function()
         index--;
     };
 
-    this.indexOf = function(key)
-    {
+    this.indexOf = function (key) {
         var cnt = 0;
-        for ( var i in this.obj )
-        {
-            if ( key == i ) return cnt;
+        for (var i in this.obj) {
+            if (key == i) return cnt;
             cnt++;
         }
     };
 
-    this.splice = function(spliceIndex)
-    {
+    this.splice = function (spliceIndex) {
         var keys = this.keys();
         keys.splice(spliceIndex, 1);
-        var temp =[];
-        for ( var i = 0 ; i < keys.length ; i++ )
-        {
-            temp[keys[i]]=this.obj[keys[i]];
+        var temp = [];
+        for (var i = 0; i < keys.length; i++) {
+            temp[keys[i]] = this.obj[keys[i]];
         }
         this.obj = temp;
         this.length = keys.length;
@@ -1907,27 +1867,22 @@ var SOFOHashMap = function()
     };
 
 
-    this.point = function(key)
-    {
+    this.point = function (key) {
         var cnt = 0;
-        for ( var i in this.obj )
-        {
-            if ( key == i ) return cnt;
+        for (var i in this.obj) {
+            if (key == i) return cnt;
             cnt++;
         }
     };
 
-    this.clear = function()
-    {
+    this.clear = function () {
         this.obj = [];
         this.length = 0;
     };
 
     var index = 0;
-    this.next = function()
-    {
-        if ( index == this.length )
-        {
+    this.next = function () {
+        if (index == this.length) {
             index = 0;
             return -1;
         }
@@ -1937,8 +1892,7 @@ var SOFOHashMap = function()
         return currentValue;
     };
 
-    this.indexValue = function(Idx)
-    {
+    this.indexValue = function (Idx) {
         var keys = this.keys();
         return this.obj[keys[Idx]];
     };
@@ -1968,23 +1922,23 @@ function phoneNumber_sum(phone1, phone2, phone3) {
 }
 
 //라디오버튼 값가져오기
-function get_radio_value(name){
-    var radio_value = $(":input:radio[name= "+ name +" ]:checked").val();
+function get_radio_value(name) {
+    var radio_value = $(":input:radio[name= " + name + " ]:checked").val();
     return radio_value;
 }
 
 //폰번호 가져오기
-function get_allphonenum(phone1,phone2,phone3) {
-    var phonenum1 = $("#"+phone1).val();
-    var phonenum2 = $("#"+phone2).val();
-    var phonenum3 = $("#"+phone3).val();
+function get_allphonenum(phone1, phone2, phone3) {
+    var phonenum1 = $("#" + phone1).val();
+    var phonenum2 = $("#" + phone2).val();
+    var phonenum3 = $("#" + phone3).val();
     var all_phonenum = phonenum1 + phonenum2 + phonenum3;
     return all_phonenum;
 }
 
 //쌍따옴표 제거
 function remove_double_quotation(val) {
-    var removed_str =   val.replace(/"/g, "");
+    var removed_str = val.replace(/"/g, "");
     return removed_str;
 }
 
@@ -1997,46 +1951,49 @@ function uncomma(str) {
     str = String(str);
     return str.replace(/[^\d]+/g, '');
 }
+
 //태그 네임 배열의 마지막값 가져오기
 function get_array_last_value_by_name(type, name) {
     var val = "";
     if (type == "select") {
-        val = $("select[name="+ '"' + name + '"' + "]").last().val();
+        val = $("select[name=" + '"' + name + '"' + "]").last().val();
     } else if (type == "input") {
-        val = $("input[name="+ '"' + name + '"' + "]").last().val();
+        val = $("input[name=" + '"' + name + '"' + "]").last().val();
     }
     return val;
 }
+
 //태그 네임 배열 값 가져오기
 function get_array_values_by_name(type, name) {
     var array = new Array();
     if (type == "select") {
-        $("select[name="+ '"' + name + '"' + "]").each(function () {
+        $("select[name=" + '"' + name + '"' + "]").each(function () {
             array.push($(this).val());
         });
     } else if (type == "input") {
-        $("input[name="+ '"' + name + '"' + "]").each(function () {
+        $("input[name=" + '"' + name + '"' + "]").each(function () {
             array.push($(this).val());
         });
     } else if (type == "span") {
-        $("span[name="+ '"' + name + '"' + "]").each(function () {
+        $("span[name=" + '"' + name + '"' + "]").each(function () {
             array.push($(this).val());
         });
     }
     return array;
 }
+
 //브라우저 종류 값 가져오기
 function get_browser_type() {
     var browser = "";
     var ua = window.navigator.userAgent;
-    if(ua.indexOf('MSIE') > 0 || ua.indexOf('Trident') > 0)
+    if (ua.indexOf('MSIE') > 0 || ua.indexOf('Trident') > 0)
         browser = "IE";
-    else if(ua.indexOf('Opera') > 0 || ua.indexOf('OPR') > 0)
+    else if (ua.indexOf('Opera') > 0 || ua.indexOf('OPR') > 0)
         browser = "Opera";
-    else if(ua.indexOf('Firefix') > 0)
+    else if (ua.indexOf('Firefix') > 0)
         browser = "Firefox";
-    else if(ua.indexOf('Safari') > 0) {
-        if(ua.indexOf('Chrome') > 0)
+    else if (ua.indexOf('Safari') > 0) {
+        if (ua.indexOf('Chrome') > 0)
             browser = "Chrome";
         else
             browser = "Safari";
@@ -2056,14 +2013,14 @@ function check_key() {
     var char_ASCII = event.keyCode;
 
     //숫자
-    if (char_ASCII >= 48 && char_ASCII <= 57 )
+    if (char_ASCII >= 48 && char_ASCII <= 57)
         return 1;
     //영어
-    else if ((char_ASCII>=65 && char_ASCII<=90) || (char_ASCII>=97 && char_ASCII<=122))
+    else if ((char_ASCII >= 65 && char_ASCII <= 90) || (char_ASCII >= 97 && char_ASCII <= 122))
         return 2;
     //특수기호
-    else if ((char_ASCII>=33 && char_ASCII<=47) || (char_ASCII>=58 && char_ASCII<=64)
-        || (char_ASCII>=91 && char_ASCII<=96) || (char_ASCII>=123 && char_ASCII<=126))
+    else if ((char_ASCII >= 33 && char_ASCII <= 47) || (char_ASCII >= 58 && char_ASCII <= 64)
+        || (char_ASCII >= 91 && char_ASCII <= 96) || (char_ASCII >= 123 && char_ASCII <= 126))
         return 4;
     //한글
     else if ((char_ASCII >= 12592) || (char_ASCII <= 12687))
@@ -2074,7 +2031,7 @@ function check_key() {
 
 /* 한글 & 영어만 입력가능한 기능 */
 function nonHangulSpecialKey() {
-    if(check_key() != 2) {
+    if (check_key() != 2) {
         event.returnValue = false;
         return;
     }
@@ -2097,23 +2054,28 @@ function getTimeStamp(name, check_mode) {
     var time = leadingZeros(d.getHours(), 2) + ':' +
         leadingZeros(d.getMinutes(), 2);
 
-    $("input[name='"+name+"']:checked").each(function() {
+    $("input[name='" + name + "']:checked").each(function () {
         var inputValue = $(this).val();
-        if($("#class_"+check_mode+"_"+inputValue).val() == ""){
-            $("#class_"+check_mode+"_"+inputValue).val(time);
+        if ($("#class_" + check_mode + "_" + inputValue).val() == "") {
+            $("#class_" + check_mode + "_" + inputValue).val(time);
         }
     });
 }
+
 // 몇일전 날짜 구하기
 function getDayAgo(dayCount) {
     var today = new Date();
-    var oldday = new Date(today - ( 3600000 * 24 * dayCount ));
+    var oldday = new Date(today - (3600000 * 24 * dayCount));
     var year = oldday.getFullYear();
     var month = oldday.getMonth() + 1;
     var day = oldday.getDate();
 
-    if (("" + month).length == 1) { month = "0" + month; }
-    if (("" + day).length   == 1) { day   = "0" + day;   }
+    if (("" + month).length == 1) {
+        month = "0" + month;
+    }
+    if (("" + day).length == 1) {
+        day = "0" + day;
+    }
 
     return year + "-" + month + "-" + day;
 }
@@ -2128,11 +2090,11 @@ function split_minute_getDay(day) {
 function getAnnual(registerDate) {
     var today = new Date();
     var dd = today.getDate();
-    var mm = today.getMonth()+1;
+    var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    if(dd<10) dd='0'+dd;
-    if(mm<10) mm='0'+mm;
-    var todeyDate = yyyy+'-' + mm+'-'+dd;
+    if (dd < 10) dd = '0' + dd;
+    if (mm < 10) mm = '0' + mm;
+    var todeyDate = yyyy + '-' + mm + '-' + dd;
 
     var arr1 = registerDate.split('-');
     var arr2 = todeyDate.split('-');
@@ -2144,17 +2106,17 @@ function getAnnual(registerDate) {
     var currMonth = currDay * 30;// 월 만듬
     var currYear = currMonth * 12; // 년 만듬
 
-    var driver_year = parseInt(diff/currYear);
+    var driver_year = parseInt(diff / currYear);
 
-    return parseInt(diff/currYear);
+    return parseInt(diff / currYear);
 }
 
 // 쿠키 생성
-function setCookie(cName, cValue, cDay){
+function setCookie(cName, cValue, cDay) {
     var expire = new Date();
     expire.setDate(expire.getDate() + cDay);
     cookies = cName + '=' + escape(cValue) + '; path=/ '; // 한글 깨짐을 막기위해 escape(cValue)를 합니다.
-    if(typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
+    if (typeof cDay != 'undefined') cookies += ';expires=' + expire.toGMTString() + ';';
     document.cookie = cookies;
 }
 
@@ -2164,14 +2126,15 @@ function getCookie(cName) {
     var cookieData = document.cookie;
     var start = cookieData.indexOf(cName);
     var cValue = '';
-    if(start != -1){
+    if (start != -1) {
         start += cName.length;
         var end = cookieData.indexOf(';', start);
-        if(end == -1)end = cookieData.length;
+        if (end == -1) end = cookieData.length;
         cValue = cookieData.substring(start, end);
     }
     return unescape(cValue);
 }
+
 //이메일 만들기
 function make_email(emailStr, emailDomain) {
     var email;
@@ -2182,18 +2145,19 @@ function make_email(emailStr, emailDomain) {
 }
 
 //이메일의 도메인명 구하기
-function get_email_domain(email){
-    if(email == null){
+function get_email_domain(email) {
+    if (email == null) {
         return;
     }
 
-    if(email.length == 0){
+    if (email.length == 0) {
         return;
     }
 
     var mail = email.split("@");
     return mail[1];
 }
+
 //마우스가 클릭되었을때 초기 메시지를 클리어
 function clearMessage(input_id) {
     if (input_id == null) return;
@@ -2203,6 +2167,7 @@ function clearMessage(input_id) {
         clearChk = false;
     }
 }
+
 //입력된 문자의 바이트 수를 체크 후 출력하기
 function checkByte(input_id, byte_message_id, limitByte) {
     var totalByte = 0;
@@ -2230,32 +2195,32 @@ function checkByte(input_id, byte_message_id, limitByte) {
  * if (check.value_compare_row_check(val1, val2, val3) == false) return;
  * </pre>
  */
-var check = function() {
+var check = function () {
     //input type=text 공백 체크
-    this.input = function(tagId, alertContent) {
-        if ($("#"+tagId).val() == "") {
+    this.input = function (tagId, alertContent) {
+        if ($("#" + tagId).val() == "") {
             alert(alertContent, tagId);
             focusInputText(tagId);
             return false;
         }
     };
     //input type=select 공백 체크
-    this.selectbox = function(tagId, alertContent) {
-        if ($("#"+tagId+" option:selected").val() == "") {
+    this.selectbox = function (tagId, alertContent) {
+        if ($("#" + tagId + " option:selected").val() == "") {
             alert(alertContent, tagId);
             focusInputText(tagId);
             return false;
         }
     };
     // 입력받은 변수의 공백 체크
-    this.value = function(val, alertContent) {
+    this.value = function (val, alertContent) {
         if (val == "" || val == undefined) {
             alert(alertContent);
             return false;
         }
     };
     //값 비교 체크
-    this.compare = function(compareVal1, compareVal2, alertContent) {
+    this.compare = function (compareVal1, compareVal2, alertContent) {
         if (Number(compareVal1) < Number(compareVal2)) {
             alert(alertContent);
             return false;
@@ -2278,12 +2243,12 @@ function value_compare_row_check(val, compare_val, alert_content) {
  * list_count : 리스트 개수
  * empty_comment : 개수가 없을때 보여질 멘트
  */
-var paging = function() {
-    this.count = function(sPage, cnt, paging_count, list_count, empty_comment) {
+var paging = function () {
+    this.count = function (sPage, cnt, paging_count, list_count, empty_comment) {
         if (cnt == "0") {
             gfn_printPageNum_new('0', paging_count, list_count, '1');
             gfn_emptyView("V", empty_comment);
-        }  else {
+        } else {
             if (new Number(cnt) < (list_count * sPage)) {
                 if (new Number(cnt) < (list_count * (sPage - 1))) {
                     sPage = 1;
@@ -2294,11 +2259,11 @@ var paging = function() {
         }
     };
 
-    this.count2 = function(sPage, cnt, paging_count, list_count, empty_comment) {
+    this.count2 = function (sPage, cnt, paging_count, list_count, empty_comment) {
         if (cnt == "0") {
             gfn_printPageNum_new2('0', paging_count, list_count, '1');
             gfn_emptyView2("V", empty_comment);
-        }  else {
+        } else {
             if (new Number(cnt) < (list_count * sPage)) {
                 if (new Number(cnt) < (list_count * (sPage - 1))) {
                     sPage = 1;
@@ -2309,11 +2274,11 @@ var paging = function() {
         }
     };
 
-    this.count3 = function(sPage, cnt, paging_count, list_count, empty_comment) {
+    this.count3 = function (sPage, cnt, paging_count, list_count, empty_comment) {
         if (cnt == "0") {
             gfn_printPageNum_new3('0', paging_count, list_count, '1');
             gfn_emptyView3("V", empty_comment);
-        }  else {
+        } else {
             if (new Number(cnt) < (list_count * sPage)) {
                 if (new Number(cnt) < (list_count * (sPage - 1))) {
                     sPage = 1;
@@ -2324,11 +2289,11 @@ var paging = function() {
         }
     };
 
-    this.count4 = function(sPage, cnt, paging_count, list_count, empty_comment) {
+    this.count4 = function (sPage, cnt, paging_count, list_count, empty_comment) {
         if (cnt == "0") {
             gfn_printPageNum_new4('0', paging_count, list_count, '1');
             gfn_emptyView4("V", empty_comment);
-        }  else {
+        } else {
             if (new Number(cnt) < (list_count * sPage)) {
                 if (new Number(cnt) < (list_count * (sPage - 1))) {
                     sPage = 1;
@@ -2344,7 +2309,7 @@ var paging = function() {
 function getJsonObjectFromDiv(divId) {
     var formdata = serializeDiv($('#' + divId), 'serializeArray');
     var data = {};
-    $(formdata ).each(function(index, obj){
+    $(formdata).each(function (index, obj) {
         data[obj.name] = obj.value;
     });
     return data;

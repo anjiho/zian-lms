@@ -21,7 +21,6 @@
                 $target.css('display', '');
                 //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
                 $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
-                alert(target.result);
             }
             reader.readAsDataURL(html.files[0]);
         }
@@ -30,12 +29,13 @@
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
+            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     var result = cmpList.result;
-                    var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0)'  class='btn btn-success btn-sm' style='float: right'>추가</button>";
-                    var posListBtn = "  <button type=\"button\" class=\"btn btn-info\" onclick=\"changeBannerList("+i+");\">순서변경저장</button>";
+                    var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
+                    var posListBtn = "  <button type=\"button\" class=\"btn btn-outline-info btn-sm float-right mr-3 mb-3\" onclick=\"changeBannerList("+i+");\">순서변경저장</button>";
                     if(result.name){
                         var bannerNameHtml = "<div class='card'>";
                         bannerNameHtml += '<div class=\'card-body\'>';
@@ -53,13 +53,13 @@
                     var bannerContentHtml = "<table class='table'  id='dragtable_"+i+"' cellspacing='0' cellpadding='2'>";
                     bannerContentHtml += '<thead>';
                     bannerContentHtml += ' <tr>';
-                    bannerContentHtml += '<th>타이틀</th>';
-                    bannerContentHtml += '<th>이미지</th>';
-                    bannerContentHtml += '<th>배경이미지</th>';
-                    bannerContentHtml += '<th>배경색상</th>';
-                    bannerContentHtml += '<th>새창열기</th>';
-                    bannerContentHtml += '<th>링크URL</th>';
-                    bannerContentHtml += '<th></th>';
+                    bannerContentHtml += '<th width="25%">타이틀</th>';
+                    bannerContentHtml += '<th width="25%">이미지명</th>';
+                    //bannerContentHtml += '<th width="10%">배경이미지</th>';
+                    //bannerContentHtml += '<th width="10%">배경색상</th>';
+                    bannerContentHtml += '<th width="10%">새창열기</th>';
+                    bannerContentHtml += '<th width="20%">링크URL</th>';
+                    bannerContentHtml += '<th width="10%"></th>';
                     bannerContentHtml += '</tr>';
                     bannerContentHtml += '</thead>';
                     bannerContentHtml += "<tbody id='dataList"+i+"'></tbody>";
@@ -78,20 +78,20 @@
                     var dataList =  "dataList"+i;
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
-                        var btn = '<button type="button" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')" class="btn btn-danger btn-sm">삭제</button>';
+                        var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm">삭제</button>';
                         var bitText = "";
 
-                        if(cmpList1.valueBit1 == "1") bitText = "O";
-                        else bitText = "X";
+                        if(cmpList1.valueBit1 == "1") bitText = "<span style='color: blue;'>O</span>";
+                        else bitText = "<span style='color: red;'>X</span>";
 
                         if (cmpList1 != undefined) {
                             var cellData = [
                                 function(data) {return cmpList1.value5 == null ? "-" : cmpList1.value5;},
-                                function(data) {return cmpList1.value1 == null ? "-" : cmpList1.value1;},
-                                function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
-                                function(data) {return cmpList1.value3 == null ? "-" : cmpList1.value3;},
+                                function(data) {return cmpList1.value1 == null ? "-" : fn_clearFilePath(cmpList1.value1);},
+                                //function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
+                                //function(data) {return cmpList1.value3 == null ? "-" : cmpList1.value3;},
                                 function(data) {return cmpList1.valueBit1 == null ? "-" : bitText;},
-                                function(data) {return cmpList1.value4 == null ? "-" : cmpList1.value4;},
+                                function(data) {return cmpList1.value4 == null ? "-" : gfn_substr(cmpList1.value4, 1, 30)+"...";},
                                 function(data) {return btn;}
                             ];
                             dwr.util.addRows(dataList, [0], cellData, {
@@ -113,6 +113,7 @@
     function popup(val,ctgKey,pos) { //수정팝업
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
+            console.log(selList);
             $("#bannerKey").val(val);
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
@@ -120,27 +121,24 @@
             innerValue("title",selList.value5);
             $("#bannerColor").val(selList.value3);
             $("#bannerLink").val(selList.value4);
-            if (selList.valueBit1 == '1') $("#newPopYn").prop('checked', true);
-            else $("#newPopYn").prop('checked', false);
-
+            $("#newPopYn").prop('checked', selList.valueBit1) ;
             if (selList.value1 != null) { /*파일명보이게*/
                 $(document).ready(function () {
-                    $('.custom-file-control').html(selList.value1);
+                    $('.custom-file-control').html(fn_clearFilePath(selList.value1));
                 });
             }
         });
     }
     function popup_save(val,ctgKey,pos) { //추가팝업
-        //팝업 value값 초기화
-        $('#myModal').show();
         $("#title").val("");
         $("#bannerColor").val("");
         $("#bannerLink").val("");
+        $("#cma_image").css('display', 'none');
         $('.custom-file-control').html("");
         $("#bannerKey").val(val);
         $("#ctgKey").val(ctgKey);
         $("#pos").val(pos);
-        $("#newPopYn").prop('checked', false) ;
+        $("#newPopYn").prop('checked', false);
     }
     //팝업 Close 기능
     function close_pop(flag) {
@@ -154,23 +152,25 @@
             data.append('file_name', file);
         });
         var attachFile = fn_clearFilePath($('#attachFile').val());
-        var ctgKey     =  getInputTextValue("ctgKey");
+        var ctgKey     = getInputTextValue("ctgKey");
         var pos        = getInputTextValue("pos");
         var bannerKey  = getInputTextValue("bannerKey");
         var title      = getInputTextValue("title");
         var bannerColor= getInputTextValue("bannerColor");
         var bannerLink = getInputTextValue("bannerLink");
-        var newPopYn = "";
-        if($('input:checkbox[name="newPopYn1"]').is(":checked") == true) newPopYn = '1';
-        else{newPopYn = '0';}
+        var checkYn = "";
+        if($("input:checkbox[id='newPopYn']:checked").val()=='on'){
+            checkYn = '1';
+        }else{
+            checkYn = '0';
+        }
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
         data.append("ctgKey", ctgKey);
         data.append("value5", title);
         data.append("value3", bannerColor);
-        data.append("valueBit1", newPopYn);
+        data.append("valueBit1", checkYn);
         data.append("value4", bannerLink);
-
         if(confirm("저장하시겠습니까?")) {
             $.ajax({
                 url: "/file/bannerUpload",
@@ -290,79 +290,85 @@
 </div>
 <div class="container-fluid">
     <div class="form-group">
-        <div class="row">
-            <label  class="text-right control-label col-form-label">서브도메인</label>
+        <div class="row col-md-6">
+            <label class="text-left control-label col-form-label">서브도메인</label>
             <div class="col-sm-5">
-                <select id="sel_subDomain" class="form-control" onChange="changeBox2(this.value);">
-                    <option value="">선택</option>
+                <select id="sel_subDomain" class="form-control" onchange="changeBox2(this.value);">
+                    <option value="#">행정직학원</option>
                 </select>
             </div>
         </div>
     </div>
+
     <div id="bannerName"></div>
-    <!-- The Modal -->
-    <form name="popupModal" id="popupModal">
-        <div id="myModal" class="modal1">
-            <input type="hidden" id="bannerKey" value="">
-            <input type="hidden" id="pos" value="">
-            <input type="hidden" id="ctgKey" value="">
-            <!-- Modal content -->
-            <div class="modal-content1">
-                <div class="form-group row">
-                    <label class="text-right control-label col-form-label">타이틀</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="title">
-                    </div>
+
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 581px;">
+            <div class="modal-content">
+                <input type="hidden" id="bannerKey" value="">
+                <input type="hidden" id="pos" value="">
+                <input type="hidden" id="ctgKey" value="">
+                <div class="modal-header">
+                    <h5 class="modal-title">배너추가</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
-                <div class="form-group row">
-                    <label class="text-right control-label col-form-label">이미지</label>
-                    <div class="col-sm-9">
-                        <!--<label class="custom-file">
-                            <input type="file" id="attachFile" class="custom-file-input" onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
-                            <span class="custom-file-control"></span>
-                            <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
-                        </label>-->
+                <form>
+                    <input type="hidden" id="key" value="">
+                    <!-- modal body -->
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">타이틀</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="title">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">이미지</label>
+                            <div class="col-md-9">
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="attachFile"  onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
                                     <span class="custom-file-control custom-file-label"></span>
-                                     <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
+                                    <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
                                 </div>
-
-
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="text-right control-label col-form-label">배경색상</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="bannerColor">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="text-right control-label col-form-label">새창열기</label>
-                    <div class="col-sm-9">
-                        <div style="margin-top: -23px;">
-                            OFF
-                            <label class="switch">
-                                <input type="checkbox" id="newPopYn" name="newPopYn">
-                                <span class="slider"></span>
-                            </label>
-                            ON
+                            </div>
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">배경색상</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="bannerColor">
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">새창열기</label>
+                            <div class="col-sm-9">
+                                <div style="margin-top: -23px;">
+                                    OFF
+                                    <label class="switch">
+                                        <input type="checkbox" id="newPopYn" name="newPopYn" style="display:none;">
+                                        <span class="slider"></span>
+                                    </label>
+                                    ON
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">링크url</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="bannerLink">
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-info float-right m-l-2" onclick="modify();">저장</button>
                     </div>
-                </div>
-                <div class="form-group row">
-                    <label class="text-right control-label col-form-label">링크url</label>
-                    <div class="col-sm-9">
-                        <input type="text" class="form-control" id="bannerLink">
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <button type="button" class="btn btn-info" onclick="modify()">저장</button>
-                    <button type="button" class="btn btn-info"   onClick="close_pop();">닫기</button>
-                </div>
+                    <!-- //modal body -->
+                </form>
             </div>
         </div>
-    </form>
+    </div>
+
+
+
 </div>
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
