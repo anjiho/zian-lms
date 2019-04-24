@@ -43,7 +43,7 @@
         getProductSearchTypeSelectbox("l_productSearch");
 
         productManageService.getProductDetailInfo(gKey, "ACADEMY", function(info) {
-            console.log(info);
+
             /**
              * 학원강의 기본정보 가져오기
              */
@@ -69,17 +69,18 @@
              * 학원 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
-            var cnt = 1;
             dwr.util.addRows("optionList", productOptionInfo, [
                 function(data) {return getOptionSelectbox(data.kind, true);},
                 function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
                 function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
                 function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
-                function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
+                function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
+                //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                 function(data) {return "%"},
                 function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                function(data) {return cnt == 1 ? "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" disabled>삭제</button>" : "<button type=\"button\" onclick=\"optionDelete('optionDelete');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
             ], {escapeHtml:false});
+            $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
 
 
             /**
@@ -179,6 +180,7 @@
         $trNew.find("td input").eq(0).val('');
         $trNew.find("td input").eq(1).val('');
         $trNew.find("td input").eq(2).val('');
+        $trNew.find("td input").eq(3).val('');
         $trNew.find("td span").html('');
         $trNew.find("td button").attr('disabled', false);
     }
@@ -258,15 +260,41 @@
                         imageViewFile = parse.imageViewFilePath;
                     }
                     productManageService.updateGoodsInfo(data, data.gKey, imageListFile, imageViewFile,function (data) {
-                        location.reload();
+
                     });
                 }
             });
         }
     }
 
+    //옵션정보 수정
     function updateOptionInfo() {
+        var optionNames = get_array_values_by_name("select", "selOption[]");
+        var optionPrices = get_array_values_by_name("input", "price[]");
+        var sellPrices = get_array_values_by_name("input", "sellPrice[]");
+        var points = get_array_values_by_name("input", "point[]");
+        var expendPercents = get_array_values_by_name("input", "expendPercent[]");
 
+        var dataArr = new Array();
+        for (var i=0; i<optionNames.length; i++) {
+            var data = {
+                priceKey:'0',
+                gKey:'0',
+                kind:optionNames[i],
+                ctgKey:'0',
+                name:'0',
+                price:optionPrices[i],
+                sellPrice:sellPrices[i],
+                point:points[i],
+                extendPercent:expendPercents[i]
+            }
+            dataArr.push(data)
+        }
+        if(confirm("옵션정보를 수정 하시겠습니까?")){
+            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
+
+            });
+        }
     }
 
 
@@ -335,10 +363,18 @@
     }
 
     //옵션 - 할인률 계산
-    function saleInputPrice(extendPercent, sellPrice, priceKey) {
+    function saleInputPrice(val) {
+        var checkBtn = val;
+
+        var tr = checkBtn.parent().parent();
+        var td = tr.children();
+
+        var sellPrice = td.find("input").eq(0).val();
+        var extendPercent = td.find("input").eq(3).val();
+
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
-        var calcPrice = "sum_" + priceKey
-        innerHTML(calcPrice, sum);
+        td.find("span").html(sum);
+        //innerHTML(calcPrice, sum);
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
@@ -513,7 +549,7 @@
                 <!-- 2.옵션 Tab -->
                 <h3>옵션</h3>
                 <section>
-                    <input type="button" value="수정" onclick="">
+                    <input type="button" value="수정" onclick="updateOptionInfo();">
                     <div id="section2">
                         <table class="table" id="optionTable">
                             <input type="hidden" value="0" name="goodsTypeName">
