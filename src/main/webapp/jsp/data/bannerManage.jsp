@@ -8,6 +8,7 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
+
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -20,7 +21,7 @@
             reader.onload = function (e) {
                 $target.css('display', '');
                 //$target.css('background-image', 'url(\"' + e.target.result + '\")'); // 배경으로 지정시
-                $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; height: auto;" alt="" />');
+                $target.html('<img src="' + e.target.result + '" border="0" style="max-width:100%; margin-top: 5px;margin-bottom: 5px;height: auto;" alt="" />');
             }
             reader.readAsDataURL(html.files[0]);
         }
@@ -121,7 +122,7 @@
             innerValue("title",selList.value5);
             $("#bannerColor").val(selList.value3);
             $("#bannerLink").val(selList.value4);
-            $("#newPopYn").prop('checked', selList.valueBit1) ;
+            $("#newPopYn").prop('checked', selList.valueBit1);
             if (selList.value1 != null) { /*파일명보이게*/
                 $(document).ready(function () {
                     $('.custom-file-control').html(fn_clearFilePath(selList.value1));
@@ -208,6 +209,7 @@
                     pos : pos
                 };
                 arr.push(data);
+
             });
             dataManageService.changeBannerPosition(arr, function () {
                 location.reload();
@@ -221,7 +223,6 @@
                     ctgInfoKey : ctgInfoKey,
                     pos : pos
                 };
-
                 arr.push(data);
             });
             dataManageService.changeBannerPosition(arr, function () {
@@ -330,7 +331,7 @@
                                 <div class="custom-file">
                                     <input type="file" class="custom-file-input" id="attachFile"  onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
                                     <span class="custom-file-control custom-file-label"></span>
-                                    <div id="cma_image" style="width:30%;max-width:30%;border:1px solid #000;display:none;"></div>
+                                    <div id="cma_image" style="width:30%;max-width:30%;display:none;"></div>
                                 </div>
                             </div>
                         </div>
