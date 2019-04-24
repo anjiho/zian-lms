@@ -844,9 +844,7 @@
 
                             //강의목록 수정 팝업
                             function LectureCurriPopup(curriKey) {
-                                //$('#lectureListPopup').show();
-                                productManageService.getLectureCurriInfo(curriKey, function (info) {
-                                    console.log(info);
+                                productManageService.getLectureCurriInfo(curriKey, function (info) {;
                                     innerValue("curriKey", info.curriKey);
                                     innerValue("lectureName", info.name);//강의이름
                                     // //노출여부,샘플여부

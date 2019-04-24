@@ -6,7 +6,7 @@ import lombok.Data;
 @Data
 public class TCategoryOtherInfoVO {
 
-    private int ctgInfoKey;
+    private int ctgInfoKey;//테이블키값
 
     private int ctgKey;
 

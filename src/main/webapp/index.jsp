@@ -13,7 +13,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon icon -->
     <link rel="icon" type="image/png" sizes="16x16" href="common/assets/images/favicon.png">
-    <title>Matrix Template - The Ultimate Multipurpose admin template</title>
+    <title>지안에듀관리자</title>
     <!-- Custom CSS -->
     <link href="common/dist/css/style.min.css" rel="stylesheet">
     <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -88,6 +88,10 @@
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
         <div class="auth-box bg-dark border-top border-secondary">
             <div id="loginform">
+                <div class="text-center" style="margin-bottom: 20px;">
+                    <span style="font-size:20px;color: white;">지안에듀 관리자</span>
+                </div>
+
                 <form class="form-horizontal m-t-20" name="frm">
 
                     <input type="hidden" id="page_bgn" name="page_gbn">
@@ -95,7 +99,7 @@
                     <input type="hidden" id="userName" name="userName">
                     <input type="hidden" id="authority" name="authority">
 
-                    <div class="row p-b-30">
+                    <div class="row p-b-30" style="margin-bottom: 20px;">
                         <div class="col-12">
                             <div class="input-group mb-3">
                                 <div class="input-group-prepend">
@@ -107,45 +111,20 @@
                                 <div class="input-group-prepend">
                                     <span class="input-group-text bg-warning text-white" id="basic-addon2"><i class="ti-pencil"></i></span>
                                 </div>
-                                <input type="password" id="userPass" class="form-control form-control-lg" placeholder="비밀번호" aria-label="Password" aria-describedby="basic-addon1" required="">
+                                <input type="password" id="userPass" class="form-control form-control-lg" placeholder="비밀번호" aria-label="Password" aria-describedby="basic-addon1" required="" onkeypress="if(event.keyCode==13) {loginCheck(); return false;}">
                             </div>
                         </div>
                     </div>
                     <div class="row border-top border-secondary">
                         <div class="col-12">
                             <div class="form-group">
-                                <div class="p-t-20">
-                                    <button class="btn btn-info" id="to-recover" type="button"><i class="fa fa-lock m-r-5"></i> Lost password?</button>
-                                    <input type="button" class="btn btn-success float-right" onclick="loginCheck()" value="로그인">
+                                <div style="margin-bottom: 10px;"><!--onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}-->
+                                    <input type="button" class="btn btn-success float-right" style="width:100%" onclick="loginCheck();" value="로그인" >
                                 </div>
                             </div>
                         </div>
                     </div>
                 </form>
-            </div>
-            <div id="recoverform">
-                <div class="text-center">
-                    <span class="text-white">Enter your e-mail address below and we will send you instructions how to recover a password.</span>
-                </div>
-                <div class="row m-t-20">
-                    <!-- Form -->
-                    <form class="col-12">
-                        <!-- email -->
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text bg-danger text-white" id="basic-addon1"><i class="ti-email"></i></span>
-                            </div>
-                            <input type="text" class="form-control form-control-lg" placeholder="Email Address" aria-label="Username" aria-describedby="basic-addon1">
-                        </div>
-                        <!-- pwd -->
-                        <div class="row m-t-20 p-t-20 border-top border-secondary">
-                            <div class="col-12">
-                                <a class="btn btn-success" href="#" id="to-login" name="action">Back To Login</a>
-                                <button class="btn btn-info float-right" type="button" name="action">Recover</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
