@@ -5,6 +5,7 @@
 
 <script>
     function init() {
+        menuActive('menu-1', 3);
         getProductSearchSelectbox("l_searchSel");
     }
 

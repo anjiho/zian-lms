@@ -1,21 +1,19 @@
 $.sidebarMenu = function(menu) {
   var animationSpeed = 300,
-    subMenuSelector = '.sidebar-submenu';
+    //subMenuSelector = '.sidebar-submenu';
+      subMenuSelector = '.collapse';
 
-  $(menu).on('click', 'li a', function(e) {
-    //메뉴 권한 예외 처리 2018. 03. 30 안지호
+  $('#sidebarnav').on('click', 'li a', function(e) {
     var $this = $(this);
-    if ($this.attr("data") == 1) {
-      alert(comment.auth_error_menu);
-      return;
-    }
+
     var checkElement = $this.next();
 
     if (checkElement.is(subMenuSelector) && checkElement.is(':visible')) {
+
       checkElement.slideUp(animationSpeed, function() {
         checkElement.removeClass('menu-open');
       });
-      checkElement.parent("li").removeClass("active");
+     // checkElement.parent("li").removeClass("active");
     }
 
     //If the menu is not visible
@@ -33,13 +31,30 @@ $.sidebarMenu = function(menu) {
       checkElement.slideDown(animationSpeed, function() {
         //Add the class active to the parent li
         checkElement.addClass('menu-open');
-        parent.find('li.active').removeClass('active');
-        parent_li.addClass('active');
+        //parent.find('li.active').removeClass('active');
+        //parent_li.addClass('active');
       });
     }
     //if this isn't a link, prevent the page from being redirected
     if (checkElement.is(subMenuSelector)) {
       e.preventDefault();
     }
+  });
+}
+
+$.sidebarSubMenu = function() {
+
+  $('.sidebar-item').on('click', 'li', function(e) {
+    var subMenu = $('.collapse');
+    //console.log($this);
+    subMenu.find('li').removeClass('active');
+    subMenu.find('li').find('a').removeClass('active');
+
+    var $this = $(this);
+    $this.find('a').addClass('active');
+    var checkElement = $this.next();
+
+    checkElement.parent("li").removeClass('active');
+
   });
 }
