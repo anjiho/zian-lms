@@ -2321,3 +2321,12 @@ function pagingListCount() {
 
 
 
+function menuActive(mainMenuId, subMenuId, index) {
+    $("#" + mainMenuId).addClass('selected');
+    //$("#menu-0 > a").addClass('active');
+    $("#" + mainMenuId).find("a").eq(index).addClass('active');
+    $("#" + mainMenuId).find("ul").addClass('in');
+    //$("#menu-0 > ul").addClass('in');
+    $("#" + subMenuId).addClass('active');
+    $("#" + subMenuId).find("a").eq(index).addClass('active');
+}

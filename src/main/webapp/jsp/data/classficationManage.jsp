@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script>
+    function init() {
+        menuActive('menu-0', 'menu-0-0', 0);
+    }
     function saveClassfication(){ /* 분류저장 */
         var subject =  getInputTextValue("subject");
         if(subject != ""){

@@ -3,6 +3,9 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script>
+    function init() {
+        menuActive('menu-0', 'menu-0-1', 1);
+    }
     function saveClassfication(){ /* 분류저장 */
         var subject =  getInputTextValue("subject");
         alert(subject);

@@ -8,13 +8,40 @@
 <!-- Left Sidebar-->
 
 <%@page contentType="text/html; charset=UTF-8" language="java" pageEncoding="UTF-8"%>
+<style>
+    hr {
+        border: 1;
+        height: 1px;
+        background-image: linear-gradient(left, #f0f0f0, #8c8c8c, #f0f0f0);
+    }
+
+</style>
+<script>
+    $(function() {
+        $('#sidebarnav li').on('click', function (e) {
+            $(this).children("a").addClass('active');
+            $(this).children("ul").addClass('in');
+
+           // $(this).removeClass("active");
+            $(this).parents("ul:first").removeClass("active");
+            $(this).next("ul").removeClass("in");
+            //alert($(this).find("ul > li").hasClass("active"));
+            console.log(">>");
+            console.log($(this));
+            //$(this).find("ul").
+            //$(this).parents("a").removeClass("active");
+            $(this).find("ul > li > a").removeClass("active");
+
+
+        });
+    });
+</script>
 <aside class="left-sidebar" data-sidebarbg="skin5">
     <!-- Sidebar scroll-->
     <div class="scroll-sidebar">
         <!-- Sidebar navigation-->
         <nav class="sidebar-nav">
             <ul id="sidebarnav" class="p-t-30 ">
-<%--                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">기본관리</span></a>--%>
 <%--                    <ul aria-expanded="false" class="collapse  first-level">--%>
 <%--                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 기본정보 </span></a></li>--%>
 <%--                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 요약정보 </span></a></li>--%>
@@ -32,34 +59,40 @@
                             </ul>
                     </li>
                 -->
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">데이터관리</span></a>
+                <li class="sidebar-item" id="menu-0"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">데이터관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 카테고리관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'classficationSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 분류관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'subjectSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 과목관리 </span></a></li>
-                        <li class="sidebar-item"><a href="#"  class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 배너관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'bannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">배너관리</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'sideBannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">사이드바배너관리</span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 일정/검색어관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'examplanSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 시험일정관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'searchSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 검색어관리 </span></a></li>
+                        <li class="sidebar-item" id="menu-0-0"><a href="void(0)" onclick="goPage('dataManage', 'classficationSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 분류관리 </span></a></li>
+                        <li class="sidebar-item" id="menu-0-1"><a href="http://localhost:8080/dataManage?page_gbn=subjectSave" id='test1'  onclick="goPage('dataManage', 'subjectSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 과목관리 </span></a></li>
+                        <!--<li class="sidebar-item"><a href="#"  class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 배너관리 </span></a></li>-->
+                        <hr>
+                        <li class="sidebar-item" id="menu-0-2"><a href="void(0)" onclick="goPage('dataManage', 'bannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">배너관리</span></a></li>
+                        <li class="sidebar-item" id="menu-0-3"><a href="void(0)" onclick="goPage('dataManage', 'sideBannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">사이드바배너관리</span></a></li>
+                        <hr>
+                        <!--<li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 일정/검색어관리 </span></a></li>-->
+                        <li class="sidebar-item" id="menu-0-4"><a href="void(0)" onclick="goPage('dataManage', 'examplanSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 시험일정관리 </span></a></li>
+                        <li class="sidebar-item" id="menu-0-5"><a href="void(0)" onclick="goPage('dataManage', 'searchSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 검색어관리 </span></a></li>
+                        <hr>
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">상품관리</span></a>
+                <li class="sidebar-item"  id="menu-1"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">상품관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 동영상상품관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'playList'); return false;" class="sidebar-link style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'playSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 등록 </span></a></li>
-                        <li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 학원강의 상품관리 </span></a></li>
-                        <li class="sidebar-item"><a href="#" onclick="goPage('productManage', 'academyLectureList')" class="sidebar-link"><i class=""></i><span class="hide-menu">학원강의 목록</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu">학원강의 등록</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 도서관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 도서목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 도서등록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 모의고사관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사등록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 문제은행 </span></a></li>
+                        <!--<li class="sidebar-item" ><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 동영상상품관리 </span></a></li>-->
+                        <li class="sidebar-item"  id="menu-1-0"><a href="http://localhost:8080/productManage?page_gbn=playList" id='ggggg' onclick="goPage('productManage', 'playList'); return false;" class="sidebar-link style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 목록 </span></a></li>
+                        <li class="sidebar-item" id="menu-1-1"><a href="http://localhost:8080/productManage?page_gbn=playSave" id='sdfsdfsd' onclick="goPage('productManage', 'playSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 등록 </span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <!--<li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 학원강의 상품관리 </span></a></li>-->
+                        <li class="sidebar-item" id="menu-1-2"><a href="#" onclick="goPage('productManage', 'academyLectureList')" class="sidebar-link"><i class=""></i><span class="hide-menu">학원강의 목록</span></a></li>
+                        <li class="sidebar-item" id="menu-1-3"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu">학원강의 등록</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <!--<li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 도서관리 </span></a></li>-->
+                        <li class="sidebar-item" id="menu-1-4"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 도서목록 </span></a></li>
+                        <li class="sidebar-item" id="menu-1-5"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 도서등록 </span></a></li>
+                        <!--<li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 모의고사관리 </span></a></li>-->
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item" id="menu-1-6"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사목록 </span></a></li>
+                        <li class="sidebar-item" id="menu-1-7"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사등록 </span></a></li>
+                        <li class="sidebar-item" id="menu-1-8"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 문제은행 </span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-border-inside"></i><span class="hide-menu">프로모션상품관리</span></a>

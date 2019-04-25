@@ -479,6 +479,7 @@
 
     function playDetailList() { //동영상정보
         productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
+            console.log(">");
             console.log(selList);
             if (selList.productInfo) {/*---기본정보---*/
                 innerValue("name", selList.productInfo.name);//이름
