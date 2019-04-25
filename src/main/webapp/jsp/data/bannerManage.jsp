@@ -11,7 +11,7 @@
 
     });
     function init() {
-        menuActive('menu-0', 'menu-0-2', 2);
+        menuActive('menu-0', 2);
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {

@@ -2321,12 +2321,24 @@ function pagingListCount() {
 
 
 
-function menuActive(mainMenuId, subMenuId, index) {
+function menuActive(mainMenuId, index) {
+
+    $('.sidebar-item').on('click', 'li', function(e) {
+        var subMenu = $('.collapse');
+
+        subMenu.find('li').removeClass('active');
+        subMenu.find('li').find('a').removeClass('active');
+
+        var $this = $(this);
+        $this.parent().find('li').removeClass('active');
+        $this.find('a').addClass('active');
+
+        var checkElement = $this.next();
+        checkElement.parent("li").removeClass('active');
+
+    });
     $("#" + mainMenuId).addClass('selected');
-    //$("#menu-0 > a").addClass('active');
     $("#" + mainMenuId).find("a").eq(index).addClass('active');
     $("#" + mainMenuId).find("ul").addClass('in');
-    //$("#menu-0 > ul").addClass('in');
-    $("#" + subMenuId).addClass('active');
-    $("#" + subMenuId).find("a").eq(index).addClass('active');
+
 }

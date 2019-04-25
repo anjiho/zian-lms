@@ -47,8 +47,9 @@
         });
     });
 
-    //수정화면 최고 진입 시 데이터 출력하기
+    //수정화면 최초 진입 시 데이터 출력하기
     function init() {
+        menuActive('menu-1', 3);
         getProductSearchTypeSelectbox("l_productSearch");
 
         productManageService.getProductDetailInfo(gKey, "ACADEMY", function(info) {
@@ -182,6 +183,7 @@
                 getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
                 getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
                 innerValue("multiple", gfn_zeroToZero(productLectureInfo.multiple));//배수
+                innerValue("lecKey", productLectureInfo.lecKey);
             }
 
 
