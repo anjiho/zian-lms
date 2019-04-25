@@ -20,6 +20,7 @@
     <script src="common/js/common.js"></script>
     <script src="common/js/comPage.js"></script>
     <script src="common/js/selectbox.js"></script>
+    <script src="common/js/checkbox.js"></script>
 
     <script type='text/javascript' src='/dwr/engine.js'></script>
     <script type='text/javascript' src='/dwr/util.js'></script>

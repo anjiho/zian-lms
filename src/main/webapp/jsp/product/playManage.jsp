@@ -2,7 +2,6 @@
 <%@include file="/common/jsp/common.jsp" %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
-<script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 <script>
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");

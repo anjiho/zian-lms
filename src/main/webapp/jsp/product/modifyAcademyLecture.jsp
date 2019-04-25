@@ -6,6 +6,7 @@
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<!-- 강의교재 메뉴 팝업 관련 스크립트 include -->
 <script src="common/js/bookGiftListPopup.js"></script>
 <script>
     var gKey = '<%=gKey%>';
@@ -37,13 +38,20 @@
                 }
             }
         });
+
+        //탭 메뉴 색상 변경
+        $("#playForm ul").each(function(idx) {
+            var ul = $(this);
+            ul.find("li").addClass("done").attr("aria-selected", "false");
+            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
     });
 
+    //수정화면 최고 진입 시 데이터 출력하기
     function init() {
         getProductSearchTypeSelectbox("l_productSearch");
 
         productManageService.getProductDetailInfo(gKey, "ACADEMY", function(info) {
-
             /**
              * 학원강의 기본정보 가져오기
              */
@@ -69,26 +77,59 @@
              * 학원 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
-            dwr.util.addRows("optionList", productOptionInfo, [
-                function(data) {return getOptionSelectbox(data.kind, true);},
-                function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
-                function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
-                function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
-                function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
-                //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
-                function(data) {return "%"},
-                function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
-            ], {escapeHtml:false});
-            $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
+            if (productOptionInfo.length == 0) {
+                var cellData = [
+                    function() {return getOptionSelectbox("", true);},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
+                    function() {return "%"},
+                    function() {return "<span id='sum_0'></span>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                ];
+                dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
+                $('#optionList tr').eq(0).attr("style", "display:none");
 
+            } else {
+                dwr.util.addRows("optionList", productOptionInfo, [
+                    function(data) {return getOptionSelectbox(data.kind, true);},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
+                    //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
+                    function(data) {return "%"},
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                ], {escapeHtml:false});
+                $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
+            }
 
             /**
              * 학원 카테고리 정보 가져오기
              */
             var productCategoryInfo = info.productCategoryInfo;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-            var categoryCnt = 1;
+
+            if (productCategoryInfo.length == 0) {
+                var cellData = [
+                    function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                    function() {return "지안에듀";},
+                    function() {return nextIcon},
+                    function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                    function() {return nextIcon},
+                    function() {return defaultCategorySelectbox();},
+                    function() {return nextIcon},
+                    function() {return defaultCategorySelectbox();},
+                    function() {return nextIcon},
+                    function() {return defaultCategorySelectbox();},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                ];
+                dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+                $('#categoryList tr').eq(0).attr("style", "display:none");
+            }
+
             dwr.util.addRows("categoryList", productCategoryInfo, [
                 function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
                 function() {return "지안에듀";},
@@ -114,111 +155,177 @@
             /**
              * 학원 강좌정보 가져오기
              */
-            var productLectureInfo = info.productLectureInfo;
-            getNewSelectboxListForCtgKey("l_classGroup", "4309", productLectureInfo.classGroupCtgKey);
-            getNewSelectboxListForCtgKey2("l_subjectGroup", "70", productLectureInfo.subjectCtgKey);
-            getNewSelectboxListForCtgKey3("l_stepGroup", "202", productLectureInfo.stepCtgKey);
-            getLectureStatusSelectbox("status", productLectureInfo.status);//강좌정보- 진행상태
-            getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
-            getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
-            getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
-            getExamPrepareSelectbox("examYear", productLectureInfo.examYear);//시험대비년도 셀렉트박스
-            getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
-            getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
-            getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
-            innerValue("multiple", gfn_zeroToZero(productLectureInfo.multiple));//배수
+            if (info.productLectureInfo == null) {
+                getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
+                getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
+                getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
+                getLectureStatusSelectbox("status", "");//강좌정보- 진행상태
+                getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", "");//수강일수
+                getLectureCountSelectbox("lecTime", "");//강좌시간
+                getExamPrepareSelectbox("examYear", "");//시험대비년도 셀렉트박스
+                getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", "");//수강일수
+                getLectureCountSelectbox("lecTime", "");//강좌시간
+                innerValue("multiple", gfn_zeroToZero("0"));//배수
+            } else {
+                var productLectureInfo = info.productLectureInfo;
+                getNewSelectboxListForCtgKey("l_classGroup", "4309", productLectureInfo.classGroupCtgKey);
+                getNewSelectboxListForCtgKey2("l_subjectGroup", "70", productLectureInfo.subjectCtgKey);
+                getNewSelectboxListForCtgKey3("l_stepGroup", "202", productLectureInfo.stepCtgKey);
+                getLectureStatusSelectbox("status", productLectureInfo.status);//강좌정보- 진행상태
+                getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
+                getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
+                getExamPrepareSelectbox("examYear", productLectureInfo.examYear);//시험대비년도 셀렉트박스
+                getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
+                getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
+                innerValue("multiple", gfn_zeroToZero(productLectureInfo.multiple));//배수
+            }
+
 
             /**
              * 강사 목록 가져오기
              */
             var productTeacherInfo = info.productTeacherInfo;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-            for (var i = 0; i < productTeacherInfo.length; i++) {
-                var cmpList = productTeacherInfo[i]
+
+            if (productTeacherInfo.length == 0) {
                 var cellData = [
-                    function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
-                    function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
-                    function() {return cmpList.subjectName},
+                    function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
+                    function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
+                    function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
                     function() {return nextIcon},
-                    function() {return cmpList.teacherName},
-                    function() {return "<input type='text' name='calcRate[]' class='form-control' value='"+ cmpList.calculateRate +"'>"},
+                    function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
+                    function() {return "<input type='text' name='calcRate[]' class='form-control' >"},
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                $('#teacherList tr').eq(0).attr("style", "display:none");
+                $('#teacherList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
+                });
+            } else {
+                for (var i = 0; i < productTeacherInfo.length; i++) {
+                    var cmpList = productTeacherInfo[i]
+                    var cellData = [
+                        function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
+                        function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
+                        function() {return cmpList.subjectName},
+                        function() {return nextIcon},
+                        function() {return cmpList.teacherName},
+                        function() {return "<input type='text' name='calcRate[]' class='form-control' value='"+ cmpList.calculateRate +"'>"},
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    ];
+                    dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                }
+                $('#teacherList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
+                });
             }
-            $('#teacherList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(1).attr("style", "display:none");
-            });
 
             /**
-             * 그외 선택 항목 가져오기
+             * 강의교재 항목 가져오기
              */
             var productOtherInfo = info.productOtherInfo;
             //MockTitle
-            for (var i=0; i<productOtherInfo.length; i++) {
-                var cmpList = productOtherInfo[i];
-                for (var j=0; j<cmpList.length; j++) {
-                    if (cmpList[j].resType == "8") {
+            if (productOptionInfo.length == 0) {
 
-                    }
+            } else {
+                dwr.util.addRows("bookList", productOtherInfo[0], [
+                    function(data) {return data.goodsName;},
+                    function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
+                    function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    ], {escapeHtml:false});
+
+                for (var i=0; i<productOtherInfo[0].length; i++) {
+                    var cmpList = productOtherInfo[0][i];
+                    var valueBit = cmpList.valueBit;
+                    var resKey = cmpList.resKey;
+                    var checkboxId = "isBookMain_" + resKey;
+
+                    var isCheck = true;
+                    if (valueBit == "0") isCheck = false;
+                    isCheckbox(checkboxId, isCheck);
+
                 }
+                $('#bookList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
+                });
             }
         });
     }
 
     //옵션 추가 버튼
     function addProductOptionInfo() {
-        var num = $("input[name='price[]']").length;
-        var $tableBody = $("#optionTable").find("tbody"),
-            $trLast = $tableBody.find("tr:last"),
-            $trNew = $trLast.clone();
-        $trLast.after($trNew);
+        var fistTrStyle = $("#optionList tr").eq(0).attr("style");
 
-        $trNew.find("td select").val('');
-        $trNew.find("td input").eq(0).val('');
-        $trNew.find("td input").eq(1).val('');
-        $trNew.find("td input").eq(2).val('');
-        $trNew.find("td input").eq(3).val('');
-        $trNew.find("td span").html('');
-        $trNew.find("td button").attr('disabled', false);
+        if (fistTrStyle == "display:none") {
+            $('#optionList tr').eq(0).removeAttr("style", null);
+        } else {
+            var $tableBody = $("#optionTable").find("tbody"),
+                $trLast = $tableBody.find("tr:last"),
+                $trNew = $trLast.clone();
+            $trLast.after($trNew);
+
+            $trNew.find("td select").val('');
+            $trNew.find("td input").eq(0).val('');
+            $trNew.find("td input").eq(1).val('');
+            $trNew.find("td input").eq(2).val('');
+            $trNew.find("td input").eq(3).val('');
+            $trNew.find("td span").html('');
+            $trNew.find("td button").attr('disabled', false);
+            $trNew.find("td").eq(7).attr('style', "display:''");
+        }
     }
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var num = $("input[name='price[]']").length;
-        var $tableBody = $("#categoryTable").find("tbody"),
-            $trLast = $tableBody.find("tr:last"),
-            $trNew = $trLast.clone();
-        $trLast.after($trNew);
+        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
 
-        //var inputHidden = "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";
-        $trNew.find("td input").eq(0).val("");
-        $trNew.find("td").eq(1).html("지안에듀");
-        getCategoryNoTag('categoryTable','1183', '3');
-        $trNew.find("td").eq(5).html(defaultCategorySelectbox());
-        $trNew.find("td").eq(7).html(defaultCategorySelectbox());
-        $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+        if (fistTrStyle == "display:none") {
+            $('#categoryList tr').eq(0).removeAttr("style", null);
+        } else {
+            var $tableBody = $("#categoryTable").find("tbody"),
+                $trLast = $tableBody.find("tr:last"),
+                $trNew = $trLast.clone();
+            $trLast.after($trNew);
+
+            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td").eq(1).html("지안에듀");
+            getCategoryNoTag('categoryTable','1183', '3');
+            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(7).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+        }
     }
 
     //교사 추가 버튼
     function addTeacherInfo() {
-        var $tableBody = $("#teacherTable").find("tbody"),
-            $trLast = $tableBody.find("tr:last"),
-            $trNew = $trLast.clone();
-        $trLast.after($trNew);
+        var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
 
-        $trNew.find("td input").eq(0).val("");
-        $trNew.find("td input").eq(1).val("");
-        $trNew.find("td input").eq(2).val("");
+        if (fistTrStyle == "display:none") {
+            $('#teacherList tr').eq(0).removeAttr("style", null);
+        } else {
+            var $tableBody = $("#teacherTable").find("tbody"),
+                $trLast = $tableBody.find("tr:last"),
+                $trNew = $trLast.clone();
+            $trLast.after($trNew);
 
-        getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);
-        selectTeacherSelectboxNoTag('teacherTable', 4);
-    }
+            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td input").eq(1).val("");
+            $trNew.find("td input").eq(2).val("");
 
-    function test() {
-        var arr = get_array_values_by_name("input", "inputCtgKey[]");
+            getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);
+            selectTeacherSelectboxNoTag('teacherTable', 4);
+        }
     }
 
     //기본정보 수정
@@ -260,7 +367,7 @@
                         imageViewFile = parse.imageViewFilePath;
                     }
                     productManageService.updateGoodsInfo(data, data.gKey, imageListFile, imageViewFile,function (data) {
-
+                        isReloadPage(true);
                     });
                 }
             });
@@ -292,12 +399,50 @@
         }
         if(confirm("옵션정보를 수정 하시겠습니까?")){
             productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
-
+                isReloadPage(true);
             });
         }
     }
 
+    //카테고리정보 수정
+    function updateCategoryInfo() {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
 
+        if(confirm("카테고리를 수정 하시겠습니까?")){
+
+            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+
+            if (fistTrStyle == "display:none") {
+                productManageService.deleteTCategoryGoods(gKey, function(){
+                    isReloadPage(true);
+                });
+            } else {
+                var dataArr = new Array();
+                $.each(ctgKeys, function(index, key) {
+                    var data = {
+                        ctgGKey:0,
+                        ctgKey:key,
+                        gKey:0,
+                        pos:0
+                    };
+                    dataArr.push(data);
+                });
+                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
+                    isReloadPage(true);
+                });
+            }
+        }
+    }
+
+    //강좌정보 수정
+    function updateLectureInfo() {
+        if (confirm("강좌정보를 수정 하시겠습니까?")) {
+            var lectureObj = getJsonObjectFromDiv("section4");
+            productManageService.upsultTLec(lectureObj, gKey,function () {
+                isReloadPage(true);
+            });
+        }
+    }
 
     //강사목록 수정 버튼
     function updateTeacherList() {
@@ -305,60 +450,96 @@
         var subjectKeys = get_array_values_by_name("input", "subjectKeys[]");
         var calcRates = get_array_values_by_name("input", "calcRate[]");
 
-        var dataArr = new Array();
-        for (var i=0; i<teacherKeys.length; i++) {
-            var data = {
-                teacherKey : teacherKeys[i],
-                subjectKey : subjectKeys[i],
-                calcRate : calcRates[i]
+        if(confirm("강좌정보를 수정 하시겠습니까?")) {
+
+            var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
+
+            if (fistTrStyle == "display:none") {
+                productManageService.deleteTGoodsTeacherLinkByGkey(gKey, function(){
+                    location.reload();
+                });
+            } else {
+                var dataArr = new Array();
+                for (var i=0; i<teacherKeys.length; i++) {
+                    var data = {
+                        gTeacherKey:0,
+                        isPublicSubject:0,
+                        subjectCtgKey : subjectKeys[i],
+                        teacherKey : teacherKeys[i],
+                        calculateRate : calcRates[i],
+                        subjectName: "",
+                        teacherName: ""
+                    }
+                    dataArr.push(data);
+                }
+                productManageService.upsultTGoodTeacherLink(dataArr, gKey,function () {
+                    isReloadPage(true);
+                });
             }
-            console.log(data);
-            dataArr.push(data);
         }
     }
 
     //강의교재 수정 버튼
     function updateLectureBookList() {
         var bookKeys = get_array_values_by_name("input", "res_key[]");
-        var dataArr = new Array();
+        console.log(bookKeys);
+        if (confirm("강의교재 정보를 수정 하시겠습니까?")) {
+            var dataArr = new Array();
+            for (var i = 0; i < bookKeys.length; i++) {
+                var valueBit;
+                var isBookMainId = "isBookMain_" + bookKeys[i];
+                var isBookMain = $("input:checkbox[id=" + "'" + isBookMainId + "'" + "]").is(":checked");
 
-        for (var i=0; i<bookKeys.length; i++) {
-            var valueBit;
-            var isBookMainId = "isBookMain_" + bookKeys[i];
-            var isBookMain = $("input:checkbox[id=" + "'" + isBookMainId + "'" + "]").is(":checked");
-            //주교재 여부 값 변환
-            if (isBookMain) valueBit = 1;
-            else valueBit = 0;
+                //주교재 여부 값 변환
+                if (isBookMain) valueBit = 1;
+                else valueBit = 0;
 
-            var data = {
-                linkKey : 0,
-                reqKey : gKey,
-                resKey : bookKeys[i],
-                resType : 5,
-                pos : 0,
-                valueBit : valueBit
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey: bookKeys[i],
+                    resType: 5,
+                    pos: 0,
+                    valueBit: valueBit
+                }
+                dataArr.push(data);
             }
-            dataArr.push(data);
+            if (dataArr.length == 0) {
+                productManageService.deleteTLinkKeyByResType(gKey, 5, function() {
+                    isReloadPage(true);
+                });
+            } else {
+                productManageService.upsultTLinkKink(dataArr, gKey, function () {
+                    isReloadPage(true);
+                });
+            }
         }
-
     }
 
     //테이블 로우 삭제
     function deleteTableRow(tableId) {
+        $("#categoryTable > tbody > tr").length;
+
         if (tableId == "productOption") {
-            $('#optionTable > tbody:last > tr:last').remove();
+            if ($("#optionTable > tbody > tr").length == 1) {
+                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#optionTable > tbody:last > tr:last').remove();
+            }
         } else if (tableId == "productCategory") {
-            $('#categoryTable > tbody:last > tr:last').remove();
+            if ($("#categoryTable > tbody > tr").length == 1) {
+                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#categoryTable > tbody:last > tr:last').remove();
+            }
         } else if (tableId == "productTeacher") {
-            $('#teacherTable > tbody:last > tr:last').remove();
-        } else if(tableId == 'allMockTitleDelete'){
-            $('#allMockList > tbody:last > tr:last').remove();
-        } else if(tableId == 'examQuestionDelete'){
-            $('#examQuestionList > tbody:last > tr:last').remove();
-        } else if(tableId == 'bookTitleDelete'){
-            $('#bookList > tbody:last > tr:last').remove();
-        } else if(tableId == 'giftDelete'){
-            $('#giftList > tbody:last > tr:last').remove();
+            if ($("#teacherTable > tbody > tr").length == 1) {
+                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#teacherTable > tbody:last > tr:last').remove();
+            }
+        }  else if(tableId == 'productBook'){
+            $('#bookTable > tbody:last > tr:last').remove();
         }
     }
 
@@ -563,7 +744,8 @@
                                 <th scope="col" style="text-align:center;"></th>
                             </tr>
                             </thead>
-                            <tbody id="optionList"></tbody>
+                            <tbody id="optionList">
+                            </tbody>
                         </table>
                         <div class="mx-auto" style="width:5.5%">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="addProductOptionInfo();">추가</button>
@@ -575,7 +757,7 @@
                 <!-- 3.카테고리 목록 Tab -->
                 <h3>카테고리</h3>
                 <section>
-                    <input type="button" value="수정" onclick="test();">
+                    <input type="button" value="수정" onclick="updateCategoryInfo();">
                     <div id="section3">
                         <table class="table" id="categoryTable">
                             <input type="hidden" name="ctgGKey" value="0">
@@ -605,7 +787,7 @@
                 <!-- 4.강좌 정보 Tab -->
                 <h3>강좌정보</h3>
                 <section>
-                    <input type="button" value="수정" onclick="lectureInfoModify();">
+                    <input type="button" value="수정" onclick="updateLectureInfo();">
                     <div id="section4">
 
                         <input type="hidden" name="lecKey" id="lecKey">
@@ -707,10 +889,10 @@
                     <input type="button" value="수정" onclick="updateLectureBookList();">
                     <div id="section6">
                         <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
-                        <table class="table text-center table-hover" id="bookList">
+                        <table class="table text-center table-hover" id="bookTable">
                             <thead>
                             </thead>
-                            <tbody></tbody>
+                            <tbody id="bookList"></tbody>
                         </table>
                     </div>
                 </section>
@@ -788,18 +970,6 @@
     <div class="modal-body">
         <input type="hidden" id="curri_lecKey">
         <input type="hidden" id="curriKey">
-<%--                <div class="form-group row">--%>
-<%--                    <label class="col-sm-3 text-right control-label col-form-label">강좌 CODE</label>--%>
-<%--                    <div class="col-sm-9">--%>
-<%--                        <input type="text" id="lecCurriKey" value="<%=gKey%>" class="form-control" readonly>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
-<%--                <div class="form-group row">--%>
-<%--                    <label class="col-sm-3 text-right control-label col-form-label">강의 CODE</label>--%>
-<%--                    <div class="col-sm-9">--%>
-<%--                        <input type="text" id="curriKey" class="form-control" readonly>--%>
-<%--                    </div>--%>
-<%--                </div>--%>
         <div class="form-group row">
             <label class="col-sm-3 text-right control-label col-form-label">강의 이름</label>
             <div class="col-sm-9">
@@ -862,7 +1032,6 @@
                 <div class="custom-file">
                     <input type="file" class="custom-file-input dataAddFile" id="dataFile" name="dataFile" required>
                     <span class="custom-file-control2 custom-file-label"></span>
-<%--                            <span id="l_lectureFile"></span>--%>
                 </div>
             </div>
         </div>
@@ -872,34 +1041,6 @@
                 <input type="number" class="form-control" id="vodTime" name="vodTime">
             </div>
         </div>
-        <!--<div class="form-group row">
-            <label  class="col-sm-3 text-right control-label col-form-label">단원 선택</label>
-            <div class="col-sm-9">
-                <div>
-                    <select class="select2 form-control custom-select" style="width:24%">
-                        <option>준비중</option>
-                        <option value="#">2010</option>
-                        <option value="#">2011</option>
-                    </select>
-                    <select class="select2 form-control custom-select" style="width:24%">
-                        <option>준비중</option>
-                        <option value="#">2010</option>
-                        <option value="#">2011</option>
-                    </select>
-                    <select class="select2 form-control custom-select" style="width:24%">
-                        <option>준비중</option>
-                        <option value="#">2010</option>
-                        <option value="#">2011</option>
-                    </select>
-                    <select class="select2 form-control custom-select" style="width:24%">
-                        <option>준비중</option>
-                        <option value="#">2010</option>
-                        <option value="#">2011</option>
-                    </select>
-                </div>
-            </div>
-        </div>-->
-<%--        <button type="button" class="mt-3 mb-1 btn btn-info float-right" onclick="videoLectureSave();">저장</button>--%>
     </div>
     <!-- //modal body -->
 </div>
