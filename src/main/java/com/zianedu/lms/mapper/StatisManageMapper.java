@@ -7,9 +7,9 @@ import java.util.List;
 
 public interface StatisManageMapper {
 
-    List<StatisResultDTO> selectTotalStatisAtMonth(@Param("year") String year);
+    List<StatisResultDTO> selectTotalStatisAtMonth(@Param("year") String year, @Param("goodsType") int goodsType);
 
-    List<StatisResultDTO> selectTotalStatisAtYear();
+    List<StatisResultDTO> selectTotalStatisAtYear(@Param("goodsType") int goodsType);
 
-    List<StatisResultDTO> selectTotalStatisAtYearDay(@Param("month") String month);
+    List<StatisResultDTO> selectTotalStatisAtYearDay(@Param("month") String month, @Param("goodsType") int goodsType);
 }

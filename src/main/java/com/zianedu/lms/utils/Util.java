@@ -1,5 +1,6 @@
 package com.zianedu.lms.utils;
 
+import com.zianedu.lms.define.datasource.GoodsType;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
@@ -1015,7 +1016,7 @@ public class Util {
         SecurityUtil securityUtil = new SecurityUtil();
 
 
-        System.out.println(returnNow());
+        System.out.println(GoodsType.getGoodsTypeKey("ALL"));
 
 
     }
