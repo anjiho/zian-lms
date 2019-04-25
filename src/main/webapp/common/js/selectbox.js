@@ -297,6 +297,21 @@ function getOptionSelectbox(val) {
     return html;
 }
 
+function getOptionSelectboxAddTag(val, tagId) {
+    var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i=1; i<13; i++) {
+        if (i == val) {
+            html += "<option value="+i+" selected>"+ i +"개월</option>";
+        } else {
+            html += "<option value="+i+">"+ i +"개월</option>";
+        }
+    }
+    html += "</select>";
+    return html;
+    innerHTML(tagId, html);
+}
+
 function getCategoryNoTag(tableId, val, tdNum) {
     var nextTdNum = Number(tdNum)+2;
     var html = "<select id='sel_category' name='selCategory[]' onchange='changeCategory(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class='form-control'>";

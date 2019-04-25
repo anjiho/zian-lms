@@ -712,6 +712,24 @@ public class ProductManageService extends PagingSupport {
         }
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTLinkKeyByResType(int reqKey, int resType) {
+        if (reqKey == 0 && resType == 0) return;
+        productManageMapper.deleteTLinkKeyByResType(reqKey, resType);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTGoodsTeacherLinkByGkey(int gKey) {
+        if (gKey == 0) return;
+        productManageMapper.deleteTGoodsTeacherLinkByGkey(gKey);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTCategoryGoods(int gKey) {
+        if (gKey == 0) return;
+        productManageMapper.deleteTCategoryGoods(gKey);
+    }
+
     /**
      * 동영상 강의 저장
      * @param tLecCurri

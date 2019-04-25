@@ -77,16 +77,20 @@ function sendChildValue_2(val) {
     bookkListHtml     += " <div style=\"margin-top: -23px;\">";
     bookkListHtml     += "부교재";
     bookkListHtml     += " <label class=\"switch\">";
-    bookkListHtml     += " <input type='checkbox' id='isBookMain_"+ gKey + "' style='display:none;' >";
+    bookkListHtml     += " <input type='checkbox'  id='isBookMain_"+ gKey + "' style='display:none;' >";
     bookkListHtml     += "<span class=\"slider\" ></span>";
     bookkListHtml     += "</label>";
     bookkListHtml     += "주교재";
     bookkListHtml     += "  </div>";
     bookkListHtml     += "</div>";
     bookkListHtml     += "</td>";
+    bookkListHtml     += " <td>";
+    bookkListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+    bookkListHtml     += "</td>";
 
-    $('#bookList > tbody:first').append(bookkListHtml);//선택 모의고사 리스트 뿌리기
-    $('#bookList tr').each(function(){
+
+    $('#bookTable > tbody:first').append(bookkListHtml);//선택 모의고사 리스트 뿌리기
+    $('#bookTable tr').each(function(){
         var tr = $(this);
         //tr.children().eq(2).attr("style", "display:none");
     });
