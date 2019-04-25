@@ -36,7 +36,7 @@ public enum GoodsType {
                 return goodsType.goodsTypeKey;
             }
         }
-        return null;
+        return 0;
     }
 
     public static String getGoodsTypeStr(int goodsTypeKey) {
