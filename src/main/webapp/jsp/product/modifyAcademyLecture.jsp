@@ -210,7 +210,7 @@
                 });
             } else {
                 for (var i = 0; i < productTeacherInfo.length; i++) {
-                    var cmpList = productTeacherInfo[i]
+                    var cmpList = productTeacherInfo[i];
                     var cellData = [
                         function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
                         function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
