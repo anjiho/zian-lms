@@ -78,8 +78,8 @@
                 <li class="sidebar-item"  id="menu-1"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">상품관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <!--<li class="sidebar-item" ><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 동영상상품관리 </span></a></li>-->
-                        <li class="sidebar-item"  id="menu-1-0"><a href="http://localhost:8080/productManage?page_gbn=playList" id='ggggg' onclick="goPage('productManage', 'playList'); return false;" class="sidebar-link style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 목록 </span></a></li>
-                        <li class="sidebar-item" id="menu-1-1"><a href="http://localhost:8080/productManage?page_gbn=playSave" id='sdfsdfsd' onclick="goPage('productManage', 'playSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 등록 </span></a></li>
+                        <li class="sidebar-item"  id="menu-1-0"><a href="http://localhost:8080/productManage?page_gbn=playList" onclick="goPage('productManage', 'playList'); return false;" class="sidebar-link style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 목록 </span></a></li>
+                        <li class="sidebar-item" id="menu-1-1"><a href="http://localhost:8080/productManage?page_gbn=playSave" onclick="goPage('productManage', 'playSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상 등록 </span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <!--<li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 학원강의 상품관리 </span></a></li>-->
                         <li class="sidebar-item" id="menu-1-2"><a href="#" onclick="goPage('productManage', 'academyLectureList')" class="sidebar-link"><i class=""></i><span class="hide-menu">학원강의 목록</span></a></li>
@@ -174,11 +174,11 @@
                         <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 공지사항 </span></a></li>
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">통계</span></a>
+                <li class="sidebar-item" id="menu-7"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">통계</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 매출통계 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 상품통계 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원통계 </span></a></li>
+                        <li class="sidebar-item" ><a href="void(0)" onclick="goPage('statisManage', 'productStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 상품통계 </span></a></li>
+<%--                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 상품통계 </span></a></li>--%>
+<%--                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원통계 </span></a></li>--%>
                     </ul>
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">교수</span></a>

@@ -27,15 +27,26 @@ public class StatisManageService {
      * 차트 :  https://www.highcharts.com/demo/line-labels
      */
     @Transactional(readOnly = true)
-    public int[] getTotalStatisAtMonth(String searchYear, String goodsTypeStr) {
+    public int[] getTotalStatisAtMonth(String searchYear) {
         if ("".equals(searchYear)) return null;
 
         List<Integer>result = new ArrayList<>();
-        List<StatisResultDTO> list = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey(goodsTypeStr));
+        List<Integer>Videoresult = new ArrayList<>();
+        List<StatisResultDTO> list = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey("NEW"));
+        List<StatisResultDTO> videoList = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey("VIDEO"));
+        List<StatisResultDTO> academuList = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey("ACADEMY"));
+        List<StatisResultDTO> bookList = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey("BOOK"));
+
         if (list.size() > 0) {
             for (StatisResultDTO resultDTO : list) {
-                Integer price = Integer.parseInt(resultDTO.getPrice());
-                result.add(price);
+                Integer totalPrice = Integer.parseInt(resultDTO.getPrice());
+                result.add(totalPrice);
+            }
+        }
+        if (videoList.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                Integer videoPrice = Integer.parseInt(resultDTO.getPrice());
+                Videoresult.add(videoPrice);
             }
         }
         int[] arr = Ints.toArray(result);
