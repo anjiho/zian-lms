@@ -8,7 +8,7 @@
 
     function init() {
         getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-1', 'menu-1-0', 1);
+        menuActive('menu-1', 1);
     }
 
     function play_modify(gKey) {

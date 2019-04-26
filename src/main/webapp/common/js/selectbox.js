@@ -308,7 +308,6 @@ function getOptionSelectboxAddTag(val, tagId) {
         }
     }
     html += "</select>";
-    return html;
     innerHTML(tagId, html);
 }
 

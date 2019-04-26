@@ -23,15 +23,24 @@ function fn_search3(val) {
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
+                    var isShow = "";
+                    var isSell = "";
+                    var isFree = "";
+                    if(cmpList.isShow == '1') isShow = '<i class="mdi mdi-check" style="color:green;"></i>';
+                    else isShow = '<i class="mdi mdi-close" style="color: red"></i>';
+                    if(cmpList.isSell == '1') isSell = '<i class="mdi mdi-check" style="color:green;"></i>';
+                    else isSell = '<i class="mdi mdi-close" style="color: red"></i>';
+                    if(cmpList.isFree == '1') isFree = '<i class="mdi mdi-check" style="color:green;"></i>';
+                    else isFree = '<i class="mdi mdi-close" style="color: red"></i>';
 
                     var bookSelBtn = '<input type="button" id="addBookBtn" onclick="sendChildValue_2($(this))" value="선택" class="btn btn-outline-info mx-auto"/>';
                     if (cmpList != undefined) {
                         var cellData = [
                             function(data) {return '<input name="bookKey[]" value=' + "'" + cmpList.GKey + "'" + '>';},
                             function(data) {return cmpList.goodsName;},
-                            function(data) {return cmpList.isShow;},
-                            function(data) {return cmpList.isSell;},
-                            function(data) {return cmpList.isFree;},
+                            function(data) {return isShow;},
+                            function(data) {return isSell;},
+                            function(data) {return isFree;},
                             function(data) {return bookSelBtn;}
                         ];
                         dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});

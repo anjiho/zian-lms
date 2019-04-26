@@ -58,7 +58,7 @@
              */
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);   //상품이름
-            innerValue("indate", split_minute_getDay(productInfo.indate));   //등록일
+            innerValue("indate", split_minute_getDay(productInfo.indate));//등록일
             innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate)); //판매일
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
@@ -547,11 +547,12 @@
 
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
+        console.log(val);
         var checkBtn = val;
 
         var tr = checkBtn.parent().parent();
         var td = tr.children();
-
+        console.log(tr);
         var sellPrice = td.find("input").eq(0).val();
         var extendPercent = td.find("input").eq(3).val();
 
