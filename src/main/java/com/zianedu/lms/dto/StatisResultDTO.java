@@ -9,6 +9,8 @@ public class StatisResultDTO {
 
     private String price;
 
+    private int userCount;
+
     private String[] years;
 
     private long[] prices;
@@ -23,9 +25,12 @@ public class StatisResultDTO {
 
     public StatisResultDTO(){}
 
-    public StatisResultDTO(String[] years, long[] prices) {
+    public StatisResultDTO(String[] years, long[] totalPrices, long[] videoPrices, long[] academyPrices, long[] bookPrices) {
         this.years = years;
-        this.prices = prices;
+        this.totalPrices = totalPrices;
+        this.videoPrices = videoPrices;
+        this.academyPrices = academyPrices;
+        this.bookPrices = bookPrices;
     }
 
     public StatisResultDTO(long[] prices) {

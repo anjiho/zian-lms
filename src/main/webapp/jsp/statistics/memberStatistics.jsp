@@ -17,7 +17,7 @@
 
 <script>
     function init() {
-        menuActive('menu-7', 1);
+        menuActive('menu-7', 3);
 
         getExamYearSelectbox("l_year");
         getMonthsSelectbox("l_month");
@@ -39,18 +39,15 @@
             gfn_display("container2", false);
             gfn_display("container3", false);
 
-            statisManageService.getTotalStatisAtMonth(year, function(result) {
-                var totalPrice = result.totalPrices;
-                var videoPrice = result.videoPrices;
-                var academyPrice = result.academyPrices;
-                var bookPrice = result.bookPrices;
+            statisManageService.selectMemberRegStatisByMonth(year, function(result) {
+                var userCounts = result.userCounts;
 
                 Highcharts.chart('container', {
                     chart: {
                         type: 'line'
                     },
                     title: {
-                        text: '월간 상품통계' + '(' + year + ')'
+                        text: '월간 회원가입 통계' + '(' + year + ')'
                     },
                     // subtitle: {
                     //     text: 'Source: WorldClimate.com'
@@ -60,7 +57,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: '금액'
+                            text: '명'
                         }
                     },
                     plotOptions: {
@@ -75,17 +72,8 @@
                         enabled: false
                     },
                     series: [{
-                        name: '전체',
-                        data: totalPrice
-                    }, {
-                        name: '동영상',
-                        data: videoPrice
-                    }, {
-                        name: '학원',
-                        data: academyPrice
-                    }, {
-                        name: '도서',
-                        data: bookPrice
+                        name: '회원',
+                        data: userCounts
                     }]
                 });
             });
@@ -94,17 +82,15 @@
             gfn_display("container2", true);
             gfn_display("container3", false);
 
-            statisManageService.getTotalStatisAtYear(function(result) {
+            statisManageService.selectMemberRegStatisByYear(function(result) {
                 var yearList = result.years;
-                var totalPrice = result.totalPrices;
-                var videoPrice = result.videoPrices;
-                var academyPrice = result.academyPrices;
-                var bookPrice = result.bookPrices;
+                var userCounts = result.userCounts;
+
 
                 Highcharts.chart('container2', {
 
                     title: {
-                        text: '년간 상품통계'
+                        text: '년간 회원가입 통계'
                     },
 
                     // subtitle: {
@@ -113,7 +99,7 @@
 
                     yAxis: {
                         title: {
-                            text: '금액'
+                            text: '명'
                         }
                     },
                     legend: {
@@ -134,17 +120,8 @@
                     },
 
                     series: [{
-                        name: '전체',
-                        data: totalPrice
-                    }, {
-                        name: '동영상',
-                        data: videoPrice
-                    }, {
-                        name: '학원',
-                        data: academyPrice
-                    }, {
-                        name: '도서',
-                        data: bookPrice
+                        name: '회원',
+                        data: userCounts
                     }],
 
                     responsive: {
@@ -184,17 +161,14 @@
 
             var yyyyMM = makeYYYY_MM(year, month);
 
-            statisManageService.getTotalStatisAtDay(yyyyMM, function(result) {
+            statisManageService.selectMemberRegStatisByDay(yyyyMM, function(result) {
 
-                var totalPrice = result.totalPrices;
-                var videoPrice = result.videoPrices;
-                var academyPrice = result.academyPrices;
-                var bookPrice = result.bookPrices;
+                var userCounts = result.userCounts;
 
                 Highcharts.chart('container3', {
 
                     title: {
-                        text: '일별 상품통계' + '(' + yyyyMM + ')'
+                        text: '일별 회원가입 통계' + '(' + yyyyMM + ')'
                     },
 
                     // subtitle: {
@@ -203,7 +177,7 @@
 
                     yAxis: {
                         title: {
-                            text: '금액'
+                            text: '명'
                         }
                     },
                     legend: {
@@ -225,17 +199,8 @@
                     },
 
                     series: [{
-                        name: '전체',
-                        data: totalPrice
-                    }, {
-                        name: '동영상',
-                        data: videoPrice
-                    }, {
-                        name: '학원',
-                        data: academyPrice
-                    }, {
-                        name: '도서',
-                        data: bookPrice
+                        name: '회원',
+                        data: userCounts
                     }],
 
                     responsive: {
@@ -275,12 +240,12 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">상품통계</h4>
+            <h4 class="page-title">회원가입 통계</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">통계</li>
-                        <li class="breadcrumb-item active" aria-current="page">상품통계</li>
+                        <li class="breadcrumb-item active" aria-current="page">회원가입 통계</li>
                     </ol>
                 </nav>
             </div>

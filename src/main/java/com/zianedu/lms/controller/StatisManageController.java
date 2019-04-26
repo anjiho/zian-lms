@@ -23,6 +23,10 @@ public class StatisManageController {
 
         if("productStatistics".equals(page_gbn)) {
             mvc.setViewName("statistics/productStatistics");
+        } else if ("promotionStatistics".equals(page_gbn)) {
+            mvc.setViewName("statistics/promotionStatistics");
+        } else if ("memberStatistics".equals(page_gbn)) {
+            mvc.setViewName("statistics/memberStatistics");
         }
 
         return mvc;

@@ -17,7 +17,7 @@
 
 <script>
     function init() {
-        menuActive('menu-7', 1);
+        menuActive('menu-7', 2);
 
         getExamYearSelectbox("l_year");
         getMonthsSelectbox("l_month");
@@ -39,18 +39,17 @@
             gfn_display("container2", false);
             gfn_display("container3", false);
 
-            statisManageService.getTotalStatisAtMonth(year, function(result) {
-                var totalPrice = result.totalPrices;
-                var videoPrice = result.videoPrices;
-                var academyPrice = result.academyPrices;
-                var bookPrice = result.bookPrices;
+            statisManageService.selectPromotionStatisByMonth(year, function(result) {
+                var packagePrice = result.packagePrices;
+                var yearMemberPrice = result.yearMemberPrices;
+                var zianPassPrice = result.zianPassPrices;
 
                 Highcharts.chart('container', {
                     chart: {
                         type: 'line'
                     },
                     title: {
-                        text: '월간 상품통계' + '(' + year + ')'
+                        text: '월간 프로모션 통계' + '(' + year + ')'
                     },
                     // subtitle: {
                     //     text: 'Source: WorldClimate.com'
@@ -75,17 +74,14 @@
                         enabled: false
                     },
                     series: [{
-                        name: '전체',
-                        data: totalPrice
+                        name: '패키지',
+                        data: packagePrice
                     }, {
-                        name: '동영상',
-                        data: videoPrice
+                        name: '연간회원제',
+                        data: yearMemberPrice
                     }, {
-                        name: '학원',
-                        data: academyPrice
-                    }, {
-                        name: '도서',
-                        data: bookPrice
+                        name: '지안패스',
+                        data: zianPassPrice
                     }]
                 });
             });
@@ -94,17 +90,16 @@
             gfn_display("container2", true);
             gfn_display("container3", false);
 
-            statisManageService.getTotalStatisAtYear(function(result) {
+            statisManageService.selectPromotionStatisByYear(function(result) {
                 var yearList = result.years;
-                var totalPrice = result.totalPrices;
-                var videoPrice = result.videoPrices;
-                var academyPrice = result.academyPrices;
-                var bookPrice = result.bookPrices;
+                var packagePrice = result.packagePrices;
+                var yearMemberPrice = result.yearMemberPrices;
+                var zianPassPrice = result.zianPassPrices;
 
                 Highcharts.chart('container2', {
 
                     title: {
-                        text: '년간 상품통계'
+                        text: '년간 프로모션 통계'
                     },
 
                     // subtitle: {
@@ -134,17 +129,14 @@
                     },
 
                     series: [{
-                        name: '전체',
-                        data: totalPrice
+                        name: '패키지',
+                        data: packagePrice
                     }, {
-                        name: '동영상',
-                        data: videoPrice
+                        name: '연간회원제',
+                        data: yearMemberPrice
                     }, {
-                        name: '학원',
-                        data: academyPrice
-                    }, {
-                        name: '도서',
-                        data: bookPrice
+                        name: '지안패스',
+                        data: zianPassPrice
                     }],
 
                     responsive: {
@@ -184,17 +176,16 @@
 
             var yyyyMM = makeYYYY_MM(year, month);
 
-            statisManageService.getTotalStatisAtDay(yyyyMM, function(result) {
+            statisManageService.selectPromotionStatisByDay(yyyyMM, function(result) {
 
-                var totalPrice = result.totalPrices;
-                var videoPrice = result.videoPrices;
-                var academyPrice = result.academyPrices;
-                var bookPrice = result.bookPrices;
+                var packagePrice = result.packagePrices;
+                var yearMemberPrice = result.yearMemberPrices;
+                var zianPassPrice = result.zianPassPrices;
 
                 Highcharts.chart('container3', {
 
                     title: {
-                        text: '일별 상품통계' + '(' + yyyyMM + ')'
+                        text: '일별 프로모션 통계' + '(' + yyyyMM + ')'
                     },
 
                     // subtitle: {
@@ -225,17 +216,14 @@
                     },
 
                     series: [{
-                        name: '전체',
-                        data: totalPrice
+                        name: '패키지',
+                        data: packagePrice
                     }, {
-                        name: '동영상',
-                        data: videoPrice
+                        name: '연간회원제',
+                        data: yearMemberPrice
                     }, {
-                        name: '학원',
-                        data: academyPrice
-                    }, {
-                        name: '도서',
-                        data: bookPrice
+                        name: '지안패스',
+                        data: zianPassPrice
                     }],
 
                     responsive: {
@@ -275,12 +263,12 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">상품통계</h4>
+            <h4 class="page-title">프로모션 통계</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">통계</li>
-                        <li class="breadcrumb-item active" aria-current="page">상품통계</li>
+                        <li class="breadcrumb-item active" aria-current="page">프로모션 통계</li>
                     </ol>
                 </nav>
             </div>
