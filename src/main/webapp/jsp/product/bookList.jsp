@@ -2,16 +2,15 @@
 <%@include file="/common/jsp/common.jsp" %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
-
 <script>
     function init() {
-        menuActive('menu-1', 3);
         getProductSearchSelectbox("l_searchSel");
+        menuActive('menu-1', 'menu-1-4', 3);
     }
 
-    function goModifyAcademyLecture(gKey) {
+    function goModifyBook(gKey) {
         innerValue("gKey", gKey);
-        goPage("productManage","modifyAcademyLecture");
+        goPage("productManage","modifyBook");
     }
 
     function fn_search(val) {
@@ -25,17 +24,17 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        productManageService.getProductListCount(searchType, searchText, "ACADEMY", function (cnt) {
+        productManageService.getProductListCount(searchType, searchText, "BOOK", function (cnt) {
             paging.count(sPage, cnt, pagingListCount(), pagingListCount(), comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getProductList(sPage, pagingListCount(), searchType, searchText, "ACADEMY", function (selList) {
+            productManageService.getProductList(sPage, pagingListCount(), searchType, searchText, "BOOK", function (selList) {
                 if (selList.length == 0) return;
 
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return listNum--;},
                     // function(data) {return i+1;},
                     function(data) {return data.GKey;},
-                    function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyAcademyLecture(" + data.GKey + ");'>" + data.goodsName + "</a>";},
+                    function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyBook(" + data.GKey + ");'>" + data.goodsName + "</a>";},
                     function(data) {return split_minute_getDay(data.indate);},
                     function(data) {return data.isShow == 0 ? "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
                     function(data) {return data.isSell == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";;},
@@ -44,20 +43,16 @@
             });
         });
     }
-
 </script>
-<input type="hidden" id="sPage" >
-<input type="hidden" id="gKey" name="gKey" >
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">학원강의 목록</h4>
+            <h4 class="page-title">도서 목록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">학원강의 상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">학원강의 목록</li>
+                        <li class="breadcrumb-item">도서관리</li>
+                        <li class="breadcrumb-item active" aria-current="page">도서목록</li>
                     </ol>
                 </nav>
             </div>
@@ -103,11 +98,6 @@
         </div>
     </div>
 </div>
+
+
 <%@include file="/common/jsp/footer.jsp" %>
-<script>
-    var table = $('#zero_config').DataTable();
-    var info = table.page.info();
-    $('.page-link').click(function(){
-        //alert("1");
-    });
-</script>

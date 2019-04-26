@@ -74,3 +74,5 @@ input:checked + .slider {
     width: 50%; /* Could be more or less, depending on screen size */
 }
 /*팝업*/
+
+.wizard-content .wizard>.content{background: white}
