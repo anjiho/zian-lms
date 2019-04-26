@@ -174,11 +174,12 @@
                         <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 공지사항 </span></a></li>
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">통계</span></a>
+                <li class="sidebar-item" id="menu-7"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">통계</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 매출통계 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 상품통계 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원통계 </span></a></li>
+                        <li class="sidebar-item" ><a href="void(0)" onclick="goPage('statisManage', 'productStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 상품통계 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 프로모션 통계 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원가입 통계 </span></a></li>
+<%--                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원통계 </span></a></li>--%>
                     </ul>
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">교수</span></a>

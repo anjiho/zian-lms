@@ -116,6 +116,9 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.TeacherDetailDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.SmsSendListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.StatisResultDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.PromotionStatisDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MemberStatisDTO"/>
+
 
 	</allow>
 

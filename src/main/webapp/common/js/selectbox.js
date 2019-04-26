@@ -385,4 +385,25 @@ function getProductSearchTypeSelectbox(tagId) {
     });
 }
 
+function getExamYearSelectbox(tagId) {
+    selectboxService.getExamPrepareSelectbox(function (list) {
+        var html = "<select id='selYear' class='form-control' onchange=''>";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            html += "<option value="+list[i]+">"+ list[i]+"년</option>";
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+function getMonthsSelectbox(tagId) {
+    var html = "<select id='selMonth' class='form-control'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i=1; i<13; i++) {
+        html += "<option value="+i+">"+ i +"월</option>";
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
+}
 

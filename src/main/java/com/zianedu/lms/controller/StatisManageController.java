@@ -21,6 +21,14 @@ public class StatisManageController {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
 
+        if("productStatistics".equals(page_gbn)) {
+            mvc.setViewName("statistics/productStatistics");
+        } else if ("promotionStatistics".equals(page_gbn)) {
+            mvc.setViewName("statistics/promotionStatistics");
+        } else if ("memberStatistics".equals(page_gbn)) {
+            mvc.setViewName("statistics/memberStatistics");
+        }
+
         return mvc;
     }
 }

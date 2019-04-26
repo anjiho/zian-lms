@@ -1342,6 +1342,17 @@ function makeYYYY_MM_DD(val) {
     }
 }
 
+function makeYYYY_MM(year, month) {
+    var yyyy_mm = "";
+    if (year != "" && month != "") {
+        if (month < 10) {
+            month = "0" + month;
+        }
+        yyyy_mm = year + "-" + month;
+        return yyyy_mm;
+    }
+}
+
 function today() {
     var date = new Date();
 
