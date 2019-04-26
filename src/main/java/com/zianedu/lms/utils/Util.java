@@ -47,6 +47,12 @@ public class Util {
         return formatter.format(date);
     }
 
+    public static String getYearMonth(){
+        Date date = new Date();
+        SimpleDateFormat formatter =new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        return formatter.format(date);
+    }
+
     /**
      * null이인지 체크함.
      * @param str 체크할 대상
@@ -981,6 +987,42 @@ public class Util {
         return rewardPopcorn;
     }
 
+    // 두날짜의 개월수 차이 계산
+    public static int getMonthsDifference(String szSDate, String szEDate){
+
+        int sYear= Integer.parseInt(szSDate.substring(0,4));
+        int sMonth = Integer.parseInt(szSDate.substring(4,6));
+        int eYear = Integer.parseInt(szEDate.substring(0,4));
+        int eMonth = Integer.parseInt(szEDate.substring(4,6));
+        int month_diff = (eYear - sYear)* 12 + (eMonth - sMonth);
+
+        return month_diff;
+    }
+
+    public static String addDate(String dt, int m) throws Exception  {
+        SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
+
+        Calendar cal = Calendar.getInstance();
+        Date date = format.parse(dt);
+        cal.setTime(date);
+        cal.add(Calendar.MONTH, m);     //년 더하기
+
+        return format.format(cal.getTime());
+    }
+
+    public static String convertDateFormat(String date) throws Exception {
+        SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyymm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm");
+        Date originDate = fromDateFormat.parse(date);
+
+        String newDate = dateFormat.format(originDate);
+
+        return newDate;
+
+    }
+
+
+
     public static void main(String[] args) throws Exception {
 //        String host = "smtp.hiworks.com";
 //        final String username = "admin@ideepstudy.com";
@@ -1015,9 +1057,7 @@ public class Util {
         String str = "c7684301";
         SecurityUtil securityUtil = new SecurityUtil();
 
-
-        System.out.println(GoodsType.getGoodsTypeKey("ALL"));
-
+        System.out.println(convertDateFormat("201507"));
 
     }
 }

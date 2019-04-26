@@ -4,6 +4,8 @@ import com.zianedu.lms.define.datasource.*;
 import com.zianedu.lms.dto.SelectboxDTO;
 import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.SelectboxMapper;
+import com.zianedu.lms.utils.DateUtils;
+import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.SearchKeywordDomainVO;
 import com.zianedu.lms.vo.TCategoryVO;
 import com.zianedu.lms.vo.TGoodTeacherLinkVO;
@@ -282,5 +284,31 @@ public class SelectboxService {
      */
     public List<SelectboxDTO>selectAcademyTypeSelectbox(){
         return TeacherExposureType.getAcademyTypeSelectbox();
+    }
+
+    /**
+     * SMS발송 검색 년월 셀렉트박스 가져오기
+     * @return
+     * @throws Exception
+     */
+    public List<SelectboxDTO>selectSmsSearchTypeSelectbox() throws Exception {
+        String startDay = "20150701";
+        String toDay = Util.getYearMonth();
+
+        int diffMonth = Util.getMonthsDifference(startDay, toDay);
+
+        List<SelectboxDTO>list = new ArrayList<>();
+
+        for (int i=0; i<diffMonth; i++) {
+            SelectboxDTO selectboxDTO = new SelectboxDTO();
+            String yyyyMM = Util.addDate("201507", i);
+            String yyyy_MM = Util.convertDateFormat(yyyyMM);
+
+            selectboxDTO.setKey(yyyy_MM);
+            selectboxDTO.setValue(yyyy_MM);
+
+            list.add(selectboxDTO);
+        }
+        return list;
     }
 }

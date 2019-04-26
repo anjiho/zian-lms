@@ -54,7 +54,7 @@ public class DateUtils {
     }
 
     public static void main(String[] args) throws Exception {
-        System.out.println(stringToDate("2019-01-01"));
+        System.out.println(now());
         //System.out.println(dateToStr(d));
     }
 }
