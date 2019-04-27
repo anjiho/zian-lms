@@ -14,7 +14,7 @@ public interface DataManageMapper {
     //t_category의 마지막 pos 가져오기
     int selectTCategoryLastPosNumber(@Param("parentKey") int parentKey);
 
-    int selectTCategoryOtherInfoLastPosNumber(@Param("ctgKey") int ctgKey);
+    Integer selectTCategoryOtherInfoLastPosNumber(@Param("ctgKey") int ctgKey);
 
     List<TCategoryOtherInfoVO> selectTCategoryOtherInfoList(@Param("ctgKey") int ctgKey);
 
@@ -61,6 +61,8 @@ public interface DataManageMapper {
 
     /** UPDATE **/
     void updateTCategoryOtherInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO);
+
+    void changeBannerPosition(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 
     void updateTSchedule(TScheduleVO tScheduleVO);
 

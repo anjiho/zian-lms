@@ -8,6 +8,7 @@
 
     function init() {
         getProductSearchSelectbox("l_searchSel");
+        menuActive('menu-1', 1);
     }
 
     function play_modify(gKey) {
@@ -43,17 +44,16 @@
                         var cmpList = selList[i];
                         var goosNameHtml = "<a href='javascript:void(0);' color='blue' style='float:left' onclick='play_modify(" + cmpList.GKey + ");'>"+cmpList.goodsName +"</a>";
                         if (cmpList != undefined) {
+                            console.log(cmpList.isShow);
                             var cellData = [
                                 function(data) {return listNum--;},
                                 // function(data) {return i+1;},
                                 function(data) {return cmpList.GKey;},
                                 function(data) {return goosNameHtml;},
                                 function(data) {return split_minute_getDay(cmpList.indate);},
-                                function(data) {return contentYn(cmpList.isShow);},
-                                function(data) {return contentYn(cmpList.isSell);},
-                                function(data) {return contentYn(cmpList.isFree);},
-                                function(data) {return cmpList.teacherName == null ? "-" : cmpList.teacherName;},
-                                function(data) {return cmpList.statusStr;}
+                                function(data) {return cmpList.isShow == 0 ? "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
+                                function(data) {return cmpList.isSell == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
+                                function(data) {return cmpList.isFree == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";}
                             ];
                             dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
                         }
@@ -76,6 +76,8 @@
     }
 
 </script>
+<input type="hidden" id="sPage" >
+<input type="hidden" id="gKey"  name="gKey">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
@@ -110,8 +112,6 @@
                         </div>
                     </div>
                 </div>
-                <input type="hidden" id="sPage" >
-                <input type="hidden" id="gKey"  name="gKey">
                 <table class="table table-hover text-center">
                     <thead>
                     <tr>
@@ -122,8 +122,6 @@
                         <th scope="col" style="width: 5%;">노출</th>
                         <th scope="col" style="width: 5%;">판매</th>
                         <th scope="col" style="width: 5%;">무료</th>
-                        <th scope="col" style="width: 10%;">강사</th>
-                        <th scope="col" style="width: 15%;">진행상태</th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>
@@ -141,6 +139,6 @@
     var table = $('#zero_config').DataTable();
     var info = table.page.info();
     $('.page-link').click(function(){
-        alert("1");
+        //alert("1");
     });
 </script>

@@ -189,7 +189,7 @@
 			<if test="value3 != '' and value3 != null">VALUE_3 = #{value3},</if>
 			<if test="value4 != '' and value4 != null">VALUE_4 = #{value4},</if>
 			<if test="value5 != '' and value5 != null">VALUE_5 = #{value5},</if>
-			<if test="valueBit1 != '' and valueBit1 != null">VALUE_BIT_1 = #{valueBit1},</if>
+			<if test="valueBit1 != null">VALUE_BIT_1 = #{valueBit1},</if>
 			<if test="pos != null">POS = #{pos},</if>
 		</set>
 		<where>
@@ -197,6 +197,12 @@
 				CTG_INFO_KEY = #{ctgInfoKey}
 			</if>
 		</where>
+	</update>
+
+	<update id="changeBannerPosition" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		UPDATE T_CATEGORY_OTHER_INFO
+		SET POS = #{pos}
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
 	</update>
 
 	<update id="updateTSchedule" parameterType="com.zianedu.lms.vo.TScheduleVO">

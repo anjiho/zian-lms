@@ -257,12 +257,19 @@ public class DataManageService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveBannerInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO) {
         if (tCategoryOtherInfoVO == null) return;
-        int lastPosNum= dataManageMapper.selectTCategoryOtherInfoLastPosNumber(tCategoryOtherInfoVO.getCtgKey());
+
+        Integer lastPosNum= dataManageMapper.selectTCategoryOtherInfoLastPosNumber(tCategoryOtherInfoVO.getCtgKey());
+
+        if (lastPosNum == null) {
+            tCategoryOtherInfoVO.setPos(0);
+        } else {
+            tCategoryOtherInfoVO.setPos(lastPosNum + 1);
+        }
         tCategoryOtherInfoVO.setType(1);
         tCategoryOtherInfoVO.setValue2("");
         tCategoryOtherInfoVO.setValueLong1(0);
         tCategoryOtherInfoVO.setValueLong2(0);
-        tCategoryOtherInfoVO.setPos(lastPosNum + 1);
+
         dataManageMapper.insertTCategoryOtherInfo(tCategoryOtherInfoVO);
     }
 
@@ -353,7 +360,7 @@ public class DataManageService {
     public void changeBannerPosition(List<TCategoryOtherInfoVO>list) {
         if (list.size() == 0) return;
         for (TCategoryOtherInfoVO vo : list) {
-            dataManageMapper.updateTCategoryOtherInfo(vo);
+            dataManageMapper.changeBannerPosition(vo);
         }
     }
 

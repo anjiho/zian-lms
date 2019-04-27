@@ -3,6 +3,9 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script>
+    function init() {
+        menuActive('menu-0', 2);
+    }
     function saveClassfication(){ /* 분류저장 */
         var subject =  getInputTextValue("subject");
         alert(subject);
@@ -30,10 +33,10 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     if (cmpList != undefined) {
-                        console.log(cmpList);
+                        var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
                         var cellData = [
                             function(data) {return cmpList.name;},
-                            function(data) {return "<a href='javascript:void(0)' id='"+ cmpList.ctgKey + "' onclick='deleteSubject(this.id)' data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\" ></i><i class=\"mdi mdi-close\"></i></a>"}
+                            function(data) {return deleteBtn;}
                         ];
                         dwr.util.addRows("dataList", [0], cellData, {escapeHtml:false});
                     }
@@ -63,23 +66,24 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
                 <div class="card-body">
-                    <div class="row">
-                        <label  class="text-right control-label col-form-label">과목등록</label>
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" id="subject" required="required">
-                        </div>
-                        <div class="">
-                            <button type="button" class="btn btn-info" style="float:right;" onclick="saveClassfication();">추가</button>
-                        </div>
+                    <div class="form-group row" style="margin-bottom: 0px;">
+                        <label  class="col-sm-3 text-center control-label col-form-label card-title"">과목등록</label>
+                            <div class="col-sm-7">
+                                <input type="text" class="form-control" width="50px" id="subject" required="required">
+                            </div>
+                            <div>
+                                <button type="button" class="btn btn-info" style="float:right;" onclick="saveClassfication();">추가</button>
+                            </div>
                     </div>
                 </div>
-                <table class="table">
+                <table class="table table-hover text-center">
                     <thead>
                     <tr>
-                        <th scope="col">과목</th>
+                        <th scope="col">과목명</th>
+                        <th scope="col">관리</th>
                         <th scope="col"></th>
                     </tr>
                     </thead>

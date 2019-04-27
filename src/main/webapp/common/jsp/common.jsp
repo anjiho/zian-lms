@@ -20,6 +20,7 @@
     <script src="common/js/common.js"></script>
     <script src="common/js/comPage.js"></script>
     <script src="common/js/selectbox.js"></script>
+    <script src="common/js/checkbox.js"></script>
 
     <script type='text/javascript' src='/dwr/engine.js'></script>
     <script type='text/javascript' src='/dwr/util.js'></script>
@@ -54,7 +55,9 @@
     <!--Wave Effects -->
     <script src="common/dist/js/waves.js"></script>
     <!--Menu sidebar -->
-    <script src="common/dist/js/sidebarmenu.js"></script>
+    <!--<script src="common/dist/js/sidebarmenu.js"></script>-->
+    <script src="common/js/sidebar-menu.js"></script>
+
     <!--Custom JavaScript -->
     <script src="common/dist/js/custom.min.js"></script>
     <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>

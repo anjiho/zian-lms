@@ -27,4 +27,8 @@ public enum PromotionPmType {
         }
         return 0;
     }
+
+    public int getPromotionPmKey() {
+        return this.promotionPmTypekey;
+    }
 }

@@ -1,8 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script>
+    function init() {
+        menuActive('menu-0', 1);
+    }
     function saveClassfication(){ /* 분류저장 */
         var subject =  getInputTextValue("subject");
         if(subject != ""){
@@ -31,9 +35,10 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     if (cmpList != undefined) {
+                        var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
                         var cellData = [
                             function(data) {return cmpList.name;},
-                            function(data) {return "<a href='javascript:void(0)' id='"+ cmpList.ctgKey + "' onclick='deleteSubject(this.id)' data-toggle=\"tooltip\" data-placement=\"top\" title=\"Delete\" ></i><i class=\"mdi mdi-close\"></i></a>"}
+                            function(data) {return deleteBtn;},
                         ];
                         dwr.util.addRows("dataList", [0], cellData, {escapeHtml:false});
                     }
@@ -63,28 +68,30 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-5">
             <div class="card">
-                <div class="card-body">
-                    <div class="row">
-                        <label  class="text-right control-label col-form-label">분류등록</label>
-                        <div class="col-sm-3">
-                            <input type="text" class="form-control" id="subject" required="required">
+              <div class="card-body">
+                    <h5 class="card-title" style="position: absolute;left: -9999px;top: -9999px">분류등록</h5>
+                    <div class="form-group row" style="margin-bottom: 0px;">
+                        <label class="col-sm-3 text-center control-label col-form-label card-title"  style="margin-bottom: 0px;">직렬직선택</label>
+                        <div class="col-sm-7">
+                             <input type="text" class="form-control" width="50px" id="subject" required="required">
                         </div>
-                        <div class="">
+                        <div>
                             <button type="button" class="btn btn-info" style="float:right;" onclick="saveClassfication();">추가</button>
                         </div>
                     </div>
-                </div>
-                <table class="table">
+              </div>
+              <table class="table table-hover text-center">
                     <thead>
                     <tr>
-                        <th scope="col">분류</th>
-                        <th scope="col"></th>
+                        <th scope="col" style="width:75%;">분류명</th>
+                        <th scope="col" style="width:25%;">관리</th>
+                        <th scope="col" style="width:25%;"></th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>
-                </table>
+              </table>
             </div>
         </div>
     </div>

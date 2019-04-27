@@ -5,37 +5,179 @@
 
     <select id="selectTotalStatisAtMonth" resultType="StatisResultDTO">
         SELECT
-            TO_CHAR(A.INDATE, 'YYYY-MM') as DAY,
-            SUM(A.PRICE_PAY) as PRICE
-        FROM T_ORDER A
-        WHERE 1=1
-        AND A.PAY_STATUS = 2
-        AND TO_CHAR(A.INDATE, 'YYYY') = #{year}
-        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM')
+            TO_CHAR(INDATE, 'YYYY-MM') as DAY,
+            SUM(PRICE_PAY) as PRICE
+        FROM
+        (
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+            <if test="goodsType > 0">
+                AND B.TYPE = #{goodsType}
+            </if>
+        )
+        WHERE TO_CHAR(INDATE, 'YYYY') = #{year}
+        GROUP BY TO_CHAR(INDATE, 'YYYY-MM')
         ORDER BY DAY ASC
     </select>
 
     <select id="selectTotalStatisAtYear" resultType="StatisResultDTO">
-        SELECT
-            TO_CHAR(A.INDATE, 'YYYY') as DAY,
-            SUM(A.PRICE_PAY) as PRICE
-        FROM T_ORDER A
-        WHERE 1=1
-        and A.PAY_STATUS = 2
-        GROUP BY TO_CHAR(A.INDATE, 'YYYY')
+       SELECT
+            TO_CHAR(INDATE, 'YYYY') as DAY,
+            SUM(PRICE_PAY) as PRICE
+        FROM
+        (
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+            <if test="goodsType > 0">
+                AND B.TYPE = #{goodsType}
+            </if>
+
+        )
+        GROUP BY TO_CHAR(INDATE, 'YYYY')
         ORDER BY DAY ASC
     </select>
 
     <select id="selectTotalStatisAtYearDay" resultType="StatisResultDTO">
         SELECT
-            TO_CHAR(A.INDATE, 'YYYY-MM-DD') as DAY,
-            SUM(A.PRICE_PAY) as PRICE
-        FROM T_ORDER A
-        WHERE 1=1
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as DAY,
+            SUM(PRICE_PAY) as PRICE
+        FROM
+        (
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+            <if test="goodsType > 0">
+                AND B.TYPE = #{goodsType}
+            </if>
+        )
+        WHERE TO_CHAR(INDATE, 'YYYY-MM') = #{month}
+        GROUP BY TO_CHAR(INDATE, 'YYYY-MM-DD')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectPackageStatisByMonth" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(INDATE, 'YYYY-MM') as DAY,
+            SUM(PRICE_PAY) as PRICE
+        FROM
+        (
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND B.TYPE = 5
+            <if test="pmType > 0">
+                AND B.PM_TYPE = #{pmType}
+            </if>
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+        )
+        WHERE TO_CHAR(INDATE, 'YYYY') = #{year}
+        GROUP BY TO_CHAR(INDATE, 'YYYY-MM')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectPackageStatisByYear" resultType="StatisResultDTO">
+        SELECT
+        TO_CHAR(INDATE, 'YYYY') as DAY,
+        SUM(PRICE_PAY) as PRICE
+        FROM
+        (
+            SELECT
+            distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND B.TYPE = 5
+            <if test="pmType > 0">
+                AND B.PM_TYPE = #{pmType}
+            </if>
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+        )
+        GROUP BY TO_CHAR(INDATE, 'YYYY')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectPackageStatisByDay" resultType="StatisResultDTO">
+        SELECT
+        TO_CHAR(INDATE, 'YYYY-MM-DD') as DAY,
+        SUM(PRICE_PAY) as PRICE
+        FROM
+        (
+            SELECT
+            distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND B.TYPE = 5
+            <if test="pmType > 0">
+                AND B.PM_TYPE = #{pmType}
+            </if>
         AND A.PAY_STATUS = 2
-        AND TO_CHAR(A.INDATE, 'YYYY-MM') = #{month}
+        AND A.PAY_TYPE != 20
+        )
+        WHERE TO_CHAR(INDATE, 'YYYY-MM') = #{month}
+        GROUP BY TO_CHAR(INDATE, 'YYYY-MM-DD')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectMemberRegStatisByMonth" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM') as DAY,
+            COUNT(A.USER_KEY) as USER_COUNT
+        FROM T_USER A
+        WHERE 1=1
+        AND A.AUTHORITY IN (10, 19)
+        AND TO_CHAR(A.INDATE, 'YYYY') = #{year}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectMemberRegStatisByYear" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY') as DAY,
+            COUNT(A.USER_KEY) as USER_COUNT
+        FROM T_USER A
+        WHERE 1=1
+        AND A.AUTHORITY IN (10, 19)
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectMemberRegStatisByDay" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM-DD') as DAY,
+            COUNT(A.USER_KEY) as USER_COUNT
+        FROM T_USER A
+        WHERE 1=1
+        AND A.AUTHORITY IN (10, 19)
+        AND TO_CHAR(INDATE, 'YYYY-MM') = #{month}
         GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM-DD')
         ORDER BY DAY ASC
     </select>
+
+
 
 </mapper>

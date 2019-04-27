@@ -2,14 +2,18 @@
 <%@include file="/common/jsp/common.jsp" %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
-<script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
+<!-- 강의교재 메뉴 팝업 관련 스크립트 include -->
+<script src="common/js/bookGiftListPopup.js"></script>
 <script>
+    function init() {
+        menuActive('menu-1', 2);
+    }
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
         getCategoryList("selCate1","214");
-        getSelectboxListForCtgKey("classGroupCtgKey","4309");//급수 셀렉트박스
-        getSelectboxListForCtgKey("subjectCtgKey","70");//과목 셀렉트박스
-        getSelectboxListForCtgKey("stepCtgKey","202");//유형 셀렉트박스
+        getNewSelectboxListForCtgKey("l_classGroup", "4309", "");//급수
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
+        getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");//유형
         getSelectboxListForCtgKey("SubjectList_0","70");//과목 셀렉트박스
         selectTeacherSelectbox("teacherList_0","");//선생님 셀렉트박스
         getLectureCountSelectbox("lectureTimeCnt","");//강좌시간
@@ -20,7 +24,7 @@
         selectExamSearchSelectbox("booksearchType","");
         getExamPrepareSelectbox("examYear","");//시험대비년도 셀렉트박스
         getLectureStatusSelectbox("status","");//강좌정보- 진행상태
-        $('#summary').summernote({ //기본정보-에디터
+        $('#description').summernote({ //기본정보-에디터
             width: 750,
             height: 300,
             focus: true,
@@ -47,7 +51,7 @@
         getCategoryList(id, val);
     }
 
-    function optionDelete(val) {
+    /*function optionDelete(val) {
         if(val == 'optionDelete'){
             $('#optionTable > tbody:last > tr:last').remove();
         }else if(val == 'allMockTitleDelete'){
@@ -57,11 +61,38 @@
         }else if(val == 'setOptionDelete'){
             $('#optionTable > tbody:last > tr:last').remove();
         }else if(val == 'bookTitleDelete'){
-            $('#bookList > tbody:last > tr:last').remove();
+            $('#bookTable > tbody:last > tr:last').remove();
         }else if(val == 'categoryDelete'){//teacherDelete
             $('#categoryTable > tbody:last > tr:last').remove();
         }else if(val == 'teacherDelete'){//teacherDelete
             $('#teacherTabel > tbody:last > tr:last').remove();
+        }
+    }*/
+
+    //테이블 로우 삭제
+    function deleteTableRow(tableId) {
+        $("#categoryTable > tbody > tr").length;
+
+        if (tableId == "productOption") {
+            if ($("#optionTable > tbody > tr").length == 1) {
+                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#optionTable > tbody:last > tr:last').remove();
+            }
+        } else if (tableId == "productCategory") {
+            if ($("#categoryTable > tbody > tr").length == 1) {
+                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#categoryTable > tbody:last > tr:last').remove();
+            }
+        } else if (tableId == "productTeacher") {
+            if ($("#teacherTabel > tbody > tr").length == 1) {
+                $('#teacherTabel > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#teacherTabel > tbody:last > tr:last').remove();
+            }
+        }  else if(tableId == 'productBook'){
+            $('#bookTable > tbody:last > tr:last').remove();
         }
     }
 
@@ -91,7 +122,7 @@
                     optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<button type=\"button\" onclick=\"optionDelete('setOptionDelete')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productOption')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
                 optionHtml += "</a>";
                 optionHtml += "</td>";
         optionHtml += "</tr>";
@@ -124,7 +155,7 @@
          optionHtml  += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\"> %";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
-         optionHtml += "<button type=\"button\" onclick=\"optionDelete('teacherDelete')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productTeacher')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
          optionHtml  += "</td>";
          optionHtml  += "</tr>";
         $('#teacherTabel > tbody:first').append(optionHtml);
@@ -138,286 +169,8 @@
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 
-    //전범위 모의고사 리스트불러오기
-    function fn_search(val) {
-        var paging = new Paging();
-        var sPage = $("#sPage").val();
-        var searchType = getSelectboxValue("searchType");
-        var searchText = getInputTextValue("searchText");
-
-        if(val == "new") sPage = "1";
-        if (searchType == undefined) searchType = "";
-        if (searchText == undefined) searchText = "";
-
-        dwr.util.removeAllRows("dataList");
-        gfn_emptyView("H", "");//페이징 예외사항처리
-        productManageService.getMockExamListCount(searchType, searchText, function(cnt) {
-            paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getMockExamList(sPage, '10',searchType, searchText, function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var acceptDateHtml = "<td style='vertical-align:middle'>"+split_minute_getDay(cmpList.acceptStartDate)+" "+split_minute_getDay(cmpList.acceptEndDate)+"</td>";
-                        var onlineDateHtml = "<td style='vertical-align:middle'>"+split_minute_getDay(cmpList.onlineStartDate)+" "+split_minute_getDay(cmpList.onlineEndDate)+"</td>";
-                        var onlineTimeHtml = cmpList.onlineTime+'분';
-                        var text = "'mockBtn'";
-                        var lectureSelBtn = '<button type="button" onclick="sendChildValue('+cmpList.examKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return cmpList.name;},
-                                function(data) {return acceptDateHtml;},
-                                function(data) {return onlineDateHtml;},
-                                function(data) {return onlineTimeHtml;},
-                                function(data) {return lectureSelBtn;}
-                            ];
-                            dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
-                        }
-                    }
-                }else{
-                    gfn_emptyView("V", comment.blank_list2);
-                }
-            });
-        });
-    }
-
-    //기출문제 리스트 불러오기
-    function fn_search2(val) {
-        var paging = new Paging();
-        var sPage = $("#sPage2").val();
-        var searchType = getSelectboxValue("examsearchType");
-        var searchText = getInputTextValue("examsearchType");
-
-        if(val == "new") sPage = "1";
-        if (searchType == undefined) searchType = "";
-        if (searchText == undefined) searchText = "";
-
-        dwr.util.removeAllRows("dataList2");
-        gfn_emptyView2("H", "");//페이징 예외사항처리
-
-        productManageService.getMockExamListCount(searchType, searchText, function(cnt) {
-            paging.count2(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getMockExamList(sPage, '10',searchType, searchText, function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var acceptDateHtml = "<td style='vertical-align:middle'>"+split_minute_getDay(cmpList.acceptStartDate)+" "+split_minute_getDay(cmpList.acceptEndDate)+"</td>";
-                        var onlineDateHtml = "<td style='vertical-align:middle'>"+split_minute_getDay(cmpList.onlineStartDate)+" "+split_minute_getDay(cmpList.onlineEndDate)+"</td>";
-                        var onlineTimeHtml = cmpList.onlineTime+'분';
-                        var text = "'examBtn'";
-                        var lectureSelBtn = '<button type="button" onclick="sendChildValue('+cmpList.examKey+","+text+')"    class="btn btn-outline-info mx-auto">선택</button>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return cmpList.name;},
-                                function(data) {return acceptDateHtml;},
-                                function(data) {return onlineDateHtml;},
-                                function(data) {return onlineTimeHtml;},
-                                function(data) {return lectureSelBtn;}
-                            ];
-                            dwr.util.addRows("dataList2", [0], cellData, {escapeHtml: false});
-                        }
-                    }
-                }else{
-                    gfn_emptyView2("V", comment.blank_list2);
-                }
-            });
-        });
-    }
-
-    //강의교재 리스트 불러오기
-    function fn_search3(val) {
-        var paging = new Paging();
-        var sPage = $("#sPage3").val();
-        var searchType = getSelectboxValue("booksearchType");
-        var searchText = getInputTextValue("booksearchType");
-
-        if(val == "new") {
-            sPage = "1";
-        }
-        if (searchType == undefined) {
-            searchType = "";
-        }
-        if (searchText == undefined) {
-            searchText = "";
-        }
-
-        dwr.util.removeAllRows("dataList3");
-        gfn_emptyView3("H", "");//페이징 예외사항처리
-        productManageService.getProductListCount(searchType, searchText, 'BOOK', function(cnt) {
-            paging.count3(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getProductList(sPage, '10',searchType, searchText, 'BOOK', function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var text = "'bookBtn'";
-                        var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return cmpList.goodsName;},
-                                function(data) {return cmpList.isShow;},
-                                function(data) {return cmpList.isSell;},
-                                function(data) {return cmpList.isFree;},
-                                function(data) {return bookSelBtn;}
-                            ];
-                            dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});
-                        }
-                    }
-                }else{
-                    gfn_emptyView3("V", comment.blank_list2);
-                }
-            });
-        });
-    }
-
-    //사은품 리스트 불러오기
-    function fn_search4(val) {
-        var paging = new Paging();
-        var sPage = $("#sPage4").val();
-        var searchType = getSelectboxValue("gifrsearchType");
-        var searchText = getInputTextValue("giftsearchType");
-
-        if(val == "new") {
-            sPage = "1";
-        }
-        if (searchType == undefined) {
-            searchType = "";
-        }
-        if (searchText == undefined) {
-            searchText = "";
-        }
-
-        dwr.util.removeAllRows("dataList4");
-        gfn_emptyView4("H", "");//페이징 예외사항처리
-        productManageService.getProductListCount(searchType, searchText, 'BOOK', function(cnt) {
-            paging.count4(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getProductList(sPage, '10',searchType, searchText, 'BOOK', function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var text = "'giftBtn'";
-                        var bookSelBtn = '<button type="button" onclick="sendChildValue_2('+cmpList.GKey+","+text+')"  class="btn btn-outline-info mx-auto">선택</button>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return cmpList.goodsName;},
-                                function(data) {return cmpList.isShow;},
-                                function(data) {return cmpList.isSell;},
-                                function(data) {return cmpList.isFree;},
-                                function(data) {return bookSelBtn;}
-                            ];
-                            dwr.util.addRows("dataList4", [0], cellData, {escapeHtml: false});
-                        }
-                    }
-                }else{
-                    gfn_emptyView4("V", comment.blank_list2);
-                }
-            });
-        });
-    }
 
 
-    // 전범위 모의고사 / 기출문제 선택시 값전달
-    function sendChildValue(examKey,set) {
-        productManageService.getMockExamInfo(examKey, function (selList) {
-            var allMockCnt = $("#allMockList tr").length-1; //모의고사
-            var examQuestionListCnt = $("#examQuestionList tr").length-1;//기출문제
-
-            var deleteSel = "";
-            var getallMockOption = "";
-            if(set == 'mockBtn'){
-                getallMockOption = "MockName_"+allMockCnt;
-                deleteSel = "allMockTitleDelete";
-            }else if(set == 'examBtn'){
-                getallMockOption = "examName_"+examQuestionListCnt;
-                deleteSel = "examQuestionDelete";
-            }
-
-            if (selList.mokExamInfo) {
-                var title =  selList.mokExamInfo.name;
-                var MockListHtml = "<tr>";
-                     MockListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem;vertical-align: middle;width:95%\">";
-                            MockListHtml     += "<input type='text'  class=\"col-sm-8 form-control\" id='"+getallMockOption+"' value='' readonly>";
-                     MockListHtml     += "</td>";//examKey
-                    MockListHtml     += "<td>";
-                        MockListHtml     += "<input type='hidden'  value='"+selList.mokExamInfo.examKey+"' readonly>";
-                    MockListHtml     += "</td>";//examKey
-                    MockListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
-                         MockListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
-                    MockListHtml     += "</td>";
-                MockListHtml     += "</tr>";
-
-                if(set == 'mockBtn'){ //전범위 모의고사
-                    $('#allMockList > tbody:first').append(MockListHtml);//선택 모의고사 리스트 뿌리기
-                    $("#"+getallMockOption).val(title);//모의고사 제목 뿌리기
-                }else if(set == 'examBtn'){ //기출문제
-                    $('#examQuestionList > tbody:first').append(MockListHtml);//선택 기출문제 리스트 뿌리기
-                    $("#"+getallMockOption).val(title);//기출문제 제목 뿌리기
-                }
-                //$("#lecturePopupClose").click();
-            }
-        });
-    }
-
-    //강의교재 , 사은품 선택시 전달값
-    function sendChildValue_2(GKey,set) {
-        productManageService.getProductDetailInfo(GKey, 'BOOK', function (selList) {
-            var bookkCnt = $("#bookList tr").length-1; //강의교재
-            var giftCnt = $("#giftList tr").length-1;//기출문제
-
-            var deleteSel = "";
-            var bookgiftOption = "";
-            if(set == 'bookBtn'){
-                bookgiftOption = "bookName_"+bookkCnt;
-                deleteSel = "bookTitleDelete";
-            }else if(set == 'giftBtn'){
-                bookgiftOption = "giftName_"+giftCnt;
-                deleteSel = "giftDelete";
-            }
-
-
-            if (selList.productInfo) {
-
-                var title =  selList.productInfo.name;
-                var bookkListHtml = "<tr>";
-                bookkListHtml     += " <td class=\"text-left\" style=\"padding:0.3rem;vertical-align: middle;width: 65%\">";
-                    bookkListHtml     += "<input type='text'   class=\"col-sm-8 form-control\" id='"+bookgiftOption+"' value='' readonly>";
-                bookkListHtml     += "</td>";
-                bookkListHtml     += " <td>";
-                    bookkListHtml     += "<input type='hidden'  value='"+selList.productInfo.GKey+"' readonly>";
-                bookkListHtml     += "</td>";
-                if(set == 'bookBtn'){
-                    bookkListHtml     += "<td class=\"text-left\" style=\"padding: 0.3rem; vertical-align: middle;width: 30%\">";
-                    bookkListHtml     += " <div class='col-sm-10'>";
-                    bookkListHtml     += " <div style=\"margin-top: -23px;\">";
-                    bookkListHtml     += "부교재";
-                    bookkListHtml     += " <label class=\"switch\">";
-                    bookkListHtml     += " <input type=\"checkbox\" style=\"display:none;\">";
-                    bookkListHtml     += "<span class=\"slider\"></span>";
-                    bookkListHtml     += "</label>";
-                    bookkListHtml     += "주교재";
-                    bookkListHtml     += "  </div>";
-                    bookkListHtml     += "</div>";
-                    bookkListHtml     += "</td>";
-                }
-                bookkListHtml     += "<td class=\"text-left\" style=\"padding:0.3rem;vertical-align:middle;\">";
-                    bookkListHtml     += "<button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick=optionDelete("+"'"+deleteSel+"'"+")>삭제</button>";
-                bookkListHtml     += "</td>";
-                bookkListHtml     += " </tr>";
-
-
-                if(set == 'bookBtn'){ //전범위 모의고사
-                    $('#bookList > tbody:first').append(bookkListHtml);//선택 모의고사 리스트 뿌리기
-                    $("#"+bookgiftOption).val(title);//모의고사 제목 뿌리기
-                }else if(set == 'giftBtn'){ //기출문제
-                    $('#giftList > tbody:first').append(bookkListHtml);//선택 기출문제 리스트 뿌리기
-                    $("#"+bookgiftOption).val(title);//기출문제 제목 뿌리기
-                }
-                //$("#lecturePopupClose").click();
-            }
-        });
-    }
 
     //옵션 - 판매가 재수강시 할인율적용 함수
     function saleInputPrice(val,cnt) {
@@ -462,7 +215,7 @@
         categoryHtml += "  </select>";
         categoryHtml += " </td>";
         categoryHtml += "<td>";
-        categoryHtml += "<button type=\"button\" onclick=\"optionDelete('categoryDelete')\" class='btn btn-outline-danger btn-sm' style=\"margin-top:8%;\">삭제</button>";
+        categoryHtml += "<button type=\"button\" onclick=\"deleteTableRow('productCategory')\" class='btn btn-outline-danger btn-sm' style=\"margin-top:8%;\">삭제</button>";
         categoryHtml += "</td>";
         categoryHtml += "</tr>";
         $('#categoryTable > tbody:first').append(categoryHtml);
@@ -470,16 +223,12 @@
 
     //저장
     function playSave() {
-
-
         var data = new FormData();
         $.each($('#imageListFile')[0].files, function(i, file) {
-
             data.append('imageListFile', file);
         });
 
         $.each($('#imageViewFile')[0].files, function(i, file) {
-
             data.append('imageViewFile', file);
         });
 
@@ -518,6 +267,7 @@
             array.push(data);
         });
         /* //옵션 obj */
+        console.log(array);
 
         /*  3.카테고리 obj  */
         var array1 = new Array();
@@ -532,12 +282,13 @@
             };
             array1.push(data);
         });
+        console.log(array1);
         /*  //카테고리 obj  */
 
 
         /*  4.강좌정보 obj  */
         var lectureObj = getJsonObjectFromDiv("section4");
-
+        console.log(lectureObj);
         /*  //강좌정보 obj  */
 
         /*  5.강사정보 obj  */
@@ -546,7 +297,7 @@
             var teacher = $(this).find("td select").eq(0).val();
             var teacher1 = $(this).find("td select").eq(1).val();
             var teacher2 = $(this).find("td input").eq(0).val();
-            console.log(teacher+","+teacher1+","+teacher2);
+
             var data = {
                 gTeacherKey:'0',
                 gKey:'0',
@@ -559,62 +310,30 @@
             };
             array2.push(data);
         });
+        console.log(array2);
         /*  //강사정보 obj  */
 
         /*  6.선택 obj  */
         var array3 = new Array();
-        $('#allMockList tbody tr').each(function(index){
-            var mockTitle = $(this).find("td input").eq(0).val();
-            var mockKey = $(this).find("td input").eq(1).val();
-            var data = {
-                linkKey: 0,
-                reqKey: 0,
-                resKey:mockKey,
-                resType: 8,
-                pos: 0,
-                valueBit: 0
-            };
-            array3.push(data);
-        });
-        $('#examQuestionList tbody tr').each(function(index){
-            var examQuestionTitle = $(this).find("td input").eq(0).val();
-            var examKey = $(this).find("td input").eq(1).val();
-            var data = {
-                linkKey: 0,
-                reqKey: 0,
-                resKey:examKey,
-                resType: 9,
-                pos: 0,
-                valueBit: 0
-            };
-            array3.push(data);
-        });
-        $('#bookList tbody tr').each(function(index){
-            var bookTitle = $(this).find("td input").eq(0).val();
-            var bookKey = $(this).find("td input").eq(1).val();
+        $('#bookTable tbody tr').each(function(index){
+            var bookKey = $(this).find("td input").eq(0).val();
+            var isBookMainId = "isBookMain_" + bookKey;
+            var isBookMain = $("input:checkbox[id=" + "'" + isBookMainId + "'" + "]").is(":checked");
+            //주교재 여부 값 변환
+            if (isBookMain) valueBit = 1;
+            else valueBit = 0;
+
             var data = {
                 linkKey: 0,
                 reqKey: 0,
                 resKey:bookKey,
                 resType: 5,
                 pos: 0,
-                valueBit: 0
+                valueBit: valueBit
             };
             array3.push(data);
         });
-        $('#giftList tbody tr').each(function(index){
-            var giftTitle = $(this).find("td input").eq(0).val();
-            var gifyKey = $(this).find("td input").eq(1).val();
-            var data = {
-                linkKey: 0,
-                reqKey: 0,
-                resKey:gifyKey,
-                resType: 4,
-                pos: 0,
-                valueBit: 0
-            };
-            array3.push(data);
-        });
+            console.log(array3);
         data.append("videoInfo", JSON.stringify(obj));
         data.append("videoOptionInfo",JSON.stringify(array));
         data.append("videoCategoryInfo",JSON.stringify(array1));
@@ -674,7 +393,7 @@
                 <div>
                     <!-- 1.기본정보 Tab -->
                     <h3>기본정보</h3>
-                    <section class="col-md-6">
+                    <section class="col-md-auto">
                         <div id="section1">
                             <input type="hidden" value="0" name="gKey">
                             <input type="hidden" value="0" name="cpKey">
@@ -684,118 +403,120 @@
                             <input type="hidden" value="0" name="isQuickDelivery">
                             <input type="hidden" value="0" name="goodsId">
                             <input type="hidden" value="" name="goodsTypeName">
-                            <input type="hidden" value="" name="description">
-                            <div class="form-group">
-                                <label class="control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                                <span>온라인강좌</span>
-                                <input type="hidden" class="form-control" id="type" name='type' value="1">
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                <input type="text" class="form-control" id="name" name="name">
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                <div class="input-group" id="dateRangePicker">
-                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate" id="indate">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                            <input type="hidden" value="" name="summary">
+                            <div class="col-md-6">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
+                                    <span>온라인강좌</span>
+                                    <input type="hidden" class="col-sm-6 bg-light required form-control" id="type" name='type' value="1">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
+                                    <input type="text" class="col-sm-6 form-control" id="name" name="name">
+                                </div>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
+                                    <div class="col-sm-6 input-group pl-0 pr-0" id="dateRangePicker">
+                                        <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate" id="indate">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
-                                <div class="input-group">
-                                    <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
+                                    <div class="col-sm-6 input-group pl-0 pr-0">
+                                        <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
+                                        <div class="input-group-append">
+                                            <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row mt-4" style="">
-                                <label class="col-sm-2 text-left control-label col-form-label">노출</label>
-                                <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
-                                        OFF
-                                        <label class="switch">
-                                            <input type="checkbox" id="isShow" name="isShow" style="display:none;">
-                                            <span class="slider"></span>
-                                        </label>
-                                        ON
+                                <div class="form-group row mt-4">
+                                    <label class="col-sm-2 text-left control-label col-form-label">노출</label>
+                                    <div class="col-sm-10">
+                                        <div style="margin-top: -23px;">
+                                            OFF
+                                            <label class="switch">
+                                                <input type="checkbox" id="isShow" name="isShow" style="display:none;">
+                                                <span class="slider"></span>
+                                            </label>
+                                            ON
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 text-left control-label col-form-label">판매</label>
-                                <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
-                                        OFF
-                                        <label class="switch">
-                                            <input type="checkbox" id="is_sell" name="isSell" style="display:none;">
-                                            <span class="slider"></span>
-                                        </label>
-                                        ON
+                                <div class="form-group row">
+                                    <label class="col-sm-2 text-left control-label col-form-label">판매</label>
+                                    <div class="col-sm-10">
+                                        <div style="margin-top: -23px;">
+                                            OFF
+                                            <label class="switch">
+                                                <input type="checkbox" id="is_sell" name="isSell" style="display:none;">
+                                                <span class="slider"></span>
+                                            </label>
+                                            ON
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 text-left control-label col-form-label">무료</label>
-                                <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
-                                        OFF
-                                        <label class="switch">
-                                            <input type="checkbox" id="is_free" name="isFree" style="display:none;">
-                                            <span class="slider"></span>
-                                        </label>
-                                        ON
+                                <div class="form-group row">
+                                    <label class="col-sm-2 text-left control-label col-form-label">무료</label>
+                                    <div class="col-sm-10">
+                                        <div style="margin-top: -23px;">
+                                            OFF
+                                            <label class="switch">
+                                                <input type="checkbox" id="is_free" name="isFree" style="display:none;">
+                                                <span class="slider"></span>
+                                            </label>
+                                            ON
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                <div>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
-                                        <span class="custom-file-control custom-file-label"></span>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
+                                    <div class="col-sm-8 pl-0 pr-0">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
+                                            <span class="custom-file-control custom-file-label"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                <div>
-                                    <div class="custom-file">
-                                        <input type="file" class="custom-file-input addFile" id="imageViewFile" name="imageViewFile" required>
-                                        <span class="custom-file-control1 custom-file-label"></span>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
+                                    <div class="col-sm-8 pl-0 pr-0">
+                                        <div class="custom-file">
+                                            <input type="file" class="custom-file-input addFile"  id="imageViewFile" name="imageViewFile" required>
+                                            <span class="custom-file-control1 custom-file-label"></span>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label  class="control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                                <div>
-                                    <select class="col-sm-6 select2 form-control custom-select" id="emphasis" name="emphasis">
-                                        <option  value="0">없음</option>
-                                        <option value="1">BEST</option>
-                                        <option value="2">NEW</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label">사은품 배송비 무료</label>
-                                <div>
-                                    <div style="margin-top: -23px;">
-                                        OFF
-                                        <label class="switch">
-                                            <input type="checkbox" style="display:none;" id="is_freebie_delivery_free" name="isFreebieDeliveryFree">
-                                            <span class="slider"></span>
-                                        </label>
-                                        ON
+                                <div class="form-group row">
+                                    <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
+                                    <div class="col-sm-6 pl-0 pr-0">
+                                        <select class="select2 form-control custom-select" id="emphasis" name="emphasis">
+                                            <option value="0">없음</option>
+                                            <option value="1">BEST</option>
+                                            <option value="2">NEW</option>
+                                        </select>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="control-label col-form-label">상세설명</label>
-                                <div>
-                                    <textarea name="content"  value="" id="summary" name="summary"></textarea>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label">사은품 배송비 무료</label>
+                                    <div class="col-sm-10">
+                                        <div style="margin-top: -23px;">
+                                            OFF
+                                            <label class="switch">
+                                                <input type="checkbox" style="display:none;" id="is_freebie_delivery_free" name="isFreebieDeliveryFree">
+                                                <span class="slider"></span>
+                                            </label>
+                                            ON
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label class="control-label col-form-label">상세설명</label>
+                                    <div>
+                                        <textarea  value="" id="description" name="description"></textarea>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -841,7 +562,7 @@
                                         <input type="number" class="form-control" id="resultPrice_0" readonly>
                                     </td>
                                     <td style="padding: 0.3rem;">
-                                        <button type="button" onclick="optionDelete('optionDelete');" class="btn btn-outline-danger btn-sm" style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="deleteTableRow('optionDelete');" class="btn btn-outline-danger btn-sm" style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -856,6 +577,9 @@
                     <!-- 3.카테고리 목록 Tab -->
                     <h3>카테고리</h3>
                     <section>
+                        <div class="float-right mb-3">
+                            <button type="button" class="btn btn-info btn-sm" onclick="addCategory();">추가</button>
+                        </div>
                         <div id="section3">
                                 <table class="table" id="categoryTable">
                                     <input type="hidden" name="ctgGKey" value="0">
@@ -898,14 +622,11 @@
                                                 </select>
                                             </td>
                                             <td>
-                                            <button type="button" onclick="optionDelete('categoryDelete')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('productOption')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
                                             </td>
                                         </tr>
                                     </tbody>
                                 </table>
-                                <div class="mx-auto" style="width:5.5%">
-                                    <button type="button" class="btn btn-outline-info mx-auto" onclick="addCategory();">추가</button>
-                                </div>
                         </div>
                     </section>
                     <!-- //3.카테고리 목록 Tab -->
@@ -929,21 +650,15 @@
                             <input type="hidden" name="lecDateMonth" value="0">
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">급수</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="classGroupCtgKey" name="classGroupCtgKey">
-                                    <option value="">선택</option>
-                                </select>
+                                <span id="l_classGroup"></span>
                             </div>
                             <div class="form-group">
                                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">과목</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="subjectCtgKey" name="subjectCtgKey">
-                                    <option value="">선택</option>
-                                </select>
+                                <span id="l_subjectGroup"></span>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">유형</label>
-                                <select class="col-sm-3 select2 form-control custom-select" id="stepCtgKey" name="stepCtgKey">
-                                    <option value="">선택</option>
-                                </select>
+                                <span id="l_stepGroup"></span>
                             </div>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
@@ -985,6 +700,9 @@
                     <!-- 5.강사 목록 Tab -->
                     <h3>강사목록</h3>
                     <section>
+                        <div class="float-right mb-3">
+                            <button type="button" class="btn btn-info btn-sm" onclick="addTeacher();">추가</button>
+                        </div>
                         <div id="section5">
                             <table class="table" id="teacherTabel">
                                 <input type="hidden" name="gTeacherKey" value="0">
@@ -1014,66 +732,26 @@
                                         <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculate_rate"> %
                                     </td>
                                     <td style="width:3%;vertical-align: middle">
-                                        <button type="button" onclick="optionDelete('teacherDelete')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="deleteTableRow('productTeacher')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="mx-auto" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info mx-auto" style="margin-bottom:18px;" onclick="addTeacher();">추가</button>
-                            </div>
                         </div>
                     </section>
                     <!-- //5.강사 목록 Tab -->
 
                     <!-- 6.선택 Tab -->
-                    <h3>선택</h3>
+                    <h3>강의 교재선택</h3>
                     <section>
+                        <div class="float-right mb-3">
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                        </div>
                         <div id="section6">
-                            <table class="table text-center table-hover" id="allMockList">
+                            <table class="table text-center table-hover" id="bookTable">
                                 <thead>
-                                <tr>
-                                    <th scope="col" colspan="2">전범위 모의고사
-                                    <button type="button"  style="float: right;" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
-                                    </th>
-                                </tr>
                                 </thead>
-                                <tbody id="MockTitle"></tbody>
-                            </table>
-                            <!--<div class="mx-auto mb-5" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal3" onclick="fn_search('new');">추가</button>
-                            </div>-->
-                            <table class="table table-hover text-center" id="examQuestionList">
-                                <thead>
-                                <tr>
-                                    <th scope="col" colspan="2">기출문제 회차별
-                                        <button type="button" style="float: right;"  class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#sModal4" onclick="fn_search2('new');">추가</button>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody id="examQuestionTitle"></tbody>
-                            </table>
-                            <table class="table text-center table-hover" id="bookList">
-                                <thead>
-                                <tr>
-                                    <th scope="col" colspan="3">강의교재
-                                        <button type="button" style="float: right;" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
-                            </table>
-                            <table class="table text-center table-hover" id="giftList">
-                                <thead>
-                                <tr>
-                                    <th scope="col" colspan="2">사은품
-                                        <button type="button"  style="float: right;" class="btn btn-outline-info btn-sm"  data-toggle="modal" data-target="#giftModal" onclick="fn_search4('new');">추가</button>
-                                    </th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                </tbody>
+                                <tbody id="bookList"></tbody>
                             </table>
                         </div>
                     </section>
@@ -1150,111 +828,6 @@
 </div>
 </form>
 <!-- // 기본소스-->
-<!-- 6.선택 전범위 모의고사 팝업창 -->
-<div class="modal fade" id="sModal3" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 900px">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">강의 입력</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="lecturePopupClose">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form>
-                <!-- modal body -->
-                <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
-                            <select class="form-control" id="searchType">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="searchText">
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
-                            <thead class="thead-light">
-                            <tr>
-                                <th style="width:45%">시험명</th>
-                                <th style="width:15%">시험신청기간</th>
-                                <th style="width:15%">시험기간</th>
-                                <th style="width:15%">진행시간</th>
-                                <th style="width:5%"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="dataList"></tbody>
-                            <tr>
-                                <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                            </tr>
-                        </table>
-                        <%@ include file="/common/inc/com_pageNavi.inc" %>
-                    </div>
-                </div>
-                <!-- //modal body -->
-            </form>
-        </div>
-    </div>
-</div>
-<!-- //선택 전범위 모의고사 추가 팝업창 -->
-
-<!-- 기출문제 회차별 팝업창 -->
-<div class="modal fade" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 900px">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">강의 입력</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="examPopupClose">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form>
-                <!-- modal body -->
-                <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
-                            <select class="form-control" id="examsearchType">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="examsearchText">
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search2('new')">검색</button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <input type="hidden" id="sPage2" >
-                        <table id="zero_config" class="table table-hover text-center">
-                            <thead class="thead-light">
-                            <tr>
-                                <th style="width:45%">시험명</th>
-                                <th style="width:15%">시험신청기간</th>
-                                <th style="width:15%">시험기간</th>
-                                <th style="width:15%">진행시간</th>
-                                <th style="width:5%"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="dataList2"></tbody>
-                            <tr>
-                                <td id="emptys2" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                            </tr>
-                        </table>
-                        <%@ include file="/common/inc/com_pageNavi2.inc" %>
-                    </div>
-                </div>
-                <!-- //modal body -->
-            </form>
-        </div>
-    </div>
-</div>
-<!-- //기출문제 회차별 팝업창 -->
 
 <!-- 6.선택 강의교재  팝업창 -->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1271,12 +844,12 @@
                 <div class="modal-body">
                     <div style=" display:inline;">
                         <div style=" float: left; width: 10%">
-                            <select class="form-control" id="booksearchType">
+                            <select class="form-control" id="searchType">
                                 <option>선택</option>
                             </select>
                         </div>
                         <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="booksearchTextBook">
+                            <input type="text" class="form-control" id="productSearchType">
                         </div>
                         <div style=" float: left; width: 33%">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
@@ -1308,61 +881,6 @@
     </div>
 </div>
 <!-- //선택 추가 팝업창 -->
-
-
-<!-- 6.선택 사은품  팝업창 -->
-<div class="modal fade" id="giftModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 900px">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">상품선택</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" >
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form>
-                <!-- modal body -->
-                <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
-                            <select class="form-control" id="giftsearchType">
-                                <option>선택</option>
-                            </select>
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="giftsearchTextBook">
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <input type="hidden" id="sPage4" >
-                        <table id="zero_config" class="table table-hover text-center">
-                            <thead class="thead-light">
-                            <tr>
-                                <th style="width:45%">상품명</th>
-                                <th style="width:15%">노출</th>
-                                <th style="width:15%">판매</th>
-                                <th style="width:15%">무료</th>
-                                <th style="width:15%"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="dataList4"></tbody>
-                            <tr>
-                                <td id="emptys4" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                            </tr>
-                        </table>
-                        <%@ include file="/common/inc/com_pageNavi4.inc" %>
-                    </div>
-                </div>
-                <!-- //modal body -->
-            </form>
-        </div>
-    </div>
-</div>
-<!-- //선택 추가 팝업창 -->
-
 
 <!-- 강의목록 추가 팝업창 -->
 <div class="modal" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
