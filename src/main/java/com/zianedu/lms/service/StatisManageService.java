@@ -378,6 +378,11 @@ public class StatisManageService {
         return new MemberStatisDTO(years, userCounts);
     }
 
+    /**
+     * 일간 회원 통계
+     * @param yyyyMM
+     * @return
+     */
     @Transactional(readOnly = true)
     public MemberStatisDTO selectMemberRegStatisByDay(String yyyyMM) {
         if ("".equals(yyyyMM)) return null;

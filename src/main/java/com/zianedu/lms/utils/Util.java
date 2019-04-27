@@ -999,17 +999,19 @@ public class Util {
         return month_diff;
     }
 
+    //입력날짜 기준 m 만큼 월 더하기
     public static String addDate(String dt, int m) throws Exception  {
         SimpleDateFormat format = new SimpleDateFormat("yyyyMM");
 
         Calendar cal = Calendar.getInstance();
         Date date = format.parse(dt);
         cal.setTime(date);
-        cal.add(Calendar.MONTH, m);     //년 더하기
+        cal.add(Calendar.MONTH, m);     //월 더하기
 
         return format.format(cal.getTime());
     }
 
+    // yyyymm -> yyyy-mm 변환
     public static String convertDateFormat(String date) throws Exception {
         SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyymm");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-mm");

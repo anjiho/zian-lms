@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -299,7 +300,7 @@ public class SelectboxService {
 
         List<SelectboxDTO>list = new ArrayList<>();
 
-        for (int i=0; i<diffMonth; i++) {
+        for (int i=0; i<diffMonth+1; i++) {
             SelectboxDTO selectboxDTO = new SelectboxDTO();
             String yyyyMM = Util.addDate("201507", i);
             String yyyy_MM = Util.convertDateFormat(yyyyMM);
@@ -309,6 +310,7 @@ public class SelectboxService {
 
             list.add(selectboxDTO);
         }
+        Collections.reverse(list);
         return list;
     }
 }
