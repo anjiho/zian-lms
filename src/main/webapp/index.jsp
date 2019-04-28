@@ -2,6 +2,7 @@
 <%
     response.setCharacterEncoding("UTF-8");
     response.setContentType("text/html;charset=UTF-8");
+    int httpStatusCode = response.getStatus();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -31,8 +32,23 @@
     <script type='text/javascript' src='/dwr/interface/loginService.js'></script>
 </head>
 <script>
+    var httpCode = '<%=httpStatusCode%>';
 
     function loginCheck() {
+        var URL = null;
+        if (httpCode == '901') {
+            URL = window.location.pathname ;
+            var data = getSearchParams();
+            var i = 0;
+            $.each(data, function(key, value){
+                var spl = "?";
+                if (i >= 1) {
+                    spl = "&";
+                }
+                URL += spl + key + "=" + value;
+                ++i;
+            });
+        }
         var userId = getInputTextValue("userId");
         var userPass = getInputTextValue("userPass");
 
@@ -43,38 +59,19 @@
                     innerValue("userKey", data.userKey);
                     innerValue("authority", data.adminAuthorityKey);
                     innerValue("userName", data.name);
+                    innerValue("targetUrl", gfn_isnullvalue(URL, ""));
                     goPage("login", "session");
                 }
             } else {
                 alert("error");
             }
-            /*if (data.flowMemberId != null ) {
-                loginOk(data, URL);
-            } else {
-                alert(comment.blank_login_check);
-                return;
-            }*/
         });
     }
 
-    function loginOk(val) {
-
-        with(document.frm) {
-            var authority = val.adminAuthorityKey;
-            alert(authority);
-            if (authority == 0) {
-                //alert("1111");
-                authority = 4;
-            }
-            // innerValue("userKey", jsonData.userKey);
-            // innerValue("authority", authority);
-            // innerValue("userName", jsonData.name);
-            //goPage("login", "session");
-        }
-    }
-
-    function isNumber(value) {
-        return typeof value === 'number' && isFinite(value);
+    function getSearchParams(k){
+        var p={};
+        location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,function(s,k,v){p[k]=v})
+        return k?p[k]:p;
     }
 </script>
 <body>
@@ -98,6 +95,7 @@
                     <input type="hidden" id="userKey" name="userKey">
                     <input type="hidden" id="userName" name="userName">
                     <input type="hidden" id="authority" name="authority">
+                    <input type="hidden" id="targetUrl" name="targetUrl">
 
                     <div class="row p-b-30" style="margin-bottom: 20px;">
                         <div class="col-12">
