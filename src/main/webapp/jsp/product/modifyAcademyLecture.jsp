@@ -401,7 +401,9 @@
         }
         if(confirm("옵션정보를 수정 하시겠습니까?")){
             productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
-                isReloadPage(true);
+                //isReloadPage(true);
+                //$('#steps-uid-0-t-1').click();
+                
             });
         }
     }
@@ -1123,6 +1125,19 @@
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
+
+    $.fn.steps.done = function () {
+        var wizard = this,
+            options = getOptions(this),
+            state = getState(this);
+
+        if(state.currentIndex == 2){
+            for (i = 0; i < 2; i++) {
+                var stepAnchor = getStepAnchor(wizard, i);
+                stepAnchor.parent().removeClass("done")._enableAria(false);
+            }
+        }
+        };
 
 </script>
 <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
