@@ -1,0 +1,230 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.OrderManageMapper">
+
+    <select id="selectOrderList" resultType="OrderResultDTO">
+        SELECT
+            DISTINCT A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
+                     A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
+                     A.INDATE, A.DEPOSIT_USER, A.CARD_CODE
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        INNER JOIN T_ORDER_GOODS C
+        ON A.J_KEY = C.J_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY D
+        ON A.J_KEY = D.J_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        AND A.PAY_STATUS IN (0, 1, 2)
+        <if test="goodsType != '' and goodsType != null">
+            AND C.TYPE = #{goodsType}
+        </if>
+        <if test="isOffline != null and isOffline >= 0">
+            AND A.IS_OFFLINE = #{isOffline}
+        </if>
+        <if test="payType != null and payType >= 0">
+            AND A.PAY_TYPE = #{payType}
+        </if>
+        <if test="isMobile != null and isMobile >= 0">
+            AND A.IS_MOBILE = #{isMobile}
+        </if>
+        <if test="searchType == 'orderUserId'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderId'">
+            AND A.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND C.G_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <!-- 동영상 재수강 여부 -->
+        <if test="isVideoReply == 0">
+            AND C.EXTEND_DAY = -1
+        </if>
+        <if test="isVideoReply == 1">
+            AND C.EXTEND_DAY > -1
+        </if>
+        ORDER BY A.J_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectGoodsNameAtLimitOne" resultType="OrderGoodsNameDTO">
+        SELECT * FROM
+        (
+            SELECT G_NAME,
+                    (
+                        ( SELECT count(J_G_KEY) FROM T_ORDER_GOODS WHERE J_KEY = A.J_KEY ) - 1
+                    ) as CNT
+            FROM T_ORDER_GOODS A
+            WHERE A.J_KEY = #{jKey}
+            ORDER BY A.J_G_KEY ASC
+        )
+        WHERE ROWNUM = 1
+    </select>
+
+    <select id="selectOrderListCount" resultType="Integer">
+        SELECT COUNT(J_KEY)
+        FROM (
+                SELECT DISTINCT A.J_KEY
+                FROM T_ORDER A
+                INNER JOIN T_USER B
+                ON A.USER_KEY = B.USER_KEY
+                INNER JOIN T_ORDER_GOODS C
+                ON A.J_KEY = C.J_KEY
+                LEFT OUTER JOIN T_ORDER_DELIVERY D
+                ON A.J_KEY = D.J_KEY
+                WHERE 1=1
+                <![CDATA[
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+                AND A.PAY_STATUS IN (0, 1, 2)
+                <if test="goodsType != '' and goodsType != null">
+                    AND C.TYPE = #{goodsType}
+                </if>
+                <if test="isOffline != null and isOffline >= 0">
+                    AND A.IS_OFFLINE = #{isOffline}
+                </if>
+                <if test="payType != null and payType >= 0">
+                    AND A.PAY_TYPE = #{payType}
+                </if>
+                <if test="isMobile != null and isMobile >= 0">
+                    AND A.IS_MOBILE = #{isMobile}
+                </if>
+                <if test="searchType == 'orderUserId'">
+                    AND B.USER_ID = #{searchText}
+                </if>
+                <if test="searchType == 'orderUserName'">
+                    AND B.NAME LIKE '%'||#{searchText}||'%'
+                </if>
+                <if test="searchType == 'orderId'">
+                    AND A.J_ID = #{searchText}
+                </if>
+                <if test="searchType == 'orderUserName'">
+                    AND C.G_NAME LIKE '%'||#{searchText}||'%'
+                </if>
+                <!-- 동영상 재수강 여부 -->
+                <if test="isVideoReply == 0">
+                    AND C.EXTEND_DAY = -1
+                </if>
+                <if test="isVideoReply == 1">
+                    AND C.EXTEND_DAY > -1
+                </if>
+        )
+    </select>
+
+    <select id="selectCancelOrderList" resultType="OrderResultDTO">
+        SELECT
+            DISTINCT A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
+            A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
+            A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.CANCEL_DATE
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        INNER JOIN T_ORDER_GOODS C
+        ON A.J_KEY = C.J_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY D
+        ON A.J_KEY = D.J_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        <![CDATA[
+            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        AND A.PAY_STATUS IN
+        <foreach collection="payStatus" item="item" index="index" separator="," open="(" close=")">
+            #{item}
+        </foreach>
+        <if test="isOffline != null and isOffline >= 0">
+            AND A.IS_OFFLINE = #{isOffline}
+        </if>
+        <if test="payType != null and payType >= 0">
+            AND A.PAY_TYPE = #{payType}
+        </if>
+        <if test="isMobile != null and isMobile >= 0">
+            AND A.IS_MOBILE = #{isMobile}
+        </if>
+        <if test="searchType == 'orderUserId'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderId'">
+            AND A.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND C.G_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.J_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectCancelOrderListCount" resultType="Integer">
+        SELECT COUNT(J_KEY)
+        FROM (
+            SELECT DISTINCT A.J_KEY
+            FROM T_ORDER A
+            INNER JOIN T_USER B
+            ON A.USER_KEY = B.USER_KEY
+            INNER JOIN T_ORDER_GOODS C
+            ON A.J_KEY = C.J_KEY
+            LEFT OUTER JOIN T_ORDER_DELIVERY D
+            ON A.J_KEY = D.J_KEY
+            WHERE 1=1
+            <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+             ]]>
+            <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            <![CDATA[
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+             ]]>
+            <![CDATA[
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            AND A.PAY_STATUS IN (8, 9, 10)
+            <if test="isOffline != null and isOffline >= 0">
+                AND A.IS_OFFLINE = #{isOffline}
+            </if>
+            <if test="payType != null and payType >= 0">
+                AND A.PAY_TYPE = #{payType}
+            </if>
+            <if test="isMobile != null and isMobile >= 0">
+                AND A.IS_MOBILE = #{isMobile}
+            </if>
+            <if test="searchType == 'orderUserId'">
+                AND B.USER_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND B.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderId'">
+                AND A.J_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND C.G_NAME LIKE '%'||#{searchText}||'%'
+            </if>
+        )
+    </select>
+
+</mapper>

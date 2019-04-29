@@ -178,6 +178,47 @@
         ORDER BY DAY ASC
     </select>
 
+    <select id="selectTeacherStatisByMonth" resultType="TeacherCalculateDTO">
+        SELECT
+            C.G_KEY, B.KIND, C.NAME,
+            COUNT (DECODE(B.PAY_STATUS, 2, 1)) PAY_CNT,
+            SUM (DECODE(B.PAY_STATUS, 2, B.CALC_PRICE, 0)) PAY_PRICE,
+            COUNT (DECODE(B.PAY_STATUS, 8, 1)) CANCEL_CNT,
+            SUM (DECODE(B.PAY_STATUS, 8, B.CALC_PRICE, 0)) CANCEL_PRICE
+        FROM T_CALCULATE A
+        RIGHT JOIN T_CALCULATE_DATA B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        INNER JOIN T_GOODS C
+        ON B.G_KEY = C.G_KEY
+        WHERE A.TEACHER_KEY = #{teacherKey}
+        AND B.TYPE = #{goodsType}
+        AND A.YEAR_MONTH = #{month}
+        GROUP BY C.G_KEY, B.KIND, C.NAME
+        ORDER BY C.G_KEY ASC
+    </select>
 
+    <select id="selectTeacherStatisBySection" resultType="TeacherCalculateDTO">
+        SELECT
+            C.G_KEY, B.KIND, C.NAME,
+            COUNT (DECODE(B.PAY_STATUS, 2, 1)) PAY_CNT,
+            SUM (DECODE(B.PAY_STATUS, 2, B.CALC_PRICE, 0)) PAY_PRICE,
+            COUNT (DECODE(B.PAY_STATUS, 8, 1)) CANCEL_CNT,
+            SUM (DECODE(B.PAY_STATUS, 8, B.CALC_PRICE, 0)) CANCEL_PRICE
+        FROM T_CALCULATE A
+        RIGHT JOIN T_CALCULATE_DATA B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        INNER JOIN T_GOODS C
+        ON B.G_KEY = C.G_KEY
+        WHERE A.TEACHER_KEY = #{teacherKey}
+        AND B.TYPE = #{goodsType}
+        <![CDATA[
+            AND TO_CHAR(B.INDATE, 'YYYY-MM-DD') >= TO_DATE(#{searchStartDate}, 'YYYY-MM-DD')
+        ]]>
+        <![CDATA[
+            AND TO_CHAR(B.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{searchEndDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        GROUP BY C.G_KEY, B.KIND, C.NAME
+        ORDER BY C.G_KEY ASC
+    </select>
 
 </mapper>

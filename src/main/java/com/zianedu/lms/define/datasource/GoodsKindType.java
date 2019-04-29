@@ -1,5 +1,6 @@
 package com.zianedu.lms.define.datasource;
 
+import com.zianedu.lms.dto.GoodsKindName;
 import com.zianedu.lms.dto.SelectboxDTO;
 
 import java.util.ArrayList;
@@ -35,4 +36,27 @@ public enum GoodsKindType {
         }
         return list;
     }
+
+    public static String getGoodsKindName(int kind) {
+        for (GoodsKindType goodsKindType : GoodsKindType.values()) {
+            if (goodsKindType.kind == kind) {
+                return goodsKindType.kindStr;
+            }
+        }
+        return null;
+    }
+
+    public static List<GoodsKindName> getGoodsKindList() {
+        List<GoodsKindName>list = new ArrayList<>();
+        for (GoodsKindType goodsKindType : GoodsKindType.values()) {
+            GoodsKindName goodsKindName = new GoodsKindName();
+            goodsKindName.setGoodsKind(goodsKindType.kind);
+            goodsKindName.setGoodsKindName(goodsKindType.kindStr);
+
+            list.add(goodsKindName);
+        }
+        return list;
+    }
+
+
 }
