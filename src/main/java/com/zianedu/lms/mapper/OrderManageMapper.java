@@ -1,9 +1,6 @@
 package com.zianedu.lms.mapper;
 
-import com.zianedu.lms.dto.OrderGoodsNameDTO;
-import com.zianedu.lms.dto.OrderResultDTO;
-import com.zianedu.lms.dto.StatisResultDTO;
-import com.zianedu.lms.dto.TeacherCalculateDTO;
+import com.zianedu.lms.dto.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -26,11 +23,26 @@ public interface OrderManageMapper {
     List<OrderResultDTO> selectCancelOrderList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                          @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                          @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,
-                                         @Param("payStatus") List<String>payStatus, @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
+                                         @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
                                          @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     int selectCancelOrderListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                                @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,
                                                @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
                                                @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<OrderLectureListDTO> selectOrderLectureVideoList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                          @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
+                                                          @Param("payStatus") int payStatus, @Param("orderLecStatus") int orderLecStatus,
+                                                          @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectOrderLectureVideoListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
+                                                          @Param("payStatus") int payStatus, @Param("orderLecStatus") int orderLecStatus,
+                                                          @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    LectureTimeListDTO selectTOrderInfoAtLectureTime(@Param("jLecKey") int jLecKey);
+
+    List<LectureTimeDTO> selectLectureTimeList(@Param("jLecKey") int jLecKey);
+
+    Integer selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") int curriKey);
 }

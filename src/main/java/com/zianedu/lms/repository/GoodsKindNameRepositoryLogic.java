@@ -3,7 +3,6 @@ package com.zianedu.lms.repository;
 import com.zianedu.lms.define.datasource.GoodsKindType;
 import com.zianedu.lms.dto.GoodsKindName;
 import com.zianedu.lms.dto.GoodsKindNameContain;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

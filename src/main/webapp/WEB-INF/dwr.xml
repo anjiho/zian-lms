@@ -127,6 +127,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.TeacherCalculateDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.TeacherCalculateResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderResultDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.OrderLectureListDTO"/>
 
 	</allow>
 

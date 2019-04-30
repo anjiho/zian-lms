@@ -36,4 +36,8 @@ public class OrderResultDTO {
     private String depositUser;
 
     private int cardCode;
+
+    private int isOffline;
+
+    private int userKey;
 }

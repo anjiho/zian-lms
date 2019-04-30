@@ -4,9 +4,10 @@ package com.zianedu.lms.service;
 import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.OrderPayStatusType;
 import com.zianedu.lms.define.datasource.OrderPayType;
-import com.zianedu.lms.dto.OrderGoodsNameDTO;
-import com.zianedu.lms.dto.OrderResultDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.OrderManageMapper;
+import com.zianedu.lms.repository.GoodsKindNameRepository;
+import com.zianedu.lms.repository.OrderLecStatusNameRepository;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
 import org.slf4j.Logger;
@@ -26,6 +27,12 @@ public class OrderManageService {
 
     @Autowired
     private OrderManageMapper orderManageMapper;
+
+    @Autowired
+    private GoodsKindNameRepository goodsKindNameRepository;
+
+    @Autowired
+    private OrderLecStatusNameRepository orderLecStatusNameRepository;
 
     /**
      * 주문목록 조회
@@ -118,12 +125,10 @@ public class OrderManageService {
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
 
-        List<String>payStatus = Arrays.asList("8", "9", "10");
-
         List<OrderResultDTO>list = orderManageMapper.selectCancelOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""),
-                payStatus, isOffline, payType, isMobile, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+                isOffline, payType, isMobile, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
         );
 
         if (list != null && list.size() > 0) {
@@ -167,6 +172,77 @@ public class OrderManageService {
                 isOffline, payType, isMobile,
                 Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
         );
+    }
+
+    /**
+     * 수강관리 > 수강내역목록 리스트 가져오기
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<OrderLectureListDTO> getVideoLectureWatchList(int sPage, int listLimit, String startSearchDate, String endSearchDate,
+                                                              int payStatus, int orderLecStatus, String searchType, String searchText) {
+        if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<OrderLectureListDTO>list = orderManageMapper.selectOrderLectureVideoList(
+                startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
+                payStatus, orderLecStatus, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        if (list.size() > 0) {
+            //수강타입명 주입하기
+            goodsKindNameRepository.injectGoodsKindNameAny(list);
+            //진행상태명 주입하기
+            orderLecStatusNameRepository.injectOrderLecStatusNameAny(list);
+        }
+        return list;
+    }
+
+    /**
+     * 수강관리 > 수강내역목록 리스트 개수
+     * @param startSearchDate
+     * @param endSearchDate
+     * @param payStatus
+     * @param orderLecStatus
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getVideoLectureWatchListCount(String startSearchDate, String endSearchDate,
+                                             int payStatus, int orderLecStatus, String searchType, String searchText) {
+        if ("".equals(startSearchDate) && "".equals(endSearchDate)) return 0;
+
+        return orderManageMapper.selectOrderLectureVideoListCount(
+                Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
+                payStatus, orderLecStatus, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+    /**
+     * 수강관리 > 수강내역목록 > 수강시간 조정 데이터
+     * @param jLecKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public ResultDTO getLectureVideoDetailInfo(int jLecKey) {
+        LectureTimeListDTO lectureTimeInfo = orderManageMapper.selectTOrderInfoAtLectureTime(jLecKey);
+        List<LectureTimeDTO> lectureTimeInfoList = orderManageMapper.selectLectureTimeList(jLecKey);
+        //강좌수만큼 시간이 있는지 확인
+        if (lectureTimeInfoList != null || lectureTimeInfoList.size() > 0) {
+            for (LectureTimeDTO lectureTimeDTO : lectureTimeInfoList) {
+                Integer remainTime = orderManageMapper.selectLectureTimeByCurriKey(jLecKey, lectureTimeDTO.getCurriKey());
+                if (remainTime == null) {
+                    lectureTimeDTO.setRemainTime(0);
+                } else {
+                    lectureTimeDTO.setRemainTime(remainTime);
+                }
+            }
+        }
+        ResultDTO resultDTO = new ResultDTO();
+        resultDTO.setResult(lectureTimeInfo);
+        resultDTO.setResultList(lectureTimeInfoList);
+        return resultDTO;
     }
 
 }
