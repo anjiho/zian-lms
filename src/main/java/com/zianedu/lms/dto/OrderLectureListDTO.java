@@ -3,7 +3,9 @@ package com.zianedu.lms.dto;
 import lombok.Data;
 
 @Data
-public class OrderLectureListDTO implements GoodsKindNameContain, OrderLecStatusNameContain {
+public class OrderLectureListDTO implements GoodsKindNameContain,
+                                            OrderLecStatusNameContain,
+                                            OrderPayTypeNameContain {
 
     private Long jLecKey;
 
@@ -33,6 +35,16 @@ public class OrderLectureListDTO implements GoodsKindNameContain, OrderLecStatus
 
     private String jId;
 
+    private String userName;
+
+    private int payStatus;
+
+    private int userKey;
+
+    private int payType;
+
+    private String payTypeName;
+
     @Override
     public Integer goodsKind() {
         return kind;
@@ -51,5 +63,15 @@ public class OrderLectureListDTO implements GoodsKindNameContain, OrderLecStatus
     @Override
     public void addOrderLecStatusName(OrderLecStatusName orderLecStatusName) {
         statusName = orderLecStatusName.getOrderLecStatusName();
+    }
+
+    @Override
+    public Integer orderPayType() {
+        return payType;
+    }
+
+    @Override
+    public void addOrderPayTypeName(OrderPayTypeName orderPayTypeName) {
+        payTypeName = orderPayTypeName.getOrderPayTypeName();
     }
 }

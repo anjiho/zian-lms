@@ -8,8 +8,10 @@ import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.OrderManageMapper;
 import com.zianedu.lms.repository.GoodsKindNameRepository;
 import com.zianedu.lms.repository.OrderLecStatusNameRepository;
+import com.zianedu.lms.repository.OrderPayTypeNameRepository;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
+import com.zianedu.lms.vo.TOrderLecCurriVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -32,6 +34,9 @@ public class OrderManageService {
 
     @Autowired
     private OrderLecStatusNameRepository orderLecStatusNameRepository;
+
+    @Autowired
+    private OrderPayTypeNameRepository orderPayTypeNameRepository;
 
     /**
      * 주문목록 조회
@@ -193,6 +198,8 @@ public class OrderManageService {
             goodsKindNameRepository.injectGoodsKindNameAny(list);
             //진행상태명 주입하기
             orderLecStatusNameRepository.injectOrderLecStatusNameAny(list);
+            //결제상태명 주입하기
+            orderPayTypeNameRepository.injectOrderPayTypeNameAny(list);
         }
         return list;
     }
@@ -227,17 +234,7 @@ public class OrderManageService {
     public ResultDTO getUserLectureVideoDetailInfo(int jLecKey) {
         LectureTimeInfoDTO lectureTimeInfo = orderManageMapper.selectTOrderInfoAtLectureTime(jLecKey);
         List<LectureTimeDTO> lectureTimeInfoList = orderManageMapper.selectLectureTimeList(jLecKey);
-        //강좌수만큼 시간이 있는지 확인
-        if (lectureTimeInfoList != null || lectureTimeInfoList.size() > 0) {
-            for (LectureTimeDTO lectureTimeDTO : lectureTimeInfoList) {
-                Integer remainTime = orderManageMapper.selectLectureTimeByCurriKey(jLecKey, lectureTimeDTO.getCurriKey());
-                if (remainTime == null) {
-                    lectureTimeDTO.setRemainTime(0);
-                } else {
-                    lectureTimeDTO.setRemainTime(remainTime);
-                }
-            }
-        }
+
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setResult(lectureTimeInfo);
         resultDTO.setResultList(lectureTimeInfoList);

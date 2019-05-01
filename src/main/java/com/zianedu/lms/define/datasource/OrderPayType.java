@@ -1,5 +1,11 @@
 package com.zianedu.lms.define.datasource;
 
+import com.zianedu.lms.dto.OrderPayTypeName;
+import org.aspectj.weaver.ast.Or;
+
+import java.util.ArrayList;
+import java.util.List;
+
 public enum OrderPayType {
 
     CARD(0, "신용카드"),
@@ -27,5 +33,17 @@ public enum OrderPayType {
             }
         }
         return null;
+    }
+
+    public static List<OrderPayTypeName> getOrderPayTypeList() {
+        List<OrderPayTypeName>list = new ArrayList<>();
+        for (OrderPayType orderPayType : OrderPayType.values()) {
+            OrderPayTypeName orderPayTypeName = new OrderPayTypeName();
+            orderPayTypeName.setOrderPayType(orderPayType.orderPayTypeKey);
+            orderPayTypeName.setOrderPayTypeName(orderPayType.orderPayTypeStr);
+
+            list.add(orderPayTypeName);
+        }
+        return list;
     }
 }

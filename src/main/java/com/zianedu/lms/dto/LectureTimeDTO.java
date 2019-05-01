@@ -5,11 +5,13 @@ import lombok.Data;
 @Data
 public class LectureTimeDTO {
 
-    private int curriKey;
+    private Long curriKey;
 
     private String name;
 
     private int vodTime;
 
     private int remainTime;
+
+    private Long jCurriKey;
 }

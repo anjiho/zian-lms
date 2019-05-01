@@ -237,16 +237,82 @@
     </select>
 
     <select id="selectOrderLectureVideoList" resultType="OrderLectureListDTO">
-        SELECT A.J_LEC_KEY, C.J_KEY, C.USER_KEY, E.NAME, B.KIND, D.NAME as GOODS_NAME, A.STATUS, A.START_DT, (A.START_DT + A.LIMIT_DAY) as END_DT, A.LIMIT_DAY, A.PAUSE_CNT, A.PAUSE_START_DT, A.PAUSE_TOTAL_DAY, A.PAUSE_DAY, C.PAY_STATUS
+        SELECT
+            A.J_LEC_KEY, C.J_KEY, C.USER_KEY, E.NAME, B.KIND, D.NAME as GOODS_NAME,
+            A.STATUS, A.START_DT, (A.START_DT + A.LIMIT_DAY) as END_DT, A.LIMIT_DAY,
+            A.PAUSE_CNT, A.PAUSE_START_DT, A.PAUSE_TOTAL_DAY, A.PAUSE_DAY, C.PAY_STATUS,
+            E.NAME as USER_NAME, C.J_ID, C.PAY_TYPE
         FROM T_ORDER_LEC A
         INNER JOIN T_ORDER_GOODS B
-        on A.J_G_KEY = B.J_G_KEY
+        ON A.J_G_KEY = B.J_G_KEY
         INNER JOIN T_ORDER C
-        on B.J_KEY = C.J_KEY
+        ON B.J_KEY = C.J_KEY
         INNER JOIN T_GOODS D
-        on B.G_KEY = D.G_KEY
+        ON B.G_KEY = D.G_KEY
         INNER JOIN T_USER E
-        on C.USER_KEY = E.USER_KEY
+        ON C.USER_KEY = E.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+             ]]>
+        <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        <if test="payStatus != null and payStatus != ''">
+            <!-- 결제상태 : 결제완료 -->
+            <if test="payStatus == '1'">
+                AND C.PAY_STATUS IN (0, 1, 2)
+            </if>
+            <!-- 결제상태 : 결제취소 -->
+            <if test="payStatus == '2'">
+                AND C.PAY_STATUS IN (8, 9, 10)
+            </if>
+        </if>
+        <if test="orderLecStatus != null and orderLecStatus != ''">
+            <!-- 진행상태 : 대기중 + 시작 -->
+            <if test="orderLecStatus == '1'">
+                AND A.STATUS IN (0, 1)
+            </if>
+            <!-- 진행상태 : 일시정지 -->
+            <if test="orderLecStatus == '2'">
+                AND A.STATUS = 2
+            </if>
+            <!-- 진행상태 : 종강 -->
+            <if test="orderLecStatus == '3'">
+                AND A.STATUS = 3
+            </if>
+            <!-- 진행상태 : 재시작대기 -->
+            <if test="orderLecStatus == '3'">
+                AND A.STATUS = 4
+            </if>
+        </if>
+        <if test="searchType == 'userId'">
+            AND E.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'userName'">
+            AND E.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderNumber'">
+            AND C.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'goodsName'">
+            AND D.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.J_LEC_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectOrderLectureVideoListCount" resultType="Integer">
+        SELECT COUNT (A.J_LEC_KEY)
+        FROM T_ORDER_LEC A
+        INNER JOIN T_ORDER_GOODS B
+        ON A.J_G_KEY = B.J_G_KEY
+        INNER JOIN T_ORDER C
+        ON B.J_KEY = C.J_KEY
+        INNER JOIN T_GOODS D
+        ON B.G_KEY = D.G_KEY
+        INNER JOIN T_USER E
+        ON C.USER_KEY = E.USER_KEY
         WHERE 1=1
         <![CDATA[
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -282,12 +348,18 @@
                 AND A.STATUS = 4
             </if>
         </if>
-        ORDER BY A.J_LEC_KEY DESC
-        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
-    </select>
-
-    <select id="selectOrderLectureVideoListCount" resultType="Integer">
-
+        <if test="searchType == 'userId'">
+            AND E.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'userName'">
+            AND E.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderNumber'">
+            AND C.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'goodsName'">
+            AND D.NAME LIKE '%'||#{searchText}||'%'
+        </if>
     </select>
 
     <select id="selectTOrderInfoAtLectureTime" resultType="LectureTimeInfoDTO">
@@ -306,9 +378,12 @@
 
     <!-- 수강내역목록 > 수강시간 조정 > 강의제목 리스트 -->
     <select id="selectLectureTimeList" resultType="LectureTimeDTO">
-        SELECT A.CURRI_KEY, A.NAME, A.VOD_TIME
-        FROM T_LEC_CURRI A
-        WHERE A.LEC_KEY = (
+        SELECT
+            Z.CURRI_KEY, Z.NAME, Z.VOD_TIME,
+            NVL((SELECT J_CURRI_KEY FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY = #{jLecKey}), 0) as J_CURRI_KEY,
+        NVL((SELECT TIME FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY = #{jLecKey}), 0) as REMAIN_TIME
+        FROM T_LEC_CURRI Z
+        WHERE Z.LEC_KEY = (
             SELECT C.LEC_KEY
             FROM T_ORDER_LEC A
             INNER JOIN T_ORDER_GOODS B
@@ -317,14 +392,18 @@
             ON B.G_KEY = C.G_KEY
             WHERE A.J_LEC_KEY = #{jLecKey}
         )
-        ORDER BY A.CURRI_KEY ASC
+        ORDER BY Z.CURRI_KEY ASC
     </select>
 
-    <select id="selectLectureTimeByCurriKey" resultType="Integer">
-        SELECT TIME
+    <select id="selectLectureTimeByCurriKey" resultType="com.zianedu.lms.vo.TOrderLecCurriVO">
+        SELECT J_CURRI_KEY, TIME
         FROM T_ORDER_LEC_CURRI
         WHERE J_LEC_KEY = #{jLecKey}
         AND CURRI_KEY = #{curriKey}
     </select>
+
+    <insert id="insertTOrderLecCurri" parameterType="">
+
+    </insert>
 
 </mapper>

@@ -9,6 +9,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
+/**
+ * 강좌 상태 한글명 주입하기(T_ORDER_LEC.STATUS)
+ */
 @Component
 public class OrderLecStatusNameRepositoryLogic implements OrderLecStatusNameRepository {
 

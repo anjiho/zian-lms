@@ -1,12 +1,13 @@
 package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.*;
+import com.zianedu.lms.vo.TOrderLecCurriVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface OrderManageMapper {
-
+    /** SELECT **/
     List<OrderResultDTO> selectOrderList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                          @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                          @Param("goodsType") int goodsType, @Param("isOffline") int isOffline,
@@ -44,5 +45,8 @@ public interface OrderManageMapper {
 
     List<LectureTimeDTO> selectLectureTimeList(@Param("jLecKey") int jLecKey);
 
-    Integer selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") int curriKey);
+    TOrderLecCurriVO selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") Long curriKey);
+
+    /** INSERT **/
+    void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 }
