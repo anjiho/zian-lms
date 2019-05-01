@@ -10,8 +10,8 @@ public enum GoodsKindType {
 
     BASIC(0, "기본설정"),
     VOD(100, "VOD"),
-    MOBILE(101, "Mobile"),
-    VOD_MOBILE(102, "VOD + Mobile"),
+    MOBILE(101, "MOBILE"),
+    VOD_MOBILE(102, "VOD + MOBILE"),
     CATEGORY_SEARCH(119, "카테고리 참조"),
     DIRECT_INSERT(120, "직접입력");
 

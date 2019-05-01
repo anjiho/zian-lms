@@ -128,6 +128,8 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.TeacherCalculateResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderLectureListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.LectureTimeDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.LectureTimeInfoDTO"/>
 
 	</allow>
 

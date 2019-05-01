@@ -3,9 +3,9 @@ package com.zianedu.lms.dto;
 import lombok.Data;
 
 @Data
-public class LectureTimeListDTO {
+public class LectureTimeInfoDTO {
 
-    private int jLecKey;
+    private Long jLecKey;
 
     private String jId;
 

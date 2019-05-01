@@ -19,7 +19,7 @@ public class OrderLecStatusNameRepositoryLogic implements OrderLecStatusNameRepo
         List<OrderLecStatusNameContain> contains = orderLecStatusNameAny
                 .stream()
                 .filter(Objects::nonNull)
-                .filter(any->any instanceof OrderLecStatusName)
+                .filter(any->any instanceof OrderLecStatusNameContain)
                 .map(any->(OrderLecStatusNameContain)any)
                 .collect(Collectors.toList());
 

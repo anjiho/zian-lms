@@ -40,7 +40,7 @@ public interface OrderManageMapper {
                                                           @Param("payStatus") int payStatus, @Param("orderLecStatus") int orderLecStatus,
                                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
 
-    LectureTimeListDTO selectTOrderInfoAtLectureTime(@Param("jLecKey") int jLecKey);
+    LectureTimeInfoDTO selectTOrderInfoAtLectureTime(@Param("jLecKey") int jLecKey);
 
     List<LectureTimeDTO> selectLectureTimeList(@Param("jLecKey") int jLecKey);
 

@@ -17,7 +17,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -225,8 +224,8 @@ public class OrderManageService {
      * @return
      */
     @Transactional(readOnly = true)
-    public ResultDTO getLectureVideoDetailInfo(int jLecKey) {
-        LectureTimeListDTO lectureTimeInfo = orderManageMapper.selectTOrderInfoAtLectureTime(jLecKey);
+    public ResultDTO getUserLectureVideoDetailInfo(int jLecKey) {
+        LectureTimeInfoDTO lectureTimeInfo = orderManageMapper.selectTOrderInfoAtLectureTime(jLecKey);
         List<LectureTimeDTO> lectureTimeInfoList = orderManageMapper.selectLectureTimeList(jLecKey);
         //강좌수만큼 시간이 있는지 확인
         if (lectureTimeInfoList != null || lectureTimeInfoList.size() > 0) {

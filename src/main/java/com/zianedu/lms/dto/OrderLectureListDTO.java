@@ -50,6 +50,6 @@ public class OrderLectureListDTO implements GoodsKindNameContain, OrderLecStatus
 
     @Override
     public void addOrderLecStatusName(OrderLecStatusName orderLecStatusName) {
-        kindName = orderLecStatusName.getOrderLecStatusName();
+        statusName = orderLecStatusName.getOrderLecStatusName();
     }
 }

@@ -248,14 +248,13 @@
         INNER JOIN T_USER E
         on C.USER_KEY = E.USER_KEY
         WHERE 1=1
-
         <![CDATA[
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
              ]]>
         <![CDATA[
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
-        <if test="payStatus != null and patStatus != ''">
+        <if test="payStatus != null and payStatus != ''">
             <!-- 결제상태 : 결제완료 -->
             <if test="payStatus == '1'">
                 AND C.PAY_STATUS IN (0, 1, 2)
@@ -265,32 +264,33 @@
                 AND C.PAY_STATUS IN (8, 9, 10)
             </if>
         </if>
-        <if test="lecStatus != null and lecStatus != ''">
+        <if test="orderLecStatus != null and orderLecStatus != ''">
             <!-- 진행상태 : 대기중 + 시작 -->
             <if test="lecStatus == '1'">
                 AND A.STATUS IN (0, 1)
             </if>
             <!-- 진행상태 : 일시정지 -->
-            <if test="lecStatus == '2'">
+            <if test="orderLecStatus == '2'">
                 AND A.STATUS = 2
             </if>
             <!-- 진행상태 : 종강 -->
-            <if test="lecStatus == '3'">
+            <if test="orderLecStatus == '3'">
                 AND A.STATUS = 3
             </if>
             <!-- 진행상태 : 재시작대기 -->
-            <if test="lecStatus == '3'">
+            <if test="orderLecStatus == '3'">
                 AND A.STATUS = 4
             </if>
         </if>
         ORDER BY A.J_LEC_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
 
     <select id="selectOrderLectureVideoListCount" resultType="Integer">
 
     </select>
 
-    <select id="selectTOrderInfoAtLectureTime" resultType="LectureTimeListDTO">
+    <select id="selectTOrderInfoAtLectureTime" resultType="LectureTimeInfoDTO">
         SELECT A.J_LEC_KEY, C.j_id, C.USER_KEY, E.NAME, D.NAME as GOODS_NAME
         FROM T_ORDER_LEC A
         INNER JOIN T_ORDER_GOODS B
@@ -317,6 +317,7 @@
             ON B.G_KEY = C.G_KEY
             WHERE A.J_LEC_KEY = #{jLecKey}
         )
+        ORDER BY A.CURRI_KEY ASC
     </select>
 
     <select id="selectLectureTimeByCurriKey" resultType="Integer">
