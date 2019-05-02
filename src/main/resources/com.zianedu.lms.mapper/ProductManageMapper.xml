@@ -368,6 +368,35 @@
 		WHERE A.g_key = #{gKey}
 	</select>
 
+	<select id="selectVideoProductListByFreeLectureInject" resultType="FreeInjectDTO">
+		SELECT A.G_KEY, A.NAME as GOODS_NAME,
+			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 100) as VOD_PRICE_KEY,
+			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 101) as MOBILE_PRICE_KEY,
+			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 102) as VOD_MOBILE_PRICE_KEY
+		FROM T_GOODS A
+		WHERE A.TYPE = 1
+		<if test="searchType == 'name'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		<if test="searchType == 'code'">
+			AND A.G_KEY = #{searchText}
+		</if>
+		ORDER BY A.G_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectVideoProductListCountByFreeLectureInject" resultType="Integer">
+		SELECT COUNT (A.G_KEY)
+		FROM T_GOODS A
+		WHERE A.TYPE = 1
+		<if test="searchType == 'name'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		<if test="searchType == 'code'">
+			AND A.G_KEY = #{searchText}
+		</if>
+	</select>
+
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		<selectKey resultType="Integer" keyProperty="gKey" order="BEFORE">
 			SELECT T_GOODS_SEQ.NEXTVAL FROM DUAL

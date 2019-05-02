@@ -13,4 +13,13 @@ public class TOrderLecCurriVO {
 
     private Integer time;
 
+    public TOrderLecCurriVO(){}
+
+    public TOrderLecCurriVO(Long jCurriKey, Long jLecKey, Long curriKey, Integer time) {
+        this.jCurriKey = jCurriKey;
+        this.jLecKey = jLecKey;
+        this.curriKey = curriKey;
+        this.time = time;
+    }
+
 }

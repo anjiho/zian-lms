@@ -49,7 +49,7 @@ public class Util {
 
     public static String getYearMonth(){
         Date date = new Date();
-        SimpleDateFormat formatter =new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        SimpleDateFormat formatter =new SimpleDateFormat("yyMMdd", Locale.KOREA);
         return formatter.format(date);
     }
 
@@ -633,6 +633,12 @@ public class Util {
         return sdf.format(today);
     }
 
+    public static String returnHourMinute() {
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+        return sdf.format(today);
+    }
+
     public static String yesterDay(String date) {
         long chStart = 0;
         DateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -1059,7 +1065,7 @@ public class Util {
         String str = "c7684301";
         SecurityUtil securityUtil = new SecurityUtil();
 
-        System.out.println(convertDateFormat("201507"));
+        System.out.println(plusDate(returnNowDateByYYMMDD(), 7));
 
     }
 }

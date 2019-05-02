@@ -130,6 +130,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderLectureListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.LectureTimeDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.LectureTimeInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.FreeInjectDTO"/>
 
 	</allow>
 

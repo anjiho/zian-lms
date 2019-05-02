@@ -6,17 +6,20 @@ import com.zianedu.lms.define.datasource.OrderPayStatusType;
 import com.zianedu.lms.define.datasource.OrderPayType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.OrderManageMapper;
+import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.repository.GoodsKindNameRepository;
 import com.zianedu.lms.repository.OrderLecStatusNameRepository;
 import com.zianedu.lms.repository.OrderPayTypeNameRepository;
+import com.zianedu.lms.session.UserSession;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
-import com.zianedu.lms.vo.TOrderLecCurriVO;
+import com.zianedu.lms.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,6 +34,9 @@ public class OrderManageService {
 
     @Autowired
     private GoodsKindNameRepository goodsKindNameRepository;
+
+    @Autowired
+    private ProductManageMapper productManageMapper;
 
     @Autowired
     private OrderLecStatusNameRepository orderLecStatusNameRepository;
@@ -239,6 +245,115 @@ public class OrderManageService {
         resultDTO.setResult(lectureTimeInfo);
         resultDTO.setResultList(lectureTimeInfoList);
         return resultDTO;
+    }
+
+    /**
+     * 수강관리 > 수강내역목록 > 수강시간 조정 > 시간 수정 (배열이아닌 건 바이 건)
+     * @param jCurriKey
+     * @param jLecKey
+     * @param curriKey
+     * @param time
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void changeUserLectureTime(int jCurriKey, int jLecKey, int curriKey, int time) {
+        if (jLecKey == 0 && curriKey == 0) return;
+
+        TOrderLecCurriVO lecCurriVO = new TOrderLecCurriVO(
+                (long)jCurriKey,
+                (long)jLecKey,
+                (long)curriKey,
+                time
+        );
+        if (jCurriKey == 0) {
+            orderManageMapper.insertTOrderLecCurri(lecCurriVO);
+        } else {
+            orderManageMapper.updateTOrderLecCurri(lecCurriVO);
+        }
+    }
+
+    /**
+     * 수강관리 > 수강내역목록 > 수강타입, 진행상태 수정 ( UI 새로 구성 --> 한번에 표현 후 수정 )
+     * @param jLecKey
+     * @param kind
+     * @param status
+     * @param startDate
+     * @param endDate
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUserLectureInfo(Long jLecKey, int kind, int status, String startDate, String endDate) {
+        if (jLecKey == 0L) return;
+
+        String searchStartDate = "";
+        String searchEndDate = "";
+
+        if (!"".equals(startDate)) {
+            String[] startDates = Util.split(startDate, "-");
+            searchStartDate = startDates[0] + startDates[1] + startDates[2];
+        }
+        if (!"".equals(endDate)) {
+            String[] endDates = Util.split(endDate, "-");
+            searchEndDate = endDates[0] + endDates[1] + endDates[2];
+        }
+        int limitDay = Util.getDiffDayCount(searchStartDate, searchEndDate);
+
+        Long jGKey = orderManageMapper.selectJGKeyByJLecKey(jLecKey);
+        if (jGKey != null || jGKey > 0L) {
+            orderManageMapper.updateTOrderGoodsKind(jGKey, kind);
+        }
+        orderManageMapper.updateTOrderLec(jLecKey, status, limitDay);
+    }
+
+    /**
+     * 수강관리 > 학원수강입력
+     * @param userKey
+     * @param goodsKeyList
+     * @param price
+     * @param payType
+     * @param cardCode
+     * @param memoTitle
+     * @param memoContent
+     * @return
+     * @throws Exception
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int saveAcademyLecture(Integer userKey, List<Integer>goodsKeyList, int price, int payType,
+                                   String cardCode, String memoTitle, String memoContent) throws Exception {
+        if (userKey == 0 && goodsKeyList.size() == 0 && price == 0) return 0;
+
+        TOrderVO tOrderVO = new TOrderVO(userKey, price, payType, cardCode);
+        //T_ORDER 결제정보 저장
+        orderManageMapper.insertTOrder(tOrderVO);
+
+        int jKey = tOrderVO.getJKey();
+        if (jKey > 0) {
+            for (Integer goodsKey : goodsKeyList) {
+                //상품의 강사이름 조회
+                List<String>teacherName = productManageMapper.selectTeacherNameListByVideoProduct(goodsKey);
+                //상품의 강좌 조회
+                TLecVO tLecVO = productManageMapper.selectTLecInfo(goodsKey);
+                //상품의 가격 조회
+                List<TGoodsPriceOptionVO>goodsPriceOptionList = productManageMapper.selectTGoodsPriceOptionList(goodsKey);
+                //상품 기본정보 조회
+                TGoodsVO tGoodsVO = productManageMapper.selectTGoodsInfo(goodsKey);
+
+                if (tLecVO != null && goodsPriceOptionList.size() > 0) {
+                    TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
+                            jKey, userKey, goodsKey, goodsPriceOptionList.get(0).getPriceKey(), price,
+                            goodsPriceOptionList.get(0).getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
+                            tLecVO.getSubjectCtgKey(), teacherName.get(0), tGoodsVO.getName()
+                    );
+                    //T_ORDER_GOODS 결제 상품 저장
+                    orderManageMapper.insertTOrderGoods(tOrderGoodsVO);
+                }
+            }
+            if (!"".equals(memoTitle)) {
+                //메모 정보 저장
+                int sendUserKey = UserSession.get() == null ? 5 : UserSession.getUserKey();
+                TMemoVO tMemoVO = new TMemoVO(jKey, sendUserKey, Util.isNullValue(memoTitle, ""), Util.isNullValue(memoContent, ""));
+                orderManageMapper.insertTMemo(tMemoVO);
+            }
+        }
+        return jKey;
     }
 
 }

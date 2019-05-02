@@ -1,7 +1,10 @@
 package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.*;
+import com.zianedu.lms.vo.TMemoVO;
+import com.zianedu.lms.vo.TOrderGoodsVO;
 import com.zianedu.lms.vo.TOrderLecCurriVO;
+import com.zianedu.lms.vo.TOrderVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -47,6 +50,21 @@ public interface OrderManageMapper {
 
     TOrderLecCurriVO selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") Long curriKey);
 
+    Long selectJGKeyByJLecKey(@Param("jLecKey") Long jLecKey);
+
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
+
+    Long insertTOrder(TOrderVO tOrderVO);
+
+    void insertTOrderGoods(TOrderGoodsVO tOrderGoodsVO);
+
+    void insertTMemo(TMemoVO tMemoVO);
+
+    /** UPDATE **/
+    void updateTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
+
+    void updateTOrderLec(@Param("jLecKey") Long jLecKey, @Param("status") int status, @Param("limitDay") int limitDay);
+
+    void updateTOrderGoodsKind(@Param("jGKey") Long jGKey, @Param("kind") int kind);
 }

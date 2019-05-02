@@ -1,9 +1,6 @@
 package com.zianedu.lms.mapper;
 
-import com.zianedu.lms.dto.PagingSearchDTO;
-import com.zianedu.lms.dto.ProblemBankListDTO;
-import com.zianedu.lms.dto.ProblemBankSubjectDTO;
-import com.zianedu.lms.dto.VideoListDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -85,6 +82,11 @@ public interface ProductManageMapper {
     Integer selectTBankSubjectQuesLinkLastPos(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey);
 
     List<String> selectTeacherNameListByVideoProduct(@Param("gKey") int gKey);
+
+    List<FreeInjectDTO> selectVideoProductListByFreeLectureInject(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                                  @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectVideoProductListCountByFreeLectureInject(@Param("searchText") String searchText, @Param("searchType") String searchType);
 
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);

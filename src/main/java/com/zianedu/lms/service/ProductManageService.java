@@ -521,42 +521,38 @@ public class ProductManageService extends PagingSupport {
         return subjectDetailDTO;
     }
 
-//    /**
-//     * 상품종류 리스트
-//     * @param sPage
-//     * @param listLimit
-//     * @param searchType
-//     * @param searchText
-//     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 책 : BOOK)
-//     * @return
-//     */
-//    @Transactional(readOnly = true)
-//    public List<TGoodsVO>getGoodList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
-//        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-//        return productManageMapper.selectTGoodsListByType(
-//                startNumber,
-//                listLimit,
-//                Util.isNullValue(searchType, ""),
-//                Util.isNullValue(searchText, ""),
-//                GoodsType.getGoodsTypeKey(goodsTypeStr)
-//        );
-//    }
-//
-//    /**
-//     * 상품종류 리스트 개수
-//     * @param searchType
-//     * @param searchText
-//     * @param goodsTypeStr
-//     * @return
-//     */
-//    @Transactional(readOnly = true)
-//    public int getGoodListCount(String searchType, String searchText, String goodsTypeStr) {
-//        return productManageMapper.selectTGoodsListByTypeCount(
-//                Util.isNullValue(searchType, ""),
-//                Util.isNullValue(searchText, ""),
-//                GoodsType.getGoodsTypeKey(goodsTypeStr)
-//        );
-//    }
+    /**
+     * 수강관리 > 무료수강입력 > 상품목록 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<FreeInjectDTO> getVideoProductListByFreeLectureInject(int sPage, int listLimit,
+                                                                      String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<FreeInjectDTO>list = productManageMapper.selectVideoProductListByFreeLectureInject(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 수강관리 > 무료수강입력 > 상품목록 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getVideoProductListCountByFreeLectureInject(String searchType, String searchText) {
+        return productManageMapper.selectVideoProductListCountByFreeLectureInject(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
 
     /**
      * 상품기본정보 저장및 수정
