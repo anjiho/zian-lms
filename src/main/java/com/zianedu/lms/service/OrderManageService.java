@@ -356,4 +356,49 @@ public class OrderManageService {
         return jKey;
     }
 
+    /**
+     * 수강관리 > 무료수강입력 (강의시작일, 강의종료일, 수강일수, 시작대기 값 개발해야함)
+     * @param priceKeyList
+     * @param userKeyList
+     * @return
+     * @throws Exception
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int injectFreeVideoLecture(List<Integer>priceKeyList, List<Integer>userKeyList) throws Exception {
+        if (priceKeyList.size() == 0 && userKeyList.size() == 0) return 0;
+        int jKey = 0;
+
+        for (Integer userKey : userKeyList) {
+            for (Integer priceKey : priceKeyList) {
+                TGoodsPriceOptionVO tGoodsPriceOptionVO = productManageMapper.selectTGoodsPriceOptionInfo(priceKey);
+                int gKey = tGoodsPriceOptionVO.getGKey();
+                //상품의 강사이름 조회
+                List<String>teacherName = productManageMapper.selectTeacherNameListByVideoProduct(gKey);
+                //상품의 강좌 조회
+                TLecVO tLecVO = productManageMapper.selectTLecInfo(gKey);
+                //상품의 가격 조회
+                List<TGoodsPriceOptionVO>goodsPriceOptionList = productManageMapper.selectTGoodsPriceOptionList(gKey);
+                //상품 기본정보 조회
+                TGoodsVO tGoodsVO = productManageMapper.selectTGoodsInfo(gKey);
+
+                TOrderVO tOrderVO = new TOrderVO(userKey, 0, 20, "0");
+                orderManageMapper.insertTOrder(tOrderVO);
+
+                jKey = tOrderVO.getJKey();
+                if (jKey > 0) {
+                    if (tLecVO != null && goodsPriceOptionList.size() > 0) {
+                        TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
+                                jKey, userKey, gKey, goodsPriceOptionList.get(0).getPriceKey(), 0,
+                                tGoodsPriceOptionVO.getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
+                                tLecVO.getSubjectCtgKey(), teacherName.get(0), tGoodsVO.getName()
+                        );
+                        //T_ORDER_GOODS 결제 상품 저장
+                        orderManageMapper.insertTOrderGoods(tOrderGoodsVO);
+                    }
+                }
+            }
+        }
+        return jKey;
+    }
+
 }

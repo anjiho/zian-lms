@@ -50,6 +50,10 @@
 		SELECT * FROM T_GOODS_PRICE_OPTION WHERE G_KEY = #{gKey}
 	</select>
 
+	<select id="selectTGoodsPriceOptionInfo" resultType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		SELECT * FROM T_GOODS_PRICE_OPTION WHERE PRICE_KEY = #{priceKey}
+	</select>
+
 	<select id="selectTCategoryGoodsList" parameterType="Integer" resultType="com.zianedu.lms.vo.TCategoryGoods">
 		SELECT * FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
 	</select>
