@@ -1065,7 +1065,7 @@ public class Util {
         String str = "c7684301";
         SecurityUtil securityUtil = new SecurityUtil();
 
-        System.out.println(plusDate(returnNowDateByYYMMDD(), 7));
+        System.out.println(convertToYYYYMMDD("2019-05-04"));
 
     }
 }

@@ -135,6 +135,16 @@ public class StringUtils {
         return sj.toString();
     }
 
+    public static String implodeList(String separator, List<String>dataList) {
+        StringJoiner sj = new StringJoiner(separator);
+        for (String str : dataList) {
+            if (!COMMA.matcher(str).matches()) {
+                sj.add(str);
+            }
+        }
+        return sj.toString();
+    }
+
     /**
      * 콤마 자르기
      * @param srcStr
@@ -285,8 +295,10 @@ public class StringUtils {
     }
 
     public static void main(String[] args) {
-        String[] strs = {"1","2","3"};
-        System.out.println(stringArrayToString(strs, ","));
+        List<String>list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        System.out.println(implodeList(",", list));
     }
 
     String lottoNumbers() {

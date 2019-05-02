@@ -486,6 +486,22 @@
         )
     </insert>
 
+    <insert id="insertTOrderLec" parameterType="com.zianedu.lms.vo.TOrderLecVO">
+        <selectKey resultType="int" keyProperty="jLecKey" order="BEFORE">
+            SELECT T_ORDER_LEC_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_ORDER_LEC
+        (
+          J_LEC_KEY, J_G_KEY, INDATE, STATUS, START_DT, LIMIT_DAY, PAUSE_START_DT,
+          PAUSE_CNT, PAUSE_DAY, PAUSE_TOTAL_DAY, MULTIPLE, MAX_READ_COUNT
+        )
+        VALUES
+        (
+          #{jLecKey}, #{jGKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{status}, TO_DATE(#{startDt}, 'YYYY-mm-dd hh24:mi:ss'), #{limitDay}, #{pauseStartDt},
+          #{pauseCnt}, #{pauseDay}, #{pauseTotalDay}, #{multiple}, #{maxReadCount}
+        )
+    </insert>
+
     <update id="updateTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         UPDATE T_ORDER_LEC_CURRI
         <set>

@@ -1,10 +1,7 @@
 package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.*;
-import com.zianedu.lms.vo.TMemoVO;
-import com.zianedu.lms.vo.TOrderGoodsVO;
-import com.zianedu.lms.vo.TOrderLecCurriVO;
-import com.zianedu.lms.vo.TOrderVO;
+import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -60,6 +57,8 @@ public interface OrderManageMapper {
     void insertTOrderGoods(TOrderGoodsVO tOrderGoodsVO);
 
     void insertTMemo(TMemoVO tMemoVO);
+
+    void insertTOrderLec(TOrderLecVO tOrderLecVO);
 
     /** UPDATE **/
     void updateTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);

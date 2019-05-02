@@ -12,6 +12,7 @@ import com.zianedu.lms.repository.OrderLecStatusNameRepository;
 import com.zianedu.lms.repository.OrderPayTypeNameRepository;
 import com.zianedu.lms.session.UserSession;
 import com.zianedu.lms.utils.PagingSupport;
+import com.zianedu.lms.utils.StringUtils;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
 import org.slf4j.Logger;
@@ -357,14 +358,14 @@ public class OrderManageService {
     }
 
     /**
-     * 수강관리 > 무료수강입력 (강의시작일, 강의종료일, 수강일수, 시작대기 값 개발해야함)
+     * 수강관리 > 무료수강입력
      * @param priceKeyList
      * @param userKeyList
      * @return
      * @throws Exception
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public int injectFreeVideoLecture(List<Integer>priceKeyList, List<Integer>userKeyList) throws Exception {
+    public int injectFreeVideoLecture(List<Integer>priceKeyList, List<Integer>userKeyList, int status, String startDate, String endDate) throws Exception {
         if (priceKeyList.size() == 0 && userKeyList.size() == 0) return 0;
         int jKey = 0;
 
@@ -373,7 +374,7 @@ public class OrderManageService {
                 TGoodsPriceOptionVO tGoodsPriceOptionVO = productManageMapper.selectTGoodsPriceOptionInfo(priceKey);
                 int gKey = tGoodsPriceOptionVO.getGKey();
                 //상품의 강사이름 조회
-                List<String>teacherName = productManageMapper.selectTeacherNameListByVideoProduct(gKey);
+                List<String>teacherNameList = productManageMapper.selectTeacherNameListByVideoProduct(gKey);
                 //상품의 강좌 조회
                 TLecVO tLecVO = productManageMapper.selectTLecInfo(gKey);
                 //상품의 가격 조회
@@ -387,13 +388,32 @@ public class OrderManageService {
                 jKey = tOrderVO.getJKey();
                 if (jKey > 0) {
                     if (tLecVO != null && goodsPriceOptionList.size() > 0) {
+
+                        String teacherName = "";
+                        //선생님 이름 만들기
+                        if (teacherNameList.size() > 0) {
+                            teacherName = StringUtils.implodeList(",", teacherNameList);
+                        }
                         TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
-                                jKey, userKey, gKey, goodsPriceOptionList.get(0).getPriceKey(), 0,
+                                jKey, userKey, gKey, priceKey, 0,
                                 tGoodsPriceOptionVO.getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
-                                tLecVO.getSubjectCtgKey(), teacherName.get(0), tGoodsVO.getName()
+                                tLecVO.getSubjectCtgKey(), teacherName, tGoodsVO.getName()
                         );
                         //T_ORDER_GOODS 결제 상품 저장
                         orderManageMapper.insertTOrderGoods(tOrderGoodsVO);
+
+                        int jGKey = tOrderGoodsVO.getJGKey();
+                        if (jGKey > 0) {
+                            int limitDay = 0;
+                            if ("".equals(endDate)) limitDay = tLecVO.getLimitDay();    //수강일수 설정값이 아닐때
+                            else limitDay = Util.getDiffDayCount(Util.convertToYYYYMMDD(startDate), Util.convertToYYYYMMDD(endDate));   //수강일수 설정값일때
+
+                            TOrderLecVO tOrderLecVO = new TOrderLecVO(
+                                    jGKey, status, startDate, limitDay, tLecVO.getMultiple()
+                            );
+                            //T_ORDER_LEC 동영상 상품 저장
+                            orderManageMapper.insertTOrderLec(tOrderLecVO);
+                        }
                     }
                 }
             }
