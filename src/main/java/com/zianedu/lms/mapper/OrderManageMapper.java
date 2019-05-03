@@ -49,6 +49,32 @@ public interface OrderManageMapper {
 
     Long selectJGKeyByJLecKey(@Param("jLecKey") Long jLecKey);
 
+    List<DeviceListDTO> selectPcDeviceList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectPcDeviceListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<DeviceListDTO> selectMobileDeviceList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectMobileDeviceListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<DeviceListDTO> selectDeviceChangeLogList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                  @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
+                                           @Param("deviceType") String deviceType, @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectDeviceChangeLogListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
+                                       @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("deviceType") String deviceType);
+
+    String selectGoodsNameByJGKey(@Param("jGKey") int jGKey);
+
+    TDeviceLimitVO selectTDeviceLimitInfo(@Param("deviceLimitKey") int deviceLimitKey);
+
+    List<PointListDTO> selectTPointList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                        @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectTPointListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 
@@ -60,10 +86,17 @@ public interface OrderManageMapper {
 
     void insertTOrderLec(TOrderLecVO tOrderLecVO);
 
+    void insertTDeviceLimitLog(TDeviceLimitLogVO tDeviceLimitLogVO);
+
+    void insertTPoint(TPointVO tPointVO);
+
     /** UPDATE **/
     void updateTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 
     void updateTOrderLec(@Param("jLecKey") Long jLecKey, @Param("status") int status, @Param("limitDay") int limitDay);
 
     void updateTOrderGoodsKind(@Param("jGKey") Long jGKey, @Param("kind") int kind);
+
+    /** DELETE **/
+    void deleteTDeviceLimit(@Param("deviceLimitKey") int deviceLimitKey);
 }

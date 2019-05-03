@@ -414,6 +414,206 @@
         WHERE A.J_LEC_KEY = #{jLecKey}
     </select>
 
+    <select id="selectPcDeviceList" resultType="DeviceListDTO">
+        SELECT
+            C.NAME as USER_NAME, C.USER_KEY, C.USER_ID, A.DEVICE_LIMIT_KEY,
+            TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            A.DEVICE_ID, E.NAME as GOODS_NAME
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER C
+        ON A.USER_KEY = C.USER_KEY
+        LEFT JOIN T_ORDER_GOODS D
+        ON A.DATA_KEY = D.J_G_KEY
+        LEFT JOIN T_GOODS E
+        ON D.G_KEY = E.G_KEY
+        WHERE A.TYPE = 0
+        <if test="searchType == 'id'">
+            AND C.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND C.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.DEVICE_LIMIT_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectPcDeviceListCount" resultType="Integer">
+        SELECT COUNT (A.DEVICE_LIMIT_KEY)
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER C
+        ON A.USER_KEY = C.USER_KEY
+        LEFT JOIN T_ORDER_GOODS D
+        ON A.DATA_KEY = D.J_G_KEY
+        WHERE A.TYPE = 0
+        <if test="searchType == 'id'">
+            AND C.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND C.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectMobileDeviceList" resultType="DeviceListDTO">
+        SELECT
+            B.NAME, B.USER_ID, B.USER_KEY, A.DEVICE_LIMIT_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            A.DEVICE_ID, A.DEVICE_MODEL, A.OS_VERSION, A.APP_VERSION
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE A.TYPE = 1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.DEVICE_LIMIT_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectMobileDeviceListCount" resultType="Integer">
+        SELECT COUNT (A.DEVICE_LIMIT_KEY)
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE A.TYPE = 1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectDeviceChangeLogList" resultType="DeviceListDTO">
+        SELECT
+            B.USER_ID, B.NAME, B.USER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD hh24:mi:ss') as DELETE_DATE, A.DEVICE_ID, A.TYPE, A.DEVICE_MODEL,
+            A.OS_VERSION, A.APP_VERSION, A.DATA_KEY
+        FROM T_DEVICE_LIMIT_LOG A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        <if test="deviceType != '' and deviceType != null">
+            <if test="deviceType == 'pc'">
+                AND A.TYPE = 0
+            </if>
+            <if test="deviceType == 'mobile'">
+                AND A.TYPE = 1
+            </if>
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.DELETE_DATE DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectDeviceChangeLogListCount" resultType="Integer">
+        SELECT COUNT(A.DEVICE_LOG_KEY)
+        FROM T_DEVICE_LIMIT_LOG A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        <if test="deviceType != '' and deviceType != null">
+            <if test="deviceType == 'pc'">
+                AND A.TYPE = 0
+            </if>
+            <if test="deviceType == 'mobile'">
+                AND A.TYPE = 1
+            </if>
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectGoodsNameByJGKey" resultType="String">
+        SELECT B.NAME
+        FROM T_ORDER_GOODS A
+        INNER JOIN T_GOODS B
+        ON A.G_KEY = B.G_KEY
+        WHERE A.J_G_KEY = #{jGKey}
+    </select>
+
+    <select id="selectTDeviceLimitInfo" resultType="com.zianedu.lms.vo.TDeviceLimitVO">
+        SELECT * FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
+    </select>
+
+    <select id="selectTPointList" resultType="PointListDTO">
+        SELECT
+            B.USER_ID, B.NAME, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            A.J_ID, A.TYPE, A.POINT, A.DESC_TYPE, A.DESCRIPTION
+        FROM T_POINT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'jid'">
+            AND A.J_ID = #{searchText}
+        </if>
+        ORDER BY A.POINT_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTPointListCount" resultType="Integer">
+        SELECT COUNT (A.POINT_KEY)
+        FROM T_POINT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'jid'">
+            AND A.J_ID = #{searchText}
+        </if>
+    </select>
+
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
@@ -502,6 +702,39 @@
         )
     </insert>
 
+    <insert id="insertTDeviceLimitLog" parameterType="com.zianedu.lms.vo.TDeviceLimitLogVO">
+        <selectKey resultType="int" keyProperty="deviceLogKey" order="BEFORE">
+            SELECT T_DEVICE_LIMIT_LOG_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_DEVICE_LIMIT_LOG
+        (
+            DEVICE_LOG_KEY, DEVICE_LIMIT_KEY, C_KEY, USER_KEY, INDATE,
+            DELETE_DATE, TYPE, DATA_KEY, DEVICE_ID, DEVICE_MODEL, OS_VERSION, APP_VERSION
+        )
+        VALUES
+        (
+            #{deviceLogKey}, #{deviceLimitKey}, #{cKey}, #{userKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'),
+            TO_DATE(#{deleteDate}, 'YYYY-mm-dd hh24:mi:ss'), #{type}, #{dataKey}, #{deviceId}, #{deviceModel}, #{osVersion}, #{appVersion}
+        )
+
+    </insert>
+
+    <insert id="insertTPoint" parameterType="com.zianedu.lms.vo.TPointVO">
+        <selectKey resultType="int" keyProperty="pointKey" order="BEFORE">
+            SELECT T_POINT_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_POINT
+        (
+            POINT_KEY, C_KEY, INDATE, USER_KEY,
+            TYPE, POINT, J_KEY, J_ID, DESC_TYPE, DESCRIPTION
+        )
+        VALUES
+        (
+            #{pointKey}, #{cKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{userKey},
+            #{type}, #{point}, #{jKey}, #{jId}, #{descType}, #{description}
+        )
+    </insert>
+
     <update id="updateTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         UPDATE T_ORDER_LEC_CURRI
         <set>
@@ -526,5 +759,9 @@
         </set>
         WHERE J_G_KEY = #{jGKey}
     </update>
+
+    <delete id="deleteTDeviceLimit">
+        DELETE FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
+    </delete>
 
 </mapper>

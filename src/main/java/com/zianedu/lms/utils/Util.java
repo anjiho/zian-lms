@@ -1064,8 +1064,10 @@ public class Util {
 //        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
         String str = "c7684301";
         SecurityUtil securityUtil = new SecurityUtil();
-
-        System.out.println(convertToYYYYMMDD("2019-05-04"));
+        String date = "2019-03-29 00:00:00.0";
+        String[] datas = StringUtils.splitComma(date);
+        System.out.println(datas[0]);
+        System.out.println(datas[1]);
 
     }
 }

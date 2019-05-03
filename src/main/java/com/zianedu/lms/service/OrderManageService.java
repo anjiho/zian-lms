@@ -249,6 +249,157 @@ public class OrderManageService {
     }
 
     /**
+     * 디바이스 관리 > 상품별 디바이스 관리 리스트 (PC 디바이스로 변경)
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<DeviceListDTO> getPcDeviceList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<DeviceListDTO>list = orderManageMapper.selectPcDeviceList(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 디바이스 관리 > 상품별 디바이스 관리 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getPcDeviceListCount(String searchType, String searchText) {
+        return orderManageMapper.selectPcDeviceListCount(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+    /**
+     * 디바이스 관리 > 모바일 디바이스 관리 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<DeviceListDTO> getMobileDeviceList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<DeviceListDTO>list = orderManageMapper.selectMobileDeviceList(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 디바이스 관리 > 모바일 디바이스 관리 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMobileDeviceListCount(String searchType, String searchText) {
+        return orderManageMapper.selectMobileDeviceListCount(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+    /**
+     * 디바이스 관리 > 기기변경 이력 조회 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchStartDate
+     * @param searchEndDate
+     * @param deviceType
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<DeviceListDTO> getDeviceChangeLogList(int sPage, int listLimit, String searchStartDate, String searchEndDate,
+                                                      String deviceType, String searchType, String searchText) {
+        if (sPage == 0 && "".equals(searchStartDate) && "".equals(searchEndDate)) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        List<DeviceListDTO>list = orderManageMapper.selectDeviceChangeLogList(
+                startNumber, listLimit, Util.isNullValue(searchStartDate, ""), Util.isNullValue(searchEndDate, ""),
+                Util.isNullValue(deviceType.toLowerCase(), ""), Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+
+        if (list.size() > 0) {
+            for (DeviceListDTO deviceListDTO : list) {
+                //PC일때 상품명 주입
+                if (deviceListDTO.getType() == 0) {
+                    String goodsName = orderManageMapper.selectGoodsNameByJGKey(deviceListDTO.getDataKey());
+                    deviceListDTO.setGoodsName(goodsName);
+                }
+            }
+        }
+        return list;
+    }
+
+    /**
+     * 디바이스 관리 > 기기변경 이력 조회 리스트 개수
+     * @param searchStartDate
+     * @param searchEndDate
+     * @param deviceType
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getDeviceChangeLogListCount(String searchStartDate, String searchEndDate, String deviceType,
+                                           String searchType, String searchText) {
+        if ("".equals(searchStartDate) && "".equals(searchEndDate)) return 0;
+        return orderManageMapper.selectDeviceChangeLogListCount(
+                Util.isNullValue(searchStartDate, ""), Util.isNullValue(searchEndDate, ""),
+                Util.isNullValue(deviceType.toLowerCase(), ""), Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+    /**
+     * 마일리지 관리 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<PointListDTO> getUserPointList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        List<PointListDTO>list = orderManageMapper.selectTPointList(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 마일리지 관리 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getUserPointListCount(String searchType, String searchText) {
+        return orderManageMapper.selectTPointListCount(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+    /**
      * 수강관리 > 수강내역목록 > 수강시간 조정 > 시간 수정 (배열이아닌 건 바이 건)
      * @param jCurriKey
      * @param jLecKey
@@ -419,6 +570,45 @@ public class OrderManageService {
             }
         }
         return jKey;
+    }
+
+    /**
+     * 사용자 마일리지 추가 및 빼기
+     * @param injectType(P : 추가, M : 빼기)
+     * @param userKey
+     * @param point
+     * @param description
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void injectUserPoint(String injectType, int userKey, int point, String description) {
+        if (userKey == 0 && "".equals(injectType) && point == 0) return;
+
+        if ("M".equals(injectType)) {
+            point = -point;
+        }
+        TPointVO tPointVO = new TPointVO(userKey, point, description);
+        orderManageMapper.insertTPoint(tPointVO);
+    }
+
+    /**
+     * 디바이스 관리 리스트 > 삭제하기
+     * @param deviceLimitKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteUserDeviceLimit(int deviceLimitKey) {
+        if (deviceLimitKey == 0) return;
+
+        TDeviceLimitVO tDeviceLimitVO = orderManageMapper.selectTDeviceLimitInfo(deviceLimitKey);
+        if (tDeviceLimitVO != null) {
+            String[] indates = StringUtils.splitComma(tDeviceLimitVO.getIndate());
+            TDeviceLimitLogVO limitLogVO = new TDeviceLimitLogVO(
+                    tDeviceLimitVO.getDeviceLimitKey(), tDeviceLimitVO.getCKey(), tDeviceLimitVO.getUserKey(), indates[0],
+                    tDeviceLimitVO.getType(), tDeviceLimitVO.getDataKey(), tDeviceLimitVO.getDeviceId(),
+                    tDeviceLimitVO.getDeviceModel(), tDeviceLimitVO.getOsVersion(), tDeviceLimitVO.getAppVersion()
+            );
+            orderManageMapper.insertTDeviceLimitLog(limitLogVO);
+        }
+        orderManageMapper.deleteTDeviceLimit(deviceLimitKey);
     }
 
 }
