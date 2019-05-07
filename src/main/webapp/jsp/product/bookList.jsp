@@ -5,7 +5,7 @@
 <script>
     function init() {
         getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-1', 'menu-1-4', 3);
+        menuActive('menu-1', 5);
     }
 
     function goModifyBook(gKey) {
@@ -51,7 +51,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">도서관리</li>
+                        <li class="breadcrumb-item">상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">도서목록</li>
                     </ol>
                 </nav>

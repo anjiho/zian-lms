@@ -57,7 +57,6 @@
     $(document).on('change', '.dataAddFile', function() {
         $(this).parent().find('.custom-file-control2').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
@@ -183,15 +182,15 @@
 
         function playDetailList() { //동영상정보
             productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
-                console.log(">");
-                console.log(selList);
                 if (selList.productInfo) {/*---기본정보---*/
+                    console.log(selList.productInfo);
                     innerValue("name", selList.productInfo.name);//이름
                     innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일
                     innerValue("sellstartdate", split_minute_getDay(selList.productInfo.sellstartdate));//판매시작일
-                    isCheckbox("isShow", selList.productInfo.isShow);//노출
-                    isCheckbox("isSell", selList.productInfo.isSell);//판매
-                    isCheckbox("isFree", selList.productInfo.isFree);//무료
+                    isCheckboxByNumber("isShow", selList.productInfo.isShow);//노출
+                    isCheckboxByNumber("isSell", selList.productInfo.isSell);//판매
+                    isCheckboxByNumber("isFree", selList.productInfo.isFree);//무료
+                    isCheckboxByNumber("isFreebieDeliveryFree", selList.productInfo.isFreebieDeliveryFree);//무료
                     if (selList.productInfo.imageList != null) {
                         $('.custom-file-control').html(fn_clearFilePath(selList.productInfo.imageList));//리스트이미지
                     }
@@ -199,18 +198,16 @@
                         $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
                     }
                     $("#emphasis").val(selList.productInfo.emphasis);//강조표시
-                    isCheckbox("isFreebieDeliveryFree", true);//사은품 배송비무료
-                    //innerValue("description", selList.productInfo.description);//상세설명
                     $("#description").summernote("code", selList.productInfo.description);
-                    //console.log(">>" + selList.productInfo.description);
                 }
             /**
-             * 학원 옵션정보 가져오기
+             * 옵션정보 가져오기
              */
                 var productOptionInfo = selList.productOptionInfo;
+
                 if (productOptionInfo.length == 0) {
                     var cellData = [
-                        function() {return getOptionSelectbox("", true);},
+                        function() {return getVideoOptionTypeSelectbox("");},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
@@ -224,7 +221,7 @@
 
                 } else {
                     dwr.util.addRows("optionList", productOptionInfo, [
-                        function(data) {return getOptionSelectbox(data.kind, true);},
+                        function(data) {return getVideoOptionTypeSelectbox(data.kind);},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
@@ -490,6 +487,7 @@
             innerValue("vodTime", info.vodTime);
         });
     }
+
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
         var checkBtn = val;
@@ -502,6 +500,7 @@
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
         td.find("span").html(sum);
+        //innerHTML(calcPrice, sum);
     }
 
     //강의목록- 입력 저장
@@ -521,7 +520,6 @@
             contentType: false,
             success: function (data) {
                 var result = JSON.stringify(data);
-                console.log(result);
                 if(result != "") {
                     var parse = JSON.parse(result);
                 }
@@ -559,26 +557,25 @@
                     productManageService.saveVideoLectureInfo(data, function (data) {
                         if(data){//lectureListPopup
                             alert("저장되었습니다.");
-                            innerValue("lectureName",'');
-                            isCheckbox("lectureIsShow", false);//노출
-                            isCheckbox("isSample", false);//노출
-                            innerValue("vodFileLow",'');
-                            innerValue("vodFileHigh",'');
-                            innerValue("vodFileMobileLow",'');
-                            innerValue("vodFileMobileHigh",'');
-                            innerValue("vodTime",'');
+                            $("#lectureName").val('');
+                            $("#lectureIsShow").prop('checked', false);
+                            $("#isSample").prop('checked', false);
+                            $("#vodFileLow").val('');
+                            $("#vodFileHigh").val('');
+                            $("#vodFileMobileLow").val('');
+                            $("#vodFileMobileHigh").val('');
+                            $("#vodTime").val('');
                             $('.custom-file-control2').html('');
                         }
                     });
                 } else {
                     productManageService.updateTLecCurri(data, function () {
-                            alert("수정되었습니다.");
+                        alert("수정되었습니다.");
                     });
                 }
             }
         });
     }
-
     //기본정보 수정 함수
     function basicModify() {
         var fileData = new FormData();
@@ -619,8 +616,9 @@
                         imageListFile = parse.imageListFilePath;
                         imageViewFile = parse.imageViewFilePath;
                     }
+
                     productManageService.updateGoodsInfo(data, data.gKey, imageListFile, imageViewFile,function (data) {
-                        isReloadPage(true);
+                        //isReloadPage(true);
                     });
                 }
             });
@@ -874,8 +872,8 @@
                         <input type="hidden" value="" name="goodsId">
                         <input type="hidden" value="" name="goodsTypeName">
                         <input type="hidden" value="" name="summary">
-                        <button type="button" class="btn btn-outline-primary btn-sm float-right" onclick="basicModify();">수정</button>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-outline-primary btn-sm float-right" onclick="basicModify();">수정</button>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                 <span>온라인강좌</span>
@@ -944,26 +942,25 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                <div class="col-sm-8 pl-0 pr-0">
+                                <div class="col-sm-6 pl-0 pr-0">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
-                                        <label class="custom-file-control custom-file-label">Choose file...</label>
-
+                                        <span class="custom-file-control custom-file-label"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                <div class="col-sm-8 pl-0 pr-0">
+                                <div class="col-sm-6 pl-0 pr-0">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input"  id="imageViewFile" name="imageViewFile" required>
+                                        <input type="file" class="custom-file-input addFile"  id="imageViewFile" name="imageViewFile" required>
                                         <span class="custom-file-control1 custom-file-label"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                                <div class="col-sm-6 pl-0 pr-0">
+                                <div class="col-sm-2 pl-0 pr-0">
                                     <select class="select2 form-control custom-select" id="emphasis" name="emphasis">
                                         <option value="0">없음</option>
                                         <option value="1">BEST</option>
@@ -972,21 +969,23 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 control-label col-form-label">사은품 배송비무료</label>
+                                <label class="col-sm-2 text-left control-label col-form-label">사은품 배송비무료</label>
                                 <div class="col-sm-10">
                                     <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox"  id="isFreebieDeliveryFree" name="isFreebieDeliveryFree" style="display:none;">
+                                            <input type="checkbox" id="isFreebieDeliveryFree" name="isFreebieDeliveryFree" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세설명</label>
-                                <textarea class="col-sm-10 form-control" value="" id="description" name="description"></textarea>
+                            <div class="form-group">
+                                <label class="control-label col-form-label">상세설명</label>
+                                <div>
+                                    <textarea name="description"  value="" id="description"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1013,7 +1012,8 @@
                             <th scope="col" style="text-align:center;"></th>
                         </tr>
                         </thead>
-                        <tbody id="optionList"> </tbody>
+                        <tbody id="optionList">
+                        </tbody>
                     </table>
                 </div>
             </section>
@@ -1043,7 +1043,8 @@
                             <th scope="col"></th>
                         </tr>
                         </thead>
-                        <tbody id="categoryList"></tbody>
+                        <tbody id="categoryList">
+                        </tbody>
                     </table>
                 </div>
             </section>
@@ -1188,111 +1189,6 @@
 </div>
 </form>
 <!-- // 기본소스-->
-<!-- 6.선택 전범위 모의고사 팝업창 -->
-<div class="modal fade" id="sModal3" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">강의 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="searchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="searchText">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">시험명</th>
-                        <th style="width:15%">시험신청기간</th>
-                        <th style="width:15%">시험기간</th>
-                        <th style="width:15%">진행시간</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList"></tbody>
-                    <tr>
-                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //선택 전범위 모의고사 추가 팝업창 -->
-
-<!-- 기출문제 회차별 팝업창 -->
-<div class="modal fade" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">강의 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="examPopupClose">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="examsearchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="examsearchText">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search2('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage2" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">시험명</th>
-                        <th style="width:15%">시험신청기간</th>
-                        <th style="width:15%">시험기간</th>
-                        <th style="width:15%">진행시간</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList2"></tbody>
-                    <tr>
-                        <td id="emptys2" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi2.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //기출문제 회차별 팝업창 -->
 
 <!-- 6.선택 강의교재  팝업창 -->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1440,31 +1336,7 @@
 </div>
 </div>
 <!-- //강의목록 추가 팝업창 -->
-<!-- 시험일정 추가 팝업창 -->
-<div class="modal fade" id="sModal2" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">텍스트 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <!-- modal body -->
-    <div class="modal-body">
-        <div class="form-group row">
-            <label class="col-sm-3 text-right control-label col-form-label">텍스트</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control">
-            </div>
-        </div>
-        <button type="button" class="btn btn-info float-right">확인</button>
-    </div>
-    <!-- //modal body -->
-</div>
-</div>
-</div>
-<!-- //시험일정 추가 팝업창 -->
+
 <!-- End Container fluid  -->
 <%@include file="/common/jsp/footer.jsp" %>
 <script>

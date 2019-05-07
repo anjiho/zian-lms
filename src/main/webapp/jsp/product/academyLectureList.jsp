@@ -56,7 +56,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">학원강의 상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">학원강의 목록</li>
                     </ol>
                 </nav>

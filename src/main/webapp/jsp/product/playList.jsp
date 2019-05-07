@@ -86,7 +86,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">동영상 상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">동영상 목록</li>
                     </ol>
                 </nav>

@@ -8,6 +8,7 @@
 <script>
     $(document).ready(function() {
         changeBox2();
+        menuActive('menu-0', 4);
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -221,7 +222,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">배너관리</li>
+                        <li class="breadcrumb-item">데이터관리</li>
                         <li class="breadcrumb-item active" aria-current="page">사이드배너관리</li>
                     </ol>
                 </nav>

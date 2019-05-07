@@ -56,7 +56,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">카테고리관리</a></li>
+                        <li class="breadcrumb-item"><a href="#">데이터관리</a></li>
                         <li class="breadcrumb-item active" aria-current="page">과목관리</li>
                     </ol>
                 </nav>

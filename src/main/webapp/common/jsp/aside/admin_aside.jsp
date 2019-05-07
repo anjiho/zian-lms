@@ -13,6 +13,8 @@
         border: 1;
         height: 1px;
         background-image: linear-gradient(left, #f0f0f0, #8c8c8c, #f0f0f0);
+        margin-bottom: 0px;
+        margin-top: 0px;
     }
 
 </style>

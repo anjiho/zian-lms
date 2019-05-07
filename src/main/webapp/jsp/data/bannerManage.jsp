@@ -8,10 +8,9 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
-
     });
     function init() {
-        menuActive('menu-0', 2);
+        menuActive('menu-0', 3);
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -117,7 +116,6 @@
     function popup(val,ctgKey,pos) { //수정팝업
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
-            console.log(selList);
             $("#bannerKey").val(val);
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
@@ -168,6 +166,11 @@
         }else{
             checkYn = '0';
         }
+
+        var text = '';
+        if(bannerKey == '0') text = '저장하시겠습니까?';
+        else text = '수정하시겠습니까?';
+
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
         data.append("ctgKey", ctgKey);
@@ -175,7 +178,7 @@
         data.append("value3", bannerColor);
         data.append("valueBit1", checkYn);
         data.append("value4", bannerLink);
-        if(confirm("저장하시겠습니까?")) {
+        if(confirm(text)) {
             $.ajax({
                 url: "/file/bannerUpload",
                 method: "post",
@@ -194,7 +197,7 @@
     function bannerDelete(val,ctgKey,pos) {
         if(confirm("삭제하시겠습니까?")) {
             dataManageService.deleteBannerInfo(val, ctgKey, function () {
-                location.reload();
+                //location.reload();
             });
         }
     }
@@ -215,7 +218,7 @@
 
             });
             dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
+                //location.reload();
             });
         }else if(val == "1"){
             $("#dragtable_1 tbody tr").each(function(index) {
@@ -284,7 +287,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">배너관리</li>
+                        <li class="breadcrumb-item">데이터관리</li>
                         <li class="breadcrumb-item active" aria-current="page">배너관리</li>
                     </ol>
                 </nav>

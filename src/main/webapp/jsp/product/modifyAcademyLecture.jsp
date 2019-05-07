@@ -204,6 +204,9 @@
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+
+
+
                 $('#teacherList tr').eq(0).attr("style", "display:none");
                 $('#teacherList tr').each(function(){
                     var tr = $(this);
@@ -368,8 +371,9 @@
                         imageListFile = parse.imageListFilePath;
                         imageViewFile = parse.imageViewFilePath;
                     }
+
                     productManageService.updateGoodsInfo(data, data.gKey, imageListFile, imageViewFile,function (data) {
-                        isReloadPage(true);
+                      //  isReloadPage(true);
                     });
                 }
             });
@@ -471,7 +475,7 @@
                         calculateRate : calcRates[i],
                         subjectName: "",
                         teacherName: ""
-                    }
+                    };
                     dataArr.push(data);
                 }
                 productManageService.upsultTGoodTeacherLink(dataArr, gKey,function () {
@@ -484,7 +488,6 @@
     //강의교재 수정 버튼
     function updateLectureBookList() {
         var bookKeys = get_array_values_by_name("input", "res_key[]");
-        console.log(bookKeys);
         if (confirm("강의교재 정보를 수정 하시겠습니까?")) {
             var dataArr = new Array();
             for (var i = 0; i < bookKeys.length; i++) {
@@ -547,12 +550,11 @@
 
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
-        console.log(val);
         var checkBtn = val;
 
         var tr = checkBtn.parent().parent();
         var td = tr.children();
-        console.log(tr);
+
         var sellPrice = td.find("input").eq(0).val();
         var extendPercent = td.find("input").eq(3).val();
 
@@ -602,7 +604,6 @@
                 <h4 class="card-title"></h4>
                 <h6 class="card-subtitle"></h6>
                 <div id="playForm" method="" action="" class="m-t-40">
-<%--                                            <input type="hidden" id="gKey" name="gKey" value="<%=gKey%>">--%>
                     <div>
                         <!-- 1.기본정보 Tab -->
                         <h3>기본정보</h3>
@@ -616,35 +617,36 @@
                                 <input type="hidden" value="0" name="isQuickDelivery">
                                 <input type="hidden" value="" name="goodsId">
                                 <input type="hidden" value="" name="goodsTypeName">
-<%--                                <input type="hidden" value="" name="summary">--%>
-                                <div class="form-group">
-                                    <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
+                                <div class="col-md-12">
+                                <button type="button" class="btn btn-outline-primary btn-sm float-right" onclick="updateBasicInfo();">수정</button>
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                     <span>온라인강좌</span>
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                    <input type="text" class="col-sm-8 form-control" style="display: inline-block;" id="name" name="name">
+                                <div class="form-group row">
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
+                                    <input type="text" class="col-sm-6 form-control" id="name" name="name">
                                 </div>
-                                <div class="form-group">
-                                    <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                    <div class="input-group col-sm-3" id="dateRangePicker">
-                                        <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
-                                    <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
+                                        <div class="col-sm-6 input-group pl-0 pr-0">
+                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="indate" id="indate">
+                                            <div class="input-group-append">
+                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label col-form-label"  style="margin-bottom: 0">판매시작일</label>
-                                <div class="input-group col-sm-3">
+                            <div class="form-group row">
+                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
+                                <div class="col-sm-6 input-group pl-0 pr-0">
                                     <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row mt-4" style="">
-                                <label class="col-sm-1 control-label col-form-label"  style="margin-bottom: 0">노출</label>
+                            <div class="form-group row mt-4">
+                                <label class="col-sm-2 text-left control-label col-form-label">노출</label>
                                 <div class="col-sm-10">
                                     <div style="margin-top: -23px;">
                                         OFF
@@ -657,7 +659,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">판매</label>
+                                <label class="col-sm-2 text-left control-label col-form-label">판매</label>
                                 <div class="col-sm-10">
                                     <div style="margin-top: -23px;">
                                         OFF
@@ -670,7 +672,7 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">무료</label>
+                                <label class="col-sm-2 text-left control-label col-form-label">무료</label>
                                 <div class="col-sm-10">
                                     <div style="margin-top: -23px;">
                                         OFF
@@ -682,35 +684,37 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                <div>
-                                    <div class="custom-file col-sm-5">
+                            <div class="form-group row">
+                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
+                                <div class="col-sm-6 pl-0 pr-0">
+                                    <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
                                         <span class="custom-file-control custom-file-label"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                <div>
-                                    <div class="custom-file col-sm-5">
+                            <div class="form-group row">
+                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
+                                <div class="col-sm-6 pl-0 pr-0">
+                                    <div class="custom-file">
                                         <input type="file" class="custom-file-input addFile" id="imageViewFile" name="imageViewFile" required>
                                         <span class="custom-file-control1 custom-file-label"></span>
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group">
-                                <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
+                            <div class="form-group row">
+                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
+                                <div class="col-sm-7 pl-0 pr-0">
                                     <span id="l_emphasis"></span>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">사은품 배송비 무료</label>
-                                <div>
-                                    <div style="margin-top: -23px;" class="col-sm-5">
+                            <div class="form-group row">
+                                <label class="col-sm-2 control-label col-form-label">사은품 배송비 무료</label>
+                                <div class="col-sm-10">
+                                    <div style="margin-top: -23px;">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox" style="display:none;" id="isFreebieDeliveryFree" name="isFreebieDeliveryFree">
+                                            <input type="checkbox"  id="isFreebieDeliveryFree" name="isFreebieDeliveryFree" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
@@ -723,9 +727,7 @@
                                     <textarea name="description"  value="" id="description"></textarea>
                                 </div>
                             </div>
-                            <div style="float: right">
-                                <input type="button" class="btn btn-default" value="수정" onclick="updateBasicInfo();">
-                            </div>
+                        </div>
                         </div>
                     </section>
                 <!-- // 1.기본정보 Tab -->
@@ -733,7 +735,10 @@
                 <!-- 2.옵션 Tab -->
                 <h3>옵션</h3>
                 <section>
-                    <input type="button" value="수정" onclick="updateOptionInfo();">
+                    <div class="float-right mb-3">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateOptionInfo();">수정</button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
+                    </div>
                     <div id="section2">
                         <table class="table" id="optionTable">
                             <input type="hidden" value="0" name="goodsTypeName">
@@ -750,9 +755,6 @@
                             <tbody id="optionList">
                             </tbody>
                         </table>
-                        <div class="mx-auto" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="addProductOptionInfo();">추가</button>
-                        </div>
                     </div>
                 </section>
                 <!-- //2.옵션 Tab -->
@@ -760,7 +762,10 @@
                 <!-- 3.카테고리 목록 Tab -->
                 <h3>카테고리</h3>
                 <section>
-                    <input type="button" value="수정" onclick="updateCategoryInfo();">
+                    <div class="float-right mb-3">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateCategoryInfo();">수정</button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo()">추가</button>
+                    </div>
                     <div id="section3">
                         <table class="table" id="categoryTable">
                             <input type="hidden" name="ctgGKey" value="0">
@@ -780,9 +785,6 @@
                             </thead>
                             <tbody id="categoryList"></tbody>
                         </table>
-                        <div class="mx-auto" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="addCategoryInfo();">추가</button>
-                        </div>
                     </div>
                 </section>
                 <!-- //3.카테고리 목록 Tab -->
@@ -790,7 +792,9 @@
                 <!-- 4.강좌 정보 Tab -->
                 <h3>강좌정보</h3>
                 <section>
-                    <input type="button" value="수정" onclick="updateLectureInfo();">
+                    <div class="float-right mb-3">
+                        <input type="button" value="수정" class="btn btn-outline-primary btn-sm" onclick="updateLectureInfo();">
+                    </div>
                     <div id="section4">
 
                         <input type="hidden" name="lecKey" id="lecKey">
@@ -855,7 +859,10 @@
                 <!-- 5.강사 목록 Tab -->
                 <h3>강사목록</h3>
                 <section>
-                    <input type="button" value="수정" onclick="updateTeacherList();">
+                    <div class="float-right mb-3">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateTeacherList();">수정</button>
+                        <button type="button" class="btn btn-info btn-sm" onclick="addTeacherInfo();">추가</button>
+                    </div>
                     <span></span>
                     <div id="section5">
                         <table class="table"id="teacherTable">
@@ -879,9 +886,6 @@
                             </thead>
                             <tbody id="teacherList"></tbody>
                         </table>
-                        <div class="mx-auto" style="width:5.5%">
-                            <button type="button" class="btn btn-outline-info mx-auto" style="margin-bottom:18px;" onclick="addTeacherInfo();">추가</button>
-                        </div>
                     </div>
                 </section>
                 <!-- //5.강사 목록 Tab -->
@@ -889,9 +893,11 @@
                 <!-- 6.강의 교재선택 Tab -->
                 <h3>강의 교재선택</h3>
                 <section>
-                    <input type="button" value="수정" onclick="updateLectureBookList();">
+                    <div class="float-right mb-3">
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateLectureBookList();">수정</button>
+                        <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                    </div>
                     <div id="section6">
-                        <button type="button"  style="float: right" class="btn btn-outline-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                         <table class="table text-center table-hover" id="bookTable">
                             <thead>
                             </thead>
