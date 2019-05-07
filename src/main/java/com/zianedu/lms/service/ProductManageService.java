@@ -555,6 +555,39 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
+     * 출판사 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCpVO> getCpList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<TCpVO>list = productManageMapper.selectTCpList(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 출판사 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getCpListCoubt(String searchType, String searchText) {
+        return productManageMapper.selectTCpListCount(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+
+    /**
      * 상품기본정보 저장및 수정
      * @param tGoodsVO
      * @return

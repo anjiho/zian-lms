@@ -401,6 +401,28 @@
 		</if>
 	</select>
 
+	<select id="selectTCpList" resultType="com.zianedu.lms.vo.TCpVO">
+		SELECT CP_KEY, NAME
+		FROM T_CP
+		WHERE TYPE = 1
+		AND C_KEY = 100
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY CP_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectTCpListCount" resultType="Integer">
+		SELECT COUNT (CP_KEY)
+		FROM T_CP
+		WHERE TYPE = 1
+		AND C_KEY = 100
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
+	</select>
+
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		<selectKey resultType="Integer" keyProperty="gKey" order="BEFORE">
 			SELECT T_GOODS_SEQ.NEXTVAL FROM DUAL

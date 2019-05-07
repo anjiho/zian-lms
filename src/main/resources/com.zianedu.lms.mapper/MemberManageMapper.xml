@@ -387,6 +387,15 @@
         </if>
     </select>
 
+    <select id="selectCalculateTeacherList" resultType="com.zianedu.lms.vo.TTeacherVO">
+        SELECT A.TEACHER_KEY, A.ONLINELEC_CALCULATE_RATE, A.OFFLINELEC_CALCULATE_RATE
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.STATUS = 10
+        AND A.ONLINELEC_CALCULATE_RATE IS NOT NULL
+        ORDER BY A.TEACHER_KEY ASC
+    </select>
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">

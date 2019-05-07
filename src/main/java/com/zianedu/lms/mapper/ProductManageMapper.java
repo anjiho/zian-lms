@@ -88,6 +88,12 @@ public interface ProductManageMapper {
     List<FreeInjectDTO> selectVideoProductListByFreeLectureInject(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                                                   @Param("searchText") String searchText, @Param("searchType") String searchType);
 
+    List<TCpVO> selectTCpList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                              @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectTCpListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+
     int selectVideoProductListCountByFreeLectureInject(@Param("searchText") String searchText, @Param("searchType") String searchType);
 
     /** INSERT **/

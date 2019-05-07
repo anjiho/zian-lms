@@ -1029,6 +1029,18 @@ public class Util {
 
     }
 
+    // yyyymm -> yyyy-mm 변환
+    public static String convertDateFormat2(String date) throws Exception {
+        SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyy-mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymm");
+        Date originDate = fromDateFormat.parse(date);
+
+        String newDate = dateFormat.format(originDate);
+
+        return newDate;
+
+    }
+
 
 
     public static void main(String[] args) throws Exception {
@@ -1062,12 +1074,11 @@ public class Util {
 //        mimeMessage.setSubject(subject); //제목셋팅
 //        mimeMessage.setText(body); //내용셋팅
 //        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
-        String str = "c7684301";
-        SecurityUtil securityUtil = new SecurityUtil();
-        String date = "2019-03-29 00:00:00.0";
-        String[] datas = StringUtils.splitComma(date);
-        System.out.println(datas[0]);
-        System.out.println(datas[1]);
+        String date = plusDate(returnNow(), -1);
+        System.out.println(date);
+        //System.out.println(convertDateFormat2(date));
+        //System.out.println(plusDate(returnNow(), -1));
+
 
     }
 }

@@ -10,6 +10,7 @@ import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.repository.GoodsKindNameRepository;
 import com.zianedu.lms.repository.OrderLecStatusNameRepository;
 import com.zianedu.lms.repository.OrderPayTypeNameRepository;
+import com.zianedu.lms.repository.TeacherCalculateRepository;
 import com.zianedu.lms.session.UserSession;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.StringUtils;
@@ -44,6 +45,9 @@ public class OrderManageService {
 
     @Autowired
     private OrderPayTypeNameRepository orderPayTypeNameRepository;
+
+    @Autowired
+    private TeacherCalculateRepository teacherCalculateRepository;
 
     /**
      * 주문목록 조회
@@ -609,6 +613,10 @@ public class OrderManageService {
             orderManageMapper.insertTDeviceLimitLog(limitLogVO);
         }
         orderManageMapper.deleteTDeviceLimit(deviceLimitKey);
+    }
+
+    public void test(String yyyymmdd) throws Exception {
+        teacherCalculateRepository.calculateTeacherSaleGoodsAny(yyyymmdd);
     }
 
 }

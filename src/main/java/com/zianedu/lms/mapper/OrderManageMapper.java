@@ -68,12 +68,16 @@ public interface OrderManageMapper {
 
     String selectGoodsNameByJGKey(@Param("jGKey") int jGKey);
 
+    Integer selectCalculateRateTGoods(@Param("gKey") int gKey);
+
     TDeviceLimitVO selectTDeviceLimitInfo(@Param("deviceLimitKey") int deviceLimitKey);
 
     List<PointListDTO> selectTPointList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                         @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     int selectTPointListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<CalculateInfoDTO> selectCalculateInfoBySchedule(@Param("yesterday") String yesterday);
 
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
@@ -89,6 +93,10 @@ public interface OrderManageMapper {
     void insertTDeviceLimitLog(TDeviceLimitLogVO tDeviceLimitLogVO);
 
     void insertTPoint(TPointVO tPointVO);
+
+    Long insertTCalculate(TCalculateVO tCalculateVO);
+
+    void insertTCalculateData(TCalculateDataVO tCalculateDataVO);
 
     /** UPDATE **/
     void updateTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);

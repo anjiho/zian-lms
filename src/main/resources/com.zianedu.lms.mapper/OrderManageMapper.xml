@@ -572,6 +572,10 @@
         WHERE A.J_G_KEY = #{jGKey}
     </select>
 
+    <select id="selectCalculateRateTGoods" resultType="Integer">
+        SELECT CALCULATE_RATE FROM T_GOODS WHERE G_KEY = #{gKey}
+    </select>
+
     <select id="selectTDeviceLimitInfo" resultType="com.zianedu.lms.vo.TDeviceLimitVO">
         SELECT * FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
     </select>
@@ -612,6 +616,17 @@
         <if test="searchType == 'jid'">
             AND A.J_ID = #{searchText}
         </if>
+    </select>
+
+    <select id="selectCalculateInfoBySchedule" resultType="CalculateInfoDTO">
+        SELECT * FROM T_ORDER A
+        LEFT JOIN T_ORDER_GOODS B
+        ON A.J_KEY = B.J_KEY
+        WHERE A.PAY_STATUS IN (2, 8)
+        AND A.PAY_TYPE NOT IN ( 20 )
+        AND B.PM_TYPE IN (0, 1, 2)
+        AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = #{yesterday}
+        ORDER BY A.INDATE DESC
     </select>
 
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
@@ -732,6 +747,36 @@
         (
             #{pointKey}, #{cKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{userKey},
             #{type}, #{point}, #{jKey}, #{jId}, #{descType}, #{description}
+        )
+    </insert>
+
+    <insert id="insertTCalculate" parameterType="com.zianedu.lms.vo.TCalculateVO">
+        <selectKey resultType="Long" keyProperty="calculateKey" order="BEFORE">
+            SELECT T_CALCULATE_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_CALCULATE
+        (
+            CALCULATE_KEY, C_KEY, TEACHER_KEY, INDATE, TARGET_DATE, YEAR_MONTH
+        )
+        VALUES
+        (
+            #{calculateKey}, #{cKey}, #{teacherKey}, #{indate}, #{targetDate}, #{yearMonth}
+        )
+    </insert>
+
+    <insert id="insertTCalculateData" parameterType="com.zianedu.lms.vo.TCalculateDataVO">
+        <selectKey resultType="Long" keyProperty="calculateDataKey" order="BEFORE">
+            SELECT T_CALCULATE_DATA_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_CALCULATE_DATA
+        (
+            CALCULATE_DATA_KEY, CALCULATE_KEY, INDATE, G_KEY, TYPE, PM_TYPE, KIND, CALC_PRICE, J_COUNT, PAY_STATUS,
+            CALC_CALCULATE_RATE, G_CALCULATE_RATE, G_T_CALCULATE_RATE, T_CALCULATE_RATE, J_KEY
+        )
+        VALUES
+        (
+            #{calculateDataKey}, #{calculateKey}, #{indate}, #{gKey}, #{type}, #{pmType}, #{kind}, #{calcPrice}, #{jCount}, #{payStatus},
+            #{calcCalculateRate}, #{gCalculateRate}, #{gTCalculateRate}, #{tCalculateRate}, #{jKey}
         )
     </insert>
 

@@ -60,6 +60,7 @@ public interface MemberManageMapper {
 
     Integer selectSmsSendLogListCount(SmsSearchParamDTO smsSearchParamDTO);
 
+    List<TTeacherVO> selectCalculateTeacherList();
 
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);

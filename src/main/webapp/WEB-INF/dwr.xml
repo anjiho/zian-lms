@@ -96,6 +96,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TCounselVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TTeacherVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryGoods"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCpVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
