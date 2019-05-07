@@ -1,0 +1,812 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.OrderManageMapper">
+
+    <select id="selectOrderList" resultType="OrderResultDTO">
+        SELECT
+            DISTINCT A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
+                     A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
+                     A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        INNER JOIN T_ORDER_GOODS C
+        ON A.J_KEY = C.J_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY D
+        ON A.J_KEY = D.J_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        AND A.PAY_STATUS IN (0, 1, 2)
+        <if test="goodsType != '' and goodsType != null">
+            AND C.TYPE = #{goodsType}
+            <if test="goodsType != 5">
+                AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
+            </if>
+            <if test="goodsType == 5">
+                AND A.UNIQUE_TYPE_LIST LIKE '5,'||'%'
+            </if>
+        </if>
+        <if test="isOffline != null and isOffline >= 0">
+            AND A.IS_OFFLINE = #{isOffline}
+        </if>
+        <if test="payType != null and payType >= 0">
+            AND A.PAY_TYPE = #{payType}
+        </if>
+        <if test="isMobile != null and isMobile >= 0">
+            AND A.IS_MOBILE = #{isMobile}
+        </if>
+        <if test="searchType == 'orderUserId'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderId'">
+            AND A.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND C.G_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <!-- 동영상 재수강 여부 -->
+        <if test="isVideoReply == 0">
+            AND C.EXTEND_DAY = -1
+        </if>
+        <if test="isVideoReply == 1">
+            AND C.EXTEND_DAY > -1
+        </if>
+        ORDER BY A.J_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectGoodsNameAtLimitOne" resultType="OrderGoodsNameDTO">
+        SELECT * FROM
+        (
+            SELECT G_NAME,
+                    (
+                        ( SELECT count(J_G_KEY) FROM T_ORDER_GOODS WHERE J_KEY = A.J_KEY ) - 1
+                    ) as CNT
+            FROM T_ORDER_GOODS A
+            WHERE A.J_KEY = #{jKey}
+            ORDER BY A.J_G_KEY ASC
+        )
+        WHERE ROWNUM = 1
+    </select>
+
+    <select id="selectOrderListCount" resultType="Integer">
+        SELECT COUNT(J_KEY)
+        FROM (
+                SELECT DISTINCT A.J_KEY
+                FROM T_ORDER A
+                INNER JOIN T_USER B
+                ON A.USER_KEY = B.USER_KEY
+                INNER JOIN T_ORDER_GOODS C
+                ON A.J_KEY = C.J_KEY
+                LEFT OUTER JOIN T_ORDER_DELIVERY D
+                ON A.J_KEY = D.J_KEY
+                WHERE 1=1
+                <![CDATA[
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+                AND A.PAY_STATUS IN (0, 1, 2)
+                <if test="goodsType != '' and goodsType != null">
+                    AND C.TYPE = #{goodsType}
+                    <if test="goodsType != 5">
+                        AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
+                    </if>
+                    <if test="goodsType == 5">
+                        AND A.UNIQUE_TYPE_LIST LIKE '5,'||'%'
+                    </if>
+                </if>
+                <if test="isOffline != null and isOffline >= 0">
+                    AND A.IS_OFFLINE = #{isOffline}
+                </if>
+                <if test="payType != null and payType >= 0">
+                    AND A.PAY_TYPE = #{payType}
+                </if>
+                <if test="isMobile != null and isMobile >= 0">
+                    AND A.IS_MOBILE = #{isMobile}
+                </if>
+                <if test="searchType == 'orderUserId'">
+                    AND B.USER_ID = #{searchText}
+                </if>
+                <if test="searchType == 'orderUserName'">
+                    AND B.NAME LIKE '%'||#{searchText}||'%'
+                </if>
+                <if test="searchType == 'orderId'">
+                    AND A.J_ID = #{searchText}
+                </if>
+                <if test="searchType == 'orderUserName'">
+                    AND C.G_NAME LIKE '%'||#{searchText}||'%'
+                </if>
+                <!-- 동영상 재수강 여부 -->
+                <if test="isVideoReply == 0">
+                    AND C.EXTEND_DAY = -1
+                </if>
+                <if test="isVideoReply == 1">
+                    AND C.EXTEND_DAY > -1
+                </if>
+        )
+    </select>
+
+    <select id="selectCancelOrderList" resultType="OrderResultDTO">
+        SELECT
+            DISTINCT A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
+            A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
+            A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.CANCEL_DATE, A.IS_OFFLINE, B.USER_KEY
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        INNER JOIN T_ORDER_GOODS C
+        ON A.J_KEY = C.J_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY D
+        ON A.J_KEY = D.J_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        <![CDATA[
+            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        AND A.PAY_STATUS IN (8, 9, 10)
+        <if test="isOffline != null and isOffline >= 0">
+            AND A.IS_OFFLINE = #{isOffline}
+        </if>
+        <if test="payType != null and payType >= 0">
+            AND A.PAY_TYPE = #{payType}
+        </if>
+        <if test="isMobile != null and isMobile >= 0">
+            AND A.IS_MOBILE = #{isMobile}
+        </if>
+        <if test="searchType == 'orderUserId'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderId'">
+            AND A.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND C.G_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.J_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectCancelOrderListCount" resultType="Integer">
+        SELECT COUNT(J_KEY)
+        FROM (
+            SELECT DISTINCT A.J_KEY
+            FROM T_ORDER A
+            INNER JOIN T_USER B
+            ON A.USER_KEY = B.USER_KEY
+            INNER JOIN T_ORDER_GOODS C
+            ON A.J_KEY = C.J_KEY
+            LEFT OUTER JOIN T_ORDER_DELIVERY D
+            ON A.J_KEY = D.J_KEY
+            WHERE 1=1
+            <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+             ]]>
+            <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            <![CDATA[
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+             ]]>
+            <![CDATA[
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            AND A.PAY_STATUS IN (8, 9, 10)
+            <if test="isOffline != null and isOffline >= 0">
+                AND A.IS_OFFLINE = #{isOffline}
+            </if>
+            <if test="payType != null and payType >= 0">
+                AND A.PAY_TYPE = #{payType}
+            </if>
+            <if test="isMobile != null and isMobile >= 0">
+                AND A.IS_MOBILE = #{isMobile}
+            </if>
+            <if test="searchType == 'orderUserId'">
+                AND B.USER_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND B.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderId'">
+                AND A.J_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND C.G_NAME LIKE '%'||#{searchText}||'%'
+            </if>
+        )
+    </select>
+
+    <select id="selectOrderLectureVideoList" resultType="OrderLectureListDTO">
+        SELECT
+            A.J_LEC_KEY, C.J_KEY, C.USER_KEY, E.NAME, B.KIND, D.NAME as GOODS_NAME,
+            A.STATUS, A.START_DT, (A.START_DT + A.LIMIT_DAY) as END_DT, A.LIMIT_DAY,
+            A.PAUSE_CNT, A.PAUSE_START_DT, A.PAUSE_TOTAL_DAY, A.PAUSE_DAY, C.PAY_STATUS,
+            E.NAME as USER_NAME, C.J_ID, C.PAY_TYPE
+        FROM T_ORDER_LEC A
+        INNER JOIN T_ORDER_GOODS B
+        ON A.J_G_KEY = B.J_G_KEY
+        INNER JOIN T_ORDER C
+        ON B.J_KEY = C.J_KEY
+        INNER JOIN T_GOODS D
+        ON B.G_KEY = D.G_KEY
+        INNER JOIN T_USER E
+        ON C.USER_KEY = E.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+             ]]>
+        <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        <if test="payStatus != null and payStatus != ''">
+            <!-- 결제상태 : 결제완료 -->
+            <if test="payStatus == '1'">
+                AND C.PAY_STATUS IN (0, 1, 2)
+            </if>
+            <!-- 결제상태 : 결제취소 -->
+            <if test="payStatus == '2'">
+                AND C.PAY_STATUS IN (8, 9, 10)
+            </if>
+        </if>
+        <if test="orderLecStatus != null and orderLecStatus != ''">
+            <!-- 진행상태 : 대기중 + 시작 -->
+            <if test="orderLecStatus == '1'">
+                AND A.STATUS IN (0, 1)
+            </if>
+            <!-- 진행상태 : 일시정지 -->
+            <if test="orderLecStatus == '2'">
+                AND A.STATUS = 2
+            </if>
+            <!-- 진행상태 : 종강 -->
+            <if test="orderLecStatus == '3'">
+                AND A.STATUS = 3
+            </if>
+            <!-- 진행상태 : 재시작대기 -->
+            <if test="orderLecStatus == '3'">
+                AND A.STATUS = 4
+            </if>
+        </if>
+        <if test="searchType == 'userId'">
+            AND E.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'userName'">
+            AND E.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderNumber'">
+            AND C.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'goodsName'">
+            AND D.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.J_LEC_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectOrderLectureVideoListCount" resultType="Integer">
+        SELECT COUNT (A.J_LEC_KEY)
+        FROM T_ORDER_LEC A
+        INNER JOIN T_ORDER_GOODS B
+        ON A.J_G_KEY = B.J_G_KEY
+        INNER JOIN T_ORDER C
+        ON B.J_KEY = C.J_KEY
+        INNER JOIN T_GOODS D
+        ON B.G_KEY = D.G_KEY
+        INNER JOIN T_USER E
+        ON C.USER_KEY = E.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+             ]]>
+        <![CDATA[
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        <if test="payStatus != null and payStatus != ''">
+            <!-- 결제상태 : 결제완료 -->
+            <if test="payStatus == '1'">
+                AND C.PAY_STATUS IN (0, 1, 2)
+            </if>
+            <!-- 결제상태 : 결제취소 -->
+            <if test="payStatus == '2'">
+                AND C.PAY_STATUS IN (8, 9, 10)
+            </if>
+        </if>
+        <if test="orderLecStatus != null and orderLecStatus != ''">
+            <!-- 진행상태 : 대기중 + 시작 -->
+            <if test="lecStatus == '1'">
+                AND A.STATUS IN (0, 1)
+            </if>
+            <!-- 진행상태 : 일시정지 -->
+            <if test="orderLecStatus == '2'">
+                AND A.STATUS = 2
+            </if>
+            <!-- 진행상태 : 종강 -->
+            <if test="orderLecStatus == '3'">
+                AND A.STATUS = 3
+            </if>
+            <!-- 진행상태 : 재시작대기 -->
+            <if test="orderLecStatus == '3'">
+                AND A.STATUS = 4
+            </if>
+        </if>
+        <if test="searchType == 'userId'">
+            AND E.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'userName'">
+            AND E.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderNumber'">
+            AND C.J_ID = #{searchText}
+        </if>
+        <if test="searchType == 'goodsName'">
+            AND D.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectTOrderInfoAtLectureTime" resultType="LectureTimeInfoDTO">
+         SELECT
+            A.J_LEC_KEY, C.j_id, C.USER_KEY, E.NAME, D.NAME as GOODS_NAME,
+            B.KIND, A.STATUS, TO_CHAR(A.START_DT, 'YYYY-MM-DD') as START_DT,
+            TO_CHAR((A.START_DT + A.LIMIT_DAY), 'YYYY-MM-DD') as END_DT,
+            A.LIMIT_DAY
+        FROM T_ORDER_LEC A
+        INNER JOIN T_ORDER_GOODS B
+        ON A.J_G_KEY = B.J_G_KEY
+        LEFT JOIN T_ORDER C
+        ON B.J_KEY = C.J_KEY
+        LEFT JOIN T_GOODS D
+        ON B.G_KEY = D.G_KEY
+        LEFT JOIN T_USER E
+        ON C.USER_KEY = E.USER_KEY
+        WHERE A.J_LEC_KEY = #{jLecKey}
+    </select>
+
+    <!-- 수강내역목록 > 수강시간 조정 > 강의제목 리스트 -->
+    <select id="selectLectureTimeList" resultType="LectureTimeDTO">
+        SELECT
+            Z.CURRI_KEY, Z.NAME, Z.VOD_TIME,
+            NVL((SELECT J_CURRI_KEY FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY = #{jLecKey}), 0) as J_CURRI_KEY,
+        NVL((SELECT TIME FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY = #{jLecKey}), 0) as REMAIN_TIME
+        FROM T_LEC_CURRI Z
+        WHERE Z.LEC_KEY = (
+            SELECT C.LEC_KEY
+            FROM T_ORDER_LEC A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_G_KEY = B.J_G_KEY
+            INNER JOIN T_LEC C
+            ON B.G_KEY = C.G_KEY
+            WHERE A.J_LEC_KEY = #{jLecKey}
+        )
+        ORDER BY Z.CURRI_KEY ASC
+    </select>
+
+    <select id="selectLectureTimeByCurriKey" resultType="com.zianedu.lms.vo.TOrderLecCurriVO">
+        SELECT J_CURRI_KEY, TIME
+        FROM T_ORDER_LEC_CURRI
+        WHERE J_LEC_KEY = #{jLecKey}
+        AND CURRI_KEY = #{curriKey}
+    </select>
+
+    <select id="selectJGKeyByJLecKey" resultType="Long">
+         SELECT B.J_G_KEY
+        FROM T_ORDER_LEC A
+        INNER JOIN T_ORDER_GOODS B
+        ON A.J_G_KEY = B.J_G_KEY
+        WHERE A.J_LEC_KEY = #{jLecKey}
+    </select>
+
+    <select id="selectPcDeviceList" resultType="DeviceListDTO">
+        SELECT
+            C.NAME as USER_NAME, C.USER_KEY, C.USER_ID, A.DEVICE_LIMIT_KEY,
+            TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            A.DEVICE_ID, E.NAME as GOODS_NAME
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER C
+        ON A.USER_KEY = C.USER_KEY
+        LEFT JOIN T_ORDER_GOODS D
+        ON A.DATA_KEY = D.J_G_KEY
+        LEFT JOIN T_GOODS E
+        ON D.G_KEY = E.G_KEY
+        WHERE A.TYPE = 0
+        <if test="searchType == 'id'">
+            AND C.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND C.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.DEVICE_LIMIT_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectPcDeviceListCount" resultType="Integer">
+        SELECT COUNT (A.DEVICE_LIMIT_KEY)
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER C
+        ON A.USER_KEY = C.USER_KEY
+        LEFT JOIN T_ORDER_GOODS D
+        ON A.DATA_KEY = D.J_G_KEY
+        WHERE A.TYPE = 0
+        <if test="searchType == 'id'">
+            AND C.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND C.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectMobileDeviceList" resultType="DeviceListDTO">
+        SELECT
+            B.NAME, B.USER_ID, B.USER_KEY, A.DEVICE_LIMIT_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            A.DEVICE_ID, A.DEVICE_MODEL, A.OS_VERSION, A.APP_VERSION
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE A.TYPE = 1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.DEVICE_LIMIT_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectMobileDeviceListCount" resultType="Integer">
+        SELECT COUNT (A.DEVICE_LIMIT_KEY)
+        FROM T_DEVICE_LIMIT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE A.TYPE = 1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectDeviceChangeLogList" resultType="DeviceListDTO">
+        SELECT
+            B.USER_ID, B.NAME, B.USER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD hh24:mi:ss') as DELETE_DATE, A.DEVICE_ID, A.TYPE, A.DEVICE_MODEL,
+            A.OS_VERSION, A.APP_VERSION, A.DATA_KEY
+        FROM T_DEVICE_LIMIT_LOG A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        <if test="deviceType != '' and deviceType != null">
+            <if test="deviceType == 'pc'">
+                AND A.TYPE = 0
+            </if>
+            <if test="deviceType == 'mobile'">
+                AND A.TYPE = 1
+            </if>
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        ORDER BY A.DELETE_DATE DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectDeviceChangeLogListCount" resultType="Integer">
+        SELECT COUNT(A.DEVICE_LOG_KEY)
+        FROM T_DEVICE_LIMIT_LOG A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        <if test="deviceType != '' and deviceType != null">
+            <if test="deviceType == 'pc'">
+                AND A.TYPE = 0
+            </if>
+            <if test="deviceType == 'mobile'">
+                AND A.TYPE = 1
+            </if>
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'device'">
+            AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectGoodsNameByJGKey" resultType="String">
+        SELECT B.NAME
+        FROM T_ORDER_GOODS A
+        INNER JOIN T_GOODS B
+        ON A.G_KEY = B.G_KEY
+        WHERE A.J_G_KEY = #{jGKey}
+    </select>
+
+    <select id="selectCalculateRateTGoods" resultType="Integer">
+        SELECT CALCULATE_RATE FROM T_GOODS WHERE G_KEY = #{gKey}
+    </select>
+
+    <select id="selectTDeviceLimitInfo" resultType="com.zianedu.lms.vo.TDeviceLimitVO">
+        SELECT * FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
+    </select>
+
+    <select id="selectTPointList" resultType="PointListDTO">
+        SELECT
+            B.USER_ID, B.NAME, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            A.J_ID, A.TYPE, A.POINT, A.DESC_TYPE, A.DESCRIPTION
+        FROM T_POINT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'jid'">
+            AND A.J_ID = #{searchText}
+        </if>
+        ORDER BY A.POINT_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTPointListCount" resultType="Integer">
+        SELECT COUNT (A.POINT_KEY)
+        FROM T_POINT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'name'">
+            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'jid'">
+            AND A.J_ID = #{searchText}
+        </if>
+    </select>
+
+    <select id="selectCalculateInfoBySchedule" resultType="CalculateInfoDTO">
+        SELECT * FROM T_ORDER A
+        LEFT JOIN T_ORDER_GOODS B
+        ON A.J_KEY = B.J_KEY
+        WHERE A.PAY_STATUS IN (2, 8)
+        AND A.PAY_TYPE NOT IN ( 20 )
+        AND B.PM_TYPE IN (0, 1, 2)
+        AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = #{yesterday}
+        ORDER BY A.INDATE DESC
+    </select>
+
+    <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
+        <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
+            SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_ORDER_LEC_CURRI
+        (
+            J_CURRI_KEY, J_LEC_KEY, CURRI_KEY, "TIME", MOBILE_TIME, MAX_READ_COUNT, EXAM_EXPECTATION_KEY, EXAM_OTHER_KEY, EXAM_QUESTION_EXPECT_COUNT, EXAM_QUESTION_OTHER_COUNT
+        )
+        VALUES
+        (
+            #{jCurriKey}, #{jLecKey}, #{curriKey}, #{time}, 0, 0, 0, 0, 0, 0
+        )
+    </insert>
+
+    <insert id="insertTOrder" parameterType="com.zianedu.lms.vo.TOrderVO">
+        <selectKey resultType="int" keyProperty="jKey" order="BEFORE">
+            SELECT T_ORDER_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_ORDER
+        (
+            J_KEY, C_KEY, USER_KEY, J_ID, INDATE, PRICE, PRICE_PAY, POINT, DC_WELFARE, DC_POINT, DC_COUPON,
+            DC_FREE, DELIVERY_PRICE, PAY_STATUS, PAY_DATE, PAY_TYPE, CANCEL_DATE, BANK, BANK_ACCOUNT, CARD_CODE,
+            DEPOSIT_USER, DEPOSIT_DATE, DELIVERY_NANE, DELIVERY_TELEPHONE, DELIVERY_TELEPHONE_MOBILE, DELIVERY_EMAIL,
+            DELIVERY_ZIPCODE, DELIVERY_ADDRESS, DELIVERY_ADDRESS_ROAD, DELIVERY_ADDRESS_ADD, UNIQUE_TYPE_LIST,
+            UNIQUE_EXTEND_DAY_LIST, PAY_KEY, OFFLINE_SERIAL, IS_MOBILE, IS_OFFLINE, TMP, G_NAME_LIST, IS_CANCEL_REQUEST,
+            CASH_RECEIPT_TYPE, CASH_RECEIPT_NUMBER, CANCEL_REQUEST_DATE
+        )
+        VALUES
+        (
+            #{jKey}, #{cKey}, #{userKey}, #{jId}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{price}, #{pricePay}, #{point}, #{dcWelfare}, #{dcPoint}, #{dcCoupon},
+            #{dcFree}, #{deliveryPrice}, #{payStatus}, TO_DATE(#{payDate}, 'YYYY-mm-dd hh24:mi:ss'), #{payType}, #{cancelDate}, #{bank}, #{bankAccount}, #{cardCode},
+            #{depositUser}, #{depositDate}, #{deliveryName}, #{deliveryTelephone}, #{deliveryTelephoneMobile}, #{deliveryEmail},
+            #{deliveryZipcode}, #{deliveryAddress}, #{deliveryAddressRoad}, #{deliveryAddressAdd}, #{uniqueTypeList},
+            #{uniqueExtendDayList}, #{payKey}, #{offlineSerial}, #{isMobile}, #{isOffline}, #{tmp}, #{gNameList}, #{isCancelRequest},
+            #{cashReceiptType}, #{cashReceiptNumber}, #{cancelRequestDate}
+        )
+    </insert>
+
+    <insert id="insertTOrderGoods" parameterType="com.zianedu.lms.vo.TOrderGoodsVO">
+        <selectKey resultType="int" keyProperty="jGKey" order="BEFORE">
+            SELECT T_ORDER_GOODS_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_ORDER_GOODS
+        (
+            J_G_KEY, J_KEY, C_KEY, USER_KEY, G_KEY, CART_KEY, PRICE_KEY, PRICE, SELL_PRICE, POINT, CNT, TYPE, PM_TYPE, KIND,
+            EXTEND_DAY, COUPON_ISSUE_KEY, COUPON_DC_PRICE, J_PM_KEY, FREEBIE_PARENT_CART_KEY, TMP, CTG_KEY, SITE_NAME, START_DATE, EXAM_YEAR,
+            CLASS_GROUP_CTG_KEY, SUBJECT_CTG_KEY, STEP_CTG_KEY, TEACHER_NAME_LIST, STS_CALC_PRICE, STS_TEACHER_LIST,
+            STS_SUBJECT_CTG_KEY, STS_STEP_CTG_KEY, STS_SITE_NAME, STS_AFFILIATION_CTG_KEY, G_NAME
+        )
+        VALUES
+        (
+            #{jGKey}, #{jKey}, #{cKey}, #{userKey}, #{gKey}, #{cartKey}, #{priceKey}, #{price}, #{sellPrice}, #{point}, #{cnt}, #{type}, #{pmType}, #{kind},
+            #{extendDay}, #{couponIssueKey}, #{couponDcPrice}, #{jPmKey}, #{freebieParentCartKey}, #{tmp}, #{ctgKey}, #{siteName}, TO_DATE(#{startDate}, 'YYYY-mm-dd'), #{examYear},
+            #{classGroupCtgKey}, #{subjectCtgKey}, #{stepCtgKey}, #{teacherNameList}, #{stsCalcPrice}, #{stsTeacherList},
+            #{stsSubjectCtgKey}, #{stsStepCtgKey}, #{stsSiteName}, #{stsAffiliationCtgKey}, #{gName}
+        )
+    </insert>
+
+    <insert id="insertTMemo" parameterType="com.zianedu.lms.vo.TMemoVO">
+        <selectKey resultType="int" keyProperty="memoKey" order="BEFORE">
+            SELECT T_MEMO_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_MEMO
+        (
+            MEMO_KEY, C_KEY, TABLE_NAME, TABLE_KEY, SEND_USER_KEY, INDATE, TITLE, MEMO, AUTHORITY
+        )
+        VALUES
+        (
+            #{memoKey}, #{cKey}, #{tableName}, #{tableKey}, #{sendUserKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{title}, #{memo}, ''
+        )
+    </insert>
+
+    <insert id="insertTOrderLec" parameterType="com.zianedu.lms.vo.TOrderLecVO">
+        <selectKey resultType="int" keyProperty="jLecKey" order="BEFORE">
+            SELECT T_ORDER_LEC_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_ORDER_LEC
+        (
+          J_LEC_KEY, J_G_KEY, INDATE, STATUS, START_DT, LIMIT_DAY, PAUSE_START_DT,
+          PAUSE_CNT, PAUSE_DAY, PAUSE_TOTAL_DAY, MULTIPLE, MAX_READ_COUNT
+        )
+        VALUES
+        (
+          #{jLecKey}, #{jGKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{status}, TO_DATE(#{startDt}, 'YYYY-mm-dd hh24:mi:ss'), #{limitDay}, #{pauseStartDt},
+          #{pauseCnt}, #{pauseDay}, #{pauseTotalDay}, #{multiple}, #{maxReadCount}
+        )
+    </insert>
+
+    <insert id="insertTDeviceLimitLog" parameterType="com.zianedu.lms.vo.TDeviceLimitLogVO">
+        <selectKey resultType="int" keyProperty="deviceLogKey" order="BEFORE">
+            SELECT T_DEVICE_LIMIT_LOG_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_DEVICE_LIMIT_LOG
+        (
+            DEVICE_LOG_KEY, DEVICE_LIMIT_KEY, C_KEY, USER_KEY, INDATE,
+            DELETE_DATE, TYPE, DATA_KEY, DEVICE_ID, DEVICE_MODEL, OS_VERSION, APP_VERSION
+        )
+        VALUES
+        (
+            #{deviceLogKey}, #{deviceLimitKey}, #{cKey}, #{userKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'),
+            TO_DATE(#{deleteDate}, 'YYYY-mm-dd hh24:mi:ss'), #{type}, #{dataKey}, #{deviceId}, #{deviceModel}, #{osVersion}, #{appVersion}
+        )
+
+    </insert>
+
+    <insert id="insertTPoint" parameterType="com.zianedu.lms.vo.TPointVO">
+        <selectKey resultType="int" keyProperty="pointKey" order="BEFORE">
+            SELECT T_POINT_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_POINT
+        (
+            POINT_KEY, C_KEY, INDATE, USER_KEY,
+            TYPE, POINT, J_KEY, J_ID, DESC_TYPE, DESCRIPTION
+        )
+        VALUES
+        (
+            #{pointKey}, #{cKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{userKey},
+            #{type}, #{point}, #{jKey}, #{jId}, #{descType}, #{description}
+        )
+    </insert>
+
+    <insert id="insertTCalculate" parameterType="com.zianedu.lms.vo.TCalculateVO">
+        <selectKey resultType="Long" keyProperty="calculateKey" order="BEFORE">
+            SELECT T_CALCULATE_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_CALCULATE
+        (
+            CALCULATE_KEY, C_KEY, TEACHER_KEY, INDATE, TARGET_DATE, YEAR_MONTH
+        )
+        VALUES
+        (
+            #{calculateKey}, #{cKey}, #{teacherKey}, #{indate}, #{targetDate}, #{yearMonth}
+        )
+    </insert>
+
+    <insert id="insertTCalculateData" parameterType="com.zianedu.lms.vo.TCalculateDataVO">
+        <selectKey resultType="Long" keyProperty="calculateDataKey" order="BEFORE">
+            SELECT T_CALCULATE_DATA_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_CALCULATE_DATA
+        (
+            CALCULATE_DATA_KEY, CALCULATE_KEY, INDATE, G_KEY, TYPE, PM_TYPE, KIND, CALC_PRICE, J_COUNT, PAY_STATUS,
+            CALC_CALCULATE_RATE, G_CALCULATE_RATE, G_T_CALCULATE_RATE, T_CALCULATE_RATE, J_KEY
+        )
+        VALUES
+        (
+            #{calculateDataKey}, #{calculateKey}, #{indate}, #{gKey}, #{type}, #{pmType}, #{kind}, #{calcPrice}, #{jCount}, #{payStatus},
+            #{calcCalculateRate}, #{gCalculateRate}, #{gTCalculateRate}, #{tCalculateRate}, #{jKey}
+        )
+    </insert>
+
+    <update id="updateTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
+        UPDATE T_ORDER_LEC_CURRI
+        <set>
+            <if test="time != '' and time != null">TIME = #{time}</if>
+        </set>
+        WHERE J_CURRI_KEY = #{jCurriKey}
+    </update>
+
+    <update id="updateTOrderLec">
+        UPDATE T_ORDER_LEC
+        <set>
+            <if test="status != null and status > -1">STATUS = #{status},</if>
+            <if test="limitDay != null and limitDay > 0">LIMIT_DAY = #{limitDay},</if>
+        </set>
+        WHERE J_LEC_KEY = #{jLecKey}
+    </update>
+
+    <update id="updateTOrderGoodsKind">
+        UPDATE T_ORDER_GOODS
+        <set>
+            <if test="kind != null and kind > 0">KIND = #{kind}</if>
+        </set>
+        WHERE J_G_KEY = #{jGKey}
+    </update>
+
+    <delete id="deleteTDeviceLimit">
+        DELETE FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
+    </delete>
+
+</mapper>

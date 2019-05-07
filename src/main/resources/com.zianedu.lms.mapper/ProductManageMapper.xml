@@ -50,6 +50,10 @@
 		SELECT * FROM T_GOODS_PRICE_OPTION WHERE G_KEY = #{gKey}
 	</select>
 
+	<select id="selectTGoodsPriceOptionInfo" resultType="com.zianedu.lms.vo.TGoodsPriceOptionVO">
+		SELECT * FROM T_GOODS_PRICE_OPTION WHERE PRICE_KEY = #{priceKey}
+	</select>
+
 	<select id="selectTCategoryGoodsList" parameterType="Integer" resultType="com.zianedu.lms.vo.TCategoryGoods">
 		SELECT * FROM T_CATEGORY_GOODS WHERE G_KEY = #{gKey}
 	</select>
@@ -366,6 +370,57 @@
 		INNER JOIN t_user C
 		ON B.user_key = C.user_key
 		WHERE A.g_key = #{gKey}
+	</select>
+
+	<select id="selectVideoProductListByFreeLectureInject" resultType="FreeInjectDTO">
+		SELECT A.G_KEY, A.NAME as GOODS_NAME,
+			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 100) as VOD_PRICE_KEY,
+			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 101) as MOBILE_PRICE_KEY,
+			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 102) as VOD_MOBILE_PRICE_KEY
+		FROM T_GOODS A
+		WHERE A.TYPE = 1
+		<if test="searchType == 'name'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		<if test="searchType == 'code'">
+			AND A.G_KEY = #{searchText}
+		</if>
+		ORDER BY A.G_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectVideoProductListCountByFreeLectureInject" resultType="Integer">
+		SELECT COUNT (A.G_KEY)
+		FROM T_GOODS A
+		WHERE A.TYPE = 1
+		<if test="searchType == 'name'">
+			AND A.NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		<if test="searchType == 'code'">
+			AND A.G_KEY = #{searchText}
+		</if>
+	</select>
+
+	<select id="selectTCpList" resultType="com.zianedu.lms.vo.TCpVO">
+		SELECT CP_KEY, NAME
+		FROM T_CP
+		WHERE TYPE = 1
+		AND C_KEY = 100
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
+		ORDER BY CP_KEY DESC
+		OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+	</select>
+
+	<select id="selectTCpListCount" resultType="Integer">
+		SELECT COUNT (CP_KEY)
+		FROM T_CP
+		WHERE TYPE = 1
+		AND C_KEY = 100
+		<if test="searchType == 'name'">
+			AND NAME LIKE '%'||#{searchText}||'%'
+		</if>
 	</select>
 
 	<insert id="insertTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">

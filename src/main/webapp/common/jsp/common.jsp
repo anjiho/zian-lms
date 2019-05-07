@@ -5,6 +5,7 @@
     TUserVO tUserVO = (TUserVO)session.getAttribute("user_info");
     int authority = tUserVO.getAuthority();
     String name = tUserVO.getName();
+    int httpStatusCode = response.getStatus();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -124,6 +125,11 @@
 }
 %>
 <script>
+    var httpCode = '<%=httpStatusCode%>';
+    if (httpCode == '901') {
+        alert("세션이 만료되어 로그인 페이지로 이동합니다.");
+    }
+
     function serializeDiv( $div, serialize_method ) {
         // Accepts 'serialize', 'serializeArray'; Implicit 'serialize'
         serialize_method = serialize_method || 'serialize';

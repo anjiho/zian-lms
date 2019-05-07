@@ -121,8 +121,18 @@ public class RandomUtil {
         return sb.toString();
     }
 
+    public static String getRandomNumber(int number) {
+        String[] no = {"1","2","3","4","5","6","7","8","9","0"};
+        StringBuffer sb = new StringBuffer();
+        Random rm = new Random();
+        for (int i = 0; i < number; i++) {
+            sb.append(no[rm.nextInt(number)]);
+        }
+        return sb.toString();
+    }
+
     public static void main(String[] args) {
-            System.out.println(getRandomAlphaNumber(13));
+            System.out.println(getRandomNumber(6));
 
     }
 }

@@ -57,7 +57,6 @@ function gfn_fnList2(page) {
 }
 
 function gfn_fnList3(page) {
-    alert(page);
     var sPage = document.getElementById("sPage3");
     sPage.value = page;
     try {

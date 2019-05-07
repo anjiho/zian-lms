@@ -10,7 +10,7 @@
 
 	String webRoot = request.getContextPath();
 
-	String targetUrl = request.getParameter("target_url");
+	String targetUrl = request.getParameter("targetUrl");
 
 	String page_gbn = "";
 
@@ -28,10 +28,17 @@
 <script type="text/javascript">
 	var page_gbn = "<%=page_gbn%>";
 	function init() {
-		with(document.frm) {
-			action = "/dashboard";
-			page_gbn.value = "dashboard";
-			submit();
+		var url =  '<%=targetUrl%>';
+		if (url == "null") url = "";
+
+		if (url != "") {
+			location.replace(url);
+		} else {
+			with(document.frm) {
+				action = "/dashboard";
+				page_gbn.value = "dashboard";
+				submit();
+			}
 		}
 	}
 </script>
