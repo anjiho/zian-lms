@@ -620,13 +620,19 @@
 
     <select id="selectCalculateInfoBySchedule" resultType="CalculateInfoDTO">
         SELECT * FROM T_ORDER A
-        LEFT JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
         WHERE A.PAY_STATUS IN (2, 8)
         AND A.PAY_TYPE NOT IN ( 20 )
-        AND B.PM_TYPE IN (0, 1, 2)
         AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = #{yesterday}
         ORDER BY A.INDATE DESC
+    </select>
+
+    <select id="selectTOrderGoods" resultType="com.zianedu.lms.vo.TOrderGoodsVO">
+        SELECT *
+        FROM T_ORDER_GOODS
+        WHERE PRICE > 0
+        AND SELL_PRICE > 0
+        AND PM_TYPE IN (0,1,2)
+        AND J_KEY = #{jKey}
     </select>
 
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">

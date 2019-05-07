@@ -8,6 +8,7 @@ import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.utils.ZianCalculate;
 import com.zianedu.lms.vo.TCalculateVO;
 import com.zianedu.lms.vo.TGoodTeacherLinkVO;
+import com.zianedu.lms.vo.TOrderGoodsVO;
 import com.zianedu.lms.vo.TTeacherVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -41,39 +42,45 @@ public class TeacherCalculateRepositoryLogic implements TeacherCalculateReposito
             TCalculateVO tCalculateVO = new TCalculateVO(teacherVO.getTeacherKey());
             //T_CALCULATE 테이블 내용 저장
             //Long calculateKey = orderManageMapper.insertTCalculate(tCalculateVO);
-            //주문내역 조회
+            //주문내역 조회(T_ORDER)
             //List<CalculateInfoDTO> orderInfoList = orderManageMapper.selectCalculateInfoBySchedule(Util.plusDate(Util.returnNow(), -1));
             List<CalculateInfoDTO> orderInfoList = orderManageMapper.selectCalculateInfoBySchedule(yyyymmdd);
+
             //주문내역만큼 배열 시작
             for (CalculateInfoDTO calculateInfoDTO : orderInfoList) {
-                int gKey = calculateInfoDTO.getGKey();
-                int calculateRate = orderManageMapper.selectCalculateRateTGoods(gKey);
-                //1. 상품이 동영상일때
-                if (calculateInfoDTO.getType() == 1) {
-                    //동영상 상품에 등록되어 있는 강사 조회
-                    List<TGoodTeacherLinkVO> teacherLinkVOS = productManageMapper.selectTeacherListByTeacherLink(gKey);
+                //T_ORDER_GOODS 테이블 조회
+                List<TOrderGoodsVO>orderGoodsList = orderManageMapper.selectTOrderGoods(calculateInfoDTO.getJKey());
 
-                    int teacherSize = teacherLinkVOS.size();
-                    if (teacherLinkVOS.size() > 0 || teacherLinkVOS != null) {
-                        for (TGoodTeacherLinkVO teacherLinkVO : teacherLinkVOS) {
-                            int price = calculateInfoDTO.getPrice();
-                            if (teacherSize > 1) {
-                                price = price / 2;
+                //주문한 T_ORDER_GOODS 조회만큼
+                for (TOrderGoodsVO orderGoodsVO : orderGoodsList) {
+                    int gKey = orderGoodsVO.getGKey();
+                    //T_GOODS.CALCULATE_RATE 필드 조회
+                    int calculateRate = orderManageMapper.selectCalculateRateTGoods(gKey);
+
+                    //1. 상품이 동영상일때
+                    if (orderGoodsVO.getType() == 1) {
+                        //동영상 상품에 등록되어 있는 강사 조회
+                        List<TGoodTeacherLinkVO> teacherLinkVOS = productManageMapper.selectTeacherListByTeacherLink(gKey);
+
+                        int teacherSize = teacherLinkVOS.size();
+                        if (teacherLinkVOS.size() > 0 || teacherLinkVOS != null) {
+                            for (TGoodTeacherLinkVO teacherLinkVO : teacherLinkVOS) {
+                                int price = calculateInfoDTO.getPrice();
+                                if (teacherSize > 1) {
+                                    price = price / 2;
+                                }
+                                //정산금액 계산하기
+                                double calcPrice = ZianCalculate.calcSingleProduct(
+                                        price, calculateInfoDTO.getCouponDcPrice(), calculateInfoDTO.getDcWelfare(), calculateRate,
+                                        calculateInfoDTO.getDcPoint(), calculateInfoDTO.getDcFree(), calculateInfoDTO.getPayType()
+                                );
+                                logger.info("calcPrice >>>>>>>>>>>>>>>> " + calcPrice);
                             }
-                            //정산금액 계산하기
-                            double calcPrice = ZianCalculate.calcSingleProduct(
-                                price, calculateInfoDTO.getCouponDcPrice(), calculateInfoDTO.getDcWelfare(), calculateRate,
-                                calculateInfoDTO.getDcPoint(), calculateInfoDTO.getDcFree(), calculateInfoDTO.getPayType()
-                            );
-                            logger.info("calcPrice >>>>>>>>>>>>>>>> " + calcPrice);
                         }
                     }
                 }
 
             }
-
         }
-
-
     }
 }
