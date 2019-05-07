@@ -518,7 +518,11 @@
 		)
 	</insert>
 
+
 	<insert id="insertTBook" parameterType="com.zianedu.lms.vo.TBookVO">
+		<selectKey resultType="Integer" keyProperty="bookKey" order="BEFORE">
+			SELECT T_BOOK_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_BOOK
 		(
 			BOOK_KEY, G_KEY, STATUS, WRITER, PUBLISH_DATE, PAGE_CNT, ISBN, IS_DELIVERY_FREE,
@@ -526,7 +530,7 @@
 		)
 		VALUES
 		(
-			T_BOOK_SEQ.nextval, #{gKey}, #{status}, #{status}, #{writer}, TO_DATE(#{publishDate}, 'YYYY-mm-dd'), #{pageCnt}, #{isbn}, #{isDeliveryFree},
+			#{bookKey}, #{gKey}, #{status}, #{writer}, TO_DATE(#{publishDate}, 'YYYY-mm-dd'), #{pageCnt}, #{isbn}, #{isDeliveryFree},
 			#{isSet}, #{contentList}, #{subjectCtgKey}, #{classGroupCtgKey}, #{goodsId}, #{nextGKey}
 		)
 	</insert>

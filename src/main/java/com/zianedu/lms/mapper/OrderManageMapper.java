@@ -79,6 +79,8 @@ public interface OrderManageMapper {
 
     List<CalculateInfoDTO> selectCalculateInfoBySchedule(@Param("yesterday") String yesterday);
 
+    List<TOrderGoodsVO> selectTOrderGoods(@Param("jKey") int jKey);
+
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 
