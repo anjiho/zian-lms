@@ -187,6 +187,7 @@
 			A.*,
 			( SELECT name FROM T_CATEGORY WHERE ctg_key = A.class_group_ctg_key) as classGroupName,
 			( SELECT name FROM T_CATEGORY WHERE ctg_key = A.subject_ctg_key) as subjectName,
+			( SELECT name FROM T_GOODS WHERE A.NEXT_G_KEY = G_KEY) as nextGoodsName,
 			B.cp_key, C.name as cpName
 		FROM T_BOOK A
 		INNER JOIN T_GOODS B

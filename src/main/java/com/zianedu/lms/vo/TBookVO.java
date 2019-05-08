@@ -40,4 +40,6 @@ public class TBookVO {
     private int cpKey;
     //출판사명
     private String cpName;
+
+    private String nextGoodsName;
 }
