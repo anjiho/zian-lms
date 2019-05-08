@@ -133,12 +133,23 @@
                 dwr.util.addRows("previewImgList", previewInfo, [
                     function(data) {return "<input type='hidden' id='reskey' value='"+ data.resKey +"'>"},
                     function(data) {return fn_clearFilePath(data.value)},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function(data) {return "<button type='button' onclick='deleteImg("+ data.resKey +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
                 ], {escapeHtml:false});
                 $('#previewImgList tr').eq(0).children().eq(7).attr("style", "display:none");
-
             }
         });
+    }
+
+    function deleteImg(val){
+        if(confirm("삭제 하시겠습니까?")) {
+            productManageService.deletePreviewInfo(val, function () {
+                if ($("#bookTable > tbody > tr").length == 1) {
+                    $('#bookTable > tbody:first > tr:first').attr("style", "display:none");
+                } else {
+                    $('#bookTable > tbody:last > tr:last').remove();
+                }
+            });
+        }
     }
 
     $( document ).ready(function() {
@@ -546,21 +557,24 @@
                     processData: false,
                     contentType: false,
                     success: function (data) {
+                        $(".custom-file-control3").html('');
                         if(data.result){
                             var fileName = fn_clearFilePath(data.result);
-                            var cellData = [
-                                function() {return fileName},
-                                function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
-                            ];
-                            dwr.util.addRows("previewImgList", [0], cellData, {escapeHtml: false});
-                            $(".custom-file-control3").html('');
                             var tResVO = {
                                 key00 : gKey,
                                 value : data.result
                             };
-                            productManageService.saveBookPreviewInfo(tResVO , function () {});
+                            productManageService.saveBookPreviewInfo(tResVO , function (resKey) {
+                                if(resKey != null){
+                                    var cellData = [
+                                        function() {return fileName},
+                                        function() {return "<button type='button' onclick='deleteImg("+ resKsy +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
+                                    ];
+                                    dwr.util.addRows("previewImgList", [0], cellData, {escapeHtml: false});
+                                }
+                            });
                         }
-                    }
+                    }//success
                 });
             }
         });
