@@ -537,6 +537,9 @@
 	</insert>
 
 	<insert id="insertTRes" parameterType="com.zianedu.lms.vo.TResVO">
+        <selectKey resultType="Integer" keyProperty="resKey" order="BEFORE">
+            SELECT T_RES_SEQ.nextval FROM DUAL
+        </selectKey>
 		INSERT INTO T_RES
 		(
 			RES_KEY, TYPE, DEVICE, KEY_00, KEY_01, KEY_02, KEY_00_TYPE, KEY_01_TYPE, KEY_02_TYPE, VALUE, VALUE_TEXT
