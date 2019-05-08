@@ -11259,11 +11259,12 @@ ul.list-style-none li a:hover {
 }
 
 .sidebar-nav ul .sidebar-item .sidebar-link.active, .sidebar-nav ul .sidebar-item .sidebar-link:hover {
+    background: #27a9e3;
     opacity: 1
 }
 
 .sidebar-nav ul .sidebar-item.selected > .sidebar-link {
-    background: #27a9e3;
+    background: black;
     opacity: 1
 }
 

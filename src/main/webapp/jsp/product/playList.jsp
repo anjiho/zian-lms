@@ -39,21 +39,19 @@
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
                 if (selList.length > 0) {
-                    console.log(selList);
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
                         var goosNameHtml = "<a href='javascript:void(0);' color='blue' style='float:left' onclick='play_modify(" + cmpList.GKey + ");'>"+cmpList.goodsName +"</a>";
                         if (cmpList != undefined) {
-                            console.log(cmpList.isShow);
                             var cellData = [
                                 function(data) {return listNum--;},
                                 // function(data) {return i+1;},
                                 function(data) {return cmpList.GKey;},
                                 function(data) {return goosNameHtml;},
                                 function(data) {return split_minute_getDay(cmpList.indate);},
-                                function(data) {return cmpList.isShow == 0 ? "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
-                                function(data) {return cmpList.isSell == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
-                                function(data) {return cmpList.isFree == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";}
+                                function(data) {return cmpList.isShow == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                                function(data) {return cmpList.isSell == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                                function(data) {return cmpList.isFree == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                             ];
                             dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
                         }
@@ -76,7 +74,7 @@
     }
 
 </script>
-<input type="hidden" id="sPage" >
+<input type="hidden" id="sPage">
 <input type="hidden" id="gKey"  name="gKey">
 <div class="page-breadcrumb">
     <div class="row">
@@ -86,7 +84,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">동영상 상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">동영상 목록</li>
                     </ol>
                 </nav>

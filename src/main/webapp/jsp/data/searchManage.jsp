@@ -7,7 +7,7 @@
     $( document ).ready(function() {
         getSearchKeywordDomainList('sel_subDomain','');
         searchChange("PUBLIC");
-
+        menuActive('menu-0', 6);
         $('.modal').on('hidden.bs.modal', function (e) {
             $('form').each(function(){
                 this.reset();
@@ -36,7 +36,6 @@
     }
 
     function getSearch(val) { //상세정보 가져오기
-        alert(val);
         $("#key").val('modify');
         $("#searchKeywordKey").val(val);
         dataManageService.getSearchKeywordInfo(val, function (selList) {
@@ -53,7 +52,7 @@
         if(key == "modify"){
             if(confirm("수정 하시겠습니까?")) {
                 dataManageService.modifySearchKeyword(searchKeywordKey, searchText, function () {
-                    isReloadPage(true);
+                    //isReloadPage(true);
                 });
             }
         }else{
@@ -82,7 +81,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">데이터관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">일정/검색어관리</li>
                         <li class="breadcrumb-item active" aria-current="page">검색어관리</li>
                     </ol>
                 </nav>

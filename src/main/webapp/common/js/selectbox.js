@@ -283,6 +283,25 @@ function getEmphasisSelectbox(tagId, val) {
     });
 }
 
+//동영상 저장 옵션명
+function getVideoOptionTypeSelectbox(val) {
+    var optionName = "";
+    var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i = 100; i < 103; i++) {
+        if(i == 100) optionName = 'VOD';
+        else if(i == 101) optionName = 'Mobile';
+        else optionName = 'VOD + Mobile';
+        if (i == val) {
+            html += "<option value="+i+" selected>" + optionName + "</option>";
+        } else {
+            html += "<option value="+i+">" + optionName + "</option>";
+        }
+    }
+    html += "</select>";
+    return html;
+}
+
 function getOptionSelectbox(val) {
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
     html += "<option value=''>선택하세요</option>";
@@ -325,6 +344,36 @@ function getCategoryNoTag(tableId, val, tdNum) {
     });
 }
 
+//학원강의 등록 카테고리
+function getCategoryNoTag2(tableId, val, tdNum) {
+    alert(val);
+    var nextTdNum = Number(tdNum)+2;
+    var html = "<select id='sel_category' name='selCategory[]' onchange='changeCategory(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class='form-control'>";
+    html += "<option value=''>선택하세요</option>";
+    selectboxService.getCategoryList(val, function (list) {
+        for (var i=0; i<list.length; i++) {
+            html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+        }
+        html += "</select>";
+        $("#"+ tableId).find("tbody").find("tr:last").find("td").eq(tdNum).html(html);
+        $("#"+ tableId).find("tbody").find("tr:last").find("td input").eq(0).val(val);
+    });
+}
+
+//모의고사 등록 - 분류 셀렉트박스 //688
+function getMockCategoryList(tagId, val) {
+    selectboxService.getCategoryList(688, function (list) {
+        var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+
 function defaultCategorySelectbox() {
     var html = "<select id='sel_category' name='selCategory[]' onchange='' class='form-control'>";
     html += "<option value=''>선택하세요</option>";
@@ -349,6 +398,22 @@ function getSelectboxListForCtgKeyNoTag(tableId, val, tdNum) {
     });
 }
 
+function getSelectboxListForCtgKeyNoTag2(tableId, val, tdNum) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='selSubjectKey' name='selSubjectByTeacher[]' onchange='injectSubjectKey(this.value)' class='form-control'>";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        $("#"+ tableId).find("tbody").find("tr:last").find("select").eq(tdNum).html(html);
+    });
+}
+
 function selectTeacherSelectboxNoTag(tableId, tdNum) {
     selectboxService.selectTeacherSelectbox(function (list) {
         var html = "<select id='selTeacherKey' name='selTeacher[]' onchange='injectTeacherKey(this.value)' class='form-control'>";
@@ -358,6 +423,18 @@ function selectTeacherSelectboxNoTag(tableId, tdNum) {
         }
         html += "</select>";
         $("#"+ tableId).find("tbody").find("tr:last").find("td").eq(tdNum).html(html);
+    });
+}
+
+function selectTeacherSelectboxNoTag2(tableId, tdNum) {
+    selectboxService.selectTeacherSelectbox(function (list) {
+        var html = "<select id='selTeacherKey' name='selTeacher[]' onchange='injectTeacherKey(this.value)' class='form-control'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            html += "<option value="+list[i].teacherKey+">"+ list[i].teacherName +"</option>";
+        }
+        html += "</select>";
+        $("#"+ tableId).find("tbody").find("tr:last").find("select").eq(tdNum).html(html);
     });
 }
 
@@ -404,6 +481,19 @@ function getMonthsSelectbox(tagId) {
         html += "<option value="+i+">"+ i +"월</option>";
     }
     html += "</select>";
+    innerHTML(tagId, html);
+}
+
+//모의고사 출제년도 셀렉트박스
+function getMockYearSelectbox(tagId, val) {
+    var yearAgo   = getYearAgo(3650);
+    var yearAfter =  getYearAfter(4015);
+
+    var html = "<select id='examYear' name='examYear' class='col-sm-3 select2 form-control custom-select'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i=yearAgo; i<yearAfter; i++) {
+        html += "<option value="+i+">"+ i +"년</option>";
+    }
     innerHTML(tagId, html);
 }
 

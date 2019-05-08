@@ -8,10 +8,9 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
-
     });
     function init() {
-        menuActive('menu-0', 2);
+        menuActive('menu-0', 3);
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -85,15 +84,13 @@
                         var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm">삭제</button>';
                         var bitText = "";
 
-                        if(cmpList1.valueBit1 == "1") bitText = "<span style='color: blue;'>O</span>";
-                        else bitText = "<span style='color: red;'>X</span>";
+                        if(cmpList1.valueBit1 == "1") bitText = "<i class=\"mdi mdi-check\" style=\"color:green;\"></i>";
+                        else bitText = "<i class=\"mdi mdi-close\" style=\"color: red\"></i>";
 
                         if (cmpList1 != undefined) {
                             var cellData = [
                                 function(data) {return cmpList1.value5 == null ? "-" : cmpList1.value5;},
                                 function(data) {return cmpList1.value1 == null ? "-" : fn_clearFilePath(cmpList1.value1);},
-                                //function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
-                                //function(data) {return cmpList1.value3 == null ? "-" : cmpList1.value3;},
                                 function(data) {return cmpList1.valueBit1 == null ? "-" : bitText;},
                                 function(data) {return cmpList1.value4 == null ? "-" : gfn_substr(cmpList1.value4, 1, 30)+"...";},
                                 function(data) {return btn;}
@@ -117,7 +114,6 @@
     function popup(val,ctgKey,pos) { //수정팝업
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
-            console.log(selList);
             $("#bannerKey").val(val);
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
@@ -168,6 +164,11 @@
         }else{
             checkYn = '0';
         }
+
+        var text = '';
+        if(bannerKey == '0') text = '저장하시겠습니까?';
+        else text = '수정하시겠습니까?';
+
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
         data.append("ctgKey", ctgKey);
@@ -175,7 +176,7 @@
         data.append("value3", bannerColor);
         data.append("valueBit1", checkYn);
         data.append("value4", bannerLink);
-        if(confirm("저장하시겠습니까?")) {
+        if(confirm(text)) {
             $.ajax({
                 url: "/file/bannerUpload",
                 method: "post",
@@ -194,7 +195,7 @@
     function bannerDelete(val,ctgKey,pos) {
         if(confirm("삭제하시겠습니까?")) {
             dataManageService.deleteBannerInfo(val, ctgKey, function () {
-                location.reload();
+                //location.reload();
             });
         }
     }
@@ -215,7 +216,7 @@
 
             });
             dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
+                //location.reload();
             });
         }else if(val == "1"){
             $("#dragtable_1 tbody tr").each(function(index) {
@@ -284,7 +285,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">배너관리</li>
+                        <li class="breadcrumb-item">데이터관리</li>
                         <li class="breadcrumb-item active" aria-current="page">배너관리</li>
                     </ol>
                 </nav>

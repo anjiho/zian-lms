@@ -8,6 +8,7 @@
 <script>
     $(document).ready(function() {
         changeBox2();
+        menuActive('menu-0', 4);
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -19,7 +20,6 @@
     function changeBox2() {
         $(".card").remove();
         dataManageService.getSideBarBannerList(4200,function (selList) {
-            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -69,8 +69,9 @@
                         var cmpList1 = selList2[j];
 
                         var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\"  onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm">삭제</button>';
-                        if(cmpList1.valueBit1 == "1") bitText = "<span style='color: blue;'>O</span>";
-                        else bitText = "<span style='color: red;'>X</span>";
+                        if(cmpList1.valueBit1 == "1") bitText = "<i class=\"mdi mdi-check\" style=\"color:green;\"></i>";
+                        else bitText = "<i class=\"mdi mdi-close\" style=\"color: red\"></i>";
+
                         if (cmpList1 != undefined) {
                             var cellData = [
                                 //return cmpList1.valueBit1 == null ? "-" : cmpList1.value1;
@@ -221,7 +222,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">배너관리</li>
+                        <li class="breadcrumb-item">데이터관리</li>
                         <li class="breadcrumb-item active" aria-current="page">사이드배너관리</li>
                     </ol>
                 </nav>
