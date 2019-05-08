@@ -205,8 +205,6 @@
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
 
-
-
                 $('#teacherList tr').eq(0).attr("style", "display:none");
                 $('#teacherList tr').each(function(){
                     var tr = $(this);

@@ -45,6 +45,7 @@
     }
 </script>
 <div class="page-breadcrumb">
+    <input type="hidden" id="gKey"  name="gKey">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">도서 목록</h4>

@@ -394,11 +394,6 @@
         if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
         else bookObj.isSet = '0';
 
-        //data.append("videoInfo", JSON.stringify(basicObj));
-        //data.append("videoOptionInfo",JSON.stringify(optionArray));
-        //data.append("videoCategoryInfo",JSON.stringify(categoryArr));
-        //updateBookInfo
-
         $.ajax({
             url: "/file/updateBookInfo",
             method: "post",
@@ -411,40 +406,18 @@
             }
         });
 
+        var cpKey = $("#cpKey").val();
+
         console.log(basicObj);
         console.log(optionArray);
         console.log(categoryArr);
         console.log(bookObj);
 
         if(confirm("저장하시겠습니까?")) {
-            productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
+            productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, cpKey,function (selList) {
 
             });
         }
-    }
-    
-    function imageSave() {
-        //previewFileUpload
-        var data = new FormData();
-        $.each($('#PreviewFile')[0].files, function(i, file) {
-            data.append('PreviewFile', file);
-            if(confirm("이미지를 저장 하시겠습니까?")) {
-                $.ajax({
-                    url: "/file/previewFileUpload",
-                    method: "post",
-                    dataType: "JSON",
-                    data: data,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        if(data.result){
-                           $(".custom-file-control3").html('');
-                        }
-                    }
-                });
-            }
-        });
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
@@ -479,7 +452,7 @@
                         <section class="col-md-auto">
                             <div id="section1">
                                 <input type="hidden" value="0" name="gKey">
-                                <input type="hidden" value="0" name="cpKey">
+                                <input type="hidden" value="0" name="cpK ey">
                                 <input type="hidden" value="0" name="isNodc">
                                 <input type="hidden" value="0" name="tags">
                                 <input type="hidden" value="0" name="goodsId">
@@ -845,22 +818,6 @@
                         </section>
                         <!-- // 1.기본정보 Tab -->
                         <!-- 도서정보 -->
-
-                        <!-- 6.강의 교재선택 Tab -->
-                        <h3>미리보기이미지</h3>
-                        <section>
-                            <div class="float-right mb-3">
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sModal">추가</button>
-                            </div>
-                            <div id="section6">
-                                <table class="table text-center table-hover" id="bookTable">
-                                    <thead>
-                                    </thead>
-                                    <tbody id="bookList"></tbody>
-                                </table>
-                            </div>
-                        </section>
-                        <!-- //6.강의 교재선택 Tab -->
                     </div>
                 </div>
             </div>
