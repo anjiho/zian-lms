@@ -152,6 +152,8 @@ public interface ProductManageMapper {
 
     void deleteTGoodsPriceOption(@Param("gKey") int gKey);
 
+    void deleteTRes(@Param("resKey") int resKey);
+
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);
 
