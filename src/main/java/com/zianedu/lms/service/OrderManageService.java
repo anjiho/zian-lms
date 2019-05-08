@@ -615,8 +615,8 @@ public class OrderManageService {
         orderManageMapper.deleteTDeviceLimit(deviceLimitKey);
     }
 
-    public void test(String yyyymmdd) throws Exception {
-        teacherCalculateRepository.calculateTeacherSaleGoodsAny(yyyymmdd);
+    public void test(String yyyymmdd, int teacherKey) throws Exception {
+        teacherCalculateRepository.calculateTeacherSaleGoodsAny(yyyymmdd, teacherKey);
     }
 
 }
