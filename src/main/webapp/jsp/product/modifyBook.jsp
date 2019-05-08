@@ -10,24 +10,15 @@
     function init() {
         menuActive('menu-1', 5);
         getCategoryList("sel_category","214");
-        getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
-        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
-        getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
-        getLectureStatusSelectbox("status", "");
-        getLectureCountSelectbox("limitCount", "");
-        getClassRegistraionDaySelectbox("limitDay", "");
-        getLectureCountSelectbox("lecTime", "");
-        getExamPrepareSelectbox("examYear", "");
-        getSelectboxListForCtgKeyNoTag2('teacherTable', '70', 0);
-        selectTeacherSelectboxNoTag2('teacherTable', 1);
         getProductSearchTypeSelectbox("l_productSearch");
+        $('#bookTable tr').eq(0).attr("style", "display:none");
         productManageService.getBookDetailInfo(gKey, function(info) {
             console.log(info);
             /*1. 기본정보 가져오기 */
             var productInfo = info.productInfo;
-            innerValue("name",productInfo.name);
-            innerValue("indate",productInfo.indate);
-            innerValue("sellstartdate",productInfo.sellstartdate);
+            innerValue("name", productInfo.name);
+            innerValue("indate", split_minute_getDay(productInfo.indate));
+            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             isCheckboxByNumber("isFree", productInfo.isFree);//무료
@@ -125,7 +116,7 @@
             getNewSelectboxListForCtgKey("l_classGroup", "4309", bookInfo.classGroupCtgKey);//급수
             getNewSelectboxListForCtgKey2("l_subjectGroup", "70", bookInfo.subjectCtgKey);//과목
             innerValue("writer", bookInfo.writer);//저자
-            innerValue("cpdate", bookInfo.publishDate);//최신발행일
+            innerValue("cpdate", split_minute_getDay(bookInfo.publishDate));//최신발행일
             innerValue("isbn", bookInfo.isbn);//ISBN
             innerValue("pageCnt", bookInfo.pageCnt);//페이지수
             innerValue("cpKey", bookInfo.cpKey);//출판사 키
@@ -133,8 +124,20 @@
             isCheckboxByNumber("isDeliveryFree", bookInfo.isDeliveryFree);//배송비무료
             isCheckboxByNumber("isSet", bookInfo.isSet);//세트상품
             innerValue("nextGKey", bookInfo.nextGKey);//과년도도서 카
-            //innerHTML("goodName", bookInfo.cpName);//과년도도서
+            innerHTML("goodName", bookInfo.nextGoodsName);//과년도도서
             $("#contentList").summernote("code", bookInfo.contentList);
+
+            /*2. 미리보기 이미지 가져오기 */
+            var previewInfo = info.previewInfo;
+            if (previewInfo.length != 0) {
+                dwr.util.addRows("previewImgList", previewInfo, [
+                    function(data) {return "<input type='hidden' id='reskey' value='"+ data.resKey +"'>"},
+                    function(data) {return fn_clearFilePath(data.value)},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                ], {escapeHtml:false});
+                $('#previewImgList tr').eq(0).children().eq(7).attr("style", "display:none");
+
+            }
         });
     }
 
@@ -271,14 +274,6 @@
             } else {
                 $('#categoryTable > tbody:last > tr:last').remove();
             }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
         }
     }
 
@@ -297,18 +292,7 @@
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
-    }
-
-    //강사목록 새로 등록하는 값 주입하기(강사키)
-    function injectSubjectKey(val) {
-        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(1).val(val);
-    }
-
-    //강사목록 새로 등록하는 값 주입하기(과목키)
-    function injectTeacherKey(val) {
-        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
     }
 
     //과년도 도서 추가
@@ -456,68 +440,6 @@
         });
 
         /* 1. 기본정보 obj */
-        var basicObj = getJsonObjectFromDiv("section1");
-        if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-        else basicObj.isShow = '0';
-        if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
-        else basicObj.isSell = '0';
-        if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
-        else basicObj.isFree = '0';
-        if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
-        else basicObj.isFreebieDeliveryFree = '0';
-        if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
-        else basicObj.isQuickDelivery = '0';
-
-        /*  //기본정보 obj */
-
-        /*  2.옵션 obj */
-        var optionArray = new Array();
-        $('#optionTable tbody tr').each(function(index){
-            var i = 0;
-            var optionName = $(this).find("td select").eq(0).val();
-            var price = $(this).find("td input").eq(0).val();
-            var sellPrice = $(this).find("td input").eq(1).val();
-            var point = $(this).find("td input").eq(2).val();
-            var extendPercent = $(this).find("td input").eq(3).val();
-            var data = {
-                priceKey:'0',
-                gKey:'0',
-                kind:optionName,
-                ctgKey:'0',
-                name:'0',
-                price:price,
-                sellPrice:sellPrice,
-                point:point,
-                extendPercent:extendPercent
-            };
-            optionArray.push(data);
-        });
-
-        /* 3. 카테고리 저장 */
-        var categoryArr = new Array();
-        $('#categoryTable tbody tr').each(function(index){
-            var ctgKey = $(this).find("td select").eq(4).val();
-            var data = {
-                ctgGKey:0,
-                ctgKey:ctgKey,
-                gKey:0,
-                pos:0
-            };
-            categoryArr.push(data);
-        });
-
-        /* 4. 도서정보 obj */
-        var bookObj = getJsonObjectFromDiv("section4");
-        if(bookObj.isDeliveryFree == 'on')  bookObj.isDeliveryFree = '1';//무료
-        else bookObj.isDeliveryFree = '0';
-        if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
-        else bookObj.isSet = '0';
-
-        //data.append("videoInfo", JSON.stringify(basicObj));
-        //data.append("videoOptionInfo",JSON.stringify(optionArray));
-        //data.append("videoCategoryInfo",JSON.stringify(categoryArr));
-        //updateBookInfo
-
         $.ajax({
             url: "/file/updateBookInfo",
             method: "post",
@@ -527,19 +449,86 @@
             processData: false,
             contentType: false,
             success: function (data) {
+                /* 1. 기본정보 */
+                var cpKey = $("#cpKey").val();
+                var basicObj = getJsonObjectFromDiv("section1");
+                if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
+                else basicObj.isShow = '0';
+                if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
+                else basicObj.isSell = '0';
+                if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
+                else basicObj.isFree = '0';
+                if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
+                else basicObj.isFreebieDeliveryFree = '0';
+                if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
+                else basicObj.isQuickDelivery = '0';
+                basicObj.cpKey = cpKey;
+                basicObj.GKey = gKey;
+
+                var result = JSON.stringify(data.result);
+                if(result != "") {
+                    var parse = JSON.parse(result);
+                    basicObj.imageList = parse.imageListFilePath;
+                    basicObj.imageView = parse.imageViewFilePath;
+                }
+
+                /*  2.옵션 obj */
+                var optionArray = new Array();
+                $('#optionTable tbody tr').each(function(index){
+                    var i = 0;
+                    //var optionName = $(this).find("td select").eq(0).val();
+                    var price = $(this).find("td input").eq(0).val();
+                    var sellPrice = $(this).find("td input").eq(1).val();
+                    var point = $(this).find("td input").eq(2).val();
+                    var extendPercent = $(this).find("td input").eq(3).val();
+                    var data = {
+                        priceKey:'0',
+                        gKey:'0',
+                        kind:'0',
+                        ctgKey:'0',
+                        name:'0',
+                        price:price,
+                        sellPrice:sellPrice,
+                        point:point,
+                        extendPercent:extendPercent
+                    };
+                    optionArray.push(data);
+                });
+
+                /* 3. 카테고리 저장 */
+                var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+                var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+                if (fistTrStyle == "display:none") {
+                    productManageService.deleteTCategoryGoods(gKey, function(){
+                        isReloadPage(true);
+                    });
+                } else {
+                    var categoryArr = new Array();
+                    $.each(ctgKeys, function(index, key) {
+                        var data = {
+                            ctgGKey:0,
+                            ctgKey:key,
+                            gKey:0,
+                            pos:0
+                        };
+                        categoryArr.push(data);
+                    });
+                }
+                /* 4. 도서정보 obj */
+                var bookObj = getJsonObjectFromDiv("section4");
+                if(bookObj.isDeliveryFree == 'on')  bookObj.isDeliveryFree = '1';//무료
+                else bookObj.isDeliveryFree = '0';
+                if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
+                else bookObj.isSet = '0';
+
+                if(confirm("수정 하시겠습니까?")) {
+                    productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
+                        isReloadPage(true);
+                    });
+                }
+
             }
         });
-
-        console.log(basicObj);
-        console.log(optionArray);
-        console.log(categoryArr);
-        console.log(bookObj);
-
-        /*if(confirm("저장하시겠습니까?")) {
-            productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
-
-            });
-        }*/
     }
 
     function imageSave() {
@@ -558,7 +547,18 @@
                     contentType: false,
                     success: function (data) {
                         if(data.result){
+                            var fileName = fn_clearFilePath(data.result);
+                            var cellData = [
+                                function() {return fileName},
+                                function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                            ];
+                            dwr.util.addRows("previewImgList", [0], cellData, {escapeHtml: false});
                             $(".custom-file-control3").html('');
+                            var tResVO = {
+                                key00 : gKey,
+                                value : data.result
+                            };
+                            productManageService.saveBookPreviewInfo(tResVO , function () {});
                         }
                     }
                 });
@@ -592,13 +592,12 @@
                 <h4 class="card-title"></h4>
                 <h6 class="card-subtitle"></h6>
                 <div id="playForm" method="" action="" class="m-t-40">
-                    <input type="hidden" value="<%=gKey%>" name="gKey">
                     <div>
                         <!-- 1.기본정보 Tab -->
                         <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" value="0" name="gKey">
+                                <input type="hidden" value="<%=gKey%>" name="gKey">
                                 <input type="hidden" value="0" name="cpKey">
                                 <input type="hidden" value="0" name="isNodc">
                                 <input type="hidden" value="0" name="tags">
@@ -775,7 +774,6 @@
                             <div id="section3">
                                 <table class="table" id="categoryTable">
                                     <input type="hidden" name="ctgGKey" value="0">
-                                    <input type="hidden" name="gKey" value="0">
                                     <input type="hidden" name="pos" value="0">
                                     <thead>
                                     <tr style="display:none;">
@@ -795,14 +793,12 @@
                         </section>
                         <!-- //3.카테고리 목록 Tab -->
 
-                        <!-- 도서정보 -->
+                        <!-- 4. 도서정보 -->
                         <h3>도서정보</h3>
                         <section class="col-md-auto">
-                            <input type="hidden" value="" name="bookKey">
-                            <input type="hidden" value="" name="gKey">
-                            <input type="hidden" value="" name="contentList">
-                            <input type="hidden" value="0" name="goodsId">
                             <div id="section4">
+                                <input type="hidden" value="" name="bookKey" id="bookKey">
+                                <input type="hidden" value="0" name="goodsId">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">도서코드</label>
@@ -818,13 +814,17 @@
                                             <option value="3">절판</option>
                                         </select>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">급수</label>
-                                        <span id="l_classGroup"></span>
+                                    <div class="form-group row">
+                                        <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">급수</label>
+                                        <div class="col-sm-6 pl-0 pr-0">
+                                            <span id="l_classGroup"></span>
+                                        </div>
                                     </div>
-                                    <div class="form-group">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">과목</label>
-                                        <span id="l_subjectGroup"></span>
+                                    <div class="form-group row">
+                                        <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">과목</label>
+                                        <div class="col-sm-6 pl-0 pr-0">
+                                            <span id="l_subjectGroup"></span>
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">저자</label>
@@ -898,10 +898,9 @@
                                 </div>
                             </div>
                         </section>
-                        <!-- // 1.기본정보 Tab -->
                         <!-- 도서정보 -->
 
-                        <!-- 6.강의 교재선택 Tab -->
+                        <!-- 5. 미리보기 이미지 Tab -->
                         <h3>미리보기이미지</h3>
                         <section>
                             <div class="float-right mb-3">
@@ -910,8 +909,12 @@
                             <div id="section6">
                                 <table class="table text-center table-hover" id="bookTable">
                                     <thead>
+                                    <tr style="display:none;">
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
                                     </thead>
-                                    <tbody id="bookList"></tbody>
+                                    <tbody id="previewImgList"></tbody>
                                 </table>
                             </div>
                         </section>

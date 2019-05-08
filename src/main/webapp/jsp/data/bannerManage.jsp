@@ -84,15 +84,13 @@
                         var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm">삭제</button>';
                         var bitText = "";
 
-                        if(cmpList1.valueBit1 == "1") bitText = "<span style='color: blue;'>O</span>";
-                        else bitText = "<span style='color: red;'>X</span>";
+                        if(cmpList1.valueBit1 == "1") bitText = "<i class=\"mdi mdi-check\" style=\"color:green;\"></i>";
+                        else bitText = "<i class=\"mdi mdi-close\" style=\"color: red\"></i>";
 
                         if (cmpList1 != undefined) {
                             var cellData = [
                                 function(data) {return cmpList1.value5 == null ? "-" : cmpList1.value5;},
                                 function(data) {return cmpList1.value1 == null ? "-" : fn_clearFilePath(cmpList1.value1);},
-                                //function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
-                                //function(data) {return cmpList1.value3 == null ? "-" : cmpList1.value3;},
                                 function(data) {return cmpList1.valueBit1 == null ? "-" : bitText;},
                                 function(data) {return cmpList1.value4 == null ? "-" : gfn_substr(cmpList1.value4, 1, 30)+"...";},
                                 function(data) {return btn;}

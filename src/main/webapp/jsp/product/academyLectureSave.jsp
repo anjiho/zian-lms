@@ -177,7 +177,7 @@
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        if(tdNum == '5') return false;
+        //if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 

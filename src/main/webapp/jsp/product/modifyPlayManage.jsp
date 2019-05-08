@@ -11,6 +11,7 @@
 <script>
     function init() {
         menuActive('menu-1', 1);
+        getProductSearchTypeSelectbox("l_productSearch");
     }
     var gKey = '<%=gKey%>';
     $( document ).ready(function() {
@@ -1205,12 +1206,10 @@
         <div class="modal-body">
             <div style=" display:inline;">
                 <div style=" float: left; width: 10%">
-                    <select class="form-control" id="booksearchType">
-                        <option>선택</option>
-                    </select>
+                    <span id="l_productSearch"></span>
                 </div>
                 <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="booksearchTextBook">
+                    <input type="text" class="form-control" id="productSearchType">
                 </div>
                 <div style=" float: left; width: 33%">
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>

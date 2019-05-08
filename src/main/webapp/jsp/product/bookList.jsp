@@ -25,26 +25,26 @@
         gfn_emptyView("H", "");//페이징 예외사항처리
 
         productManageService.getProductListCount(searchType, searchText, "BOOK", function (cnt) {
-            paging.count(sPage, cnt, pagingListCount(), pagingListCount(), comment.blank_list);
+            paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, pagingListCount(), searchType, searchText, "BOOK", function (selList) {
                 if (selList.length == 0) return;
-
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return listNum--;},
                     // function(data) {return i+1;},
                     function(data) {return data.GKey;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyBook(" + data.GKey + ");'>" + data.goodsName + "</a>";},
                     function(data) {return split_minute_getDay(data.indate);},
-                    function(data) {return data.isShow == 0 ? "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
-                    function(data) {return data.isSell == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";;},
-                    function(data) {return data.isFree == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";;}
+                    function(data) {return data.isShow == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.isSell == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.isFree == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                 ], {escapeHtml:false});
             });
         });
     }
 </script>
 <div class="page-breadcrumb">
+    <input type="hidden" id="sPage">
     <input type="hidden" id="gKey"  name="gKey">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">

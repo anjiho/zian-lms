@@ -7,6 +7,7 @@
 <script>
     function init() {
         menuActive('menu-1', 2);
+        getProductSearchTypeSelectbox("l_productSearch");
     }
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
@@ -813,9 +814,7 @@
                 <div class="modal-body">
                     <div style=" display:inline;">
                         <div style=" float: left; width: 10%">
-                            <select class="form-control" id="searchType">
-                                <option>선택</option>
-                            </select>
+                            <span id="l_productSearch"></span>
                         </div>
                         <div style=" float: left; width: 33%">
                             <input type="text" class="form-control" id="productSearchType">

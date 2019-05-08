@@ -37,9 +37,9 @@
                     function(data) {return data.GKey;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyAcademyLecture(" + data.GKey + ");'>" + data.goodsName + "</a>";},
                     function(data) {return split_minute_getDay(data.indate);},
-                    function(data) {return data.isShow == 0 ? "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
-                    function(data) {return data.isSell == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";;},
-                    function(data) {return data.isFree == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";;}
+                    function(data) {return data.isShow == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.isSell == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.isFree == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                 ], {escapeHtml:false});
             });
         });
