@@ -346,6 +346,7 @@ function getCategoryNoTag(tableId, val, tdNum) {
 
 //학원강의 등록 카테고리
 function getCategoryNoTag2(tableId, val, tdNum) {
+    alert(val);
     var nextTdNum = Number(tdNum)+2;
     var html = "<select id='sel_category' name='selCategory[]' onchange='changeCategory(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class='form-control'>";
     html += "<option value=''>선택하세요</option>";
@@ -358,6 +359,20 @@ function getCategoryNoTag2(tableId, val, tdNum) {
         $("#"+ tableId).find("tbody").find("tr:last").find("td input").eq(0).val(val);
     });
 }
+
+//모의고사 등록 - 분류 셀렉트박스 //688
+function getMockCategoryList(tagId, val) {
+    selectboxService.getCategoryList(688, function (list) {
+        var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
 
 function defaultCategorySelectbox() {
     var html = "<select id='sel_category' name='selCategory[]' onchange='' class='form-control'>";
@@ -466,6 +481,19 @@ function getMonthsSelectbox(tagId) {
         html += "<option value="+i+">"+ i +"월</option>";
     }
     html += "</select>";
+    innerHTML(tagId, html);
+}
+
+//모의고사 출제년도 셀렉트박스
+function getMockYearSelectbox(tagId, val) {
+    var yearAgo   = getYearAgo(3650);
+    var yearAfter =  getYearAfter(4015);
+
+    var html = "<select id='examYear' name='examYear' class='col-sm-3 select2 form-control custom-select'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i=yearAgo; i<yearAfter; i++) {
+        html += "<option value="+i+">"+ i +"년</option>";
+    }
     innerHTML(tagId, html);
 }
 

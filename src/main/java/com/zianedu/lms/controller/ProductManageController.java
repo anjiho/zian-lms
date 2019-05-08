@@ -38,7 +38,10 @@ public class ProductManageController {
             mvc.setViewName("product/modifyBook");
         }else if("academyLectureSave".equals(page_gbn)) {
             mvc.setViewName("product/academyLectureSave");
+        }else if("mokExamManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokExamManage");
         }
+
         return mvc;
     }
 }

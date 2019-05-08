@@ -13,7 +13,6 @@
         getProductSearchTypeSelectbox("l_productSearch");
         $('#bookTable tr').eq(0).attr("style", "display:none");
         productManageService.getBookDetailInfo(gKey, function(info) {
-            console.log(info);
             /*1. 기본정보 가져오기 */
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
@@ -567,8 +566,9 @@
                             productManageService.saveBookPreviewInfo(tResVO , function (resKey) {
                                 if(resKey != null){
                                     var cellData = [
+                                        function() {return "<input type='hidden' id='reskey' value='"+ resKey +"'>"},
                                         function() {return fileName},
-                                        function() {return "<button type='button' onclick='deleteImg("+ resKsy +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
+                                        function() {return "<button type='button' onclick='deleteImg("+ resKey +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
                                     ];
                                     dwr.util.addRows("previewImgList", [0], cellData, {escapeHtml: false});
                                 }

@@ -2122,6 +2122,32 @@ function getAnnual(registerDate) {
     return parseInt(diff / currYear);
 }
 
+// 날짜 구하기
+function getYearAgo(dayCount) {
+    var today = new Date();
+    var oldday = new Date(today - (3600000 * 24 * dayCount));
+    var year = oldday.getFullYear();
+    var month = oldday.getMonth() + 1;
+    var day = oldday.getDate();
+
+    if (("" + month).length == 1) {
+        month = "0" + month;
+    }
+    if (("" + day).length == 1) {
+        day = "0" + day;
+    }
+
+    return year;
+}
+
+// 10년후 날짜 구하기
+function getYearAfter(dayCount) {
+    var today = new Date();
+    var year  = today.getFullYear() + 11;
+
+    return year;
+}
+
 // 쿠키 생성
 function setCookie(cName, cValue, cDay) {
     var expire = new Date();
@@ -2353,3 +2379,5 @@ function menuActive(mainMenuId, index) {
     $("#" + mainMenuId).find("ul").addClass('in');
 
 }
+
+
