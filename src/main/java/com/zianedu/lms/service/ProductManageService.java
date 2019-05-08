@@ -951,4 +951,14 @@ public class ProductManageService extends PagingSupport {
         }
     }
 
+    /**
+     * 도서 > 미리보기 삭제
+     * @param resKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deletePreviewInfo(int resKey) {
+        if (resKey == 0) return;
+        productManageMapper.deleteTRes(resKey);
+    }
+
 }

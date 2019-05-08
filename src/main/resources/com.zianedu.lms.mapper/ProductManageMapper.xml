@@ -895,4 +895,7 @@
 		DELETE FROM T_GOODS_PRICE_OPTION WHERE G_KEY = #{gKey}
 	</delete>
 
+    <delete id="deleteTRes" parameterType="Integer">
+        DELETE FROM T_RES WHERE RES_KEY = #{resKey}
+    </delete>
 </mapper>
