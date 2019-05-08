@@ -113,7 +113,7 @@ public interface ProductManageMapper {
 
     void insertTBook(TBookVO tBookVO);
 
-    void insertTRes(TResVO tResVO);
+    Integer insertTRes(TResVO tResVO);
 
     void insertTResAtTeacherSubject(TResVO tResVO);
 

@@ -826,9 +826,10 @@ public class ProductManageService extends PagingSupport {
      * @param tResVO
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveBookPreviewInfo(TResVO tResVO) {
-        if (tResVO == null)return;
+    public Integer saveBookPreviewInfo(TResVO tResVO) {
+        if (tResVO == null)return null;
         productManageMapper.insertTRes(tResVO);
+        return tResVO.getResKey();
     }
 
     /**
