@@ -455,13 +455,16 @@
 	</insert>
 
 	<insert id="insertTCategoryGoods" parameterType="com.zianedu.lms.vo.TCategoryGoods">
+		<selectKey resultType="Integer" keyProperty="ctgGKey" order="BEFORE">
+			SELECT T_CATEGORY_GOODS_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_CATEGORY_GOODS
 		(
 			CTG_G_KEY, CTG_KEY, G_KEY, POS
 		)
 		VALUES
 		(
-			T_CATEGORY_GOODS_SEQ.nextval, #{ctgKey}, #{gKey}, #{pos}
+			#{ctgGKey}, #{ctgKey}, #{gKey}, #{pos}
 		)
 	</insert>
 
@@ -482,24 +485,30 @@
 	</insert>
 
 	<insert id="insertTGoodsTeacherLink" parameterType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
+		<selectKey resultType="Integer" keyProperty="gTeacherKey" order="BEFORE">
+			SELECT T_GOODS_TEACHER_LINK_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_GOODS_TEACHER_LINK
 		(
 			G_TEACHER_KEY, G_KEY, IS_PUBLIC_SUBJECT, SUBJECT_CTG_KEY, TEACHER_KEY, CALCULATE_RATE
 		)
 		VALUES
 		(
-			T_GOODS_TEACHER_LINK_SEQ.nextval, #{gKey}, #{isPublicSubject}, #{subjectCtgKey}, #{teacherKey}, #{calculateRate}
+			#{gTeacherKey}, #{gKey}, #{isPublicSubject}, #{subjectCtgKey}, #{teacherKey}, #{calculateRate}
 		)
 	</insert>
 
 	<insert id="insertTLinkKey" parameterType="com.zianedu.lms.vo.TLinkKeyVO">
+		<selectKey resultType="Integer" keyProperty="linkKey" order="BEFORE">
+			SELECT T_LINK_KEY_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_LINK_KEY
 		(
 			LINK_KEY, REQ_KEY, RES_KEY, REQ_TYPE, RES_TYPE, POS, VALUE_BIT
 		)
 		VALUES
 		(
-			T_LINK_KEY_SEQ.nextval, #{reqKey}, #{resKey}, #{reqType}, #{resType}, 0, #{valueBit}
+			#{linkKey}, #{reqKey}, #{resKey}, #{reqType}, #{resType}, 0, #{valueBit}
 		)
 	</insert>
 
@@ -546,18 +555,21 @@
 		)
 		VALUES
 		(
-			T_RES_SEQ.nextval, 0, 0, #{key00}, 0, 0, 0, 0, 0, #{value}, ''
+			#{resKey}, 0, 0, #{key00}, 0, 0, 0, 0, 0, #{value}, ''
 		)
 	</insert>
 
 	<insert id="insertTResAtTeacherSubject" parameterType="com.zianedu.lms.vo.TResVO">
+		<selectKey resultType="Integer" keyProperty="resKey" order="BEFORE">
+			SELECT T_RES_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_RES
 		(
 			RES_KEY, TYPE, DEVICE, KEY_00, KEY_01, KEY_02, KEY_00_TYPE, KEY_01_TYPE, KEY_02_TYPE, VALUE, VALUE_TEXT
 		)
 		VALUES
 		(
-			T_RES_SEQ.nextval, 2, #{device}, #{teacherKey}, #{ctgKey}, 0, 200, 100, 0, '', #{valueText}
+			#{resKey}, 2, #{device}, #{teacherKey}, #{ctgKey}, 0, 200, 100, 0, '', #{valueText}
 		)
 	</insert>
 
@@ -584,6 +596,9 @@
 	</insert>
 
     <insert id="insertTExamQuestionBank" parameterType="com.zianedu.lms.vo.TExamQuestionBankVO">
+		<selectKey resultType="Integer" keyProperty="examQuestionBankKey" order="BEFORE">
+			SELECT T_EXAM_QUESTION_BANK_SEQ.nextval FROM DUAL
+		</selectKey>
         INSERT INTO T_EXAM_QUESTION_BANK
         (
             EXAM_QUESTION_BANK_KEY, DSP_DATE, QUESTION_IMAGE, COMMENTARY_IMAGE, BOOK_IMAGE, ANSWER, TAG, DIVISION_CTG_KEY,
@@ -592,31 +607,37 @@
         )
         VALUES
         (
-            T_EXAM_QUESTION_BANK_SEQ.nextval, TO_DATE(#{dspDate}, 'YYYY-mm-dd'), #{questionImage}, #{commentaryImage}, #{bookImage}, #{answer}, #{tag}, #{divisionCtgKey},
+            #{examQuestionBankKey}, TO_DATE(#{dspDate}, 'YYYY-mm-dd'), #{questionImage}, #{commentaryImage}, #{bookImage}, #{answer}, #{tag}, #{divisionCtgKey},
             #{subjectCtgKey}, #{stepCtgKey}, #{patternCtgKey}, #{unitCtgKey}, #{examYear}, #{examLevel}, #{subjectCode}, #{review}, #{commentaryUrl},
             #{answer1Reason}, #{answer2Reason}, #{answer3Reason}, #{answer4Reason}, #{answer5Reason}
         )
     </insert>
 
 	<insert id="insertTBankSubjectQuesLink">
+		<selectKey resultType="Integer" keyProperty="bankSubjectQuesLinkKey" order="BEFORE">
+			SELECT T_BANK_SUBJECT_QUES_LINK_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_BANK_SUBJECT_QUES_LINK
 		(
 			BANK_SUBJECT_QUES_LINK_KEY, EXAM_QUES_BANK_SUBJECT_KEY, EXAM_QUES_BANK_KEY, POS
 		)
 		VALUES
 		(
-			T_BANK_SUBJECT_QUES_LINK_SEQ.nextval, #{examQuesBankSubjectKey}, #{examQuesBankKey}, #{pos}
+			#{bankSubjectQuesLinkKey}, #{examQuesBankSubjectKey}, #{examQuesBankKey}, #{pos}
 		)
 	</insert>
 
 	<insert id="insertTExamQuestionBankSubject" parameterType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
+		<selectKey resultType="Integer" keyProperty="examQuestionBankSubjectKey" order="BEFORE">
+			SELECT T_EXAM_QUESTION_BANK_SUB_SEQ.nextval FROM DUAL
+		</selectKey>
 		INSERT INTO T_EXAM_QUESTION_BANK_SUBJECT
 		(
 			EXAM_QUESTION_BANK_SUBJECT_KEY, C_KEY, SUBJECT_CTG_KEY, NAME
 		)
 		VALUES
 		(
-			T_EXAM_QUESTION_BANK_SUB_SEQ.nextval, 100, #{subjectCtgKey}, #{name}
+			#{examQuestionBankSubjectKey}, 100, #{subjectCtgKey}, #{name}
 		)
 	</insert>
 
