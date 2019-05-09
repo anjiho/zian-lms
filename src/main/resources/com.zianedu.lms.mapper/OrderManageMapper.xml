@@ -635,6 +635,10 @@
         AND J_KEY = #{jKey}
     </select>
 
+    <select id="selectTCalculateDataSeq" resultType="Long">
+        SELECT T_CALCULATE_DATA_SEQ.nextval FROM DUAL
+    </select>
+
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
@@ -766,11 +770,11 @@
         )
         VALUES
         (
-            #{calculateKey}, #{cKey}, #{teacherKey}, #{indate}, #{targetDate}, #{yearMonth}
+            #{calculateKey}, #{cKey}, #{teacherKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{targetDate}, #{yearMonth}
         )
     </insert>
 
-    <insert id="insertTCalculateData" parameterType="com.zianedu.lms.vo.TCalculateDataVO">
+    <insert id="insertTCalculateData" parameterType="list" useGeneratedKeys="true">
         <selectKey resultType="Long" keyProperty="calculateDataKey" order="BEFORE">
             SELECT T_CALCULATE_DATA_SEQ.nextval FROM DUAL
         </selectKey>
@@ -781,7 +785,7 @@
         )
         VALUES
         (
-            #{calculateDataKey}, #{calculateKey}, #{indate}, #{gKey}, #{type}, #{pmType}, #{kind}, #{calcPrice}, #{jCount}, #{payStatus},
+            #{calculateDataKey}, #{calculateKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{gKey}, #{type}, #{pmType}, #{kind}, #{calcPrice}, #{jCount}, #{payStatus},
             #{calcCalculateRate}, #{gCalculateRate}, #{gTCalculateRate}, #{tCalculateRate}, #{jKey}
         )
     </insert>

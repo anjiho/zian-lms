@@ -914,6 +914,18 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
+     * 모의고사 > 시험과목 저장하기
+     * @param examKey
+     * @param bankSubjectExamLinkKey
+     * @param required
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveTBankSubjectExamLink(int examKey, int bankSubjectExamLinkKey, int required) {
+        TBankSubjectExamLinkVO tBankSubjectExamLinkVO = new TBankSubjectExamLinkVO(examKey, bankSubjectExamLinkKey, required);
+        productManageMapper.insertTBankSubjectExamLink(tBankSubjectExamLinkVO);
+    }
+
+    /**
      * 모의고사 문제은행 과목 수정 목록 > "x"표시로 항목 삭제
      * @param bankSubjectQuesLinkKey
      */

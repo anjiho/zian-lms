@@ -2,6 +2,8 @@ package com.zianedu.lms.utils;
 
 import com.zianedu.lms.define.datasource.*;
 
+import java.math.BigDecimal;
+
 public class Test {
     //온라인 강좌 단일 상품 정산 계산 (t_order_promotion.pm_type = 0)
     public static double calcSingleProduct() {
@@ -99,6 +101,11 @@ public class Test {
     }
 
     public static void main(String[] args) {
-        System.out.println(calcSingleProduct());
+
+        BigDecimal incm_civil_amt = new BigDecimal (884883);
+        incm_civil_amt = incm_civil_amt.setScale(-1, BigDecimal.ROUND_DOWN);
+        System.out.println("incm_civil_amt 일단위: " + incm_civil_amt.intValue());
+
+
     }
 }

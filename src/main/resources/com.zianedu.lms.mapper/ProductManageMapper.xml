@@ -620,6 +620,20 @@
 		)
 	</insert>
 
+	<insert id="insertTBankSubjectExamLink" parameterType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
+		<selectKey resultType="Integer" keyProperty="bankSubjectExamLinkKey" order="BEFORE">
+			SELECT T_BANK_SUBJECT_EXAM_LINK_SEQ.nextval FROM DUAL
+		</selectKey>
+		INSERT INTO T_BANK_SUBJECT_EXAM_LINK
+		(
+			BANK_SUBJECT_EXAM_LINK_KEY, C_KEY, EXAM_KEY, EXAM_QUESTION_BANK_SUBJECT_KEY, REQUIRED
+		)
+		VALUES
+		(
+			#{bankSubjectExamLinkKey}, #{cKey}, #{examKey}, #{examQuestionBankSubjectKey}, #{required}
+		)
+	</insert>
+
 	<update id="updateTGoods" parameterType="com.zianedu.lms.vo.TGoodsVO">
 		UPDATE T_GOODS
 		<set>
