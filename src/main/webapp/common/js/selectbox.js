@@ -346,7 +346,6 @@ function getCategoryNoTag(tableId, val, tdNum) {
 
 //학원강의 등록 카테고리
 function getCategoryNoTag2(tableId, val, tdNum) {
-    alert(val);
     var nextTdNum = Number(tdNum)+2;
     var html = "<select id='sel_category' name='selCategory[]' onchange='changeCategory(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class='form-control'>";
     html += "<option value=''>선택하세요</option>";
@@ -366,7 +365,11 @@ function getMockCategoryList(tagId, val) {
         var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택하세요</option>";
         for (var i=0; i<list.length; i++) {
-            html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
         }
         html += "</select>";
         innerHTML(tagId, html);
@@ -488,12 +491,55 @@ function getMonthsSelectbox(tagId) {
 function getMockYearSelectbox(tagId, val) {
     var yearAgo   = getYearAgo(3650);
     var yearAfter =  getYearAfter(4015);
-
     var html = "<select id='examYear' name='examYear' class='col-sm-3 select2 form-control custom-select'>";
     html += "<option value=''>선택하세요</option>";
     for (var i=yearAgo; i<yearAfter; i++) {
-        html += "<option value="+i+">"+ i +"년</option>";
+        if (i == val) {
+            html += "<option value="+i+" selected>"+ i +"년</option>";
+        }else{
+            html += "<option value="+i+">"+ i +"년</option>";
+        }
     }
     innerHTML(tagId, html);
 }
 
+//숫자 1-9까지 앞에 0 채우기
+function leadingZeros(date, num) {
+    if(date == 10) return 10;
+    var zero = '';
+    date = date.toString();
+
+    if (date.length < num) {
+        for (i = 0; i < num - date.length; i++)
+            zero += '0';
+    }
+    return zero + date;
+}
+
+//시간(Hour) 셀렉트박스
+function getTimeHourSelectbox(tagId, val) {
+    var html = "<select id='timeHour' name='timeHour' class='form-control'>";
+    for (var i=0; i<25; i++) {
+        if (i == val) {
+            html += "<option value="+i+" selected>"+ leadingZeros(i,2) +"</option>";
+        } else {
+            html += "<option value="+i+">"+ leadingZeros(i,2) +"</option>";
+        }
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+//시간(분) 셀렉트박스
+function getTimeMinuteSelectbox(tagId, val) {
+    var html = "<select id='timeMinute' name='timeMinute' class='form-control'>";
+    for (var i=0; i<60; i++) {
+        if (i == val) {
+            html += "<option value="+i+" selected>"+ leadingZeros(i,2) +"</option>";
+        } else {
+            html += "<option value="+i+">"+ leadingZeros(i,2) +"</option>";
+        }
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
+}

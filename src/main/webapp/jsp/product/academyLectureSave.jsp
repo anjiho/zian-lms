@@ -108,13 +108,10 @@
             $trLast.after($trNew);
 
             getCategoryNoTag2('categoryTable','1183', '2');
-            /*$trNew.find("td").eq(3).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(7).html(defaultCategorySelectbox());*/
         }
     }
 
-    //교사 추가 버튼
+    //강사 추가 버튼
     function addTeacherInfo() {
         var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
 
@@ -126,9 +123,9 @@
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
-            $trNew.find("td input").eq(1).val("");
-            $trNew.find("td input").eq(2).val("");
+            $trNew.find("td input").eq(0).val("100");
+            //$trNew.find("td input").eq(1).val("");
+            //$trNew.find("td input").eq(2).val("");
 
             getSelectboxListForCtgKeyNoTag2('teacherTable', '70', 0);
             selectTeacherSelectboxNoTag2('teacherTable', 1);
@@ -213,27 +210,7 @@
         else obj.isFreebieDeliveryFree = '0';
         /*  //기본정보 obj */
 
-        /* 2. 옵션 저장 \
-        var optionArr = new Array();
-        var optionNames = get_array_values_by_name("select", "selOption[]");
-        var optionPrices = get_array_values_by_name("input", "price[]");
-        var sellPrices = get_array_values_by_name("input", "sellPrice[]");
-        var points = get_array_values_by_name("input", "point[]");
-        var expendPercents = get_array_values_by_name("input", "expendPercent[]");
-        for (var i=0; i<optionNames.length; i++) {
-            var data = {
-                priceKey:'0',
-                gKey:'0',
-                kind:optionNames[i],
-                ctgKey:'0',
-                name:'0',
-                price:optionPrices[i],
-                sellPrice:sellPrices[i],
-                point:points[i],
-                extendPercent:expendPercents[i]
-            };
-            optionArr.push(data);
-        }*/
+
         /*  2.옵션 obj */
         var array = new Array();
         $('#optionTable tbody tr').each(function(index){
@@ -273,24 +250,6 @@
 
         /* 2. 강좌정보 저장 */
         var lectureObj = getJsonObjectFromDiv("section4");
-
-        /* 2. 강사목록 저장
-        var teacherKeys = get_array_values_by_name("input", "teacherKeys[]");
-        var subjectKeys = get_array_values_by_name("input", "subjectKeys[]");
-        var calcRates = get_array_values_by_name("input", "calcRate[]");
-        var teacherArr = new Array();
-        for (var i=0; i<teacherKeys.length; i++) {
-            var data = {
-                gTeacherKey:0,
-                isPublicSubject:0,
-                subjectCtgKey : subjectKeys[i],
-                teacherKey : teacherKeys[i],
-                calculateRate : calcRates[i],
-                subjectName: "",
-                teacherName: ""
-            };
-            teacherArr.push(data);
-        }*/
         var array2 = new Array();
         $('#teacherTable tbody tr').each(function(index){
             var teacher = $(this).find("td select").eq(0).val();
@@ -309,27 +268,7 @@
             };
             array2.push(data);
         });
-        /* 2. 강의교재 저장
-        var bookKeys = get_array_values_by_name("input", "res_key[]");
-        var bookArr = new Array();
-        for (var i = 0; i < bookKeys.length; i++) {
-            var valueBit;
-            var isBookMainId = "isBookMain_" + bookKeys[i];
-            var isBookMain = $("input:checkbox[id=" + "'" + isBookMainId + "'" + "]").is(":checked");
-            //주교재 여부 값 변환
-            if (isBookMain) valueBit = 1;
-            else valueBit = 0;
 
-            var data = {
-                linkKey: 0,
-                reqKey: 0,
-                resKey: bookKeys[i],
-                resType: 5,
-                pos: 0,
-                valueBit: valueBit
-            };
-            bookArr.push(data);
-        }*/
         var array3 = new Array();
         $('#bookTable tbody tr').each(function(index){
             var bookKey = $(this).find("td input").eq(0).val();
@@ -726,13 +665,13 @@
                                     <colgroup>
                                         <col width="30%" />
                                         <col width="10%" />
-                                        <col width="50%" />
+                                        <col width="60%" />
                                     </colgroup>
                                     <thead>
                                     <tr style="">
                                         <th>과목</th>
                                         <th>선생님명</th>
-                                        <th>정산률(%)</th>
+                                        <th style="padding-left: 9%;">정산률(%)</th>
                                     </tr>
                                     </thead>
                                     <tbody id="teacherList">
@@ -744,7 +683,7 @@
                                             <select class="select2 form-control custom-select" style="height:36px;" name="subjectKeys[]"></select>
                                         </td>
                                         <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                            <input type="text" class="form-control text-right" style="display: inline-block;width:60%" name='calcRate[]'> %
+                                            <input type="text" class="form-control text-right" style="display: inline-block;width:60%;text-align: right" name='calcRate[]' value="100"> %
                                         </td>
                                         <td style="padding: 0.3rem;width: 20%">
                                             <button type="button" onclick="deleteTableRow('productTeacher')" class='btn btn-outline-danger btn-sm'>삭제</button>

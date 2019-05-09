@@ -1,11 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String examKey = request.getParameter("examKey");
+%>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
+    var examKey = '<%=examKey%>';
     function init() {
-        menuActive('menu-1', 8);
-
+        menuActive('menu-1', 7);
+        getProductSearchTypeSelectbox("l_productSearch");
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");//급수
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
         getMockCategoryList("l_Classification","");//분류
@@ -20,10 +24,51 @@
         getTimeMinuteSelectbox("acceptEndMinute",24);
         getTimeMinuteSelectbox("onlineStartMinute",24);
         getTimeMinuteSelectbox("onlineEndMinute",24);
-    }
-    
-    function mockExamSave() {
+        //탭 메뉴 색상 변경
+        $("#playForm ul").each(function(idx) {
+            var ul = $(this);
+            ul.find("li").addClass("done").attr("aria-selected", "false");
+            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
 
+        /* 모의고사 정보 가져오기 */
+        productManageService.getMockExamInfo(examKey, function(info) {
+            console.log(info);
+            var mokExamInfo = info.mokExamInfo;
+            innerValue("name", mokExamInfo.name);
+            isCheckboxByNumber("isRealFree", mokExamInfo.isRealFree);//노출
+            isCheckboxByNumber("isGichul", mokExamInfo.isGichul);//판매
+            isCheckboxByNumber("isShowFiles", mokExamInfo.isShowFiles);//무료
+            isCheckboxByNumber("isShowStaticTotalRank", mokExamInfo.isShowStaticTotalRank);//판매
+            isCheckboxByNumber("isShowStaticTotalAvg", mokExamInfo.isShowStaticTotalAvg);//무료
+            getNewSelectboxListForCtgKey("l_classGroup", "4309", mokExamInfo.classGroupCtgKey);//급수
+            getNewSelectboxListForCtgKey2("l_subjectGroup", "70", mokExamInfo.subjectCtgKey);//과목
+            getMockCategoryList("l_Classification", mokExamInfo.classCtgKey);//분류
+            getMockYearSelectbox("l_examYearGroup", mokExamInfo.examYear);//출제년도
+            innerValue("indate", split_minute_getDay(mokExamInfo.indate));
+            innerValue("acceptStartDate", split_minute_getDay(mokExamInfo.acceptStartDate));
+            innerValue("acceptEndDate", split_minute_getDay(mokExamInfo.acceptEndDate));
+            innerValue("onlineStartDate", split_minute_getDay(mokExamInfo.onlineStartDate));
+            innerValue("onlineEndDate", split_minute_getDay(mokExamInfo.onlineEndDate));
+            innerValue("onlineTime", mokExamInfo.onlineTime);//온라인 시험기간
+            innerValue("offlineDate", split_minute_getDay(mokExamInfo.offlineDate));//오프라인 시험일
+            innerValue("offlineTimePeriod", mokExamInfo.offlineTimePeriod);//오프라인 모의고사 시간 (표시용)
+            innerValue("offlineTimePlace", mokExamInfo.offlineTimePlace);//오프라인 모의고사 시험 장소 (표시용)
+            innerValue("selectSubjectCount", mokExamInfo.selectSubjectCount);//선택과목수
+            innerValue("questionCount", mokExamInfo.questionCount);// 과목당 문항수
+            innerValue("answerCount", mokExamInfo.answerCount);// 답안수
+            split_HH_getTime(mokExamInfo.acceptStartDate, "timeHour", 0);
+            split_MM_getTime(mokExamInfo.acceptStartDate, "timeMinute", 0);
+            split_HH_getTime(mokExamInfo.acceptEndDate, "timeHour", 1);
+            split_MM_getTime(mokExamInfo.acceptEndDate, "timeMinute", 1);
+            split_HH_getTime(mokExamInfo.onlineStartDate, "timeHour", 2);
+            split_MM_getTime(mokExamInfo.onlineStartDate, "timeMinute", 2);
+            split_HH_getTime(mokExamInfo.onlineEndDate, "timeHour", 3);
+            split_MM_getTime(mokExamInfo.onlineEndDate, "timeMinute", 3);
+        });
+    }
+
+    function mockExamSave() {
         var mockInfoObj = getJsonObjectFromDiv("section1");
         if(mockInfoObj.isRealFree == 'on')  mockInfoObj.isRealFree = '1'; //주간모의고사
         else mockInfoObj.isRealFree = '0';
@@ -50,17 +95,80 @@
             });
         }
     }
+
+    //모의고사 문제은행 과목선택 팝업창 리스트 불러오기
+    function fn_search3(val) {
+        var paging = new Paging();
+        var sPage = $("#sPage3").val();
+        var searchType = getSelectboxValue("searchType");
+        var searchText = getInputTextValue("productSearchType");
+
+        if(val == "new") {
+            sPage = "1";
+        }
+
+        dwr.util.removeAllRows("dataList3");
+        gfn_emptyView3("H", "");//페이징 예외사항처리
+        productManageService.getMockExamQuestionBankSubjectListCount(searchType, searchText, function(cnt) {
+            paging.count3(sPage, cnt, '10', '10', comment.blank_list);
+            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+            productManageService.getMockExamQuestionBankSubjectList(sPage, '10', searchType, searchText, function (selList) {
+                if (selList.length > 0) {
+                    for (var i = 0; i < selList.length; i++) {
+                        var cmpList = selList[i];
+                        console.log(cmpList);
+                        var bookSelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-outline-info mx-auto"/>';
+                        var examQuestionBankSubjectKey = "<input type='hidden' id='bankSubKey[]' value='"+ cmpList.examQuestionBankSubjectKey +"'>";
+                        if (cmpList != undefined) {
+                            var cellData = [
+                                function(data) {return examQuestionBankSubjectKey;},
+                                function(data) {return cmpList.ctgName;},
+                                function(data) {return cmpList.name;},
+                                function(data) {return cmpList.questionNumber;},
+                                function(data) {return bookSelBtn;}
+                            ];
+                            dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});
+                            $('#dataList3 tr').each(function(){
+                                var tr = $(this);
+                                tr.children().eq(0).attr("style", "display:none");
+                            });
+                        }
+                    }
+                }else{
+                    gfn_emptyView3("V", comment.blank_list2);
+                }
+            });
+        });
+    }
+    
+    function sendChildValue(val) {
+        var checkBtn = val;
+
+        var tr = checkBtn.parent().parent();
+        var td = tr.children();
+
+        var gKey = td.find("input").val();
+
+        var goodsName = td.eq(1).text();
+
+        var resKeys = get_array_values_by_name("input", "res_key[]");
+        if ($.inArray(gKey, resKeys) != '-1') {
+            alert("이미 선택된 과목입니다.");
+            return;
+        }
+        $("#goodName").html(goodsName);
+        $("#nextGKey").val(gKey);
+    }
 </script>
-<input type="hidden" name="sPage3" id="sPage3">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">모의고사 등록</h4>
+            <h4 class="page-title">모의고사 수정</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">모의고사 등록</li>
+                        <li class="breadcrumb-item active" aria-current="page">모의고사 수정</li>
                     </ol>
                 </nav>
             </div>
@@ -78,8 +186,10 @@
                 <h6 class="card-subtitle"></h6>
                 <div id="playForm" method="" action="" class="m-t-40">
                     <div>
+                        <h3>모의고사 정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
+                                <input type="hidden" value="<%=examKey%>" name="examKey">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">시험명</label>
@@ -275,10 +385,31 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <button type="button" class="btn btn-info float-right m-l-2" onclick="mockExamSave();">저장</button>
                                 </div>
                             </div>
                         </section>
+                        <!-- // 1.기본정보 Tab -->
+                        <!-- 2.옵션 Tab -->
+                        <h3>시험과목</h3>
+                        <section>
+                            <div class="mb-3 float-right">
+                                <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#examSubModal" onclick="fn_search3('new');">추가</button>
+                            </div>
+                            <table class="table text-center table-hover"  id="lectureCurriTabel">
+                                <thead>
+                                <tr>
+                                    <th scope="col" colspan="1" style="width:40%">과목명</th>
+                                    <th scope="col" colspan="1" style="width:20%">등록명</th>
+                                    <th scope="col" colspan="1" style="width:10%">문제수</th>
+                                    <th scope="col" colspan="1" style="width:10%">필수과목</th>
+                                    <th scope="col" colspan="1" style="width:7%"></th>
+                                </tr>
+                                </thead>
+                                <tbody id="examSubjectList">
+                                </tbody>
+                            </table>
+                        </section>
+                        <!-- //2.옵션 Tab -->
                     </div>
                 </div>
             </div>
@@ -286,32 +417,80 @@
         <!-- //div.card -->
     </div>
 </form>
-<!-- End Container fluid  -->
+
+<!--모의고사 문제은행 과목선택 팝업창-->
+<div class="modal fade" id="examSubModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog" role="document" style="max-width: 900px">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">모의고사 문제은행 과목선택</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form>
+                <!-- modal body -->
+                <div class="modal-body">
+                    <div style=" display:inline;">
+                        <div style=" float: left; width: 10%">
+                            <span id="l_productSearch"></span>
+                        </div>
+                        <div style=" float: left; width: 33%">
+                            <input type="text" class="form-control" id="productSearchType">
+                        </div>
+                        <div style=" float: left; width: 33%">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
+                        </div>
+                    </div>
+                    <div class="table-responsive">
+                        <input type="hidden" id="sPage3" >
+                        <table id="zero_config" class="table table-hover text-center">
+                            <thead class="thead-light">
+                            <tr>
+                                <th style="width:15%">과목</th>
+                                <th style="width:45%">이름</th>
+                                <th style="width:15%">문제수</th>
+                                <th style="width:7%"></th>
+                            </tr>
+                            </thead>
+                            <tbody id="dataList3"></tbody>
+                            <tr>
+                                <td id="emptys3" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
+                            </tr>
+                        </table>
+                        <%@ include file="/common/inc/com_pageNavi3.inc" %>
+                    </div>
+                </div>
+                <!-- //modal body -->
+            </form>
+        </div>
+    </div>
+</div>
+<!-- // 기본소스-->
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
-    // Basic Example with form
+    var form = $("#playForm");
+    form.children("div").steps({
+        headerTag: "h3",
+        bodyTag: "section",
+        enableAllSteps: true,
+        startIndex : 0,
+        saveState : true, //현재 단계 쿠키저장
+        enablePagination : true,
+        onFinished: function(event, currentIndex) {
+            bookInfoSave();
+        }
+    });
 
     $('#indate').datepicker({
         format: "yyyy-mm-dd",
-        language: "kr",
-        numberOfMonths: [2,3]
+        language: "kr"
     });
-
-    $('#acceptStartDate,#acceptEndDate').datepicker({
-        format: "yyyy-mm-dd",
-        language: "kr",
-        numberOfMonths: [2,3]
-    });
-    $('#onlineStartDate ').datepicker({
-        format: "yyyy-mm-dd",
-        language: "kr",
-        numberOfMonths: [2,2]
-    });
-    $('#onlineEndDate').datepicker({
+    $('#sellstartdate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });
-    $('#offlineDate').datepicker({
+    $('#cpdate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });
@@ -323,6 +502,10 @@
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
+    $(document).on('change', '.PreviewFile', function() {
+        $(this).parent().find('.custom-file-control3').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+
 </script>
 
 <%@include file="/common/jsp/footer.jsp" %>

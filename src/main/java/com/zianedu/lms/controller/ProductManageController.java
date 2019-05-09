@@ -40,6 +40,10 @@ public class ProductManageController {
             mvc.setViewName("product/academyLectureSave");
         }else if("mokExamManage".equals(page_gbn)) {
             mvc.setViewName("product/mokExamManage");
+        }else if("mokExamList".equals(page_gbn)) {
+            mvc.setViewName("product/mokExamList");
+        }else if("modifyMokExam".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokExam");
         }
 
         return mvc;
