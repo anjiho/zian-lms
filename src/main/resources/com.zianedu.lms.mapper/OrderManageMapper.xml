@@ -635,10 +635,6 @@
         AND J_KEY = #{jKey}
     </select>
 
-    <select id="selectTCalculateDataSeq" resultType="Long">
-        SELECT T_CALCULATE_DATA_SEQ.nextval FROM DUAL
-    </select>
-
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL

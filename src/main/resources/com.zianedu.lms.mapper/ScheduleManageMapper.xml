@@ -200,37 +200,37 @@
             FROM
             (
                 SELECT
-                A.G_KEY, C.NAME, A.J_KEY, A.TYPE,
+                    A.G_KEY, C.NAME, A.J_KEY, A.TYPE,
 
-                CASE WHEN A.KIND >= 1
-                <![CDATA[
-                  AND A.KIND <= 50 THEN 1 ELSE A.KIND END kind,
-                ]]>
-                (A.SELL_PRICE * A.cnt) PRICE,
-                NVL( A.coupon_dc_price, 0 ) coupon_dc_price,
-                B.dc_welfare, B.dc_point, B.dc_free,
+                    CASE WHEN A.KIND >= 1
+                    <![CDATA[
+                      AND A.KIND <= 50 THEN 1 ELSE A.KIND END kind,
+                    ]]>
+                    (A.SELL_PRICE * A.cnt) PRICE,
+                    NVL( A.coupon_dc_price, 0 ) coupon_dc_price,
+                    B.dc_welfare, B.dc_point, B.dc_free,
 
-                CASE NVL( C.calculate_rate, 0 )
-                WHEN 0 THEN CASE A.TYPE
-                WHEN 1 THEN CASE NVL( E.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE E.onlinelec_calculate_rate END
-                WHEN 2 THEN CASE NVL( E.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE E.offlinelec_calculate_rate END
-                ELSE 0 END
-                ELSE C.calculate_rate * ( D.calculate_rate / 100 )
-                END as calc_calculate_rate,
-                C.calculate_rate g_calculate_rate,
-                D.calculate_rate as g_t_calculate_rate,
-                CASE A.TYPE
-                WHEN 1 THEN CASE NVL( E.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE E.onlinelec_calculate_rate END
-                WHEN 2 THEN CASE NVL( E.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE E.offlinelec_calculate_rate END
-                ELSE 0 END as t_calculate_rate,
+                    CASE NVL( C.calculate_rate, 0 )
+                    WHEN 0 THEN CASE A.TYPE
+                    WHEN 1 THEN CASE NVL( E.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE E.onlinelec_calculate_rate END
+                    WHEN 2 THEN CASE NVL( E.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE E.offlinelec_calculate_rate END
+                    ELSE 0 END
+                    ELSE C.calculate_rate * ( D.calculate_rate / 100 )
+                    END as calc_calculate_rate,
+                    C.calculate_rate g_calculate_rate,
+                    D.calculate_rate as g_t_calculate_rate,
+                    CASE A.TYPE
+                    WHEN 1 THEN CASE NVL( E.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE E.onlinelec_calculate_rate END
+                    WHEN 2 THEN CASE NVL( E.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE E.offlinelec_calculate_rate END
+                    ELSE 0 END as t_calculate_rate,
 
-                (
-                  SELECT COUNT(*) FROM T_ORDER_GOODS WHERE J_KEY = B.J_KEY AND ( TYPE = 1 or TYPE = 2 OR ( TYPE = 5 AND F.PM_TYPE = 1 OR F.PM_TYPE = 2  ) )
-                ) as J_G_COUNT,
+                    (
+                      SELECT COUNT(*) FROM T_ORDER_GOODS WHERE J_KEY = B.J_KEY AND ( TYPE = 1 or TYPE = 2 OR ( TYPE = 5 AND F.PM_TYPE = 1 OR F.PM_TYPE = 2  ) )
+                    ) as J_G_COUNT,
 
-                CASE B.PAY_TYPE WHEN 0 THEN 0.038 WHEN 22 THEN 0.038 ELSE 0 END PAY_CHARGE,
-                0 as PM_TYPE,
-                B.PAY_STATUS
+                    CASE B.PAY_TYPE WHEN 0 THEN 0.038 WHEN 22 THEN 0.038 ELSE 0 END PAY_CHARGE,
+                    0 as PM_TYPE,
+                    B.PAY_STATUS
 
                 FROM T_ORDER_GOODS A
                 INNER JOIN T_ORDER B
@@ -258,52 +258,52 @@
                 UNION ALL
 
                 SELECT
-                A.G_KEY, E.NAME, A.J_KEY, A.TYPE, A.KIND,
+                    A.G_KEY, E.NAME, A.J_KEY, A.TYPE, A.KIND,
 
-                CASE B.PM_TYPE
-                WHEN 1 THEN A.SELL_PRICE / ( SELECT COUNT(J_G_KEY) FROM T_ORDER_GOODS WHERE J_PM_KEY = C.J_PM_KEY )
-                WHEN 2 THEN  (
-                F.SELL_PRICE * ( 1.0 * A.SELL_PRICE /
-                                    (
-                                    SELECT SUM (ZZ.SELL_PRICE)
-                                    FROM T_ORDER_GOODS Z
-                                    INNER JOIN T_GOODS_PRICE_OPTION ZZ
-                                    on Z.PRICE_KEY = ZZ.PRICE_KEY
-                                    WHERE Z.J_PM_KEY = C.J_PM_KEY
+                    CASE B.PM_TYPE
+                    WHEN 1 THEN A.SELL_PRICE / ( SELECT COUNT(J_G_KEY) FROM T_ORDER_GOODS WHERE J_PM_KEY = C.J_PM_KEY )
+                    WHEN 2 THEN  (
+                    F.SELL_PRICE * ( 1.0 * A.SELL_PRICE /
+                                        (
+                                        SELECT SUM (ZZ.SELL_PRICE)
+                                        FROM T_ORDER_GOODS Z
+                                        INNER JOIN T_GOODS_PRICE_OPTION ZZ
+                                        on Z.PRICE_KEY = ZZ.PRICE_KEY
+                                        WHERE Z.J_PM_KEY = C.J_PM_KEY
+                                        )
                                     )
-                                )
-                              )
-                ELSE C.SELL_PRICE END AS PRICE,
+                                  )
+                    ELSE C.SELL_PRICE END AS PRICE,
 
-                NVL( C.coupon_dc_price, 0 ) COUPON_DC_PRICE,
-                D.DC_WELFARE,
-                D.DC_POINT,
-                D.DC_FREE,
+                    NVL( C.coupon_dc_price, 0 ) COUPON_DC_PRICE,
+                    D.DC_WELFARE,
+                    D.DC_POINT,
+                    D.DC_FREE,
 
-                CASE C.TYPE
-                WHEN 1 THEN CASE NVL( I.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE I.onlinelec_calculate_rate END
-                WHEN 2 THEN CASE NVL( I.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE I.offlinelec_calculate_rate END
-                ELSE 0 END calc_calculate_rate,
+                    CASE C.TYPE
+                    WHEN 1 THEN CASE NVL( I.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE I.onlinelec_calculate_rate END
+                    WHEN 2 THEN CASE NVL( I.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE I.offlinelec_calculate_rate END
+                    ELSE 0 END calc_calculate_rate,
 
-                E.calculate_rate g_calculate_rate,
-                G.calculate_rate g_t_calculate_rate,
+                    E.calculate_rate g_calculate_rate,
+                    G.calculate_rate g_t_calculate_rate,
 
-                CASE C.TYPE
-                WHEN 1 THEN CASE NVL( I.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE I.onlinelec_calculate_rate END
-                WHEN 2 THEN CASE NVL( I.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE I.offlinelec_calculate_rate END
-                ELSE 0 END t_calculate_rate,
+                    CASE C.TYPE
+                    WHEN 1 THEN CASE NVL( I.onlinelec_calculate_rate, 0 ) WHEN 0 THEN 30 ELSE I.onlinelec_calculate_rate END
+                    WHEN 2 THEN CASE NVL( I.offlinelec_calculate_rate, 0 ) WHEN 0 THEN 50 ELSE I.offlinelec_calculate_rate END
+                    ELSE 0 END t_calculate_rate,
 
-                (
-                    SELECT COUNT(*) FROM T_ORDER_GOODS WHERE J_KEY = D.J_KEY AND ( TYPE = 1 or TYPE = 2 OR ( TYPE = 5 AND B.PM_TYPE = 1 OR B.PM_TYPE = 2  ) )
-                ) as J_G_COUNT,
+                    (
+                        SELECT COUNT(*) FROM T_ORDER_GOODS WHERE J_KEY = D.J_KEY AND ( TYPE = 1 or TYPE = 2 OR ( TYPE = 5 AND B.PM_TYPE = 1 OR B.PM_TYPE = 2  ) )
+                    ) as J_G_COUNT,
 
-                CASE PAY_TYPE
-                WHEN 0 THEN 0.038
-                WHEN 22 THEN 0.038
-                ELSE 0 END pay_charge,
+                    CASE PAY_TYPE
+                    WHEN 0 THEN 0.038
+                    WHEN 22 THEN 0.038
+                    ELSE 0 END pay_charge,
 
-                B.PM_TYPE,
-                D.PAY_STATUS
+                    B.PM_TYPE,
+                    D.PAY_STATUS
                 FROM T_ORDER_GOODS A
                 INNER JOIN T_ORDER_PROMOTION B
                 ON A.j_g_key = B.j_g_key

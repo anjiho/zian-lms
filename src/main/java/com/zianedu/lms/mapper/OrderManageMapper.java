@@ -81,8 +81,6 @@ public interface OrderManageMapper {
 
     List<TOrderGoodsVO> selectTOrderGoods(@Param("jKey") int jKey);
 
-    Long selectTCalculateDataSeq();
-
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 

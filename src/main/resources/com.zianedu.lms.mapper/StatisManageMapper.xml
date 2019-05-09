@@ -221,4 +221,24 @@
         ORDER BY C.G_KEY ASC
     </select>
 
+    <select id="selectTCalculateOptionList" resultType="com.zianedu.lms.vo.TCalculateOptionVO">
+        SELECT * FROM T_CALCULATE_OPTION
+        WHERE TEACHER_KEY = #{teacherKey}
+        AND TARGET_DATE = #{targetDate}
+    </select>
+
+    <insert id="insertTCalculateOption" parameterType="com.zianedu.lms.vo.TCalculateOptionVO">
+        <selectKey resultType="Integer" keyProperty="calculateOptionKey" order="BEFORE">
+            SELECT T_CALCULATE_OPTION_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_CALCULATE_OPTION
+        (
+          CALCULATE_OPTION_KEY, TEACHER_KEY, TARGET_DATE, TITLE, PRICE
+        )
+        VALUES
+        (
+          #{calculateOptionKey}, #{teacherKey}, #{targetDate}, #{title}, #{price}
+        )
+    </insert>
+
 </mapper>

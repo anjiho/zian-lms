@@ -2,11 +2,14 @@ package com.zianedu.lms.mapper;
 
 import com.zianedu.lms.dto.StatisResultDTO;
 import com.zianedu.lms.dto.TeacherCalculateDTO;
+import com.zianedu.lms.vo.TCalculateOptionVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
 public interface StatisManageMapper {
+
+    /** SELECT **/
 
     List<StatisResultDTO> selectTotalStatisAtMonth(@Param("year") String year, @Param("goodsType") int goodsType);
 
@@ -32,4 +35,8 @@ public interface StatisManageMapper {
     List<TeacherCalculateDTO> selectTeacherStatisBySection(@Param("teacherKey") int teacherKey, @Param("goodsType") int goodsType,
                                                            @Param("searchStartDate") String searchStartDate, @Param("searchEndDate") String searchEndDate);
 
+    List<TCalculateOptionVO> selectTCalculateOptionList(@Param("teacherKey") int teacherKey, @Param("targetDate") String targetDate);
+
+    /** INSERT **/
+    void insertTCalculateOption(TCalculateOptionVO tCalculateOptionVO);
 }

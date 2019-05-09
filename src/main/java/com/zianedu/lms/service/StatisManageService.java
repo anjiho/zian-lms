@@ -11,10 +11,12 @@ import com.zianedu.lms.repository.GoodsKindNameRepository;
 import com.zianedu.lms.utils.StringUtils;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.utils.ZianUtils;
+import com.zianedu.lms.vo.TCalculateOptionVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -442,7 +444,10 @@ public class StatisManageService {
         if (packageCalculateResult != null && packageCalculateResult.size() > 0) {
             goodsKindNameRepository.injectGoodsKindNameAny(packageCalculateResult);
         }
-        return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult);
+        //옵션 정보 가져오기
+        List<TCalculateOptionVO>calculateOptionList = statisManageMapper.selectTCalculateOptionList(teacherKey, searchMonth);
+
+        return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult, calculateOptionList);
     }
 
     /**
@@ -488,7 +493,23 @@ public class StatisManageService {
         if (packageCalculateResult != null && packageCalculateResult.size() > 0) {
             goodsKindNameRepository.injectGoodsKindNameAny(packageCalculateResult);
         }
-        return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult);
+        return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult, null);
+    }
+
+    /**
+     * 교수 > 정산내역 > 옵션추가
+     * @param teacherKey
+     * @param targetDate
+     * @param title
+     * @param price
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveTeacherCalculateOptionInfo(int teacherKey, String targetDate, String title, int price) {
+        if (teacherKey == 0 && "".equals(targetDate) && "".equals(title)) return;
+        TCalculateOptionVO tCalculateOptionVO = new TCalculateOptionVO(
+                teacherKey, targetDate, title, price
+        );
+        statisManageMapper.insertTCalculateOption(tCalculateOptionVO);
     }
 
 }

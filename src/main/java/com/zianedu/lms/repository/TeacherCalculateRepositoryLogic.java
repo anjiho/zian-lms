@@ -28,118 +28,82 @@ public class TeacherCalculateRepositoryLogic implements TeacherCalculateReposito
     private MemberManageMapper memberManageMapper;
 
     @Autowired
-    private ProductManageMapper productManageMapper;
-
-    @Autowired
     private ScheduleManageMapper scheduleManageMapper;
 
     /**
-     *
+     * 일단위 강사 판매 금액 정산하기
      * @param yyyymmdd
      * @throws Exception
      */
     @Override
     public void calculateTeacherSaleGoodsAny(String yyyymmdd) throws Exception {
+        if ("".equals(yyyymmdd)) {
+            logger.error("******************* yyyymmdd is null!! *******************");
+            return;
+        }
 
-        logger.info(">>>>>>>>>>>>>>>>>>>>>>>>");
+        logger.info("===============================================================");
+        logger.info("정산 시작 + (" + yyyymmdd + ")");
 
         List<TTeacherVO> calculateTeacherList = memberManageMapper.selectCalculateTeacherList();
 
-        if (calculateTeacherList.size() == 0 || calculateTeacherList == null) return;
+        if (calculateTeacherList.size() == 0 || calculateTeacherList == null) {
+            logger.error("******************* calculateTeacherList is null!! *******************");
+            return;
+        }
 
         //강사만큼 배열 시작
         for (TTeacherVO teacherVO : calculateTeacherList) {
+            logger.info("===============================================================");
+            logger.info("강사 넘버 + (" + teacherVO.getTeacherKey() + ") 정산");
+
             TCalculateVO tCalculateVO = new TCalculateVO(teacherVO.getTeacherKey());
             //T_CALCULATE 테이블 내용 저장
             orderManageMapper.insertTCalculate(tCalculateVO);
             Long calculateKey = tCalculateVO.getCalculateKey();
-                    //주문목록중에 강사의 주문목록 가져오기(핵심)
-            //List<CalculateInfoDTO>calculateInfoList = scheduleManageMapper.selectCalculateListAtYesterday(yyyymmdd, teacherVO.getTeacherKey());
+
+            //계산된 정상 결제 목록
             List<CalculateInfoDTO>calculateInfoListByPayDate = scheduleManageMapper.selectCalculateListAtYesterdayByPayDate(yyyymmdd, teacherVO.getTeacherKey());
+            //계산된 취소 결제 목록
             List<CalculateInfoDTO>calculateInfoListByCancelDate = scheduleManageMapper.selectCalculateListAtYesterdayByCancelDate(yyyymmdd, teacherVO.getTeacherKey());
 
+            //계산된 정상 결제 목록 저장
             if (calculateInfoListByPayDate.size() > 0) {
+                logger.info("===============================================================");
+                logger.info("정상 결제 목록 정산 시작");
+                //calculateKey, payStatus 주입
                 calculateInfoListByPayDate.stream()
                         .peek(calculateInfoDTO -> calculateInfoDTO.setCalculateKey(calculateKey))
                         .peek(calculateInfoDTO -> calculateInfoDTO.setPayStatus(2))
                         .collect(Collectors.toList());
 
                 for (CalculateInfoDTO calculateInfoDTO : calculateInfoListByPayDate) {
-                    //Long calculateDataKey = orderManageMapper.selectTCalculateDataSeq();
                     TCalculateDataVO tCalculateDataVO = new TCalculateDataVO(calculateInfoDTO);
-
                     orderManageMapper.insertTCalculateData(tCalculateDataVO);
                 }
+                logger.info("===============================================================");
+                logger.info("정상 결제 목록 " + calculateInfoListByPayDate.size() + " 건 저장");
             }
 
+            //계산된 취소 결제 목록 저장
             if (calculateInfoListByCancelDate.size() > 0) {
+                logger.info("===============================================================");
+                logger.info("취소 결제 목록 정산 시작");
+                //calculateKey, payStatus 주입
                 calculateInfoListByCancelDate.stream()
                         .peek(calculateInfoDTO -> calculateInfoDTO.setCalculateKey(calculateKey))
                         .peek(calculateInfoDTO -> calculateInfoDTO.setPayStatus(8))
                         .collect(Collectors.toList());
 
                 for (CalculateInfoDTO calculateInfoDTO : calculateInfoListByCancelDate) {
-                    //Long calculateDataKey = orderManageMapper.selectTCalculateDataSeq();
                     TCalculateDataVO tCalculateDataVO = new TCalculateDataVO(calculateInfoDTO);
-
                     orderManageMapper.insertTCalculateData(tCalculateDataVO);
                 }
+                logger.info("===============================================================");
+                logger.info("취소 결제 목록 " + calculateInfoListByCancelDate.size() + " 건 저장");
             }
         }
-
-
-
-
-
-        //정산할 강사 조회
-//        List<TTeacherVO> calculateTeacherList = memberManageMapper.selectCalculateTeacherList();
-//
-//        if (calculateTeacherList == null || calculateTeacherList.size() == 0) return;
-//        //강사만큼 배열 시작
-//        for (TTeacherVO teacherVO : calculateTeacherList) {
-//            TCalculateVO tCalculateVO = new TCalculateVO(teacherVO.getTeacherKey());
-//            //T_CALCULATE 테이블 내용 저장
-//            //Long calculateKey = orderManageMapper.insertTCalculate(tCalculateVO);
-//            //주문내역 조회(T_ORDER)
-//            //List<CalculateInfoDTO> orderInfoList = orderManageMapper.selectCalculateInfoBySchedule(Util.plusDate(Util.returnNow(), -1));
-//            List<CalculateInfoDTO> orderInfoList = orderManageMapper.selectCalculateInfoBySchedule(yyyymmdd);
-//
-//            //주문내역만큼 배열 시작
-//            for (CalculateInfoDTO calculateInfoDTO : orderInfoList) {
-//                //T_ORDER_GOODS 테이블 조회
-//                List<TOrderGoodsVO>orderGoodsList = orderManageMapper.selectTOrderGoods(calculateInfoDTO.getJKey());
-//
-//                //주문한 T_ORDER_GOODS 조회만큼
-//                for (TOrderGoodsVO orderGoodsVO : orderGoodsList) {
-//                    int gKey = orderGoodsVO.getGKey();
-//                    //T_GOODS.CALCULATE_RATE 필드 조회
-//                    int calculateRate = orderManageMapper.selectCalculateRateTGoods(gKey);
-//
-//                    //1. 상품이 동영상일때
-//                    if (orderGoodsVO.getType() == 1) {
-//                        //동영상 상품에 등록되어 있는 강사 조회
-//                        List<TGoodTeacherLinkVO> teacherLinkVOS = productManageMapper.selectTeacherListByTeacherLink(gKey);
-//
-//                        int teacherSize = teacherLinkVOS.size();
-//                        if (teacherLinkVOS.size() > 0 || teacherLinkVOS != null) {
-//                            for (TGoodTeacherLinkVO teacherLinkVO : teacherLinkVOS) {
-//                                int price = calculateInfoDTO.getPrice();
-//                                if (teacherSize > 1) {
-//                                    price = price / 2;
-//                                }
-//                                //정산금액 계산하기
-//                                double calcPrice = ZianCalculate.calcSingleProduct(
-//                                        price, calculateInfoDTO.getCouponDcPrice(), calculateInfoDTO.getDcWelfare(), calculateRate,
-//                                        calculateInfoDTO.getDcPoint(), calculateInfoDTO.getDcFree(), calculateInfoDTO.getPayType()
-//                                );
-//                                logger.info("calcPrice >>>>>>>>>>>>>>>> " + calcPrice);
-//                            }
-//                        }
-//                    }
-//                }
-//
-//            }
-//        }
-//
+        logger.info("===============================================================");
+        logger.info("정산 끝");
     }
 }
