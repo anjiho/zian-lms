@@ -34,12 +34,14 @@ public class TeacherCalculateRepositoryLogic implements TeacherCalculateReposito
     private ScheduleManageMapper scheduleManageMapper;
 
     /**
-     * j_count가 어떻게 나오는지 확인해야 함
+     *
      * @param yyyymmdd
      * @throws Exception
      */
     @Override
     public void calculateTeacherSaleGoodsAny(String yyyymmdd) throws Exception {
+
+        logger.info(">>>>>>>>>>>>>>>>>>>>>>>>");
 
         List<TTeacherVO> calculateTeacherList = memberManageMapper.selectCalculateTeacherList();
 

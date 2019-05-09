@@ -172,25 +172,25 @@
         select  TT.g_key, TT.type, TT.pm_type, TT.kind, sum( calc_price - ( calc_price * pay_charge ) ) as calc_price, count(*) as j_count, TT.calc_calculate_rate, TT.g_calculate_rate, TT.g_t_calculate_rate, TT.t_calculate_rate
         from
         (
-        SELECT
-        G_KEY,
-        NAME,
-        J_KEY,
-        TYPE,
-        KIND,
-        PRICE,
-        COUPON_DC_PRICE,
-        (dc_welfare / j_g_count) as DC_WELFARE,
-        (dc_point / j_g_count) as DC_POINT,
-        CALC_CALCULATE_RATE,
-        NVL( g_calculate_rate, 0 ) as G_CALCULATE_RATE,
-        NVL( g_t_calculate_rate, 0 ) as G_T_CALCULATE_RATE,
-        T_CALCULATE_RATE,
-        J_G_COUNT,
-        ( price - ( dc_welfare / j_g_count ) - ( dc_free / j_g_count ) ) * ( calc_calculate_rate / 100.0 ) - coupon_dc_price - ( dc_point / j_g_count ) as CALC_PRICE,
-        PAY_CHARGE,
-        PM_TYPE,
-        PAY_STATUS
+            SELECT
+            G_KEY,
+            NAME,
+            J_KEY,
+            TYPE,
+            KIND,
+            PRICE,
+            COUPON_DC_PRICE,
+            (dc_welfare / j_g_count) as DC_WELFARE,
+            (dc_point / j_g_count) as DC_POINT,
+            CALC_CALCULATE_RATE,
+            NVL( g_calculate_rate, 0 ) as G_CALCULATE_RATE,
+            NVL( g_t_calculate_rate, 0 ) as G_T_CALCULATE_RATE,
+            T_CALCULATE_RATE,
+            J_G_COUNT,
+            ( price - ( dc_welfare / j_g_count ) - ( dc_free / j_g_count ) ) * ( calc_calculate_rate / 100.0 ) - coupon_dc_price - ( dc_point / j_g_count ) as CALC_PRICE,
+            PAY_CHARGE,
+            PM_TYPE,
+            PAY_STATUS
         FROM
         (
         SELECT
