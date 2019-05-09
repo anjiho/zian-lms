@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface TeacherCalculateRepository {
 
-    void calculateTeacherSaleGoodsAny(String yyyymmdd, int teacherKey) throws Exception;
+    void calculateTeacherSaleGoodsAny(String yyyymmdd) throws Exception;
 
     //List<> calculateTeacherSaleGoodsContain(List<>)
 }

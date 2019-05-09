@@ -6,17 +6,15 @@ import com.zianedu.lms.mapper.OrderManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.mapper.ScheduleManageMapper;
 import com.zianedu.lms.utils.Util;
-import com.zianedu.lms.utils.ZianCalculate;
-import com.zianedu.lms.vo.TCalculateVO;
-import com.zianedu.lms.vo.TGoodTeacherLinkVO;
-import com.zianedu.lms.vo.TOrderGoodsVO;
-import com.zianedu.lms.vo.TTeacherVO;
+import com.zianedu.lms.vo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
 public class TeacherCalculateRepositoryLogic implements TeacherCalculateRepository {
@@ -41,7 +39,7 @@ public class TeacherCalculateRepositoryLogic implements TeacherCalculateReposito
      * @throws Exception
      */
     @Override
-    public void calculateTeacherSaleGoodsAny(String yyyymmdd, int teacherKey) throws Exception {
+    public void calculateTeacherSaleGoodsAny(String yyyymmdd) throws Exception {
 
         List<TTeacherVO> calculateTeacherList = memberManageMapper.selectCalculateTeacherList();
 
@@ -51,18 +49,38 @@ public class TeacherCalculateRepositoryLogic implements TeacherCalculateReposito
         for (TTeacherVO teacherVO : calculateTeacherList) {
             TCalculateVO tCalculateVO = new TCalculateVO(teacherVO.getTeacherKey());
             //T_CALCULATE 테이블 내용 저장
-            //Long calculateKey = orderManageMapper.insertTCalculate(tCalculateVO);
-            //주문목록중에 강사의 주문목록 가져오기(핵심)
-            List<CalculateInfoDTO>calculateInfoList = scheduleManageMapper.selectCalculateListAtYesterday(yyyymmdd, teacherVO.getTeacherKey());
-            //계산 시작
-            if (calculateInfoList.size() > 0) {
+            orderManageMapper.insertTCalculate(tCalculateVO);
+            Long calculateKey = tCalculateVO.getCalculateKey();
+                    //주문목록중에 강사의 주문목록 가져오기(핵심)
+            //List<CalculateInfoDTO>calculateInfoList = scheduleManageMapper.selectCalculateListAtYesterday(yyyymmdd, teacherVO.getTeacherKey());
+            List<CalculateInfoDTO>calculateInfoListByPayDate = scheduleManageMapper.selectCalculateListAtYesterdayByPayDate(yyyymmdd, teacherVO.getTeacherKey());
+            List<CalculateInfoDTO>calculateInfoListByCancelDate = scheduleManageMapper.selectCalculateListAtYesterdayByCancelDate(yyyymmdd, teacherVO.getTeacherKey());
 
-                for (CalculateInfoDTO calculateInfoDTO : calculateInfoList) {
-                    //동영상강좌일때
-                    if (calculateInfoDTO.getType() == 1) {
-                        double resultPrice = ZianCalculate.calcSingleProduct2(calculateInfoDTO);
-                        logger.info(">>>>>>>>>>>>>> resultPrice :" + resultPrice);
-                    }
+            if (calculateInfoListByPayDate.size() > 0) {
+                calculateInfoListByPayDate.stream()
+                        .peek(calculateInfoDTO -> calculateInfoDTO.setCalculateKey(calculateKey))
+                        .peek(calculateInfoDTO -> calculateInfoDTO.setPayStatus(2))
+                        .collect(Collectors.toList());
+
+                for (CalculateInfoDTO calculateInfoDTO : calculateInfoListByPayDate) {
+                    //Long calculateDataKey = orderManageMapper.selectTCalculateDataSeq();
+                    TCalculateDataVO tCalculateDataVO = new TCalculateDataVO(calculateInfoDTO);
+
+                    orderManageMapper.insertTCalculateData(tCalculateDataVO);
+                }
+            }
+
+            if (calculateInfoListByCancelDate.size() > 0) {
+                calculateInfoListByCancelDate.stream()
+                        .peek(calculateInfoDTO -> calculateInfoDTO.setCalculateKey(calculateKey))
+                        .peek(calculateInfoDTO -> calculateInfoDTO.setPayStatus(8))
+                        .collect(Collectors.toList());
+
+                for (CalculateInfoDTO calculateInfoDTO : calculateInfoListByCancelDate) {
+                    //Long calculateDataKey = orderManageMapper.selectTCalculateDataSeq();
+                    TCalculateDataVO tCalculateDataVO = new TCalculateDataVO(calculateInfoDTO);
+
+                    orderManageMapper.insertTCalculateData(tCalculateDataVO);
                 }
             }
         }

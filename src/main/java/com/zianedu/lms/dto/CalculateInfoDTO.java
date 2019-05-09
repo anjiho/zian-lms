@@ -1,5 +1,6 @@
 package com.zianedu.lms.dto;
 
+import com.zianedu.lms.utils.Util;
 import lombok.Data;
 
 @Data
@@ -40,5 +41,13 @@ public class CalculateInfoDTO {
     private int pmType;
 
     private int payStatus;
+
+    private int calcPrice;
+
+    private Long calculateKey;
+
+    private String indate = Util.returnNow();
+
+    private int jCount;
 
 }

@@ -615,8 +615,9 @@ public class OrderManageService {
         orderManageMapper.deleteTDeviceLimit(deviceLimitKey);
     }
 
+    @Transactional(propagation = Propagation.REQUIRED)
     public void test(String yyyymmdd, int teacherKey) throws Exception {
-        teacherCalculateRepository.calculateTeacherSaleGoodsAny(yyyymmdd, teacherKey);
+        teacherCalculateRepository.calculateTeacherSaleGoodsAny(yyyymmdd);
     }
 
 }

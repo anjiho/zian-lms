@@ -1,5 +1,7 @@
 package com.zianedu.lms.vo;
 
+import com.zianedu.lms.dto.CalculateInfoDTO;
+import com.zianedu.lms.utils.StringUtils;
 import com.zianedu.lms.utils.Util;
 import lombok.Data;
 
@@ -38,22 +40,20 @@ public class TCalculateDataVO {
 
     public TCalculateDataVO(){}
 
-    public TCalculateDataVO(Long calculateKey, int gKey, int type, int pmType, int kind, int calcPrice,
-                            int jCount, int payStatus, int calcCalculateRate, int gCalculateRate, int gTCalculateRate,
-                            int tCalculateRate, int jKey) {
-        this.calculateKey = calculateKey;
+    public TCalculateDataVO(CalculateInfoDTO calculateInfoDTO) {
+        this.calculateKey = calculateInfoDTO.getCalculateKey();
         this.indate = Util.returnNow();
-        this.gKey = gKey;
-        this.type = type;
-        this.pmType = pmType;
-        this.kind = kind;
-        this.calcPrice = calcPrice;
-        this.jCount = jCount;
-        this.payStatus = payStatus;
-        this.calcCalculateRate = calcCalculateRate;
-        this.gCalculateRate = gCalculateRate;
-        this.gTCalculateRate = gTCalculateRate;
-        this.tCalculateRate = tCalculateRate;
-        this.jKey = jKey;
+        this.gKey = calculateInfoDTO.getGKey();
+        this.type = calculateInfoDTO.getType();
+        this.pmType = calculateInfoDTO.getPmType();
+        this.kind = calculateInfoDTO.getKind();
+        this.calcPrice = StringUtils.convertLastNumberZero(calculateInfoDTO.getCalcPrice());
+        this.jCount = calculateInfoDTO.getJCount();
+        this.payStatus = calculateInfoDTO.getPayStatus();
+        this.calcCalculateRate = calculateInfoDTO.getCalcCalculateRate();
+        this.gCalculateRate = calculateInfoDTO.getGCalculateRate();
+        this.gTCalculateRate = calculateInfoDTO.getGTCalculateRate();
+        this.tCalculateRate = calculateInfoDTO.getTCalculateRate();
+        //this.jKey = jKey;
     }
 }

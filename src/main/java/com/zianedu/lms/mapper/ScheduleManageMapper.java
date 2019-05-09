@@ -8,5 +8,7 @@ import java.util.List;
 
 public interface ScheduleManageMapper {
 
-    List<CalculateInfoDTO> selectCalculateListAtYesterday(@Param("yesterday") String yesterday, @Param("teacherKey") int teacherKey);
+    List<CalculateInfoDTO> selectCalculateListAtYesterdayByPayDate(@Param("yesterday") String yesterday, @Param("teacherKey") int teacherKey);
+
+    List<CalculateInfoDTO> selectCalculateListAtYesterdayByCancelDate(@Param("yesterday") String yesterday, @Param("teacherKey") int teacherKey);
 }

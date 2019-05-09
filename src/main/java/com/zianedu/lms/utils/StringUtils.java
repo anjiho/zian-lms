@@ -1,6 +1,7 @@
 package com.zianedu.lms.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
@@ -331,6 +332,17 @@ public class StringUtils {
         }
         String str = builder.toString();
         return str;
+    }
+
+    //일단위 0으로 만들기
+    public static int convertLastNumberZero(int number) {
+        int convertNumber = 0;
+        if (number > 0) {
+            BigDecimal incm_civil_amt = new BigDecimal (number);
+            incm_civil_amt = incm_civil_amt.setScale(-1, BigDecimal.ROUND_DOWN);
+            return incm_civil_amt.intValue();
+        }
+        return convertNumber;
     }
 
 }
