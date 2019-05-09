@@ -8,6 +8,12 @@
     function init() {
         menuActive('menu-1', 2);
         getProductSearchTypeSelectbox("l_productSearch");
+        //탭 메뉴 색상 변경
+        $("#playForm ul").each(function(idx) {
+            var ul = $(this);
+            ul.find("li").addClass("done").attr("aria-selected", "false");
+            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
     }
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
@@ -135,7 +141,7 @@
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"padding: 0.3rem;width:60%;text-align:right;vertical-align: middle\">";
          optionHtml  += "<label style=\"display: inline-block\">조건 : </label>";
-         optionHtml  += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\"> %";
+         optionHtml  += "<input type=\"text\" class=\"form-control\" value='100' style=\"display: inline-block;width:60%;text-align: right;\"> %";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
          optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productTeacher')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
@@ -699,7 +705,7 @@
                                     </td>
                                     <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
                                         <label style="display: inline-block">조건 : </label>
-                                        <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculate_rate"> %
+                                        <input type="text" class="form-control" style="display: inline-block;width:60%;text-align: right" name="calculate_rate" value="100"> %
                                     </td>
                                     <td style="width:3%;vertical-align: middle">
                                         <button type="button" onclick="deleteTableRow('productTeacher')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
@@ -726,70 +732,6 @@
                         </div>
                     </section>
                     <!-- //6.선택 Tab -->
-
-                    <!-- 7.강의 목록 Tab -->
-                    <!--<h3>강의목록</h3>
-                    <section>
-                        <div class="mb-3 float-right">
-                            <button type="button" class="btn btn-outline-info btn-sm">순서변경</button>
-                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sModal4">추가</button>
-                        </div>
-                        <table class="table text-center table-hover">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="1" style="width:8%">번호</th>
-                                <th scope="col" colspan="1" style="width:50%">강의제목</th>
-                                <th scope="col" colspan="1" style="width:15%">시간</th>
-                                <th scope="col" colspan="1" style="width:10%">출력</th>
-                                <th scope="col" colspan="1" style="width:10%">샘플사용</th>
-                                <th scope="col" colspan="1" style="width:7%"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
-                                    <span>1</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem; vertical-align: middle;">
-                                    <span>text</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <span>10</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <i class="mdi mdi-close" style="color: red"></i>
-                                </td>
-                                <td style="vertical-align: middle">
-                                    <i class="mdi mdi-check" style="color:green;"></i>
-                                </td>
-                                <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
-                                    <span>2</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem; vertical-align: middle;">
-                                    <span>text</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <span>120</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <i class="mdi mdi-check" style="color:green;"></i>
-                                </td>
-                                <td style="vertical-align: middle">
-                                    <i class="mdi mdi-check" style="color:green;"></i>
-                                </td>
-                                <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </section>
-                 //7.강의 목록 Tab -->
                 </div>
             </div>
         </div>

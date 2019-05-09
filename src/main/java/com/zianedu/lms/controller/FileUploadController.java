@@ -184,13 +184,6 @@ public class FileUploadController {
         return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();
     }
 
-
-
-
-
-
-
-
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public @ResponseBody String test(MultipartHttpServletRequest request, @RequestParam(value = "productInfo") String videoInfo,
                                                @RequestParam(value = "productOptionInfo") String videoOptionInfo,

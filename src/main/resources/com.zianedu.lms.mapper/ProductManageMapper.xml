@@ -575,8 +575,8 @@
 		)
 		VALUES
 		(
-			#{examKey}, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh:mi:ss'),
-            TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{onlineTime}, TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'), #{offlineTimePeriod},
+			#{examKey}, #{cKey}, #{name}, #{indate}, #{classCtgKey}, #{subjectCtgKey}, #{selectSubjectCount}, TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh24:mi:ss'),
+            TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh24:mi:ss'), #{onlineTime}, TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'), #{offlineTimePeriod},
 			#{offlineTimePlace}, #{answerCount}, #{questionCount}, #{printQuestionFile}, #{printCommentaryFile},
 			#{isShowStaticTotalRank}, #{isShowStaticTotalAvg}, #{isShowFiles}, #{classGroupCtgKey}, #{examYear}, #{unitCtgKey},
 			#{divisionCtgKey}, #{refKey}, #{isRealFree}, #{isGichul}

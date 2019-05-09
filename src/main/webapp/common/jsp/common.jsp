@@ -92,7 +92,6 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
     <!-- dwr common -->
     <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
-
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">

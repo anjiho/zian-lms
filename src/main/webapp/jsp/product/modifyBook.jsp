@@ -1069,11 +1069,8 @@
     </div>
 </div>
 
-
-<!-- End Container fluid  -->
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
-    // Basic Example with form
     var form = $("#playForm");
     form.children("div").steps({
         headerTag: "h3",
@@ -1084,18 +1081,7 @@
         enablePagination : true,
         onFinished: function(event, currentIndex) {
             bookInfoSave();
-        },
-        // onContentLoaded: function (event, currentIndex) {
-        //
-        // }
-        /*onFinishing: function(event, currentIndex) {
-            //form.validate().settings.ignore = ":disabled";
-            //return form.valid();
-        },
-        onFinished: function(event, currentIndex) {
-            //alert("Submitted!");
-        }*/
-        // aria-selected:"false"
+        }
     });
 
     $('#indate').datepicker({
