@@ -121,7 +121,7 @@
 
 
   	<!-- ========================= CRONQUARTZ DEFINITIONS ======================== -->
-
+    <!-- 강사 정산 스케쥴링 -->
   	<bean id="teacherCalculateQuartz" class="org.springframework.scheduling.quartz.JobDetailBean">
   		<property name="jobClass" value="com.zianedu.lms.schedule.TeacherCalculateSchedule" />
   		<property name="applicationContextJobDataKey" value="applicationContext"/>
@@ -132,9 +132,7 @@
 <!--		<property name="cronExpression" value="0/30 * * * * ?"/>-->
 	</bean>
 
-	<!-- 푸시 발송 목록 삭제 -->
   	<!-- 3.Cron 실행 -->
-
   	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>

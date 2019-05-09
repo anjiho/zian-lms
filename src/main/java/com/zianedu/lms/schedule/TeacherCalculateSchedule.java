@@ -8,7 +8,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
 /**
- * 강사 정산 스케쥴링
+ * 강사 정산 스케쥴링 JOB
  */
 public class TeacherCalculateSchedule extends QuartzJobBean {
 
