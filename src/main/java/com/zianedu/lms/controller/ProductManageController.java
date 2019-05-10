@@ -43,8 +43,15 @@ public class ProductManageController {
         }else if("mokExamList".equals(page_gbn)) {
             mvc.setViewName("product/mokExamList");
         }else if("modifyMokExam".equals(page_gbn)) {
-            mvc.setViewName("product/modifyMokExam");
+            mvc.setViewName("product/modifyMokExam");//mokProductList
+        }else if("mokProductList".equals(page_gbn)) {
+            mvc.setViewName("product/mokProductList");
+        }else if("mokProductManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokProductManage");
+        }else if("ModifyMokProduct".equals(page_gbn)) {
+            mvc.setViewName("product/mokProductList");
         }
+
 
         return mvc;
     }

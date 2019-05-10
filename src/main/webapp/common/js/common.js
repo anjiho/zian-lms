@@ -2097,23 +2097,6 @@ function split_minute_getDay(day) {
     return day[0];
 }
 
-//년도자르고 HH 구하기
-function split_HH_getTime(day) {
-    var day = day.split(" ");
-    if(day[1]){
-      var HH =  day[1].split(":");
-    }
-    return HH[0];
-}
-
-//년도자르고 MM 구하기
-function split_MM_getTime(day) {
-    var day = day.split(" ");
-    if(day[1]){
-      var MM = day[1].split(":");
-    }
-    return MM[1];
-}
 
 //현재날짜기준으로 연차 구하기
 function getAnnual(registerDate) {

@@ -92,11 +92,16 @@
                         <li class="sidebar-item" id="menu-1-5"><a href="void(0)" onclick="goPage('productManage', 'bookSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 도서등록 </span></a></li>
                         <!--<li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 모의고사관리 </span></a></li>-->
                         <hr style="width: 100%;color:#6c757d" noshade >
-                        <li class="sidebar-item" id="menu-1-6"><a href="void(0)" onclick="goPage('productManage', 'mokExamList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사목록 </span></a></li>
-                        <li class="sidebar-item" id="menu-1-7"><a href="void(0)" onclick="goPage('productManage', 'mokExamManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사등록 </span></a></li>
-                        <li class="sidebar-item" id="menu-1-8"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 문제은행 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokExamList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokExamManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사등록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProductList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사상품 목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProductManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사상품 등록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 문제은행 </span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
+
+
+
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-border-inside"></i><span class="hide-menu">프로모션상품관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">

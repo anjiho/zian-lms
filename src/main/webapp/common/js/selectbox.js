@@ -61,6 +61,30 @@ function getVideoOptionTypeList(tag_id, val) {
     });
 }
 
+//옵션 셀렉트박스
+function getAllOptionSelectboxAddTag(tagId, val) {
+    selectboxService.getVideoOptionTypeList(function (list) {
+        var html = "<select id='selOption' name='selOption[]' onchange='' class='form-control'>";
+        html += "<option value=''>선택하세요</option>";
+        for (var i=1; i<13; i++) {
+            if (i == val) {
+                html += "<option value="+i+" selected>"+ i +"개월</option>";
+            } else {
+                html += "<option value="+i+">"+ i +"개월</option>";
+            }
+        }
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
 //카테고리
 function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
