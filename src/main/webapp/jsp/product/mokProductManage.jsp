@@ -6,17 +6,6 @@
     function init() {
         menuActive('menu-1', 10);
         getCategoryList("sel_category","214");
-        getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
-        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
-        getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
-        getLectureStatusSelectbox("status", "");//강좌정보- 진행상태
-        getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
-        getClassRegistraionDaySelectbox("limitDay", "");//수강일수
-        getLectureCountSelectbox("lecTime", "");//강좌시간
-        getExamPrepareSelectbox("examYear", "");//시험대비년도 셀렉트박스
-        getSelectboxListForCtgKeyNoTag2('teacherTable', '70', 0);
-        selectTeacherSelectboxNoTag2('teacherTable', 1);
-        getProductSearchTypeSelectbox("l_productSearch");
         getEmphasisSelectbox("l_emphasis", "");
         getAllOptionSelectboxAddTag("sel_option","");
         //탭 메뉴 색상 변경
@@ -63,9 +52,6 @@
             $trLast.after($trNew);
 
             getCategoryNoTag2('categoryTable','1183', '2');
-            /*$trNew.find("td").eq(3).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(7).html(defaultCategorySelectbox());*/
         }
     }
 
@@ -85,14 +71,6 @@
             } else {
                 $('#categoryTable > tbody:last > tr:last').remove();
             }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
         }
     }
 
@@ -113,16 +91,6 @@
     function changeCategory(tableId, val, tdNum) {
         if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
-    }
-
-    //강사목록 새로 등록하는 값 주입하기(강사키)
-    function injectSubjectKey(val) {
-        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(1).val(val);
-    }
-
-    //강사목록 새로 등록하는 값 주입하기(과목키)
-    function injectTeacherKey(val) {
-        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
     }
 
     //저장
@@ -150,8 +118,8 @@
 
         if(confirm("저장하시겠습니까?")) {
             productManageService.upsultGoodsInfo(obj, " ", " ", function (gKey) {
-                alert(gKey);
-                /*if(gKey > 0){
+
+                if(gKey > 0){
                     var optionArray = new Array();
                     $('#optionTable tbody tr').each(function(index){
                         var i =0;
@@ -186,11 +154,10 @@
                         };
                         categoryArr.push(data);
                     });
-                }*/
-                //productManageService.upsultTGoodsPriceOption(optionArray, gKey, function () {});
-                //productManageService.upsultTCategoryGoods(categoryArr, gKey, function () {});
+                }
+                productManageService.upsultTGoodsPriceOption(optionArray, gKey, function () {});
+                productManageService.upsultTCategoryGoods(categoryArr, gKey, function () {});
             });
-            //isReloadPage(true);
         }
     }
 
@@ -483,17 +450,6 @@
         onFinished: function(event, currentIndex) {
             mokProductInfoSave();
         },
-        // onContentLoaded: function (event, currentIndex) {
-        //
-        // }
-        /*onFinishing: function(event, currentIndex) {
-            //form.validate().settings.ignore = ":disabled";
-            //return form.valid();
-        },
-        onFinished: function(event, currentIndex) {
-            //alert("Submitted!");
-        }*/
-        // aria-selected:"false"
     });
 
     $('#indate').datepicker({
@@ -508,18 +464,6 @@
         format: "yyyy-mm-dd",
         language: "kr"
     });
-
-    //파일 선택시 파일명 보이게 하기
-    $(document).on('change', '.custom-file-input', function() {
-        $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
-    $(document).on('change', '.addFile', function() {
-        $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
-    $(document).on('change', '.PreviewFile', function() {
-        $(this).parent().find('.custom-file-control3').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
-
 </script>
 
 <%@include file="/common/jsp/footer.jsp" %>
