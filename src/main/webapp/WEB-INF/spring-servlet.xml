@@ -29,7 +29,7 @@
 			<mvc:mapping path="/orderManage"/>
 			<mvc:mapping path="/popupCouponManage"/>
 			<mvc:mapping path="/productManage"/>
-			<mvc:mapping path="/professorManage"/>
+			<mvc:mapping path="/teacherManage"/>
 			<mvc:mapping path="/promotionManage"/>
 			<mvc:mapping path="/statisManage"/>
    			<bean class="com.zianedu.lms.config.SessionInterceptor"/>

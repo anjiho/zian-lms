@@ -167,7 +167,7 @@ function getNewSelectboxListForCtgKey3(tag_id, val, val2) {
 function selectTeacherSelectbox(tag_id,val) {
     selectboxService.selectTeacherSelectbox(function (list) {
        var html = "<select id='sel_1' onchange='' class='form-control'>";
-        html += "<option value='' selected>선택</option>";
+        html += "<option value='' selected>강사선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].teacherKey == val) {
                 html += "<option value="+list[i].teacherKey+" selected>"+ list[i].teacherName +"</option>";

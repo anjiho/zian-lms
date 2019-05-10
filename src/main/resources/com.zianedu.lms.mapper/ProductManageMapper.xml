@@ -225,6 +225,7 @@
 		INNER JOIN T_CATEGORY C
 		ON B.SUBJECT_CTG_KEY = C.CTG_KEY
 		WHERE A.exam_key = #{examKey}
+		ORDER BY A.BANK_SUBJECT_EXAM_LINK_KEY ASC
 	</select>
 
 	<select id="selectMockExamQuestionBankSubjectList" resultType="com.zianedu.lms.vo.TExamQuestionBankSubjectVO">
