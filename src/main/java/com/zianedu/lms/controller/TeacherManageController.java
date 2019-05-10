@@ -14,12 +14,16 @@ import org.springframework.web.servlet.ModelAndView;
  * </PRE>
  */
 @Controller
-public class ProfessorManageController {
+public class TeacherManageController {
 
-    @RequestMapping(value = "/professorManage")
+    @RequestMapping(value = "/teacherManage")
     public ModelAndView professorManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
+
+        if("teacherCalcGraph".equals(page_gbn)) {
+            mvc.setViewName("teacher/teacherCalcStatistics");
+        }
 
         return mvc;
     }

@@ -62,6 +62,8 @@ public interface MemberManageMapper {
 
     List<TTeacherVO> selectCalculateTeacherList();
 
+    List<MemberListDTO> selectSearchTeacherList();
+
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
 

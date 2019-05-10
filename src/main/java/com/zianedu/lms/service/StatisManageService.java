@@ -521,6 +521,58 @@ public class StatisManageService {
     }
 
     /**
+     * 강사 매출 그래프 ( 년별 )
+     * @param teacherKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public StatisResultDTO getTeacherStatisGraphByYear(int teacherKey) {
+        if (teacherKey == 0) return null;
+
+        List<String>yearList = new ArrayList<>();
+        List<Integer>priceResult = new ArrayList<>();
+        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByYear(teacherKey);
+
+        if (list.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                String year = resultDTO.getDay();
+                Integer price = Integer.parseInt(resultDTO.getPrice());
+
+                yearList.add(year);
+                priceResult.add(price);
+            }
+        }
+        String[] years = StringUtils.arrayListToStringArray(yearList);
+        long[] prices = Longs.toArray(priceResult);
+
+        return new StatisResultDTO(years, prices);
+    }
+
+    /**
+     * 강사 매출 그래프 ( 일별 )
+     * @param teacherKey
+     * @param yyyyMM
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public StatisResultDTO getTeacherStatisGraphByDay(int teacherKey, String yyyyMM) {
+        if (teacherKey == 0 && "".equals(yyyyMM)) return null;
+
+        List<Integer>priceResult = new ArrayList<>();
+        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByDay(teacherKey, yyyyMM);
+
+        if (list.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                Integer price = Integer.parseInt(resultDTO.getPrice());
+                priceResult.add(price);
+            }
+        }
+        long[] prices = Longs.toArray(priceResult);
+
+        return new StatisResultDTO(prices);
+    }
+
+    /**
      * 교수 > 정산내역 > 옵션추가
      * @param teacherKey
      * @param targetDate

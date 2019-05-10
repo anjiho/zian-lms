@@ -397,6 +397,16 @@
         ORDER BY A.TEACHER_KEY ASC
     </select>
 
+    <select id="selectSearchTeacherList" resultType="MemberListDTO">
+        SELECT
+            A.TEACHER_KEY, B.NAME
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.STATUS = 10
+        ORDER BY B.NAME
+    </select>
+
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">
             SELECT T_USER_SEQ.nextval FROM DUAL

@@ -29,10 +29,10 @@ public class TBankSubjectExamLinkVO {
         this.required = required;
     }
 
-    public TBankSubjectExamLinkVO(int examKey, int bankSubjectExamLinkKey, int required) {
+    public TBankSubjectExamLinkVO(int examKey, int examQuestionBankSubjectKey, int required) {
         this.cKey = ZianCoreManage.ZIAN_COMPANY_CODE;
         this.examKey = examKey;
-        this.bankSubjectExamLinkKey = bankSubjectExamLinkKey;
+        this.examQuestionBankSubjectKey = examQuestionBankSubjectKey;
         this.required = required;
     }
 }

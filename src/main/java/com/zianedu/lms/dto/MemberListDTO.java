@@ -30,4 +30,6 @@ public class MemberListDTO {
     private String gradeName;
 
     private String authorityName;
+
+    private int teacherKey;
 }

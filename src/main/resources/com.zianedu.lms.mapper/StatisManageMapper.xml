@@ -252,6 +252,19 @@
         ORDER BY DAY ASC
     </select>
 
+    <select id="selectTeacherStatisGraphByDay" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM-DD') as DAY,
+            SUM(CALC_PRICE) as PRICE
+        FROM T_CALCULATE_DATA A
+        INNER JOIN T_CALCULATE B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        WHERE B.TEACHER_KEY = #{teacherKey}
+        AND TO_CHAR(A.INDATE, 'YYYY-MM') = #{month}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM-DD')
+        ORDER BY DAY ASC
+    </select>
+
     <insert id="insertTCalculateOption" parameterType="com.zianedu.lms.vo.TCalculateOptionVO">
         <selectKey resultType="Integer" keyProperty="calculateOptionKey" order="BEFORE">
             SELECT T_CALCULATE_OPTION_SEQ.nextval FROM DUAL

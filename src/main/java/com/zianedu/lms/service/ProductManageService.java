@@ -916,12 +916,12 @@ public class ProductManageService extends PagingSupport {
     /**
      * 모의고사 > 시험과목 저장하기
      * @param examKey
-     * @param bankSubjectExamLinkKey
+     * @param examQuestionBankSubjectKey
      * @param required
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveTBankSubjectExamLink(int examKey, int bankSubjectExamLinkKey, int required) {
-        TBankSubjectExamLinkVO tBankSubjectExamLinkVO = new TBankSubjectExamLinkVO(examKey, bankSubjectExamLinkKey, required);
+    public void saveTBankSubjectExamLink(int examKey, int examQuestionBankSubjectKey, int required) {
+        TBankSubjectExamLinkVO tBankSubjectExamLinkVO = new TBankSubjectExamLinkVO(examKey, examQuestionBankSubjectKey, required);
         productManageMapper.insertTBankSubjectExamLink(tBankSubjectExamLinkVO);
     }
 
