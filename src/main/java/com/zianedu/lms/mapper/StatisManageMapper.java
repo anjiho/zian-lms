@@ -37,6 +37,10 @@ public interface StatisManageMapper {
 
     List<TCalculateOptionVO> selectTCalculateOptionList(@Param("teacherKey") int teacherKey, @Param("targetDate") String targetDate);
 
+    List<StatisResultDTO> selectTeacherStatisGraphByMonth(@Param("teacherKey") int teacherKey, @Param("year") String year);
+
+    List<StatisResultDTO> selectTeacherStatisGraphByYear(@Param("teacherKey") int teacherKey);
+
     /** INSERT **/
     void insertTCalculateOption(TCalculateOptionVO tCalculateOptionVO);
 }

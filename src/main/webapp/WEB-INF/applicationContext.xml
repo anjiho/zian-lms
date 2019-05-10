@@ -128,8 +128,8 @@
   	</bean>
   	<bean id="cronTrigger1" class="org.springframework.scheduling.quartz.CronTriggerBean">
 		<property name="jobDetail" ref="teacherCalculateQuartz"/>
-		<!--<property name="cronExpression" value="0/1 * * * * ? "/>-->
-<!--		<property name="cronExpression" value="0/30 * * * * ?"/>-->
+<!--		<property name="cronExpression" value="0/1 * * * * ? "/>-->
+        <property name="cronExpression" value="0 0 5 * * ?"/> <!-- 새벽 5시 예약 -->
 	</bean>
 
   	<!-- 3.Cron 실행 -->

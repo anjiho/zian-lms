@@ -792,12 +792,12 @@
 			<if test="classCtgKey != null">CLASS_CTG_KEY = #{classCtgKey},</if>
 			<if test="subjectCtgKey != null">SUBJECT_CTG_KEY = #{subjectCtgKey},</if>
 			<if test="selectSubjectCount != null">SELECT_SUBJECT_COUNT = #{selectSubjectCount},</if>
-			<if test="acceptStartDate != '' or acceptStartDate != null">ACCEPT_START_DATE = TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
-			<if test="acceptEndDate != '' or acceptEndDate != null">ACCEPT_END_DATE =TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
-			<if test="onlineStartDate != '' or onlineStartDate != null">ONLINE_START_DATE = TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
-			<if test="onlineEndDate != '' or onlineEndDate != null">ONLINE_END_DATE = TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="acceptStartDate != '' or acceptStartDate != null">ACCEPT_START_DATE = TO_DATE(#{acceptStartDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
+			<if test="acceptEndDate != '' or acceptEndDate != null">ACCEPT_END_DATE =TO_DATE(#{acceptEndDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
+			<if test="onlineStartDate != '' or onlineStartDate != null">ONLINE_START_DATE = TO_DATE(#{onlineStartDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
+			<if test="onlineEndDate != '' or onlineEndDate != null">ONLINE_END_DATE = TO_DATE(#{onlineEndDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
 			<if test="onlineTime != null">ONLINE_TIME = #{onlineTime},</if>
-			<if test="offlineDate != '' or offlineDate != null">OFFLINE_DATE = TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh:mi:ss'),</if>
+			<if test="offlineDate != '' or offlineDate != null">OFFLINE_DATE = TO_DATE( #{offlineDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
 			<if test="offlineTimePeriod != '' or offlineTimePeriod != null">OFFLINE_TIME_PERIOD = #{offlineTimePeriod},</if>
 			<if test="offlineTimePlace != '' or offlineTimePlace != null">OFFLINE_TIME_PLACE = #{offlineTimePlace},</if>
 			<if test="answerCount != null">ANSWER_COUNT = #{answerCount},</if>

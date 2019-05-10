@@ -227,6 +227,31 @@
         AND TARGET_DATE = #{targetDate}
     </select>
 
+    <select id="selectTeacherStatisGraphByMonth" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM') as DAY,
+            SUM(CALC_PRICE) as PRICE
+        FROM T_CALCULATE_DATA A
+        INNER JOIN T_CALCULATE B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        WHERE B.TEACHER_KEY = #{teacherKey}
+        AND TO_CHAR(A.INDATE, 'YYYY') = #{year}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectTeacherStatisGraphByYear" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY') as DAY,
+            SUM(CALC_PRICE) as PRICE
+        FROM T_CALCULATE_DATA A
+        INNER JOIN T_CALCULATE B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        WHERE B.TEACHER_KEY = #{teacherKey}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY')
+        ORDER BY DAY ASC
+    </select>
+
     <insert id="insertTCalculateOption" parameterType="com.zianedu.lms.vo.TCalculateOptionVO">
         <selectKey resultType="Integer" keyProperty="calculateOptionKey" order="BEFORE">
             SELECT T_CALCULATE_OPTION_SEQ.nextval FROM DUAL

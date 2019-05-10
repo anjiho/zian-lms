@@ -497,6 +497,30 @@ public class StatisManageService {
     }
 
     /**
+     * 강사 매출 그래프 ( 월별 )
+     * @param teacherKey
+     * @param searchYear
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public StatisResultDTO getTeacherStatisGraphByMonth(int teacherKey, String searchYear) {
+        if (teacherKey == 0 && "".equals(searchYear)) return null;
+
+        List<Integer>priceResult = new ArrayList<>();
+        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByMonth(teacherKey, searchYear);
+
+        if (list.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                Integer price = Integer.parseInt(resultDTO.getPrice());
+                priceResult.add(price);
+            }
+        }
+        long[] prices = Longs.toArray(priceResult);
+
+        return new StatisResultDTO(prices);
+    }
+
+    /**
      * 교수 > 정산내역 > 옵션추가
      * @param teacherKey
      * @param targetDate

@@ -1,5 +1,6 @@
 package com.zianedu.lms.schedule;
 
+import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.repository.TeacherCalculateRepository;
 import com.zianedu.lms.service.ScheduleService;
 import org.quartz.JobExecutionContext;
@@ -26,7 +27,10 @@ public class TeacherCalculateSchedule extends QuartzJobBean {
 
     private void executeJob(JobExecutionContext ex) throws Exception {
 
-        ScheduleService scheduleService = (ScheduleService)context.getBean("scheduleService");
-        scheduleService.calculateTeacherSaleGoods();
+        boolean isSchedule = ConfigHolder.isSchedule();
+        if (isSchedule) {
+            ScheduleService scheduleService = (ScheduleService)context.getBean("scheduleService");
+            scheduleService.calculateTeacherSaleGoods();
+        }
     }
 }
