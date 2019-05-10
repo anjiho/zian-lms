@@ -19,12 +19,21 @@
     function init() {
         menuActive('menu-8', 3);
 
+        selectTeacherSelectbox("l_teacherList", "");
         getExamYearSelectbox("l_year");
         getMonthsSelectbox("l_month");
     }
 
     function chartInit() {
+        var teacherKey = getSelectboxValue("sel_1");
         var searchType = getSelectboxValue("searchType");
+
+        if (teacherKey == "") {
+            alert("강사를 선택하세요.");
+            focus("sel_1");
+            return;
+        }
+
         if (searchType == "month") {
 
             var year = getSelectboxValue("selYear");
@@ -39,15 +48,15 @@
             gfn_display("container2", false);
             gfn_display("container3", false);
 
-            statisManageService.getTeacherStatisGraphByMonth(year, function(result) {
-                var userCounts = result.userCounts;
+            statisManageService.getTeacherStatisGraphByMonth(teacherKey, year, function(result) {
+                var prices = result.prices;
 
                 Highcharts.chart('container', {
                     chart: {
                         type: 'line'
                     },
                     title: {
-                        text: '월간 회원가입 통계' + '(' + year + ')'
+                        text: '월간 매출 통계' + '(' + year + ')'
                     },
                     // subtitle: {
                     //     text: 'Source: WorldClimate.com'
@@ -57,7 +66,7 @@
                     },
                     yAxis: {
                         title: {
-                            text: '명'
+                            text: '금액(원)'
                         }
                     },
                     plotOptions: {
@@ -72,8 +81,8 @@
                         enabled: false
                     },
                     series: [{
-                        name: '회원',
-                        data: userCounts
+                        name: '매출액',
+                        data: prices
                     }]
                 });
             });
@@ -82,15 +91,15 @@
             gfn_display("container2", true);
             gfn_display("container3", false);
 
-            statisManageService.getTeacherStatisGraphByYear(function(result) {
+            statisManageService.getTeacherStatisGraphByYear(teacherKey, function(result) {
                 var yearList = result.years;
-                var userCounts = result.userCounts;
+                var prices = result.prices;
 
 
                 Highcharts.chart('container2', {
 
                     title: {
-                        text: '년간 회원가입 통계'
+                        text: '년간 매출 통계'
                     },
 
                     // subtitle: {
@@ -99,7 +108,7 @@
 
                     yAxis: {
                         title: {
-                            text: '명'
+                            text: '금액(원)'
                         }
                     },
                     legend: {
@@ -120,8 +129,8 @@
                     },
 
                     series: [{
-                        name: '회원',
-                        data: userCounts
+                        name: '매출액',
+                        data: prices
                     }],
 
                     responsive: {
@@ -161,14 +170,13 @@
 
             var yyyyMM = makeYYYY_MM(year, month);
 
-            statisManageService.getTeacherStatisGraphByDay(yyyyMM, function(result) {
-
-                var userCounts = result.userCounts;
+            statisManageService.getTeacherStatisGraphByDay(teacherKey, yyyyMM, function(result) {
+                var prices = result.prices;
 
                 Highcharts.chart('container3', {
 
                     title: {
-                        text: '일별 회원가입 통계' + '(' + yyyyMM + ')'
+                        text: '일별 매출 통계' + '(' + yyyyMM + ')'
                     },
 
                     // subtitle: {
@@ -177,7 +185,7 @@
 
                     yAxis: {
                         title: {
-                            text: '명'
+                            text: '금액(원)'
                         }
                     },
                     legend: {
@@ -199,8 +207,8 @@
                     },
 
                     series: [{
-                        name: '회원',
-                        data: userCounts
+                        name: '매출액',
+                        data: prices
                     }],
 
                     responsive: {
@@ -258,6 +266,9 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
+                    <div style="float: left;">
+                        <span id="l_teacherList"></span>
+                    </div>
                     <div style="float: left;">
                         <select id="searchType" class="form-control" onchange="changeStaticsType(this.value)">
                             <option value="year">년도별</option>
