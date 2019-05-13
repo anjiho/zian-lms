@@ -119,6 +119,20 @@
   	<!-- ========================= CONFIG OBJECT DEFINITIONS CONFIG ======================== -->
   	<bean id="ConfigHolder" class="com.zianedu.lms.config.ConfigHolder"/>
 
+    <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
+        <constructor-arg>
+            <ref bean="zianOracleDataSource"/>
+        </constructor-arg>
+
+        <!-- 첫 번째 방법 -->
+        <property name="dataSource" ref="zianOracleDataSource"></property>
+
+        <!-- 두 번째 방법 -->
+        <!-- <property name="dataSource">
+            <ref bean="dataSource"/>
+        </property> -->
+    </bean>
+
 
   	<!-- ========================= CRONQUARTZ DEFINITIONS ======================== -->
     <!-- 강사 정산 스케쥴링 -->

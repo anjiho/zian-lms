@@ -53,6 +53,8 @@ public class FileUploadUtil {
                     } else {
                         filePath = "100/promotion/";
                     }
+                } else if ("QUESTION_BANK".equals(uploadType)) {
+                    filePath = "100/exam_question_bank/";
                 }
 
                 if (uploadFileName != null || !"".equals(uploadFileName)) {
@@ -113,6 +115,14 @@ public class FileUploadUtil {
                         } else {
                             map.put("imageViewFilePath", filePath + fileName);
                         }
+                    } else if ("QUESTION_BANK".equals(uploadType)) {
+                        filePath = "100/exam_question_bank/";
+                        if("questionImage".equals(uploadFileName)) {
+                            map.put("questionImagePath", filePath + fileName);
+                        } else {
+                            map.put("commentaryImagePath", filePath + fileName);
+                        }
+
                     }
 
                 }
