@@ -96,7 +96,10 @@
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokExamManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사등록 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProductList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사상품 목록 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProductManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사상품 등록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 문제은행 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemBankList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사 문제은행 문제목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemBankManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사 문제은행 문제등록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemSubjectBankList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사 문제은행 과목목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemSubjectBankManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">모의고사 문제은행 과목등록</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
 

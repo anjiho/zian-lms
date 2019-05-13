@@ -1468,7 +1468,7 @@ function isCheckbox(checkbox_id, boolean) {
  */
 function isCheckboxByNumber(checkbox_id, number) {
     var boolean = false;
-    if (number == "1") boolean = true;
+    if (number == "1" || number == "2") boolean = true; //number2 = 모의고사(온라인)
 
     if (checkbox_id != "") {
         $("#" + checkbox_id).attr("checked", boolean);

@@ -85,6 +85,25 @@ function getAllOptionSelectboxAddTag(tagId, val) {
     });
 }
 
+//모의고사상품 리스트 셀렉트박스
+function getAllListOptionSelectbox(val) {
+    var optionName = "";
+    var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i=1; i<13; i++) {
+        if (i == val) {
+            html += "<option value="+i+" selected>"+ i +"개월</option>";
+        } else {
+            html += "<option value="+i+">"+ i +"개월</option>";
+        }
+    }
+    html += "<option value='100' selected>VOD</option>";
+    html += "<option value='101' selected>MOBILE</option>";
+    html += "<option value='102' selected>VOD +  MOBILE</option>";
+    html += "</select>";
+    return html;
+}
+
 //카테고리
 function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
@@ -121,7 +140,24 @@ function getNewCategoryList(tag_id, val, val2) {
 //급수,과목,유형
 function getSelectboxListForCtgKey(tag_id, val) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        var html = "<select id='sel_1' onchange='' class=\"col-sm-3 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//모의고사 문제은행 출제구분 divisionCtgKey
+function getSelectboxListdivisionCtgKey(tag_id, val) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-3 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
@@ -566,4 +602,90 @@ function getTimeMinuteSelectbox(tagId, val) {
     }
     html += "</select>";
     innerHTML(tagId, html);
+}
+
+//모의고사문제은행 정답 셀렉트박스
+function getAnswerSelectbox(tagId, val) {
+    var html = "<select id='answer' name='answer' class='col-sm-3 select2 form-control custom-select'>";
+    html += "<option value=''>선택하세요</option>";
+    for (var i=1; i<6; i++) {
+        if(i == val){
+            html += "<option value="+i+" selected>"+ i +"</option>";
+        }else{
+            html += "<option value="+i+">"+ i +"</option>";
+        }
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+//모의고사 문제은행 난이도
+function getExamLevelSelectbox(tagId, val) {
+    selectboxService.selectExamLevelSelectbox(function (list) {
+        var html = "<select id='examLevel' name='examLevel'  class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            }else{
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+//모의고사 문제은행 유형
+function getSelectboxstepCtgKey(tag_id, val) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='CtgKey' onchange='changeExamUnit(this.value"+ ","+ '"' + tag_id + '"' + ");' class=\"col-sm-3 select2 form-control custom-select\">";
+        //onchange='changeExamUnit(this.value"+ ","+ '"' + tag_id + '"' + ","+ '"' + nextTdNum + '"' + ");'
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+
+//모의고사 문제은행 패턴
+function getExamPatternSelectbox(tagId, val) {
+    selectboxService.selectPatternSelectbox(function (list) {
+        var html = "<select id='selPattern' name='selPattern'  class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].ctgKey == val) {
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+//모의고사 문제은행 단원
+function getExamUnitSelectbox(tagId, val) {
+    selectboxService.selectUnitSelectbox(function (list) {
+        console.log(list);
+        var html = "<select id='selUnit' name='selUnit'  class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].ctgKey == val) {
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
 }

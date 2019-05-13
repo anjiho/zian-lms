@@ -48,9 +48,25 @@ public class ProductManageController {
             mvc.setViewName("product/mokProductList");
         }else if("mokProductManage".equals(page_gbn)) {
             mvc.setViewName("product/mokProductManage");
-        }else if("ModifyMokProduct".equals(page_gbn)) {
-            mvc.setViewName("product/mokProductList");
+        }else if("modifyMokProduct".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokProduct");
+        }else if("mokProblemBankManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemBankManage");
+        }else if("mokProblemBankList".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemBankList");
+        }else if("modifymokProblemBank".equals(page_gbn)) {
+            mvc.setViewName("product/modifymokProblemBank");
+        }else if("mokProblemSubjectBankList".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemSubjectBankList");
+        }else if("mokProblemSubjectBankManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemSubjectBankManage");
+        }else if("modifyMokProblemSubjectBank".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokProblemSubjectBank");
         }
+
+
+
+
 
 
         return mvc;

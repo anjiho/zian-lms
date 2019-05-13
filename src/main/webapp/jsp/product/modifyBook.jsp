@@ -932,7 +932,6 @@
                                 </table>
                             </div>
                         </section>
-                        <!-- //6.강의 교재선택 Tab -->
                     </div>
                 </div>
             </div>

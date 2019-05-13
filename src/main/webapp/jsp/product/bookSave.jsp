@@ -418,10 +418,6 @@
                     }
                 });
 
-                console.log(basicObj);
-                console.log(optionArray);
-                console.log(categoryArr);
-                console.log(bookObj);
 
                 if(confirm("저장하시겠습니까?")) {
                     productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
