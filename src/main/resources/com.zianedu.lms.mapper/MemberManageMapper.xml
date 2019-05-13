@@ -420,7 +420,7 @@
         )
         VALUES
         (
-            #{userKey}, 100, #{userId}, #{indate}, #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
+            #{userKey}, 100, #{userId}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
             #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{email}, #{recvSms}, #{recvEmail},
             0, #{grade}, #{interestCtgKey0}, 0, #{isMobileReg},
             #{adminAuthorityKey}, 0, #{gradePrice}, #{note}
@@ -436,7 +436,7 @@
         VALUES
         (
             T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status}, TO_DATE(#{indate}, 'YYYY-mm-dd hh:mi:ss'),
-            TO_DATE(#{procStartDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{procEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
+            TO_DATE(#{procStartDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{procEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
         )
     </insert>
 

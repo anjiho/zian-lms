@@ -16,7 +16,7 @@ public class TUserVO implements Serializable {
     //아이디
     private String userId;
     //등록일
-    private String inDate;
+    private String indate;
     //이름
     private String name;
     //권한
@@ -36,7 +36,7 @@ public class TUserVO implements Serializable {
 
     private String telephoneMobile;
 
-    private String zipCode;
+    private String zipcode;
 
     private String addressRoad;
 
