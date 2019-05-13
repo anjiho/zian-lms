@@ -213,6 +213,4 @@
             </div>
         </div>
     </div>
-
-
 <%@include file="/common/jsp/footer.jsp" %>
