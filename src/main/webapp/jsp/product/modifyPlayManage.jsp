@@ -628,7 +628,6 @@
     //강의교재 수정 버튼
     function updateLectureBookList() {
         var bookKeys = get_array_values_by_name("input", "res_key[]");
-        console.log(bookKeys);
         if (confirm("강의교재 정보를 수정 하시겠습니까?")) {
             var dataArr = new Array();
             for (var i = 0; i < bookKeys.length; i++) {
@@ -896,7 +895,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
                                 <div class="col-sm-6 input-group pl-0 pr-0">
-                                    <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
+                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>

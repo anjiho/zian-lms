@@ -987,8 +987,8 @@
         </div>
         <div class="form-group row">
             <label class="col-sm-3 text-right col-sm-2 text-left control-label col-form-label">노출 여부</label>
-            <div class="col-sm-9">
-                <div style="margin-top: -23px;">
+                    <div class="col-sm-9">
+                        <div style="margin-top: -23px;">
                     OFF
                     <label class="switch">
                         <input type="checkbox" id="lectureIsShow" name="lectureIsShow"/>

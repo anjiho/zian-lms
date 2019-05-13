@@ -7,6 +7,8 @@
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
     var examKey = '<%=examKey%>';
+
+
     function init() {
         menuActive('menu-1', 7);
         getProductSearchTypeSelectbox("l_productSearch");
@@ -65,7 +67,69 @@
             split_MM_getTime(mokExamInfo.onlineStartDate, "timeMinute", 2);
             split_HH_getTime(mokExamInfo.onlineEndDate, "timeHour", 3);
             split_MM_getTime(mokExamInfo.onlineEndDate, "timeMinute", 3);
+
+            /* 시험과목 리스트 가져오기 */
+            var examSubjectInfo = info.examSubjectInfo;
+
+            if (examSubjectInfo.length == 0) {
+                var cellData = [];
+                dwr.util.addRows("examSubList", [0], cellData, {escapeHtml: false});
+            }else {
+                for (var i = 0; i < examSubjectInfo.length; i++) {
+                    var cmpList = examSubjectInfo[i];
+                    var deleteBtn = '<button type="button" onclick="deletebankInfo(' + cmpList.bankSubjectExamLinkKey + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
+                    var subBankKey    = "<input type='hidden'  value='" + cmpList.examQuestionBankSubjectKey + "' name='bankSubKey[]' >";
+                    var bankExamLinkKey    = "<input type='hidden'  value='" + cmpList.bankSubjectExamLinkKey + "' name='bankSubLinkKey[]' >";
+
+                    var check = "";
+                    if(Number(cmpList.required) == 1){
+                        check = "checked";
+                    }
+
+                    var subHtml =  "<div class='col-sm-10'>";
+                        subHtml += "<div style=\"margin-top: -23px;\">";
+                        subHtml += "ON";
+                        subHtml += " <label class=\"switch\">";
+                        subHtml += " <input type='checkbox'  name='required'  onchange='updateRequireSubject("+cmpList.bankSubjectExamLinkKey+")'  id='bankSubLinkKey_"+ cmpList.bankSubjectExamLinkKey +"' style='display:none;' "+ check +">";
+                        subHtml += "<span class=\"slider\" ></span>";
+                        subHtml += "</label>";
+                        subHtml += "OFF";
+                        subHtml += "</div>";
+                        subHtml += "</div>";
+
+                    var cellData = [
+                        function() {return cmpList.ctgName},
+                        function() {return cmpList.name},
+                        function() {return cmpList.questionNumber},
+                        function() {return subHtml},
+                        function() {return deleteBtn},
+                        function() {return subBankKey},
+                        function() {return cmpList.required},
+                        function() {return bankExamLinkKey},
+                    ];
+                    dwr.util.addRows("examSubList", [0], cellData, {escapeHtml: false});
+                }
+                $('#examSubList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(5).attr("style", "display:none");//bankKey hidden
+                    tr.children().eq(6).attr("style", "display:none");//required hidden
+                    tr.children().eq(7).attr("style", "display:none");//required hidden
+                    tr.children().eq(3).attr("style","text-align: left");
+                });
+            }
         });
+    }
+    
+    function deletebankInfo(bankKey) {
+        if(confirm("삭제 하시겠습니까?")) {
+            productManageService.deleteExamSubject(bankKey, function () {
+                if ($("#examSubTable > tbody > tr").length == 1) {
+                    $('#examSubTable > tbody:first > tr:first').attr("style", "display:none");
+                } else {
+                    $('#examSubTable > tbody:last > tr:last').remove();
+                }
+            });
+        }
     }
 
     function mockExamSave() {
@@ -89,11 +153,43 @@
         mockInfoObj.printQuestionFile = "";
         mockInfoObj.printCommentaryFile = "";
 
-        if(confirm("저장 하시겠습니까?")) {
+        if(confirm("수정 하시겠습니까?")) {
+            /*시험과목 저장*/
+            var bankSubLinkKey = get_array_values_by_name("input", "bankSubLinkKey[]");
+            var bankSubKey = get_array_values_by_name("input", "bankSubKey[]");
+
+            for (var i = 0; i < bankSubLinkKey.length; i++) {
+                var isRequired = $("input:checkbox[name='required']").eq(i).is(":checked");//필수과목 체크
+                if (isRequired == true) required = '1';
+                else required = '0';
+
+                if(bankSubLinkKey[i] == ""){
+                    productManageService.saveTBankSubjectExamLink(examKey, bankSubKey[i] ,required, function () {});
+                }
+            }
+
+            /*기본정보 저장*/
             productManageService.upsultMokExamInfo(mockInfoObj, function () {
-                //isReloadPage(true);
+                 //isReloadPage(true);
             });
         }
+    }
+
+    function updateRequireSubject(key) {
+        var required = "";
+        if($("#bankSubLinkKey_"+key).is(":checked") == true){
+             required = 1;
+         }else{
+             required = 0;
+         }
+     /*필수과목 변경 저장*/
+        var tBankSubjectExamLinkVOS = {
+            bankSubjectExamLinkKey: key,
+            required: required
+        };
+        var array = new Array();
+        array.push(tBankSubjectExamLinkVOS);
+        productManageService.updateRequireSubject(array, function () {});
     }
 
     //모의고사 문제은행 과목선택 팝업창 리스트 불러오기
@@ -113,10 +209,10 @@
             paging.count3(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getMockExamQuestionBankSubjectList(sPage, '10', searchType, searchText, function (selList) {
+                console.log(selList);
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
-                        console.log(cmpList);
                         var bookSelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-outline-info mx-auto"/>';
                         var examQuestionBankSubjectKey = "<input type='hidden' id='bankSubKey[]' value='"+ cmpList.examQuestionBankSubjectKey +"'>";
                         if (cmpList != undefined) {
@@ -140,25 +236,69 @@
             });
         });
     }
-    
-    function sendChildValue(val) {
+
+    function sendChildValue (val) {
         var checkBtn = val;
 
         var tr = checkBtn.parent().parent();
         var td = tr.children();
 
-        var gKey = td.find("input").val();
+        var bankSubKey = td.find("input").val();
+        var ctgName = td.eq(1).text();
+        var name = td.eq(2).text();
+        var questionNumber = td.eq(3).text();
 
-        var goodsName = td.eq(1).text();
-
-        var resKeys = get_array_values_by_name("input", "res_key[]");
-        if ($.inArray(gKey, resKeys) != '-1') {
+        var bankSubKey1 = get_array_values_by_name("input", "bankSubKey[]");
+        if ($.inArray(bankSubKey, bankSubKey1) != '-1') {
             alert("이미 선택된 과목입니다.");
             return;
         }
-        $("#goodName").html(goodsName);
-        $("#nextGKey").val(gKey);
+
+        var subHtml = "<tr scope='col' colspan='3'>";
+        subHtml     += " <td>";
+        subHtml     += "<span>" + ctgName + "</span>";
+        subHtml     += "<input type='hidden' value='' name='bankSubLinkKey[]'>";
+        subHtml     += "<input type='hidden'  value='" + bankSubKey + "' name='bankSubKey[]'>";
+        subHtml     += "</td>";
+        subHtml     += " <td>";
+        subHtml     += "<span>" + name + "</span>";
+        subHtml     += "</td>";
+        subHtml     += " <td>";
+        subHtml     += "<span>" + questionNumber + "</span>";
+        subHtml     += "</td>";
+        subHtml     += "<td class=\"text-left\">";
+        subHtml     += " <div class='col-sm-10'>";
+        subHtml     += " <div style=\"margin-top: -23px;\">";
+        subHtml     += "ON";
+        subHtml     += " <label class=\"switch\">";
+        subHtml     += " <input type='checkbox'  name='required'  style='display:none;' >";
+        subHtml     += "<span class=\"slider\" ></span>";
+        subHtml     += "</label>";
+        subHtml     += "OFF";
+        subHtml     += "</div>";
+        subHtml     += "</div>";
+        subHtml     += "</td>";
+        subHtml     += " <td>";
+        subHtml     += "<button type=\"button\" onclick=\"deleteTableRow('examSubTable');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        subHtml     += "</td>";
+
+        $('#examSubTable > tbody:first').append(subHtml);//선택 모의고사 리스트 뿌리기
+        $('#examSubTable tr').each(function(){
+            var tr = $(this);
+        });
     }
+
+    //테이블 로우 삭제
+    function deleteTableRow(tableId) {
+        if (tableId == "examSubTable") {
+            if ($("#examSubTable > tbody > tr").length == 1) {
+                $('#examSubTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#examSubTable > tbody:last > tr:last').remove();
+            }
+        }
+    }
+
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -252,6 +392,7 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
                                         <div class="col-sm-6 input-group pl-0 pr-0">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
+
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>
@@ -395,17 +536,17 @@
                             <div class="mb-3 float-right">
                                 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#examSubModal" onclick="fn_search3('new');">추가</button>
                             </div>
-                            <table class="table text-center table-hover"  id="lectureCurriTabel">
+                            <table class="table text-center table-hover"  id="examSubTable">
                                 <thead>
                                 <tr>
-                                    <th scope="col" colspan="1" style="width:40%">과목명</th>
-                                    <th scope="col" colspan="1" style="width:20%">등록명</th>
+                                    <th scope="col" colspan="1" style="width:20%">과목명</th>
+                                    <th scope="col" colspan="1" style="width:40%">등록명</th>
                                     <th scope="col" colspan="1" style="width:10%">문제수</th>
-                                    <th scope="col" colspan="1" style="width:10%">필수과목</th>
+                                    <th scope="col" colspan="1" style="width:15%">필수과목</th>
                                     <th scope="col" colspan="1" style="width:7%"></th>
                                 </tr>
                                 </thead>
-                                <tbody id="examSubjectList">
+                                <tbody id="examSubList">
                                 </tbody>
                             </table>
                         </section>
@@ -478,7 +619,7 @@
         saveState : true, //현재 단계 쿠키저장
         enablePagination : true,
         onFinished: function(event, currentIndex) {
-            bookInfoSave();
+            mockExamSave();
         }
     });
 

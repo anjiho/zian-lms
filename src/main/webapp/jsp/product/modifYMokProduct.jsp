@@ -4,7 +4,7 @@
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
     function init() {
-        menuActive('menu-1', 6);
+        menuActive('menu-1', 9);
         getCategoryList("sel_category","214");
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
@@ -19,73 +19,10 @@
         getProductSearchTypeSelectbox("l_productSearch");
         getEmphasisSelectbox("l_emphasis", "");
     }
+    //upsultGoodsInfo
+
 
     $( document ).ready(function() {
-        $('textarea[name=description]').summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-        $('#contentList').summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
@@ -106,7 +43,7 @@
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").val('');
+            $trNew.find("td select").val('');
             $trNew.find("td input").eq(0).val('');
             $trNew.find("td input").eq(1).val('');
             $trNew.find("td input").eq(2).val('');
@@ -191,257 +128,17 @@
     function injectTeacherKey(val) {
         $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
     }
-
-    //과년도 도서 추가
-    function fn_search3(val) {
-        var paging = new Paging();
-        var sPage = $("#sPage3").val();
-        var searchType = getSelectboxValue("searchType");
-        var searchText = getInputTextValue("productSearchType");
-
-        if(val == "new") {
-            sPage = "1";
-        }
-
-        dwr.util.removeAllRows("dataList3");
-        gfn_emptyView3("H", "");//페이징 예외사항처리
-        productManageService.getProductListCount(searchType, searchText, 'BOOK', function(cnt) {
-            paging.count3(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getProductList(sPage, '10',searchType, searchText, 'BOOK', function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var isShow = "";
-                        var isSell = "";
-                        var isFree = "";
-                        if(cmpList.isShow == '1') isShow = '<i class="mdi mdi-check" style="color:green;"></i>';
-                        else isShow = '<i class="mdi mdi-close" style="color: red"></i>';
-                        if(cmpList.isSell == '1') isSell = '<i class="mdi mdi-check" style="color:green;"></i>';
-                        else isSell = '<i class="mdi mdi-close" style="color: red"></i>';
-                        if(cmpList.isFree == '1') isFree = '<i class="mdi mdi-check" style="color:green;"></i>';
-                        else isFree = '<i class="mdi mdi-close" style="color: red"></i>';
-
-                        var bookSelBtn = '<input type="button" onclick="sendChildValue_2($(this))" value="선택" class="btn btn-outline-info mx-auto"/>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return '<input name="bookKey[]" value=' + "'" + cmpList.GKey + "'" + '>';},
-                                function(data) {return cmpList.goodsName;},
-                                function(data) {return isShow;},
-                                function(data) {return isSell;},
-                                function(data) {return isFree;},
-                                function(data) {return bookSelBtn;}
-                            ];
-                            dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});
-                            $('#dataList3 tr').each(function(){
-                                var tr = $(this);
-                                tr.children().eq(0).attr("style", "display:none");
-                            });
-                        }
-                    }
-                }else{
-                    gfn_emptyView3("V", comment.blank_list2);
-                }
-            });
-        });
-    }
-
-    //과년도 도서 전달값
-    function sendChildValue_2(val) {
-        var checkBtn = val;
-
-        var tr = checkBtn.parent().parent();
-        var td = tr.children();
-
-        var gKey = td.find("input").val();
-
-        var goodsName = td.eq(1).text();
-
-        var resKeys = get_array_values_by_name("input", "res_key[]");
-        if ($.inArray(gKey, resKeys) != '-1') {
-            alert("이미 선택된 도서입니다.");
-            return;
-        }
-        $("#goodName").html(goodsName);
-        $("#nextGKey").val(gKey);
-    }
-
-
-    //출판사 추가
-    function fn_search(val) {
-        var paging = new Paging();
-        var sPage = $("#sPage").val();
-        var searchText = getInputTextValue("CpSearchType");
-
-        if(val == "new")  sPage = "1";
-
-        dwr.util.removeAllRows("dataList");
-        gfn_emptyView3("H", "");//페이징 예외사항처리
-        productManageService.getCpListCoubt("title", searchText, function(cnt) {
-            paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getCpList(sPage, '10', "title", searchText, function (selList) {
-                if (selList.length > 0) {
-                    for (var i = 0; i < selList.length; i++) {
-                        var cmpList = selList[i];
-                        var cpSelBtn = '<input type="button" onclick="sendChildValue_1($(this))" value="선택" class="btn btn-outline-info mx-auto"/>';
-                        if (cmpList != undefined) {
-                            var cellData = [
-                                function(data) {return '<input name="bookKey[]" value=' + "'" + cmpList.cpKey + "'" + '>';},
-                                function(data) {return cmpList.name;},
-                                function(data) {return cpSelBtn;},
-                            ];
-                            dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
-                            $('#dataList tr').each(function(){
-                                var tr = $(this);
-                                tr.children().eq(0).attr("style", "display:none");
-                            });
-                        }
-                    }
-                }else{
-                    gfn_emptyView3("V", comment.blank_list2);
-                }
-            });
-        });
-    }
-
-    //출판사 전달값
-    function sendChildValue_1(val) {
-        var checkBtn = val;
-
-        var tr = checkBtn.parent().parent();
-        var td = tr.children();
-
-        var gKey = td.find("input").val();
-        var goodsName = td.eq(1).text();
-
-        var resKeys = get_array_values_by_name("input", "res_key[]");
-        if ($.inArray(gKey, resKeys) != '-1') {
-            alert("이미 선택된 출판사입니다.");
-            return;
-        }
-        $("#cpName").html(goodsName);
-        $("#cpKey").val(gKey);
-    }
-
-
-    function bookInfoSave() {
-        var data = new FormData();
-        var fileData = new FormData();
-        $.each($('#imageListFile')[0].files, function(i, file) {
-            fileData.append('imageListFile', file);
-        });
-
-        $.each($('#imageViewFile')[0].files, function(i, file) {
-            fileData.append('imageViewFile', file);
-        });
-        $.ajax({
-            url: "/file/updateBookInfo",
-            method: "post",
-            dataType: "JSON",
-            data: fileData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                var cpKey = $("#cpKey").val();
-                var basicObj = getJsonObjectFromDiv("section1");
-                if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-                else basicObj.isShow = '0';
-                if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
-                else basicObj.isSell = '0';
-                if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
-                else basicObj.isFree = '0';
-                if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
-                else basicObj.isFreebieDeliveryFree = '0';
-                if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
-                else basicObj.isQuickDelivery = '0';
-                basicObj.cpKey = cpKey;
-                var result = JSON.stringify(data.result);
-                if(result != "") {
-                    var parse = JSON.parse(result);
-                    basicObj.imageList = parse.imageListFilePath;
-                    basicObj.imageView = parse.imageViewFilePath;
-                }
-
-                /*  2.옵션  */
-                var optionArray = new Array();
-                $('#optionTable tbody tr').each(function(index){
-                    var i = 0;
-                    var optionName = $(this).find("td select").eq(0).val();
-                    var price = $(this).find("td input").eq(0).val();
-                    var sellPrice = $(this).find("td input").eq(1).val();
-                    var point = $(this).find("td input").eq(2).val();
-                    var extendPercent = $(this).find("td input").eq(3).val();
-                    var data = {
-                        priceKey:'0',
-                        gKey:'0',
-                        kind:'0',
-                        ctgKey:'0',
-                        name:'0',
-                        price:price,
-                        sellPrice:sellPrice,
-                        point:point,
-                        extendPercent:extendPercent
-                    };
-                    optionArray.push(data);
-                });
-
-                /* 3. 카테고리 저장 */
-                var categoryArr = new Array();
-                $('#categoryTable tbody tr').each(function(index){
-                    var ctgKey = $(this).find("td select").eq(4).val();
-                    var data = {
-                        ctgGKey:0,
-                        ctgKey:ctgKey,
-                        gKey:0,
-                        pos:0
-                    };
-                    categoryArr.push(data);
-                });
-                /* 4. 도서정보  */
-                var bookObj = getJsonObjectFromDiv("section4");
-                if(bookObj.isDeliveryFree == 'on')  bookObj.isDeliveryFree = '1';//무료
-                else bookObj.isDeliveryFree = '0';
-                if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
-                else bookObj.isSet = '0';
-
-                $.ajax({
-                    url: "/file/updateBookInfo",
-                    method: "post",
-                    dataType: "JSON",
-                    data: fileData,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                    }
-                });
-
-                console.log(basicObj);
-                console.log(optionArray);
-                console.log(categoryArr);
-                console.log(bookObj);
-
-                if(confirm("저장하시겠습니까?")) {
-                    productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
-                        isReloadPage(true);
-                    });
-                }
-            }
-        });
-    }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">도서 정보등록</h4>
+            <h4 class="page-title">모의고사 상품 등록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">도서 등록</li>
+                        <li class="breadcrumb-item active" aria-current="page">모의고사 상품 등록</li>
                     </ol>
                 </nav>
             </div>
@@ -463,17 +160,10 @@
                         <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" value="0" name="gKey">
-                                <input type="hidden" value="0" name="cpK ey">
-                                <input type="hidden" value="0" name="isNodc">
-                                <input type="hidden" value="0" name="tags">
-                                <input type="hidden" value="0" name="goodsId">
-                                <input type="hidden" value="" name="goodsTypeName">
-                                <input type="hidden" value="" name="summary">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                                        <span>도서</span>
+                                        <span>모의고사</span>
                                         <input type="hidden" class="col-sm-6 bg-light required form-control" id="type" name='type' value="3">
                                     </div>
                                     <div class="form-group row">
@@ -564,7 +254,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">정산율</label>
                                         <div class="col-sm-6 pl-0 pr-0">
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="calculateRate" name="calculateRate">%
+                                            <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="calculateRate" name="calculateRate">%
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -580,25 +270,6 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">황금날개배송</label>
-                                        <div class="col-sm-10">
-                                            <div style="margin-top: -23px;" class="col-sm-5">
-                                                OFF
-                                                <label class="switch">
-                                                    <input type="checkbox" style="display:none;" id="isQuickDelivery" name="isQuickDelivery">
-                                                    <span class="slider"></span>
-                                                </label>
-                                                ON
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                    <label class="control-label col-form-label">상세설명</label>
-                                    <div>
-                                        <textarea value="" id="description1" name="description"></textarea>
-                                    </div>
-                                </div>
                                 </div>
                             </div>
                         </section>
@@ -627,7 +298,7 @@
                                     <tbody id="optionList">
                                     <tr>
                                         <td style="padding: 0.3rem;vertical-align: middle">
-                                            <input type="text" value="기본옵션" readonly>
+                                            <span id="sel_option"></span>
                                         </td>
                                         <td style="padding: 0.3rem;vertical-align: middle">
                                             <input type="text" class="form-control" name="price[]" id='price_0'>
@@ -724,69 +395,10 @@
                         <!-- //3.카테고리 목록 Tab -->
 
                         <!-- 도서정보 -->
-                        <h3>도서정보</h3>
+                        <h3>모의고사 정보</h3>
                         <section class="col-md-auto">
-                            <input type="hidden" value="0" name="bookKey">
-                            <input type="hidden" value="0" name="gKey">
-                            <input type="hidden" value="" name="contentList">
-                            <input type="hidden" value="0" name="goodsId">
                             <div id="section4">
                                 <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">도서코드</label>
-                                        <span>0</span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매상태</label>
-                                        <select class="col-sm-3 select2 form-control custom-select" id="status" name='status'>
-                                            <option value="">선택</option>
-                                            <option value="0">예약</option>
-                                            <option value="1">판매중</option>
-                                            <option value="2">품절</option>
-                                            <option value="3">절판</option>
-                                        </select>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">급수</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
-                                            <span id="l_classGroup"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">과목</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
-                                            <span id="l_subjectGroup"></span>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">저자</label>
-                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id="writer">
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">최신발행일</label>
-                                        <div class="col-sm-3 input-group pl-0 pr-0">
-                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="publishDate" id="cpdate">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">ISBN</label>
-                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="isbn" id="isbn">
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">페이지 수</label>
-                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="pageCnt" id="pageCnt">
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">출판사</label>
-                                        <div class="col-sm-7 pl-0 pr-0">
-                                            <input type="hidden" id="cpKey" name='cpKey' value="">
-                                            <span id="cpName" class="pr-2"></span>
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#cpModal" onclick="fn_search('new');">출판사 추가</button>
-                                        </div>
-                                    </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송비 무료</label>
                                         <div class="col-sm-10">
@@ -801,30 +413,11 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">세트상품</label>
-                                        <div class="col-sm-10">
-                                            <div style="margin-top: -23px;" class="col-sm-5">
-                                                OFF
-                                                <label class="switch">
-                                                    <input type="checkbox" style="display:none;" id="isSet" name="isSet">
-                                                    <span class="slider"></span>
-                                                </label>
-                                                ON
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">과년도 도서</label>
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">모의고사</label>
                                         <div class="col-sm-7 pl-0 pr-0">
                                             <input type="hidden" id="nextGKey" name="nextGKey" value="">
                                             <span id="goodName" class="pr-2"></span>
-                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">과년도 도서 추가</button>
-                                        </div>
-                                    </div>
-                                    <div class="form-group">
-                                        <label class="control-label col-form-label">목차</label>
-                                        <div>
-                                            <textarea value="" id="contentList" name="contentList"></textarea>
+                                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">모의고사 선택</button>
                                         </div>
                                     </div>
                                 </div>
@@ -840,37 +433,6 @@
     </div>
 </form>
 <!-- // 기본소스-->
-
-<!--미리보기 이미지 팝업창-->
-<div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <input type="hidden" id="key" value="modify">
-            <input type="hidden" id="searchKeywordKey" value="">
-            <div class="modal-header">
-                <h5 class="modal-title">리소스 수정</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- modal body -->
-            <div class="modal-body">
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">이미지</label>
-                    <div class="col-sm-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input PreviewFile" id="PreviewFile" name="PreviewFile" required>
-                            <span class="custom-file-control3 custom-file-label"></span>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-info float-right" onclick="imageSave();">저장</button>
-            </div>
-            <!-- //modal body -->
-        </div>
-    </div>
-</div>
-
 <!-- 과년도 도서 팝업창-->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 900px">
@@ -920,55 +482,6 @@
         </div>
     </div>
 </div>
-
-<!-- 출판사 팝업창-->
-<div class="modal fade" id="cpModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 600px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">CP사 선택</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <form>
-                <!-- modal body -->
-                <div class="modal-body" style="padding: 1.25rem;">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
-                            <span>이름</span>
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="CpSearchType">
-                        </div>
-                        <div style=" float: left; width: 33%">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                        </div>
-                    </div>
-                    <div class="table-responsive">
-                        <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
-                            <thead class="thead-light">
-                            <tr>
-                                <th style="width:45%">출판사명</th>
-                                <th style="width:15%"></th>
-                            </tr>
-                            </thead>
-                            <tbody id="dataList"></tbody>
-                            <tr>
-                                <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                            </tr>
-                        </table>
-                        <%@ include file="/common/inc/com_pageNavi.inc" %>
-                    </div>
-                </div>
-                <!-- //modal body -->
-            </form>
-        </div>
-    </div>
-</div>
-
-
 <!-- End Container fluid  -->
 <%@include file="/common/jsp/footer.jsp" %>
 <script>

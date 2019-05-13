@@ -822,7 +822,6 @@
     <update id="updateTBankSubjectExamLink" parameterType="com.zianedu.lms.vo.TBankSubjectExamLinkVO">
         UPDATE T_BANK_SUBJECT_EXAM_LINK
         <set>
-            <if test="examQuestionBankSubjectKey != null">EXAM_QUESTION_BANK_SUBJECT_KEY = #{examQuestionBankSubjectKey},</if>
             <if test="required != null">REQUIRED = #{required},</if>
         </set>
         WHERE BANK_SUBJECT_EXAM_LINK_KEY = #{bankSubjectExamLinkKey}
