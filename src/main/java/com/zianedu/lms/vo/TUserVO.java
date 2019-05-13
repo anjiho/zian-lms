@@ -88,6 +88,8 @@ public class TUserVO implements Serializable {
 
     private String appDeviceType;
 
+    private String userPwd;
+
     public TUserVO() {}
 
     public TUserVO(int userKey, String userName, int authority) {

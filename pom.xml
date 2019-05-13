@@ -353,6 +353,12 @@
             <artifactId>jackson-mapper-asl</artifactId>
             <version>1.9.10</version>
         </dependency>
+        <!-- https://mvnrepository.com/artifact/javax.inject/javax.inject -->
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+            <version>1</version>
+        </dependency>
 
     </dependencies>
 

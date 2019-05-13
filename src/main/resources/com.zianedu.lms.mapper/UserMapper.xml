@@ -13,4 +13,14 @@
 		WHERE USER_KEY = #{userKey}
 	</select>
 
+	<select id="getUserList" resultType="com.zianedu.lms.vo.TUserVO">
+		SELECT USER_KEY, PWD FROM T_USER
+	</select>
+
+	<update id="updateUserPwd">
+		UPDATE T_USER
+		SET USER_PWD = #{userPwd}
+		WHERE USER_KEY = #{userKey}
+	</update>
+
 </mapper>
