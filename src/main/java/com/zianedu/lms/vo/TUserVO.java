@@ -100,7 +100,7 @@ public class TUserVO implements Serializable {
 
     public TUserVO(TUserVO tUserVO) throws Exception {
         this.userId = tUserVO.getUserId();
-        this.inDate = tUserVO.getInDate();
+        this.indate = tUserVO.getIndate();
         this.name = tUserVO.getName();
         this.authority = tUserVO.getAuthority();
         this.pwd = SecurityUtil.encryptSHA256(tUserVO.getPwd());
@@ -109,7 +109,7 @@ public class TUserVO implements Serializable {
         this.gender = tUserVO.getGender();
         this.telephone = Util.isNullValue(Aes256.encrypt(tUserVO.getTelephone()), "");
         this.telephoneMobile = Util.isNullValue(Aes256.encrypt(tUserVO.getTelephoneMobile()), "");
-        this.zipCode = Util.isNullValue(tUserVO.getZipCode(), "");
+        this.zipcode = Util.isNullValue(tUserVO.getZipcode(), "");
         this.address = Util.isNullValue(tUserVO.getAddress(), "");
         this.email = Util.isNullValue(Aes256.encrypt(tUserVO.getEmail()), "");
         this.recvSms = tUserVO.getRecvSms();
