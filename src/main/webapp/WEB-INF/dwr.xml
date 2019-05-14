@@ -134,7 +134,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.FreeInjectDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.DeviceListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PointListDTO"/>
-
+		<convert converter="bean" match="com.zianedu.lms.dto.ChangeNumberDTO"/>
 	</allow>
 
 

@@ -6,52 +6,74 @@
     function init() {
         menuActive('menu-1', 12);
         getMockYearSelectbox("l_examYearGroup","");//출제년도
-        getSelectboxListdivisionCtgKey("l_examType", 4390);//출제구분
+        getSelectboxListdivisionCtgKey("l_examType", 4390, "");//출제구분
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
         getAnswerSelectbox("l_answerType", "");//정답
         getExamLevelSelectbox("l_examLevel", "");//난이도
 
-        getSelectboxstepCtgKey("l_Type", 4392);//유형
-        getSelectboxstepCtgKey("l_pattern", 4404);//패턴
-        getSelectboxstepCtgKey("l_unit", 4405);//단원
+        getSelectboxstepCtgKey("typeTable", 4392, 0);//유형
+        getSelectboxstepCtgKey("patternTable", 4404, 0);//패턴
+        getSelectboxstepCtgKey("unitTable", 4405, 0);//단원
     }
     
     function mockProblemBankSave() {
         var data = new FormData();
-        var fileData = new FormData();
-        $.each($('#imageQuestionFile')[0].files, function(i, file) {
-            fileData.append('imageQuestionFile', file);
+
+        $.each($('#questionImage')[0].files, function(i, file) {
+            data.append('questionImage', file);
         });
 
-        $.each($('#imagecommentaryFile')[0].files, function(i, file) {
-            fileData.append('imagecommentaryFile', file);
+        $.each($('#commentaryImage')[0].files, function(i, file) {
+            data.append('commentaryImage', file);
         });
 
-        var basicObj = getJsonObjectFromDiv("section1");
-        //console.log(basicObj);
+        data.append('uploadType', 'QUESTION_BANK');
 
-        var ctgKeys = get_array_values_by_name("select", "CtgKey[]");
-        basicObj.stepCtgKey = ctgKeys[1];//유형
-        basicObj.patternCtgKey = ctgKeys[3];//패턴
-        basicObj.unitCtgKey = ctgKeys[5];//단원
-
-        console.log(basicObj);
         if(confirm("저장하시겠습니까?")) {
-            productManageService.upsultProblemBank(basicObj, function () {
-                isReloadPage(true);
+            $.ajax({
+                url: "/file/imageFileUpload",
+                method: "post",
+                dataType: "JSON",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if(data.result){
+                        var basicObj = getJsonObjectFromDiv("section1");
+
+                        $('#typeTable tbody tr').each(function(index){//유형
+                            var ctgKey = $(this).find("td select").eq(1).val();
+                            basicObj.stepCtgKey = ctgKey;
+                        });
+
+                        $('#patternTable tbody tr').each(function(index){//패턴
+                            var ctgKey = $(this).find("td select").eq(1).val();
+                            basicObj.patternCtgKey = ctgKey;
+                        });
+
+                        $('#unitTable tbody tr').each(function(index){//단원
+                            var ctgKey = $(this).find("td select").eq(2).val();
+                            basicObj.unitCtgKey = ctgKey;
+                        });
+
+
+                        basicObj.questionImage = data.result.questionImagePath;
+                        basicObj.commentaryImage = data.result.commentaryImagePath;
+
+                        productManageService.upsultProblemBank(basicObj, function () {
+                             isReloadPage(true);
+                         });
+
+                    }
+                }
             });
         }
     }
 
     //유형 셀렉트박스 변경 시
-    function changeExamUnit(val, tagId) {
-        if(tagId == 'l_Type'){
-            getSelectboxstepCtgKey("l_AddType", val);//유형
-        }else if(tagId == 'l_pattern'){
-            getSelectboxstepCtgKey("l_Addpattern", val);//유형
-        }else if(tagId == 'l_unit'){
-            getSelectboxstepCtgKey("l_Addunit", val);//유형
-        }
+    function changeExamUnit(val,tableId , tdNum) {
+        getSelectboxstepCtgKey(tableId, val, tdNum);//단원
     }
     /*문제,해설 이미지파일 미리보기 */
     $(document).ready(function() {
@@ -65,19 +87,15 @@
                  reader.readAsDataURL(input.files[0]);
                 }
         }
-
-         $("#imageQuestionFile").change(function(){
-             $("#questionImageUrl").val(this.value);
+         $("#questionImage").change(function(){
              readURL(this, 'QuestionBlah');
          });
-        $("#imagecommentaryFile").change(function(){
-            $("#commentaryImageUrl").val(this.value);
+        $("#commentaryImage").change(function(){
             readURL(this, 'commentaryBlah');
         });
     });
 
 </script>
-<input type="hidden" name="sPage3" id="sPage3">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
@@ -107,7 +125,6 @@
                         <section class="col-md-auto">
                             <div id="section1">
                                 <input type="hidden" value="0" name="examQuestionBankKey">
-                                <input type="hidden" value="0" name="cKey">
                                 <input type="hidden" value="" name="bookImage">
                                 <input type="hidden" value="" name="answer1Reason">
                                 <input type="hidden" value="" name="answer2Reason">
@@ -120,22 +137,20 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">문제 이미지</label>
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="imageQuestionFile"  name="imageQuestionFile" required>
+                                                <input type="file" class="custom-file-input" id="questionImage"  name="questionImage" required>
                                                 <span class="custom-file-control custom-file-label"></span>
                                             </div>
                                             <img id="QuestionBlah" src="#"  style="display: none"/>
-                                            <input type="hidden" name="questionImageUrl" id="questionImageUrl" value="">
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">해설 이미지</label>
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input addFile" id="imagecommentaryFile" name="imagecommentaryFile" required>
+                                                <input type="file" class="custom-file-input addFile" id="commentaryImage" name="commentaryImage" required>
                                                 <span class="custom-file-control1 custom-file-label"></span>
                                             </div>
                                             <img id="commentaryBlah" src="#" style="display: none" />
-                                            <input type="hidden" name="commentaryImageUrl" id="commentaryImageUrl" value="">
                                         </div>
                                     </div>
                                     <div class="form-group row">
@@ -185,22 +200,52 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">유형</label>
                                         <div class="col-sm-6 pl-0 pr-0">
-                                            <span id="l_Type"></span>
-                                            <span id="l_AddType"></span>
+                                            <table id="typeTable">
+                                                <tbody id="typeSelList">
+                                                <td><!--옵션명selbox-->
+                                                    <select class='form-control'  id='sel_type' onchange="changeExamUnit('typeTable', this.value, 1);">
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class='form-control'></select>
+                                                </td>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">패턴</label>
                                         <div class="col-sm-6 pl-0 pr-0">
-                                            <span id="l_pattern"></span>
-                                            <span id="l_Addpattern"></span>
+                                            <table id="patternTable">
+                                                <tbody id="patternSelList">
+                                                    <td><!--옵션명selbox-->
+                                                        <select class='form-control'  id='sel_pattern' onchange="changeExamUnit('patternTable', this.value, 1);">
+                                                        </select>
+                                                    </td>
+                                                    <td>
+                                                        <select class='form-control'></select>
+                                                    </td>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">단원</label>
                                         <div class="col-sm-6 pl-0 pr-0">
-                                            <span id="l_unit"></span>
-                                            <span id="l_Addunit"></span>
+                                            <table id="unitTable">
+                                                <tbody id="unitSelList">
+                                                <td><!--옵션명selbox-->
+                                                    <select class='form-control'  id='sel_unit' onchange="changeExamUnit('unitTable', this.value, 1);">
+                                                    </select>
+                                                </td>
+                                                <td>
+                                                    <select class='form-control'></select>
+                                                </td>
+                                                <td>
+                                                    <select class='form-control'></select>
+                                                </td>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <div class="form-group row">

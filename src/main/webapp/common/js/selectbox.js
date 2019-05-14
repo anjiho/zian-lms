@@ -155,12 +155,12 @@ function getSelectboxListForCtgKey(tag_id, val) {
 }
 
 //모의고사 문제은행 출제구분 divisionCtgKey
-function getSelectboxListdivisionCtgKey(tag_id, val) {
+function getSelectboxListdivisionCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-3 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].key == val) {
+            if (list[i].key == val2) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
@@ -636,12 +636,12 @@ function getExamLevelSelectbox(tagId, val) {
     });
 }
 
-//모의고사 문제은행 유형
-function getSelectboxstepCtgKey(tag_id, val) {
+//모의고사 문제은행 유형,패턴,단원 - 단계별
+function getSelectboxstepCtgKey(tableId, val, tdNum) {
+    var nextTdNum = Number(tdNum)+1;
+    var html = "<select  id='mokSel' onchange='changeExamUnit(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class=\"form-control\">";
+    html += "<option value='' selected>선택</option>";
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select id='CtgKey' onchange='changeExamUnit(this.value"+ ","+ '"' + tag_id + '"' + ");' class=\"col-sm-3 select2 form-control custom-select\">";
-        //onchange='changeExamUnit(this.value"+ ","+ '"' + tag_id + '"' + ","+ '"' + nextTdNum + '"' + ");'
-        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -650,12 +650,30 @@ function getSelectboxstepCtgKey(tag_id, val) {
             }
         }
         html += "</select>";
-        innerHTML(tag_id, html);
+        $("#"+ tableId).find("tbody").find("td").eq(tdNum).html(html);
+    });
+}
+
+//모의고사 문제은행 수정 유형,패턴,단원 - 단계별
+function getSelectboxstepCtgKey2(tableId, val, tdNum, val2) {
+    var nextTdNum = Number(tdNum)+1;
+    var html = "<select  id='mokSel' onchange='changeExamUnit(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ","+ '"' + '' + '"' + ");' class=\"form-control\">";
+    html += "<option value='' selected>선택</option>";
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        $("#"+ tableId).find("tbody").find("td").eq(tdNum).html(html);
     });
 }
 
 
-//모의고사 문제은행 패턴
+//모의고사 문제은행 목록검색 - 전체가져오기 패턴 셀렉트박스
 function getExamPatternSelectbox(tagId, val) {
     selectboxService.selectPatternSelectbox(function (list) {
         var html = "<select id='selPattern' name='selPattern'  class='col-sm-3 select2 form-control custom-select'>";
@@ -672,10 +690,9 @@ function getExamPatternSelectbox(tagId, val) {
     });
 }
 
-//모의고사 문제은행 단원
-function getExamUnitSelectbox(tagId, val) {
-    selectboxService.selectUnitSelectbox(function (list) {
-        console.log(list);
+//모의고사 문제은행 목록검색 - 전체가져오기 유형 셀렉트박스
+function getTypeSelectbox(tagId, val) {
+    selectboxService.selectTypeSelectbox(function (list) {
         var html = "<select id='selUnit' name='selUnit'  class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {

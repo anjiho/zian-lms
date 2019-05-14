@@ -234,6 +234,7 @@ table {
     border-collapse: collapse
 }
 
+
 caption {
     padding-top: 1rem;
     padding-bottom: 1rem;
@@ -1859,6 +1860,10 @@ pre code {
 
 .table-hover tbody tr:hover {
     background-color: #f8f9fa
+}
+
+.table thead tr{ /*추가*/
+    background-color: #d4d4d4;
 }
 
 .table-primary, .table-primary > td, .table-primary > th {

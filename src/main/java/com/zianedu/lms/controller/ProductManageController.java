@@ -54,8 +54,8 @@ public class ProductManageController {
             mvc.setViewName("product/mokProblemBankManage");
         }else if("mokProblemBankList".equals(page_gbn)) {
             mvc.setViewName("product/mokProblemBankList");
-        }else if("modifymokProblemBank".equals(page_gbn)) {
-            mvc.setViewName("product/modifymokProblemBank");
+        }else if("modifyMokProblemBank".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokProblemBank");
         }else if("mokProblemSubjectBankList".equals(page_gbn)) {
             mvc.setViewName("product/mokProblemSubjectBankList");
         }else if("mokProblemSubjectBankManage".equals(page_gbn)) {
@@ -63,12 +63,6 @@ public class ProductManageController {
         }else if("modifyMokProblemSubjectBank".equals(page_gbn)) {
             mvc.setViewName("product/modifyMokProblemSubjectBank");
         }
-
-
-
-
-
-
         return mvc;
     }
 }

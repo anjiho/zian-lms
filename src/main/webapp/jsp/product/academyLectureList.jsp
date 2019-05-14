@@ -47,9 +47,9 @@
 
 </script>
 <input type="hidden" id="sPage" >
-<input type="hidden" id="gKey" name="gKey" >
 <div class="page-breadcrumb">
     <div class="row">
+        <input type="hidden" id="gKey" name="gKey" >
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">학원강의 목록</h4>
             <div class="ml-auto text-right">
