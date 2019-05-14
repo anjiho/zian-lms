@@ -33,7 +33,7 @@
             if(val > 0){
                 var examQuestionBankKey = get_array_values_by_name("input", "examQuestionBankKey[]");
                 for (var i=0; i<examQuestionBankKey.length; i++) {
-                    productManageService.saveProblemBankSubject(examQuestionBankKey[i], examQuesBankKey, function () {});
+                    productManageService.saveProblemBankSubject(val, examQuestionBankKey[i], function () {});
                 }
             }
         });
