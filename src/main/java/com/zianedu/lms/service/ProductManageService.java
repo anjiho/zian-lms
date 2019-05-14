@@ -956,14 +956,21 @@ public class ProductManageService extends PagingSupport {
      * @param subjectCtgKey
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void upsultProblemBankTitleInfo(int examQuestionBankSubjectKey, String subjectName, int subjectCtgKey) {
-        if ("".equals(subjectName) && subjectCtgKey == 0) return;
+    public Integer upsultProblemBankTitleInfo(int examQuestionBankSubjectKey, String subjectName, int subjectCtgKey) {
+        int resultKey = 0;
+        if ("".equals(subjectName) && subjectCtgKey == 0) return 0;
 
         if (examQuestionBankSubjectKey == 0) {
-            productManageMapper.insertTExamQuestionBankSubject(subjectName, subjectCtgKey);
+            TExamQuestionBankSubjectVO tExamQuestionBankSubjectVO = new TExamQuestionBankSubjectVO();
+            tExamQuestionBankSubjectVO.setName(subjectName);
+            tExamQuestionBankSubjectVO.setSubjectCtgKey(subjectCtgKey);
+            productManageMapper.insertTExamQuestionBankSubject(tExamQuestionBankSubjectVO);
+            resultKey = tExamQuestionBankSubjectVO.getExamQuestionBankSubjectKey();
+            //productManageMapper.insertTExamQuestionBankSubject(subjectName, subjectCtgKey);
         } else {
             productManageMapper.updateTExamQuestionBankSubject(examQuestionBankSubjectKey, subjectName, subjectCtgKey);
         }
+        return resultKey;
     }
 
     /**
