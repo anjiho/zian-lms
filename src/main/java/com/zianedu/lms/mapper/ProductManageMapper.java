@@ -124,7 +124,9 @@ public interface ProductManageMapper {
     void insertTBankSubjectQuesLink(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey, @Param("examQuesBankKey") int examQuesBankKey,
                                     @Param("pos") int pos);
 
-    void insertTExamQuestionBankSubject(@Param("name") String name, @Param("subjectCtgKey") int subjectCtgKey);
+    //void insertTExamQuestionBankSubject(@Param("name") String name, @Param("subjectCtgKey") int subjectCtgKey);
+
+    void insertTExamQuestionBankSubject(TExamQuestionBankSubjectVO tExamQuestionBankSubjectVO);
 
     void insertTBankSubjectExamLink(TBankSubjectExamLinkVO tBankSubjectExamLinkVO);
 

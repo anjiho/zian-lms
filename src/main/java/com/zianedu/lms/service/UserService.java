@@ -32,7 +32,7 @@ public class UserService {
         List<TUserVO> userList = userMapper.getUserList();
 
         if (userList.size() > 0) {
-            sql = "UPDATE T_USER SET USER_PWD = ? WHERE USER_KEY= ?";
+            sql = "UPDATE T_USER SET PWD = ? WHERE USER_KEY= ?";
             jdbcTemplate.batchUpdate(
                     sql,
                     userList,
