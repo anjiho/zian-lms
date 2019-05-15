@@ -15,7 +15,25 @@
         getSelectboxstepCtgKey("patternTable", 4404, 0);//패턴
         getSelectboxstepCtgKey("unitTable", 4405, 0);//단원
     }
-    
+
+    $(document).ready(function() {
+        $('#type2').click(function() {
+            $('#typeTable tbody tr').each(function(index){//유형
+               $(this).find("td select").eq(0).focus();
+            });
+        });
+        $('#pattern2').click(function() {
+            $('#patternTable tbody tr').each(function(index){//패턴
+                $(this).find("td select").eq(0).focus();
+            });
+        });
+        $('#unit2,#unit3').click(function() {
+            $('#unitTable tbody tr').each(function(index){//유형
+                $(this).find("td select").eq(0).focus();
+            });
+        });
+    });
+
     function mockProblemBankSave() {
         var data = new FormData();
 
@@ -46,17 +64,14 @@
                             var ctgKey = $(this).find("td select").eq(1).val();
                             basicObj.stepCtgKey = ctgKey;
                         });
-
                         $('#patternTable tbody tr').each(function(index){//패턴
                             var ctgKey = $(this).find("td select").eq(1).val();
                             basicObj.patternCtgKey = ctgKey;
                         });
-
                         $('#unitTable tbody tr').each(function(index){//단원
                             var ctgKey = $(this).find("td select").eq(2).val();
                             basicObj.unitCtgKey = ctgKey;
                         });
-
 
                         basicObj.questionImage = data.result.questionImagePath;
                         basicObj.commentaryImage = data.result.commentaryImagePath;
@@ -202,12 +217,14 @@
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <table id="typeTable">
                                                 <tbody id="typeSelList">
-                                                <td><!--옵션명selbox-->
+                                                <td>
                                                     <select class='form-control'  id='sel_type' onchange="changeExamUnit('typeTable', this.value, 1);">
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class='form-control'></select>
+                                                    <select class='form-control' id="type2">
+                                                        <option>선택</option>
+                                                    </select>
                                                 </td>
                                                 </tbody>
                                             </table>
@@ -223,7 +240,9 @@
                                                         </select>
                                                     </td>
                                                     <td>
-                                                        <select class='form-control'></select>
+                                                        <select class='form-control' id="pattern2">
+                                                            <option>선택</option>
+                                                        </select>
                                                     </td>
                                                 </tbody>
                                             </table>
@@ -239,10 +258,14 @@
                                                     </select>
                                                 </td>
                                                 <td>
-                                                    <select class='form-control'></select>
+                                                    <select class='form-control' id="unit2">
+                                                        <option>선택</option>
+                                                    </select>
                                                 </td>
                                                 <td>
-                                                    <select class='form-control'></select>
+                                                    <select class='form-control' id="unit3">
+                                                        <option>선택</option>
+                                                    </select>
                                                 </td>
                                                 </tbody>
                                             </table>

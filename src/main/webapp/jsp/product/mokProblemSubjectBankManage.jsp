@@ -23,20 +23,23 @@
         getSelectboxstepCtgKey(tableId, val, tdNum);//단원
     }
 
-    //강의목록 순서변경저장
+    //저장
     function mockSubjectBanksave() {
         var subjectName = $("#name").val();
         var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
 
         //상단내용 저장
-        productManageService.upsultProblemBankTitleInfo(0, subjectName, subjectCtgKey, function (val) {
-            if(val > 0){
-                var examQuestionBankKey = get_array_values_by_name("input", "examQuestionBankKey[]");
-                for (var i=0; i<examQuestionBankKey.length; i++) {
-                    productManageService.saveProblemBankSubject(val, examQuestionBankKey[i], function () {});
+        if(confirm('저장 하시겠습니까?')){
+            productManageService.upsultProblemBankTitleInfo(0, subjectName, subjectCtgKey, function (val) {
+                if(val > 0){
+                    var examQuestionBankKey = get_array_values_by_name("input", "examQuestionBankKey[]");
+                    for (var i=0; i<examQuestionBankKey.length; i++) {
+                        productManageService.saveProblemBankSubject(val, examQuestionBankKey[i], function () {});
+                    }
                 }
-            }
-        });
+                isReloadPage();
+            });
+        }
     }
     
 </script>
@@ -250,8 +253,8 @@
 </script>
 <!--모의고사 문제은행 과목등록 -->
 <div class="modal fade" id="sModal2" tabindex="-1" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width:1000px;">
+    <div class="modal-dialog" role="document" style="max-width: 1000px;">
+        <div class="modal-content" >
             <div class="modal-header">
                 <h5 class="modal-title">모의고사 문제은행 문제목록</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

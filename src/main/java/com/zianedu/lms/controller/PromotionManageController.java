@@ -20,6 +20,25 @@ public class PromotionManageController {
     public ModelAndView promotionManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
+        if("packageManage".equals(page_gbn)) {
+            mvc.setViewName("promotion/packageManage");
+        }else if("packageList".equals(page_gbn)) {
+            mvc.setViewName("promotion/packageList");
+        }else if("modifypackage".equals(page_gbn)) {
+            mvc.setViewName("promotion/modifypackage");
+        }else if("zianPassManage".equals(page_gbn)) {
+            mvc.setViewName("promotion/zianPassManage");
+        }else if("zianPassList".equals(page_gbn)) {
+            mvc.setViewName("promotion/zianPassList");
+        }else if("modifyZianPass".equals(page_gbn)) {
+            mvc.setViewName("promotion/modifyZianPass");
+        }else if("yearMemberManage".equals(page_gbn)) {
+            mvc.setViewName("promotion/yearMemberManage");
+        }else if("yearMemberList".equals(page_gbn)) {
+            mvc.setViewName("promotion/yearMemberList");
+        }else if("modifyYearMember".equals(page_gbn)) {
+            mvc.setViewName("promotion/modifyYearMember");
+        }
 
         return mvc;
     }

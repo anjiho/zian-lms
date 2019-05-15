@@ -65,7 +65,7 @@ function getVideoOptionTypeList(tag_id, val) {
 function getAllOptionSelectboxAddTag(tagId, val) {
     selectboxService.getVideoOptionTypeList(function (list) {
         var html = "<select id='selOption' name='selOption[]' onchange='' class='form-control'>";
-        html += "<option value=''>선택하세요</option>";
+        html += "<option value=''>선택</option>";
         for (var i=1; i<13; i++) {
             if (i == val) {
                 html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -89,7 +89,7 @@ function getAllOptionSelectboxAddTag(tagId, val) {
 function getAllListOptionSelectbox(val) {
     var optionName = "";
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     for (var i=1; i<13; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -108,7 +108,7 @@ function getAllListOptionSelectbox(val) {
 function getCategoryList(tag_id, val) {
     selectboxService.getCategoryList(val, function (list) {
         var html = "<select id='sel_1' onchange='' class='form-control'>";
-            html += "<option value=''>선택하세요</option>";
+            html += "<option value=''>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].ctgKey == val) {
                 html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
@@ -157,7 +157,7 @@ function getSelectboxListForCtgKey(tag_id, val) {
 //모의고사 문제은행 출제구분 divisionCtgKey
 function getSelectboxListdivisionCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select id='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-3 select2 form-control custom-select\">";
+        var html = "<select idㄷ='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-5 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {
@@ -175,7 +175,7 @@ function getSelectboxListdivisionCtgKey(tag_id, val, val2) {
 function getNewSelectboxListForCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='selClassGroupCtgKey' name='classGroupCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -192,7 +192,7 @@ function getNewSelectboxListForCtgKey(tag_id, val, val2) {
 function getNewSelectboxListForCtgKey2(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='selSubjectCtgKey' name='subjectCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -209,7 +209,24 @@ function getNewSelectboxListForCtgKey2(tag_id, val, val2) {
 function getNewSelectboxListForCtgKey3(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='selStepCtgKey' name='stepCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+//급수,과목,유형
+function getNewSelectboxListForCtgKey4(tag_id, val, val2) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='selSubjectCtgKey1' name='subjectCtgKey' class=\"col-sm-5 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -260,7 +277,7 @@ function getLectureCountSelectbox(tag_id,val) {
 //수강일수
 function getClassRegistraionDaySelectbox(tag_id,val) {
     selectboxService.getLectureCountSelectbox(function (list) {
-        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        var html = "<select id='sel_1' onchange='' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i] == val) {
@@ -294,7 +311,7 @@ function selectExamSearchSelectbox(tag_id,val) {
 //시험대비년도 셀레긑박스
 function getExamPrepareSelectbox(tag_id,val) {
     selectboxService.getExamPrepareSelectbox(function (list) {
-        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        var html = "<select id='sel_1' onchange='' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i] == val) {
@@ -330,7 +347,7 @@ function getLectureStatusSelectbox(tag_id,val) {
 function getEmphasisSelectbox(tagId, val) {
     selectboxService.getEmphasisList(function (list) {
         var html = "<select id='sel_emphasis' name='emphasis' class='col-sm-3 select2 form-control custom-select'>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -347,7 +364,7 @@ function getEmphasisSelectbox(tagId, val) {
 function getVideoOptionTypeSelectbox(val) {
     var optionName = "";
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     for (var i = 100; i < 103; i++) {
         if(i == 100) optionName = 'VOD';
         else if(i == 101) optionName = 'Mobile';
@@ -364,7 +381,7 @@ function getVideoOptionTypeSelectbox(val) {
 
 function getOptionSelectbox(val) {
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     for (var i=1; i<13; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -378,7 +395,7 @@ function getOptionSelectbox(val) {
 
 function getOptionSelectboxAddTag(val, tagId) {
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     for (var i=1; i<13; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -393,7 +410,7 @@ function getOptionSelectboxAddTag(val, tagId) {
 function getCategoryNoTag(tableId, val, tdNum) {
     var nextTdNum = Number(tdNum)+2;
     var html = "<select id='sel_category' name='selCategory[]' onchange='changeCategory(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class='form-control'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     selectboxService.getCategoryList(val, function (list) {
         for (var i=0; i<list.length; i++) {
             html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
@@ -408,7 +425,7 @@ function getCategoryNoTag(tableId, val, tdNum) {
 function getCategoryNoTag2(tableId, val, tdNum) {
     var nextTdNum = Number(tdNum)+2;
     var html = "<select id='sel_category' name='selCategory[]' onchange='changeCategory(this.value"+ ","+ '"' + tableId + '"' + ","+ '"' + nextTdNum + '"' + ");' class='form-control'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     selectboxService.getCategoryList(val, function (list) {
         for (var i=0; i<list.length; i++) {
             html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
@@ -423,7 +440,7 @@ function getCategoryNoTag2(tableId, val, tdNum) {
 function getMockCategoryList(tagId, val) {
     selectboxService.getCategoryList(688, function (list) {
         var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if(list[i].ctgKey == val){
                 html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
@@ -439,7 +456,7 @@ function getMockCategoryList(tagId, val) {
 
 function defaultCategorySelectbox() {
     var html = "<select id='sel_category' name='selCategory[]' onchange='' class='form-control'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     html += "</select>";
     return html;
 }
@@ -448,7 +465,7 @@ function defaultCategorySelectbox() {
 function getSelectboxListForCtgKeyNoTag(tableId, val, tdNum) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='selSubjectKey' name='selSubjectByTeacher[]' onchange='injectSubjectKey(this.value)' class='form-control'>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -464,7 +481,7 @@ function getSelectboxListForCtgKeyNoTag(tableId, val, tdNum) {
 function getSelectboxListForCtgKeyNoTag2(tableId, val, tdNum) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='selSubjectKey' name='selSubjectByTeacher[]' onchange='injectSubjectKey(this.value)' class='form-control'>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -504,7 +521,7 @@ function selectTeacherSelectboxNoTag2(tableId, tdNum) {
 function getMockExamSearchTypeSelectbox(tagId) {
     selectboxService.selectExamSearchSelectbox(function (list) {
         var html = "<select id='searchType' class='form-control'>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
         }
@@ -516,7 +533,7 @@ function getMockExamSearchTypeSelectbox(tagId) {
 function getProductSearchTypeSelectbox(tagId) {
     selectboxService.getVideoSearchTypeList(function (list) {
         var html = "<select id='searchType' class='form-control'>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
         }
@@ -528,7 +545,7 @@ function getProductSearchTypeSelectbox(tagId) {
 function getExamYearSelectbox(tagId) {
     selectboxService.getExamPrepareSelectbox(function (list) {
         var html = "<select id='selYear' class='form-control' onchange=''>";
-        html += "<option value='' selected>선택하세요</option>";
+        html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             html += "<option value="+list[i]+">"+ list[i]+"년</option>";
         }
@@ -539,7 +556,7 @@ function getExamYearSelectbox(tagId) {
 
 function getMonthsSelectbox(tagId) {
     var html = "<select id='selMonth' class='form-control'>";
-    html += "<option value=''>선택하세요</option>";
+    html += "<option value=''>선택</option>";
     for (var i=1; i<13; i++) {
         html += "<option value="+i+">"+ i +"월</option>";
     }
@@ -551,8 +568,8 @@ function getMonthsSelectbox(tagId) {
 function getMockYearSelectbox(tagId, val) {
     var yearAgo   = getYearAgo(3650);
     var yearAfter =  getYearAfter(4015);
-    var html = "<select id='examYear' name='examYear' class='col-sm-3 select2 form-control custom-select'>";
-    html += "<option value=''>선택하세요</option>";
+    var html = "<select id='examYear' name='examYear' class='col-sm-5 select2 form-control custom-select'>";
+    html += "<option value=''>선택</option>";
     for (var i=yearAgo; i<yearAfter; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"년</option>";
@@ -606,8 +623,8 @@ function getTimeMinuteSelectbox(tagId, val) {
 
 //모의고사문제은행 정답 셀렉트박스
 function getAnswerSelectbox(tagId, val) {
-    var html = "<select id='answer' name='answer' class='col-sm-3 select2 form-control custom-select'>";
-    html += "<option value=''>선택하세요</option>";
+    var html = "<select id='answer' name='answer' class='col-sm-5 select2 form-control custom-select'>";
+    html += "<option value=''>선택</option>";
     for (var i=1; i<6; i++) {
         if(i == val){
             html += "<option value="+i+" selected>"+ i +"</option>";
@@ -622,7 +639,7 @@ function getAnswerSelectbox(tagId, val) {
 //모의고사 문제은행 난이도
 function getExamLevelSelectbox(tagId, val) {
     selectboxService.selectExamLevelSelectbox(function (list) {
-        var html = "<select id='examLevel' name='examLevel'  class='col-sm-3 select2 form-control custom-select'>";
+        var html = "<select id='examLevel' name='examLevel'  class='col-sm-5 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
@@ -676,7 +693,7 @@ function getSelectboxstepCtgKey2(tableId, val, tdNum, val2) {
 //모의고사 문제은행 목록검색 - 전체가져오기 패턴 셀렉트박스
 function getExamPatternSelectbox(tagId, val) {
     selectboxService.selectPatternSelectbox(function (list) {
-        var html = "<select id='selPattern' name='selPattern'  class='col-sm-3 select2 form-control custom-select'>";
+        var html = "<select id='selPattern' name='selPattern'  class='col-sm-5 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].ctgKey == val) {
@@ -693,7 +710,7 @@ function getExamPatternSelectbox(tagId, val) {
 //모의고사 문제은행 목록검색 - 전체가져오기 유형 셀렉트박스
 function getTypeSelectbox(tagId, val) {
     selectboxService.selectTypeSelectbox(function (list) {
-        var html = "<select id='selUnit' name='selUnit'  class='col-sm-3 select2 form-control custom-select'>";
+        var html = "<select id='selUnit' name='selUnit'  class='col-sm-5 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].ctgKey == val) {
@@ -705,4 +722,19 @@ function getTypeSelectbox(tagId, val) {
         html += "</select>";
         innerHTML(tagId, html);
     });
+}
+
+function deviceLimitSelectbox(tagId, val) {
+    var html = "<select id='deviceLimitCount' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='0'>무제한</option>";
+    for (var i=1; i<11; i++) {
+        if(i == val){
+            html += "<option value="+i+" selected>"+ i +"</option>";
+        }else{
+            html += "<option value="+i+">"+ i +"</option>";
+        }
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
 }
