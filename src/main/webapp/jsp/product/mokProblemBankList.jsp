@@ -182,9 +182,9 @@
                             <th scope="col" width="8%">코드</th>
                             <th scope="col" width="8%">출제구분</th>
                             <th scope="col" width="8%">출제년도</th>
-                            <th scope="col" width="8%">과목</th>
+                            <th scope="col" width="9%">과목</th>
                             <th scope="col" width="9%">난이도</th>
-                            <th scope="col" width="9%">유형</th>
+                            <th scope="col" width="10%">유형</th>
                             <th scope="col" width="20%">패턴</th>
                             <th scope="col" width="35%">단원</th>
                         </tr>

@@ -23,20 +23,22 @@
         getSelectboxstepCtgKey(tableId, val, tdNum);//단원
     }
 
-    //강의목록 순서변경저장
+    //저장
     function mockSubjectBanksave() {
         var subjectName = $("#name").val();
         var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
 
         //상단내용 저장
-        productManageService.upsultProblemBankTitleInfo(0, subjectName, subjectCtgKey, function (val) {
-            if(val > 0){
-                var examQuestionBankKey = get_array_values_by_name("input", "examQuestionBankKey[]");
-                for (var i=0; i<examQuestionBankKey.length; i++) {
-                    productManageService.saveProblemBankSubject(val, examQuestionBankKey[i], function () {});
+        if(confirm('저장 하시겠습니까?')){
+            productManageService.upsultProblemBankTitleInfo(0, subjectName, subjectCtgKey, function (val) {
+                if(val > 0){
+                    var examQuestionBankKey = get_array_values_by_name("input", "examQuestionBankKey[]");
+                    for (var i=0; i<examQuestionBankKey.length; i++) {
+                        productManageService.saveProblemBankSubject(val, examQuestionBankKey[i], function () {});
+                    }
                 }
-            }
-        });
+            });
+        }
     }
     
 </script>

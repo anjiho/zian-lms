@@ -27,6 +27,7 @@
                 innerValue("answer3Reason", selList.answer3Reason);
                 innerValue("answer4Reason", selList.answer4Reason);
                 innerValue("answer5Reason", selList.answer5Reason);
+
                 if (selList.questionImage != null) {
                     $('.custom-file-control').html(fn_clearFilePath(selList.questionImage));//리스트이미지
                 }

@@ -206,6 +206,24 @@ function getNewSelectboxListForCtgKey2(tag_id, val, val2) {
 }
 
 //급수,과목,유형
+function getNewSelectboxListForCtgKey4(tag_id, val, val2) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select id='selSubjectCtgKey1' name='subjectCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택하세요</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+
+//급수,과목,유형
 function getNewSelectboxListForCtgKey3(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
         var html = "<select id='selStepCtgKey' name='stepCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
