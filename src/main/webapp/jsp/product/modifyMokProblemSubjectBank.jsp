@@ -25,7 +25,6 @@
 
 
         productManageService.getProblemBankSubjectList(bankSubjectKey, function(info) {
-            console.log(info);
             var resultInfo = info.resultInfo;
             innerHTML("productType", resultInfo.examQuestionBankSubjectKey);
             innerValue("name",resultInfo.name);
@@ -34,8 +33,9 @@
             var resultList = info.resultList;
             if (resultList.length > 0) {
                 dwr.util.addRows("dataList", resultList, [
+
                     function(data) {return "<input type='hidden' name='examQuestionBankKey[]' value=''>"},//코드
-                    function(data) {return "<input type='hidden' name='questionBankKey[]' value='"+ data.examQuesBankKey +"'>"},//코드
+                    function(data) {return "<input type='hidden' name='bankSubjectQuesLinkKey[]' value='"+ data.bankSubjectQuesLinkKey +"'>"},//코드
                     function(data) {return data.examQuesBankKey},//코드
                     function(data) {return data.className},//출제구분
                     function(data) {return data.examYear+"년"},//출제년도
@@ -44,7 +44,7 @@
                     function(data) {return data.typeName},//유형
                     function(data) {return data.patternName},//패턴
                     function(data) {return data.unitName},//단원
-                    function(data) {return "<button type='button' onclick='deleteTableRow("+ data.examQuesBankKey +");' class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function(data) {return "<button type='button' onclick='deleteTableRow("+ data.bankSubjectQuesLinkKey +");' class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#dataList tr').each(function(){
                     var tr = $(this);
@@ -60,10 +60,11 @@
     }
 
     //리스트 삭제
-    function deleteTableRow(examQuesBankKey) {//bankSubjectQuesLinkKey
-        alert(examQuesBankKey);
+    function deleteTableRow(examQuesBankKey) {
         if(confirm('삭제 하시겠습니까?')){
-            productManageService.deleteProblemBankSubjectList(examQuesBankKey, function() {});
+            productManageService.deleteProblemBankSubjectList(examQuesBankKey, function() {
+                isReloadPage();
+            });
         }
     }
 
@@ -83,6 +84,7 @@
                         }
                     }
                 }
+                isReloadPage();
             });
         }
     }
@@ -288,18 +290,18 @@
 
             //
             var changeNumberArr = new Array();
-            var questionBankKey = get_array_values_by_name("input", "questionBankKey[]");
-            for (var i=0; i<questionBankKey.length; i++) {
-                if(questionBankKey[i] > 0){
+            var bankSubjectQuesLinkKey = get_array_values_by_name("input", "bankSubjectQuesLinkKey[]");
+            for (var i=0; i<bankSubjectQuesLinkKey.length; i++) {
+                if(bankSubjectQuesLinkKey[i] > 0){
                     var data = {
-                        key : questionBankKey[i],
+                        key : bankSubjectQuesLinkKey[i],
                         pos : i
                     };
                 }
                 changeNumberArr.push(data);
             }
             console.log(changeNumberArr);
-            //productManageService.changeNumberProblemBankSubjectList(changeNumberArr, function () {});
+            productManageService.changeNumberProblemBankSubjectList(changeNumberArr, function () {});
         }
     });
 
@@ -312,8 +314,8 @@
 </script>
 <!--모의고사 문제은행 과목등록 팝업창-->
 <div class="modal fade" id="sModal2" tabindex="-1" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width:1000px;">
+    <div class="modal-dialog" role="document" style="max-width: 1000px;">
+        <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">모의고사 문제은행 문제목록</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">

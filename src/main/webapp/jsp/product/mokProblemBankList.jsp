@@ -57,16 +57,13 @@
             examYear: examYear,
             subjectCode: subjectCode
         };
-        console.log(searchVO);
-
         productManageService.getProblemBankListCount(searchVO, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-
             productManageService.getProblemBankList(searchVO, function (selList) {
-                console.log(selList);
                 if (selList.length == 0) return;
                 dwr.util.addRows("dataList", selList, [
+                    function(data) {return listNum--;},
                     function(data) {return data.examQuestionBankKey == 0 ? "-" : "<a href='javascript:void(0);' color='blue' onclick='goModifyProblemBank(" + data.examQuestionBankKey + ");'>" +  data.examQuestionBankKey + "</a>";},
                     function(data) {return data.className == null ? "-" : data.className;},
                     function(data) {return data.examYear == null ? "-" : data.examYear;},
@@ -179,6 +176,7 @@
                     <table class="table table-hover">
                         <thead>
                         <tr>
+                            <th scope="col" style="width: 5%;">No.</th>
                             <th scope="col" width="8%">코드</th>
                             <th scope="col" width="8%">출제구분</th>
                             <th scope="col" width="8%">출제년도</th>

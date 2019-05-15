@@ -28,10 +28,10 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getMockExamList(sPage, pagingListCount(), searchType, searchText, function (selList) {
-                console.log(selList);
                 if (selList.length == 0) return;
                 dwr.util.addRows("dataList", selList, [
-                    function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goModifyMockExam(" + data.examKey + ");'>" +  data.name + "</a>";},
+                    function(data) {return listNum--;},
+                    function(data) {return "<a href='javascript:void(0);' style='float:left' color='blue' onclick='goModifyMockExam(" + data.examKey + ");'>" +  data.name + "</a>";},
                     function(data) {return split_minute_getDay(data.acceptStartDate)+"<br>"+split_minute_getDay(data.acceptEndDate);},
                     function(data) {return split_minute_getDay(data.onlineStartDate)+"<br>"+split_minute_getDay(data.onlineEndDate);},
                     function(data) {return data.onlineTime+'분';},
@@ -77,6 +77,7 @@
                     <input type="hidden" id="examKey" name="examKey" value="">
                     <thead>
                     <tr>
+                        <th scope="col" style="width: 5%;">No.</th>
                         <th scope="col" style="width: 50%;">시험명</th>
                         <th scope="col" style="width: 15%;">시험신청기간</th>
                         <th scope="col" style="width: 15%;">시험기간</th>

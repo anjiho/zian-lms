@@ -492,6 +492,9 @@
                     <!-- 2.옵션 Tab -->
                     <h3>옵션</h3>
                     <section>
+                        <div class="float-right mb-3">
+                            <button type="button" class="btn btn-info btn-sm" onclick="addOption();">추가</button>
+                        </div>
                         <div id="section2">
                             <table class="table" id="optionTable">
                                 <input type="hidden" value="0" name="goodsTypeName">
@@ -533,9 +536,6 @@
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="mx-auto" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info mx-auto" onclick="addOption();">추가</button>
-                            </div>
                         </div>
                     </section>
                     <!-- //2.옵션 Tab -->

@@ -3,9 +3,7 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
-
 <script>
-
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 1);
@@ -15,13 +13,6 @@
         innerValue("gKey", gKey);
         goPage("productManage","modifyPlayManage");
     }
-
-    // function enterkey() {
-    //     if (window.event.keyCode == 13) {
-    //        fn_search('new');
-    //     }
-    // }
-
 
     function fn_search(val) {
         var paging = new Paging();
@@ -45,7 +36,6 @@
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return listNum--;},
-                                // function(data) {return i+1;},
                                 function(data) {return cmpList.GKey;},
                                 function(data) {return goosNameHtml;},
                                 function(data) {return split_minute_getDay(cmpList.indate);},
@@ -65,11 +55,8 @@
 
     function contentYn(val) {
         var content = "";
-        if(val == '1'){
-            content = 'O';
-        }else {
-            content = 'X';
-        }
+        if(val == '1') content = 'O';
+        else content = 'X';
         return content;
     }
 

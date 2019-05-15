@@ -14,6 +14,7 @@
     }
 
     function fn_search(val) {
+
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
         var searchType = getSelectboxValue("searchType");   //검색 조건 셀렉트박스 값
@@ -30,8 +31,9 @@
             productManageService.getMockExamQuestionBankSubjectList(sPage, pagingListCount(), searchType, searchText, function (selList) {
                 if (selList.length == 0) return;
                 dwr.util.addRows("dataList", selList, [
+                    function(data) {return listNum--;},
                     function(data) {return data.ctgName;},
-                    function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goModifyBankSubject(" + data.examQuestionBankSubjectKey + ");'>" +  data.name + "</a>";},
+                    function(data) {return "<a href='javascript:void(0);' style='float:left' color='blue' onclick='goModifyBankSubject(" + data.examQuestionBankSubjectKey + ");'>" +  data.name + "</a>";},
                     function(data) {return data.questionNumber;},
                 ], {escapeHtml:false});
             });
@@ -75,6 +77,7 @@
                 <table class="table table-hover text-center">
                     <thead>
                     <tr>
+                        <th scope="col" style="width: 5%;">No.</th>
                         <th scope="col" style="width: 5%;">과목</th>
                         <th scope="col" style="width: 45%;">이름</th>
                         <th scope="col" style="width: 10%;">문제수</th>

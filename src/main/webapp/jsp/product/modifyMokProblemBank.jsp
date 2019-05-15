@@ -13,7 +13,7 @@
         productManageService.getProblemBankDetailInfo(examQuestionBankKey, function (selList) {
             console.log(selList);
             if(selList){
-                innerValue("dspDate", selList.dspDate);//노출날짜
+                innerValue("dspDate", split_minute_getDay(selList.dspDate));//노출날짜
                 getSelectboxListdivisionCtgKey("l_examType", 4390, selList.divisionCtgKey);//출제구분
                 getMockYearSelectbox("l_examYearGroup",selList.examYear);//출제년도
                 innerValue("subjectCode", selList.subjectCode);

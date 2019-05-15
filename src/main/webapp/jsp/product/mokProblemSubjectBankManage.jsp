@@ -37,6 +37,7 @@
                         productManageService.saveProblemBankSubject(val, examQuestionBankKey[i], function () {});
                     }
                 }
+                isReloadPage();
             });
         }
     }
@@ -252,8 +253,8 @@
 </script>
 <!--모의고사 문제은행 과목등록 -->
 <div class="modal fade" id="sModal2" tabindex="-1" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog" role="document">
-        <div class="modal-content" style="width:1000px;">
+    <div class="modal-dialog" role="document" style="max-width: 1000px;">
+        <div class="modal-content" >
             <div class="modal-header">
                 <h5 class="modal-title">모의고사 문제은행 문제목록</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
