@@ -19,24 +19,6 @@
 
 </style>
 <script>
-    // $(function() {
-    //     $('#sidebarnav li').on('click', function (e) {
-    //         if ($(this).children('ul').hasClass('in')) {
-    //             $(this).children("a").addClass('');
-    //             $(this).children("ul").removeClass('in');
-    //         } else {
-    //             $(this).children("a").addClass('active');
-    //             $(this).children("ul").addClass('in');
-    //         }
-    //     });
-    //     $('.sidebar-item > a').on('click', function() {
-    //         $(this).children("a").addClass('active');
-    //         $(this).children("ul").addClass('in');
-    //         $(this).parent().removeClass("active");
-    //         //$('.sidebar-item').find('a').removeClass('active');
-    //
-    //     });
-    // });
 </script>
 <aside class="left-sidebar" data-sidebarbg="skin5">
     <!-- Sidebar scroll-->
@@ -67,14 +49,14 @@
                         <!--   -->
                         <li class="sidebar-item" id="menu-0-1"><a href="#" onclick="goPage('dataManage', 'subjectSave');" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 과목관리 </span></a></li>
                         <!--<li class="sidebar-item"><a href="#"  class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 배너관리 </span></a></li>-->
-                        <hr>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item" id="menu-0-2"><a href="void(0)" onclick="goPage('dataManage', 'bannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">배너관리</span></a></li>
                         <li class="sidebar-item" id="menu-0-3"><a href="void(0)" onclick="goPage('dataManage', 'sideBannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">사이드바배너관리</span></a></li>
-                        <hr>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                         <!--<li class="sidebar-item"><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 일정/검색어관리 </span></a></li>-->
                         <li class="sidebar-item" id="menu-0-4"><a href="void(0)" onclick="goPage('dataManage', 'examplanSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 시험일정관리 </span></a></li>
                         <li class="sidebar-item" id="menu-0-5"><a href="void(0)" onclick="goPage('dataManage', 'searchSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 검색어관리 </span></a></li>
-                        <hr>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
                 <li class="sidebar-item"  id="menu-1"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">상품관리</span></a>
@@ -102,21 +84,20 @@
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemSubjectBankManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">모의고사 문제은행 과목등록</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
-
-
-
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-border-inside"></i><span class="hide-menu">프로모션상품관리</span></a>
+                <li class="sidebar-item" id="menu-2"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">프로모션상품관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 패키지 상품관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 패키지목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 패키지등록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 지안패스 상품관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 지안패스 페이지 관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 지안패스 관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 연간회원제 상품관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 연간회원제 페이지관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 연간회원제 관리 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'packageList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 패키지목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'packageManage'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 패키지상품 등록 </span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">지안패스 목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">지안패스 등록</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <!--<li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu">연간회원제 페이지 목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu">연간회원제 페이지 등록</span></a></li>-->
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">연간회원제 목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">연간회원제 등록</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span class="hide-menu">주문관리</span></a>

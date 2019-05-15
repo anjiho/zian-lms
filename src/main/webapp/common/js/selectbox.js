@@ -157,7 +157,7 @@ function getSelectboxListForCtgKey(tag_id, val) {
 //모의고사 문제은행 출제구분 divisionCtgKey
 function getSelectboxListdivisionCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select id='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-5 select2 form-control custom-select\">";
+        var html = "<select idㄷ='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-5 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {
@@ -277,7 +277,7 @@ function getLectureCountSelectbox(tag_id,val) {
 //수강일수
 function getClassRegistraionDaySelectbox(tag_id,val) {
     selectboxService.getLectureCountSelectbox(function (list) {
-        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        var html = "<select id='sel_1' onchange='' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i] == val) {
@@ -311,7 +311,7 @@ function selectExamSearchSelectbox(tag_id,val) {
 //시험대비년도 셀레긑박스
 function getExamPrepareSelectbox(tag_id,val) {
     selectboxService.getExamPrepareSelectbox(function (list) {
-        var html = "<select id='sel_1' onchange='' class='form-control'>";
+        var html = "<select id='sel_1' onchange='' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i] == val) {
@@ -722,4 +722,19 @@ function getTypeSelectbox(tagId, val) {
         html += "</select>";
         innerHTML(tagId, html);
     });
+}
+
+function deviceLimitSelectbox(tagId, val) {
+    var html = "<select id='deviceLimitCount' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='0'>무제한</option>";
+    for (var i=1; i<11; i++) {
+        if(i == val){
+            html += "<option value="+i+" selected>"+ i +"</option>";
+        }else{
+            html += "<option value="+i+">"+ i +"</option>";
+        }
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
 }

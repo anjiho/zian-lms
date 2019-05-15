@@ -5,16 +5,15 @@
 <script>
     function init() {
         getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-1', 13);
+        menuActive('menu-2', 1);
     }
 
-        function goModifyBankSubject(bankSubjectKey) {
-        innerValue("bankSubjectKey", bankSubjectKey);
-        goPage("productManage","modifyMokProblemSubjectBank");
+    function goModifyPackage(gKey) {
+        innerValue("gKey", gKey);
+        goPage('promotionManage', 'modifypackage');
     }
 
     function fn_search(val) {
-
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
         var searchType = getSelectboxValue("searchType");   //검색 조건 셀렉트박스 값
@@ -25,16 +24,21 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        productManageService.getMockExamQuestionBankSubjectListCount(searchType, searchText, function (cnt) {
-            paging.count(sPage, cnt, pagingListCount(), pagingListCount(), comment.blank_list);
+        productManageService.getProductListCount(searchType, searchText, "PACKAGE", function (cnt) {
+            paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getMockExamQuestionBankSubjectList(sPage, pagingListCount(), searchType, searchText, function (selList) {
+            productManageService.getProductList(sPage, pagingListCount(), searchType, searchText, "PACKAGE", function (selList) {
                 if (selList.length == 0) return;
+                console.log(selList);
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return listNum--;},
-                    function(data) {return data.ctgName;},
-                    function(data) {return "<a href='javascript:void(0);' style='float:left' color='blue' onclick='goModifyBankSubject(" + data.examQuestionBankSubjectKey + ");'>" +  data.name + "</a>";},
-                    function(data) {return data.questionNumber;},
+                    // function(data) {return i+1;},
+                    function(data) {return data.GKey;},
+                    function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyPackage(" + data.GKey + ");'>" + data.goodsName + "</a>";},
+                    function(data) {return split_minute_getDay(data.indate);},
+                    function(data) {return data.isShow == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.isSell == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.isFree == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                 ], {escapeHtml:false});
             });
         });
@@ -42,15 +46,15 @@
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
-    <input type="hidden" id="bankSubjectKey"  name="bankSubjectKey">
+    <input type="hidden" id="gKey"  name="gKey">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">모의고사 문제은행 과목목록</h4>
+            <h4 class="page-title">패키지 목록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">모의고사 문제은행 과목목록</li>
+                        <li class="breadcrumb-item">패키지프로모션 관리</li>
+                        <li class="breadcrumb-item active" aria-current="page">패키지 목록</li>
                     </ol>
                 </nav>
             </div>
@@ -78,9 +82,12 @@
                     <thead>
                     <tr>
                         <th scope="col" style="width: 5%;">No.</th>
-                        <th scope="col" style="width: 5%;">과목</th>
-                        <th scope="col" style="width: 45%;">이름</th>
-                        <th scope="col" style="width: 10%;">문제수</th>
+                        <th scope="col" style="width: 5%;">CODE</th>
+                        <th scope="col" style="width: 45%;">상품명</th>
+                        <th scope="col" style="width: 10%;">등록일</th>
+                        <th scope="col" style="width: 5%;">노출</th>
+                        <th scope="col" style="width: 5%;">판매</th>
+                        <th scope="col" style="width: 5%;">무료</th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>
