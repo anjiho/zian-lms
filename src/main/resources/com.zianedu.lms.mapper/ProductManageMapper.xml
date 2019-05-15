@@ -338,6 +338,7 @@
 
     <select id="selectTBankSubjectQuesLinkList" resultType="ProblemBankSubjectDTO">
         SELECT
+        	A.BANK_SUBJECT_QUES_LINK_KEY,
 			A.EXAM_QUES_BANK_KEY,
 			(SELECT name FROM T_CATEGORY WHERE CTG_KEY = B.DIVISION_CTG_KEY) as class_name,
             B.EXAM_YEAR,
