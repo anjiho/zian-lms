@@ -5,6 +5,8 @@ import lombok.Data;
 @Data
 public class ProblemBankSubjectDTO {
 
+    private int bankSubjectQuesLinkKey;
+
     private int examQuesBankKey;
 
     private int unitCtgKey;
@@ -12,6 +14,8 @@ public class ProblemBankSubjectDTO {
     private int examYear;
 
     private int examLevel;
+
+    private String className;
 
     private String unitName;
 
