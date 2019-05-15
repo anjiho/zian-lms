@@ -259,7 +259,7 @@
 			AND A.EXAM_QUESTION_BANK_SUBJECT_KEY = #{searchText}
 		</if>
 		<if test="searchType == 'title'">
-			AND B.NAME LIKE '%'||#{searchText}||'%'
+			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 	</select>
 
