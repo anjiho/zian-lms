@@ -85,11 +85,12 @@ function getAllOptionSelectboxAddTag(tagId, val) {
     });
 }
 
-//모의고사상품 리스트 셀렉트박스
+//모의고사상품 & 리스트 셀렉트박스
 function getAllListOptionSelectbox(val) {
     var optionName = "";
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
-    html += "<option value=''>선택</option>";
+        html += "<option value=''>선택</option>";
+
     for (var i=1; i<13; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -97,16 +98,18 @@ function getAllListOptionSelectbox(val) {
             html += "<option value="+i+">"+ i +"개월</option>";
         }
     }
-    for(var j=100; i<103; i++){
-        if (i == val) {
-            html += "<option value="+i+" selected>"+ i +"개월</option>";
-        } else {
-            html += "<option value="+i+">"+ i +"개월</option>";
-        }
+
+    for (var i = 100; i < 103; i++) {
+
+        if(i == 100) optionName = 'VOD';
+        else if(i == 101) optionName = 'Mobile';
+        else optionName = 'VOD + Mobile';
+
+        if (i == val) html += "<option value="+i+" selected>" + optionName + "</option>";
+        else html += "<option value="+i+">" + optionName + "</option>";
+
     }
-    html += "<option value='100' selected>VOD</option>";
-    html += "<option value='101' selected>MOBILE</option>";
-    html += "<option value='102' selected>VOD + MOBILE</option>";
+
     html += "</select>";
     return html;
 }
@@ -164,7 +167,7 @@ function getSelectboxListForCtgKey(tag_id, val) {
 //모의고사 문제은행 출제구분 divisionCtgKey
 function getSelectboxListdivisionCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select idㄷ='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-5 select2 form-control custom-select\">";
+        var html = "<select id='divisionCtgKey' name='divisionCtgKey' onchange='' class=\"col-sm-5 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {

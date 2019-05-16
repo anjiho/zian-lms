@@ -18,11 +18,11 @@
 
         /* 지안패스 정보 가져오기 */
         promotionManageService.getPackageDetailInfo(gKey, function(info) {
-            console.log(info);
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
             innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
+            isCheckboxByNumber("isSell", productInfo.isSell);//판매
             /**
              * 옵션정보 가져오기
              */
@@ -227,6 +227,8 @@
         basicObj.calculateRate = 0;
         basicObj.isFreebieDeliveryFree = 0;
         basicObj.isQuickDelivery = 0;
+        if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
+        else basicObj.isSell = '0';
         /*  2.옵션 obj */
         var optionArray = new Array();
         $('#optionTable tbody tr').each(function(index){
@@ -283,7 +285,7 @@
         console.log(onlineLecInfo);
         if(confirm("수정 하시겠습니까?")) {
             promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
-                //isReloadPage(true);
+                isReloadPage(true);
             });
         }
     }
@@ -327,7 +329,6 @@
                                 <input type="hidden" value="" name="goodsTypeName">
                                 <input type="hidden" value="" name="summary">
                                 <input type="hidden" value="0" name="isShow">
-                                <input type="hidden" value="0" name="isSell">
                                 <input type="hidden" value="0" name="isFree">
                                 <input type="hidden" value="0" name="isNodc">
                                 <div class="col-md-12">
@@ -355,6 +356,19 @@
                                             <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 text-left control-label col-form-label" style="margin-bottom: 0">판매</label>
+                                        <div class="col-sm-10">
+                                            <div style="margin-top: -23px;">
+                                                OFF
+                                                <label class="switch">
+                                                    <input type="checkbox" id="isSell" name="isSell" style="display:none;">
+                                                    <span class="slider"></span>
+                                                </label>
+                                                ON
                                             </div>
                                         </div>
                                     </div>
@@ -387,8 +401,6 @@
                             </div>
                         </section>
                         <!-- //2.옵션 Tab -->
-
-
                         <!-- 프로모션 정보 -->
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">

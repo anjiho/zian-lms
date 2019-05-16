@@ -633,9 +633,11 @@
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
-                                        <select class="col-sm-3 select2 form-control custom-select"  id="limitDay" name="limitDay">
-                                            <option value="">선택</option>
-                                        </select>
+                                        <div class="col-sm-6 pl-0 pr-0">
+                                            <select class="col-sm-3 select2 form-control custom-select"  id="limitDay" name="limitDay">
+                                                <option value="">선택</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>

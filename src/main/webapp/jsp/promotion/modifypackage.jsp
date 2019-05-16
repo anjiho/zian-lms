@@ -23,7 +23,6 @@
         selectTeacherSelectboxNoTag2('teacherTable', 1);
         getProductSearchTypeSelectbox("l_productSearch");//검색 셀렉박
         getEmphasisSelectbox("l_emphasis", "");//강조표시
-        getAllOptionSelectboxAddTag("sel_option", "");//옵션
         getSelectboxListForCtgKey('affiliationCtgKey','133','');//직렬
 
         /* 패키시상품 정보 가져오기 */
@@ -279,6 +278,8 @@
     function deleteTableRow(tableId) {
         if(tableId == 'productOnline'){
             $('#promotionOnlineTable > tbody:last > tr:last').remove();
+        }else if(tableId == 'productOption'){
+            $('#optionTable > tbody:last > tr:last').remove();
         }
     }
 
@@ -683,6 +684,7 @@
                                         <th scope="col" style="text-align:center;">판매가</th>
                                         <th scope="col" style="text-align:center;">포인트</th>
                                         <th scope="col" colspan="2" style="text-align:center;">재수강</th>
+                                        <th scope="col" style="text-align:center;"></th>
                                         <th scope="col" style="text-align:center;"></th>
                                     </tr>
                                     </thead>

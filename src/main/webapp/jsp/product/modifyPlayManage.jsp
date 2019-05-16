@@ -876,7 +876,7 @@
                             <button type="button" class="btn btn-outline-primary btn-sm float-right" onclick="basicModify();">수정</button>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                                <span>온라인강좌</span>
+                                <span style="margin-left: 20px">온라인강좌</span>
                                 <input type="hidden" id="type" name='type' class="col-sm-6 bg-light required form-control" value="1" readonly>
                             </div>
                             <div class="form-group row">
@@ -904,7 +904,7 @@
                             <div class="form-group row mt-4">
                                 <label class="col-sm-2 text-left control-label col-form-label">노출</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isShow" name="isShow" style="display:none;" />
@@ -917,7 +917,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 text-left control-label col-form-label">판매</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isSell" name="isSell" style="display:none;">
@@ -930,7 +930,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 text-left control-label col-form-label">무료</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isFree" name="isFree" style="display:none;">
@@ -971,7 +971,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 text-left control-label col-form-label">사은품 배송비무료</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isFreebieDeliveryFree" name="isFreebieDeliveryFree" style="display:none;">
