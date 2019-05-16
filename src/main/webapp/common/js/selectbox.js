@@ -97,9 +97,16 @@ function getAllListOptionSelectbox(val) {
             html += "<option value="+i+">"+ i +"개월</option>";
         }
     }
+    for(var j=100; i<103; i++){
+        if (i == val) {
+            html += "<option value="+i+" selected>"+ i +"개월</option>";
+        } else {
+            html += "<option value="+i+">"+ i +"개월</option>";
+        }
+    }
     html += "<option value='100' selected>VOD</option>";
     html += "<option value='101' selected>MOBILE</option>";
-    html += "<option value='102' selected>VOD +  MOBILE</option>";
+    html += "<option value='102' selected>VOD + MOBILE</option>";
     html += "</select>";
     return html;
 }
@@ -727,9 +734,14 @@ function getTypeSelectbox(tagId, val) {
 function deviceLimitSelectbox(tagId, val) {
     var html = "<select id='deviceLimitCount' class='form-control'>";
     html += "<option value=''>선택</option>";
-    html += "<option value='0'>무제한</option>";
-    for (var i=1; i<11; i++) {
-        if(i == val){
+    for (var i=0; i<11; i++) {
+        if(i == 0){
+            if(val == 0){
+                html += "<option value="+ i +" selected>무제한</option>";
+            }else{
+                html += "<option value="+ i +">무제한</option>";
+            }
+        }else if(i == val){
             html += "<option value="+i+" selected>"+ i +"</option>";
         }else{
             html += "<option value="+i+">"+ i +"</option>";

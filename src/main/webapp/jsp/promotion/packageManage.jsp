@@ -247,8 +247,11 @@
         $.each($('#imageViewFile')[0].files, function(i, file) {
             fileData.append('imageViewFile', file);
         });
+
+        fileData.append('uploadType', 'PACKAGE');
+
         $.ajax({
-            url: "/file/updateBookInfo",
+            url: "/file/imageFileUpload",
             method: "post",
             dataType: "JSON",
             data: fileData,
@@ -291,7 +294,7 @@
                         gKey:'0',
                         kind:optionName,
                         ctgKey:'0',
-                        name:'0',
+                        name:'',
                         price:price,
                         sellPrice:sellPrice,
                         point:point,
@@ -330,11 +333,11 @@
                     onlineLecInfo.push(data);
                 });
 
-                /*if(confirm("저장하시겠습니까?")) {
-                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, onlineLecInfo, onlineLecInfo, function () {
+                if(confirm("저장하시겠습니까?")) {
+                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
                         isReloadPage(true);
                     });
-                }*/
+                }
             }
         });
     }
@@ -343,12 +346,12 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">지안패스 등록</h4>
+            <h4 class="page-title">패키지상품 등록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">프로모션 관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">지안패스 등록</li>
+                        <li class="breadcrumb-item active" aria-current="page">패키지상품 등록</li>
                     </ol>
                 </nav>
             </div>
@@ -622,11 +625,11 @@
                         <!-- 프로모션 정보 -->
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">
-                            <input type="hidden" value="0" name="bookKey">
-                            <input type="hidden" value="0" name="gKey">
-                            <input type="hidden" value="" name="contentList">
-                            <input type="hidden" value="0" name="goodsId">
                             <div id="section4">
+                                <input type="hidden" value="0" name="pmKey">
+                                <input type="hidden" value="0" name="gKey">
+                                <input type="hidden" value="1" name="pmType">
+                                <input type="hidden" value="PACKAGE" name="pmTypeStr">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수강일수</label>

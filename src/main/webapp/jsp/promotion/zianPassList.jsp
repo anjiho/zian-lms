@@ -10,7 +10,7 @@
 
     function goModifyPackage(gKey) {
         innerValue("gKey", gKey);
-        goPage('promotionManage', 'modifypackage');
+        goPage('promotionManage', 'modifyZianPass');
     }
 
     function fn_search(val) {

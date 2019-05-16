@@ -26,9 +26,8 @@
         getAllOptionSelectboxAddTag("sel_option", "");//옵션
         getSelectboxListForCtgKey('affiliationCtgKey','133','');//직렬
 
-        //getPackageDetailInfo
+        /* 패키시상품 정보 가져오기 */
         promotionManageService.getPackageDetailInfo(gKey, function(info) {
-            console.log(info);
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
@@ -48,12 +47,13 @@
             $("#description").summernote("code", productInfo.description);
 
             /**
-             * 학원 옵션정보 가져오기
+             * 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
+
             if (productOptionInfo.length == 0) {
                 var cellData = [
-                    function() {return getAllOptionSelectboxAddTag("sel_option", '');},
+                    function() {return getAllListOptionSelectbox('');},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
@@ -67,7 +67,7 @@
 
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
-                    function(data) {return getAllOptionSelectboxAddTag('sel_option', data.kind);},
+                    function(data) {return getAllListOptionSelectbox(data.kind);},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
@@ -75,13 +75,13 @@
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
                     function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
 
             /**
-             * 학원 카테고리 정보 가져오기
+             * 카테고리 정보 가져오기
              */
             var productCategoryInfo = info.productCategoryInfo;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
@@ -131,6 +131,7 @@
             getExamPrepareSelectbox("examYear", productPromotionInfo.examYear);//시험대비년도 셀렉트박스
             getNewSelectboxListForCtgKey("l_classGroup", "4309", productPromotionInfo.classGroupCtgKey);
             getNewSelectboxListForCtgKey('affiliationCtgKey', '133', productPromotionInfo.affiliationCtgKey);//직렬
+            innerValue("pmKey", productPromotionInfo.pmKey);
 
             /*포함된 온라인강좌 가져오기*/
             var productOnlineLectureInfo = info.productOnlineLectureInfo;
@@ -140,15 +141,16 @@
                 dwr.util.addRows("promotionOnlineList", productOnlineLectureInfo, [
                     function(data) {return data.goodsName;},
                     function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
+                    function(data) {return "<input type='hidden' name='linkKey[]' value='" + data.linkKey + "'>";},
+                    function(data) {return "<input type='hidden' name='reqKey[]' value='" + data.reqKey + "'>";},
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOnline');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#promotionOnlineList tr').each(function(){
                     var tr = $(this);
                     tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
+
                 });
             }
-
-
         });
 
     }
@@ -250,21 +252,28 @@
         }
     }
 
+
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
+        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
-            $('#categoryTable tr').eq(0).removeAttr("style", null);
+            $('#categoryList tr').eq(0).removeAttr("style", null);
         } else {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            getCategoryNoTag2('categoryTable','1183', '2');
+            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td").eq(1).html("지안에듀");
+            getCategoryNoTag2('categoryTable','1183', '3');
+            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(7).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(9).html(defaultCategorySelectbox());
         }
     }
+
 
     //테이블 로우 삭제
     function deleteTableRow(tableId) {
@@ -288,7 +297,6 @@
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
@@ -395,8 +403,11 @@
         $.each($('#imageViewFile')[0].files, function(i, file) {
             fileData.append('imageViewFile', file);
         });
+
+        fileData.append('uploadType', 'PACKAGE');
+
         $.ajax({
-            url: "/file/updateBookInfo",
+            url: "/file/imageFileUpload",
             method: "post",
             dataType: "JSON",
             data: fileData,
@@ -439,7 +450,7 @@
                         gKey:gKey,
                         kind:optionName,
                         ctgKey:'0',
-                        name:'0',
+                        name:'',
                         price:price,
                         sellPrice:sellPrice,
                         point:point,
@@ -449,17 +460,25 @@
                 });
 
                 /* 3. 카테고리 저장 */
-                var categoryArr = new Array();
-                $('#categoryTable tbody tr').each(function(index){
-                    var ctgKey = $(this).find("td select").eq(4).val();
-                    var data = {
-                        ctgGKey:0,
-                        ctgKey:ctgKey,
-                        gKey:gKey,
-                        pos:0
-                    };
-                    categoryArr.push(data);
-                });
+                var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+                var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+
+                if (fistTrStyle == "display:none") {
+                    /*productManageService.deleteTCategoryGoods(gKey, function(){
+                        isReloadPage(true);
+                    });*/
+                } else {
+                    var categoryArr = new Array();
+                    $.each(ctgKeys, function(index, key) {
+                        var data = {
+                            ctgGKey:0,
+                            ctgKey:key,
+                            gKey:gKey,
+                            pos:0
+                        };
+                        categoryArr.push(data);
+                    });
+                }
 
                 /* 4. 프로모션정보 저장 */
                 var promotionInfo = getJsonObjectFromDiv("section4");
@@ -468,21 +487,24 @@
                 var onlineLecInfo = new Array();
                 $('#promotionOnlineTable tbody tr').each(function(index){
                     var onlineKey = $(this).find("td input").eq(0).val();
+                    var linkKey = $(this).find("td input").eq(1).val();
+                    var reqKey = $(this).find("td input").eq(2).val();
+
                     var data = {
                         linkKey: 0,
-                        reqKey: 0,
-                        resKey:onlineKey,
+                        reqKey: gKey,
+                        resKey: onlineKey,
                         resType: 5,
                         pos: 0,
                     };
                     onlineLecInfo.push(data);
                 });
 
-                /*if(confirm("수정 하시겠습니까?")) {
-                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, onlineLecInfo, onlineLecInfo, function () {
+                if(confirm("수정 하시겠습니까?")) {
+                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
                         isReloadPage(true);
                     });
-                }*/
+                }
             }
         });
     }
@@ -518,7 +540,7 @@
                         <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" value=<%=gKey%> name="gKey">
+                                <input type="hidden" value=<%=gKey%> name="GKey">
                                 <input type="hidden" value="0" name="cpKey">
                                 <input type="hidden" value="0" name="isNodc">
                                 <input type="hidden" value="0" name="tags">
@@ -680,7 +702,6 @@
                             <div id="section3">
                                 <table class="table" id="categoryTable">
                                     <input type="hidden" name="ctgGKey" value="0">
-                                    <input type="hidden" name="gKey" value="0">
                                     <input type="hidden" name="pos" value="0">
                                     <thead>
                                     <tr style="display:none;">
@@ -703,12 +724,17 @@
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">
                             <div id="section4">
+                                <input type="hidden" value="" name="pmKey" id="pmKey">
+                                <input type="hidden" value="1" name="pmType">
+                                <input type="hidden" value="PACKAGE" name="pmTypeStr">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
-                                        <select class="col-sm-3 select2 form-control custom-select"  id="limitDay" name="limitDay">
-                                            <option value="">선택</option>
-                                        </select>
+                                        <div class="col-sm-6 pl-0 pr-0">
+                                            <select class="col-sm-3 select2 form-control custom-select"  id="limitDay" name="limitDay">
+                                                <option value="">선택</option>
+                                            </select>
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>

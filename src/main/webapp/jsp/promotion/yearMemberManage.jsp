@@ -185,7 +185,7 @@
                         gKey:'0',
                         kind:optionName,
                         ctgKey:'0',
-                        name:'0',
+                        name:'',
                         price:price,
                         sellPrice:sellPrice,
                         point:point,
@@ -348,11 +348,11 @@
                         <!-- 프로모션 정보 -->
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">
-                            <input type="hidden" value="0" name="bookKey">
-                            <input type="hidden" value="0" name="gKey">
-                            <input type="hidden" value="" name="contentList">
-                            <input type="hidden" value="0" name="goodsId">
                             <div id="section4">
+                                <input type="hidden" value="0" name="pmKey">
+                                <input type="hidden" value="0" name="gKey">
+                                <input type="hidden" value="50" name="pmType">
+                                <input type="hidden" value="YEAR_MEMBER" name="pmTypeStr">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>

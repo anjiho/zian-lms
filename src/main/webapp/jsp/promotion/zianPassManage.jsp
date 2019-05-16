@@ -211,83 +211,73 @@
 
     function promotionPacakgeSave() {
         var data = new FormData();
-        var fileData = new FormData();
-        $.each($('#imageListFile')[0].files, function(i, file) {
-            fileData.append('imageListFile', file);
+
+        var basicObj = getJsonObjectFromDiv("section1");
+        basicObj.imageList = "";
+        basicObj.imageView = "";
+        basicObj.emphasis = 0;
+        basicObj.calculateRate = 0;
+        basicObj.isFreebieDeliveryFree = 0;
+        basicObj.isQuickDelivery = 0;
+        /*  2.옵션 obj */
+        var optionArray = new Array();
+        $('#optionTable tbody tr').each(function(index){
+            var i =0;
+            var optionName = $(this).find("td select").eq(0).val();
+            var price = $(this).find("td input").eq(0).val();
+            var sellPrice = $(this).find("td input").eq(1).val();
+            var point = $(this).find("td input").eq(2).val();
+            var extendPercent = $(this).find("td input").eq(3).val();
+            var data = {
+                priceKey:'0',
+                gKey:'0',
+                kind:optionName,
+                ctgKey:'0',
+                name:'',
+                price:price,
+                sellPrice:sellPrice,
+                point:point,
+                extendPercent:extendPercent
+            };
+            optionArray.push(data);
         });
 
-        $.each($('#imageViewFile')[0].files, function(i, file) {
-            fileData.append('imageViewFile', file);
+        var categoryArr = new Array();
+        var data = {
+            ctgGKey:0,
+            ctgKey:0,
+            gKey:0,
+            pos:0
+        };
+        categoryArr.push(data);
+
+
+        /* 4. 프로모션정보 저장 */
+        var promotionInfo = getJsonObjectFromDiv("section4");
+
+        /* 5. 포함된온라인강좌 저장 */
+        var onlineLecInfo = new Array();
+        $('#promotionOnlineTable tbody tr').each(function(index){
+            var onlineKey = $(this).find("td input").eq(0).val();
+            var data = {
+                linkKey: 0,
+                reqKey: 0,
+                resKey:onlineKey,
+                resType: 5,
+                pos: 0,
+            };
+            onlineLecInfo.push(data);
         });
-        $.ajax({
-            url: "/file/updateBookInfo",
-            method: "post",
-            dataType: "JSON",
-            data: fileData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                var basicObj = getJsonObjectFromDiv("section1");
-
-                var result = JSON.stringify(data.result);
-                if(result != "") {
-                    var parse = JSON.parse(result);
-                    basicObj.imageList = parse.imageListFilePath;
-                    basicObj.imageView = parse.imageViewFilePath;
-                }else{
-                    basicObj.imageList = "";
-                    basicObj.imageView = "";
-                }
-
-                /*  2.옵션 obj */
-                var optionArray = new Array();
-                $('#optionTable tbody tr').each(function(index){
-                    var i =0;
-                    var optionName = $(this).find("td select").eq(0).val();
-                    var price = $(this).find("td input").eq(0).val();
-                    var sellPrice = $(this).find("td input").eq(1).val();
-                    var point = $(this).find("td input").eq(2).val();
-                    var extendPercent = $(this).find("td input").eq(3).val();
-                    var data = {
-                        priceKey:'0',
-                        gKey:'0',
-                        kind:optionName,
-                        ctgKey:'0',
-                        name:'0',
-                        price:price,
-                        sellPrice:sellPrice,
-                        point:point,
-                        extendPercent:extendPercent
-                    };
-                    optionArray.push(data);
-                });
-
-
-                /* 4. 프로모션정보 저장 */
-                var promotionInfo = getJsonObjectFromDiv("section4");
-
-                /* 5. 포함된온라인강좌 저장 */
-                var onlineLecInfo = new Array();
-                $('#promotionOnlineTable tbody tr').each(function(index){
-                    var onlineKey = $(this).find("td input").eq(0).val();
-                    var data = {
-                        linkKey: 0,
-                        reqKey: 0,
-                        resKey:onlineKey,
-                        resType: 5,
-                        pos: 0,
-                    };
-                    onlineLecInfo.push(data);
-                });
-
-                /*if(confirm("저장하시겠습니까?")) {
-                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
-                        isReloadPage(true);
-                    });
-                }*/
-            }
-        });
+        console.log(basicObj);
+        console.log(optionArray);
+        console.log(categoryArr);
+        console.log(promotionInfo);
+        console.log(onlineLecInfo);
+        if(confirm("저장하시겠습니까?")) {
+            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
+                isReloadPage(true);
+            });
+        }
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
@@ -328,6 +318,10 @@
                                 <input type="hidden" value="0" name="goodsId">
                                 <input type="hidden" value="" name="goodsTypeName">
                                 <input type="hidden" value="" name="summary">
+                                <input type="hidden" value="0" name="isShow">
+                                <input type="hidden" value="0" name="isSell">
+                                <input type="hidden" value="0" name="isFree">
+                                <input type="hidden" value="0" name="isNodc">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
@@ -417,11 +411,11 @@
                         <!-- 프로모션 정보 -->
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">
-                            <input type="hidden" value="0" name="bookKey">
-                            <input type="hidden" value="0" name="gKey">
-                            <input type="hidden" value="" name="contentList">
-                            <input type="hidden" value="0" name="goodsId">
                             <div id="section4">
+                                <input type="hidden" value="0" name="pmKey">
+                                <input type="hidden" value="0" name="gKey">
+                                <input type="hidden" value="100" name="pmType">
+                                <input type="hidden" value="ZIAN_PASS" name="pmTypeStr">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">시험대비년도</label>
