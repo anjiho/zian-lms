@@ -100,23 +100,23 @@
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-blur-linear"></i><span class="hide-menu">주문관리</span></a>
+                <li class="sidebar-item" id="menu-3"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">주문관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 주문관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 전체주문목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 수강관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 수강내역목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 학원수강 관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 무료수강 관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 디바이스관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 상품/모바일 디바이스관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 기기변경 이력조회 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 모의고사 관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 오프라인 응시자 목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 성적내역 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> OMR </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 기타관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 마일리지관리 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 전체주문목록 </span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">수강내역목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학원수강관리</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">무료수강관리</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">상품/모바일 디바이스관리</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">기기변경 이력조회</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">오프라인 응시자 목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">성적내역</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">OMR</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'yearMemberManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">마일리지관리</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">팝업/쿠폰관리</span></a>

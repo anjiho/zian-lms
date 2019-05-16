@@ -20,7 +20,9 @@ public class OrderManageController {
     public ModelAndView orderManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
-
+        if("orderList".equals(page_gbn)) {
+            mvc.setViewName("order/orderList");
+        }
         return mvc;
     }
 }

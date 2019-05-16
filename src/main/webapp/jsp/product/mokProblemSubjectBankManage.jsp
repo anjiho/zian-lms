@@ -150,6 +150,7 @@
             examYear: examYear,
             subjectCode: subjectCode
         };
+        console.log(searchVO);
 
         productManageService.getProblemBankListCount(searchVO, function (cnt) {
             paging.count3(sPage, cnt, '10', '10', comment.blank_list);
@@ -253,7 +254,7 @@
 </script>
 <!--모의고사 문제은행 과목등록 -->
 <div class="modal fade" id="sModal2" tabindex="-1" role="dialog" aria-hidden="true" >
-    <div class="modal-dialog" role="document" style="max-width: 1000px;">
+    <div class="modal-dialog" role="document" style="max-width: 1500px;">
         <div class="modal-content" >
             <div class="modal-header">
                 <h5 class="modal-title">모의고사 문제은행 문제목록</h5>
@@ -340,11 +341,11 @@
                                     <thead>
                                     <tr>
                                         <th scope="col" width="5%">코드</th>
-                                        <th scope="col" width="8%">출제구분</th>
-                                        <th scope="col" width="8%">출제년도</th>
-                                        <th scope="col" width="8%">과목</th>
+                                        <th scope="col" width="5%">출제구분</th>
+                                        <th scope="col" width="5%">출제년도</th>
+                                        <th scope="col" width="10%">과목</th>
                                         <th scope="col" width="9%">난이도</th>
-                                        <th scope="col" width="9%">유형</th>
+                                        <th scope="col" width="12%">유형</th>
                                         <th scope="col" width="20%">패턴</th>
                                         <th scope="col" width="40%">단원</th>
                                         <th scope="col" width="8%"></th>
