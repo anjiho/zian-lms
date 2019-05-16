@@ -396,6 +396,7 @@
             ON B.G_KEY = C.G_KEY
             WHERE A.J_LEC_KEY = #{jLecKey}
         )
+        AND Z.IS_SHOW = 1
         ORDER BY Z.CURRI_KEY ASC
     </select>
 
