@@ -103,6 +103,12 @@
                 <li class="sidebar-item" id="menu-3"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">주문관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 전체주문목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상주문목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 동영상주문목록(재수강) </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 학원강의주문목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 도서주문목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 프로모션주문목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'orderList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 주문,결제취소목록 </span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">수강내역목록</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('promotionManage', 'zianPassManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학원수강관리</span></a></li>

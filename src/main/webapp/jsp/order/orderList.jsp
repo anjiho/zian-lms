@@ -20,6 +20,14 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 1);
+        orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
+        orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
+        isOfflineSelectbox('isOffline', '');
+        deviceSelectbox('deviceSel', '');
+        orderPayTypeSelectbox('orderPayTypeSel', '');
+        orderSearchSelectbox('orderSearch', '');
+        orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
+        listNumberSelectbox('listNumberSel', '');
     }
     function fn_search(val) {
         var paging = new Paging();
@@ -30,34 +38,29 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        var examYear = getSelectboxValue("examYear");
-        var subjectCode = getInputTextValue("subjectCode");
-        var divisionCtgKey = getSelectboxValue("divisionCtgKey");
-        var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
-        var patternCtgKey = getSelectboxValue("selPattern");
-        var stepCtgKey = getSelectboxValue("selUnit");
-        var ctgKey = $('#unitTable').find("td select").eq(2).val();
-        var unitCtgKey = ctgKey;
-        if(unitCtgKey == null){
-            unitCtgKey = 0;
-        }
-        var searchVO = {
-            startPage: sPage,
-            listLimitNumber: 10,
-            divisionCtgKey: divisionCtgKey,
-            subjectCtgKey: subjectCtgKey,
-            stepCtgKey: stepCtgKey,
-            patternCtgKey: patternCtgKey,
-            unitCtgKey: unitCtgKey,
-            examYear: examYear,
-            subjectCode: subjectCode
-        };
-        productManageService.getProblemBankListCount(searchVO, function (cnt) {
+        var orderStatus = getSelectboxValue("orderStatus");//처리상태
+        //var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
+        var isOffline = getSelectboxValue("isOffline");//구매장소
+        var isMobile = getSelectboxValue("deviceSel");//디바이스
+        var payType = getSelectboxValue("orderPayTypeSel");//결제방법
+        var searchType = getSelectboxValue("orderSearch");//검색타입
+        var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
+        var listNumberSel = getSelectboxValue("listNumberSel");//리스트개수
+        var startSearchDate = getInputTextValue('searchStartDate');
+        var endSearchDate = getInputTextValue('searchEndDate');
+        var searchText = getInputTextValue('searchText');
+
+        var goodsType = '';
+        var isVideoReply = 0;
+
+        productManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, isOffline,
+                                               payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getProblemBankList(searchVO, function (selList) {
+            productManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
+                                              isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
                 if (selList.length == 0) return;
-                dwr.util.addRows("dataList", selList, [
+               /* dwr.util.addRows("dataList", selList, [
                     function(data) {return listNum--;},
                     function(data) {return data.examQuestionBankKey == 0 ? "-" : "<a href='javascript:void(0);' color='blue' onclick='goModifyProblemBank(" + data.examQuestionBankKey + ");'>" +  data.examQuestionBankKey + "</a>";},
                     function(data) {return data.className == null ? "-" : data.className;},
@@ -67,7 +70,7 @@
                     function(data) {return data.typeName == null ? "-" : data.typeName;},
                     function(data) {return data.patternName == null ? "-" : data.patternName;},
                     function(data) {return data.unitName == null ? "-" : data.unitName;},
-                ], {escapeHtml:false});
+                ], {escapeHtml:false});*/
             });
         });
     }
@@ -98,7 +101,7 @@
                     <div class="col">
                         <div class="form-group row">
                             <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
-                            <div class="col-sm-8 pl-0 pr-0">
+                            <div class="col-sm-5 pl-0 pr-0">
                                 <tr>
                                     <td>
                                         <ul class="searchDate">
@@ -106,12 +109,6 @@
                                                 <span class="chkbox2">
                                                     <input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d')"/>
                                                     <label for="dateType1">당일</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType2" onclick="setSearchDate('3d')"/>
-                                                    <label for="dateType2">3일</label>
                                                 </span>
                                             </li>
                                             <li>
@@ -145,24 +142,19 @@
                                                 </span>
                                             </li>
                                         </ul>
-                                        <div class="clearfix">
-                                            <div class="col-sm-3 input-group pl-0 pr-0">
-                                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                                </div>
-                                            </div>
-                                            <!-- // -->
-                                            <span class="demi">~</span>
-                                            <div class="col-sm-3 input-group pl-0 pr-0">
-                                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
-                                                <div class="input-group-append">
-                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </td>
                                 </tr>
+                            </div>
+                            <div class="col-sm-5 input-group pl-0 pr-0">
+                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
+                                <span> ~ </span>
+                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
+                                <div class="input-group-append">
+                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -172,25 +164,28 @@
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">처리상태</label>
                             <div class="col-sm-8 pl-0 pr-0">
-                                <span id=""></span>
+                                <span id="orderStatus"></span>
+                                <span id="orderPayStatus"></span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
                             <div class="col-sm-8 pl-0 pr-0">
-                                <span id="l_examType"></span>
+                                <span id="orderPayTypeSel"></span>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group row" style="">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">구매장소</label>
-                            <input type="text" class="col-sm-8 form-control" id="subjectCode">
+                            <div class="col-sm-8 pl-0 pr-0">
+                                <span id="isOffline"></span>
+                            </div>
                         </div>
                         <div class="form-group row">
                             <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">디바이스</label>
                             <div class="col-sm-8 pl-0 pr-0">
-                                <span id="l_subjectGroup"></span>
+                                <span id="deviceSel"></span>
                             </div>
                         </div>
                     </div>
@@ -199,10 +194,31 @@
                     <div class="col">
                         <div class="form-group row">
                             <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
+                            <div class="col-sm-10 pl-0 pr-0" >
+                                <span id="orderSearch"></span>
+                            </div>
+                            <div style=" float: left;width:20%">
+                                <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                            </div>
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="col">
+                        <div style=" float: right;">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
+        </div>
+        <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
+        <span id="orderStatusChangeSel"></span>
+        <button type="button" class="btn btn-outline-info mx-auto">변경</button>
+        <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
+        <div class="col-sm-3 pl-0 pr-0" >
+        <span id="listNumberSel"></span>
         </div>
     </div>
 </div>
@@ -249,9 +265,10 @@
         return  year +'-'+ month +'-'+ day;
     }
 
-    $("#searchStartDate, #searchEndDate").datepicker({
+    $("#searchStartDate , #searchEndDate").datepicker({
         language: "kr",
         format: "yyyy-mm-dd",
+        numberOfMonths: 2
     });
 
     function setSearchDate(start){
@@ -278,7 +295,6 @@
 
         $('#searchStartDate').val(startDate);
     }
-
 
 </script>
 <!--main wapper-->

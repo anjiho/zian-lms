@@ -753,3 +753,142 @@ function deviceLimitSelectbox(tagId, val) {
     html += "</select>";
     innerHTML(tagId, html);
 }
+
+/* 주문관리 - 처리상태  */
+function orderStatusTypeSelecbox(tagId, val) {
+    var html = "<select id='orderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+
+        if(val == '-1') html += "<option value='-1' selected>전체</option>";
+        else html += "<option value='-1'>전체</option>";
+        if(val == '0') html += "<option value='0' selected>입금예정</option>";
+        else html += "<option value='0'>입금예정</option>";
+        if(val == '1') html += "<option value='1' selected>결제대기</option>";
+        else html += "<option value='1'>결제대기</option>";
+        if(val == '2') html += "<option value='2' selected>결제완료</option>";
+        else html += "<option value='2'>결제완료</option>";
+        html += "</select>";
+
+        innerHTML(tagId, html);
+}
+
+/* 주문관리 - 처리상태  */
+function orderPayStatusTypeSelecbox(tagId, val) {
+    var html = "<select id='orderPayStatus' name='orderPayStatus' class='col-sm-5 select2 form-control custom-select'>";
+        if(val == '-1') html += "<option value='-1' selected>전체</option>";
+        else html += "<option value='-1'>전체</option>";
+        if(val == '8') html += "<option value='8' selected>결제취소</option>";
+        else html += "<option value='8'>결제취소</option>";
+        if(val == '9') html += "<option value='9' selected>주문취소</option>";
+        else html += "<option value='9'>주문취소</option>";
+        if(val == '10') html += "<option value='10' selected>결제실패</option>";
+        else html += "<option value='10'>결제실패</option>";
+        html += "</select>";
+
+        innerHTML(tagId, html);
+}
+
+/* 주문관리 - 처리상태  */
+function orderStatusTypeChangeSelecbox(tagId, val) {
+    var html = "<select id='orderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '-1') html += "<option value='' selected>선택</option>";
+    else html += "<option value=''>선택</option>";
+    if(val == '0') html += "<option value='0' selected>입금예정</option>";
+    else html += "<option value='0'>입금예정</option>";
+    if(val == '1') html += "<option value='1' selected>결제대기</option>";
+    else html += "<option value='1'>결제대기</option>";
+    if(val == '2') html += "<option value='2' selected>결제완료</option>";
+    else html += "<option value='2'>결제완료</option>";
+    if(val == '8') html += "<option value='8' selected>결제취소</option>";
+    else html += "<option value='8'>결제취소</option>";
+    if(val == '9') html += "<option value='9' selected>주문취소</option>";
+    else html += "<option value='9'>주문취소</option>";
+    if(val == '10') html += "<option value='10' selected>결제실패</option>";
+    else html += "<option value='10'>결제실패</option>";
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+
+/* 주문관리 - 구매장소  */
+function isOfflineSelectbox(tagId, val) {
+    var html = "<select id='isOffline' name='isOffline' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '-1') html += "<option value='-1' selected>전체</option>";
+    else html += "<option value='-1'>전체</option>";
+    if(val == '0') html += "<option value='0' selected>온라인</option>";
+    else html += "<option value='0'>온라인</option>";
+    if(val == '1') html += "<option value='1' selected>오프라인</option>";
+    else html += "<option value='1'>오프라인</option>";
+
+    innerHTML(tagId, html);
+}
+
+/* 주문관리 - 디바이스  */
+function deviceSelectbox(tagId, val) {
+    var html = "<select id='deviceSel' name='deviceSel' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '-1') html += "<option value='-1' selected>전체</option>";
+    else html += "<option value='-1'>전체</option>";
+    if(val == '0') html += "<option value='0' selected>PC</option>";
+    else html += "<option value='0'>PC</option>";
+    if(val == '1') html += "<option value='1' selected>Mobile</option>";
+    else html += "<option value='1'>Mobile</option>";
+
+    innerHTML(tagId, html);
+}
+
+/* 주문관리 - 결제방법  */
+function orderPayTypeSelectbox(tagId, val) {
+    var html = "<select id='orderPayType' name='orderPayType' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '-1') html += "<option value='-1' selected>전체</option>";
+    else html += "<option value='-1'>전체</option>";
+    if(val == '0') html += "<option value='0' selected>신용카드</option>";
+    else html += "<option value='0'>신용카드</option>";
+    if(val == '19') html += "<option value='19' selected>무통장입금</option>";
+    else html += "<option value='19'>무통장입금</option>";
+    if(val == '20') html += "<option value='20' selected>무료</option>";
+    else html += "<option value='20'>무료</option>";
+    if(val == '21') html += "<option value='21' selected>현금</option>";
+    else html += "<option value='21'>현금</option>";
+    if(val == '22') html += "<option value='22' selected>현금+신용카드</option>";
+    else html += "<option value='22'>현금+신용카드</option>";
+    if(val == '23') html += "<option value='23' selected>온라인</option>";
+    else html += "<option value='23'>온라인</option>";
+
+    innerHTML(tagId, html);
+}
+
+
+/* 주문관리 - 결제방법  */
+function orderSearchSelectbox(tagId, val) {
+    var html = "<select id='searchType' name='searchType' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '0') html += "<option value='0' selected>주문자 ID</option>";
+    else html += "<option value='0'>주문자 ID</option>";
+    if(val == '19') html += "<option value='19' selected>주문자 이름</option>";
+    else html += "<option value='19'>주문자 이름</option>";
+    if(val == '20') html += "<option value='20' selected>주문번호</option>";
+    else html += "<option value='20'>주문번호</option>";
+    if(val == '21') html += "<option value='21' selected>입금자명</option>";
+    else html += "<option value='21'>입금자명</option>";
+    if(val == '22') html += "<option value='22' selected>상품명</option>";
+    else html += "<option value='22'>상품명</option>";
+
+    innerHTML(tagId, html);
+}
+
+function listNumberSelectbox(tagId, val) {
+    var html = "<select id='listNumberSel' class='col-sm-3 select2 form-control custom-select'>";
+
+    for (var i=10; i < 101; i+=10) {
+        if(i == val){
+            html += "<option value="+i+" selected>"+ i +"</option>";
+        }else{
+            html += "<option value="+i+">"+ i +"</option>";
+        }
+    }
+    html += "</select>";
+    innerHTML(tagId, html);
+}
