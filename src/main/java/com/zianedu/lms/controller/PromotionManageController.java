@@ -38,6 +38,8 @@ public class PromotionManageController {
             mvc.setViewName("promotion/yearMemberList");
         }else if("modifyYearMember".equals(page_gbn)) {
             mvc.setViewName("promotion/modifyYearMember");
+        }else if("orderDetailManage".equals(page_gbn)) {
+            mvc.setViewName("promotion/orderDetailManage");
         }
 
         return mvc;

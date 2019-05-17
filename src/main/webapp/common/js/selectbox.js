@@ -820,7 +820,7 @@ function isOfflineSelectbox(tagId, val) {
     else html += "<option value='0'>온라인</option>";
     if(val == '1') html += "<option value='1' selected>오프라인</option>";
     else html += "<option value='1'>오프라인</option>";
-
+    html += "</select>";
     innerHTML(tagId, html);
 }
 
@@ -834,7 +834,7 @@ function deviceSelectbox(tagId, val) {
     else html += "<option value='0'>PC</option>";
     if(val == '1') html += "<option value='1' selected>Mobile</option>";
     else html += "<option value='1'>Mobile</option>";
-
+    html += "</select>";
     innerHTML(tagId, html);
 }
 
@@ -856,7 +856,7 @@ function orderPayTypeSelectbox(tagId, val) {
     else html += "<option value='22'>현금+신용카드</option>";
     if(val == '23') html += "<option value='23' selected>온라인</option>";
     else html += "<option value='23'>온라인</option>";
-
+    html += "</select>";
     innerHTML(tagId, html);
 }
 
@@ -875,12 +875,12 @@ function orderSearchSelectbox(tagId, val) {
     else html += "<option value='21'>입금자명</option>";
     if(val == '22') html += "<option value='22' selected>상품명</option>";
     else html += "<option value='22'>상품명</option>";
-
+    html += "</select>";
     innerHTML(tagId, html);
 }
 
 function listNumberSelectbox(tagId, val) {
-    var html = "<select id='listNumberSel' class='col-sm-3 select2 form-control custom-select'>";
+    var html = "<select id='listNumberSel' onchange='changeList();' class='col-sm-3 select2 form-control custom-select'>";
 
     for (var i=10; i < 101; i+=10) {
         if(i == val){
@@ -890,5 +890,37 @@ function listNumberSelectbox(tagId, val) {
         }
     }
     html += "</select>";
+    innerHTML(tagId, html);
+}
+
+function deliveryNameSelectbox(tagId, val) {
+    var html = "<select id='deliveryType' name='deliveryType' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '1') html += "<option value='1' selected>CJGLS</option>";
+    else html += "<option value='1'>CJGLS</option>";
+    if(val == '6') html += "<option value='6' selected>대한통운</option>";
+    else html += "<option value='6'>대한통운</option>";
+    if(val == '21') html += "<option value='21' selected>현대택배</option>";
+    else html += "<option value='21'>현대택배</option>";
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+
+function orderDeliveryInfoSelectbox(tagId, val) {
+    var html = "<select id='deliveryType' name='deliveryType' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '1') html += "<option value='1' selected>준비중</option>";
+    else html += "<option value='1'>준비중</option>";
+    if(val == '6') html += "<option value='6' selected>배송중</option>";
+    else html += "<option value='6'>배송중</option>";
+    if(val == '21') html += "<option value='21' selected>배송완료</option>";
+    else html += "<option value='21'>배송완료</option>";
+    if(val == '21') html += "<option value='21' selected>방문수령</option>";
+    else html += "<option value='21'>방문수령</option>";
+    if(val == '21') html += "<option value='21' selected>방문수령완료</option>";
+    else html += "<option value='21'>방문수령완료</option>";
+    html += "</select>";
+
     innerHTML(tagId, html);
 }

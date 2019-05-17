@@ -1,6 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
-
 <style>
     ol,ul{list-style:none}
 
@@ -15,7 +14,7 @@
     .searchDate li .chkbox2.on label{background:#ec6a6a}
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
-<script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
 <script>
     function init() {
         getProductSearchSelectbox("l_searchSel");
@@ -25,9 +24,10 @@
         isOfflineSelectbox('isOffline', '');
         deviceSelectbox('deviceSel', '');
         orderPayTypeSelectbox('orderPayTypeSel', '');
-        orderSearchSelectbox('orderSearch', '');
+        orderSearchSelectbox('orderSearch', '19');
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
+        setSearchDate('6m');
     }
     function fn_search(val) {
         var paging = new Paging();
@@ -38,7 +38,7 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        var orderStatus = getSelectboxValue("orderStatus");//처리상태
+        var payStatus = getSelectboxValue("orderStatus");//처리상태
         //var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
         var isOffline = getSelectboxValue("isOffline");//구매장소
         var isMobile = getSelectboxValue("deviceSel");//디바이스
@@ -53,30 +53,64 @@
         var goodsType = '';
         var isVideoReply = 0;
 
-        productManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, isOffline,
-                                               payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
+        orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
+                                                payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
-                                              isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
+                orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
+                payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
                 if (selList.length == 0) return;
-               /* dwr.util.addRows("dataList", selList, [
-                    function(data) {return listNum--;},
-                    function(data) {return data.examQuestionBankKey == 0 ? "-" : "<a href='javascript:void(0);' color='blue' onclick='goModifyProblemBank(" + data.examQuestionBankKey + ");'>" +  data.examQuestionBankKey + "</a>";},
-                    function(data) {return data.className == null ? "-" : data.className;},
-                    function(data) {return data.examYear == null ? "-" : data.examYear;},
-                    function(data) {return data.subjectName == null ? "-" : data.subjectName;},
-                    function(data) {return data.levelName == null ? "-" : data.levelName;},
-                    function(data) {return data.typeName == null ? "-" : data.typeName;},
-                    function(data) {return data.patternName == null ? "-" : data.patternName;},
-                    function(data) {return data.unitName == null ? "-" : data.unitName;},
-                ], {escapeHtml:false});*/
+               dwr.util.addRows("dataList", selList, [
+                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
+                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
+                    function(data) {return data.depositUser == null ? "-" : data.depositUser;},
+                    function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
+                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
+                    function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
+                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                    //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
+                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                    function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
+                ], {escapeHtml:false});
             });
         });
+    }
+    function format(str) {
+        str = String(str);
+        return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+    }
+    
+    function allChk(obj){
+        var chkObj = document.getElementsByName("rowChk");
+        var rowCnt = chkObj.length - 1;
+        var check = obj.checked;
+        if (check) {﻿
+          for (var i=0; i<=rowCnt; i++){
+              if(chkObj[i].type == "checkbox")
+                  chkObj[i].checked = true;
+          }
+        } else {
+            for (var i=0; i<=rowCnt; i++) {
+                if(chkObj[i].type == "checkbox"){
+                    chkObj[i].checked = false;
+                }
+            }
+        }
+    }
+    
+    function changeList() {
+        fn_search('new');
+    }
+    
+    function goOrderDetail(val) {
+        innerValue('JKey', val);
+        goPage('promotionManage', 'orderDetailManage');
     }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
+    <input type="hidden" id="JKey" name="JKey" value="">
     <input type="hidden" id="examQuestionBankKey"  name="examQuestionBankKey">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
@@ -165,7 +199,7 @@
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">처리상태</label>
                             <div class="col-sm-8 pl-0 pr-0">
                                 <span id="orderStatus"></span>
-                                <span id="orderPayStatus"></span>
+                                <!--<span id="orderPayStatus"></span>-->
                             </div>
                         </div>
                         <div class="form-group row">
@@ -230,15 +264,16 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col" width="15%">주문번호</th>
+                        <th scope="col" width="10%">주문번호</th>
+                        <th scope="col" width="8%">ID</th>
                         <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="20%">주문내역</th>
-                        <th scope="col" width="8%">결제금액</th>
-                        <th scope="col" width="9%">결제방법</th>
-                        <th scope="col" width="10%">진행상태</th>
-                        <th scope="col" width="5%">모바일</th>
-                        <th scope="col" width="10%">배송상태</th>
-                        <th scope="col" width="5%"></th>
+                        <th scope="col" width="30%">주문내역</th>
+                        <th scope="col" width="7%">결제금액</th>
+                        <th scope="col" width="5%">결제방법</th>
+                        <th scope="col" width="8%">진행상태</th>
+                        <th scope="col" width="8%">모바일</th>
+                        <th scope="col" width="8%">배송상태</th>
+                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this);"></th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>

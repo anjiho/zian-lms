@@ -19,7 +19,8 @@
             AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
          ]]>
         <![CDATA[
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
         ]]>
         <if test="payStatus == -1">
             AND A.PAY_STATUS IN (0, 1, 2)
