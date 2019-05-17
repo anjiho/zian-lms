@@ -21,7 +21,12 @@
         <![CDATA[
             AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
-        AND A.PAY_STATUS IN (0, 1, 2)
+        <if test="payStatus == -1">
+            AND A.PAY_STATUS IN (0, 1, 2)
+        </if>
+        <if test="payStatus > -1">
+            AND A.PAY_STATUS = #{payStatus}
+        </if>
         <if test="goodsType != '' and goodsType != null">
             AND C.TYPE = #{goodsType}
             <if test="goodsType != 5">
@@ -95,7 +100,12 @@
                 <![CDATA[
                     AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
-                AND A.PAY_STATUS IN (0, 1, 2)
+                <if test="payStatus == -1">
+                    AND A.PAY_STATUS IN (0, 1, 2)
+                </if>
+                <if test="payStatus > -1">
+                    AND A.PAY_STATUS = #{payStatus}
+                </if>
                 <if test="goodsType != '' and goodsType != null">
                     AND C.TYPE = #{goodsType}
                     <if test="goodsType != 5">
@@ -161,7 +171,12 @@
         <![CDATA[
             AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
-        AND A.PAY_STATUS IN (8, 9, 10)
+        <if test="payStatus == -1">
+            AND A.PAY_STATUS IN (8, 9, 10)
+        </if>
+        <if test="payStatus > -1">
+            AND A.PAY_STATUS = #{payStatus}
+        </if>
         <if test="isOffline != null and isOffline >= 0">
             AND A.IS_OFFLINE = #{isOffline}
         </if>
@@ -211,7 +226,12 @@
             <![CDATA[
                 AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
-            AND A.PAY_STATUS IN (8, 9, 10)
+            <if test="payStatus == -1">
+                AND A.PAY_STATUS IN (8, 9, 10)
+            </if>
+            <if test="payStatus > -1">
+                AND A.PAY_STATUS = #{payStatus}
+            </if>
             <if test="isOffline != null and isOffline >= 0">
                 AND A.IS_OFFLINE = #{isOffline}
             </if>
@@ -396,6 +416,7 @@
             ON B.G_KEY = C.G_KEY
             WHERE A.J_LEC_KEY = #{jLecKey}
         )
+        AND Z.IS_SHOW = 1
         ORDER BY Z.CURRI_KEY ASC
     </select>
 
