@@ -56,6 +56,7 @@ public class OrderManageService {
      * @param startSearchDate 검색일 시작
      * @param endSearchDate 검색일 종료
      * @param goodsType 상품타입 GoodsType 정의
+     * @Param payStatus 처리상태 (-1: 전체, 0 : 입금예정, 1 : 결제대기, 2 : 결제완료)
      * @param isOffline 구매장소 (0,1), 전체 : -1
      * @param payType 결제방법 {@link OrderPayType}, 전체 : -1
      * @param isMobile 디바이스 (0 : PC, 1: Mobile), 전체 : -1
@@ -66,7 +67,7 @@ public class OrderManageService {
      */
     @Transactional(readOnly = true)
     public List<OrderResultDTO> getOrderList(int sPage, int listLimit, String startSearchDate, String endSearchDate, String goodsType,
-                                             int isOffline, int payType, int isMobile, String searchType, String searchText,
+                                             int payStatus, int isOffline, int payType, int isMobile, String searchType, String searchText,
                                              int isVideoReply) {
         if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
 
@@ -75,7 +76,7 @@ public class OrderManageService {
 
         List<OrderResultDTO>list = orderManageMapper.selectOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
-                GoodsType.getGoodsTypeKey(goodsType), isOffline, payType, isMobile,
+                GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
                 Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply
         );
 
@@ -107,24 +108,25 @@ public class OrderManageService {
      * @return
      */
     @Transactional(readOnly = true)
-    public int getOrderListCount(String startSearchDate, String endSearchDate, String goodsType, int isOffline,
+    public int getOrderListCount(String startSearchDate, String endSearchDate, String goodsType, int payStatus, int isOffline,
                             int payType, int isMobile, String searchType, String searchText, int isVideoReply) {
 
         return orderManageMapper.selectOrderListCount(
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
-                GoodsType.getGoodsTypeKey(goodsType), isOffline, payType, isMobile,
+                GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
                 Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply
         );
     }
 
     /**
-     * 취소 주문목록 리스트
+     * 취소주문 리스트
      * @param sPage
      * @param listLimit
      * @param startSearchDate
      * @param endSearchDate
      * @param startCancelSearchDate
      * @param endCancelSearchDate
+     * @param payStatus (-1 : 전체, 8 : 결제취소, 9 : 주문취소, 10 : 결제실패 )
      * @param isOffline
      * @param payType
      * @param isMobile
@@ -134,15 +136,15 @@ public class OrderManageService {
      */
     @Transactional(readOnly = true)
     public List<OrderResultDTO> getCancelOrderList(int sPage, int listLimit, String startSearchDate, String endSearchDate,
-                                                   String startCancelSearchDate, String endCancelSearchDate, int isOffline,
-                                                   int payType, int isMobile, String searchType, String searchText) {
+                                                   String startCancelSearchDate, String endCancelSearchDate, int payStatus,
+                                                   int isOffline, int payType, int isMobile, String searchType, String searchText) {
         if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
 
         List<OrderResultDTO>list = orderManageMapper.selectCancelOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
-                Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""),
+                Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""), payStatus,
                 isOffline, payType, isMobile, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
         );
 
@@ -161,11 +163,12 @@ public class OrderManageService {
     }
 
     /**
-     * 취소주문 리스트 개수
+     *  취소주문 리스트 개수
      * @param startSearchDate
      * @param endSearchDate
      * @param startCancelSearchDate
      * @param endCancelSearchDate
+     * @param payStatus (-1 : 전체, 8 : 결제취소, 9 : 주문취소, 10 : 결제실패 )
      * @param isOffline
      * @param payType
      * @param isMobile
@@ -175,7 +178,7 @@ public class OrderManageService {
      */
     @Transactional(readOnly = true)
     public int getCancelOrderListCount(String startSearchDate, String endSearchDate, String startCancelSearchDate,
-                                       String endCancelSearchDate, int isOffline, int payType, int isMobile,
+                                       String endCancelSearchDate, int payStatus, int isOffline, int payType, int isMobile,
                                        String searchType, String searchText) {
         if ("".equals(startSearchDate) && "".equals(endSearchDate)
                 && "".equals(startCancelSearchDate) && "".equals(endCancelSearchDate)) {
@@ -184,7 +187,7 @@ public class OrderManageService {
         return orderManageMapper.selectCancelOrderListCount(
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""),
-                isOffline, payType, isMobile,
+                payStatus, isOffline, payType, isMobile,
                 Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
         );
     }
