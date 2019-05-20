@@ -46,17 +46,19 @@
         <if test="isMobile != null and isMobile >= 0">
             AND A.IS_MOBILE = #{isMobile}
         </if>
-        <if test="searchType == 'orderUserId'">
-            AND B.USER_ID = #{searchText}
-        </if>
-        <if test="searchType == 'orderUserName'">
-            AND B.NAME LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'orderId'">
-            AND A.J_ID = #{searchText}
-        </if>
-        <if test="searchType == 'orderUserName'">
-            AND C.G_NAME LIKE '%'||#{searchText}||'%'
+        <if test="searchType != ''">
+            <if test="searchType == 'orderUserId'">
+                AND B.USER_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND B.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderId'">
+                AND A.J_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderGoodsName'">
+                AND C.G_NAME LIKE '%'||#{searchText}||'%'
+            </if>
         </if>
         <!-- 동영상 재수강 여부 -->
         <if test="isVideoReply == 0">
@@ -134,7 +136,7 @@
                 <if test="searchType == 'orderId'">
                     AND A.J_ID = #{searchText}
                 </if>
-                <if test="searchType == 'orderUserName'">
+                <if test="searchType == 'orderGoodsName'">
                     AND C.G_NAME LIKE '%'||#{searchText}||'%'
                 </if>
                 <!-- 동영상 재수강 여부 -->

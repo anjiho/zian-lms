@@ -80,7 +80,7 @@ public class OrderManageService {
         List<OrderResultDTO>list = orderManageMapper.selectOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply
+                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""), isVideoReply
         );
 
         if (list != null && list.size() > 0) {

@@ -2,13 +2,24 @@
 <%@include file="/common/jsp/common.jsp" %>
 <%
     String JKey = request.getParameter("JKey");
+    String Type = request.getParameter("Type");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
 <script>
     var JKey = '<%=JKey%>';
+    var Type = '<%=Type%>';
+
     function init() {
-        menuActive('menu-3', 1);
+        var num = '';
+        if(Type == 'orderList') num = 1;
+        else if(Type == 'playOrderList') num = 2;
+        else if(Type == 'rePlayOrderList') num = 3;
+        else if(Type == 'academyLectureOrderList') num = 4;
+        else if(Type == 'bookOrderList') num = 5;
+        else if(Type == 'promotionOrderList') num = 6;
+        else if(Type == 'cancelOrderList') num = 7;
+        menuActive('menu-3', num);
         deliveryNameSelectbox('deliveryNameSel', '');
         orderDeliveryInfoSelectbox('deliveryStatusSel', '');
 
@@ -21,18 +32,26 @@
             innerHTML("payStatusName", payInfo.payStatusName);//진행상태
             innerHTML("payTypeName", payInfo.payTypeName);//결제방법
             innerHTML("price", payInfo.price  == ''? '0원' : format(payInfo.price)+"원");//주문금액
-            innerHTML("deliveryPrice", payInfo.deliveryPrice == ''? '0원' : payInfo.deliveryPrice+"원");//배송비
-            innerHTML("dcWelfare", payInfo.dcWelfare == ''? '0원' : payInfo.dcWelfare+"원");//복지할인
-            innerHTML("dcCoupon", payInfo.dcCoupon == ''? '0원' : payInfo.dcCoupon+"원");//쿠폰할인
-            innerHTML("dcPoint", payInfo.dcPoint == ''? '0원' : payInfo.dcPoint+"원");//사용마일리지
-            innerHTML("point", payInfo.point == ''? '0원' : payInfo.point+"원");//적립마일리지
-            innerHTML("remainPoint", payInfo.remainPoint == ''? '0원' : payInfo.remainPoint+"원");//남은마일리지
+            innerHTML("deliveryPrice", payInfo.deliveryPrice == ''? '0원' : format(payInfo.deliveryPrice)+"원");//배송비
+            innerHTML("dcWelfare", payInfo.dcWelfare == ''? '0원' : format(payInfo.dcWelfare)+"원");//복지할인
+            innerHTML("dcCoupon", payInfo.dcCoupon == ''? '0원' : format(payInfo.dcCoupon)+"원");//쿠폰할인
+            innerHTML("dcPoint", payInfo.dcPoint == ''? '0원' : format(payInfo.dcPoint)+"원");//사용마일리지
+            innerHTML("point", payInfo.point == ''? '0원' : format(payInfo.point)+"원");//적립마일리지
+            innerHTML("remainPoint", payInfo.remainPoint == ''? '0원' : format(payInfo.remainPoint)+"원");//남은마일리지
             innerHTML("payDate", payInfo.payDate);//결제일
             innerHTML("pricePay", payInfo.pricePay == ''? '0원' : format(payInfo.pricePay)+"원");//결제금액
             innerHTML("cancelDate", payInfo.cancelDate);//취소일
-            innerHTML("cashReceiptType", payInfo.cashReceiptType);//현금영수증방법
+            innerHTML("cancelDate1", payInfo.cancelDate);//취소일
+            innerHTML("cashReceiptTypeName", payInfo.cashReceiptTypeName);//현금영수증방법
             innerHTML("cashReceiptNumber", payInfo.cashReceiptNumber);//현금영수증번호
             innerHTML("pgMsg", payInfo.pgMsg);//PG사 메세지
+            innerHTML("bank", payInfo.bank);//(무통장입금) 은행명
+            innerHTML("bankAccount", payInfo.bankAccount);//(무통장입금) 계좌버노
+            innerHTML("depositUser", payInfo.depositUser);//(무통장입금) 입금예정자 이름
+
+            if(payInfo.payTypeName == '신용카드') $('#cardContent').show();
+            else if(payInfo.payTypeName == '무통장입금') $('#accountContent').show();
+            else $('#otherContent').show();  /*무료 / 현금+신카 / 온라인 / 현금 / 실시간계좌이체*/
 
             /* 주문자정보 가져오기 */
             var orderUserInfo = info.orderUserInfo;
@@ -62,8 +81,30 @@
             }
 
             var deliveryUserInfo = info.deliveryUserInfo;
-
-
+            innerValue('deliveryUserName', deliveryUserInfo.name);
+            innerHTML('address1', deliveryUserInfo.addressNumber);
+            innerHTML('address2', deliveryUserInfo.addressRoad);
+            if(deliveryUserInfo.email){
+                var email = deliveryUserInfo.email;
+                var splitEmail =  email.split('@');
+                innerValue('deliveryUserEmail1',splitEmail[0]);
+                innerValue('deliveryUserEmail2',splitEmail[1]);
+            }
+            if(deliveryUserInfo.telephone){
+                var telephone = deliveryUserInfo.telephone;
+                var splitTelephone =  telephone.split('-');
+                innerValue('tel1',splitTelephone[0]);
+                innerValue('tel2',splitTelephone[1]);
+                innerValue('tel3',splitTelephone[2]);
+            }
+            if(deliveryUserInfo.telephoneMobile){
+                var telephoneMobile = deliveryUserInfo.telephoneMobile;
+                var splitMobile =  telephoneMobile.split('-');
+                innerValue('phone1',splitMobile[0]);
+                innerValue('phone2',splitMobile[1]);
+                innerValue('phone3',splitMobile[2]);
+            }
+            innerValue('detailAddress', deliveryUserInfo.address);
         });
 
     }
@@ -171,33 +212,67 @@
                                     <div class="col-lg-3">
                                         <span id="payDate"></span>
                                     </div>
-                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">결제금액</label>
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0;">결제금액</label>
                                     <div class="col-lg-3">
-                                        <span id="pricePay"></span>
+                                        <span id="pricePay" style="color: blue;"></span>
                                     </div>
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
                                     <div class="col-lg-3">
                                         <span></span>
                                     </div>
                                 </div>
-                                <div class="row mb-3">
+                                <!--신용카드-->
+                                <div class="row mb-3" id="cardContent" style="display: none;">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">취소일</label>
                                     <div class="col-lg-3">
                                         <span id="cancelDate"></span>
                                     </div>
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">PG사메세지</label>
                                     <div class="col-lg-3">
-                                        <span id="pgMsg"></span>
+                                        <span id="pgMsg" style="color: red;"></span>
                                     </div>
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
                                     <div class="col-lg-3">
                                         <span></span>
                                     </div>
                                 </div>
+                                <!--//신용카드-->
+                                <!--무통장입금-->
+                                <div class="row mb-3" id="accountContent" style="display: none;">
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">입금예정 은행</label>
+                                    <div class="col-lg-3">
+                                        <span id="bank"></span>
+                                    </div>
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">입금예정 계좌번호</label>
+                                    <div class="col-lg-3">
+                                        <span id="bankAccount"></span>
+                                    </div>
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">입금예정자 이름</label>
+                                    <div class="col-lg-3">
+                                        <span id="depositUser"></span>
+                                    </div>
+                                </div>
+                                <!--//무통장입금-->
+                                <!--무료 / 현금+신카 / 온라인 / 현금-->
+                                <div class="row mb-3" id="otherContent" style="display: none;">
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">취소일</label>
+                                    <div class="col-lg-3">
+                                        <span id="cancelDate1"></span>
+                                    </div>
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
+                                    <div class="col-lg-3">
+                                        <span></span>
+                                    </div>
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
+                                    <div class="col-lg-3">
+                                        <span></span>
+                                    </div>
+                                </div>
+                                <!--//무통장입금-->
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">현금영수증방법</label>
                                     <div class="col-lg-3">
-                                        <span id="cashReceiptType"></span>
+                                        <span id="cashReceiptTypeName"></span>
                                     </div>
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">현금영수증번호</label>
                                     <div class="col-lg-3">
@@ -262,51 +337,88 @@
                             </div>
                         </section>
                         <!-- // 1.기본정보 Tab -->
-                        <!-- 2.옵션 Tab -->
+                        <!-- 2.배송지정보 Tab -->
                       <h3>배송지정보</h3>
                         <section>
                             <div class="float-right mb-3">
-                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">저장</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">주문자 정보 복사</button>
                             </div>
                             <div id="section2">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수취인</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="" name="">
+                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="deliveryUserName">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-Mail</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="" name="">
+                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="deliveryUserEmail1" >
                                         @
-                                        <span></span>
+                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="deliveryUserEmail2" >
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">연락처</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel1">
                                         -
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel2">
                                         -
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel3">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone1">
                                         -
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone2">
                                         -
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone3">
                                     </div>
-                                    <div class="form-group row">
+                                    <div class="form-group">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="addressDeliveryNumber">
                                         <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">우편번호 찾기</button>
-                                        <span></span>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;">
+                                        <span id="address1"></span><br>
+                                        <span id="address2"></span>
+                                        <input type="text" class="col-sm-4 form-control" style="display: inline-block;" id="detailAddress">
                                     </div>
                                 </div>
                             </div>
                         </section>
-                      <!--2.옵션 Tab -->
+                      <!--3.배송지정보 Tab -->
+                        <h3>배송정보</h3>
+                        <section>
+                            <div class="float-right mb-3">
+                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">저장</button>
+                            </div>
+                            <div id="section3">
+                                <div class="col-md-12">
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">택배사</label>
+                                        <span></span>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송상태</label>
+                                        <span></span>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송시작 일자</label>
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송완료 일자</label>
+                                        <span></span>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">송장번호</label>
+                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;">
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">송장번호</label>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline-block;">배송추적</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                        <!--2.옵션 Tab -->
                     </div>
                 </div>
             </div>

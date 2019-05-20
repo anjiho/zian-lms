@@ -34,6 +34,8 @@ public class OrderManageController {
             mvc.setViewName("order/promotionOrderList");
         }else if("cancelOrderList".equals(page_gbn)) {
             mvc.setViewName("order/cancelOrderList");
+        }else if("rePlayOrderList".equals(page_gbn)) {
+            mvc.setViewName("order/rePlayOrderList");
         }
         return mvc;
     }

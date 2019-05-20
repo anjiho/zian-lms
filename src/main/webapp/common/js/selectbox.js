@@ -865,16 +865,14 @@ function orderPayTypeSelectbox(tagId, val) {
 function orderSearchSelectbox(tagId, val) {
     var html = "<select id='searchType' name='searchType' class='col-sm-5 select2 form-control custom-select'>";
 
-    if(val == '0') html += "<option value='0' selected>주문자 ID</option>";
-    else html += "<option value='0'>주문자 ID</option>";
-    if(val == '19') html += "<option value='19' selected>주문자 이름</option>";
-    else html += "<option value='19'>주문자 이름</option>";
-    if(val == '20') html += "<option value='20' selected>주문번호</option>";
-    else html += "<option value='20'>주문번호</option>";
-    if(val == '21') html += "<option value='21' selected>입금자명</option>";
-    else html += "<option value='21'>입금자명</option>";
-    if(val == '22') html += "<option value='22' selected>상품명</option>";
-    else html += "<option value='22'>상품명</option>";
+    if(val == 'orderUserId') html += "<option value='orderUserId' selected>주문자 ID</option>";
+    else html += "<option value='orderUserId'>주문자 ID</option>";
+    if(val == 'orderUserName') html += "<option value='orderUserName' selected>주문자 이름</option>";
+    else html += "<option value='orderUserName'>주문자 이름</option>";
+    if(val == 'orderId') html += "<option value='orderId' selected>주문번호</option>";
+    else html += "<option value='orderId'>주문번호</option>";
+    if(val == 'orderGoodsName') html += "<option value='orderGoodsName' selected>상품명</option>";
+    else html += "<option value='orderGoodsName'>상품명</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

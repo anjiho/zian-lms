@@ -24,11 +24,12 @@
         isOfflineSelectbox('isOffline', '');
         deviceSelectbox('deviceSel', '');
         orderPayTypeSelectbox('orderPayTypeSel', '');
-        orderSearchSelectbox('orderSearch', '19');
+        orderSearchSelectbox('orderSearch', 'orderUserName');
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
     }
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
@@ -65,13 +66,14 @@
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
                     function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                    function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
+                    //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
+                   function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                     function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                     function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                     function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                     //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
                     function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                    //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                     function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
@@ -86,7 +88,8 @@
         innerValue('JKey', val);
         goPage('orderManage', 'orderDetailManage');
     }
-    
+
+    //결제상태변경
     function changePayStatus() {
         var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
 
@@ -98,15 +101,18 @@
                 payStatus : orderStatusChangeSel
             };
             arr.push(data);
-            console.log(arr);
         });
-
-        orderManageService.changePayStatus(arr , function() {});
+        if(confirm('변경하시겠습니까?')){
+            orderManageService.changePayStatus(arr , function() {
+                isReloadPage();
+            });
+        }
     }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
+    <input type="hidden" id="Type" name="Type" value="orderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">전체주문 목록</h4>
@@ -275,7 +281,7 @@
                         <th scope="col" width="5%">결제방법</th>
                         <th scope="col" width="8%">진행상태</th>
                         <th scope="col" width="8%">모바일</th>
-                        <th scope="col" width="8%">배송상태</th>
+                        <!--<th scope="col" width="8%">배송상태</th>-->
                         <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
                     </tr>
                     </thead>

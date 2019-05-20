@@ -18,7 +18,7 @@
 <script>
     function init() {
         getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-3', 7);
+        menuActive('menu-3', 3);
         orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
         orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
         isOfflineSelectbox('isOffline', '');
@@ -28,7 +28,6 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
     }
     function fn_search(val) {
         var paging = new Paging();
@@ -39,8 +38,8 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        //var payStatus = getSelectboxValue("orderStatus");//처리상태
-        var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
+        var payStatus = getSelectboxValue("orderStatus");//처리상태
+        //var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
         var isOffline = getSelectboxValue("isOffline");//구매장소
         var isMobile = getSelectboxValue("deviceSel");//디바이스
         var payType = getSelectboxValue("orderPayTypeSel");//결제방법
@@ -49,30 +48,30 @@
         var listNumberSel = getSelectboxValue("listNumberSel");//리스트개수
         var startSearchDate = getInputTextValue('searchStartDate');
         var endSearchDate = getInputTextValue('searchEndDate');
-        var cancelStartDate = getInputTextValue('cancelStartDate');
-        var cancelEndDate = getInputTextValue('cancelEndDate');
         var searchText = getInputTextValue('searchText');
 
-        orderManageService.getCancelOrderListCount(startSearchDate, endSearchDate, cancelStartDate, cancelEndDate, orderPayStatus, isOffline,
-            payType, isMobile, searchType, searchText, function (cnt) {
+        var goodsType = 'VIDEO';
+        var isVideoReply = 1; //재수강
+
+        orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
+            payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-                orderManageService.getCancelOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, cancelStartDate, cancelEndDate,
-                    orderPayStatus, isOffline, payType, isMobile, searchType, searchText, function (selList) {
+                orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
+                    payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
                         console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
-                            function(data) {return data.name == null ? "-" : data.name;},
-                            //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
+                            function(data) {return data.depositUser == null ? "-" : data.depositUser;},
+                            //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
                             function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
-                            function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.indate)+"</a>";},
-                            //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
+                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                            //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                         ], {escapeHtml:false});
                     });
@@ -87,6 +86,7 @@
         innerValue('JKey', val);
         goPage('orderManage', 'orderDetailManage');
     }
+
 
     //결제상태변경
     function changePayStatus() {
@@ -107,19 +107,20 @@
             });
         }
     }
+
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="cancelOrderList">
+    <input type="hidden" id="Type" name="Type" value="rePlayOrderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">주문,결제취소 목록</h4>
+            <h4 class="page-title">(재수강)동영상주문 목록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">주문관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">주문,결제취소 목록</li>
+                        <li class="breadcrumb-item active" aria-current="page">(재수강)동영상주문 목록</li>
                     </ol>
                 </nav>
             </div>
@@ -193,75 +194,13 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group row">
-                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">취소기간별조회</label>
-                            <div class="col-sm-5 pl-0 pr-0">
-                                <tr>
-                                    <td>
-                                        <ul class="searchDate">
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" id="dateType8" name="dateType"  onclick="setSearchDate('0d', 'cancelStartDate', 'cancelEndDate')"/>
-                                                    <label for="dateType8">당일</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" id="dateType9" name="dateType"  onclick="setSearchDate('1w', 'cancelStartDate', 'cancelEndDate')"/>
-                                                    <label for="dateType9">1주</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" id="dateType10" name="dateType"  onclick="setSearchDate('2w', 'cancelStartDate', 'cancelEndDate')"/>
-                                                    <label for="dateType10">2주</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" id="dateType11" name="dateType"  onclick="setSearchDate('1m', 'cancelStartDate', 'cancelEndDate')"/>
-                                                    <label for="dateType11">1개월</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" id="dateType12" name="dateType"  onclick="setSearchDate('3m', 'cancelStartDate', 'cancelEndDate')"/>
-                                                    <label for="dateType12">3개월</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" id="dateType13" name="dateType"  onclick="setSearchDate('6m', 'cancelStartDate', 'cancelEndDate')"/>
-                                                    <label for="dateType13">6개월</label>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
-                            </div>
-                            <div class="col-sm-5 input-group pl-0 pr-0">
-                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="cancelStartDate" id="cancelStartDate">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
-                                <span> ~ </span>
-                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="cancelEndDate" id="cancelEndDate">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
                 <div class="row" style="padding-top:20px">
                     <div class="col">
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">처리상태</label>
                             <div class="col-sm-8 pl-0 pr-0">
-                                <!--<span id="orderStatus"></span>-->
-                                <span id="orderPayStatus"></span>
+                                <span id="orderStatus"></span>
+                                <!--<span id="orderPayStatus"></span>-->
                             </div>
                         </div>
                         <div class="form-group row">
@@ -342,7 +281,7 @@
                         <th scope="col" width="5%">결제방법</th>
                         <th scope="col" width="8%">진행상태</th>
                         <th scope="col" width="8%">모바일</th>
-                        <!--<th scope="col" width="8%">배송상태</th>-->
+                        <th scope="col" width="8%">배송상태</th>
                         <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
                     </tr>
                     </thead>
@@ -361,7 +300,7 @@
 </div>
 
 <script>
-    $("#searchStartDate, #searchEndDate, #cancelStartDate, #cancelEndDate").datepicker({
+    $("#searchStartDate , #searchEndDate").datepicker({
         language: "kr",
         format: "yyyy-mm-dd",
         numberOfMonths: 2

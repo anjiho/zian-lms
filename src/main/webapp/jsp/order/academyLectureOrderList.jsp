@@ -24,7 +24,7 @@
         isOfflineSelectbox('isOffline', '');
         deviceSelectbox('deviceSel', '');
         orderPayTypeSelectbox('orderPayTypeSel', '');
-        orderSearchSelectbox('orderSearch', '19');
+        orderSearchSelectbox('orderSearch', 'orderUserName');
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
@@ -65,7 +65,8 @@
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                            function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
+                            //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
+                            function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                             function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
@@ -90,7 +91,7 @@
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="examQuestionBankKey"  name="examQuestionBankKey">
+    <input type="hidden" id="Type" name="Type" value="academyLectureOrderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">학원강의주문 목록</h4>

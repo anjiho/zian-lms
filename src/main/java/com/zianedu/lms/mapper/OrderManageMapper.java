@@ -19,8 +19,8 @@ public interface OrderManageMapper {
 
     int selectOrderListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                              @Param("goodsType") int goodsType, @Param("payStatus") int payStatus, @Param("isOffline") int isOffline,
-                             @Param("payType") int payType, @Param("isMobile") int isMobile, @Param("searchText") String searchText,
-                             @Param("searchType") String searchType, @Param("isVideoReply") int isVideoReply);
+                             @Param("payType") int payType, @Param("isMobile") int isMobile, @Param("searchType") String searchType,
+                             @Param("searchText") String searchText,@Param("isVideoReply") int isVideoReply);
 
     List<OrderResultDTO> selectCancelOrderList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                          @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
