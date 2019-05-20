@@ -1,5 +1,6 @@
 package com.zianedu.lms.mapper;
 
+import com.amazonaws.services.dynamodbv2.xspec.L;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
@@ -81,6 +82,14 @@ public interface OrderManageMapper {
 
     List<TOrderGoodsVO> selectTOrderGoods(@Param("jKey") int jKey);
 
+    OrderDetailInfoDTO selectOrderDetailInfo(@Param("jKey") int jKey);
+
+    List<OrderDetailProductListDTO> selectOrderDetailProductList(@Param("jKey") int jKey);
+
+    TUserVO selectOrderUserInfo(@Param("jKey") int jKey);
+
+    TUserVO selectDeliveryUserInfo(@Param("jKey") int jKey);
+
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 
@@ -106,6 +115,8 @@ public interface OrderManageMapper {
     void updateTOrderLec(@Param("jLecKey") Long jLecKey, @Param("status") int status, @Param("limitDay") int limitDay);
 
     void updateTOrderGoodsKind(@Param("jGKey") Long jGKey, @Param("kind") int kind);
+
+    void updateOrderStatus(@Param("jKey") int jKey, @Param("payStatus") int payStatus);
 
     /** DELETE **/
     void deleteTDeviceLimit(@Param("deviceLimitKey") int deviceLimitKey);

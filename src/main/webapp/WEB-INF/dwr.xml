@@ -135,6 +135,11 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.DeviceListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PointListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.ChangeNumberDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailProductListDTO"/>
+
+
 	</allow>
 
 
