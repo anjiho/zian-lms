@@ -47,7 +47,6 @@
                 <div id="playForm" method="" action="" class="m-t-40">
                     <div>
                         <!-- 1.기본정보 Tab -->
-                        <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
                                 <div class="row mb-3">
@@ -65,7 +64,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2" style="background-color:#dee2e6 ;height: 35px;">
-                                    <span>결제정보</span>
+                                    <h4>결제정보</h4>
                                 </div>
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
@@ -152,7 +151,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2" style="background-color:#dee2e6 ;height: 35px;">
-                                    <span>주문상품정보</span>
+                                    <h4>주문상품정보</h4>
                                 </div>
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">상품종류</label>
@@ -183,7 +182,7 @@
                                     </div>
                                 </div>
                                 <div class="row mb-2" style="background-color:#dee2e6 ;height: 35px;">
-                                    <span>주문자정보</span>
+                                    <h4>주문자정보</h4>
                                 </div>
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -215,7 +214,7 @@
                         </section>
                         <!-- // 1.기본정보 Tab -->
                         <!-- 2.옵션 Tab -->
-                        <h3>배송지정보</h3>
+                        <!--<h3>배송지정보</h3>
                         <section>
                             <div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
@@ -258,10 +257,10 @@
                                 </div>
                             </div>
                         </section>
-                        <!-- //2.옵션 Tab -->
+                      //2.옵션 Tab -->
 
                         <!-- 프로모션 정보 -->
-                        <h3>배송정보</h3>
+                        <!--<h3>배송정보</h3>
                         <section>
                             <div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" >배송정보 저장</button>
@@ -270,7 +269,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">택배사</label>
                                     <div class="col-sm-4 pl-0 pr-0">
-                                     <span id="deliveryNameSel"></span>
+                                        <span id="deliveryNameSel"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -297,7 +296,7 @@
                                 </div>
                             </div>
                         </section>
-                        <!-- 프로모션정보 -->
+                         프로모션정보 -->
                     </div>
                 </div>
             </div>
@@ -363,7 +362,7 @@
 <%@include file="/common/jsp/footer.jsp" %>
 <script>
     // Basic Example with form
-    var form = $("#playForm");
+  /*  var form = $("#playForm");
     form.children("div").steps({
         headerTag: "h3",
         bodyTag: "section",
@@ -374,7 +373,7 @@
         onFinished: function(event, currentIndex) {
             promotionPacakgeSave();
         },
-    });
+    });*/
 
     $('#indate').datepicker({
         format: "yyyy-mm-dd",

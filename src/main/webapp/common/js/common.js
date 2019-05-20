@@ -2398,3 +2398,63 @@ function split_MM_getTime(day, id, index) {
     }
     $("select[name="+id+"]").eq(index).val(MM[1]);
 }
+
+//달력 - 기간별조회
+function getFormatDate(date){
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth());
+    month = month >= 10 ? month : '0' + month;
+    var day = date.getDate();
+    day = day >= 10 ? day : '0' + day;
+    return  year +'-'+ month +'-'+ day;
+}
+
+//달력 - 기간별조회
+function setSearchDate(start, startId, endId){
+    var num = start.substring(0,1);
+    var str = start.substring(1,2);
+
+    var today = new Date();
+
+    var endDate = getFormatDate(today);
+
+    $('#'+endId).val(endDate);
+
+    if(str == 'd'){
+        today.setDate(today.getDate() - num);
+    }else if (str == 'w'){
+        today.setDate(today.getDate() - (num*7));
+    }else if (str == 'm'){
+        today.setMonth(today.getMonth() - num);
+        today.setDate(today.getDate() + 1);
+    }
+
+    var startDate = getFormatDate(today);
+
+
+    $('#'+startId).val(startDate);
+}
+
+//금액 컴마표시
+function format(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function allChk(obj, chkId){
+    var chkObj = document.getElementsByName(chkId);
+    var rowCnt = chkObj.length - 1;
+    var check = obj.checked;
+    if (check) {﻿
+          for (var i=0; i<=rowCnt; i++){
+              if(chkObj[i].type == "checkbox")
+                  chkObj[i].checked = true;
+          }
+    } else {
+        for (var i=0; i<=rowCnt; i++) {
+            if(chkObj[i].type == "checkbox"){
+                chkObj[i].checked = false;
+            }
+        }
+    }
+}

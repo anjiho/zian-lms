@@ -22,6 +22,18 @@ public class OrderManageController {
         Util.isNullValue(page_gbn, "");
         if("orderList".equals(page_gbn)) {
             mvc.setViewName("order/orderList");
+        }else if("orderDetailManage".equals(page_gbn)) {
+            mvc.setViewName("order/orderDetailManage");
+        }else if("playOrderList".equals(page_gbn)) {
+            mvc.setViewName("order/playOrderList");
+        }else if("academyLectureOrderList".equals(page_gbn)) {
+            mvc.setViewName("order/academyLectureOrderList");
+        }else if("bookOrderList".equals(page_gbn)) {
+            mvc.setViewName("order/bookOrderList");
+        }else if("promotionOrderList".equals(page_gbn)) {
+            mvc.setViewName("order/promotionOrderList");
+        }else if("cancelOrderList".equals(page_gbn)) {
+            mvc.setViewName("order/cancelOrderList");
         }
         return mvc;
     }

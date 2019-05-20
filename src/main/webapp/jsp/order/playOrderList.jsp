@@ -18,7 +18,7 @@
 <script>
     function init() {
         getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-3', 1);
+        menuActive('menu-3', 2);
         orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
         orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
         isOfflineSelectbox('isOffline', '');
@@ -50,38 +50,38 @@
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
 
-        var goodsType = '';
+        var goodsType = 'VIDEO';
         var isVideoReply = 0;
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
-                                                payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
-            paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+            payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
+                paging.count(sPage, cnt, '10', '10', comment.blank_list);
+                var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
-                payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
-                    console.log(selList);
-                if (selList.length == 0) return;
-               dwr.util.addRows("dataList", selList, [
-                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
-                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
-                    function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                    function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
-                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
-                    function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
-                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
-                    //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
-                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
-                    function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
-                ], {escapeHtml:false});
+                    payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
+                        console.log(selList);
+                        if (selList.length == 0) return;
+                        dwr.util.addRows("dataList", selList, [
+                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
+                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
+                            function(data) {return data.depositUser == null ? "-" : data.depositUser;},
+                            function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
+                            function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
+                            function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
+                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
+                            function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
+                        ], {escapeHtml:false});
+                    });
             });
-        });
     }
-    
+
     function changeList() {
         fn_search('new');
     }
-    
+
     function goOrderDetail(val) {
         innerValue('JKey', val);
         goPage('orderManage', 'orderDetailManage');
@@ -93,12 +93,12 @@
     <input type="hidden" id="examQuestionBankKey"  name="examQuestionBankKey">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">전체주문 목록</h4>
+            <h4 class="page-title">동영상주문 목록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">주문관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">전체주문 목록</li>
+                        <li class="breadcrumb-item active" aria-current="page">동영상주문 목록</li>
                     </ol>
                 </nav>
             </div>
@@ -231,7 +231,7 @@
         <button type="button" class="btn btn-outline-info mx-auto">변경</button>
         <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
         <div class="col-sm-3 pl-0 pr-0" >
-        <span id="listNumberSel"></span>
+            <span id="listNumberSel"></span>
         </div>
     </div>
 </div>

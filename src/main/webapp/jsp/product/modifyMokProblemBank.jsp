@@ -201,6 +201,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
+
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">노출날짜</label>
                                         <div class="col-sm-6 input-group pl-0 pr-0">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="dspDate" id="dspDate">
