@@ -1,6 +1,7 @@
 package com.zianedu.lms.service;
 
 
+import com.zianedu.lms.define.datasource.GoodsKindType;
 import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.OrderPayStatusType;
 import com.zianedu.lms.define.datasource.OrderPayType;
@@ -16,6 +17,7 @@ import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.StringUtils;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
+import org.apache.poi.ss.formula.functions.T;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,6 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -407,6 +410,36 @@ public class OrderManageService {
     }
 
     /**
+     * 주문상세보기
+     * @param jKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public OrderDetailDTO getOrderDetail(int jKey) {
+        OrderDetailInfoDTO orderDetailInfoDTO = orderManageMapper.selectOrderDetailInfo(jKey);
+        if (orderDetailInfoDTO != null) {
+            orderDetailInfoDTO.setPayStatusName(OrderPayStatusType.getOrderPayStatusStr(orderDetailInfoDTO.getPayStatus()));
+            orderDetailInfoDTO.setPayTypeName(OrderPayType.getOrderPayTypeStr(orderDetailInfoDTO.getPayType()));
+            orderDetailInfoDTO.setCashReceiptTypeName(CashReceiptType.getCashReceiptTypeStr(orderDetailInfoDTO.getCashReceiptType()));
+        }
+        List<OrderDetailProductListDTO> orderProductList = orderManageMapper.selectOrderDetailProductList(jKey);
+        if (orderProductList.size() > 0) {
+            for (OrderDetailProductListDTO productListDTO : orderProductList) {
+                productListDTO.setProductTypeName(OrderGoodsType.getGoodsTypeStr(productListDTO.getType()));
+                if (productListDTO.getKind() > 0 && productListDTO.getKind() < 13) {
+                    productListDTO.setProductOptionName(productListDTO.getKind() + "개월");
+                } else {
+                    productListDTO.setProductOptionName(GoodsKindType.getGoodsKindName(productListDTO.getKind()));
+                }
+            }
+        }
+        TUserVO orderUserInfo = orderManageMapper.selectOrderUserInfo(jKey);
+        TUserVO deliveryUserInfo = orderManageMapper.selectDeliveryUserInfo(jKey);
+
+        return new OrderDetailDTO(orderDetailInfoDTO, orderProductList, orderUserInfo, deliveryUserInfo);
+    }
+
+    /**
      * 수강관리 > 수강내역목록 > 수강시간 조정 > 시간 수정 (배열이아닌 건 바이 건)
      * @param jCurriKey
      * @param jLecKey
@@ -618,9 +651,21 @@ public class OrderManageService {
         orderManageMapper.deleteTDeviceLimit(deviceLimitKey);
     }
 
-    @Transactional(propagation = Propagation.REQUIRED)
-    public void test(String yyyymmdd, int teacherKey) throws Exception {
-        teacherCalculateRepository.calculateTeacherSaleGoodsAny(yyyymmdd);
+    /**
+     * 결제상태 변경하기
+     * @param list
+     */
+    public void changePayStatus(List<HashMap<Object, Object>>list) {
+        if (list.size() == 0) return;
+        for (HashMap<Object, Object>paramMap : list) {
+            int jKey = (Integer)paramMap.get("jKey");
+            int payStatus = (Integer)paramMap.get("payStatus");
+
+            if (jKey > 0) {
+                orderManageMapper.updateOrderStatus(jKey, payStatus);
+            }
+        }
     }
+
 
 }

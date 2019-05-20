@@ -657,6 +657,57 @@
         AND J_KEY = #{jKey}
     </select>
 
+    <select id="selectOrderDetailInfo" resultType="OrderDetailInfoDTO">
+        SELECT
+            A.USER_KEY, A.J_ID, A.PAY_STATUS, A.PAY_TYPE, A.PRICE, A.PRICE_PAY,
+            A.DELIVERY_PRICE, A.DC_WELFARE, A.DC_COUPON, A.DC_POINT, A.POINT,
+            ( SELECT NVL( SUM(POINT), 0 ) FROM T_POINT WHERE USER_KEY = A.USER_KEY) as REMAIN_POINT,
+            A.BANK, A.BANK_ACCOUNT, A.DEPOSIT_USER,
+            TO_CHAR( A.PAY_DATE, 'YYYY-MM-DD hh24:mm:ss') as PAY_DATE,
+            TO_CHAR( A.DEPOSIT_DATE, 'YYYY-MM-DD') as DEPOSIT_DATE,
+            TO_CHAR( A.CANCEL_DATE, 'YYYY-MM-DD') as CANCEL_DATE,
+            A.CASH_RECEIPT_TYPE, A.CASH_RECEIPT_NUMBER,
+            C.RESULTMSG as PG_MSG
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        LEFT OUTER JOIN T_PAY_INIPAY C
+        ON A.J_ID = C.MOID
+        WHERE A.J_KEY = #{jKey}
+    </select>
+
+    <select id="selectOrderDetailProductList" resultType="OrderDetailProductListDTO">
+        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, A.SELL_PRICE
+        FROM T_ORDER_GOODS A
+        INNER JOIN T_GOODS B
+        ON A.G_KEY = B.G_KEY
+        INNER JOIN T_GOODS C
+        ON A.g_key = C.g_key
+        WHERE A.J_KEY = #{jKey}
+    </select>
+
+    <select id="selectOrderUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
+        SELECT
+            B.USER_KEY, B.USER_ID, B.NAME, B.EMAIL, B.TELEPHONE, B.TELEPHONE_MOBILE,
+            B.ADDRESS, B.ADDRESS_ROAD, B.ADDRESS_NUMBER
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE A.J_KEY = #{jKey}
+    </select>
+
+    <select id="selectDeliveryUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
+        SELECT
+            B.USER_KEY, B.USER_ID, B.NAME, B.EMAIL, B.TELEPHONE, B.TELEPHONE_MOBILE,
+            B.ADDRESS, B.ADDRESS_ROAD, B.ADDRESS_NUMBER
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY C
+        ON A.J_KEY = C.J_KEY
+        WHERE C.J_KEY = #{jKey}
+    </select>
+
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
@@ -833,6 +884,11 @@
         WHERE J_G_KEY = #{jGKey}
     </update>
 
+    <update id="updateOrderStatus">
+        UPDATE T_ORDER
+        SET PAY_STATUS = #{payStatus}
+        WHERE J_KEY = #{jKey}
+    </update>
     <delete id="deleteTDeviceLimit">
         DELETE FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
     </delete>
