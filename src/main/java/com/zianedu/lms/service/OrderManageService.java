@@ -655,11 +655,11 @@ public class OrderManageService {
      * 결제상태 변경하기
      * @param list
      */
-    public void changePayStatus(List<HashMap<Object, Object>>list) {
+    public void changePayStatus(List<HashMap<String, String>>list) {
         if (list.size() == 0) return;
-        for (HashMap<Object, Object>paramMap : list) {
-            int jKey = (Integer)paramMap.get("jKey");
-            int payStatus = (Integer)paramMap.get("payStatus");
+        for (HashMap<String, String>paramMap : list) {
+            int jKey = Integer.parseInt(paramMap.get("jKey"));
+            int payStatus = Integer.parseInt(paramMap.get("payStatus"));
 
             if (jKey > 0) {
                 orderManageMapper.updateOrderStatus(jKey, payStatus);
