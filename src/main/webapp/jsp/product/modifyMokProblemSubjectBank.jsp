@@ -33,7 +33,6 @@
             var resultList = info.resultList;
             if (resultList.length > 0) {
                 dwr.util.addRows("dataList", resultList, [
-
                     function(data) {return "<input type='hidden' name='examQuestionBankKey[]' value=''>"},//코드
                     function(data) {return "<input type='hidden' name='bankSubjectQuesLinkKey[]' value='"+ data.bankSubjectQuesLinkKey +"'>"},//코드
                     function(data) {return data.examQuesBankKey},//코드

@@ -65,7 +65,7 @@
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
                     function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                    function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
+                    function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                     function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                     function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                     function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
@@ -86,11 +86,27 @@
         innerValue('JKey', val);
         goPage('orderManage', 'orderDetailManage');
     }
+    
+    function changePayStatus() {
+        var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
+
+        var arr =  new Array();
+        $("input[name=rowChk]:checked").each(function() {
+            var jKey = $(this).val();
+            var data = {
+                jKey : jKey,
+                payStatus : orderStatusChangeSel
+            };
+            arr.push(data);
+            console.log(arr);
+        });
+
+        orderManageService.changePayStatus(arr , function() {});
+    }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="examQuestionBankKey"  name="examQuestionBankKey">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">전체주문 목록</h4>
@@ -226,12 +242,20 @@
 
             </div>
         </div>
-        <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
-        <span id="orderStatusChangeSel"></span>
-        <button type="button" class="btn btn-outline-info mx-auto">변경</button>
-        <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
-        <div class="col-sm-3 pl-0 pr-0" >
-        <span id="listNumberSel"></span>
+        <div class="col">
+            <div class="form-group row">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
+                <div class="col-sm-8 pl-0 pr-0">
+                    <span id="orderStatusChangeSel"></span>
+                    <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
+                <div class="col-sm-8 pl-0 pr-0">
+                    <span id="listNumberSel"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>
