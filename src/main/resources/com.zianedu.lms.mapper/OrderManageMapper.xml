@@ -947,6 +947,7 @@
             <if test="deliveryMasterKey > 0">DELIVERY_MASTER_KEY = #{deliveryMasterKey},</if>
             <if test="status != ''">STATUS = #{status},</if>
             <if test="deliveryNo != ''">DELIVERY_NO = #{deliveryNo},</if>
+            <if test="deliveryEndDate != ''">DELIVERY_END_DATE = TO_DATE(#{deliveryEndDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
         </set>
         WHERE J_DELIVERY_KEY = #{jDeliveryKey}
     </update>
