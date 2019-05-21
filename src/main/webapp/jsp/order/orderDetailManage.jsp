@@ -10,8 +10,14 @@
 <script>
     var JKey = '<%=JKey%>';
     var Type = '<%=Type%>';
-
     function init() {
+        //탭 메뉴 색상 변경
+        $("#playForm ul").each(function(idx) {
+            var ul = $(this);
+            ul.find("li").addClass("done").attr("aria-selected", "false");
+            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
+
         var num = '';
         if(Type == 'orderList') num = 1;
         else if(Type == 'playOrderList') num = 2;
@@ -21,8 +27,8 @@
         else if(Type == 'promotionOrderList') num = 6;
         else if(Type == 'cancelOrderList') num = 7;
         menuActive('menu-3', num);
-        deliveryNameSelectbox('deliveryNameSel', '');
-        orderDeliveryInfoSelectbox('deliveryStatusSel', '');
+        deliveryCompanySelectbox("deliveryMaster","");//택배사
+        orderDeliveryInfoSelectbox('deliveryStatusSel', '');//
 
         /*주문상세정보 가져오기*/
         orderManageService.getOrderDetail(JKey, function(info) {
@@ -63,6 +69,7 @@
             innerHTML("addressRoad", orderUserInfo.addressRoad);
             innerHTML("telephone", orderUserInfo.telephone);
             innerHTML("telephoneMobile", orderUserInfo.telephoneMobile);
+            innerHTML("zipcode", orderUserInfo.zipcode);
 
             /* 주문상품정보 */
             var orderProductList = info.orderProductList;
@@ -82,45 +89,107 @@
             }
 
             /*배송지정보 가져오기*/
-            var deliveryUserInfo = info.deliveryUserInfo;
-            //우편번호 postcode  zipcode
-            innerValue('postcode', deliveryUserInfo.zipcode);
-            innerValue('deliveryUserName', deliveryUserInfo.name);
-            innerValue('jibunAddress', deliveryUserInfo.addressNumber);
-            innerValue('roadAddress', deliveryUserInfo.addressRoad);
-            if(deliveryUserInfo.email){
-                var email = deliveryUserInfo.email;
+            var deliveryAddressInfo = info.deliveryAddressInfo;
+            innerValue('postcode', deliveryAddressInfo.deliveryZipcode);
+            innerValue('deliveryUserName', deliveryAddressInfo.deliveryNane);
+            innerValue('jibunAddress', deliveryAddressInfo.deliveryAddress);
+            innerValue('roadAddress', deliveryAddressInfo.deliveryAddressRoad);
+            innerValue('detailAddress', deliveryAddressInfo.deliveryAddressAdd);
+            if(deliveryAddressInfo.deliveryEmail){
+                var email = deliveryAddressInfo.deliveryEmail;
                 var splitEmail =  email.split('@');
                 innerValue('deliveryUserEmail1',splitEmail[0]);
                 innerValue('deliveryUserEmail2',splitEmail[1]);
             }
-            if(deliveryUserInfo.telephone){
-                var telephone = deliveryUserInfo.telephone;
+            if(deliveryAddressInfo.deliveryTelephone){
+                var telephone = deliveryAddressInfo.deliveryTelephone;
                 var splitTelephone =  telephone.split('-');
                 innerValue('tel1',splitTelephone[0]);
                 innerValue('tel2',splitTelephone[1]);
                 innerValue('tel3',splitTelephone[2]);
             }
-            if(deliveryUserInfo.telephoneMobile){
-                var telephoneMobile = deliveryUserInfo.telephoneMobile;
+            if(deliveryAddressInfo.deliveryTelephoneMobile){
+                var telephoneMobile = deliveryAddressInfo.deliveryTelephoneMobile;
                 var splitMobile =  telephoneMobile.split('-');
                 innerValue('phone1',splitMobile[0]);
                 innerValue('phone2',splitMobile[1]);
                 innerValue('phone3',splitMobile[2]);
             }
-            innerValue('detailAddress', deliveryUserInfo.address);
-        });
 
+
+            /* 배송정보 가져오기*/
+            var deliveryInfo = info.deliveryInfo;
+            deliveryCompanySelectbox("deliveryMaster", deliveryInfo.deliveryMasterKey);//택배사
+            orderDeliveryInfoSelectbox('deliveryStatusSel', deliveryInfo.status);//
+            innerHTML("deliveryStartDate ", deliveryInfo.deliveryStartDate);//시작일자
+            innerHTML("deliveryEndDate  ", deliveryInfo.deliveryEndDate );//완료일자
+            innerValue("deliveryNo  ", deliveryInfo.deliveryNo);//완료일자
+        });
     }
 
-    $( document ).ready(function() {
-        //탭 메뉴 색상 변경
-        $("#playForm ul").each(function(idx) {
-            var ul = $(this);
-            ul.find("li").addClass("done").attr("aria-selected", "false");
-            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+    function saveDeliveryAddressInfo() { //배송지정보 저장
+        var deliveryName       = getInputTextValue("deliveryUserName");
+        var deliveryUserEmail1 = getInputTextValue("deliveryUserEmail1");
+        var deliveryUserEmail2 = getInputTextValue("deliveryUserEmail2");
+        var deliveryEmail      =  deliveryUserEmail1+"@"+deliveryUserEmail2;
+        var tel1 = getInputTextValue("tel1");
+        var tel2 = getInputTextValue("tel2");
+        var tel3 = getInputTextValue("tel3");
+        var deliveryTelephone  =  tel1+"-"+tel2+"-"+tel3;
+        var phone1 = getInputTextValue("phone1");
+        var phone2 = getInputTextValue("phone2");
+        var phone3 = getInputTextValue("phone3");
+        var deliveryTelephoneMobile  =  phone1+"-"+phone2+"-"+phone3;
+        var deliveryZipcode = getInputTextValue('postcode');
+        var deliveryAddressRoad = getInputTextValue('roadAddress');
+        var deliveryAddress = getInputTextValue('jibunAddress');
+        var deliveryAddressAdd = getInputTextValue('detailAddress');
+        if(confirm('배송지정보를 저장하시겠습니까?')){
+            orderManageService.saveDeliveryAddressInfo(JKey, deliveryName, deliveryEmail,
+                deliveryTelephone, deliveryTelephoneMobile, deliveryZipcode, deliveryAddress, deliveryAddressRoad, deliveryAddressAdd, function(info) {isReloadPage();});
+        }
+    }
+
+    function copyDeliveryInfo() { //주문자정보 복사
+        orderManageService.getOrderDetail(JKey, function(info) {
+            var orderUserInfo = info.orderUserInfo;
+            innerHTML("deliveryUserName", orderUserInfo.name);
+            if(orderUserInfo.email){
+                var email = orderUserInfo.email;
+                var splitEmail =  email.split('@');
+                innerValue('deliveryUserEmail1',splitEmail[0]);
+                innerValue('deliveryUserEmail2',splitEmail[1]);
+            }
+            if(orderUserInfo.telephone){
+                var telephone = orderUserInfo.telephone;
+                var splitTelephone =  telephone.split('-');
+                innerValue('tel1',splitTelephone[0]);
+                innerValue('tel2',splitTelephone[1]);
+                innerValue('tel3',splitTelephone[2]);
+            }
+            if(orderUserInfo.telephoneMobile){
+                var telephoneMobile = orderUserInfo.telephoneMobile;
+                var splitMobile =  telephoneMobile.split('-');
+                innerValue('phone1',splitMobile[0]);
+                innerValue('phone2',splitMobile[1]);
+                innerValue('phone3',splitMobile[2]);
+            }
+            innerValue('phone3',splitMobile[2]);
+            innerValue("postcode", orderUserInfo.zipcode);
+            innerValue("roadAddress", orderUserInfo.addressRoad);
+            innerValue("jibunAddress", orderUserInfo.addressNumber);
+            innerValue("detailAddress", orderUserInfo.address);
         });
-    });
+    }
+
+    function saveDeliveryInfo() { //배송정보 저장
+        var deliveryMasterKey = getSelectboxValue('deliverycompany');
+        var status = getSelectboxValue('deliveryType');
+        var deliveryNo = getInputTextValue('deliveryNo');
+        if(confirm('배송정보를 저장하시겠습니까?')){
+            orderManageService.saveDeliveryInfo(JKey, deliveryMasterKey, status, deliveryNo, function(info) {});
+        }
+    }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -328,11 +397,12 @@
                                 </div>
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">주소</label>
-                                    <div class="col-lg-3">
-                                        <span id='addressNumber'></span>
+                                    <div class="col-lg-6">
+                                        <span id='zipcode'></span>
+                                        <span id='addressRoad'></span>
                                     </div>
-                                    <div class="col-lg-3">
-                                        <span id="addressRoad"></span>address
+                                    <div class="col-lg-6">
+                                        <span id="addressNumber"></span>
                                     </div>
                                     <div class="col-lg-3">
                                         <span id='address'></span>
@@ -344,14 +414,15 @@
                         <!-- 2.배송지정보 Tab -->
                       <h3>배송지정보</h3>
                         <section>
-                            <div class="float-right mb-3">
-                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">저장</button>
-                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">주문자 정보 복사</button>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryAddressInfo();">저장</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="copyDeliveryInfo();">주문자 정보 복사</button>
                             </div>
                             <div id="section2">
                                 <div class="col-md-12">
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수취인</label>
+                                        <label cl
+                                               ass="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수취인</label>
                                         <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="deliveryUserName">
                                     </div>
                                     <div class="form-group row">
@@ -399,33 +470,34 @@
                       <!--3.배송지정보 Tab -->
                         <h3>배송정보</h3>
                         <section>
-                            <div class="float-right mb-3">
-                                <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">저장</button>
+                            <div class="mb-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryInfo();">저장</button>
                             </div>
                             <div id="section3">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">택배사</label>
-                                        <span></span>
+                                        <div class="col-sm-5 pl-0 pr-0">
+                                            <span id="deliveryMaster"></span>
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송상태</label>
-                                        <span></span>
+                                        <div class="col-sm-5 pl-0 pr-0">
+                                            <span id="deliveryStatusSel"></span>
+                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송시작 일자</label>
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;">
+                                        <span id="deliveryStartDate"></span>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">배송완료 일자</label>
-                                        <span></span>
+                                        <span id="deliveryEndDate"></span>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">송장번호</label>
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;">
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">송장번호</label>
+                                        <input type="text" id="deliveryNo"  class="col-sm-4 form-control" style="display: inline-block;">
                                         <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline-block;">배송추적</button>
                                     </div>
                                 </div>
