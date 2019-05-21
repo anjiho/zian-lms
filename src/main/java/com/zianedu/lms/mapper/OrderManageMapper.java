@@ -92,6 +92,8 @@ public interface OrderManageMapper {
 
     TOrderDeliveryVO selectDeliveryInfo(@Param("jKey") int jKey);
 
+    DeliveryAddressDTO selectDeliveryAddressInfo(@Param("jKey") int jKey);
+
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 

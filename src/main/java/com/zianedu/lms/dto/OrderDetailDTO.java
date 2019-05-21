@@ -19,14 +19,18 @@ public class OrderDetailDTO {
 
     private TOrderDeliveryVO deliveryInfo;
 
+    private DeliveryAddressDTO deliveryAddressInfo;
+
     public OrderDetailDTO(){}
 
     public OrderDetailDTO(OrderDetailInfoDTO payInfo, List<OrderDetailProductListDTO> orderProductList,
-                          TUserVO orderUserInfo, TUserVO deliveryUserInfo, TOrderDeliveryVO deliveryInfo) {
+                          TUserVO orderUserInfo, TUserVO deliveryUserInfo, TOrderDeliveryVO deliveryInfo,
+                          DeliveryAddressDTO deliveryAddressInfo) {
         this.payInfo = payInfo;
         this.orderProductList = orderProductList;
         this.orderUserInfo = orderUserInfo;
         this.deliveryUserInfo = deliveryUserInfo;
         this.deliveryInfo = deliveryInfo;
+        this.deliveryAddressInfo = deliveryAddressInfo;
     }
 }

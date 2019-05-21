@@ -435,9 +435,10 @@ public class OrderManageService {
         }
         TUserVO orderUserInfo = orderManageMapper.selectOrderUserInfo(jKey);
         TUserVO deliveryUserInfo = orderManageMapper.selectDeliveryUserInfo(jKey);
+        DeliveryAddressDTO deliveryAddressInfo = orderManageMapper.selectDeliveryAddressInfo(jKey);
         TOrderDeliveryVO deliveryInfo = orderManageMapper.selectDeliveryInfo(jKey);
 
-        return new OrderDetailDTO(orderDetailInfoDTO, orderProductList, orderUserInfo, deliveryUserInfo, deliveryInfo);
+        return new OrderDetailDTO(orderDetailInfoDTO, orderProductList, orderUserInfo, deliveryUserInfo, deliveryInfo, deliveryAddressInfo);
     }
 
     /**
