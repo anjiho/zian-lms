@@ -18,8 +18,8 @@
 <script>
     function init() {
         getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-3', 2);
-        orderStatusTypeSelecbox('orderStatus', 2);//처리상태 - 입금예정,결제대기,결제완료
+        menuActive('menu-3', 10);
+        orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
         orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
         isOfflineSelectbox('isOffline', '');
         deviceSelectbox('deviceSel', '');
@@ -29,6 +29,7 @@
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
     }
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
@@ -50,7 +51,7 @@
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
 
-        var goodsType = 'VIDEO';
+        var goodsType = '';
         var isVideoReply = 0;
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
@@ -65,14 +66,14 @@
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                            //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
+                            //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                             function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                         ], {escapeHtml:false});
                     });
@@ -111,15 +112,15 @@
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="playOrderList">
+    <input type="hidden" id="Type" name="Type" value="orderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">동영상주문 목록</h4>
+            <h4 class="page-title">학원수강 관리</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">주문관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">동영상주문 목록</li>
+                        <li class="breadcrumb-item active" aria-current="page">학원수강 관리</li>
                     </ol>
                 </nav>
             </div>
@@ -280,7 +281,7 @@
                         <th scope="col" width="5%">결제방법</th>
                         <th scope="col" width="8%">진행상태</th>
                         <th scope="col" width="8%">모바일</th>
-                        <th scope="col" width="8%">배송상태</th>
+                        <!--<th scope="col" width="8%">배송상태</th>-->
                         <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
                     </tr>
                     </thead>
