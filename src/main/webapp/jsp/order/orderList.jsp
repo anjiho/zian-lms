@@ -63,18 +63,15 @@
                     console.log(selList);
                 if (selList.length == 0) return;
                dwr.util.addRows("dataList", selList, [
-                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
+                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
-                    function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                    //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
+                   function(data) {return data.depositUser == null ? "-" : data.depositUser;},
                    function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
-                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
-                    function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
-                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
-                    //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
-                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                    //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
-                    function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
+                   function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
+                   function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
+                   function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                   function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                   function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
         });
