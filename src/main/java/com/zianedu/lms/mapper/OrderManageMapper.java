@@ -126,6 +126,8 @@ public interface OrderManageMapper {
 
     void updateOrderDeliveryInfo(DeliveryAddressDTO deliveryAddressDTO);
 
+    void updateTOrderDelivery(TOrderDeliveryVO tOrderDeliveryVO);
+
     /** DELETE **/
     void deleteTDeviceLimit(@Param("deviceLimitKey") int deviceLimitKey);
 }
