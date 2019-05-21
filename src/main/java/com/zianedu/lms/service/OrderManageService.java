@@ -686,6 +686,28 @@ public class OrderManageService {
         orderManageMapper.insertTOrderDelivery(deliveryInfo);
     }
 
-
+    /**
+     * 배송지 정보 저장
+     * @param jKey
+     * @param deliveryName
+     * @param deliveryEmail
+     * @param deliveryTelephone
+     * @param deliveryTelephoneMobile
+     * @param deliveryZipcode
+     * @param deliveryAddress
+     * @param deliveryAddressRoad
+     * @param deliveryAddressAdd
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveDeliveryAddressInfo(int jKey, String deliveryName, String deliveryEmail, String deliveryTelephone,
+                                        String deliveryTelephoneMobile, String deliveryZipcode, String deliveryAddress,
+                                        String deliveryAddressRoad, String deliveryAddressAdd) {
+        if (jKey == 0) return;
+        DeliveryAddressDTO deliveryAddressDTO = new DeliveryAddressDTO(
+                jKey, deliveryName, deliveryTelephone, deliveryTelephoneMobile, deliveryEmail,
+                deliveryZipcode, deliveryAddress, deliveryAddressRoad, deliveryAddressAdd
+        );
+        orderManageMapper.updateOrderDeliveryInfo(deliveryAddressDTO);
+    }
 
 }
