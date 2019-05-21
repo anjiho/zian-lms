@@ -121,9 +121,10 @@
             var deliveryInfo = info.deliveryInfo;
             deliveryCompanySelectbox("deliveryMaster", deliveryInfo.deliveryMasterKey);//택배사
             orderDeliveryInfoSelectbox('deliveryStatusSel', deliveryInfo.status);//
-            innerHTML("deliveryStartDate ", deliveryInfo.deliveryStartDate);//시작일자
-            innerHTML("deliveryEndDate  ", deliveryInfo.deliveryEndDate );//완료일자
-            innerValue("deliveryNo  ", deliveryInfo.deliveryNo);//완료일자
+            innerHTML("deliveryStartDate", deliveryInfo.deliveryStartDate);//시작일자
+            innerHTML("deliveryEndDate", deliveryInfo.deliveryEndDate );//완료일자
+            innerValue("deliveryNo", deliveryInfo.deliveryNo);//완료일자
+            innerValue("JDeliveryKey", deliveryInfo.JDeliveryKey);//JDeliveryKey
         });
     }
 
@@ -186,8 +187,12 @@
         var deliveryMasterKey = getSelectboxValue('deliverycompany');
         var status = getSelectboxValue('deliveryType');
         var deliveryNo = getInputTextValue('deliveryNo');
+        alert(deliveryMasterKey);
+        //JDeliveryKey
+        var JDeliveryKey = getInputTextValue('JDeliveryKey');
+        if(JDeliveryKey == null || JDeliveryKey == undefined)  JDeliveryKey = 0;
         if(confirm('배송정보를 저장하시겠습니까?')){
-            orderManageService.saveDeliveryInfo(JKey, deliveryMasterKey, status, deliveryNo, function(info) {});
+            orderManageService.saveDeliveryInfo(JDeliveryKey, JKey, deliveryMasterKey, status, deliveryNo, function(info) {});
         }
     }
 </script>
@@ -475,6 +480,7 @@
                             </div>
                             <div id="section3">
                                 <div class="col-md-12">
+                                    <input type="hidden" id="JDeliveryKey" value="">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">택배사</label>
                                         <div class="col-sm-5 pl-0 pr-0">
