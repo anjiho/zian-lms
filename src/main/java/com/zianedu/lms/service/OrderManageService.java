@@ -435,8 +435,9 @@ public class OrderManageService {
         }
         TUserVO orderUserInfo = orderManageMapper.selectOrderUserInfo(jKey);
         TUserVO deliveryUserInfo = orderManageMapper.selectDeliveryUserInfo(jKey);
+        TOrderDeliveryVO deliveryInfo = orderManageMapper.selectDeliveryInfo(jKey);
 
-        return new OrderDetailDTO(orderDetailInfoDTO, orderProductList, orderUserInfo, deliveryUserInfo);
+        return new OrderDetailDTO(orderDetailInfoDTO, orderProductList, orderUserInfo, deliveryUserInfo, deliveryInfo);
     }
 
     /**
@@ -665,6 +666,22 @@ public class OrderManageService {
                 orderManageMapper.updateOrderStatus(jKey, payStatus);
             }
         }
+    }
+
+    /**
+     * 배송정보 저장
+     * @param jKey
+     * @param deliveryMasterKey
+     * @param status
+     * @param deliveryNo
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveDeliveryInfo(int jKey, int deliveryMasterKey, int status, String deliveryNo) {
+        if (jKey == 0) return;
+        TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
+                jKey, deliveryMasterKey, status, deliveryNo
+        );
+        orderManageMapper.insertTOrderDelivery(deliveryInfo);
     }
 
 

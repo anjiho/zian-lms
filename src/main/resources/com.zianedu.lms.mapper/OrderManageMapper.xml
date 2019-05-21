@@ -710,6 +710,18 @@
         WHERE C.J_KEY = #{jKey}
     </select>
 
+    <select id="selectDeliveryInfo" resultType="com.zianedu.lms.vo.TOrderDeliveryVO">
+        SELECT
+            A.DELIVERY_MASTER_KEY, A.STATUS,
+            TO_CHAR(A.DELIVERY_START_DATE, 'YYYY-MM-DD hh24:mm:ss') as deliveryStartDate,
+            TO_CHAR(A.DELIVERY_END_DATE, 'YYYY-MM-DD hh24:mm:ss') as deliveryEndDate,
+            A.DELIVERY_NO
+        FROM T_ORDER_DELIVERY A
+        INNER JOIN T_DELIVERY_MASTER B
+        ON A.DELIVERY_MASTER_KEY = B.DELIVERY_MASTER_KEY
+        WHERE A.J_KEY = #{jKey}
+    </select>
+
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
@@ -858,6 +870,20 @@
         (
             #{calculateDataKey}, #{calculateKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{gKey}, #{type}, #{pmType}, #{kind}, #{calcPrice}, #{jCount}, #{payStatus},
             #{calcCalculateRate}, #{gCalculateRate}, #{gTCalculateRate}, #{tCalculateRate}, #{jKey}
+        )
+    </insert>
+
+    <insert id="insertTOrderDelivery" parameterType="com.zianedu.lms.vo.TOrderDeliveryVO">
+        <selectKey resultType="Long" keyProperty="jDeliveryKey" order="BEFORE">
+            SELECT T_ORDER_DELIVERY_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_ORDER_DELIVERY
+        (
+            J_DELIVERY_KEY, J_KEY, DELIVERY_MASTER_KEY, STATUS, DELIVERY_START_DATE, DELIVERY_END_DATE, DELIVERY_NO
+        )
+        VALUES
+        (
+            #{jDeliveryKey}, #{jKey}, #{deliveryMasterKey}, #{status}, TO_DATE(#{deliveryStartDate}, 'YYYY-mm-dd hh24:mi:ss'), '', #{deliveryNo}
         )
     </insert>
 

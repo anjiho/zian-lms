@@ -6,10 +6,7 @@ import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.SelectboxMapper;
 import com.zianedu.lms.utils.DateUtils;
 import com.zianedu.lms.utils.Util;
-import com.zianedu.lms.vo.SearchKeywordDomainVO;
-import com.zianedu.lms.vo.TCategoryVO;
-import com.zianedu.lms.vo.TGoodTeacherLinkVO;
-import com.zianedu.lms.vo.TSiteVO;
+import com.zianedu.lms.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -311,6 +308,22 @@ public class SelectboxService {
             list.add(selectboxDTO);
         }
         Collections.reverse(list);
+        return list;
+    }
+
+    /**
+     * 택배사 셀렉트박스
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SelectboxDTO> selectDeliveryCompanyList() {
+        List<SelectboxDTO>list = new ArrayList<>();
+        List<DeliveryVO>deliveryCompanyList = selectboxMapper.selectDeliveryCompanyList();
+
+        for (DeliveryVO delivery : deliveryCompanyList) {
+            SelectboxDTO selectboxDTO = new SelectboxDTO(delivery.getDeliveryMasterKey(), delivery.getName());
+            list.add(selectboxDTO);
+        }
         return list;
     }
 }

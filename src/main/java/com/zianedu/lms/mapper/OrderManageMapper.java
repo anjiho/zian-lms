@@ -90,6 +90,8 @@ public interface OrderManageMapper {
 
     TUserVO selectDeliveryUserInfo(@Param("jKey") int jKey);
 
+    TOrderDeliveryVO selectDeliveryInfo(@Param("jKey") int jKey);
+
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
 
@@ -108,6 +110,8 @@ public interface OrderManageMapper {
     Long insertTCalculate(TCalculateVO tCalculateVO);
 
     void insertTCalculateData(TCalculateDataVO tCalculateDataVO);
+
+    void insertTOrderDelivery(TOrderDeliveryVO tOrderDeliveryVO);
 
     /** UPDATE **/
     void updateTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
