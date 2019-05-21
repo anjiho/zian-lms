@@ -97,6 +97,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TTeacherVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryGoods"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCpVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TOrderDeliveryVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
@@ -138,6 +139,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailProductListDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.DeliveryAddressDTO"/>
 
 
 	</allow>
