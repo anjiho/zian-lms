@@ -124,6 +124,8 @@ public interface OrderManageMapper {
 
     void updateOrderStatus(@Param("jKey") int jKey, @Param("payStatus") int payStatus);
 
+    void updateOrderDeliveryInfo(DeliveryAddressDTO deliveryAddressDTO);
+
     /** DELETE **/
     void deleteTDeviceLimit(@Param("deviceLimitKey") int deviceLimitKey);
 }

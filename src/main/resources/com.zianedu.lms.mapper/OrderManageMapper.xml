@@ -924,6 +924,22 @@
         SET PAY_STATUS = #{payStatus}
         WHERE J_KEY = #{jKey}
     </update>
+
+    <update id="updateOrderDeliveryInfo" parameterType="DeliveryAddressDTO">
+        UPDATE T_ORDER
+        <set>
+            <if test="deliveryName != ''">DELIVERY_NAME = #{deliveryName},</if>
+            <if test="deliveryTelephone != ''">DELIVERY_NAME = #{deliveryTelephone},</if>
+            <if test="deliveryTelephoneMobile != ''">DELIVERY_NAME = #{deliveryTelephoneMobile},</if>
+            <if test="deliveryEmail != ''">DELIVERY_NAME = #{deliveryEmail},</if>
+            <if test="deliveryZipcode != ''">DELIVERY_NAME = #{deliveryZipcode},</if>
+            <if test="deliveryAddress != ''">DELIVERY_NAME = #{deliveryAddress},</if>
+            <if test="deliveryAddressRoad != ''">DELIVERY_NAME = #{deliveryAddressRoad},</if>
+            <if test="deliveryAddressAdd != ''">DELIVERY_NAME = #{deliveryAddressAdd},</if>
+        </set>
+        WHERE J_KEY = #{jKey}
+    </update>
+
     <delete id="deleteTDeviceLimit">
         DELETE FROM T_DEVICE_LIMIT WHERE DEVICE_LIMIT_KEY = #{deviceLimitKey}
     </delete>
