@@ -6,6 +6,7 @@
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
     var JKey = '<%=JKey%>';
     var Type = '<%=Type%>';
@@ -80,10 +81,13 @@
                 });
             }
 
+            /*배송지정보 가져오기*/
             var deliveryUserInfo = info.deliveryUserInfo;
+            //우편번호 postcode  zipcode
+            innerValue('postcode', deliveryUserInfo.zipcode);
             innerValue('deliveryUserName', deliveryUserInfo.name);
-            innerHTML('address1', deliveryUserInfo.addressNumber);
-            innerHTML('address2', deliveryUserInfo.addressRoad);
+            innerValue('jibunAddress', deliveryUserInfo.addressNumber);
+            innerValue('roadAddress', deliveryUserInfo.addressRoad);
             if(deliveryUserInfo.email){
                 var email = deliveryUserInfo.email;
                 var splitEmail =  email.split('@');
@@ -372,13 +376,22 @@
                                         -
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone3">
                                     </div>
+                                    <!--주소 -->
                                     <div class="form-group">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
+                                        <!--<label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="addressDeliveryNumber">
                                         <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">우편번호 찾기</button>
                                         <span id="address1"></span><br>
                                         <span id="address2"></span>
-                                        <input type="text" class="col-sm-4 form-control" style="display: inline-block;" id="detailAddress">
+                                        <input type="text" class="col-sm-4 form-control" style="display: inline-block;" id="detailAddress">-->
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
+                                        <input type="text" id="postcode" class="col-sm-2 form-control" style="display: inline-block;" placeholder="우편번호">
+                                        <input type="button" onclick="execDaumPostcode()" class="btn btn-info btn-sm" style="display: inline-block;" value="우편번호 찾기"><br>
+                                        <input type="text" id="roadAddress" class="col-sm-4 form-control" style="display: inline-block;" placeholder="도로명주소">
+                                        <input type="text" id="jibunAddress"  class="col-sm-4 form-control" style="display: inline-block;" placeholder="지번주소">
+                                        <span id="guide" style="color:#999;display:none"></span>
+                                        <input type="text" id="detailAddress" class="col-sm-4 form-control" placeholder="상세주소">
+                                        <!--<input type="text" id="sample4_extraAddress"  class="form-control" placeholder="참고항목">-->
                                     </div>
                                 </div>
                             </div>
@@ -453,6 +466,54 @@
         format: "yyyy-mm-dd",
         language: "kr"
     });
+
+    function execDaumPostcode() {
+        new daum.Postcode({
+            oncomplete: function(data) {
+                var roadAddr = data.roadAddress; // 도로명 주소 변수
+                var extraRoadAddr = ''; // 참고 항목 변수
+
+                if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                    extraRoadAddr += data.bname;
+                }
+
+                if(data.buildingName !== '' && data.apartment === 'Y'){
+                    extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+                }
+
+                if(extraRoadAddr !== ''){
+                    extraRoadAddr = ' (' + extraRoadAddr + ')';
+                }
+
+                document.getElementById('postcode').value = data.zonecode;
+                document.getElementById("roadAddress").value = roadAddr;
+                document.getElementById("jibunAddress").value = data.jibunAddress;
+
+                // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+                /*if(roadAddr !== ''){
+                    document.getElementById("extraAddress").value = extraRoadAddr;
+                } else {
+                    document.getElementById("extraAddress").value = '';
+                }*/
+
+                var guideTextBox = document.getElementById("guide");
+                // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+                if(data.autoRoadAddress) {
+                    var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                    guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                    guideTextBox.style.display = 'block';
+
+                } else if(data.autoJibunAddress) {
+                    var expJibunAddr = data.autoJibunAddress;
+                    guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                    guideTextBox.style.display = 'block';
+                } else {
+                    guideTextBox.innerHTML = '';
+                    guideTextBox.style.display = 'none';
+                }
+            }
+        }).open();
+    }
 </script>
 
 <%@include file="/common/jsp/footer.jsp" %>
