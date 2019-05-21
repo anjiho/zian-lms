@@ -8,7 +8,7 @@ public class DeliveryAddressDTO {
 
     private int jKey;
 
-    private String deliveryName;
+    private String deliveryNane;
 
     private String deliveryTelephone;
 
@@ -30,7 +30,7 @@ public class DeliveryAddressDTO {
                               String deliveryEmail, String deliveryZipcode, String deliveryAddress, String deliveryAddressRoad,
                               String deliveryAddressAdd) {
         this.jKey = jKey;
-        this.deliveryName = Util.isNullValue(deliveryName, "");
+        this.deliveryNane = Util.isNullValue(deliveryName, "");
         this.deliveryTelephone = Util.isNullValue(deliveryTelephone, "");
         this.deliveryTelephoneMobile = Util.isNullValue(deliveryTelephoneMobile, "");
         this.deliveryEmail = Util.isNullValue(deliveryEmail, "");
