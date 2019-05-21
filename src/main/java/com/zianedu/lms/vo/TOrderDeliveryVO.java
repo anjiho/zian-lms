@@ -21,20 +21,22 @@ public class TOrderDeliveryVO {
 
     public TOrderDeliveryVO(){}
 
-    public TOrderDeliveryVO(int jKey, int status, int deliveryMasterKey, String deliveryNo) {
+    public TOrderDeliveryVO(int jKey, int status, int deliveryMasterKey, String deliveryNo, String deliveryEndDate) {
         this.jKey = jKey;
         this.deliveryMasterKey = deliveryMasterKey;
         this.status = status;
         this.deliveryStartDate = Util.returnNow();
         this.deliveryNo = deliveryNo;
+        this.deliveryEndDate = deliveryEndDate;
     }
 
-    public TOrderDeliveryVO(int jDeliveryKey, int jKey, int status, int deliveryMasterKey, String deliveryNo) {
+    public TOrderDeliveryVO(int jDeliveryKey, int jKey, int status, int deliveryMasterKey, String deliveryNo, String deliveryEndDate) {
         this.jDeliveryKey = jDeliveryKey;
         this.jKey = jKey;
         this.deliveryMasterKey = deliveryMasterKey;
         this.status = status;
         this.deliveryStartDate = Util.returnNow();
         this.deliveryNo = deliveryNo;
+        this.deliveryEndDate = deliveryEndDate;
     }
 }

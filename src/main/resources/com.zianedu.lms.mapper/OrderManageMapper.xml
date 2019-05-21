@@ -891,7 +891,7 @@
         )
         VALUES
         (
-            #{jDeliveryKey}, #{jKey}, #{deliveryMasterKey}, #{status}, TO_DATE(#{deliveryStartDate}, 'YYYY-mm-dd hh24:mi:ss'), '', #{deliveryNo}
+            #{jDeliveryKey}, #{jKey}, #{deliveryMasterKey}, #{status}, TO_DATE(#{deliveryStartDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{deliveryEndDate}, 'YYYY-mm-dd hh24:mi:ss'), #{deliveryNo}
         )
     </insert>
 
