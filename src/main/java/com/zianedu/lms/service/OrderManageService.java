@@ -679,16 +679,20 @@ public class OrderManageService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void saveDeliveryInfo(int jDeliveryKey, int jKey, int deliveryMasterKey, int status, String deliveryNo) {
         if (jKey == 0) return;
+
+        String endDate = "";
+        if (status == 2) endDate = Util.returnNow();
+
         if (jDeliveryKey == 0) {
             //저장
             TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
-                    jKey, deliveryMasterKey, status, deliveryNo
+                    jKey, deliveryMasterKey, status, deliveryNo, endDate
             );
             orderManageMapper.insertTOrderDelivery(deliveryInfo);
         } else {
             //수정
             TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
-                    jDeliveryKey, jKey, deliveryMasterKey, status, deliveryNo
+                    jDeliveryKey, jKey, status, deliveryMasterKey, deliveryNo, endDate
             );
             orderManageMapper.updateTOrderDelivery(deliveryInfo);
         }
