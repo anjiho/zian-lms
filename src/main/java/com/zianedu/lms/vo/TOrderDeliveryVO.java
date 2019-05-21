@@ -28,4 +28,13 @@ public class TOrderDeliveryVO {
         this.deliveryStartDate = Util.returnNow();
         this.deliveryNo = deliveryNo;
     }
+
+    public TOrderDeliveryVO(int jDeliveryKey, int jKey, int status, int deliveryMasterKey, String deliveryNo) {
+        this.jDeliveryKey = jDeliveryKey;
+        this.jKey = jKey;
+        this.deliveryMasterKey = deliveryMasterKey;
+        this.status = status;
+        this.deliveryStartDate = Util.returnNow();
+        this.deliveryNo = deliveryNo;
+    }
 }

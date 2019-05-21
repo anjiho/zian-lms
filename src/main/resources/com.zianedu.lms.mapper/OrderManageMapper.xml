@@ -712,6 +712,7 @@
 
     <select id="selectDeliveryInfo" resultType="com.zianedu.lms.vo.TOrderDeliveryVO">
         SELECT
+            A.J_DELIVERY_KEY,
             A.DELIVERY_MASTER_KEY, A.STATUS,
             TO_CHAR(A.DELIVERY_START_DATE, 'YYYY-MM-DD hh24:mm:ss') as deliveryStartDate,
             TO_CHAR(A.DELIVERY_END_DATE, 'YYYY-MM-DD hh24:mm:ss') as deliveryEndDate,
@@ -938,6 +939,16 @@
             <if test="deliveryAddressAdd != ''">DELIVERY_ADDRESS_ADD = #{deliveryAddressAdd},</if>
         </set>
         WHERE J_KEY = #{jKey}
+    </update>
+
+    <update id="updateTOrderDelivery" parameterType="com.zianedu.lms.vo.TOrderDeliveryVO">
+        UPDATE T_ORDER_DELIVERY
+        <set>
+            <if test="deliveryMasterKey > 0">DELIVERY_MASTER_KEY = #{deliveryMasterKey},</if>
+            <if test="status != ''">STATUS = #{status},</if>
+            <if test="deliveryNo != ''">DELIVERY_NO = #{deliveryNo},</if>
+        </set>
+        WHERE J_DELIVERY_KEY = #{jDeliveryKey}
     </update>
 
     <delete id="deleteTDeviceLimit">

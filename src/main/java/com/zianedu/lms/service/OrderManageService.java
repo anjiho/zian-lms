@@ -670,19 +670,28 @@ public class OrderManageService {
     }
 
     /**
-     * 배송정보 저장
+     * 배송정보 저장및 수정
      * @param jKey
      * @param deliveryMasterKey
      * @param status
      * @param deliveryNo
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveDeliveryInfo(int jKey, int deliveryMasterKey, int status, String deliveryNo) {
+    public void saveDeliveryInfo(int jDeliveryKey, int jKey, int deliveryMasterKey, int status, String deliveryNo) {
         if (jKey == 0) return;
-        TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
-                jKey, deliveryMasterKey, status, deliveryNo
-        );
-        orderManageMapper.insertTOrderDelivery(deliveryInfo);
+        if (jDeliveryKey == 0) {
+            //저장
+            TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
+                    jKey, deliveryMasterKey, status, deliveryNo
+            );
+            orderManageMapper.insertTOrderDelivery(deliveryInfo);
+        } else {
+            //수정
+            TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
+                    jDeliveryKey, jKey, deliveryMasterKey, status, deliveryNo
+            );
+            orderManageMapper.updateTOrderDelivery(deliveryInfo);
+        }
     }
 
     /**
