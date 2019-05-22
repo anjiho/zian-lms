@@ -36,6 +36,16 @@ public class OrderManageController {
             mvc.setViewName("order/cancelOrderList");
         }else if("rePlayOrderList".equals(page_gbn)) {
             mvc.setViewName("order/rePlayOrderList");
+        }else if("academyLectureDetailList".equals(page_gbn)) {
+            mvc.setViewName("order/academyLectureDetailList");
+        }else if("academyLectureManage".equals(page_gbn)) {
+            mvc.setViewName("order/academyLectureManage");
+        }else if("freeLectureManage".equals(page_gbn)) {
+            mvc.setViewName("order/freeLectureManage");
+        }else if("lectureTimeManage".equals(page_gbn)) {
+            mvc.setViewName("order/lectureTimeManage");
+        }else if("lectureWatchList".equals(page_gbn)) {
+            mvc.setViewName("order/lectureWatchList");
         }
         return mvc;
     }

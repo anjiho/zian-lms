@@ -891,33 +891,35 @@ function listNumberSelectbox(tagId, val) {
     innerHTML(tagId, html);
 }
 
-function deliveryNameSelectbox(tagId, val) {
-    var html = "<select id='deliveryType' name='deliveryType' class='col-sm-5 select2 form-control custom-select'>";
-
-    if(val == '1') html += "<option value='1' selected>CJGLS</option>";
-    else html += "<option value='1'>CJGLS</option>";
-    if(val == '6') html += "<option value='6' selected>대한통운</option>";
-    else html += "<option value='6'>대한통운</option>";
-    if(val == '21') html += "<option value='21' selected>현대택배</option>";
-    else html += "<option value='21'>현대택배</option>";
-    html += "</select>";
-
-    innerHTML(tagId, html);
+/*택배사*/
+function deliveryCompanySelectbox(tagId, val) {
+    selectboxService.selectDeliveryCompanyList(function (list) {
+        var html = "<select id='deliverycompany'  class='col-sm-5 select2 form-control custom-select'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            }else{
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
 }
 
 function orderDeliveryInfoSelectbox(tagId, val) {
     var html = "<select id='deliveryType' name='deliveryType' class='col-sm-5 select2 form-control custom-select'>";
 
-    if(val == '1') html += "<option value='1' selected>준비중</option>";
-    else html += "<option value='1'>준비중</option>";
-    if(val == '6') html += "<option value='6' selected>배송중</option>";
-    else html += "<option value='6'>배송중</option>";
-    if(val == '21') html += "<option value='21' selected>배송완료</option>";
-    else html += "<option value='21'>배송완료</option>";
-    if(val == '21') html += "<option value='21' selected>방문수령</option>";
-    else html += "<option value='21'>방문수령</option>";
-    if(val == '21') html += "<option value='21' selected>방문수령완료</option>";
-    else html += "<option value='21'>방문수령완료</option>";
+    if(val == '0') html += "<option value='0' selected>준비중</option>";
+    else html += "<option value='0'>준비중</option>";
+    if(val == '1') html += "<option value='1' selected>배송중</option>";
+    else html += "<option value='1'>배송중</option>";
+    if(val == '2') html += "<option value='2' selected>배송완료</option>";
+    else html += "<option value='2'>배송완료</option>";
+    if(val == '3') html += "<option value='3' selected>방문수령</option>";
+    else html += "<option value='3'>방문수령</option>";
+    if(val == '4') html += "<option value='4' selected>방문수령완료</option>";
+    else html += "<option value='4'>방문수령완료</option>";
     html += "</select>";
 
     innerHTML(tagId, html);

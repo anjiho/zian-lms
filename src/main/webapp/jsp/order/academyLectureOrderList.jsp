@@ -5,7 +5,7 @@
 
     button{margin:0;padding:0;font-family:inherit;border:0 none;background:transparent;cursor:pointer}
     button::-moz-focus-inner{border:0;padding:0}
-    .searchDate{overflow:hidden;margin-bottom:10px;*zoom:1}
+    .searchDate{overflow:hidden;margin-bottom:-3px;*zoom:1;margin-left: -7%;}
     .searchDate:after{display:block;clear:both;content:''}
     .searchDate li{position:relative;float:left;margin:0 7px 0 0}
     .searchDate li .chkbox2{display:block;text-align:center}
@@ -173,7 +173,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="row" style="padding-top:20px">
+                <div class="row">
                     <div class="col">
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">처리상태</label>

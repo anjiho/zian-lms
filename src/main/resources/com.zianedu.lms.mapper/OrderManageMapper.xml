@@ -691,7 +691,7 @@
     <select id="selectOrderUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
         SELECT
             B.USER_KEY, B.USER_ID, B.NAME, B.EMAIL, B.TELEPHONE, B.TELEPHONE_MOBILE,
-            B.ADDRESS, B.ADDRESS_ROAD, B.ADDRESS_NUMBER
+            B.ADDRESS, B.ADDRESS_ROAD, B.ADDRESS_NUMBER, B.ZIPCODE
         FROM T_ORDER A
         INNER JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
@@ -882,7 +882,7 @@
     </insert>
 
     <insert id="insertTOrderDelivery" parameterType="com.zianedu.lms.vo.TOrderDeliveryVO">
-        <selectKey resultType="Long" keyProperty="jDeliveryKey" order="BEFORE">
+        <selectKey resultType="Integer" keyProperty="jDeliveryKey" order="BEFORE">
             SELECT T_ORDER_DELIVERY_SEQ.nextval FROM DUAL
         </selectKey>
         INSERT INTO T_ORDER_DELIVERY
@@ -929,7 +929,7 @@
     <update id="updateOrderDeliveryInfo" parameterType="DeliveryAddressDTO">
         UPDATE T_ORDER
         <set>
-            <if test="deliveryName != ''">DELIVERY_NANE = #{deliveryName},</if>
+            <if test="deliveryNane != ''">DELIVERY_NANE = #{deliveryNane},</if>
             <if test="deliveryTelephone != ''">DELIVERY_TELEPHONE = #{deliveryTelephone},</if>
             <if test="deliveryTelephoneMobile != ''">DELIVERY_TELEPHONE_MOBILE = #{deliveryTelephoneMobile},</if>
             <if test="deliveryEmail != ''">DELIVERY_EMAIL = #{deliveryEmail},</if>
