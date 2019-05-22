@@ -162,6 +162,7 @@ public class ProductManageService extends PagingSupport {
                 );
             }
         } else {
+
             List<VideoListDTO> videoListDTOList = productManageMapper.selectProductList(
                     startNumber,
                     listLimit,
@@ -181,6 +182,12 @@ public class ProductManageService extends PagingSupport {
                     }
 
                     listDTO.setTeacherName(Util.isNullValue(teacherName, ""));
+                }
+            } else if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 2) {
+                for (VideoListDTO listDTO : videoListDTOList) {
+                    int gKey = listDTO.getGKey();
+                    TGoodsPriceOptionVO priceOptionVO = productManageMapper.selectTGoodsPriceOptionSingle(gKey);
+                    listDTO.setKind(priceOptionVO.getKind());
                 }
             }
             return videoListDTOList;
