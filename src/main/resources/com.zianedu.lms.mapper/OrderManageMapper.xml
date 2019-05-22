@@ -309,16 +309,16 @@
                 AND A.STATUS = 4
             </if>
         </if>
-        <if test="searchType == 'userId'">
+        <if test="searchType == 'orderUserId'">
             AND E.USER_ID = #{searchText}
         </if>
-        <if test="searchType == 'userName'">
+        <if test="searchType == 'orderUserName'">
             AND E.NAME LIKE '%'||#{searchText}||'%'
         </if>
-        <if test="searchType == 'orderNumber'">
+        <if test="searchType == 'orderId'">
             AND C.J_ID = #{searchText}
         </if>
-        <if test="searchType == 'goodsName'">
+        <if test="searchType == 'orderGoodsName'">
             AND D.NAME LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY A.J_LEC_KEY DESC
@@ -371,18 +371,31 @@
                 AND A.STATUS = 4
             </if>
         </if>
-        <if test="searchType == 'userId'">
+<!--        <if test="searchType == 'userId'">-->
+<!--            AND E.USER_ID = #{searchText}-->
+<!--        </if>-->
+<!--        <if test="searchType == 'userName'">-->
+<!--            AND E.NAME LIKE '%'||#{searchText}||'%'-->
+<!--        </if>-->
+<!--        <if test="searchType == 'orderNumber'">-->
+<!--            AND C.J_ID = #{searchText}-->
+<!--        </if>-->
+<!--        <if test="searchType == 'goodsName'">-->
+<!--            AND D.NAME LIKE '%'||#{searchText}||'%'-->
+<!--        </if>-->
+        <if test="searchType == 'orderUserId'">
             AND E.USER_ID = #{searchText}
         </if>
-        <if test="searchType == 'userName'">
+        <if test="searchType == 'orderUserName'">
             AND E.NAME LIKE '%'||#{searchText}||'%'
         </if>
-        <if test="searchType == 'orderNumber'">
+        <if test="searchType == 'orderId'">
             AND C.J_ID = #{searchText}
         </if>
-        <if test="searchType == 'goodsName'">
+        <if test="searchType == 'orderGoodsName'">
             AND D.NAME LIKE '%'||#{searchText}||'%'
         </if>
+
     </select>
 
     <select id="selectTOrderInfoAtLectureTime" resultType="LectureTimeInfoDTO">

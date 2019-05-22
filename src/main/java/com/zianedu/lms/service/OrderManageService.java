@@ -209,7 +209,7 @@ public class OrderManageService {
 
         List<OrderLectureListDTO>list = orderManageMapper.selectOrderLectureVideoList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
-                payStatus, orderLecStatus, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+                payStatus, orderLecStatus, Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
         );
         if (list.size() > 0) {
             //수강타입명 주입하기
@@ -239,7 +239,7 @@ public class OrderManageService {
 
         return orderManageMapper.selectOrderLectureVideoListCount(
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
-                payStatus, orderLecStatus, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+                payStatus, orderLecStatus, Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
         );
     }
 
