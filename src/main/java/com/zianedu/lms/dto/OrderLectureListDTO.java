@@ -45,6 +45,8 @@ public class OrderLectureListDTO implements GoodsKindNameContain,
 
     private String payTypeName;
 
+    private String userId;
+
     @Override
     public Integer goodsKind() {
         return kind;
