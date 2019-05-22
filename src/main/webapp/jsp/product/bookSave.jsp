@@ -324,7 +324,6 @@
         $("#cpKey").val(gKey);
     }
 
-
     function bookInfoSave() {
         var data = new FormData();
         var fileData = new FormData();

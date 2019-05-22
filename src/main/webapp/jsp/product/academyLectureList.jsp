@@ -33,7 +33,6 @@
 
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return listNum--;},
-                    // function(data) {return i+1;},
                     function(data) {return data.GKey;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyAcademyLecture(" + data.GKey + ");'>" + data.goodsName + "</a>";},
                     function(data) {return split_minute_getDay(data.indate);},

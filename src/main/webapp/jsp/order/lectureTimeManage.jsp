@@ -26,18 +26,35 @@
                     var i = 0;
                     dwr.util.addRows("dataList", resultList, [
                         function(data) {return "<input type='hidden' name='curriKey[]' value='"+ data.curriKey +"'>"},
-                        function(data) {return ''},//코드
+                        function(data) {return "<input type='hidden' name='JCurriKey[]' value='"+ data.JCurriKey +"'>"},
+                        function(data) {return leadingZeros(i++,2)},//코드
                         function(data) {return data.name},
-                        function(data) {return "<input type='text' name='lectureTime[]' value='0' class='form-control col-md-2' style='float: left' >/"+data.vodTime;},//출제년도
+                        function(data) {return "<input type='text' name='lectureTime[]' value='"+ data.remainTime +"' class='form-control col-md-2' style='float: left' >/"+data.vodTime;},//출제년도
                     ], {escapeHtml:false});
                     $('#dataList tr').each(function(){
                         var tr = $(this);
                         tr.children().eq(0).attr("style", "display:none");
-                        //tr.children().eq(1).attr("style", "display:none");
+                        tr.children().eq(1).attr("style", "display:none");
                     });
                 }
             }
         });
+    }
+
+    //수강시간 조정 저장
+    function saveLectureTime() {
+        var JCurriKey = get_array_values_by_name("input", "JCurriKey[]");
+        var curriKey = get_array_values_by_name("input", "curriKey[]");
+        var lecTime = get_array_values_by_name("input", "lectureTime[]");
+        if(confirm('저장하시겠습니까?')){
+        $.each(curriKey, function(index, key) {
+            if(JCurriKey[index] == 0){
+                orderManageService.changeUserLectureTime(0, JLecKey, key, lecTime[index], function () {isReloadPage();});
+            }else {
+                orderManageService.changeUserLectureTime(JCurriKey[index], JLecKey, key, lecTime[index], function () {isReloadPage();});
+            }
+        });
+        }
     }
 
 </script>
@@ -87,6 +104,7 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
+            <button type="button" class="btn btn-outline-primary btn-sm" style="width:100px;margin-left:1330px;"  onclick="saveLectureTime();">수강시간 저장</button>
             <div class="card-body">
                 <table class="table table-hover">
                     <thead>

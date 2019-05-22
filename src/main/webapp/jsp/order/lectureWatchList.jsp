@@ -49,11 +49,10 @@
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getVideoLectureWatchList(sPage, 10, startSearchDate, endSearchDate, payStatus,
                     orderLecStatus, searchType, searchText, function (selList) {
-                        console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return data.JId == null ? "-" : data.JId;},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userKey + "</a>";},
+                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.userName == null ? "-" : data.userName;},
                             function(data) {return data.kindName == null ? "-" : data.kindName;},
                             function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
@@ -62,7 +61,7 @@
                             function(data) {return data.endDt == null ? "-" : split_minute_getDay(data.endDt)},
                             function(data) {return data.limitDay == null ? "-" : data.limitDay;},
                             function(data) {return data.pauseTotalDay == null ? "-" : data.pauseTotalDay;},
-                            function(data) {return data.status == null ? "-" : data.status;},
+                            function(data) {return data.status == 1 ? "결제완료" : '결제취소';},
                         ], {escapeHtml:false});
                     });
             });
