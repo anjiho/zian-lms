@@ -20,6 +20,8 @@ public interface ProductManageMapper {
 
     List<TGoodsPriceOptionVO> selectTGoodsPriceOptionList(@Param("gKey") int gKey);
 
+    TGoodsPriceOptionVO selectTGoodsPriceOptionSingle(@Param("gKey") int gKey);
+
     TGoodsPriceOptionVO selectTGoodsPriceOptionInfo(@Param("priceKey") int priceKey);
 
     List<TCategoryGoods> selectTCategoryGoodsList(@Param("gKey") int gKey);
