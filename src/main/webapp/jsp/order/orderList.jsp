@@ -66,7 +66,7 @@
                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
                    function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                   function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
+                   function(data) {return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                    function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},

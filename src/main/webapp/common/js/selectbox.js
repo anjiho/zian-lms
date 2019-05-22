@@ -863,7 +863,7 @@ function orderPayTypeSelectbox(tagId, val) {
 
 /* 주문관리 - 결제방법  */
 function orderSearchSelectbox(tagId, val) {
-    var html = "<select id='searchType' name='searchType' class='col-sm-5 select2 form-control custom-select'>";
+    var html = "<select id='searchType' class='col-sm-5 select2 form-control custom-select'>";
 
     if(val == 'orderUserId') html += "<option value='orderUserId' selected>주문자 ID</option>";
     else html += "<option value='orderUserId'>주문자 ID</option>";
@@ -920,6 +920,63 @@ function orderDeliveryInfoSelectbox(tagId, val) {
     else html += "<option value='3'>방문수령</option>";
     if(val == '4') html += "<option value='4' selected>방문수령완료</option>";
     else html += "<option value='4'>방문수령완료</option>";
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+
+function getEmailSelectbox(tagId, val) {
+    var html = '<select class=\'col-sm-5 select2 form-control custom-select\' id="emailSel" onchange="emailSelChange(this.value);">';
+    html +=     '<option value="1">직접입력</option>';
+    html +=     '<option value="naver.com">naver.com</option>';
+    html +=     '<option value="chol.com">chol.com</option>';
+    html +=     '<option value="dreamwiz.com">dreamwiz.com</option>';
+    html +=     '<option value="empal.com">empal.com</option>';
+    html +=     '<option value="freechel.com">freechel.com</option>';
+    html +=     '<option value="gmail.com">gmail.com</option>';
+    html +=     '<option value="hanafos.com">hanafos.com</option>';
+    html +=     '<option value="hanmail.net">hanmail.net</option>';
+    html +=     '<option value="hanmir.com">hanmir.com</option>';
+    html +=     '<option value="hitel.net">hitel.net</option>';
+    html +=     '<option value="hotmail.com">hotmail.com</option>';
+    html +=     '<option value="korea.com">korea.com</option>';
+    html +=     '<option value="lycos.co.kr">lycos.co.kr</option>';
+    html +=     '<option value="nate.com">nate.com</option>';
+    html +=     '<option value="netian.com">netian.com</option>';
+    html +=     '<option value="paran.com">paran.com</option>';
+    html +=     '<option value="yahoo.com">yahoo.com</option>';
+    html +=     '<option value="yahoo.co.kr">yahoo.co.kr</option>';
+    html +=  '</select>';
+    innerHTML(tagId, html);
+}
+
+//수강내역목록 - 결제상태 셀렉박스
+function getlectureWatchPayStatusSelectbox(tagId, val) {
+    var html = "<select id='PayStatus' class='col-sm-5 select2 form-control custom-select'>";
+    var selected = '';
+    if(val == '2') selected = 'selected';
+    else if(val == '8') selected = 'selected';
+
+    html += "<option value='2' "+ selected +">결제완료</option>";
+    html += "<option value='8' "+ selected +">결제취소</option>";
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+//수강내역목록 - 진행상태 셀렉박스
+function getlectureWatchOrderStatusSelectbox(tagId, val) {
+    var html = "<select id='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+    var selected = '';
+    if(val == '1') selected = 'selected';
+    else if(val == '2') selected = 'selected';
+    else if(val == '3') selected = 'selected';
+    else if(val == '4') selected = 'selected';
+
+
+    html += "<option value='1' "+ selected +">대기중+시작</option>";
+    html += "<option value='2' "+ selected +">일시정지</option>";
+    html += "<option value='3' "+ selected +">종강</option>";
+    html += "<option value='4' "+ selected +">재시작대기</option>";
     html += "</select>";
 
     innerHTML(tagId, html);

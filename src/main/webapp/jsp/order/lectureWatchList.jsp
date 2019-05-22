@@ -19,13 +19,9 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 8);
-        orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
-        orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
-        isOfflineSelectbox('isOffline', '');
-        deviceSelectbox('deviceSel', '');
-        orderPayTypeSelectbox('orderPayTypeSel', '');
+        getlectureWatchPayStatusSelectbox('PayStatus', ''); //결제상태
+        getlectureWatchOrderStatusSelectbox('orderStatus', ''); //진행상태
         orderSearchSelectbox('orderSearch', 'orderUserName');
-        orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
     }
@@ -39,80 +35,52 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        var payStatus = getSelectboxValue("orderStatus");//처리상태
-        //var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
-        var isOffline = getSelectboxValue("isOffline");//구매장소
-        var isMobile = getSelectboxValue("deviceSel");//디바이스
-        var payType = getSelectboxValue("orderPayTypeSel");//결제방법
+        var payStatus = getSelectboxValue('PayStatus');
+        var orderLecStatus = getSelectboxValue('orderStatus');
         var searchType = getSelectboxValue("orderSearch");//검색타입
-        var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
-        var listNumberSel = getSelectboxValue("listNumberSel");//리스트개수
         var startSearchDate = getInputTextValue('searchStartDate');
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
 
-        var goodsType = '';
-        var isVideoReply = 0;
+        //var isVideoReply = 0;
 
-        orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
-            payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
+        orderManageService.getVideoLectureWatchListCount(startSearchDate, endSearchDate, payStatus, orderLecStatus, searchType, searchText, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-                orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
-                    payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
+                orderManageService.getVideoLectureWatchList(sPage, 10, startSearchDate, endSearchDate, payStatus,
+                    orderLecStatus, searchType, searchText, function (selList) {
                         console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
-                            function(data) {return data.depositUser == null ? "-" : data.depositUser;},
-                            //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
-                            function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
-                            function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
-                            function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
-                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
-                            //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
-                            function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                            //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
-                            function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
+                            function(data) {return data.JId == null ? "-" : data.JId;},
+                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userKey + "</a>";},
+                            function(data) {return data.userName == null ? "-" : data.userName;},
+                            function(data) {return data.kindName == null ? "-" : data.kindName;},
+                            function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
+                            function(data) {return data.statusName == null ? "-" : data.statusName;},
+                            function(data) {return data.startDt == null ? "-" : split_minute_getDay(data.startDt)},
+                            function(data) {return data.endDt == null ? "-" : split_minute_getDay(data.endDt)},
+                            function(data) {return data.limitDay == null ? "-" : data.limitDay;},
+                            function(data) {return data.pauseTotalDay == null ? "-" : data.pauseTotalDay;},
+                            function(data) {return data.status == null ? "-" : data.status;},
                         ], {escapeHtml:false});
                     });
             });
     }
 
-    function changeList() {
-        fn_search('new');
-    }
+
 
     function goOrderDetail(val) {
-        innerValue('JKey', val);
-        goPage('orderManage', 'orderDetailManage');
+        //innerValue('JKey', val);
+        innerValue('JLecKey', val);
+        goPage('orderManage', 'lectureTimeManage');
     }
 
-    //결제상태변경
-    function changePayStatus() {
-        var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
-
-        var arr =  new Array();
-        $("input[name=rowChk]:checked").each(function() {
-            var jKey = $(this).val();
-            var data = {
-                jKey : jKey,
-                payStatus : orderStatusChangeSel
-            };
-            arr.push(data);
-        });
-        if(confirm('변경하시겠습니까?')){
-            orderManageService.changePayStatus(arr , function() {
-                isReloadPage();
-            });
-        }
-    }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
-    <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="orderList">
+    <!--<input type="hidden" id="JKey" name="JKey" value="">-->
+    <input type="hidden" id="JLecKey" name="JLecKey" value="">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">수강내역 목록</h4>
@@ -197,30 +165,17 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group row">
-                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">처리상태</label>
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태</label>
                             <div class="col-sm-8 pl-0 pr-0">
-                                <span id="orderStatus"></span>
-                                <!--<span id="orderPayStatus"></span>-->
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
-                            <div class="col-sm-8 pl-0 pr-0">
-                                <span id="orderPayTypeSel"></span>
+                                <span id="PayStatus"></span>
                             </div>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group row" style="">
-                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">구매장소</label>
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
                             <div class="col-sm-8 pl-0 pr-0">
-                                <span id="isOffline"></span>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">디바이스</label>
-                            <div class="col-sm-8 pl-0 pr-0">
-                                <span id="deviceSel"></span>
+                                <span id="orderStatus"></span>
                             </div>
                         </div>
                     </div>
@@ -248,21 +203,6 @@
 
             </div>
         </div>
-        <div class="col">
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
-                <div class="col-sm-8 pl-0 pr-0">
-                    <span id="orderStatusChangeSel"></span>
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
-                </div>
-            </div>
-            <div class="form-group row">
-                <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
-                <div class="col-sm-8 pl-0 pr-0">
-                    <span id="listNumberSel"></span>
-                </div>
-            </div>
-        </div>
     </div>
 </div>
 <!-- //formgroup -->
@@ -276,13 +216,14 @@
                         <th scope="col" width="10%">주문번호</th>
                         <th scope="col" width="8%">ID</th>
                         <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="30%">주문내역</th>
-                        <th scope="col" width="7%">결제금액</th>
-                        <th scope="col" width="5%">결제방법</th>
-                        <th scope="col" width="8%">진행상태</th>
-                        <th scope="col" width="8%">모바일</th>
-                        <!--<th scope="col" width="8%">배송상태</th>-->
-                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
+                        <th scope="col" width="7%">수강타입</th>
+                        <th scope="col" width="30%">강좌명</th>
+                        <th scope="col" width="7%">진행상태</th>
+                        <th scope="col" width="8%">시작일자</th>
+                        <th scope="col" width="8%">종료일자</th>
+                        <th scope="col" width="5%">수강일수</th>
+                        <th scope="col" width="5%">총 중지일수</th>
+                        <th scope="col" width="8%">결제상태</th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>
