@@ -305,7 +305,7 @@
                 AND A.STATUS = 3
             </if>
             <!-- 진행상태 : 재시작대기 -->
-            <if test="orderLecStatus == '3'">
+            <if test="orderLecStatus == '4'">
                 AND A.STATUS = 4
             </if>
         </if>
@@ -355,7 +355,7 @@
         </if>
         <if test="orderLecStatus != null and orderLecStatus != ''">
             <!-- 진행상태 : 대기중 + 시작 -->
-            <if test="lecStatus == '1'">
+            <if test="orderLecStatus == '1'">
                 AND A.STATUS IN (0, 1)
             </if>
             <!-- 진행상태 : 일시정지 -->
@@ -367,7 +367,7 @@
                 AND A.STATUS = 3
             </if>
             <!-- 진행상태 : 재시작대기 -->
-            <if test="orderLecStatus == '3'">
+            <if test="orderLecStatus == '4'">
                 AND A.STATUS = 4
             </if>
         </if>
