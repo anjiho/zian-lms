@@ -188,6 +188,7 @@ public class ProductManageService extends PagingSupport {
                     int gKey = listDTO.getGKey();
                     TGoodsPriceOptionVO priceOptionVO = productManageMapper.selectTGoodsPriceOptionSingle(gKey);
                     listDTO.setKind(priceOptionVO.getKind());
+                    listDTO.setSellPrice(priceOptionVO.getSellPrice());
                 }
             }
             return videoListDTOList;
