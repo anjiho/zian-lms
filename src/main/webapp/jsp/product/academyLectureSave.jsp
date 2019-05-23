@@ -470,9 +470,9 @@
                         <!-- 2.옵션 Tab -->
                         <h3>옵션</h3>
                         <section>
-                            <div class="float-right mb-3">
+                            <!--<div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
-                            </div>
+                            </div>-->
                             <div id="section2">
                                 <table class="table" id="optionTable">
                                     <input type="hidden" value="0" name="goodsTypeName">
@@ -510,7 +510,7 @@
                                                 <span id="sum_0"></span>
                                             </td>
                                             <td style="vertical-align: middle">
-                                                <button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>
+                                                <!--<button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>-->
                                             </td>
                                         </tr>
                                     </tbody>

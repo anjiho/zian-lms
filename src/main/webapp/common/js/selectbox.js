@@ -992,3 +992,54 @@ function getMemberSearchSelectbox(tagId) {
     html +=  "</select>";
     innerHTML(tagId, html);
 }
+
+//학원수강 입력 = 결제방법
+function getAcaLecturePayTypeSelectbox(tagId, val) {
+    var html = "<select id='payType' class='col-sm-3 select2 form-control custom-select'>";
+    var selected = '';
+    if(val == '21') selected = 'selected';
+    else if(val == '22') selected = 'selected';
+    else selected = 'selected';
+
+    html += "<option value='21' "+ selected +">현금</option>";
+    html += "<option value='22' "+ selected +">현금+신용카드</option>";
+    html += "<option value='23' "+ selected +">온라인</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+//카드선택
+function getCardKindSelectbox(tagId, val) {
+    var html = "<select id='cardCode' class='col-sm-3 select2 form-control custom-select'>";
+    var selected = '';
+    if(val == '0') selected = 'selected';
+    else if(val == '01') selected = 'selected';
+    else if(val == '03') selected = 'selected';
+    else if(val == '06') selected = 'selected';
+    else if(val == '04') selected = 'selected';
+    else if(val == '12') selected = 'selected';
+    else if(val == '11') selected = 'selected';
+    else if(val == '14') selected = 'selected';
+    else if(val == '16') selected = 'selected';
+    else if(val == '17') selected = 'selected';
+    else if(val == '900') selected = 'selected';
+    else if(val == '901') selected = 'selected';
+    else selected = 'selected';
+
+    html += "<option value='0' "+ selected +">카드선택</option>";
+    html += "<option value='01' "+ selected +">외환</option>";
+    html += "<option value='03' "+ selected +">롯데</option>";
+    html += "<option value='06' "+ selected +">국민</option>";
+    html += "<option value='04' "+ selected +">현대</option>";
+    html += "<option value='12' "+ selected +">삼성</option>";
+    html += "<option value='11' "+ selected +">BC</option>";
+    html += "<option value='14' "+ selected +">신한</option>";
+    html += "<option value='16' "+ selected +">NH</option>";
+    html += "<option value='17' "+ selected +">하나 SK</option>";
+    html += "<option value='900' "+ selected +">기업</option>";
+    html += "<option value='901' "+ selected +">우리</option>";
+    html += "<option value='999' "+ selected +">기타</option>";
+
+    html += "</select>";
+    innerHTML(tagId, html);
+}

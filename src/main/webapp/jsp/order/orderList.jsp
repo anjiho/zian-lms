@@ -252,7 +252,7 @@
                     <span id="orderStatusChangeSel"></span>
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
                 </div>
-            </div>
+            </div>deleteTableRow
             <div class="form-group row">
                 <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
                 <div class="col-sm-8 pl-0 pr-0">
@@ -262,36 +262,8 @@
         </div>
     </div>
 </div>
-<!-- //formgroup -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col" width="10%">주문번호</th>
-                        <th scope="col" width="8%">ID</th>
-                        <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="30%">주문내역</th>
-                        <th scope="col" width="7%">결제금액</th>
-                        <th scope="col" width="5%">결제방법</th>
-                        <th scope="col" width="8%">진행상태</th>
-                        <th scope="col" width="8%">모바일</th>
-                        <!--<th scope="col" width="8%">배송상태</th>-->
-                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList"></tbody>
-                    <tr>
-                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi.inc" %>
-            </div>
-        </div>
-    </div>
-</div>
+
+
 </div>
 <!-- // 기본소스-->
 </div>

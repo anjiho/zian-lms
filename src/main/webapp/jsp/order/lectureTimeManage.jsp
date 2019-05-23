@@ -48,9 +48,7 @@
         var lecTime = get_array_values_by_name("input", "lectureTime[]");
         if(confirm('저장하시겠습니까?')){
         $.each(curriKey, function(index, key) {
-            if(JCurriKey[index] == 0){
-                orderManageService.changeUserLectureTime(0, JLecKey, key, lecTime[index], function () {isReloadPage();});
-            }else {
+            if (lecTime[index] > 0) {
                 orderManageService.changeUserLectureTime(JCurriKey[index], JLecKey, key, lecTime[index], function () {isReloadPage();});
             }
         });

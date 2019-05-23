@@ -87,7 +87,7 @@
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
                     function() {return "%"},
                     function() {return "<span id='sum_0'></span>"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    //function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
                 ];
                 dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
                 $('#optionList tr').eq(0).attr("style", "display:none");
@@ -102,7 +102,7 @@
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
                     function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    //function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
@@ -737,7 +737,7 @@
                 <section>
                     <div class="float-right mb-3">
                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateOptionInfo();">수정</button>
-                        <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
+                        <!--<button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>-->
                     </div>
                     <div id="section2">
                         <table class="table" id="optionTable">

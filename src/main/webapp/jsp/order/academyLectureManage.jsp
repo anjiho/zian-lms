@@ -21,8 +21,12 @@
     function init() {
         getMemberSearchSelectbox("l_memberSearch");
         getProductSearchTypeSelectbox("l_productSearch");
+        getAcaLecturePayTypeSelectbox("payType", "");//결제방법
+        getCardKindSelectbox('cardCode', '');//카드선택
+        getSelectboxListForCtgKey('affiliationCtgKey','133','');
         menuActive('menu-3', 9);
         fn_search('new');
+        fn_search3('new');
     }
 
     function fn_search(val) {
@@ -45,7 +49,7 @@
             grade, affiliationCtgKey, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-                memberManageService.getMemeberList(sPage, 10, searchType, searchText,
+                memberManageService.getMemeberList(sPage, 5, searchType, searchText,
                     regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
                         console.log(selList);
                         if (selList.length == 0) return;
@@ -76,7 +80,7 @@
         var userKey = td.find("input").val();
         var userId = td.eq(1).text();
 
-        $("#userId").html(userId);
+        $("#userId").val(userId);
         $("#userKey").val(userKey);
     }
 
@@ -85,6 +89,7 @@
         var sPage = getInputTextValue("sPage3");
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("optionSearchType");
+        if(searchType == undefined) searchType = "";
 
         if(val == "new") sPage = "1";
 
@@ -93,7 +98,7 @@
         productManageService.getProductListCount(searchType, searchText, "ACADEMY", function (cnt) {
             paging.count3(sPage, cnt, pagingListCount(), pagingListCount(), comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getProductList(sPage, pagingListCount(), searchType, searchText, "ACADEMY", function (selList) {
+            productManageService.getProductList(sPage, 5, searchType, searchText, "ACADEMY", function (selList) {
                 if (selList.length == 0) return;
                 console.log(selList);
                 var SelBtn = '<input type="button" onclick="sendChildValue_2($(this))" value="선택" class="btn btn-outline-info"/>';
@@ -101,7 +106,7 @@
                     function(data) {return '<input name="GKey[]" value=' + "'" + data.GKey + "'" + '>';},
                     function(data) {return data.GKey;},
                     function(data) {return data.goodsName;},
-                    function(data) {return "개월수";},
+                    function(data) {return data.kind+"개월";},
                     function(data) {return SelBtn;},
                 ], {escapeHtml:false});
                 $('#dataList3 tr').each(function(){
@@ -121,29 +126,63 @@
 
         var gKey = td.find("input").val();
         var goodsName = td.eq(2).text();
-
+        var kind = td.eq(3).text();
         var GKeys = get_array_values_by_name("input", "res_key[]");
         if ($.inArray(gKey, GKeys) != '-1') {
-            alert("이미 선택된 상품입니다.");
+            alert("이미 선택된 옵션입니다.");
             return;
         }
 
         var optionListHtml = "<tr scope='col' colspan='3'>";
         optionListHtml     += " <td>";
+        optionListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
+        optionListHtml     += "</td>";
+        optionListHtml     += " <td>";
         optionListHtml     += "<span>" + goodsName + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
+        optionListHtml     += "<span>" + kind + "</span>";
         optionListHtml     += "</td>";
+        optionListHtml     += " <td>";
         optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('optionTable');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
         optionListHtml     += "</td>";
-
-        $('#optionTable > tbody:first').append(optionListHtml);//선택 모의고사 리스트 뿌리기
-        $('#optionTable tr').each(function(){
+        $('#optionTable > tbody:first').append(optionListHtml);
+        $('#optionList tr').each(function(){
             var tr = $(this);
-            //tr.children().eq(2).attr("style", "display:none");
+            tr.children().eq(0).attr("style", "display:none");
+        });
+    }
+
+    function deleteTableRow(val) {
+        if (val == "optionTable") {
+            if ($("#optionTable > tbody > tr").length == 1) {
+                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
+            } else {
+                $('#optionTable > tbody:last > tr:last').remove();
+            }
+        }
+    }
+    
+    function academyLectureInfoSave() {
+        var userKey = getInputTextValue('userKey');
+        var memoTitle = getInputTextValue('memoTitle');
+        var memoContent = getInputTextValue('memoContent');
+        var price = getInputTextValue('price');
+        var payType =  getSelectboxValue('payType');
+        var cardCode = getSelectboxValue('cardCode');
+        var optionArray = new Array();
+        $('#optionTable tbody tr').each(function(index){
+            var gKey = $(this).find("td input").eq(0).val();
+            optionArray.push(gKey);
         });
 
+        if(userKey != "") {
+            if(confirm("저장 하시겠습니까?")){
+                orderManageService.saveAcademyLecture(userKey, optionArray, price, payType, cardCode, memoTitle, memoContent,function (cnt) {});
+            }
+        }else{
+            alert("회원을 선택해 주세요.");
+        }
     }
 </script>
 <div class="page-breadcrumb">
@@ -166,17 +205,7 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-body">
-                    <div class="form-group row" style="margin-bottom: 0px;">
-                        <label class="col-sm-3 text-left control-label col-form-label card-title"  style="margin-bottom: 0px;">회원ID</label>
-                        <div class="col-sm-9">
-                            <input type="hidden" id="userKey" name="userKey" value="">
-                            <span id="userId"></span>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">회원검색</h5>
@@ -217,109 +246,96 @@
                     <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">옵션추가</h5>
                 </div>
                 <div style=" display:inline;">
-                    <button type="button" class="btn btn-outline-info mx-auto" style="float: right" data-toggle="modal" data-target="#letureOptionModal" onclick="fn_search3('new')">추가</button>
+                    <div style=" float: left;">
+                        <span id="l_productSearch"></span>
+                    </div>
+                    <div style=" float: left; width: 33%">
+                        <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                    </div>
+                    <div style=" float: left; width: 33%">
+                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
+                    </div>
                 </div>
+                <div class="table-responsive">
+                    <input type="hidden" id="sPage3" >
+                    <table id="zero_config" class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th style="width:5%">코드</th>
+                            <th style="width:50%">상품명</th>
+                            <th style="width:10%">옵션</th>
+                            <th style="width:3%"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="dataList3"></tbody>
+                        <tr>
+                            <td id="emptys3" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
+                        </tr>
+                    </table>
+                    <%@ include file="/common/inc/com_pageNavi3.inc" %>
+                </div>
+            </div>
+    </div>
+        <!-- //formgroup -->
+
+<div class="col-md-12">
+    <div class="card">
+        <div class="card-body">
+            <div class="form-group row">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원ID</label>
+                <input type="hidden" id="userKey" name="userKey" value="">
+                <input type="text" class="col-sm-2 form-control"  id="userId" readonly>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
+                <div class="col-sm-6 pl-0 pr-0">
+                    <span id="affiliationCtgKey"></span>
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매금액</label>
+                <input type="text" class="col-sm-2 form-control" id="sellPrice" readonly>
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제금액</label>
+                <input type="number" class="col-sm-2 form-control" id="price">
+            </div>
+            <div class="form-group row">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
+                <div class="col-sm-6 pl-0 pr-0">
+                    <span id="payType"></span>
+                    <span id="cardCode"></span>
+                </div>
+
+            </div>
+            <div class="form-group">
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">제목</label>
+                    <input type="text" class="col-sm-6 form-control" id="memoTitle">
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
+                    <textarea class="col-sm-6 form-control" id="memoContent" style="height: 150px;"></textarea>
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">옵션</label>
                 <table class="table table-hover text-center" id="optionTable">
                     <thead>
                     <tr>
                         <th scope="col" style="width:75%;">상품명</th>
                         <th scope="col" style="width:25%;">옵션</th>
+                        <th scope="col" style="width:5%;"></th>
                     </tr>
                     </thead>
                     <tbody id="optionList"></tbody>
                 </table>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
-                        <span></span>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매금액</label>
-                        <input type="text" class="col-sm-6 form-control" id="">
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제금액</label>
-                        <input type="text" class="col-sm-6 form-control" id="">
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
-                        <span></span>
-                        <span></span>
-                    </div>
-                    <div class="form-group">
-                        <div class="form-group row">
-                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">제목</label>
-                            <input type="text" class="col-sm-6 form-control" id="memoTitle">
-                        </div>
-                        <div class="form-group row">
-                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
-                            <textarea class="col-sm-6 form-control" id="memoContent"></textarea>
-                        </div>
-                    </div>
-            </div>
+            <button type="button" class="btn btn-info float-right" onclick="academyLectureInfoSave();">저장</button>
         </div>
     </div>
 </div>
+</div>
 <!-- // 기본소스-->
-
-    <!-- 과년도 도서 팝업창-->
-    <div class="modal fade" id="letureOptionModal" tabindex="-1" role="dialog" aria-hidden="true">
-        <div class="modal-dialog" role="document" style="max-width: 900px">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">상품선택</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <form>
-                    <!-- modal body -->
-                    <div class="modal-body">
-                        <div style=" display:inline;">
-                            <div style=" float: left; width: 10%">
-                                <span id="l_productSearch"></span>
-                            </div>
-                            <div style=" float: left; width: 33%">
-                                <input type="text" class="form-control" id="optionSearchType">
-                            </div>
-                            <div style=" float: left; width: 33%">
-                                <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
-                            </div>
-                        </div>
-                        <div class="table-responsive">
-                            <input type="hidden" id="sPage3" >
-                            <table id="zero_config" class="table table-hover text-center">
-                                <thead class="thead-light">
-                                <tr>
-                                    <th style="width:15%">코드</th>
-                                    <th style="width:45%">상품명</th>
-                                    <th style="width:15%">옵션</th>
-                                    <th style="width:15%"></th>
-                                </tr>
-                                </thead>
-                                <tbody id="dataList3"></tbody>
-                                <tr>
-                                    <td id="emptys3" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                                </tr>
-                            </table>
-                            <%@ include file="/common/inc/com_pageNavi3.inc" %>
-                        </div>
-                    </div>
-                    <!-- //modal body -->
-                </form>
-            </div>
-        </div>
-    </div>
-
-
-<script>
-    $("#searchStartDate , #searchEndDate").datepicker({
-        language: "kr",
-        format: "yyyy-mm-dd",
-        numberOfMonths: 2
-    });
-</script>
 <!--main wapper-->
 <%@include file="/common/jsp/footer.jsp" %>
