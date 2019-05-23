@@ -112,7 +112,7 @@
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'lectureWatchList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">수강내역목록</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'academyLectureManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학원수강입력</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'academyLectureDetailList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학원수강관리</span></a></li>
+                        <!--<li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'academyLectureDetailList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학원수강관리</span></a></li>-->
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'freeLectureManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">무료수강관리</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'yearMemberList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">상품/모바일 디바이스관리</span></a></li>

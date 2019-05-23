@@ -2067,6 +2067,7 @@ function getTimeStamp(name, check_mode) {
 
     $("input[name='" + name + "']:checked").each(function () {
         var inputValue = $(this).val();
+
         if ($("#class_" + check_mode + "_" + inputValue).val() == "") {
             $("#class_" + check_mode + "_" + inputValue).val(time);
         }

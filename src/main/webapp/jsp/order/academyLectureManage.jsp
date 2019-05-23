@@ -104,6 +104,7 @@
                 var SelBtn = '<input type="button" onclick="sendChildValue_2($(this))" value="선택" class="btn btn-outline-info"/>';
                 dwr.util.addRows("dataList3", selList, [
                     function(data) {return '<input name="GKey[]" value=' + "'" + data.GKey + "'" + '>';},
+                    function(data) {return '<input name="sellPrice[]" value=' + "'" + data.sellPrice + "'" + '>';},
                     function(data) {return data.GKey;},
                     function(data) {return data.goodsName;},
                     function(data) {return data.kind+"개월";},
@@ -112,6 +113,7 @@
                 $('#dataList3 tr').each(function(){
                     var tr = $(this);
                     tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
                 });
             });
         });
@@ -124,13 +126,19 @@
         var tr = checkBtn.parent().parent();
         var td = tr.children();
 
-        var gKey = td.find("input").val();
-        var goodsName = td.eq(2).text();
-        var kind = td.eq(3).text();
+        var gKey =  td.find("input").eq(0).val();
+        var sellPrice = td.find("input").eq(1).val();
+        var goodsName = td.eq(3).text();
+        var kind = td.eq(4).text();
         var GKeys = get_array_values_by_name("input", "res_key[]");
         if ($.inArray(gKey, GKeys) != '-1') {
             alert("이미 선택된 옵션입니다.");
             return;
+        }
+        if(sellPrice > 0){
+            var sellPrice1 =  Number($("#sellPrice").val());
+            sellPrice1 += Number(sellPrice);
+            $("#sellPrice").val(sellPrice1);
         }
 
         var optionListHtml = "<tr scope='col' colspan='3'>";
@@ -178,7 +186,7 @@
 
         if(userKey != "") {
             if(confirm("저장 하시겠습니까?")){
-                orderManageService.saveAcademyLecture(userKey, optionArray, price, payType, cardCode, memoTitle, memoContent,function (cnt) {});
+                orderManageService.saveAcademyLecture(userKey, optionArray, price, payType, cardCode, memoTitle, memoContent,function (cnt) {isReloadPage();});
             }
         }else{
             alert("회원을 선택해 주세요.");
@@ -205,7 +213,6 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-md-6">
-
             <div class="card">
                 <div class="card-body">
                     <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">회원검색</h5>
