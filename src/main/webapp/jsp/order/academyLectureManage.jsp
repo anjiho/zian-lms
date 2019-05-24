@@ -215,17 +215,17 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">회원검색</h5>
-                </div>
-                <div style=" display:inline;">
-                    <div style=" float: left;">
-                        <span id="l_memberSearch"></span>
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <input type="text" class="form-control" id="SearchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:15px;">회원검색</h5>
+                    <div>
+                        <div style=" float: left;">
+                            <span id="l_memberSearch"></span>
+                        </div>
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="SearchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                        </div>
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                        </div>
                     </div>
                 </div>
                 <input type="hidden" id="sPage">
@@ -250,17 +250,17 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">옵션추가</h5>
-                </div>
-                <div style=" display:inline;">
-                    <div style=" float: left;">
-                        <span id="l_productSearch"></span>
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:15px;">옵션추가</h5>
+                    <div>
+                        <div style=" float: left;">
+                            <span id="l_productSearch"></span>
+                        </div>
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                        </div>
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
+                        </div>
                     </div>
                 </div>
                 <div class="table-responsive">

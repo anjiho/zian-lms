@@ -93,7 +93,7 @@ function sendChildValue_2(val) {
     bookkListHtml     += "</div>";
     bookkListHtml     += "</td>";
     bookkListHtml     += " <td>";
-    bookkListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+    bookkListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
     bookkListHtml     += "</td>";
 
 

@@ -824,20 +824,6 @@ function isOfflineSelectbox(tagId, val) {
     innerHTML(tagId, html);
 }
 
-/* 주문관리 - 디바이스  */
-function deviceSelectbox(tagId, val) {
-    var html = "<select id='deviceSel' name='deviceSel' class='col-sm-5 select2 form-control custom-select'>";
-
-    if(val == '-1') html += "<option value='-1' selected>전체</option>";
-    else html += "<option value='-1'>전체</option>";
-    if(val == '0') html += "<option value='0' selected>PC</option>";
-    else html += "<option value='0'>PC</option>";
-    if(val == '1') html += "<option value='1' selected>Mobile</option>";
-    else html += "<option value='1'>Mobile</option>";
-    html += "</select>";
-    innerHTML(tagId, html);
-}
-
 /* 주문관리 - 결제방법  */
 function orderPayTypeSelectbox(tagId, val) {
     var html = "<select id='orderPayType' name='orderPayType' class='col-sm-5 select2 form-control custom-select'>";
@@ -1040,6 +1026,54 @@ function getCardKindSelectbox(tagId, val) {
     html += "<option value='901' "+ selected +">우리</option>";
     html += "<option value='999' "+ selected +">기타</option>";
 
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+function deviceManageSelectbox(tagId, val) {
+    var html = "<select id='deivceSel' class='form-control' onchange='changeDeviceList(this.value);'>";
+    var selected = '';
+    if(val == '0') selected = 'selected';
+    else if(val == '1') selected = 'selected';
+    html += "<option value='0' "+ selected +">상품별 디바이스 관리</option>";
+    html += "<option value='1' "+ selected +">모바일 디바이스 관리</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+/* 주문관리 - 디바이스  */
+function deviceSelectbox(tagId, val) {
+    var html = "<select id='deviceSel' name='deviceSel' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '-1') html += "<option value='-1' selected>전체</option>";
+    else html += "<option value='-1'>전체</option>";
+    if(val == '0') html += "<option value='0' selected>PC</option>";
+    else html += "<option value='0'>PC</option>";
+    if(val == '1') html += "<option value='1' selected>Mobile</option>";
+    else html += "<option value='1'>Mobile</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+//
+
+//디바이스관리 - 검색 셀렉트박스
+function getSearchDeviceSelectbox(tagId) {
+    var html = "<select id='searchType' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='id'>회원ID</option>";
+    html += "<option value='name' >회원이름</option>";
+    html += "<option value='device'>디바이스 ID</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+function deviceSelectbox1(tagId, val) {
+    var html = "<select id='deviceSel' name='deviceSel' class='col-sm-3 select2 form-control custom-select'>";
+
+    if(val == 'pc') html += "<option value='pc' selected>PC</option>";
+    else html += "<option value='pc'>PC</option>";
+    if(val == 'mobile') html += "<option value='mobile' selected>Mobile</option>";
+    else html += "<option value='mobile'>Mobile</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

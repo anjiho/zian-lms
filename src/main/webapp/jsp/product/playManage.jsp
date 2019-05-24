@@ -58,33 +58,6 @@
         });
     });
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTabel > tbody > tr").length == 1) {
-                $('#teacherTabel > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTabel > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }
-    }
-
     function addOption(){ //옵션명 추가
         var optionCnt = $("#optionTable tr").length-1;
         var getOption = "kind_"+optionCnt;
@@ -111,7 +84,7 @@
                     optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productOption')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\">삭제</button>";
                 optionHtml += "</a>";
                 optionHtml += "</td>";
         optionHtml += "</tr>";
@@ -134,7 +107,7 @@
          optionHtml  += "<td style=\"padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;\">";
          optionHtml  += "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
          optionHtml  += "</td>";
-         optionHtml  += "<td style=\"padding: 0.3rem;width: 20%\">";
+         optionHtml  += "<td style=\"padding: 0.3rem;width: 20%;vertical-align: middle\">";
          optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_"+optionCnt+"'>";
          optionHtml  += " <option>선택</option>";
          optionHtml  += "</select>";
@@ -144,7 +117,7 @@
          optionHtml  += "<input type=\"text\" class=\"form-control\" value='100' style=\"display: inline-block;width:60%;text-align: right;\"> %";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
-         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productTeacher')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('teacherTabel', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\">삭제</button>";
          optionHtml  += "</td>";
          optionHtml  += "</tr>";
         $('#teacherTabel > tbody:first').append(optionHtml);
@@ -157,9 +130,6 @@
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-
-
-
 
     //옵션 - 판매가 재수강시 할인율적용 함수
     function saleInputPrice(val,cnt) {
@@ -183,9 +153,6 @@
             $trLast.after($trNew);
 
             getCategoryNoTag2('categoryTable','1183', '2');
-            /*$trNew.find("td").eq(3).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(7).html(defaultCategorySelectbox());*/
         }
     }
     //카테코리 셀렉트 박스 변경 시
@@ -531,7 +498,7 @@
                                         <input type="number" class="form-control" id="resultPrice_0" readonly>
                                     </td>
                                     <td style="padding: 0.3rem;">
-                                        <button type="button" onclick="deleteTableRow('optionDelete');" class="btn btn-outline-danger btn-sm" style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="deleteTableRow('optionTable' , 'delBtn');" class="btn btn-outline-danger btn-sm delBtn" style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -598,7 +565,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('productCategory')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -698,7 +665,7 @@
                                     <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
                                         <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                     </td>
-                                    <td style="padding: 0.3rem;width: 20%">
+                                    <td style="padding: 0.3rem;width: 20%;vertical-align: middle">
                                         <select class="select2 form-control custom-select" style="height:36px;" id="teacherList_0">
                                             <option>선택</option>
                                         </select>
@@ -708,7 +675,7 @@
                                         <input type="text" class="form-control" style="display: inline-block;width:60%;text-align: right" name="calculate_rate" value="100"> %
                                     </td>
                                     <td style="width:3%;vertical-align: middle">
-                                        <button type="button" onclick="deleteTableRow('productTeacher')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="deleteTableRow('teacherTabel', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -960,14 +927,6 @@
             onFinished: function(event, currentIndex) {
                 playSave();
             },
-            /*onFinishing: function(event, currentIndex) {
-                //form.validate().settings.ignore = ":disabled";
-                //return form.valid();
-            },
-            onFinished: function(event, currentIndex) {
-                //alert("Submitted!");
-            }*/
-            // aria-selected:"false"
         });
         $('#indate').datepicker({
             format: "yyyy-mm-dd",

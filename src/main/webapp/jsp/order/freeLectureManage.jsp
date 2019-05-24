@@ -101,7 +101,7 @@
     }
     
     function sendChildValue2(val, priceKey, type) {
-        var checkBtn = val;
+       var checkBtn = val;
 
         var tr = checkBtn.parent().parent();
         var td = tr.children();
@@ -113,12 +113,12 @@
         var resKeys = get_array_values_by_name("input", "res_key[]");
         for(var i=0; i<resKeys.length; i++){
             if(resKeys[i] == price){
-                alert("이미 선택된 상품입니다.");
+                $("#chk_"+price).remove();
                 return false;
             }
         }
-
-        var optionListHtml = "<tr scope='col' colspan='3'>";
+        var trId = 'chk_'+price;
+        var optionListHtml = "<tr scope='col' colspan='3' id='"+ trId +"'>";
         optionListHtml     += " <td>";
         optionListHtml     += "<input type='hidden'  value='" + priceKey + "' name='res_key[]'>";
         optionListHtml     += "</td>";
@@ -132,7 +132,7 @@
         optionListHtml     += "<span>" + type + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productTable');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
         optionListHtml     += "</td>";
         $('#productTable > tbody:first').append(optionListHtml);
         $('#productList  tr').each(function(){
@@ -141,10 +141,10 @@
         });
     }
 
-    function deleteCheckBox() {
+    /*function deleteCheckBox() {
         $("#productList").show();
         $("input[type=checkbox]").prop("checked", false);
-    }
+    }*/
 
     //회원 정보 전달
     function sendChildValue(val) {
@@ -174,29 +174,13 @@
         optionListHtml     += "<span>" + userName + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('optionTable');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('memberTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
         optionListHtml     += "</td>";
         $('#memberTable > tbody:first').append(optionListHtml);
         $('#memberList tr').each(function(){
             var tr = $(this);
             tr.children().eq(0).attr("style", "display:none");
         });
-    }
-    
-    function deleteTableRow(tableId) {
-        if (tableId == "memberTable") {
-            if ($("#memberTable > tbody > tr").length == 1) {
-                $('#memberTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#memberTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTable") {
-            if ($("#productTable > tbody > tr").length == 1) {
-                $('#productTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#productTable > tbody:last > tr:last').remove();
-            }
-        }
     }
 
     //저장
@@ -221,16 +205,16 @@
         else status = 0;
 
         if(userKeyList.length > 0){
-            if(userKeys.length > 0) {
+            if(res_key.length > 0) {
                 if(confirm("무료강의제공을 하시겠습니까?")){
-                    orderManageService.injectFreeVideoLecture(priceKeyList, userKeyList, status, startDate, endDate,function (cnt) {});
+                    orderManageService.injectFreeVideoLecture(priceKeyList, userKeyList, status, startDate, endDate,function (cnt) {isReloadPage();});
                 }
             }else{
                 alert("상품을 선택해 주세요.");
                 return false;
             }
         }else{
-            alert("회원을 선택해 주세요.");
+            alert("회원을 선택해 주세요");
             return false;
         }
     }
@@ -255,7 +239,6 @@
     }
 </script>
 <div class="page-breadcrumb">
-
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">무료수강 관리</h4>
@@ -275,20 +258,17 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">상품목록</h5>
-                </div>
-                <div style=" display:inline;">
-                    <div style=" float: left;">
-                        <span id="l_productSearch"></span>
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
-                    </div>
-                    <div style=" float: left; width: 33%">
-                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
-                    </div>
-                    <div style=" float: right;">
-                        <button type="button" class="btn btn-outline-info" onclick="deleteCheckBox()">선택</button>
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:15px;">상품목록</h5>
+                    <div>
+                        <div style=" float: left;">
+                            <span id="l_productSearch"></span>
+                        </div>
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
+                        </div>
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
+                        </div>
                     </div>
                 </div>
                     <input type="hidden" id="sPage3" >
@@ -310,20 +290,20 @@
         </div>
         <div class="col-md-6">
             <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">회원목록</h5>
-                    </div>
-                    <div style=" display:inline;">
+                <div class="card-body">
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:15px;">회원목록</h5>
+                    <div>
                         <div style=" float: left;">
                             <span id="l_memberSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
                             <input type="text" class="form-control" id="SearchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
+                </div>
                     <input type="hidden" id="sPage">
                     <table class="table table-hover text-center">
                         <thead>
@@ -413,7 +393,7 @@
                                             <th scope="col" style="width:5%;"></th>
                                         </tr>
                                         </thead>
-                                        <tbody id="productList" style="display: none;"></tbody>
+                                        <tbody id="productList" ></tbody>
                                     </table>
                                 </div>
                             </div>

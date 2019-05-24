@@ -46,6 +46,10 @@ public class OrderManageController {
             mvc.setViewName("order/lectureTimeManage");
         }else if("lectureWatchList".equals(page_gbn)) {
             mvc.setViewName("order/lectureWatchList");
+        }else if("deviceListManage".equals(page_gbn)) {
+            mvc.setViewName("order/deviceListManage");
+        }else if("deviceChangeList".equals(page_gbn)) {
+            mvc.setViewName("order/deviceChangeList");
         }
         return mvc;
     }

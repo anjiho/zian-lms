@@ -62,32 +62,6 @@
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }
-    }
     //옵션 추가 버튼
     function addProductOptionInfo() {
         var fistTrStyle = $("#optionList tr").eq(0).attr("style");
@@ -215,7 +189,7 @@
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
                         function() {return "%"},
                         function() {return "<span id='sum_0'></span>"},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ];
                     dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
                     $('#optionList tr').eq(0).attr("style", "display:none");
@@ -227,10 +201,9 @@
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
-                        //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                         function(data) {return "%"},
                         function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ], {escapeHtml:false});
                     $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
                 }
@@ -252,7 +225,7 @@
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
@@ -269,7 +242,7 @@
                 function(data) {return data[1].name;},
                 function() {return nextIcon},
                 function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
@@ -345,7 +318,6 @@
                             function (data) {return textShow;},
                             function (data) {return modifyBtn+deleteBtn;}
                         ];
-                        //dwr.util.addRows("lectureCurriList", [0], cellData, {escapeHtml: false});
                         dwr.util.addRows(lectureCurriList, [0], cellData, {
                             rowCreator:function(options) {
                                 var row = document.createElement("tr");
@@ -359,7 +331,6 @@
                 }
             }
         });
-
 
         /**
          * 강사 목록 가져오기
@@ -375,7 +346,7 @@
                 function() {return nextIcon},
                 function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
                 function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' style=\"display: inline-block;width:60%\">%"},
-                function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
             ];
             dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
             $('#teacherList tr').eq(0).attr("style", "display:none");
@@ -394,7 +365,7 @@
                     function() {return nextIcon},
                     function() {return cmpList.teacherName},
                     function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' value='"+ cmpList.calculateRate +"' style=\"display: inline-block;width:60%\">%"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
             }
@@ -416,7 +387,7 @@
                         function(data) {return data.goodsName;},
                         function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                         function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ], {escapeHtml:false});
 
                     for (var i=0; i<productOtherInfo[0].length; i++) {
@@ -660,67 +631,65 @@
             }
         }
     }
-        //옵션정보 수정
-        function updateOptionInfo() {
-            var optionNames = get_array_values_by_name("select", "selOption[]");
-            var optionPrices = get_array_values_by_name("input", "price[]");
-            var sellPrices = get_array_values_by_name("input", "sellPrice[]");
-            var points = get_array_values_by_name("input", "point[]");
-            var expendPercents = get_array_values_by_name("input", "expendPercent[]");
+    //옵션정보 수정
+    function updateOptionInfo() {
+        var optionNames = get_array_values_by_name("select", "selOption[]");
+        var optionPrices = get_array_values_by_name("input", "price[]");
+        var sellPrices = get_array_values_by_name("input", "sellPrice[]");
+        var points = get_array_values_by_name("input", "point[]");
+        var expendPercents = get_array_values_by_name("input", "expendPercent[]");
 
-            var dataArr = new Array();
-            for (var i=0; i<optionNames.length; i++) {
-                var data = {
-                    priceKey:'0',
-                    gKey:'0',
-                    kind:optionNames[i],
-                    ctgKey:'0',
-                    name:'0',
-                    price:optionPrices[i],
-                    sellPrice:sellPrices[i],
-                    point:points[i],
-                    extendPercent:expendPercents[i]
-                }
-                dataArr.push(data)
+        var dataArr = new Array();
+        for (var i=0; i<optionNames.length; i++) {
+            var data = {
+                priceKey:'0',
+                gKey:'0',
+                kind:optionNames[i],
+                ctgKey:'0',
+                name:'0',
+                price:optionPrices[i],
+                sellPrice:sellPrices[i],
+                point:points[i],
+                extendPercent:expendPercents[i]
             }
-            if(confirm("옵션정보를 수정 하시겠습니까?")){
-                productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
+            dataArr.push(data)
+        }
+        if(confirm("옵션정보를 수정 하시겠습니까?")){
+            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
+                isReloadPage(true);
+            });
+        }
+    }
+
+    //카테고리정보 수정
+    function updateCategoryInfo() {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+
+        if(confirm("카테고리를 수정 하시겠습니까?")){
+
+            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+
+            if (fistTrStyle == "display:none") {
+                productManageService.deleteTCategoryGoods(gKey, function(){
+                    isReloadPage(true);
+                });
+            } else {
+                var dataArr = new Array();
+                $.each(ctgKeys, function(index, key) {
+                    var data = {
+                        ctgGKey:0,
+                        ctgKey:key,
+                        gKey:0,
+                        pos:0
+                    };
+                    dataArr.push(data);
+                });
+                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
                     isReloadPage(true);
                 });
             }
         }
-
-        //카테고리정보 수정
-        function updateCategoryInfo() {
-            var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-
-            if(confirm("카테고리를 수정 하시겠습니까?")){
-
-                var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-                if (fistTrStyle == "display:none") {
-                    productManageService.deleteTCategoryGoods(gKey, function(){
-                        isReloadPage(true);
-                    });
-                } else {
-                    var dataArr = new Array();
-                    $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:0,
-                            pos:0
-                        };
-                        dataArr.push(data);
-                    });
-                    productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
-                        isReloadPage(true);
-                    });
-                }
-            }
-        }
-
-
+    }
 
     //강좌정보 수정
     function updateLectureInfo() {
@@ -767,70 +736,67 @@
         }
     }
 
-                            function mocklISTModify() {
-                                if(confirm("수정 하시겠습니까?")){
-                                    /*  6.선택 obj  */
-                                    var array3 = new Array();
-                                    $('#allMockList tbody tr').each(function(index){
-                                        //var mockTitle = $(this).find("td input").eq(0).val();
-                                        var mockKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:mockKey,
-                                            resType: 8,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    $('#examQuestionList tbody tr').each(function(index){
-                                        //var examQuestionTitle = $(this).find("td input").eq(0).val();
-                                        var examKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:examKey,
-                                            resType: 9,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    $('#bookList tbody tr').each(function(index){
-                                        //var bookTitle = $(this).find("td input").eq(0).val();
-                                        var bookKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:bookKey,
-                                            resType: 5,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    $('#giftList tbody tr').each(function(index){
-                                        //var giftTitle = $(this).find("td input").eq(0).val();
-                                        var gifyKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:gifyKey,
-                                            resType: 4,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    productManageService.upsultTLinkKink(array3, gKey,function () {
+    function mocklISTModify() {
+        if(confirm("수정 하시겠습니까?")){
+            /*  6.선택 obj  */
+            var array3 = new Array();
+            $('#allMockList tbody tr').each(function(index){
+                //var mockTitle = $(this).find("td input").eq(0).val();
+                var mockKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:mockKey,
+                    resType: 8,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            $('#examQuestionList tbody tr').each(function(index){
+                //var examQuestionTitle = $(this).find("td input").eq(0).val();
+                var examKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:examKey,
+                    resType: 9,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            $('#bookList tbody tr').each(function(index){
+                //var bookTitle = $(this).find("td input").eq(0).val();
+                var bookKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:bookKey,
+                    resType: 5,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            $('#giftList tbody tr').each(function(index){
+                //var giftTitle = $(this).find("td input").eq(0).val();
+                var gifyKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:gifyKey,
+                    resType: 4,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            productManageService.upsultTLinkKink(array3, gKey,function () {
 
-                                    });
-                                }
-                            }
-
-
-
+            });
+        }
+    }
 </script>
 <div class="page-breadcrumb">
 <div class="row">
@@ -990,8 +956,7 @@
                         </div>
                     </div>
                 </section>
-<!-- // 1.기본정보 Tab -->
-
+            <!-- // 1.기본정보 Tab -->
             <!-- 2.옵션 Tab -->
             <h3>옵션</h3>
             <section>
@@ -1009,6 +974,7 @@
                             <th scope="col" style="text-align:center;">판매가</th>
                             <th scope="col" style="text-align:center;">포인트</th>
                             <th scope="col" colspan="2" style="text-align:center;">재수강</th>
+                            <th scope="col" style="text-align:center;"></th>
                             <th scope="col" style="text-align:center;"></th>
                         </tr>
                         </thead>

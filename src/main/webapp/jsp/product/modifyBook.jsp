@@ -44,7 +44,7 @@
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
                     function() {return "%"},
                     function() {return "<span id='sum_0'></span>"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                 ];
                 dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
                 $('#optionList tr').eq(0).attr("style", "display:none");
@@ -59,7 +59,7 @@
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
                     function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
@@ -80,7 +80,7 @@
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
@@ -97,7 +97,7 @@
                 function(data) {return data[1].name;},
                 function() {return nextIcon},
                 function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
@@ -265,25 +265,6 @@
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
-        }
-    }
-
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
         }
     }
 
@@ -769,6 +750,7 @@
                                         <th scope="col" style="text-align:center;">포인트</th>
                                         <th scope="col" colspan="2" style="text-align:center;">재수강</th>
                                         <th scope="col" style="text-align:center;"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="optionList">

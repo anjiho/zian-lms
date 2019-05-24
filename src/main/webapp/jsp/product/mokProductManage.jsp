@@ -55,24 +55,6 @@
         }
     }
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        }
-    }
 
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
@@ -340,7 +322,7 @@
                                             <span id="sum_0"></span>
                                         </td>
                                         <td style="vertical-align: middle">
-                                            <button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm delBtn"  onclick="deleteTableRow('optionTable', 'delBtn');">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -405,7 +387,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('productCategory')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
                                         </td>
                                     </tr>
 

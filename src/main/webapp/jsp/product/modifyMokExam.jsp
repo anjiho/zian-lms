@@ -277,7 +277,7 @@
         subHtml     += "</div>";
         subHtml     += "</td>";
         subHtml     += " <td>";
-        subHtml     += "<button type=\"button\" onclick=\"deleteTableRow('examSubTable');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        subHtml     += "<button type=\"button\" onclick=\"deleteTableRow('examSubTable', 'delBtn' );\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
         subHtml     += "</td>";
 
         $('#examSubTable > tbody:first').append(subHtml);//선택 모의고사 리스트 뿌리기

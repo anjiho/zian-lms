@@ -125,7 +125,7 @@
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
@@ -142,7 +142,7 @@
                 function(data) {return data[1].name;},
                 function() {return nextIcon},
                 function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
@@ -151,7 +151,6 @@
                 tr.children().eq(0).attr("style", "display:none");
                 tr.children().eq(11).attr("style", "display:none");
             });
-
 
             /**
              * 학원 강좌정보 가져오기
@@ -201,7 +200,7 @@
                     function() {return nextIcon},
                     function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
                     function() {return "<input type='text' name='calcRate[]' class='form-control' >"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
 
@@ -221,7 +220,7 @@
                         function() {return nextIcon},
                         function() {return cmpList.teacherName},
                         function() {return "<input type='text' name='calcRate[]' class='form-control' value='"+ cmpList.calculateRate +"'>"},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                     ];
                     dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
                 }
@@ -244,7 +243,7 @@
                     function(data) {return data.goodsName;},
                     function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                     function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ], {escapeHtml:false});
 
                 for (var i=0; i<productOtherInfo[0].length; i++) {
@@ -520,34 +519,6 @@
             }
         }
     }
-
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }
-    }
-
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
         var checkBtn = val;
@@ -882,6 +853,7 @@
                                 <th></th>
                                 <th>선생님명</th>
                                 <th>정산률(%)</th>
+                                <th></th>
                             </tr>
                             </thead>
                             <tbody id="teacherList"></tbody>
@@ -1096,17 +1068,6 @@
         onFinished: function(event, currentIndex) {
             playSave();
         },
-        // onContentLoaded: function (event, currentIndex) {
-        //
-        // }
-        /*onFinishing: function(event, currentIndex) {
-            //form.validate().settings.ignore = ":disabled";
-            //return form.valid();
-        },
-        onFinished: function(event, currentIndex) {
-            //alert("Submitted!");
-        }*/
-        // aria-selected:"false"
     });
 
     $('#indate').datepicker({
@@ -1125,7 +1086,6 @@
     $(document).on('change', '.dataAddFile', function() {
         $(this).parent().find('.custom-file-control2').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });

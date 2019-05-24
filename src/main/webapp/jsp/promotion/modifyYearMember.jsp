@@ -56,7 +56,7 @@
                         return "<span id='sum_0'></span>"
                     },
                     function () {
-                        return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"
+                        return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"
                     }
                 ];
                 dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
@@ -87,7 +87,7 @@
                         return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice - ((data.sellPrice * data.extendPercent) / 100)) + "</span>"
                     },
                     function (data) {
-                        return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"
+                        return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"
                     },
                 ], {escapeHtml: false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
@@ -120,13 +120,6 @@
             $trNew.find("td span").html('');
             $trNew.find("td button").attr('disabled', false);
             $trNew.find("td").eq(7).attr('style', "display:''");
-        }
-    }
-
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        if(tableId == 'optionTable'){
-            $('#optionTable > tbody:last > tr:last').remove();
         }
     }
 

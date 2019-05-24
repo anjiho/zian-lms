@@ -132,33 +132,6 @@
         }
     }
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }
-    }
-
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
         var checkBtn = val;
@@ -577,7 +550,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('productCategory')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -672,6 +645,7 @@
                                         <th>과목</th>
                                         <th>선생님명</th>
                                         <th style="padding-left: 9%;">정산률(%)</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
                                     <tbody id="teacherList">
@@ -686,7 +660,7 @@
                                             <input type="text" class="form-control text-right" style="display: inline-block;width:60%;text-align: right" name='calcRate[]' value="100"> %
                                         </td>
                                         <td style="padding: 0.3rem;width: 20%">
-                                            <button type="button" onclick="deleteTableRow('productTeacher')" class='btn btn-outline-danger btn-sm'>삭제</button>
+                                            <button type="button" onclick="deleteTableRow('teacherTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>

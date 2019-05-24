@@ -51,21 +51,21 @@ public interface OrderManageMapper {
     Long selectJGKeyByJLecKey(@Param("jLecKey") Long jLecKey);
 
     List<DeviceListDTO> selectPcDeviceList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
+                                           @Param("searchType") String searchType, @Param("searchText") String searchText);
 
-    int selectPcDeviceListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectPcDeviceListCount(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
     List<DeviceListDTO> selectMobileDeviceList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
+                                               @Param("searchType") String searchType, @Param("searchText") String searchText);
 
-    int selectMobileDeviceListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectMobileDeviceListCount(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
     List<DeviceListDTO> selectDeviceChangeLogList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                                   @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
-                                           @Param("deviceType") String deviceType, @Param("searchText") String searchText, @Param("searchType") String searchType);
+                                           @Param("deviceType") String deviceType, @Param("searchType") String searchType, @Param("searchText") String searchText);
 
     int selectDeviceChangeLogListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
-                                       @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("deviceType") String deviceType);
+                                       @Param("deviceType") String deviceType, @Param("searchType") String searchType, @Param("searchText") String searchText);
 
     String selectGoodsNameByJGKey(@Param("jGKey") int jGKey);
 

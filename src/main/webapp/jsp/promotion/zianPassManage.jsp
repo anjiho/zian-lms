@@ -111,12 +111,6 @@
         }
     }
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        if(tableId == 'optionTable'){
-            $('#optionTable > tbody:last > tr:last').remove();
-        }
-    }
 
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
@@ -201,7 +195,7 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
-        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productOnline');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
         onlineListHtml     += "</td>";
         $('#promotionOnlineTable > tbody:first').append(onlineListHtml);
         $('#promotionOnlineTable tr').each(function(){
@@ -399,7 +393,7 @@
                                             <span id="sum_0"></span>
                                         </td>
                                         <td style="vertical-align: middle">
-                                            <button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('optionTable');">삭제</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm delBtn"  onclick="deleteTableRow('optionTable', 'delBtn');">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>

@@ -36,7 +36,7 @@
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
                     function() {return "%"},
                     function() {return "<span id='sum_0'></span>"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                 ];
                 dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
                 $('#optionList tr').eq(0).attr("style", "display:none");
@@ -51,7 +51,7 @@
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
                     function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
@@ -74,7 +74,7 @@
                     function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                     function(data) {return "<input type='hidden' name='linkKey[]' value='" + data.linkKey + "'>";},
                     function(data) {return "<input type='hidden' name='reqKey[]' value='" + data.reqKey + "'>";},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOnline');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#promotionOnlineList tr').each(function(){
                     var tr = $(this);
@@ -114,15 +114,6 @@
             $trNew.find("td span").html('');
             $trNew.find("td button").attr('disabled', false);
             $trNew.find("td").eq(7).attr('style', "display:''");
-        }
-    }
-
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        if(tableId == 'optionTable'){
-            $('#optionTable > tbody:last > tr:last').remove();
-        }else if(tableId == 'productOnline'){
-            $('#promotionOnlineTable > tbody:last > tr:last').remove();
         }
     }
 
@@ -209,7 +200,7 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
-        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productOnline');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
         onlineListHtml     += "</td>";
         $('#promotionOnlineTable > tbody:first').append(onlineListHtml);
         $('#promotionOnlineTable tr').each(function(){
