@@ -4,7 +4,8 @@
 
     <select id="selectQnAList" resultType="QnaListDTO">
         SELECT * FROM (
-            SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS
+            SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS,
+                    (SELECT COUNT(BBS_COMMNET_KEY) FROM T_BBS_COMMENT T WHERE T.BBS_KEY = A.BBS_KEY) commentCount
             FROM T_BBS_DATA A
             WHERE A.is_notice = 0
             AND A.CTG_KEY = #{teacherKey}
@@ -57,6 +58,16 @@
         INNER JOIN T_USER B
         ON A.WRITE_USER_KEY = B.USER_KEY
         WHERE BBS_KEY = #{bbsKey}
+    </select>
+
+    <select id="selectQnaCommentList" resultType="BbsCommentDTO">
+        SELECT
+            A.BBS_COMMNET_KEY as bbsCommentKey, B.NAME as userName, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.COMMENT_ as commentContents
+        FROM T_BBS_COMMENT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE BBS_KEY = #{bbsKey}
+        ORDER BY A.BBS_COMMNET_KEY ASC
     </select>
 
 </mapper>

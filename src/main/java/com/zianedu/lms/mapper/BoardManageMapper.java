@@ -1,5 +1,6 @@
 package com.zianedu.lms.mapper;
 
+import com.zianedu.lms.dto.BbsCommentDTO;
 import com.zianedu.lms.dto.QnaListDTO;
 import org.apache.ibatis.annotations.Param;
 
@@ -13,4 +14,6 @@ public interface BoardManageMapper {
     Integer selectQnAListCount(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
     QnaListDTO selectQnaDetailInfo(@Param("bbsKey") int bbsKey);
+
+    List<BbsCommentDTO> selectQnaCommentList(@Param("bbsKey") int bbsKey);
 }

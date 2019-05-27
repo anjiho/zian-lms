@@ -24,4 +24,6 @@ public class QnaListDTO {
     private String userName;
 
     private boolean isNew;
+
+    private int commentCount;
 }
