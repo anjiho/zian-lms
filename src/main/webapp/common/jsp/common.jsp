@@ -100,6 +100,8 @@
 <!-- form 시작-->
 <form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
+<input type="hidden" name="param_key" id="param_key">
+</form>
 <%
     if (authority == 4) {
 %>

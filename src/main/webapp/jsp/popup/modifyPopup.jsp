@@ -1,10 +1,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String popupKey = request.getParameter("popupKey");
+    String popupKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/popupCouponManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script>
     var popupKey = '<%=popupKey%>';
     function init() {
@@ -17,7 +18,6 @@
 
         /* 패키시상품 정보 가져오기 */
         popupCouponManageService.getPopupDetailInfo(popupKey, function(info) {
-            console.log(info);
             var result = info.result;
 
             innerHTML("code", result.popupKey);
@@ -40,7 +40,7 @@
             var resultList = info.resultList;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
 
-            if (resultList.length == 0) {
+            if(resultList.length == 0){
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                     function() {return "지안에듀";},
@@ -56,28 +56,26 @@
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
+            }else{
+                for(var i=0; i < resultList.length; i++){
+                    dataManageService.getSequentialCategoryListBy4DepthUnder(resultList[i].ctgKey, function (selList) {
+                        var cellData = [
+                            function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ selList[0].ctgKey +"'>";},
+                            function() {return "지안에듀";},
+                            function() {return nextIcon},
+                            function() {return selList[3].name;},
+                            function() {return nextIcon},
+                            function() {return selList[2].name;},
+                            function() {return nextIcon},
+                            function() {return selList[1].name;},
+                            function() {return nextIcon},
+                            function() {return selList[0].name;},
+                            function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" >삭제</button>"},
+                        ];
+                        dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+                    });
+                }
             }
-
-            dwr.util.addRows("categoryList", resultList, [
-                function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function() {return "지안에듀";},
-                function() {return nextIcon},
-                function(data) {return data[3].name;},
-                function() {return nextIcon},
-                function(data) {return data[2].name;},
-                function() {return nextIcon},
-                function(data) {return data[1].name;},
-                function() {return nextIcon},
-                function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-            ], {escapeHtml:false});
-
-            $('#categoryList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(11).attr("style", "display:none");
-            });
         });
 
     }
@@ -150,79 +148,31 @@
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
+    function popupSave() {
+        var basicObj = getJsonObjectFromDiv("section1");
 
-    //수정
-    function promotionPacakgeSave() {
-        var data = new FormData();
-        var fileData = new FormData();
-        $.each($('#imageListFile')[0].files, function(i, file) {
-            fileData.append('imageListFile', file);
+        if (basicObj.isShow == 'on') basicObj.isShow = '1';//노출 checkbox
+        else basicObj.isShow = '0';
+
+        basicObj.startDate = basicObj.startDate+" "+$('select[name=timeHour]').eq(0).val()+":"+$('select[name=timeMinute]').eq(0).val()+":"+"00";
+        basicObj.endDate   = basicObj.endDate+" "+$('select[name=timeHour]').eq(1).val()+":"+$('select[name=timeMinute]').eq(1).val()+":"+"00";
+
+        var categoryArr = new Array();
+        $('#categoryTable tbody tr').each(function (index) {
+            var ctgKey = $(this).find("td select").eq(4).val();
+            categoryArr.push(ctgKey);
         });
 
-        $.each($('#imageViewFile')[0].files, function(i, file) {
-            fileData.append('imageViewFile', file);
-        });
 
-        fileData.append('uploadType', 'PACKAGE');
+        if(confirm("수정 하시겠습니까?")) {
+            popupCouponManageService.updatePopupInfo(basicObj, function () {isReloadPage(true);});
+           // popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {isReloadPage(true);});
+        }
+    }
 
-        $.ajax({
-            url: "/file/imageFileUpload",
-            method: "post",
-            dataType: "JSON",
-            data: fileData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                var basicObj = getJsonObjectFromDiv("section1");
-                if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-                else basicObj.isShow = '0';
-                if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
-                else basicObj.isSell = '0';
-                if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
-                else basicObj.isFree = '0';
-                if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
-                else basicObj.isFreebieDeliveryFree = '0';
-                if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
-                else basicObj.isQuickDelivery = '0';
-                var result = JSON.stringify(data.result);
-                if(result != "") {
-                    var parse = JSON.parse(result);
-                    basicObj.imageList = parse.imageListFilePath;
-                    basicObj.imageView = parse.imageViewFilePath;
-                }else{
-                    basicObj.imageList = "";
-                    basicObj.imageView = "";
-                }
-
-                /* 3. 카테고리 저장 */
-                var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-                var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-                if (fistTrStyle == "display:none") {
-                    /*productManageService.deleteTCategoryGoods(gKey, function(){
-                        isReloadPage(true);
-                    });*/
-                } else {
-                    var categoryArr = new Array();
-                    $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:gKey,
-                            pos:0
-                        };
-                        categoryArr.push(data);
-                    });
-                }
-
-                if(confirm("수정 하시겠습니까?")) {
-                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
-                        isReloadPage(true);
-                    });
-                }
-            }
-        });
+    function isSizeChk(px, id) {
+        if(px == 0 || px > 1280) $("#"+id).addClass('is-invalid');
+        else $("#"+id).removeClass('is-invalid');
     }
 </script>
 <div class="page-breadcrumb">
@@ -256,7 +206,7 @@
                         <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" name="popupKey" value="0">
+                                <input type="hidden" name="popupKey" value="<%=popupKey%>">
                                 <input type="hidden" name="cKey" value="0">
                                 <input type="hidden" name="type" value="0">
                                 <div class="col-md-12">
@@ -391,7 +341,7 @@
         saveState : true, //현재 단계 쿠키저장
         enablePagination : true,
         onFinished: function(event, currentIndex) {
-            promotionPacakgeSave();
+            popupSave();
         },
     });
 

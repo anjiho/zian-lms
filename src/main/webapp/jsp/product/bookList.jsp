@@ -9,7 +9,7 @@
     }
 
     function goModifyBook(gKey) {
-        innerValue("gKey", gKey);
+        innerValue("param_key", gKey);
         goPage("productManage","modifyBook");
     }
 

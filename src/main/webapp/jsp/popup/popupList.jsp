@@ -38,7 +38,7 @@
             });
     }
     function goModifyPopup(val) {
-        innerValue('popupKey', val);
+        innerValue('param_key', val);
         goPage('popupCouponManage', 'modifyPopup');
     }
 
