@@ -49,9 +49,10 @@
         </if>
     </select>
 
-    <select id="">
+    <select id="selectQnaDetailInfo" resultType="QnaListDTO">
         SELECT
-            BBS_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, TITLE,
+            A.BBS_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.READ_COUNT,
+            B.NAME as userName, B.USER_ID, A.WRITE_USER_KEY, A.CONTENTS
         FROM T_BBS_DATA A
         INNER JOIN T_USER B
         ON A.WRITE_USER_KEY = B.USER_KEY

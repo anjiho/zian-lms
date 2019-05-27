@@ -11,4 +11,6 @@ public interface BoardManageMapper {
                                    @Param("searchType") String searchType, @Param("searchText") String searchText);
 
     Integer selectQnAListCount(@Param("searchType") String searchType, @Param("searchText") String searchText);
+
+    QnaListDTO selectQnaDetailInfo(@Param("bbsKey") int bbsKey);
 }
