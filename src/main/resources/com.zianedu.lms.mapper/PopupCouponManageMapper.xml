@@ -203,7 +203,7 @@
 
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
         <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
-            SELECT T_POPUP_SEQ FROM DUAL
+            SELECT T_POPUP_SEQ.nextval FROM DUAL
         </selectKey>
         INSERT INTO T_POPUP
         (
@@ -211,7 +211,8 @@
         )
         VALUES
         (
-            #{popupKey}, 100, '', #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y}, #{startDate}, #{endDate}, #{contents}
+            #{popupKey}, 100, sysdate, #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y},
+            TO_DATE(#{startDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{endDate}, 'YYYY-mm-dd hh24:mi:ss'), #{contents}
         )
     </insert>
 

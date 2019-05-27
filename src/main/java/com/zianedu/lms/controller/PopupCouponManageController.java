@@ -20,7 +20,13 @@ public class PopupCouponManageController {
     public ModelAndView popupCouponManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
-
+        if("popupManage".equals(page_gbn)) {
+            mvc.setViewName("popup/popupManage");
+        }else if("popupList".equals(page_gbn)){
+            mvc.setViewName("popup/popupList");
+        }else if("modifyPopup".equals(page_gbn)){
+            mvc.setViewName("popup/modifyPopup");
+        }
         return mvc;
     }
 }
