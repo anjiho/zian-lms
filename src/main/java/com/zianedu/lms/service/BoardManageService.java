@@ -69,6 +69,5 @@ public class BoardManageService extends PagingSupport {
         return boardManageMapper.selectQnAListCount(Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""));
     }
 
-    public
 
 }
