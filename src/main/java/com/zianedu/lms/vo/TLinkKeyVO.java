@@ -23,6 +23,8 @@ public class TLinkKeyVO {
 
     private String name;
 
+    private int ctgKey;
+
     public TLinkKeyVO(){}
 
     public TLinkKeyVO(int linkKey, int valueBit) {

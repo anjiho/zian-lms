@@ -15,7 +15,8 @@
     </select>
 
     <select id="selectTPopupLinkKey" resultType="com.zianedu.lms.vo.TLinkKeyVO">
-        SELECT A.LINK_KEY, B.NAME as GoodsName FROM T_LINK_KEY A
+        SELECT A.LINK_KEY, B.CTG_KEY, B.NAME as GoodsName
+        FROM T_LINK_KEY A
         INNER JOIN T_CATEGORY B
         ON A.REQ_KEY = B.CTG_KEY
         WHERE A.REQ_TYPE = 100
