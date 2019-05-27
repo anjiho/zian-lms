@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.BoardManageMapper">
+
+    <select id="selectQnAList" resultType="QnaListDTO">
+        SELECT * FROM (
+            SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS
+            FROM T_BBS_DATA A
+            WHERE A.is_notice = 0
+            AND A.CTG_KEY = #{teacherKey}
+            AND A.BBS_MASTER_KEY = 10025
+            START WITH A.BBS_PARENT_KEY = 0
+            CONNECT BY PRIOR A.BBS_KEY = A.BBS_PARENT_KEY
+            ORDER SIBLINGS BY A.BBS_PARENT_KEY DESC, A.BBS_KEY DESC
+        ) Z
+        WHERE 1=1
+        <if test="searchType == 'title'">
+            AND Z.TITLE LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'contents'">
+            AND Z.CONTENTS LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'writer'">
+            AND Z.WRITE_USER_KEY IN ( SELECT USER_KEY FROM T_USER WHERE 1=1 AND NAME LIKE '%'||#{searchText}||'%' )
+        </if>
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectQnAListCount" resultType="Integer">
+        SELECT COUNT(Z.BBS_KEY) FROM (
+            SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS
+            FROM T_BBS_DATA A
+            WHERE A.is_notice = 0
+            AND A.CTG_KEY = #{teacherKey}
+            AND A.BBS_MASTER_KEY = 10025
+            START WITH A.BBS_PARENT_KEY = 0
+            CONNECT BY PRIOR A.BBS_KEY = A.BBS_PARENT_KEY
+            ORDER SIBLINGS BY A.BBS_PARENT_KEY DESC, A.BBS_KEY DESC
+        ) Z
+        WHERE 1=1
+        <if test="searchType == 'title'">
+            AND Z.TITLE LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'contents'">
+            AND Z.CONTENTS LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'writer'">
+            AND Z.WRITE_USER_KEY IN ( SELECT USER_KEY FROM T_USER WHERE 1=1 AND NAME LIKE '%'||#{searchText}||'%' )
+        </if>
+    </select>
+
+    <select id="">
+        SELECT
+            BBS_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, TITLE,
+        FROM T_BBS_DATA A
+        INNER JOIN T_USER B
+        ON A.WRITE_USER_KEY = B.USER_KEY
+        WHERE BBS_KEY = #{bbsKey}
+    </select>
+
+</mapper>

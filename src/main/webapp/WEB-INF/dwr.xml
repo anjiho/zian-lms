@@ -66,6 +66,13 @@
 			<param name="beanName" value="orderManageService" />
 		</create>
 
+		<convert converter="bean" match="com.zianedu.lms.service.BoardManageService"/>
+		<create creator="spring" javascript="boardManageService">
+			<param name="class" value="com.zianedu.lms.service.BoardManageService"/>
+			<param name="beanName" value="boardManageService" />
+		</create>
+
+
 		<!-- ========================= MANAGER ======================== -->
 
 		<!--  vo 선언 -->
@@ -140,6 +147,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailProductListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.DeliveryAddressDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.QnaListDTO"/>
 
 
 	</allow>

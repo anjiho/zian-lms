@@ -275,8 +275,9 @@ public class PopupCouponManageService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public Integer savePopupInfo(TPopupVO tPopupVO, List<Integer>ctgKeyList) {
-        Integer popupKey = popupCouponManageMapper.insertTPopupInfo(tPopupVO);
-        if (popupKey != null) {
+        popupCouponManageMapper.insertTPopupInfo(tPopupVO);
+        int popupKey = tPopupVO.getPopupKey();
+        if (popupKey > 0) {
             for (Integer ctgKey : ctgKeyList) {
                 TLinkKeyVO tLinkKeyVO = new TLinkKeyVO();
                 tLinkKeyVO.setReqKey(ctgKey);

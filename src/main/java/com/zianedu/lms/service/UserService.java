@@ -1,7 +1,9 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.mapper.TestMapper;
 import com.zianedu.lms.mapper.UserMapper;
 import com.zianedu.lms.utils.SecurityUtil;
+import com.zianedu.lms.vo.TBbsVO;
 import com.zianedu.lms.vo.TUserVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,6 +26,9 @@ public class UserService {
     private UserMapper userMapper;
 
     @Autowired
+    private TestMapper testMapper;
+
+    @Autowired
     private JdbcTemplate jdbcTemplate;
 
     @Transactional(propagation = Propagation.REQUIRED)
@@ -42,6 +47,32 @@ public class UserService {
                         public void setValues(PreparedStatement ps, TUserVO tUserVO) throws SQLException {
                             ps.setString(1, SecurityUtil.encryptSHA256(tUserVO.getPwd()));
                             ps.setInt(2, tUserVO.getUserKey());
+                        }
+                    });
+
+        }
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void test() {
+        String sql = "";
+        List<TBbsVO> noticeList = testMapper.selectNotice();
+
+        if (noticeList.size() > 0) {
+            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, NOTICE_TYPE, NOTICE_CATEGORY, CREATE_DATE, CREATE_USER_KEY) " +
+                    "VALUES (T_NOTICE_SEQ.nextval, ?, ?, ?, ?, sysdate, ?)";
+            jdbcTemplate.batchUpdate(
+                    sql,
+                    noticeList,
+                    1000,
+                    new ParameterizedPreparedStatementSetter<TBbsVO>() {
+                        @Override
+                        public void setValues(PreparedStatement ps, TBbsVO tBbsVO) throws SQLException {
+                            ps.setString(1, tBbsVO.getTitle());
+                            ps.setString(2, tBbsVO.getContents());
+                            ps.setString(3, "ALL");
+                            ps.setString(4, "");
+                            ps.setInt(5, tBbsVO.getWriteUserKey());
                         }
                     });
 
