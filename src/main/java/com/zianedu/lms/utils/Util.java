@@ -1029,7 +1029,7 @@ public class Util {
 
     }
 
-    // yyyymm -> yyyy-mm 변환
+    // yyyy-mm -> yyyymm 변환
     public static String convertDateFormat2(String date) throws Exception {
         SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyy-mm");
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymm");
@@ -1041,11 +1041,24 @@ public class Util {
 
     }
 
+    // yyyy-mm-dd -> yyyymmdd 변환
+    public static String convertDateFormat3(String date) throws Exception {
+        SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmdd");
+        Date originDate = fromDateFormat.parse(date);
+
+        String newDate = dateFormat.format(originDate);
+
+        return newDate;
+
+    }
+
 
 
     public static void main(String[] args) throws Exception {
-
-        System.out.println(plusDate(Util.returnNow(), -1));
+        String date = convertDateFormat3(plusDate(Util.returnNow(), -10));
+        String date2 = convertDateFormat3("2019-05-27");
+        System.out.println(getDiffDayCount(date, date2));
 
 
     }

@@ -203,7 +203,7 @@
 
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
         <selectKey resultType="Integer" keyProperty="popupKey" order="BEFORE">
-            SELECT T_POPUP_SEQ FROM DUAL
+            SELECT T_POPUP_SEQ.nextval FROM DUAL
         </selectKey>
         INSERT INTO T_POPUP
         (

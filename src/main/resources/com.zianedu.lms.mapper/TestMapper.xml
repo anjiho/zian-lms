@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.TestMapper">
+
+	<select id="selectNotice" resultType="com.zianedu.lms.vo.TBbsVO">
+		SELECT * FROM T_BBS_DATA WHERE IS_NOTICE = 1
+	</select>
+
+
+</mapper>
