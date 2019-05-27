@@ -1,5 +1,6 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.dto.QnaDetailInfoDTO;
 import com.zianedu.lms.dto.QnaListDTO;
 import com.zianedu.lms.mapper.BoardManageMapper;
 import com.zianedu.lms.mapper.MemberManageMapper;
@@ -10,6 +11,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -69,6 +71,24 @@ public class BoardManageService extends PagingSupport {
         return boardManageMapper.selectQnAListCount(Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""));
     }
 
+    /**
+     * QNA 상세
+     * @param bbsKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public QnaDetailInfoDTO getQnaDetailInfo(int bbsKey) {
+        QnaDetailInfoDTO qnaDetailInfo = new QnaDetailInfoDTO(
+            boardManageMapper.selectQnaDetailInfo(bbsKey),
+            boardManageMapper.selectQnaCommentList(bbsKey)
+        );
+        return qnaDetailInfo;
+    }
 
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveQnaReply(int bbsKey, boolean isPublic, String contents) {
+        if (bbsKey == 0) return;
+
+    }
 
 }

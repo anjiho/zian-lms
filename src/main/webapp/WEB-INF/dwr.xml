@@ -148,7 +148,8 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderDetailProductListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.DeliveryAddressDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.QnaListDTO"/>
-
+		<convert converter="bean" match="com.zianedu.lms.dto.QnaDetailInfoDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.BbsCommentDTO"/>
 
 	</allow>
 

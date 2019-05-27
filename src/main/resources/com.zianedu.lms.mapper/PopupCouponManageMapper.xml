@@ -263,8 +263,8 @@
             <if test="height !='' and height != null">HEIGHT = #{height},</if>
             <if test="x !='' and x != null">X = #{x},</if>
             <if test="y !='' and y != null">Y = #{y},</if>
-            <if test="startDate !='' and startDate != null">START_DATE = #{startDate},</if>
-            <if test="endDate !='' and endDate != null">END_DATE = #{endDate},</if>
+            <if test="startDate !='' and startDate != null">START_DATE = TO_DATE(#{startDate}, 'YYYY-MM-DD hh24:mm:ss'),</if>
+            <if test="endDate !='' and endDate != null">END_DATE = TO_DATE(#{endDate}, 'YYYY-MM-DD hh24:mm:ss'),</if>
             <if test="contents !='' and contents != null">CONTENTS = #{contents},</if>
         </set>
         WHERE POPUP_KEY = #{popupKey}
