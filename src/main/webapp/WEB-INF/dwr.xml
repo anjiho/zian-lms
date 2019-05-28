@@ -150,6 +150,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.QnaListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.QnaDetailInfoDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.BbsCommentDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.GoodsReviewDTO"/>
 
 	</allow>
 
