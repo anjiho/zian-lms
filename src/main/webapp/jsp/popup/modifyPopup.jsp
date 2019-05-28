@@ -6,8 +6,51 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/popupCouponManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
     var popupKey = '<%=popupKey%>';
+    $( document ).ready(function() {
+        $('textarea[name=contents]').summernote({ //기본정보-에디터
+            height: 250,
+            minHeight: null,
+            maxHeight: null,
+            focus: false,
+            lang: 'ko-KR',
+            placeholder: '내용을 적어주세요.'
+            ,hint: {
+                match: /:([\-+\w]+)$/,
+                search: function (keyword, callback) {
+                    callback($.grep(emojis, function (item) {
+                        return item.indexOf(keyword) === 0;
+                    }));
+                },
+                template: function (item) {
+                    var content = emojiUrls[item];
+                    return '<img src="' + content + '" width="20" /> :' + item + ':';
+                },
+                content: function (item) {
+                    var url = emojiUrls[item];
+                    if (url) {
+                        return $('<img />').attr('src', url).css('width', 20)[0];
+                    }
+                    return '';
+                }
+            },
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
+
+        //탭 메뉴 색상 변경
+        $("#playForm ul").each(function(idx) {
+            var ul = $(this);
+            ul.find("li").addClass("done").attr("aria-selected", "false");
+            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
+    });
+
     function init() {
         menuActive('menu-4', 1);
         getTimeHourSelectbox("acceptStartHour",0);
@@ -58,6 +101,7 @@
                 $('#categoryList tr').eq(0).attr("style", "display:none");
             }else{
                 for(var i=0; i < resultList.length; i++){
+                    var delBtn = "<input type='button' onclick='deleteCategory("+ resultList[i].linkKey +");' class='btn btn-outline-danger btn-sm' value='삭제'>";
                     dataManageService.getSequentialCategoryListBy4DepthUnder(resultList[i].ctgKey, function (selList) {
                         var cellData = [
                             function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ selList[0].ctgKey +"'>";},
@@ -70,9 +114,14 @@
                             function() {return selList[1].name;},
                             function() {return nextIcon},
                             function() {return selList[0].name;},
-                            function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" >삭제</button>"},
+                            function() {return delBtn},
+                            function() {return ""},
                         ];
                         dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+                        $('#categoryList tr').each(function(){
+                            var tr = $(this);
+                           // tr.children().eq(11).attr("style", "display:none");
+                        });
                     });
                 }
             }
@@ -80,47 +129,11 @@
 
     }
 
-    $( document ).ready(function() {
-        $('textarea[name=contents]').summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-
-        //탭 메뉴 색상 변경
-        $("#playForm ul").each(function(idx) {
-            var ul = $(this);
-            ul.find("li").addClass("done").attr("aria-selected", "false");
-            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
-        });
-    });
+    function deleteCategory(linkKey){
+        if(confirm("삭제하시겠습니까?")) {
+            productManageService.deleteVideoOtherInfo(linkKey, 'TLINK',function () {isReloadPage();});
+        }
+    }
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
@@ -133,18 +146,22 @@
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
-
-            $trNew.find("td input").eq(0).val("");
+            //추가 - 삭제버튼
+            var delBtn = "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
+            $trNew.find("td").eq(0).html("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag2('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(10).attr("style","display:none;");
+            $trNew.find("td").eq(11).html(delBtn);
         }
     }
 
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
+        if(tdNum == '11') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
@@ -159,14 +176,15 @@
 
         var categoryArr = new Array();
         $('#categoryTable tbody tr').each(function (index) {
-            var ctgKey = $(this).find("td select").eq(4).val();
-            categoryArr.push(ctgKey);
+            //alert($(this).find("td select").eq(3).val());
+            if($(this).find("td").eq(0).html() == ""){
+                var ctgKey = $(this).find("td select").eq(3).val();
+                categoryArr.push(ctgKey);
+            }
         });
-
-
         if(confirm("수정 하시겠습니까?")) {
+            popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {});
             popupCouponManageService.updatePopupInfo(basicObj, function () {isReloadPage(true);});
-           // popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {isReloadPage(true);});
         }
     }
 
@@ -296,7 +314,6 @@
                         <h3>카테고리</h3>
                         <section>
                             <div class="float-right mb-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateCategoryInfo();">수정</button>
                                 <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo()">추가</button>
                             </div>
                             <div id="section3">
