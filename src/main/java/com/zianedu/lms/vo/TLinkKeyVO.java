@@ -2,6 +2,8 @@ package com.zianedu.lms.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class TLinkKeyVO {
 
@@ -24,6 +26,8 @@ public class TLinkKeyVO {
     private String name;
 
     private int ctgKey;
+
+    private List<TCategoryVO> categoryList;
 
     public TLinkKeyVO(){}
 

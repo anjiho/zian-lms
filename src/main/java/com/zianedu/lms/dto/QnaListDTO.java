@@ -26,4 +26,8 @@ public class QnaListDTO {
     private boolean isNew;
 
     private int commentCount;
+
+    private int teacherKey;
+
+    private int ctgKey;
 }

@@ -62,9 +62,20 @@ public class PopupCouponManageService {
     @Transactional(readOnly = true)
     public PopupInfoDTO getPopupDetailInfo(int popupKey) {
         if (popupKey == 0) return null;
+
+        List<TLinkKeyVO> popupListKeyList = new ArrayList<>();
+        popupListKeyList = popupCouponManageMapper.selectTPopupLinkKey(popupKey);
+
+        if (popupListKeyList.size() > 0) {
+            for (TLinkKeyVO vo : popupListKeyList) {
+                List<TCategoryVO> categoryList =dataManageService.getSequentialCategoryListBy4DepthUnder(vo.getCtgKey());
+                vo.setCategoryList(categoryList);
+            }
+        }
         PopupInfoDTO popupInfoDTO = new PopupInfoDTO(
                 popupCouponManageMapper.selectTPopupInfo(popupKey),
-                popupCouponManageMapper.selectTPopupLinkKey(popupKey)
+                //popupCouponManageMapper.selectTPopupLinkKey(popupKey)
+                popupListKeyList
         );
         return popupInfoDTO;
     }
