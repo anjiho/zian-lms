@@ -5,7 +5,7 @@
 	<select id="getUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
 		SELECT * FROM T_USER
 		WHERE USER_ID = #{userId}
-		AND PWD = #{userPass}
+		AND USER_PWD = #{userPass}
 	</select>
 
 	<select id="getUserInfoByUserKey" resultType="com.zianedu.lms.vo.TUserVO">
@@ -22,5 +22,9 @@
 		SET USER_PWD = #{userPwd}
 		WHERE USER_KEY = #{userKey}
 	</update>
+
+	<select id="selectAlgisaUser" resultType="HashMap">
+		SELECT USER_ID, USER_PWD FROM TB_MA_MEMBER
+	</select>
 
 </mapper>

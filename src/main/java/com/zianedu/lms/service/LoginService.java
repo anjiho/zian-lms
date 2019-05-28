@@ -1,6 +1,7 @@
 package com.zianedu.lms.service;
 
 import com.zianedu.lms.mapper.UserMapper;
+import com.zianedu.lms.utils.SecurityUtil;
 import com.zianedu.lms.vo.TUserVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,7 +22,7 @@ public class LoginService {
     @Transactional(readOnly = true)
     public TUserVO login(String userId, String userPass) {
         if ("".equals(userId)) return null;
-        return userMapper.getUserInfo(userId, userPass);
+        return userMapper.getUserInfo(userId, SecurityUtil.encryptSHA256(userPass));
     }
 
     public TUserVO getUserInfoByUserKey(int userKey) {

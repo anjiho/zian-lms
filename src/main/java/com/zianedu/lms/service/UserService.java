@@ -1,5 +1,7 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.define.datasource.DataSource;
+import com.zianedu.lms.define.datasource.DataSourceType;
 import com.zianedu.lms.mapper.TestMapper;
 import com.zianedu.lms.mapper.UserMapper;
 import com.zianedu.lms.utils.SecurityUtil;
@@ -17,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.inject.Inject;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService {
@@ -79,5 +83,58 @@ public class UserService {
         }
     }
 
+
+    @DataSource(DataSourceType.ALGISA_ORACLE)
+    public void test2() {
+        String sql = "";
+
+        //sql = "SELECT USER_ID, USER_PWD FROM TB_MA_MEMBER";
+
+        List<HashMap<String, Object>> list = userMapper.selectAlgisaUser();
+        //List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
+        this.test3(list);
+
+//        if (list.size() > 0) {
+//            sql = "UPDATE T_USER SET USER_PWD = ? WHERE USER_ID= ?";
+//            jdbcTemplate.batchUpdate(
+//                    sql,
+//                    list,
+//                    1000,
+//                    new ParameterizedPreparedStatementSetter<HashMap<String, Object>>() {
+//                        @Override
+//                        public void setValues(PreparedStatement ps, HashMap<String, Object>map) throws SQLException {
+//                            ps.setString(1, SecurityUtil.encryptSHA256(String.valueOf(map.get("USER_PWD"))));
+//                            ps.setString(2, String.valueOf(map.get("USER_ID")));
+//                        }
+//                    });
+//
+//
+//        }
+
+//        for (Map<String, Object> map : list) {
+//            System.out.println(">>>>>>>>" + map.get("USER_ID"));
+//            System.out.println(">>>>>>>>" + map.get("USER_PWD"));
+//        }
+    }
+
+    public void test3(List<HashMap<String, Object>>list) {
+        String sql = "";
+        if (list.size() > 0) {
+            sql = "UPDATE T_USER SET USER_PWD = ? WHERE USER_ID= ?";
+            jdbcTemplate.batchUpdate(
+                    sql,
+                    list,
+                    1000,
+                    new ParameterizedPreparedStatementSetter<HashMap<String, Object>>() {
+                        @Override
+                        public void setValues(PreparedStatement ps, HashMap<String, Object>map) throws SQLException {
+                            ps.setString(1, SecurityUtil.encryptSHA256(String.valueOf(map.get("USER_PWD"))));
+                            ps.setString(2, String.valueOf(map.get("USER_ID")));
+                        }
+                    });
+
+
+        }
+    }
 
 }

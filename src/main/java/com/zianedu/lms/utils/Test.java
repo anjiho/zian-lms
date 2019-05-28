@@ -102,9 +102,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        BigDecimal incm_civil_amt = new BigDecimal (884883);
-        incm_civil_amt = incm_civil_amt.setScale(-1, BigDecimal.ROUND_DOWN);
-        System.out.println("incm_civil_amt 일단위: " + incm_civil_amt.intValue());
+        System.out.println(SecurityUtil.encryptSHA256("wldks2019!"));
 
 
     }

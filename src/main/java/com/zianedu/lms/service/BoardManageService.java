@@ -139,4 +139,8 @@ public class BoardManageService extends PagingSupport {
         boardManageMapper.updateTBbsComment(bbsCommentKey, Util.isNullValue(commentContents, ""));
     }
 
+    public void deleteQnaComment(int bbsCommentKey) {
+
+    }
+
 }
