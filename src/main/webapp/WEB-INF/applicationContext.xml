@@ -38,6 +38,11 @@
                 p:password="#{config['zian.oracle.db.password']}"
                 p:url="#{config['zian.oracle.db.url']}"/>
 
+    <bean id="algisaOracleDataSource" parent="parentDataSource"
+          p:username="#{config['algisa.oracle.db.username']}"
+          p:password="#{config['algisa.oracle.db.password']}"
+          p:url="#{config['algisa.oracle.db.url']}"/>
+
     <!--<bean id="logDataSource" parent="parentDataSource"-->
           <!--p:username="#{config['log.db.username']}"-->
           <!--p:password="#{config['log.db.password']}"-->
@@ -47,7 +52,7 @@
 		<property name="targetDataSources">
 			<map key-type="com.zianedu.lms.define.datasource.DataSourceType">
                 <entry key="ZIAN_ORACLE" value-ref="zianOracleDataSource"/>
-                <!--<entry key="LOG" value-ref="logDataSource"/>-->
+                <entry key="ALGISA_ORACLE" value-ref="algisaOracleDataSource"/>
 			</map>
 		</property>
 		<property name="defaultTargetDataSource" ref="zianOracleDataSource"/>
@@ -122,9 +127,11 @@
     <bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate">
         <constructor-arg>
             <ref bean="zianOracleDataSource"/>
+<!--            <ref bean="algisaOracleDataSource"/>-->
         </constructor-arg>
 
         <!-- 첫 번째 방법 -->
+<!--        <property name="dataSource" ref="algisaOracleDataSource"></property>-->
         <property name="dataSource" ref="zianOracleDataSource"></property>
 
         <!-- 두 번째 방법 -->

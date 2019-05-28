@@ -119,4 +119,12 @@
         WHERE BBS_COMMNET_KEY = #{bbsCommentKey}
     </update>
 
+    <delete id="deleteTBbsComment">
+        DELETE FROM T_BBS_COMMENT WHERE BBS_COMMNET_KEY = #{bbsCommentKey}
+    </delete>
+
+    <delete id="deleteTBbsData">
+        DELETE FROM T_BBS_DATA WHERE BBS_COMMNET_KEY = #{bbsCommentKey}
+    </delete>
+
 </mapper>

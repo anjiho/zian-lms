@@ -33,4 +33,8 @@ public interface BoardManageMapper {
 
     void updateTBbsComment(@Param("bbsCommentKey") int bbsCommentKey, @Param("contents") String contents);
 
+    /** DELETE **/
+
+    void deleteTBbsComment(@Param("bbsCommentKey") int bbsCommentKey);
+
 }
