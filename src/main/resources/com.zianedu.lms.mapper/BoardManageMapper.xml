@@ -7,9 +7,11 @@
             SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS,
                     (SELECT COUNT(BBS_COMMNET_KEY) FROM T_BBS_COMMENT T WHERE T.BBS_KEY = A.BBS_KEY) commentCount
             FROM T_BBS_DATA A
-            WHERE A.is_notice = 0
-            AND A.CTG_KEY = #{teacherKey}
+            WHERE A.IS_NOTICE = 0
             AND A.BBS_MASTER_KEY = 10025
+            <if test="teacherKey > 0">
+                AND A.CTG_KEY = #{teacherKey}
+            </if>
             START WITH A.BBS_PARENT_KEY = 0
             CONNECT BY PRIOR A.BBS_KEY = A.BBS_PARENT_KEY
             ORDER SIBLINGS BY A.BBS_PARENT_KEY DESC, A.BBS_KEY DESC
@@ -31,9 +33,11 @@
         SELECT COUNT(Z.BBS_KEY) FROM (
             SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS
             FROM T_BBS_DATA A
-            WHERE A.is_notice = 0
-            AND A.CTG_KEY = #{teacherKey}
+            WHERE A.IS_NOTICE = 0
             AND A.BBS_MASTER_KEY = 10025
+            <if test="teacherKey > 0">
+                AND A.CTG_KEY = #{teacherKey}
+            </if>
             START WITH A.BBS_PARENT_KEY = 0
             CONNECT BY PRIOR A.BBS_KEY = A.BBS_PARENT_KEY
             ORDER SIBLINGS BY A.BBS_PARENT_KEY DESC, A.BBS_KEY DESC
@@ -53,7 +57,7 @@
     <select id="selectQnaDetailInfo" resultType="QnaListDTO">
         SELECT
             A.BBS_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.READ_COUNT,
-            B.NAME as userName, B.USER_ID, A.WRITE_USER_KEY, A.CONTENTS
+            B.NAME as userName, B.USER_ID, A.WRITE_USER_KEY, A.CONTENTS, A.CTG_KEY as teacherKey, A.CTG_KEY_02 as ctgKey
         FROM T_BBS_DATA A
         INNER JOIN T_USER B
         ON A.WRITE_USER_KEY = B.USER_KEY
@@ -69,5 +73,50 @@
         WHERE BBS_KEY = #{bbsKey}
         ORDER BY A.BBS_COMMNET_KEY ASC
     </select>
+
+    <insert id="insertTBbsData" parameterType="com.zianedu.lms.vo.TBbsDataVO">
+        <selectKey resultType="Integer" keyProperty="bbsKey" order="BEFORE">
+            SELECT T_BBS_DATA_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO T_BBS_DATA
+        (
+            BBS_KEY, BBS_MASTER_KEY, BBS_PARENT_KEY, INDATE, TITLE, WRITE_USER_KEY, CTG_KEY, CTG_KEY_02, IS_NOTICE, CONTENTS, BBS_CUSTOM_KEY
+        )
+        VALUES
+        (
+            #{bbsKey}, #{bbsMasterKey}, #{bbsParentKey}, sysdate, #{title}, #{writeUserKey}, #{ctgKey}, #{ctgKey02}, #{isNotice}, #{contents}, #{bbsCustomKey}
+        )
+    </insert>
+
+    <insert id="insertTBbsComment" parameterType="com.zianedu.lms.vo.TBbsCommentVO">
+        <selectKey resultType="Integer" keyProperty="bbsCommentKey" order="BEFORE">
+            SELECT T_BBS_COMMENT_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO T_BBS_COMMENT
+        (
+            BBS_COMMNET_KEY, BBS_KEY, USER_KEY, INDATE, COMMENT_
+        )
+        VALUES
+        (
+            #{bbsCommentKey}, #{bbsKey}, #{userKey}, sysdate, #{comment_}
+        )
+    </insert>
+
+    <update id="updateTBbsData">
+        UPDATE T_BBS_DATA
+        <set>
+            <if test="title != ''">TITLE = #{title},</if>
+            <if test="contents != ''">CONTENTS = #{contents},</if>
+        </set>
+        WHERE BBS_KEY = #{bbsKey}
+    </update>
+
+    <update id="updateTBbsComment">
+        UPDATE T_BBS_COMMENT
+        <set>
+            <if test="contents != ''">COMMENT_ = #{contents}</if>
+        </set>
+        WHERE BBS_COMMNET_KEY = #{bbsCommentKey}
+    </update>
 
 </mapper>
