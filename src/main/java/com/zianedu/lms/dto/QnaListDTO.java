@@ -30,4 +30,6 @@ public class QnaListDTO {
     private int teacherKey;
 
     private int ctgKey;
+
+    private String fileName;
 }

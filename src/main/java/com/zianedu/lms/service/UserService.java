@@ -57,6 +57,7 @@ public class UserService {
         }
     }
 
+    //게시판 -->  공지사항 테이블로 이동하기
     @Transactional(propagation = Propagation.REQUIRED)
     public void test() {
         String sql = "";
@@ -85,36 +86,9 @@ public class UserService {
 
 
     @DataSource(DataSourceType.ALGISA_ORACLE)
-    public void test2() {
-        String sql = "";
-
-        //sql = "SELECT USER_ID, USER_PWD FROM TB_MA_MEMBER";
-
+    public void algisaPasswordUpdate() {
         List<HashMap<String, Object>> list = userMapper.selectAlgisaUser();
-        //List<Map<String, Object>> list = jdbcTemplate.queryForList(sql);
         this.test3(list);
-
-//        if (list.size() > 0) {
-//            sql = "UPDATE T_USER SET USER_PWD = ? WHERE USER_ID= ?";
-//            jdbcTemplate.batchUpdate(
-//                    sql,
-//                    list,
-//                    1000,
-//                    new ParameterizedPreparedStatementSetter<HashMap<String, Object>>() {
-//                        @Override
-//                        public void setValues(PreparedStatement ps, HashMap<String, Object>map) throws SQLException {
-//                            ps.setString(1, SecurityUtil.encryptSHA256(String.valueOf(map.get("USER_PWD"))));
-//                            ps.setString(2, String.valueOf(map.get("USER_ID")));
-//                        }
-//                    });
-//
-//
-//        }
-
-//        for (Map<String, Object> map : list) {
-//            System.out.println(">>>>>>>>" + map.get("USER_ID"));
-//            System.out.println(">>>>>>>>" + map.get("USER_PWD"));
-//        }
     }
 
     public void test3(List<HashMap<String, Object>>list) {

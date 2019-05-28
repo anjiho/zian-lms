@@ -1,5 +1,6 @@
 package com.zianedu.lms.service;
 
+import com.zianedu.lms.dto.GoodsReviewDTO;
 import com.zianedu.lms.dto.QnaDetailInfoDTO;
 import com.zianedu.lms.dto.QnaListDTO;
 import com.zianedu.lms.mapper.BoardManageMapper;
@@ -30,7 +31,7 @@ public class BoardManageService extends PagingSupport {
     private MemberManageMapper memberManageMapper;
 
     /**
-     * QNA 리스트
+     *
      * @param sPage
      * @param listLimit
      * @param searchType
@@ -38,12 +39,23 @@ public class BoardManageService extends PagingSupport {
      * @return
      * @throws Exception
      */
+    /**
+     * QNA 리스트
+     * @param sPage
+     * @param listLimit
+     * @param bbsMasterKey ( 10025 : QNA )
+     * @param teacherKey
+     * @param searchType
+     * @param searchText
+     * @return
+     * @throws Exception
+     */
     @Transactional(readOnly = true)
-    public List<QnaListDTO> selectQnaList(int sPage, int listLimit, int teacherKey, String searchType, String searchText) throws Exception {
+    public List<QnaListDTO> selectBbsList(int sPage, int listLimit, int bbsMasterKey, int teacherKey, String searchType, String searchText) throws Exception {
         if (sPage == 0) return null;
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
 
-        List<QnaListDTO> list = boardManageMapper.selectQnAList(startNumber, listLimit, teacherKey, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""));
+        List<QnaListDTO> list = boardManageMapper.selectQnAList(startNumber, listLimit, bbsMasterKey, teacherKey, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""));
         if (list.size() > 0) {
             String standardDate = Util.plusDate(Util.returnNow(), -10);
             for (QnaListDTO dto : list) {
@@ -64,13 +76,15 @@ public class BoardManageService extends PagingSupport {
 
     /**
      * QNA 리스트 개수
+     * @param bbsMasterKey
+     * @param teacherKey
      * @param searchType
      * @param searchText
      * @return
      */
     @Transactional(readOnly = true)
-    public int selectQnaListCount(int teacherKey, String searchType, String searchText) {
-        return boardManageMapper.selectQnAListCount(teacherKey, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""));
+    public int selectBbsListCount(int bbsMasterKey, int teacherKey, String searchType, String searchText) {
+        return boardManageMapper.selectQnAListCount(bbsMasterKey, teacherKey, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""));
     }
 
     /**
@@ -79,12 +93,40 @@ public class BoardManageService extends PagingSupport {
      * @return
      */
     @Transactional(readOnly = true)
-    public QnaDetailInfoDTO getQnaDetailInfo(int bbsKey) {
+    public QnaDetailInfoDTO getBbsDetailInfo(int bbsKey) {
         QnaDetailInfoDTO qnaDetailInfo = new QnaDetailInfoDTO(
             boardManageMapper.selectQnaDetailInfo(bbsKey),
             boardManageMapper.selectQnaCommentList(bbsKey)
         );
         return qnaDetailInfo;
+    }
+
+    /**
+     * 리뷰 리스트
+     * @param sPage
+     * @param listLimit
+     * @param gKey
+     * @param teacherKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<GoodsReviewDTO> getGoodsReviewList(int sPage, int listLimit, int gKey, int teacherKey) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<GoodsReviewDTO>reviewList = boardManageMapper.selectGoodsReviewList(startNumber, listLimit, gKey, teacherKey);
+        return reviewList;
+    }
+
+    /**
+     * 리뷰 리스트 개수
+     * @param gKey
+     * @param teacherKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getGoodsReviewListCount(int gKey, int teacherKey) {
+        return boardManageMapper.selectGoodsReviewListCount(gKey, teacherKey);
     }
 
     /**
@@ -139,8 +181,24 @@ public class BoardManageService extends PagingSupport {
         boardManageMapper.updateTBbsComment(bbsCommentKey, Util.isNullValue(commentContents, ""));
     }
 
+    /**
+     * 댓글 삭제하기
+     * @param bbsCommentKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
     public void deleteQnaComment(int bbsCommentKey) {
+        if (bbsCommentKey == 0) return;
+        boardManageMapper.deleteTBbsComment(bbsCommentKey);
+    }
 
+    /**
+     * QNA 본글 삭제하기
+     * @param bbsKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteQna(int bbsKey) {
+        if (bbsKey == 0) return;
+        boardManageMapper.deleteTBbsData(bbsKey);
     }
 
 }

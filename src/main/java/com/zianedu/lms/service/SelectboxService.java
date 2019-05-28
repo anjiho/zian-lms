@@ -2,6 +2,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.*;
 import com.zianedu.lms.dto.SelectboxDTO;
+import com.zianedu.lms.mapper.BoardManageMapper;
 import com.zianedu.lms.mapper.DataManageMapper;
 import com.zianedu.lms.mapper.SelectboxMapper;
 import com.zianedu.lms.utils.DateUtils;
@@ -13,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 @Service
@@ -23,6 +25,9 @@ public class SelectboxService {
 
     @Autowired
     private DataManageMapper dataManageMapper;
+
+    @Autowired
+    private BoardManageMapper boardManageMapper;
 
     /**
      * 서브도메인 목록 가져오기
@@ -323,6 +328,25 @@ public class SelectboxService {
         for (DeliveryVO delivery : deliveryCompanyList) {
             SelectboxDTO selectboxDTO = new SelectboxDTO(delivery.getDeliveryMasterKey(), delivery.getName());
             list.add(selectboxDTO);
+        }
+        return list;
+    }
+
+    /**
+     * 리뷰 > 강좌선택 셀렉트박스
+     * @param teacherKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<SelectboxDTO> selectGoodsReviewSubjectList(int teacherKey) {
+        List<SelectboxDTO>list = new ArrayList<>();
+        List<HashMap<String, Object>>goodsReviewSubjectList = boardManageMapper.selectGoodsReviewSubjectList(teacherKey);
+
+        if (goodsReviewSubjectList.size() > 0) {
+            for (HashMap<String, Object> hashMap : goodsReviewSubjectList) {
+                SelectboxDTO selectboxDTO = new SelectboxDTO(hashMap.get("G_KEY"), hashMap.get("NAME"));
+                list.add(selectboxDTO);
+            }
         }
         return list;
     }
