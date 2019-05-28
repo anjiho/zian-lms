@@ -40,7 +40,6 @@
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, 10, searchType, searchText, "ACADEMY", function (selList) {
                 if (selList.length == 0) return;
-                console.log(selList);
                 var SelBtn = '<input type="button" onclick="sendChildValue_2($(this))" value="선택" class="btn btn-outline-info"/>';
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return data.GKey;},

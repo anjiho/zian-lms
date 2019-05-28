@@ -24,6 +24,7 @@
         orderSearchSelectbox('orderSearch', 'orderUserName');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        fn_search("new");
     }
 
     function fn_search(val) {
@@ -70,8 +71,7 @@
 
 
     function goOrderDetail(val) {
-        //innerValue('JKey', val);
-        innerValue('JLecKey', val);
+        innerValue("param_key", val);
         goPage('orderManage', 'lectureTimeManage');
     }
 

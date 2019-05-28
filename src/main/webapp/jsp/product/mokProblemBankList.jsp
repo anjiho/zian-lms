@@ -6,6 +6,7 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 11);
+        fn_search('new');
 
         getMockYearSelectbox("l_examYearGroup","");//출제년도
         getSelectboxListdivisionCtgKey("l_examType", 4390, "");//출제구분
@@ -22,7 +23,7 @@
     }
     
     function goModifyProblemBank(val) {
-        innerValue("examQuestionBankKey", val);
+        innerValue("param_key", val);
         goPage("productManage","modifyMokProblemBank");
     }
 
@@ -41,6 +42,15 @@
         var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
         var patternCtgKey = getSelectboxValue("selPattern");
         var stepCtgKey = getSelectboxValue("selUnit");
+
+        if(examYear == null) examYear = "";
+        if(subjectCode == null) subjectCode = "";
+        if(divisionCtgKey == null) divisionCtgKey = "";
+        if(subjectCtgKey == null) subjectCtgKey = "";
+        if(patternCtgKey == null) patternCtgKey = "";
+        if(stepCtgKey == null) stepCtgKey = "";
+
+
         var ctgKey = $('#unitTable').find("td select").eq(2).val();
         var unitCtgKey = ctgKey;
         if(unitCtgKey == null){

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String JLecKey = request.getParameter("JLecKey");
+    String JLecKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -22,7 +22,6 @@
                 var resultList = info.resultList;
                 console.log(resultList);
                 if(resultList.length > 0){
-                    console.log(--resultList.length);
                     var i = 0;
                     dwr.util.addRows("dataList", resultList, [
                         function(data) {return "<input type='hidden' name='curriKey[]' value='"+ data.curriKey +"'>"},

@@ -154,11 +154,8 @@
     }
     
     function isSizeChk(px, id) {
-        if(px == 0 || px > 1280){
-            $("#"+id).addClass('is-invalid');
-        }else{
-            $("#"+id).removeClass('is-invalid');
-        }
+        if(px == 0 || px > 1280) $("#"+id).addClass('is-invalid');
+        else $("#"+id).removeClass('is-invalid');
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
@@ -227,7 +224,7 @@
                                             </div>
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">Height : </label>
-                                                <input type="text" class="col-sm-6 form-control" onkeyup="isSizeChk(this.value , 'Height');" id="height" name="height" value="0">
+                                                <input type="text" class="col-sm-6 form-control" onkeyup="isSizeChk(this.value , 'height');" id="height" name="height" value="0">
                                                 <span style="vertical-align: middle;margin-left:5px">px</span>
                                                 <span class="invalid-feedback">1이상 1280이하로 입력해야 합니다.</span>
                                             </div>
@@ -335,7 +332,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
                                         </td>
                                     </tr>
 

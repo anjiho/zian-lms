@@ -293,9 +293,7 @@
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("productSearchType");
 
-        if(val == "new") {
-            sPage = "1";
-        }
+        if(val == "new")  sPage = "1";
 
         dwr.util.removeAllRows("dataList3");
         gfn_emptyView3("H", "");//페이징 예외사항처리

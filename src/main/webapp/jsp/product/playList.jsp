@@ -7,10 +7,11 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 1);
+        fn_search('new');
     }
 
     function play_modify(gKey) {
-        innerValue("gKey", gKey);
+        innerValue("param_key", gKey);
         goPage("productManage","modifyPlayManage");
     }
 
@@ -24,7 +25,7 @@
 
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("searchText");
-
+        if(searchType == null) searchType = "";
         productManageService.getProductListCount(searchType, searchText, "VIDEO", function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -63,6 +64,7 @@
 </script>
 <input type="hidden" id="sPage">
 <input type="hidden" id="gKey"  name="gKey">
+<input type="hidden" id="param_key" name="param_key" value="">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">

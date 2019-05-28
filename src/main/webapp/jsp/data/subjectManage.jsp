@@ -11,9 +11,7 @@
         alert(subject);
         if(subject != ""){
             if(confirm("과목추가 하시겠습니까?")) {
-                dataManageService.saveClassficationInfo("SUBJECT", subject, function () {
-                    isReloadPage(true);
-                });
+                dataManageService.saveClassficationInfo("SUBJECT", subject, function () {isReloadPage(true);});
             }
         }else{
             alert("과목을 입력해 주세요.");
@@ -22,9 +20,7 @@
     }
     function deleteSubject(val) { /* 과목 삭제 */
         if(confirm("삭제하시겠습니까?")) {
-            dataManageService.deleteClassSubject(val, function () {
-                isReloadPage(true);
-            });
+            dataManageService.deleteClassSubject(val, function () {isReloadPage(true);});
         }
     }
     function categoryList() { /* 분류 리스트 */

@@ -82,7 +82,7 @@
              */
             var resultList = info.resultList;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-
+            console.log(resultList);
             if(resultList.length == 0){
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
@@ -102,26 +102,25 @@
             }else{
                 for(var i=0; i < resultList.length; i++){
                     var delBtn = "<input type='button' onclick='deleteCategory("+ resultList[i].linkKey +");' class='btn btn-outline-danger btn-sm' value='삭제'>";
-                    dataManageService.getSequentialCategoryListBy4DepthUnder(resultList[i].ctgKey, function (selList) {
-                        var cellData = [
-                            function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ selList[0].ctgKey +"'>";},
-                            function() {return "지안에듀";},
-                            function() {return nextIcon},
-                            function() {return selList[3].name;},
-                            function() {return nextIcon},
-                            function() {return selList[2].name;},
-                            function() {return nextIcon},
-                            function() {return selList[1].name;},
-                            function() {return nextIcon},
-                            function() {return selList[0].name;},
-                            function() {return delBtn},
-                            function() {return ""},
-                        ];
-                        dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                        $('#categoryList tr').each(function(){
-                            var tr = $(this);
-                           // tr.children().eq(11).attr("style", "display:none");
-                        });
+                    var categoryList =  resultList[i].categoryList;
+                    var cellData = [
+                        function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ categoryList[0].ctgKey +"'>";},
+                        function() {return "지안에듀";},
+                        function() {return nextIcon},
+                        function() {return categoryList[3].name;},
+                        function() {return nextIcon},
+                        function() {return categoryList[2].name;},
+                        function() {return nextIcon},
+                        function() {return categoryList[1].name;},
+                        function() {return nextIcon},
+                        function() {return categoryList[0].name;},
+                        function() {return delBtn},
+                        function() {return ""},
+                    ];
+                    dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+                    $('#categoryList tr').each(function(){
+                        var tr = $(this);
+                        // tr.children().eq(11).attr("style", "display:none");
                     });
                 }
             }
@@ -254,13 +253,13 @@
                                         <div class="col-sm-8 pl-0 pr-0">
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">Width : </label>
-                                                <input type="text" class="col-sm-6 form-control" onkeyup="isSizeChk(this.value, 'width');" id="width"  name="width" value="0">
+                                                <input type="number" class="col-sm-6 form-control" onkeyup="isSizeChk(this.value, 'width');" id="width"  name="width" value="0">
                                                 <span style="vertical-align: middle;margin-left:5px">px</span>
                                                 <span class="invalid-feedback">1이상 1280이하로 입력해야 합니다.</span>
                                             </div>
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">Height : </label>
-                                                <input type="text" class="col-sm-6 form-control" onkeyup="isSizeChk(this.value , 'Height');" id="height" name="height" value="0">
+                                                <input type="number" class="col-sm-6 form-control" onkeyup="isSizeChk(this.value, 'height');" id="height"  name="height" value="0">
                                                 <span style="vertical-align: middle;margin-left:5px">px</span>
                                                 <span class="invalid-feedback">1이상 1280이하로 입력해야 합니다.</span>
                                             </div>
@@ -271,12 +270,12 @@
                                         <div class="col-sm-8 pl-0 pr-0">
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">Left : </label>
-                                                <input type="text" class="col-sm-6 form-control" value="0" name="x" id="x">
+                                                <input type="number" class="col-sm-6 form-control" value="0" name="x" id="x">
                                                 <span style="vertical-align: middle;margin-left:5px">px</span>
                                             </div>
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">Top : </label>
-                                                <input type="text" class="col-sm-6 form-control" value="0" name="y"  id="y">
+                                                <input type="number" class="col-sm-6 form-control" value="0" name="y"  id="y">
                                                 <span style="vertical-align: middle;margin-left:5px">px</span>
                                             </div>
                                         </div>

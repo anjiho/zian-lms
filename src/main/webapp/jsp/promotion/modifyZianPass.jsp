@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String gKey = request.getParameter("gKey");
+    String gKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/promotionManageService.js'></script>
@@ -21,6 +21,7 @@
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
+            if(productInfo.sellstartdate == null) productInfo.sellstartdate = "";
             innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             /**
@@ -79,7 +80,6 @@
                 $('#promotionOnlineList tr').each(function(){
                     var tr = $(this);
                     tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
-
                 });
             }
         });

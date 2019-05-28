@@ -28,6 +28,7 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        fn_search("new");
     }
     function fn_search(val) {
         var paging = new Paging();
@@ -49,7 +50,7 @@
         var startSearchDate = getInputTextValue('searchStartDate');
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
-
+        if(searchType == null) searchType = "";
         var goodsType = 'BOOK'; //도서주문목록
         var isVideoReply = 0;
 
@@ -82,7 +83,8 @@
     }
 
     function goOrderDetail(val) {
-        innerValue('JKey', val);
+        innerValue("param_key", val);
+        innerValue("type", 'bookOrderList');
         goPage('orderManage', 'orderDetailManage');
     }
 
@@ -109,7 +111,6 @@
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="bookOrderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">도서주문 목록</h4>

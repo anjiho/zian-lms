@@ -114,9 +114,7 @@
         onlineLecInfo.push(data);
 
         if(confirm("저장하시겠습니까?")) {
-            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
-                isReloadPage(true);
-            });
+            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {isReloadPage(true);});
         }
     }
 </script>

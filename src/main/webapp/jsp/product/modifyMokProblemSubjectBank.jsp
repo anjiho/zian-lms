@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String bankSubjectKey = request.getParameter("bankSubjectKey");
+    String bankSubjectKey = request.getParameter("param_key");
 %>
 <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
 <script type='text/javascript' src='/dwr/engine.js'></script>
@@ -22,7 +22,6 @@
         getTypeSelectbox("l_Type", 4392);//유형
         getExamPatternSelectbox("l_pattern", 4404);//패턴
         getSelectboxstepCtgKey("unitTable", 4405, 0);//단원
-
 
         productManageService.getProblemBankSubjectList(bankSubjectKey, function(info) {
             var resultInfo = info.resultInfo;

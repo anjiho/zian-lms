@@ -77,9 +77,7 @@
 
     function DeviceDelete(key) {
         if(key != 0){
-            if(confirm('삭제하시겠습니까?')){
-                orderManageService.deleteUserDeviceLimit(key, function (selList) {isReloadPage();});
-            }
+            if(confirm('삭제하시겠습니까?')){orderManageService.deleteUserDeviceLimit(key, function (selList) {isReloadPage();});}
         }
     }
 
@@ -97,12 +95,8 @@
     
     function search() {
         var deviceType = getSelectboxValue('deivceSel');
-        if(deviceType == '0'){
-            fn_search('new');
-        }else{
-            fn_search3('new');
-        }
-
+        if(deviceType == '0') fn_search('new');
+        else fn_search3('new');
     }
 </script>
 <div class="page-breadcrumb">

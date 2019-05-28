@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String gKey = request.getParameter("gKey");
+    String gKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/promotionManageService.js'></script>
@@ -56,7 +56,7 @@
                         return "<span id='sum_0'></span>"
                     },
                     function () {
-                        return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"
+                        return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"
                     }
                 ];
                 dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
@@ -68,13 +68,13 @@
                         return getAllListOptionSelectbox(data.kind);
                     },
                     function (data) {
-                        return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='" + data.price + "' >"
+                        return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='" + format(data.price) + "' >"
                     },
                     function (data) {
-                        return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='" + data.sellPrice + "' >"
+                        return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='" + format(data.sellPrice) + "' >"
                     },
                     function (data) {
-                        return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='" + data.point + "' >"
+                        return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='" + format(data.point) + "' >"
                     },
                     function (data) {
                         return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='" + data.extendPercent + "' onkeypress='saleInputPrice($(this));'>"
@@ -84,10 +84,11 @@
                         return "%"
                     },
                     function (data) {
-                        return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice - ((data.sellPrice * data.extendPercent) / 100)) + "</span>"
+                        var price = Math.round(data.sellPrice - ((data.sellPrice * data.extendPercent) / 100));
+                        return "<span style='vertical-align: middle;' id='sum_" + data.priceKey + "'>" + format(price); + "</span>"
                     },
                     function (data) {
-                        return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"
+                        return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"
                     },
                 ], {escapeHtml: false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");

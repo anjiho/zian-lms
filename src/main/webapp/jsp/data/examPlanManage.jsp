@@ -19,7 +19,6 @@
         dataManageService.getExamSchedule( function (selList) {
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
-                    console.log(selList);
                     var cmpList = selList[i];
                     var Btn = "<button type=\"button\" class=\"btn btn-outline-primary btn-sm\" onclick='getExam("+ cmpList.scheduleKey +");' data-toggle=\"modal\" data-target=\"#sModal\">수정</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick='examDelete("+ cmpList.scheduleKey +");'>삭제</button>";
 

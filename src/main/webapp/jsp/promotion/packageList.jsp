@@ -6,10 +6,11 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-2', 1);
+        fn_search('new');
     }
 
     function goModifyPackage(gKey) {
-        innerValue("gKey", gKey);
+        innerValue("param_key", gKey);
         goPage('promotionManage', 'modifypackage');
     }
 
@@ -18,7 +19,7 @@
         var sPage = getInputTextValue("sPage");
         var searchType = getSelectboxValue("searchType");   //검색 조건 셀렉트박스 값
         var searchText = getInputTextValue("searchText");   //검색 값
-
+        if(searchType == null) searchType = "";
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
@@ -29,10 +30,8 @@
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, pagingListCount(), searchType, searchText, "PACKAGE", function (selList) {
                 if (selList.length == 0) return;
-                console.log(selList);
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return listNum--;},
-                    // function(data) {return i+1;},
                     function(data) {return data.GKey;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyPackage(" + data.GKey + ");'>" + data.goodsName + "</a>";},
                     function(data) {return split_minute_getDay(data.indate);},

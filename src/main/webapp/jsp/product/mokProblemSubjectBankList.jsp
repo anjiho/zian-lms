@@ -6,20 +6,20 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 13);
+        fn_search('new');
     }
 
-        function goModifyBankSubject(bankSubjectKey) {
-        innerValue("bankSubjectKey", bankSubjectKey);
+    function goModifyBankSubject(bankSubjectKey) {
+        innerValue("param_key", bankSubjectKey);
         goPage("productManage","modifyMokProblemSubjectBank");
     }
 
     function fn_search(val) {
-
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
         var searchType = getSelectboxValue("searchType");   //검색 조건 셀렉트박스 값
         var searchText = getInputTextValue("searchText");   //검색 값
-
+        if(searchType == null) searchType = "";
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
