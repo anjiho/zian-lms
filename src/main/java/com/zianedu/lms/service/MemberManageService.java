@@ -408,6 +408,17 @@ public class MemberManageService {
     }
 
     /**
+     * 상담내역 상세정보 가져오기
+     * @param counselKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TCounselVO getCounselDetailInfo(int counselKey) {
+        if (counselKey == 0) return null;
+        return memberManageMapper.selectTCounselInfo(counselKey);
+    }
+
+    /**
      * 회원 추가( 권한이 강사면 강사 테이블 추가 입력 )
      * @param tUserVO
      * @return

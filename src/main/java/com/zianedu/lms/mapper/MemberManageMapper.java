@@ -31,6 +31,8 @@ public interface MemberManageMapper {
 
     List<UserConsultListDTO> selectTCounselList(@Param("userKey") int userKey);
 
+    TCounselVO selectTCounselInfo(@Param("counselKey") int counselKey);
+
     List<TUserSecessionVO> selectTUserSecessionApplyList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                                          @Param("searchText") String searchText, @Param("searchType") String searchType);
 

@@ -147,11 +147,15 @@
     </select>
 
     <select id="selectTCounselList" resultType="UserConsultListDTO">
-      SELECT COUNSEL_KEY, TYPE,
+      SELECT COUNSEL_KEY, TYPE, TELEPHONE, TELEPHONE_MOBILE
              TO_CHAR(INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
              TO_CHAR(PROC_START_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_START_DATE,
              TO_CHAR(PROC_END_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_END_DATE
       FROM T_COUNSEL WHERE USER_KEY = #{userKey}
+    </select>
+
+    <select id="selectTCounselInfo" resultType="com.zianedu.lms.vo.TCounselVO">
+      SELECT * FROM T_COUNSEL WHERE COUNSEL_KEY = #{counselKey}
     </select>
 
     <select id="selectTUserSecessionApplyList" resultType="com.zianedu.lms.vo.TUserSecessionVO">
