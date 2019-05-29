@@ -17,4 +17,8 @@ public class UserConsultListDTO {
 
     private String procEndDate;
 
+    private String telephone;
+
+    private String telephoneMobile;
+
 }
