@@ -5,6 +5,7 @@ import com.zianedu.lms.dto.GoodsReviewDTO;
 import com.zianedu.lms.dto.QnaListDTO;
 import com.zianedu.lms.vo.TBbsCommentVO;
 import com.zianedu.lms.vo.TBbsDataVO;
+import com.zianedu.lms.vo.TBbsVO;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.HashMap;
@@ -34,6 +35,8 @@ public interface BoardManageMapper {
     void insertTBbsData(TBbsDataVO tBbsDataVO);
 
     void insertTBbsComment(TBbsCommentVO tBbsCommentVO);
+
+    void insertTNotice(TBbsVO tBbsVO);
 
     /** UPDATE **/
 

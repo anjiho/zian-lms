@@ -2,6 +2,8 @@ package com.zianedu.lms.vo;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class TBbsVO {
 

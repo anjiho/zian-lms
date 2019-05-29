@@ -146,6 +146,20 @@
         )
     </insert>
 
+    <insert id="insertTNotice" parameterType="com.zianedu.lms.vo.TBbsVO">
+        <selectKey resultType="Integer" keyProperty="idx" order="BEFORE">
+            SELECT T_NOTICE_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO T_NOTICE
+        (
+            IDX, TITLE, CONTENTS, BBS_MASTER_KEY, IS_HEAD, CREATE_DATE, CREATE_USER_KEY, NOTICE_FILE
+        )
+        VALUES
+        (
+            #{idx}, #{title}, #{contents}, #{bbsMasterKey}, #{isHead}, TO_DATE(#{createDate}, 'YYYY-MM-DD hh24:mi:ss')
+        )
+    </insert>
+
     <update id="updateTBbsData">
         UPDATE T_BBS_DATA
         <set>

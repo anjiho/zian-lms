@@ -64,8 +64,8 @@ public class UserService {
         List<TBbsVO> noticeList = testMapper.selectNotice();
 
         if (noticeList.size() > 0) {
-            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, BBS_MASTER_KEY, CTG_KEY, CREATE_DATE, CREATE_USER_KEY) " +
-                    "VALUES (T_NOTICE_SEQ.nextval, ?, ?, ?, ?, sysdate, ?)";
+            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, BBS_MASTER_KEY, IS_HEAD, CREATE_DATE, CREATE_USER_KEY, NOTICE_FILE) " +
+                    "VALUES (T_NOTICE_SEQ.nextval, ?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD hh24:mi:ss'), ?, ?)";
             jdbcTemplate.batchUpdate(
                     sql,
                     noticeList,
@@ -75,9 +75,11 @@ public class UserService {
                         public void setValues(PreparedStatement ps, TBbsVO tBbsVO) throws SQLException {
                             ps.setString(1, tBbsVO.getTitle());
                             ps.setString(2, tBbsVO.getContents());
-                            ps.setString(3, "ALL");
-                            ps.setString(4, "");
-                            ps.setInt(5, tBbsVO.getWriteUserKey());
+                            ps.setInt(3, tBbsVO.getBbsMasterKey());
+                            ps.setInt(4, tBbsVO.getIsNotice());
+                            ps.setString(5, tBbsVO.getIndate());
+                            ps.setInt(6, tBbsVO.getWriteUserKey());
+                            ps.setString(7, tBbsVO.getFilename());
                         }
                     });
 
