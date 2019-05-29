@@ -443,9 +443,9 @@
         VALUES
         (
             T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status},
-            <if test="indate != ''">TO_DATE(sysdate, 'YYYY-mm-dd hh24:mi:ss'),</if>
-            <if test="procStartDate != ''">TO_DATE(sysdate, 'YYYY-mm-dd hh24:mi:ss'),</if>
-            <if test="procEndDate != ''">TO_DATE(sysdate, 'YYYY-mm-dd hh24:mi:ss'),</if>
+            <if test="indate != ''">sysdate,</if>
+            <if test="procStartDate != ''">sysdate,</if>
+            <if test="procEndDate != ''">sysdate,</if>
             #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
         )
     </insert>
