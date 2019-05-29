@@ -1,48 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String popupKey = request.getParameter("param_key");
+    String userKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
-<script type='text/javascript' src='/dwr/interface/popupCouponManageService.js'></script>
-<script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
-<script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
 <script>
-    var popupKey = '<%=popupKey%>';
+    var userKey = '<%=userKey%>';
     $( document ).ready(function() {
-        $('textarea[name=contents]').summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
@@ -53,47 +18,35 @@
 
     function init() {
         menuActive('menu-5', 1);
-
-        /* 패키시상품 정보 가져오기 */
-        popupCouponManageService.getPopupDetailInfo(popupKey, function(info) {
-
+        /* 회원상세 정보 가져오기 */
+        memberManageService.getMemberDetailInfo(userKey, function(info) {
+            console.log(info);
         });
 
-    }
-
-    function deleteCategory(linkKey){
-        if(confirm("삭제하시겠습니까?")) {
-            productManageService.deleteVideoOtherInfo(linkKey, 'TLINK',function () {isReloadPage();});
-        }
-    }
-
-    function popupSave() {
-        var basicObj = getJsonObjectFromDiv("section1");
-
-        if (basicObj.isShow == 'on') basicObj.isShow = '1';//노출 checkbox
-        else basicObj.isShow = '0';
-
-        basicObj.startDate = basicObj.startDate+" "+$('select[name=timeHour]').eq(0).val()+":"+$('select[name=timeMinute]').eq(0).val()+":"+"00";
-        basicObj.endDate   = basicObj.endDate+" "+$('select[name=timeHour]').eq(1).val()+":"+$('select[name=timeMinute]').eq(1).val()+":"+"00";
-
-        var categoryArr = new Array();
-        $('#categoryTable tbody tr').each(function (index) {
-            //alert($(this).find("td select").eq(3).val());
-            if($(this).find("td").eq(0).html() == ""){
-                var ctgKey = $(this).find("td select").eq(3).val();
-                categoryArr.push(ctgKey);
+        /*회원 상담내역 리스트 가져오기*/
+        memberManageService.getUserCounselList(userKey, function(selList) {
+            console.log(selList);
+            if (selList.length == 0) return;
+            if(selList.length > 0){
+                for (var i = 0; i < selList.length; i++) {
+                    var cmpList = selList[i];
+                    if (cmpList != undefined) {
+                        var cellData = [
+                            function(data) {return cmpList.counselKey == null ? "-" : cmpList.counselKey;},
+                            function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' style='float:left' color='blue'>"+cmpList.consultTypeName+"</a>";},
+                            //연락처
+                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
+                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.procStartDate);},
+                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.procEndDate);},
+                        ];
+                        dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
+                    }else{
+                        gfn_emptyView("V", comment.blank_list2);
+                    }
+                }
             }
         });
-        if(confirm("수정 하시겠습니까?")) {
-            popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {});
-            popupCouponManageService.updatePopupInfo(basicObj, function () {isReloadPage(true);});
-        }
     }
-    
-    function addconsultMemo() {
-        
-    }
-
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -111,8 +64,6 @@
     </div>
 </div>
 <!--//순서-->
-
-<!-- 기본 소스-->
 <!-- 기본 소스-->
 <form id="basic">
     <div class="container-fluid">
@@ -126,109 +77,76 @@
                         <h3>회원 기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" name="popupKey" value="<%=popupKey%>">
+                                <input type="hidden" name="userKey" value="<%=userKey%>">
                                 <input type="hidden" name="cKey" value="0">
                                 <input type="hidden" name="type" value="0">
-                                <div class="col-md-12">
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">유저 코드</label>
-                                        <span id="userKey"></span>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>
+                                            <span id="userId"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
+                                            <span id="name"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
+                                            <span id="indate"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">생년월일</label>
+                                            <span id="birth"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">전화번호</label>
+                                            <span id="telephone"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화번호</label>
+                                            <span id="telephoneMobile"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail</label>
+                                            <span id="email"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail수신여부</label>
+                                            <span id="recvEmail"></span>
+                                        </div>
                                     </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>
-                                        <span id="userId"></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                        <span id="userName"></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">비밀번호</label>
-                                        <span id="userPassword"></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">권한</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">관리자권한등급</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">생년월일</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">음력 / 성별</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">전화번호</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화번호</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail 수신여부</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">SMS 수신여부</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">복지할인율</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">가입경로</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등급</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등급변경일</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등급세부항목</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등급가격</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">비고</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">인증키</label>
-                                        <span id=""></span>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">가입디바이스종류</label>
-                                        <span id=""></span>
+                                    <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">SMS 수신여부</label>
+                                            <span id="recvSms"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
+                                            <span id="zipcode"></span>
+                                            <span id="address"></span>
+                                            <span id="addressRoad"></span>
+                                            <span id="addressNumber"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">복지할인율</label>
+                                            <span id="welfareDcPercent"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
+                                            <span id="interestCtgKey0"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등급</label>
+                                            <span id="grade"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">비고</label>
+                                            <span id="note"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">가입디바이스종류</label>
+                                            <span id="isMobileReg"></span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -244,12 +162,12 @@
                                 <table class="table table-hover text-center">
                                     <thead>
                                     <tr>
-                                        <th scope="col" style="width: 5%;">상담번호</th>
-                                        <th scope="col" style="width: 5%;">상담구분</th>
-                                        <th scope="col" style="width: 45%;">연락처</th>
-                                        <th scope="col" style="width: 10%;">접수일</th>
-                                        <th scope="col" style="width: 5%;">처리시작일</th>
-                                        <th scope="col" style="width: 5%;">완료일</th>
+                                        <th scope="col" style="width: 15%;">상담번호</th>
+                                        <th scope="col" style="width: 15%;">상담구분</th>
+                                        <th scope="col" style="width: 15%;">연락처</th>
+                                        <th scope="col" style="width: 15%;">접수일</th>
+                                        <th scope="col" style="width: 15%;">처리시작일</th>
+                                        <th scope="col" style="width: 15%;">완료일</th>
                                     </tr>
                                     </thead>
                                     <tbody id="dataList"></tbody>
@@ -287,7 +205,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상담코드</label>
                                 <div class="col-sm-6 pl-0 pr-0">
-                                    <span id="consultCode"></span>
+                                    <span id="counselKey"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -311,7 +229,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">접수일</label>
                                 <div class="col-sm-6 pl-0 pr-0">
-                                    <span id=""></span>
+                                    <span id="indate"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -322,16 +240,6 @@
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <!--<div class="form-group row">
-                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">노출날짜</label>
-                                <div class="col-sm-6 input-group pl-0 pr-0">
-                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="dspDate" id="dspDate">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                    </div>
-                                    <span style="display: block;padding-top:5px">암기노트등, 출력날짜가 필요할때만 사용</span>
-                                </div>
-                            </div>-->
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">작성자</label>
                                     <div class="col-sm-6 pl-0 pr-0">
