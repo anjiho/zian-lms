@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String gKey = request.getParameter("gKey");
+    String gKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
@@ -293,9 +293,7 @@
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("productSearchType");
 
-        if(val == "new") {
-            sPage = "1";
-        }
+        if(val == "new")  sPage = "1";
 
         dwr.util.removeAllRows("dataList3");
         gfn_emptyView3("H", "");//페이징 예외사항처리

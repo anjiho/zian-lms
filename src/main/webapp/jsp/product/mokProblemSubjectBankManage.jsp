@@ -150,7 +150,6 @@
             examYear: examYear,
             subjectCode: subjectCode
         };
-        console.log(searchVO);
 
         productManageService.getProblemBankListCount(searchVO, function (cnt) {
             paging.count3(sPage, cnt, '10', '10', comment.blank_list);

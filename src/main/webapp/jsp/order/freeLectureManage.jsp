@@ -60,8 +60,8 @@
         var sPage = getInputTextValue("sPage3");
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("optionSearchType");
-        if(searchType == undefined) searchType = "";
 
+        if(searchType == undefined) searchType = "";
         if(val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList3");
@@ -106,9 +106,9 @@
         var tr = checkBtn.parent().parent();
         var td = tr.children();
 
-        var gKey =  td.eq(0).text();
+        var gKey      =  td.eq(0).text();
         var goodsName = td.eq(1).text();
-        var price = priceKey;
+        var price     = priceKey;
 
         var resKeys = get_array_values_by_name("input", "res_key[]");
         for(var i=0; i<resKeys.length; i++){
@@ -140,11 +140,6 @@
             tr.children().eq(0).attr("style", "display:none");
         });
     }
-
-    /*function deleteCheckBox() {
-        $("#productList").show();
-        $("input[type=checkbox]").prop("checked", false);
-    }*/
 
     //회원 정보 전달
     function sendChildValue(val) {

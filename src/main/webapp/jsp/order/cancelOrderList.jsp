@@ -29,11 +29,11 @@
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
         setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
+        fn_search("new");
     }
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
-
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
@@ -53,13 +53,14 @@
         var cancelEndDate = getInputTextValue('cancelEndDate');
         var searchText = getInputTextValue('searchText');
 
+
+        if(searchType == null) searchType = "";
         orderManageService.getCancelOrderListCount(startSearchDate, endSearchDate, cancelStartDate, cancelEndDate, orderPayStatus, isOffline,
             payType, isMobile, searchType, searchText, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getCancelOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, cancelStartDate, cancelEndDate,
                     orderPayStatus, isOffline, payType, isMobile, searchType, searchText, function (selList) {
-                        console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
@@ -84,7 +85,8 @@
     }
 
     function goOrderDetail(val) {
-        innerValue('JKey', val);
+        innerValue("param_key", val);
+        innerValue("type", 'cancelOrderList');
         goPage('orderManage', 'orderDetailManage');
     }
 

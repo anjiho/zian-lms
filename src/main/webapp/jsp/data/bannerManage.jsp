@@ -32,7 +32,6 @@
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
-            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -159,15 +158,12 @@
         var bannerColor= getInputTextValue("bannerColor");
         var bannerLink = getInputTextValue("bannerLink");
         var checkYn = "";
-        if($("input:checkbox[id='newPopYn']:checked").val()=='on'){
-            checkYn = '1';
-        }else{
-            checkYn = '0';
-        }
+        if($("input:checkbox[id='newPopYn']:checked").val()=='on') checkYn = '1';
+        else checkYn = '0';
 
-        var text = '';
-        if(bannerKey == '0') text = '저장하시겠습니까?';
-        else text = '수정하시겠습니까?';
+        var saveModifttext = '';
+        if(bannerKey == '0') saveModifttext = '저장 하시겠습니까?';
+        else saveModifttext = '수정 하시겠습니까?';
 
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
@@ -176,7 +172,7 @@
         data.append("value3", bannerColor);
         data.append("valueBit1", checkYn);
         data.append("value4", bannerLink);
-        if(confirm(text)) {
+        if(confirm(saveModifttext)) {
             $.ajax({
                 url: "/file/bannerUpload",
                 method: "post",
@@ -194,9 +190,7 @@
 
     function bannerDelete(val,ctgKey,pos) {
         if(confirm("삭제하시겠습니까?")) {
-            dataManageService.deleteBannerInfo(val, ctgKey, function () {
-                //location.reload();
-            });
+            dataManageService.deleteBannerInfo(val, ctgKey, function () {});
         }
     }
 
@@ -215,9 +209,7 @@
                 arr.push(data);
 
             });
-            dataManageService.changeBannerPosition(arr, function () {
-                //location.reload();
-            });
+            dataManageService.changeBannerPosition(arr, function () {});
         }else if(val == "1"){
             $("#dragtable_1 tbody tr").each(function(index) {
                 var id = $(this).attr("id");

@@ -125,27 +125,25 @@
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-relative-scale"></i><span class="hide-menu">팝업/쿠폰관리</span></a>
+                <li class="sidebar-item" id="menu-4"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">팝업관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 팝업관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 팝업관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 쿠폰관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 쿠폰관리 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('popupCouponManage', 'popupList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 팝업목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('popupCouponManage', 'popupManage'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 팝업등록</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">회원관리</span></a>
+                <li class="sidebar-item" id="menu-5"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">회원관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 탈퇴회원관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 상담내역 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 강사/노출순서 관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 강사관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 순서관리 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> SMS보내기 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 푸시관리 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memberList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원탈퇴 목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionApplyList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원탈퇴신청 목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'counselList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 상담내역 </span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사목록</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
+
                 <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-pencil"></i><span class="hide-menu">게시판관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 게시판관리 </span></a></li>

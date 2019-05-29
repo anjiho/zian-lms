@@ -212,7 +212,8 @@
         )
         VALUES
         (
-            #{popupKey}, 100, '', #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y}, #{startDate}, #{endDate}, #{contents}
+            #{popupKey}, 100, sysdate, #{name}, 0, #{isShow}, 0, #{width}, #{height}, #{x}, #{y},
+            TO_DATE(#{startDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{endDate}, 'YYYY-mm-dd hh24:mi:ss'), #{contents}
         )
     </insert>
 
@@ -263,8 +264,8 @@
             <if test="height !='' and height != null">HEIGHT = #{height},</if>
             <if test="x !='' and x != null">X = #{x},</if>
             <if test="y !='' and y != null">Y = #{y},</if>
-            <if test="startDate !='' and startDate != null">START_DATE = TO_DATE(#{startDate}, 'YYYY-MM-DD hh24:mm:ss'),</if>
-            <if test="endDate !='' and endDate != null">END_DATE = TO_DATE(#{endDate}, 'YYYY-MM-DD hh24:mm:ss'),</if>
+            <if test="startDate !='' and startDate != null">START_DATE = TO_DATE(#{startDate}, 'YYYY-MM-DD hh24:mi:ss'),</if>
+            <if test="endDate !='' and endDate != null">END_DATE = TO_DATE(#{endDate}, 'YYYY-MM-DD hh24:mi:ss'),</if>
             <if test="contents !='' and contents != null">CONTENTS = #{contents},</if>
         </set>
         WHERE POPUP_KEY = #{popupKey}

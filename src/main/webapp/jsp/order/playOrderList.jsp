@@ -28,18 +28,18 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        fn_search("new");
     }
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
-
+        if(searchType == null) searchType = "";
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
         var payStatus = getSelectboxValue("orderStatus");//처리상태
-        //var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
         var isOffline = getSelectboxValue("isOffline");//구매장소
         var isMobile = getSelectboxValue("deviceSel");//디바이스
         var payType = getSelectboxValue("orderPayTypeSel");//결제방법
@@ -59,7 +59,7 @@
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                     payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
-                        console.log(selList);
+
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
@@ -84,7 +84,8 @@
     }
 
     function goOrderDetail(val) {
-        innerValue('JKey', val);
+        innerValue('type', 'playOrderList');
+        innerValue('param_key', val);
         goPage('orderManage', 'orderDetailManage');
     }
 
@@ -111,7 +112,6 @@
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="playOrderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">동영상주문 목록</h4>

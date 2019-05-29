@@ -28,11 +28,12 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        fn_search("new");
     }
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
-
+        if(searchType == null) searchType = "";
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
@@ -59,7 +60,6 @@
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                     payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
-                        console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
@@ -83,7 +83,8 @@
     }
 
     function goOrderDetail(val) {
-        innerValue('JKey', val);
+        innerValue("param_key", val);
+        innerValue("type", 'promotionOrderList');
         goPage('orderManage', 'orderDetailManage');
     }
 
@@ -110,7 +111,6 @@
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="promotionOrderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">프로모션주문 목록</h4>

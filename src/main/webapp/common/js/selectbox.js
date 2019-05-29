@@ -969,7 +969,7 @@ function getlectureWatchOrderStatusSelectbox(tagId, val) {
 }
 
 function getMemberSearchSelectbox(tagId) {
-    var html = "<select class='form-control' id='memberSel'>";
+    var html = "<select class='col-sm-8 select2 form-control custom-select' id='memberSel'>";
     html +=  "<option value='name'>이름</option>";
     html +=  "<option value='id'>ID</option>";
     html +=  "<option value='phone'>전화번호</option>";
@@ -1076,4 +1076,20 @@ function deviceSelectbox1(tagId, val) {
     else html += "<option value='mobile'>Mobile</option>";
     html += "</select>";
     innerHTML(tagId, html);
+}
+
+//selectMemberGradeTypeSelectbox
+function memberGrageSelectBox(tagId, val) {
+    selectboxService.selectMemberGradeTypeSelectbox(function (list) {
+        var html = "<select id='memberGradeSel'  class='col-sm-5 select2 form-control custom-select'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            }else{
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
 }

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String examQuestionBankKey = request.getParameter("examQuestionBankKey");
+    String examQuestionBankKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
@@ -11,7 +11,6 @@
         menuActive('menu-1', 11);
 
         productManageService.getProblemBankDetailInfo(examQuestionBankKey, function (selList) {
-            console.log(selList);
             if(selList){
                 innerValue("dspDate", split_minute_getDay(selList.dspDate));//노출날짜
                 getSelectboxListdivisionCtgKey("l_examType", 4390, selList.divisionCtgKey);//출제구분

@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String gKey = request.getParameter("gKey");
+    String gKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
@@ -158,7 +158,6 @@
         function playDetailList() { //동영상정보
             productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
                 if (selList.productInfo) {/*---기본정보---*/
-                    console.log(selList.productInfo);
                     innerValue("name", selList.productInfo.name);//이름
                     innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일
                     innerValue("sellstartdate", split_minute_getDay(selList.productInfo.sellstartdate));//판매시작일
@@ -296,8 +295,6 @@
             });
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
-                    console.log(">>");
-                    console.log(selList);
                     var cmpList = selList[i];
                     if (cmpList != undefined) {
                         var text = "'CURRI'";

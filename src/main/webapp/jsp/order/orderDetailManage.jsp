@@ -1,15 +1,15 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String JKey = request.getParameter("JKey");
-    String Type = request.getParameter("Type");
+    String JKey = request.getParameter("param_key");
+    String type = request.getParameter("type");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
 <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
     var JKey = '<%=JKey%>';
-    var Type = '<%=Type%>';
+    var type = '<%=type%>';
     function init() {
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
@@ -19,13 +19,13 @@
         });
 
         var num = '';
-        if(Type == 'orderList') num = 1;
-        else if(Type == 'playOrderList') num = 2;
-        else if(Type == 'rePlayOrderList') num = 3;
-        else if(Type == 'academyLectureOrderList') num = 4;
-        else if(Type == 'bookOrderList') num = 5;
-        else if(Type == 'promotionOrderList') num = 6;
-        else if(Type == 'cancelOrderList') num = 7;
+        if(type == 'orderList') num = 1;
+        else if(type == 'playOrderList') num = 2;
+        else if(type == 'rePlayOrderList') num = 3;
+        else if(type == 'academyLectureOrderList') num = 4;
+        else if(type == 'bookOrderList') num = 5;
+        else if(type == 'promotionOrderList') num = 6;
+        else if(type == 'cancelOrderList') num = 7;
         menuActive('menu-3', num);
         deliveryCompanySelectbox("deliveryMaster","");//택배사
         orderDeliveryInfoSelectbox('deliveryStatusSel', '');//
@@ -33,7 +33,6 @@
 
         /*주문상세정보 가져오기*/
         orderManageService.getOrderDetail(JKey, function(info) {
-            console.log(info);
             /* 결제정보 가져오기 */
             var payInfo = info.payInfo;
             innerHTML("JId", payInfo.JId);//주문번호

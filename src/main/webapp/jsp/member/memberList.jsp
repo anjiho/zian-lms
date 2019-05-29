@@ -14,17 +14,14 @@
     .searchDate li .chkbox2.on label{background:#ec6a6a}
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
-<script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
 <script>
     function init() {
-        getProductSearchSelectbox("l_searchSel");
-        menuActive('menu-3', 8);
-        getlectureWatchPayStatusSelectbox('PayStatus', ''); //결제상태
-        getlectureWatchOrderStatusSelectbox('orderStatus', ''); //진행상태
-        orderSearchSelectbox('orderSearch', 'orderUserName');
-        listNumberSelectbox('listNumberSel', '');
-        setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        fn_search("new");
+        menuActive('menu-5', 1);
+        getMemberSearchSelectbox("l_searchSel");
+        getSelectboxListForCtgKey('affiliationCtgKey','133','');
+        memberGrageSelectBox("memberGrageSel", "");
+        fn_search('new');
     }
 
     function fn_search(val) {
@@ -36,58 +33,54 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        var payStatus = getSelectboxValue('PayStatus');
-        var orderLecStatus = getSelectboxValue('orderStatus');
-        var searchType = getSelectboxValue("orderSearch");//검색타입
-        var startSearchDate = getInputTextValue('searchStartDate');
-        var endSearchDate = getInputTextValue('searchEndDate');
+        var searchType = getSelectboxValue("memberSel");
         var searchText = getInputTextValue('searchText');
+        var regStartDate = getInputTextValue("searchStartDate");
+        var regEndDate = getInputTextValue("searchEndDate");
+        var grade = getSelectboxValue("memberGradeSel");
+        var affiliationCtgKey = getSelectboxValue("sel_1");
 
-        //var isVideoReply = 0;
+        if(searchType == null) searchType = "";
+        if(grade == null) grade = "";
+        if(affiliationCtgKey == null) affiliationCtgKey = "";
 
-        orderManageService.getVideoLectureWatchListCount(startSearchDate, endSearchDate, payStatus, orderLecStatus, searchType, searchText, function (cnt) {
+        memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-                orderManageService.getVideoLectureWatchList(sPage, 10, startSearchDate, endSearchDate, payStatus,
-                    orderLecStatus, searchType, searchText, function (selList) {
+                memberManageService.getMemeberList(sPage, 10, searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
                         if (selList.length == 0) return;
-                        dwr.util.addRows("dataList", selList, [
-                            function(data) {return data.JId == null ? "-" : data.JId;},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
-                            function(data) {return data.userName == null ? "-" : data.userName;},
-                            function(data) {return data.kindName == null ? "-" : data.kindName;},
-                            function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
-                            function(data) {return data.statusName == null ? "-" : data.statusName;},
-                            function(data) {return data.startDt == null ? "-" : split_minute_getDay(data.startDt)},
-                            function(data) {return data.endDt == null ? "-" : split_minute_getDay(data.endDt)},
-                            function(data) {return data.limitDay == null ? "-" : data.limitDay;},
-                            function(data) {return data.pauseTotalDay == null ? "-" : data.pauseTotalDay;},
-                            function(data) {return data.status == 1 ? "결제완료" : '결제취소';},
+                       dwr.util.addRows("dataList", selList, [
+                            function(data) {return data.userKey == null ? "-" : data.userKey;},
+                            function(data) {return data.userId == null ? "-" : data.userId;},
+                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
+                            function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
+                           function(data) {return data.email == null ? "-" : data.email;},
+                           function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
+                           function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
+                           function(data) {return data.gradeName == null ? "-" : data.gradeName;},
+                           function(data) {return data.authorityName == null ? "-" : data.authorityName;},
+                           function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                         ], {escapeHtml:false});
                     });
             });
     }
 
-
-
-    function goOrderDetail(val) {
-        innerValue("param_key", val);
-        goPage('orderManage', 'lectureTimeManage');
+    function goMemberDetail(val) {
+        innerValue('param_key', val);
+        goPage('memberManage', 'memberManage');
     }
 
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
-    <!--<input type="hidden" id="JKey" name="JKey" value="">-->
-    <input type="hidden" id="JLecKey" name="JLecKey" value="">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">수강내역 목록</h4>
+            <h4 class="page-title">회원 목록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">주문관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">수강내역 목록</li>
+                        <li class="breadcrumb-item">회원관리</li>
+                        <li class="breadcrumb-item active" aria-current="page">회원 목록</li>
                     </ol>
                 </nav>
             </div>
@@ -102,7 +95,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group row">
-                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
+                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">가입일</label>
                             <div class="col-sm-5 pl-0 pr-0">
                                 <tr>
                                     <td>
@@ -161,47 +154,35 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태</label>
-                            <div class="col-sm-8 pl-0 pr-0">
-                                <span id="PayStatus"></span>
-                            </div>
-                        </div>
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원등급</label>
+                    <div class="col-sm-8 pl-0 pr-0">
+                        <span id="memberGrageSel"></span>
+                        <!--<span id="orderPayStatus"></span>-->
                     </div>
-                    <div class="col">
-                        <div class="form-group row" style="">
-                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
-                            <div class="col-sm-8 pl-0 pr-0">
-                                <span id="orderStatus"></span>
+                </div>
+                <div class="form-group row">
+                    <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
+                    <div class="col-sm-8 pl-0 pr-0">
+                        <span id="affiliationCtgKey"></span>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
+                    <div class="col-sm-10" >
+                        <div>
+                            <div style=" float: left; width: 10%">
+                                <span id="l_searchSel"></span>
+                            </div>
+                            <div style=" float: left; width: 33%; margin-left: 10px">
+                                <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                            </div>
+                            <div style=" float: left; width: 33%; margin-left: 10px;">
+                                <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
-                            <div class="col-sm-5 pl-0 pr-0" >
-                                <span id="orderSearch"></span>
-                                <div style="width:50%">
-                                    <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col">
-                        <div style=" float: right;">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-        </div>
     </div>
 </div>
 <!-- //formgroup -->
@@ -212,17 +193,16 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col" width="10%">주문번호</th>
-                        <th scope="col" width="8%">ID</th>
-                        <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="7%">수강타입</th>
-                        <th scope="col" width="30%">강좌명</th>
-                        <th scope="col" width="7%">진행상태</th>
-                        <th scope="col" width="8%">시작일자</th>
-                        <th scope="col" width="8%">종료일자</th>
-                        <th scope="col" width="5%">수강일수</th>
-                        <th scope="col" width="5%">총 중지일수</th>
-                        <th scope="col" width="8%">결제상태</th>
+                        <th scope="col" width="5%">CODE</th>
+                        <th scope="col" width="7%">ID</th>
+                        <th scope="col" width="7%">이름</th>
+                        <th scope="col" width="10%">휴대전화</th>
+                        <th scope="col" width=10%">Email</th>
+                        <th scope="col" width="10%">등록일</th>
+                        <th scope="col" width="10%">직렬</th>
+                        <th scope="col" width="10%">등급</th>
+                        <th scope="col" width="8%">권한</th>
+                        <th scope="col" width="10%">모바일가입</th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>

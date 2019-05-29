@@ -28,6 +28,7 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        fn_search('new');
     }
 
     function fn_search(val) {
@@ -50,6 +51,8 @@
         var startSearchDate = getInputTextValue('searchStartDate');
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
+
+        if(searchType == null) searchType = "";
 
         var goodsType = '';
         var isVideoReply = 0;
@@ -82,7 +85,8 @@
     }
     
     function goOrderDetail(val) {
-        innerValue('JKey', val);
+        innerValue('param_key', val);
+        innerValue('type', 'orderList');
         goPage('orderManage', 'orderDetailManage');
     }
 
@@ -109,7 +113,6 @@
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="JKey" name="JKey" value="">
-    <input type="hidden" id="Type" name="Type" value="orderList">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">전체주문 목록</h4>

@@ -2404,10 +2404,10 @@ select:focus{
 
 .invalid-feedback {
     display: none;
-    width: 100%;
-    margin-top: 0.25rem;
+    margin-top: 0.28rem;
     font-size: 80%;
-    color: #da542e
+    color: #da542e;
+    margin-left: 10px;
 }
 
 .invalid-tooltip {

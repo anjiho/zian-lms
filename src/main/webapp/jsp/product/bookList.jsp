@@ -6,10 +6,11 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 5);
+        fn_search('new');
     }
 
     function goModifyBook(gKey) {
-        innerValue("gKey", gKey);
+        innerValue("param_key", gKey);
         goPage("productManage","modifyBook");
     }
 
@@ -18,7 +19,7 @@
         var sPage = getInputTextValue("sPage");
         var searchType = getSelectboxValue("searchType");   //검색 조건 셀렉트박스 값
         var searchText = getInputTextValue("searchText");   //검색 값
-
+        if(searchType == null) searchType = "";
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화

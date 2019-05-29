@@ -50,25 +50,16 @@
         var searchKeywordKey = $("#searchKeywordKey").val();
 
         if(key == "modify"){
-            if(confirm("수정 하시겠습니까?")) {
-                dataManageService.modifySearchKeyword(searchKeywordKey, searchText, function () {
-                    //isReloadPage(true);
-                });
-            }
+            if(confirm("수정 하시겠습니까?")) {dataManageService.modifySearchKeyword(searchKeywordKey, searchText, function () {});}
         }else{
-            if(confirm("저장 하시겠습니까?")) {
-                dataManageService.saveSearchKeyword(kewordDomain, searchText, function (selList) {
-                    isReloadPage(true);
-                });
+            if(confirm("저장 하시겠습니까?")) {dataManageService.saveSearchKeyword(kewordDomain, searchText, function (selList) {isReloadPage(true);});
             }
         }
     }
 
     function searchDelete(val) {
         if(confirm("삭제 하시겠습니까?")) {
-            dataManageService.deleteSearchkeyword(val, function () {
-                isReloadPage(true);
-            });
+            dataManageService.deleteSearchkeyword(val, function () {isReloadPage(true);});
         }
     }
 </script>
@@ -120,42 +111,6 @@
                     </tr>
                     </thead>
                     <tbody id="dataList"> </tbody>
-                    <!--<tr>
-                        <td class="text-left align-middle">안효선</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-left align-middle">2019 서울시9급</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-left align-middle">2019 국가직7급</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-left align-middle">2019 지방직7급</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="text-left align-middle">2019 서울시7급</td>
-                        <td>
-                            <button type="button" class="btn btn-outline-primary btn-sm">수정</button>
-                            <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                        </td>
-                    </tr>-->
-
                 </table>
             </div>
         </div>

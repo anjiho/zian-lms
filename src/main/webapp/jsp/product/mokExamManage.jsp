@@ -148,7 +148,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">시험 신청기간</label>
+                                        <label class="col-sm-2 control-label col-form-label  mt-4" style="margin-bottom: 0">시험 신청기간</label>
                                         <div class="col-sm-8 pl-0 pr-0">
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="acceptStartDate" id="acceptStartDate">
@@ -167,7 +167,7 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">온라인 시험기간</label>
+                                        <label class="col-sm-2 control-label col-form-label mt-4" style="margin-bottom: 0">온라인 시험기간</label>
                                         <div class="col-sm-8 pl-0 pr-0">
                                             <div class="col-sm-7 input-group pl-0 pr-0">
                                                 <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="onlineStartDate" id="onlineStartDate">

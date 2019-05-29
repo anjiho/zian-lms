@@ -130,13 +130,6 @@
         }
     }
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        if(tableId == 'productOnline'){
-            $('#promotionOnlineTable > tbody:last > tr:last').remove();
-        }
-    }
-
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
         var checkBtn = val;
@@ -171,7 +164,6 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
-                console.log(selList);
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -226,7 +218,7 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
-        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productOnline');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
         onlineListHtml     += "</td>";
 
         $('#promotionOnlineTable > tbody:first').append(onlineListHtml);//선택 모의고사 리스트 뿌리기
@@ -545,7 +537,7 @@
                                             <span id="sum_0"></span>
                                         </td>
                                         <td style="vertical-align: middle">
-                                            <button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>
+                                            <button type="button" class="btn btn-outline-danger btn-sm delBtn"  onclick="deleteTableRow('optionTable', 'delBtn');">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -612,7 +604,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('productCategory')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
                                         </td>
                                     </tr>
 
