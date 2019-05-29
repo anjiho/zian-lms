@@ -33,11 +33,11 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        var searchType = getSelectboxValue("memberSel");
-        var searchText = getInputTextValue('searchText');
+        var searchType   = getSelectboxValue("memberSel");
+        var searchText   = getInputTextValue('searchText');
         var regStartDate = getInputTextValue("searchStartDate");
-        var regEndDate = getInputTextValue("searchEndDate");
-        var grade = getSelectboxValue("memberGradeSel");
+        var regEndDate   = getInputTextValue("searchEndDate");
+        var grade        = getSelectboxValue("memberGradeSel");
         var affiliationCtgKey = getSelectboxValue("sel_1");
 
         if(searchType == null) searchType = "";

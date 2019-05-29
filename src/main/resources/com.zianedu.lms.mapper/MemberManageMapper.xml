@@ -147,7 +147,7 @@
     </select>
 
     <select id="selectTCounselList" resultType="UserConsultListDTO">
-      SELECT COUNSEL_KEY, TYPE, TELEPHONE, TELEPHONE_MOBILE
+      SELECT COUNSEL_KEY, TYPE, TELEPHONE, TELEPHONE_MOBILE,
              TO_CHAR(INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
              TO_CHAR(PROC_START_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_START_DATE,
              TO_CHAR(PROC_END_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_END_DATE

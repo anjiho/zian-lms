@@ -150,7 +150,7 @@ function getNewCategoryList(tag_id, val, val2) {
 //급수,과목,유형
 function getSelectboxListForCtgKey(tag_id, val) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select id='sel_1' onchange='' class=\"col-sm-3 select2 form-control custom-select\">";
+        var html = "<select id='sel_1' class=\"col-sm-5 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
@@ -850,7 +850,7 @@ function orderPayTypeSelectbox(tagId, val) {
 /* 주문관리 - 결제방법  */
 function orderSearchSelectbox(tagId, val) {
     var html = "<select id='searchType' class='col-sm-5 select2 form-control custom-select'>";
-
+    html +=     '<option value="">선택</option>';
     if(val == 'orderUserId') html += "<option value='orderUserId' selected>주문자 ID</option>";
     else html += "<option value='orderUserId'>주문자 ID</option>";
     if(val == 'orderUserName') html += "<option value='orderUserName' selected>주문자 이름</option>";
@@ -1082,6 +1082,51 @@ function deviceSelectbox1(tagId, val) {
 function memberGrageSelectBox(tagId, val) {
     selectboxService.selectMemberGradeTypeSelectbox(function (list) {
         var html = "<select id='memberGradeSel'  class='col-sm-5 select2 form-control custom-select'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            }else{
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+function getwelfareDcPercentSelectBox(tagId, val) {
+    var html = "<select id='twelfareDcPercentSel'  class='col-sm-5 select2 form-control custom-select'>";
+    var selected = '';
+    if(val == '0') selected = 'selected';
+    else if(val == '30') selected = 'selected';
+    else if(val == '50') selected = 'selected';
+    html += "<option value='0' "+ selected +">없음</option>";
+    html += "<option value='30' "+ selected +">30%</option>";
+    html += "<option value='50' "+ selected +">50%</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+//상담구분
+function getConsultDivisionSelectBox(tagId, val) {
+    selectboxService.selectCounselTypeSelectbox(function (list) {
+        var html = "<select id='consultDivisionSel'  class='col-sm-5 select2 form-control custom-select'>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            }else{
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+//진행상태
+function getConsultStatusSelectBox(tagId, val) {
+    selectboxService.selectCounselStatusTypeSelectbox(function (list) {
+        var html = "<select id='consultStatusSel'  class='col-sm-5 select2 form-control custom-select'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";

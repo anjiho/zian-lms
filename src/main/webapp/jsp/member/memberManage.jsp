@@ -17,30 +17,37 @@
     });
 
     function init() {
+        getConsultDivisionSelectBox("consultDivisionSel", "");
+        getConsultStatusSelectBox("consultStatusSel", "");
         menuActive('menu-5', 1);
         /* 회원상세 정보 가져오기 */
         memberManageService.getMemberDetailInfo(userKey, function(info) {
             var result = info.result;
             console.log(result);
             innerHTML("userId", result.userId == null ? "-" : result.userId );
+            innerHTML("modalUserId",result.userId);
             innerHTML("name", result.name);
-            innerHTML("indate", result.indate);
+            innerHTML("modalName",result.name);
+            innerHTML("indate1", result.indate);
             innerHTML("birth", result.birth);
             innerHTML("telephone", result.telephone);
             innerHTML("telephoneMobile", result.telephoneMobile);
             innerHTML("email", result.email);
-            innerHTML("recvEmail", result.recvEmail);//이메일 수신여부
-            innerHTML("recvSms", result.recvSms);//sms 수신여부
             innerHTML("zipcode", result.zipcode);
             innerHTML("addressRoad", result.addressRoad);
             innerHTML("addressNumber", result.addressNumber);
             innerHTML("address", result.address);
-            //복지할인율 해야함 innerHTML("welfareDcPercent", result.welfareDcPercent);
-            //준비직렬 interestCtgKey0
-            //등급 grade
-            //가입디바이스 종류  isMobileReg
-            innerHTML("note", result.note);
+            getSelectboxListForCtgKey('interestCtgKey0','133', result.interestCtgKey0);
+            memberGrageSelectBox("memberGrageSel", result.grade);
+            getwelfareDcPercentSelectBox("welfareDcPercent", result.welfareDcPercent);
+            innerHTML("isMobileReg", result.isMobileReg == '0' ? "PC" : "Mobile");
+            innerHTML("note", result.note == null ? "-" : result.note);
 
+            $('input:radio[name=recvEmail]:input[value=' + result.recvEmail + ']').attr("checked", true);
+            $('input:radio[name=recvSms]:input[value=' + result.recvSms + ']').attr("checked", true);
+            $("input[name=recvEmail]").attr("disabled",true);
+            $("input[name=recvSms]").attr("disabled",true);
+            $("select[id=twelfareDcPercentSel]").attr("disabled",true);
 
         });
 
@@ -54,11 +61,11 @@
                     if (cmpList != undefined) {
                         var cellData = [
                             function(data) {return cmpList.counselKey == null ? "-" : cmpList.counselKey;},
-                            function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' style='float:left' color='blue'>"+cmpList.consultTypeName+"</a>";},
-                            //연락처
-                            function(data) {return cmpList.indate == null ? "-" : cmpList.indate;},
-                            function(data) {return cmpList.indate == null ? "-" : cmpList.procStartDate;},
-                            function(data) {return cmpList.indate == null ? "-" : cmpList.procEndDate;},
+                            function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' color='blue'>"+cmpList.consultTypeName+"</a>";},
+                            function(data) {return cmpList.telephone+"<br>"+cmpList.telephoneMobile;},
+                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
+                            function(data) {return cmpList.procStartDate == null ? "-" : split_minute_getDay(cmpList.procStartDate);},
+                            function(data) {return cmpList.procEndDate == null ? "-" : split_minute_getDay(cmpList.procEndDate);},
                         ];
                         dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
                     }else{
@@ -66,6 +73,65 @@
                     }
                 }
             }
+        });
+    }
+
+    //파일 선택시 파일명 보이게 하기
+    $(document).on('change', '.addFile', function() {
+        $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.addFile', function() {
+        $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+
+    /* 상담 저장 */
+    function counseltSave(){
+        var data = new FormData();
+        $.each($('#imageFile1')[0].files, function(i, file) {
+            data.append('imageFile', file);
+        });
+        $.each($('#imageFile2')[0].files, function(i, file) {
+            data.append('imageFile2', file);
+        });
+        $.each($('#imageFile3')[0].files, function(i, file) {
+            data.append('imageFile3', file);
+        });
+        $.each($('#imageFile4')[0].files, function(i, file) {
+            data.append('imageFile4', file);
+        });
+        $.each($('#imageFile5')[0].files, function(i, file) {
+            data.append('imageFile5', file);
+        });
+
+        var type     =  getSelectboxValue("consultDivisionSel");
+        var status   = getSelectboxValue("consultStatusSel");
+        alert(status);
+        var memo     =  getInputTextValue("memo");
+        var contents =  getInputTextValue("contents");
+        var telephone = getInputTextValue("telephone1")+"-"+getInputTextValue("telephone2")+"-"+getInputTextValue("telephone3");
+        var telephoneMobile = getInputTextValue("telephoneMobile1")+"-"+getInputTextValue("telephoneMobile2")+"-"+getInputTextValue("telephoneMobile3");
+        var counselObj = {
+            counselKey : 0,
+            cKey : 0,
+            userKey: userKey ,
+            writeUserKey : "",
+            type : type,
+            status : status,
+            telephone : telephone,
+            telephoneMobile : telephoneMobile,
+            memo: memo,
+            contents : contents,
+            procStartDate : "",
+            procEndDate : "",
+            indate : "",
+            imageFile1 : "",
+            imageFile2 : "",
+            imageFile3 : "",
+            imageFile4 : "",
+            imageFile5 : ""
+        };
+        memberManageService.saveCounselInfo(counselObj, function(selList) {
+
         });
     }
 </script>
@@ -113,7 +179,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                            <span id="indate"></span>
+                                            <span id="indate1"></span>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">생년월일</label>
@@ -133,32 +199,44 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail수신여부</label>
-                                            <span id="recvEmail"></span>
+                                            <input type="radio" name="recvEmail"  class="custom-radio" value="1">동의
+                                            <input type="radio" name="recvEmail"  class="custom-radio" value="0">동의안함
+
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">SMS 수신여부</label>
-                                            <span id="recvSms"></span>
+                                            <input type="radio" name="recvSms"  class="custom-radio" value="1">동의
+                                            <input type="radio" name="recvSms"  class="custom-radio" value="0">동의안함
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
-                                            <span id="zipcode"></span>
-                                            <span id="address"></span>
+                                            우편번호 <span id="zipcode"></span>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0"></label>
                                             <span id="addressRoad"></span>
                                             <span id="addressNumber"></span>
+                                            <span id="address"></span>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">복지할인율</label>
-                                            <span id="welfareDcPercent"></span>
+                                            <div class="col-sm-6 pl-0 pr-0">
+                                             <span id="welfareDcPercent"></span>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
-                                            <span id="interestCtgKey0"></span>
+                                            <div class="col-sm-6 pl-0 pr-0">
+                                                <span id="interestCtgKey0"></span>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등급</label>
-                                            <span id="grade"></span>
+                                            <div class="col-sm-6 pl-0 pr-0">
+                                                <span id="memberGrageSel"></span>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">비고</label>
@@ -213,7 +291,7 @@
     <div class="modal-dialog" role="document" style="max-width: 980px;">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">상담</h5>
+                <h5 class="modal-title">상담 추가</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -221,39 +299,45 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
+                    <div id="section2">
+                        <input type="hidden" id="counselKey" value="0">
+                        <input type="hidden" id="cKey" value="0">
+                        <input type="hidden" id="userKey" value="0">
                     <div class="row">
                         <div class="col-md-6">
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상담코드</label>
                                 <div class="col-sm-6 pl-0 pr-0">
-                                    <span id="counselKey"></span>
+                                    <span id="code">0</span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상담구분</label>
                                 <div class="col-sm-6 pl-0 pr-0">
-                                    <span id="consultGbn"></span>
+                                    <span id="consultDivisionSel"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-3 control-label col-form-label" style="margin-bottom: 0">회원아이디</label>
-                                <div class="col-sm-6 pl-0 pr-0">
-                                    <span id=""></span>
+                                <div class="col-sm-7 pl-0 pr-0">
+                                    <span id="modalUserId"></span>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">전화번호</label>
-                                <div class="col-sm-6 pl-0 pr-0">
-                                    <span id=""></span>
-                                </div>
+                                <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephone1">
+                                -
+                                <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephone2">
+                                -
+                                <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephone3">
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" style="display: none;">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">접수일</label>
                                 <div class="col-sm-6 pl-0 pr-0">
                                     <span id="indate"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <div class="form-group row" style="display: none;">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">완료일</label>
                                 <div class="col-sm-6 pl-0 pr-0">
                                     <span id=""></span>
@@ -264,27 +348,28 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">작성자</label>
                                     <div class="col-sm-6 pl-0 pr-0">
-                                        <span id=""></span>
+                                        <span><%=name%></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
-
                                     <div class="col-sm-6 pl-0 pr-0">
-                                        <span id=""></span>
+                                        <span id="consultStatusSel"></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원이름</label>
-                                    <span id=""></span>
+                                    <span id="modalName"></span>
                                 </div>
                                 <div class="form-group row">
-                                    <label class="col-sm-4 control-label col-form-label" style="margin-bottom: 0">휴대전화번호</label>
-                                    <div class="col-sm-6 pl-0 pr-0">
-                                        <span id=""></span>
-                                    </div>
+                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
+                                    <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile1">
+                                    -
+                                    <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile2">
+                                    -
+                                    <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile3">
                                 </div>
-                                <div class="form-group row">
+                                <div class="form-group row" style="display: none;">
                                     <label class="col-sm-4 control-label col-form-label" style="margin-bottom: 0">처리시작일</label>
                                     <div class="col-sm-6 pl-0 pr-0">
                                         <span id=""></span>
@@ -294,18 +379,18 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">메모</label>
-                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="answer1Reason" name="answer1Reason">
+                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="memo" name="memo">
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
-                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="answer2Reason" name="answer2Reason">
+                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="contents" name="contents">
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지1</label>
                         <div class="col-sm-6 pl-0 pr-0">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input" id="questionImage"  name="questionImage" required>
-                                <span class="custom-file-control custom-file-label"></span>
+                                <input type="file" class="custom-file-input addFile1" id="imageFile1"  name="imageFile1" required>
+                                <span class="custom-file-control1 custom-file-label"></span>
                             </div>
                         </div>
                     </div>
@@ -313,8 +398,8 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지2</label>
                         <div class="col-sm-6 pl-0 pr-0">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile" id="commentaryImage" name="commentaryImage" required>
-                                <span class="custom-file-control1 custom-file-label"></span>
+                                <input type="file" class="custom-file-input addFile2" id="imageFile2" name="imageFile2" required>
+                                <span class="custom-file-control2 custom-file-label"></span>
                             </div>
                         </div>
                     </div>
@@ -322,8 +407,8 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지3</label>
                         <div class="col-sm-6 pl-0 pr-0">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile" id="commentaryImage" name="commentaryImage" required>
-                                <span class="custom-file-control1 custom-file-label"></span>
+                                <input type="file" class="custom-file-input addFile3" id="imageFile3" name="imageFile3" required>
+                                <span class="custom-file-control3 custom-file-label"></span>
                             </div>
                         </div>
                     </div>
@@ -331,8 +416,8 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지4</label>
                         <div class="col-sm-6 pl-0 pr-0">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile" id="commentaryImage" name="commentaryImage" required>
-                                <span class="custom-file-control1 custom-file-label"></span>
+                                <input type="file" class="custom-file-input addFile4" id="imageFile4" name="imageFile4" required>
+                                <span class="custom-file-control4 custom-file-label"></span>
                             </div>
                         </div>
                     </div>
@@ -340,11 +425,13 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지5</label>
                         <div class="col-sm-6 pl-0 pr-0">
                             <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile" id="commentaryImage" name="commentaryImage" required>
-                                <span class="custom-file-control1 custom-file-label"></span>
+                                <input type="file" class="custom-file-input addFile5" id="imageFile5" name="imageFile5" required>
+                                <span class="custom-file-control5 custom-file-label"></span>
                             </div>
                         </div>
                     </div>
+                        <button type="button" class="btn btn-info float-right m-l-2" style="margin-bottom: 10px;" onclick="counseltSave();">저장</button>
+                </div>
                 </div>
                 <!-- //modal body -->
             </form>
@@ -362,7 +449,7 @@
         enableAllSteps: true,
         startIndex : 0,
         saveState : true, //현재 단계 쿠키저장
-        enablePagination : true,
+        enablePagination : false,
         onFinished: function(event, currentIndex) {
             popupSave();
         },
@@ -375,6 +462,23 @@
     $('#endDate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
+    });
+
+    //파일 선택시 파일명 보이게 하기
+    $(document).on('change', '.addFile1', function() {
+        $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.addFile2', function() {
+        $(this).parent().find('.custom-file-control2').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.addFile3', function() {
+        $(this).parent().find('.custom-file-control3').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.addFile4', function() {
+        $(this).parent().find('.custom-file-control4').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+    });
+    $(document).on('change', '.addFile5', function() {
+        $(this).parent().find('.custom-file-control5').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 </script>
 
