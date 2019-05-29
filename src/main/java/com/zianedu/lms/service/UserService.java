@@ -64,7 +64,7 @@ public class UserService {
         List<TBbsVO> noticeList = testMapper.selectNotice();
 
         if (noticeList.size() > 0) {
-            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, NOTICE_TYPE, NOTICE_CATEGORY, CREATE_DATE, CREATE_USER_KEY) " +
+            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, BBS_MASTER_KEY, CTG_KEY, CREATE_DATE, CREATE_USER_KEY) " +
                     "VALUES (T_NOTICE_SEQ.nextval, ?, ?, ?, ?, sysdate, ?)";
             jdbcTemplate.batchUpdate(
                     sql,

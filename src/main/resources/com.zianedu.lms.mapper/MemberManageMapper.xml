@@ -154,6 +154,10 @@
       FROM T_COUNSEL WHERE USER_KEY = #{userKey}
     </select>
 
+    <select id="selectTCounselInfo" resultType="com.zianedu.lms.vo.TCounselVO">
+      SELECT * FROM T_COUNSEL WHERE COUNSEL_KEY = #{counselKey}
+    </select>
+
     <select id="selectTUserSecessionApplyList" resultType="com.zianedu.lms.vo.TUserSecessionVO">
         SELECT * FROM T_USER_SECESSION
         WHERE OBTAIN_DATE IS NULL

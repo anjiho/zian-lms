@@ -3,7 +3,12 @@
 <mapper namespace="com.zianedu.lms.mapper.TestMapper">
 
 	<select id="selectNotice" resultType="com.zianedu.lms.vo.TBbsVO">
-		SELECT * FROM T_BBS_DATA WHERE IS_NOTICE = 1
+		SELECT A.BBS_MASTER_KEY, A.INDATE, A.TITLE, A.WRITE_USER_KEY, A.IS_NOTICE, A.CONTENTS, B.FILENAME
+		FROM T_BBS_DATA A
+		LEFT OUTER JOIN T_BBS_DATA_FILE B
+		ON A.bbs_key = B.bbs_key
+		WHERE A.BBS_MASTER_KEY IN (10001,10007,10008,10009, 10010,10026,10027,10028,10029,10030,10041,10042,10043,10044)
+		ORDER BY A.bbs_key DESC
 	</select>
 
 
