@@ -16,11 +16,10 @@
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
         <![CDATA[
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
          ]]>
         <![CDATA[
-
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
         ]]>
         <if test="payStatus == -1">
             AND A.PAY_STATUS IN (0, 1, 2)
@@ -98,10 +97,10 @@
                 ON A.J_KEY = D.J_KEY
                 WHERE 1=1
                 <![CDATA[
-                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                    AND A.INDATE  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                 <![CDATA[
-                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
                 <if test="payStatus == -1">
                     AND A.PAY_STATUS IN (0, 1, 2)
@@ -163,16 +162,16 @@
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
         <![CDATA[
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            AND A.INDATE  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
          ]]>
         <![CDATA[
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
         <![CDATA[
-            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+            AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
          ]]>
         <![CDATA[
-            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
         <if test="payStatus == -1">
             AND A.PAY_STATUS IN (8, 9, 10)
@@ -218,16 +217,16 @@
             ON A.J_KEY = D.J_KEY
             WHERE 1=1
             <![CDATA[
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
              ]]>
             <![CDATA[
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
             <![CDATA[
-                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD')  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+                AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
              ]]>
             <![CDATA[
-                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+                AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
             <if test="payStatus == -1">
                 AND A.PAY_STATUS IN (8, 9, 10)
@@ -276,10 +275,10 @@
         ON C.USER_KEY = E.USER_KEY
         WHERE 1=1
         <![CDATA[
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
              ]]>
         <![CDATA[
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
         <if test="payStatus != null and payStatus != ''">
             <!-- 결제상태 : 결제완료 -->
@@ -338,11 +337,11 @@
         ON C.USER_KEY = E.USER_KEY
         WHERE 1=1
         <![CDATA[
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD')  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-             ]]>
+            AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
         <![CDATA[
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-            ]]>
+            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+        ]]>
         <if test="payStatus != null and payStatus != ''">
             <!-- 결제상태 : 결제완료 -->
             <if test="payStatus == '1'">
