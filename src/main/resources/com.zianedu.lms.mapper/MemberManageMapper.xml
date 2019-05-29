@@ -434,13 +434,19 @@
     <insert id="insertTCounsel" parameterType="com.zianedu.lms.vo.TCounselVO">
         INSERT INTO T_COUNSEL
         (
-            COUNSEL_KEY, C_KEY, USER_KEY, WRITE_USER_KEY, TYPE, STATUS, INDATE,
-            PROC_START_DATE, PROC_END_DATE, TELEPHONE, TELEPHONE_MOBILE, MEMO, CONTENTS
+            COUNSEL_KEY, C_KEY, USER_KEY, WRITE_USER_KEY, TYPE, STATUS,
+            <if test="indate != ''">INDATE,</if>
+            <if test="procStartDate != ''">PROC_START_DATE,</if>
+            <if test="procEndDate != ''">PROC_END_DATE,</if>
+            TELEPHONE, TELEPHONE_MOBILE, MEMO, CONTENTS
         )
         VALUES
         (
-            T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status}, TO_DATE(#{indate}, 'YYYY-mm-dd hh:mi:ss'),
-            TO_DATE(#{procStartDate}, 'YYYY-mm-dd hh24:mi:ss'), TO_DATE(#{procEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
+            T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status},
+            <if test="indate != ''">TO_DATE(sysdate, 'YYYY-mm-dd hh24:mi:ss'),</if>
+            <if test="procStartDate != ''">TO_DATE(sysdate, 'YYYY-mm-dd hh24:mi:ss'),</if>
+            <if test="procEndDate != ''">TO_DATE(sysdate, 'YYYY-mm-dd hh24:mi:ss'),</if>
+            #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
         )
     </insert>
 
