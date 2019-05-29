@@ -20,7 +20,28 @@
         menuActive('menu-5', 1);
         /* 회원상세 정보 가져오기 */
         memberManageService.getMemberDetailInfo(userKey, function(info) {
-            console.log(info);
+            var result = info.result;
+            console.log(result);
+            innerHTML("userId", result.userId == null ? "-" : result.userId );
+            innerHTML("name", result.name);
+            innerHTML("indate", result.indate);
+            innerHTML("birth", result.birth);
+            innerHTML("telephone", result.telephone);
+            innerHTML("telephoneMobile", result.telephoneMobile);
+            innerHTML("email", result.email);
+            innerHTML("recvEmail", result.recvEmail);//이메일 수신여부
+            innerHTML("recvSms", result.recvSms);//sms 수신여부
+            innerHTML("zipcode", result.zipcode);
+            innerHTML("addressRoad", result.addressRoad);
+            innerHTML("addressNumber", result.addressNumber);
+            innerHTML("address", result.address);
+            //복지할인율 해야함 innerHTML("welfareDcPercent", result.welfareDcPercent);
+            //준비직렬 interestCtgKey0
+            //등급 grade
+            //가입디바이스 종류  isMobileReg
+            innerHTML("note", result.note);
+
+
         });
 
         /*회원 상담내역 리스트 가져오기*/
@@ -35,9 +56,9 @@
                             function(data) {return cmpList.counselKey == null ? "-" : cmpList.counselKey;},
                             function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' style='float:left' color='blue'>"+cmpList.consultTypeName+"</a>";},
                             //연락처
-                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
-                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.procStartDate);},
-                            function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.procEndDate);},
+                            function(data) {return cmpList.indate == null ? "-" : cmpList.indate;},
+                            function(data) {return cmpList.indate == null ? "-" : cmpList.procStartDate;},
+                            function(data) {return cmpList.indate == null ? "-" : cmpList.procEndDate;},
                         ];
                         dwr.util.addRows(dataList, [0], cellData, {escapeHtml:false});
                     }else{
