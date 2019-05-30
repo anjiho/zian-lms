@@ -491,4 +491,12 @@
         WHERE LINK_KEY = #{linkKey}
     </update>
 
+    <update id="updateTUserSecessionObtainDate" parameterType="Integer">
+        UPDATE T_USER_SECESSION SET OBTAIN_DATE = sysdate WHERE SECESSION_KEY = #{secessionKey}
+    </update>
+
+    <delete id="deleteTUserSecession" parameterType="Integer">
+        DELETE FROM T_USER_SECESSION WHERE SECESSION_KEY = #{secessionKey}
+    </delete>
+
 </mapper>
