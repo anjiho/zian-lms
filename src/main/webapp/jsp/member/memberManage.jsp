@@ -14,6 +14,15 @@
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
         });
+        /*modal 초기화*/
+        $('#consultModal').on('hidden.bs.modal', function (e) {
+            $('form').each(function(){
+                this.reset();
+                $("#modalIndate, #modalOkDate, #modalstartDate").hide();
+                $(".modal-title").text("상담 추가");
+                $("#counselKey").val("");
+            });
+        });
     });
 
     function init() {
@@ -23,7 +32,6 @@
         /* 회원상세 정보 가져오기 */
         memberManageService.getMemberDetailInfo(userKey, function(info) {
             var result = info.result;
-            console.log(result);
             innerHTML("userId", result.userId == null ? "-" : result.userId );
             innerHTML("modalUserId",result.userId);
             innerHTML("name", result.name);
@@ -53,7 +61,6 @@
 
         /*회원 상담내역 리스트 가져오기*/
         memberManageService.getUserCounselList(userKey, function(selList) {
-            console.log(selList);
             if (selList.length == 0) return;
             if(selList.length > 0){
                 for (var i = 0; i < selList.length; i++) {
@@ -61,7 +68,7 @@
                     if (cmpList != undefined) {
                         var cellData = [
                             function(data) {return cmpList.counselKey == null ? "-" : cmpList.counselKey;},
-                            function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' color='blue'>"+cmpList.consultTypeName+"</a>";},
+                            function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' color='blue'  data-toggle=\"modal\" data-target=\"#consultModal\" onclick='modifyConsult("+ cmpList.counselKey +");'>"+cmpList.consultTypeName+"</a>";},
                             function(data) {return cmpList.telephone+"<br>"+cmpList.telephoneMobile;},
                             function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
                             function(data) {return cmpList.procStartDate == null ? "-" : split_minute_getDay(cmpList.procStartDate);},
@@ -76,6 +83,25 @@
         });
     }
 
+    function modifyConsult(counselKey){
+        $("#modalIndate, #modalOkDate, #modalstartDate").show(); //처리날짜들 보여주기
+        $(".modal-title").text("상담 수정");//팝업창 헤드text값
+        $("#counselKey").val(counselKey);
+        memberManageService.getCounselDetailInfo(counselKey, function (info) {
+            console.log(info);
+            innerHTML("wirter", info.writeUserKey);
+            innerHTML("modalUserId", info.userKey);
+            innerHTML("modalName", info.userKey);
+            innerValue("memo", info.memo);
+            innerValue("contents", info.contents);
+            innerHTML("indate", info.indate);
+            innerHTML("procEndDate", info.procEndDate);
+            innerHTML("procStartDate", info.procStartDate);
+            getConsultDivisionSelectBox("consultDivisionSel", info.type);
+            getConsultStatusSelectBox("consultStatusSel", info.status);
+        });
+    }
+
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
@@ -86,53 +112,70 @@
 
     /* 상담 저장 */
     function counseltSave(){
-        var data = new FormData();
-        $.each($('#imageFile1')[0].files, function(i, file) {
-            data.append('imageFile', file);
-        });
-        $.each($('#imageFile2')[0].files, function(i, file) {
-            data.append('imageFile2', file);
-        });
-        $.each($('#imageFile3')[0].files, function(i, file) {
-            data.append('imageFile3', file);
-        });
-        $.each($('#imageFile4')[0].files, function(i, file) {
-            data.append('imageFile4', file);
-        });
-        $.each($('#imageFile5')[0].files, function(i, file) {
-            data.append('imageFile5', file);
-        });
-
-        var type     =  getSelectboxValue("consultDivisionSel");
-        var status   = getSelectboxValue("consultStatusSel");
-        alert(status);
-        var memo     =  getInputTextValue("memo");
-        var contents =  getInputTextValue("contents");
-        var telephone = getInputTextValue("telephone1")+"-"+getInputTextValue("telephone2")+"-"+getInputTextValue("telephone3");
-        var telephoneMobile = getInputTextValue("telephoneMobile1")+"-"+getInputTextValue("telephoneMobile2")+"-"+getInputTextValue("telephoneMobile3");
-        var counselObj = {
-            counselKey : 0,
-            cKey : 0,
-            userKey: userKey ,
-            writeUserKey : "",
-            type : type,
-            status : status,
-            telephone : telephone,
-            telephoneMobile : telephoneMobile,
-            memo: memo,
-            contents : contents,
-            procStartDate : "",
-            procEndDate : "",
-            indate : "",
-            imageFile1 : "",
-            imageFile2 : "",
-            imageFile3 : "",
-            imageFile4 : "",
-            imageFile5 : ""
-        };
-        memberManageService.saveCounselInfo(counselObj, function(selList) {
-
-        });
+        var counselKey = $("#counselKey").val();
+        if(counselKey == "") { // 신규 상담내역 저장일때,
+            if (confirm("저장 하시겠습니까?")) {
+                var type = getSelectboxValue("consultDivisionSel");
+                var status = getSelectboxValue("consultStatusSel");
+                alert(status);
+                var memo = getInputTextValue("memo");
+                var contents = getInputTextValue("contents");
+                var telephone = getInputTextValue("telephone1") + "-" + getInputTextValue("telephone2") + "-" + getInputTextValue("telephone3");
+                var telephoneMobile = getInputTextValue("telephoneMobile1") + "-" + getInputTextValue("telephoneMobile2") + "-" + getInputTextValue("telephoneMobile3");
+                var counselObj = {
+                    counselKey: 0,
+                    cKey: 0,
+                    userKey: userKey,
+                    writeUserKey: "",
+                    type: type,
+                    status: status,
+                    telephone: telephone,
+                    telephoneMobile: telephoneMobile,
+                    memo: memo,
+                    contents: contents,
+                    procStartDate: "",
+                    procEndDate: "",
+                    indate: "",
+                    imageFile1: "",
+                    imageFile2: "",
+                    imageFile3: "",
+                    imageFile4: "",
+                    imageFile5: ""
+                };
+                memberManageService.saveCounselInfo(counselObj, function (selList) {
+                });
+            }
+        }else{
+            if (confirm("수정 하시겠습니까?")) {
+                var type      = getSelectboxValue("consultDivisionSel");
+                var status    = getSelectboxValue("consultStatusSel");
+                var memo      = getInputTextValue("memo");
+                var contents  = getInputTextValue("contents");
+                var telephone = getInputTextValue("telephone1") + "-" + getInputTextValue("telephone2") + "-" + getInputTextValue("telephone3");
+                var telephoneMobile = getInputTextValue("telephoneMobile1") + "-" + getInputTextValue("telephoneMobile2") + "-" + getInputTextValue("telephoneMobile3");
+                var counselObj = {
+                    counselKey: counselKey,
+                    cKey: 0,
+                    userKey: userKey,
+                    writeUserKey: "",
+                    type: type,
+                    status: status,
+                    telephone: telephone,
+                    telephoneMobile: telephoneMobile,
+                    memo: memo,
+                    contents: contents,
+                    procStartDate: "",
+                    procEndDate: "",
+                    indate: "",
+                    imageFile1: "",
+                    imageFile2: "",
+                    imageFile3: "",
+                    imageFile4: "",
+                    imageFile5: ""
+                };
+                memberManageService.updateCounselInfo(counselObj, function (selList) {});
+    }
+        }
     }
 </script>
 <div class="page-breadcrumb">
@@ -251,7 +294,7 @@
                             </div>
                         </section>
                         <!-- // 1.기본정보 Tab -->
-                        <!-- 3.카테고리 목록 Tab -->
+                        <!-- 2.상담 목록 Tab -->
                         <h3>상담내역</h3>
                         <section>
                             <div class="float-right mb-3">
@@ -277,16 +320,15 @@
                                 <%@ include file="/common/inc/com_pageNavi.inc" %>
                             </div>
                         </section>
-                        <!-- //3.카테고리 목록 Tab -->
+                        <!-- //2.상담 목록 Tab -->
                     </div>
                 </div>
             </div>
         </div>
         <!-- //div.card -->
     </div>
-</form><!-- // 기본소스-->
-
-<!-- 출판사 팝업창-->
+</form>
+<!-- 상담 팝업창-->
 <div class="modal fade" id="consultModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 980px;">
         <div class="modal-content">
@@ -300,17 +342,9 @@
                 <!-- modal body -->
                 <div class="modal-body">
                     <div id="section2">
-                        <input type="hidden" id="counselKey" value="0">
-                        <input type="hidden" id="cKey" value="0">
-                        <input type="hidden" id="userKey" value="0">
+                        <input type="hidden" id="counselKey" value="">
                     <div class="row">
                         <div class="col-md-6">
-                            <div class="form-group row">
-                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상담코드</label>
-                                <div class="col-sm-6 pl-0 pr-0">
-                                    <span id="code">0</span>
-                                </div>
-                            </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상담구분</label>
                                 <div class="col-sm-6 pl-0 pr-0">
@@ -323,24 +357,24 @@
                                     <span id="modalUserId"></span>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            <!--<div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">전화번호</label>
                                 <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephone1">
                                 -
                                 <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephone2">
                                 -
                                 <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephone3">
-                            </div>
-                            <div class="form-group row" style="display: none;">
+                            </div>-->
+                            <div class="form-group row" style="display: none;" id="modalIndate">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">접수일</label>
                                 <div class="col-sm-6 pl-0 pr-0">
                                     <span id="indate"></span>
                                 </div>
                             </div>
-                            <div class="form-group row" style="display: none;">
+                            <div class="form-group row" style="display: none;" id="modalOkDate">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">완료일</label>
                                 <div class="col-sm-6 pl-0 pr-0">
-                                    <span id=""></span>
+                                    <span id="procEndDate"></span>
                                 </div>
                             </div>
                         </div>
@@ -348,7 +382,7 @@
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">작성자</label>
                                     <div class="col-sm-6 pl-0 pr-0">
-                                        <span><%=name%></span>
+                                        <span id="wirter"><%=name%></span>
                                     </div>
                                 </div>
                                 <div class="form-group row">
@@ -361,18 +395,18 @@
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원이름</label>
                                     <span id="modalName"></span>
                                 </div>
-                                <div class="form-group row">
+                                <!--<div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
                                     <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile1">
                                     -
                                     <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile2">
                                     -
                                     <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile3">
-                                </div>
-                                <div class="form-group row" style="display: none;">
+                                </div>-->
+                                <div class="form-group row" style="display: none;" id="modalstartDate">
                                     <label class="col-sm-4 control-label col-form-label" style="margin-bottom: 0">처리시작일</label>
                                     <div class="col-sm-6 pl-0 pr-0">
-                                        <span id=""></span>
+                                        <span id="procStartDate"></span>
                                     </div>
                                 </div>
                         </div>
@@ -385,7 +419,7 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
                         <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="contents" name="contents">
                     </div>
-                    <div class="form-group row">
+                    <!--<div class="form-group row">
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지1</label>
                         <div class="col-sm-6 pl-0 pr-0">
                             <div class="custom-file">
@@ -429,8 +463,8 @@
                                 <span class="custom-file-control5 custom-file-label"></span>
                             </div>
                         </div>
-                    </div>
-                        <button type="button" class="btn btn-info float-right m-l-2" style="margin-bottom: 10px;" onclick="counseltSave();">저장</button>
+                    </div>-->
+                        <button type="button" class="btn btn-info float-right m-l-2" style="margin-bottom: 10px;" id="saveBtn" onclick="counseltSave();">저장</button>
                 </div>
                 </div>
                 <!-- //modal body -->
@@ -455,11 +489,7 @@
         },
     });
 
-    $('#startDate').datepicker({
-        format: "yyyy-mm-dd",
-        language: "kr"
-    });
-    $('#endDate').datepicker({
+    $('#startDate,#endDate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });

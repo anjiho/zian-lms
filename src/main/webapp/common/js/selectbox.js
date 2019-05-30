@@ -1138,3 +1138,21 @@ function getConsultStatusSelectBox(tagId, val) {
         innerHTML(tagId, html);
     });
 }
+
+function searchMemberSelectBox(tagId) {
+    var html = "<select id='searchMemberSel'  class='col-sm-8 select2 form-control custom-select'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='id'>아이디</option>";
+    html += "<option value='name'>이름</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+function searchMemberSelectBox1(tagId) {
+    var html = "<select id='searchMemberSel1'  class='col-sm-8 select2 form-control custom-select'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='id'>아이디</option>";
+    html += "<option value='name'>이름</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}

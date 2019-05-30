@@ -512,6 +512,7 @@ public class MemberManageService {
         } else if (tCounselVO.getStatus() == 2) {
             tCounselVO.setProcStartDate("");
             tCounselVO.setProcEndDate(Util.returnNow());
+
         }
 
         TCounselVO counselVO = new TCounselVO(tCounselVO);
