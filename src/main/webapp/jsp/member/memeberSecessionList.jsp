@@ -5,16 +5,17 @@
 <script>
     function init() {
         searchMemberSelectBox("l_searchSel");
-        searchMemberSelectBox("l_searchSel1");
+        searchMemberSelectBox1("l_searchSel1");
         menuActive('menu-5', 2);
         fn_search('new');
         fn_search3('new');
     }
 
-    function fn_search(val) {//탈퇴신청
+    //탈퇴신청 리스트 불러오기
+    function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
-        var searchType = getSelectboxValue("searchType");
+        var searchType = getSelectboxValue("searchMemberSel");
         var searchText = getInputTextValue("searchText");
 
         if (searchType == null) searchType = "";
@@ -28,28 +29,41 @@
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             memberManageService.getMemeberSecessionApplyList(sPage, pagingListCount(), searchType, searchText, function (selList) {
                 if (selList.length == 0) return;
-                dwr.util.addRows("dataList", selList, [
-                    function(data) {return data.userName == null ? "-" : data.userName;},
-                    function(data) {return data.userId == null ? "-" : data.userId;},
-                    function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
-                    function(data) {return data.deviceId+"<br>"+data.goodsName;},
-                    function(data) {return "<button type='button' onclick='DeviceDelete("+ data.deviceLimitKey +");' class='btn btn-outline-danger btn-sm'>삭제</button>";},
-                ], {escapeHtml:false});
+                console.log(selList);
+                if (selList.length > 0) {
+                    for (var i = 0; i < selList.length; i++) {
+                        var cmpList = selList[i];
+                        if (cmpList != undefined) {
+                            var acceptBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.secessionKey+")' class=\"btn btn-outline-info btn-sm\">승인</button>";
+                            var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.secessionKey+")' class=\"btn btn-outline-danger btn-sm\">취소</button>";
+                            var cellData = [
+                                function(data) {return listNum--;},
+                                function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},
+                                function(data) {return cmpList.name == null ? "-" : cmpList.name;},
+                                function(data) {return cmpList.indate == null ? "-" : cmpList.indate;},
+                                function(data) {return cmpList.reason == null ? "-" : cmpList.reason;},
+                                function(data) {return acceptBtn;},
+                                function(data) {return deleteBtn;},
+                            ];
+                            dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
+                        }
+                    }
+                }else{
+                    gfn_emptyView3("V", comment.blank_list2);
+                }
+
             });
         });
     }
 
-
-    //강의교재 리스트 불러오기
+    //탈퇴리스트 불러오기
     function fn_search3(val) {
         var paging = new Paging();
         var sPage = $("#sPage3").val();
-        var searchType = getSelectboxValue("searchType");
+        var searchType = getSelectboxValue("searchMemberSel1");
         var searchText = getInputTextValue("searchText1");
 
-        if(val == "new") {
-            sPage = "1";
-        }
+        if(val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList3");
         gfn_emptyView3("H", "");//페이징 예외사항처리
@@ -60,17 +74,17 @@
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
-
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return listNum--;},
-                                function(data) {return cmpList.goodsName;},
+                                function(data) {return cmpList.userId;},
+                                function(data) {return cmpList.name;},
+                                function(data) {return cmpList.indate;},
+                                function(data) {return cmpList.reason;},
+                                function(data) {return "";},
+                                function(data) {return "";},
                             ];
                             dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});
-                            $('#dataList3 tr').each(function(){
-                                var tr = $(this);
-                                tr.children().eq(0).attr("style", "display:none");
-                            });
                         }
                     }
                 }else{
@@ -101,11 +115,11 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-12">
-            <div class="form-group row">
-                <h4>회원탈퇴 신청 목록</h4>
-            </div>
             <div class="card">
                 <div class="card-body">
+                    <div class="form-group">
+                        <h4>회원탈퇴 신청 목록</h4>
+                    </div>
                     <div>
                         <div style=" float: left; width: 10%">
                             <span id="l_searchSel"></span>
@@ -118,7 +132,7 @@
                         </div>
                     </div>
                 </div>
-                <div id="productDeviceTable" style="display:none">
+                <div id="productDeviceTable">
                     <!--상품별 디바이스 TABLE-->
                     <table class="table table-hover text-center">
                         <thead>
@@ -128,6 +142,8 @@
                             <th scope="col" style="width: 10%;">이름</th>
                             <th scope="col" style="width: 20%;">탈퇴일</th>
                             <th scope="col" style="width: 25%;">탈퇴사유</th>
+                            <th scope="col" style="width: 5%;">탈퇴승인</th>
+                            <th scope="col" style="width: 5%;">탈퇴취소</th>
                         </tr>
                         </thead>
                         <tbody id="dataList"></tbody>
@@ -135,11 +151,16 @@
                             <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
                         </tr>
                     </table>
+                    <div style="display: none">
                     <%@ include file="/common/inc/com_pageNavi.inc" %>
+                    </div>
                 </div>
             </div>
             <div class="card">
                 <div class="card-body">
+                    <div class="form-group">
+                        <h4>회원탈퇴 목록</h4>
+                    </div>
                     <div>
                         <div style=" float: left; width: 10%">
                             <span id="l_searchSel1"></span>
@@ -148,7 +169,7 @@
                             <input type="text" class="form-control" id="searchText1" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px;">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>
                 </div>
@@ -161,8 +182,8 @@
                             <th scope="col" style="width: 10%;">이름</th>
                             <th scope="col" style="width: 20%;">탈퇴일</th>
                             <th scope="col" style="width: 25%;">탈퇴사유</th>
-                            <th scope="col" style="width: 5%;">승인</th>
-                            <th scope="col" style="width: 5%;">취소</th>
+                            <th scope="col" style="width: 5%;"></th>
+                            <th scope="col" style="width: 5%;"></th>
                         </tr>
                         </thead>
                         <tbody id="dataList3"></tbody>

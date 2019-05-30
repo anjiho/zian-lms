@@ -24,8 +24,6 @@ public class MemberManageController {
             mvc.setViewName("member/memberList");
         }else if("memeberSecessionList".equals(page_gbn)) {
             mvc.setViewName("member/memeberSecessionList");
-        }else if("memeberSecessionApplyList".equals(page_gbn)) {
-            mvc.setViewName("member/memeberSecessionApplyList");
         }else if("counselList".equals(page_gbn)) {
             mvc.setViewName("member/counselList");
         }else if("counselManage".equals(page_gbn)) {

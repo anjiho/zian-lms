@@ -135,8 +135,7 @@
                 <li class="sidebar-item" id="menu-5"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">회원관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memberList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원 목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원탈퇴 목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionApplyList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원탈퇴신청 목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 탈퇴 / 신청 목록 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'counselList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 상담내역 </span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 목록</span></a></li>
