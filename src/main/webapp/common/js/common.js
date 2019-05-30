@@ -2432,8 +2432,13 @@ function setSearchDate(start, startId, endId){
 
     var startDate = getFormatDate(today);
 
+    if(start == 'all'){
+        $('#'+startId).val("");
+        $('#'+endId).val("");
+    }else{
+        $('#'+startId).val(startDate);
+    }
 
-    $('#'+startId).val(startDate);
 }
 
 //금액 컴마표시

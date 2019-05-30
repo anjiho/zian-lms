@@ -34,12 +34,13 @@
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return listNum--;},
-                               /* function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},
+                                function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},//유저id
                                 function(data) {return cmpList.name == null ? "-" : cmpList.name;},
+                                function(data) {return cmpList.indate == null ? "-" : cmpList.type;},//상담구분
+                                function(data) {return cmpList.telephone+"<br>"+cmpList.telephoneMobile;},//연락처
                                 function(data) {return cmpList.indate == null ? "-" : cmpList.indate;},
-                                function(data) {return cmpList.reason == null ? "-" : cmpList.reason;},
-                                function(data) {return acceptBtn;},
-                                function(data) {return deleteBtn;},*/
+                                function(data) {return cmpList.procStartDate == null ? "-" : cmpList.procStartDate;},
+                                function(data) {return cmpList.procEndDate == null ? "-" : cmpList.procEndDate ;},
                             ];
                             dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
                         }

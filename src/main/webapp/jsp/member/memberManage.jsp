@@ -117,7 +117,6 @@
             if (confirm("저장 하시겠습니까?")) {
                 var type = getSelectboxValue("consultDivisionSel");
                 var status = getSelectboxValue("consultStatusSel");
-                alert(status);
                 var memo = getInputTextValue("memo");
                 var contents = getInputTextValue("contents");
                 var telephone = getInputTextValue("telephone1") + "-" + getInputTextValue("telephone2") + "-" + getInputTextValue("telephone3");

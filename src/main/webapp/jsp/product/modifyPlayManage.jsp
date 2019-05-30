@@ -24,7 +24,7 @@
             lang: 'ko-KR',
             placeholder: '내용을 적어주세요.'
             ,hint: {
-                match: /:([\-+\w]+)$/,
+                match: /:([\-+\w]+)$/,ㅊ
                 search: function (keyword, callback) {
                     callback($.grep(emojis, function (item) {
                         return item.indexOf(keyword) === 0;

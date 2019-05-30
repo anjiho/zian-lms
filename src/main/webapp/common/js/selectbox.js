@@ -1167,3 +1167,19 @@ function searchCounselSelectBox(tagId) {
     html += "</select>";
     innerHTML(tagId, html);
 }
+
+function getAuthoritySelectbox(tagId, val) {
+    var html = "<select id='authoritSel' class='form-control'>";
+    html += "<option value='0'>관리자</option>";
+    html += "<option value='5'>강사</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+function getAuthorityGradeSelectbox(tagId, val) {
+    var html = "<select id='authoritGradeSel' class='form-control'>";
+    html += "<option value='0'>관리자</option>";
+    html += "<option value='5'>강사</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}

@@ -139,6 +139,7 @@
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'counselList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 상담내역 </span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 목록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 등록</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>

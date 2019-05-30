@@ -34,7 +34,12 @@ public class MemberManageController {
             mvc.setViewName("member/memberManage");
         }else if("teacherList".equals(page_gbn)) {
             mvc.setViewName("member/teacherList");
+        }else if("teacherManage".equals(page_gbn)) {
+            mvc.setViewName("member/teacherManage");
+        }else if("modifyTeacher".equals(page_gbn)) {
+            mvc.setViewName("member/modifyTeacher");
         }
+
         return mvc;
     }
 

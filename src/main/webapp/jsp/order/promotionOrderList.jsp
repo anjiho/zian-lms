@@ -174,6 +174,12 @@
                                                     <label for="dateType7">6개월</label>
                                                 </span>
                                             </li>
+                                            <li>
+                                                <span class="chkbox2">
+                                                    <input type="radio" name="dateType" id="dateType8" onclick="setSearchDate('all', 'searchStartDate', 'searchEndDate')"/>
+                                                    <label for="dateType8">전체</label>
+                                                </span>
+                                            </li>
                                         </ul>
                                     </td>
                                 </tr>
