@@ -172,7 +172,7 @@
     </select>
 
     <select id="selectTUserSecessionApplyListCount" resultType="Integer">
-        SELECT * FROM T_USER_SECESSION
+        SELECT COUNT(*) FROM T_USER_SECESSION
         WHERE OBTAIN_DATE IS NULL
         <if test="searchType == 'name'">
             AND NAME LIKE '%'||#{searchText}||'%'
