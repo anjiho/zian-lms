@@ -1156,3 +1156,14 @@ function searchMemberSelectBox1(tagId) {
     html += "</select>";
     innerHTML(tagId, html);
 }
+
+
+function searchCounselSelectBox(tagId) {
+    var html = "<select id='searchCounselSel' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='number'>상담번호</option>";
+    html += "<option value='id'>회원아이디</option>";
+    html += "<option value='name'>회원이름</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}

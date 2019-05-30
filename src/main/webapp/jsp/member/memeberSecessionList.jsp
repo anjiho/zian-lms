@@ -34,8 +34,8 @@
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
                         if (cmpList != undefined) {
-                            var acceptBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.secessionKey+")' class=\"btn btn-outline-info btn-sm\">승인</button>";
-                            var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.secessionKey+")' class=\"btn btn-outline-danger btn-sm\">취소</button>";
+                            var acceptBtn  = "<button type=\"button\" onclick='SecessionAccept("+cmpList.secessionKey+")' class=\"btn btn-outline-info btn-sm\">승인</button>";
+                            var deleteBtn  = "<button type=\"button\" onclick='SecessionCancel("+cmpList.secessionKey+")' class=\"btn btn-outline-danger btn-sm\">취소</button>";
                             var cellData = [
                                 function(data) {return listNum--;},
                                 function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},
@@ -56,6 +56,14 @@
         });
     }
 
+    function SecessionAccept(secessionKey) {
+        if(confirm("승인 하시겠습니까?")){memberManageService.approveSecession(secessionKey, function () {isReloadPage();});}
+    }
+
+    function SecessionCancel(secessionKey) {
+        if(confirm("취소 하시겠습니까?")) {memberManageService.cancelSecession(secessionKey, function () {isReloadPage();});}
+    }
+    
     //탈퇴리스트 불러오기
     function fn_search3(val) {
         var paging = new Paging();
