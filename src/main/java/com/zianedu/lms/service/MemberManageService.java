@@ -534,5 +534,24 @@ public class MemberManageService {
         }
     }
 
+    /**
+     * 회원탈퇴 승인
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void approveSecession(int secessionKey) {
+        if (secessionKey == 0) return;
+        memberManageMapper.updateTUserSecessionObtainDate(secessionKey);
+    }
+
+    /**
+     * 회원탈퇴 취소
+     * @param secessionKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void cancelSecession(int secessionKey) {
+        if (secessionKey == 0) return;
+        memberManageMapper.deleteTUserSecession(secessionKey);
+    }
+
 
 }

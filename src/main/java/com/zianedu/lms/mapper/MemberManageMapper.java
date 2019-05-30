@@ -79,4 +79,8 @@ public interface MemberManageMapper {
     void updateTCounsel(TCounselVO tCounselVO);
 
     void updateTLinkKeyPos(@Param("linkKey") int linkKey, @Param("pos") int pos);
+
+    void updateTUserSecessionObtainDate(@Param("secessionKey") int secessionKey);
+
+    void deleteTUserSecession(@Param("secessionKey") int secessionKey);
 }
