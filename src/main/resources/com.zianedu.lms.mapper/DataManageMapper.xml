@@ -45,7 +45,13 @@
 		ORDER BY POS ASC
 	</select>
 
-	<select id="selectTCategoryOtherInfo" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">SELECT * FROM T_CATEGORY
+	<select id="selectTCategoryOtherInfo" resultType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		SELECT * FROM T_CATEGORY_OTHER_INFO
+		WHERE CTG_INFO_KEY = #{ctgInfoKey}
+	</select>
+
+	<select id="selectBannerTitleList" resultType="com.zianedu.lms.vo.TCategoryVO">
+		SELECT * FROM T_CATEGORY
 		WHERE PARENT_KEY =
 		(
 			SELECT CTG_KEY FROM T_CATEGORY
@@ -54,12 +60,6 @@
 		)
 		AND VALUE IS NOT NULL
 		ORDER BY POS ASC
-		SELECT * FROM T_CATEGORY_OTHER_INFO
-		WHERE CTG_INFO_KEY = #{ctgInfoKey}
-	</select>
-
-	<select id="selectBannerTitleList" resultType="com.zianedu.lms.vo.TCategoryVO">
-
 	</select>
 
 	<select id="selectBannerTitleListByCtgKey" resultType="com.zianedu.lms.vo.TCategoryVO">
