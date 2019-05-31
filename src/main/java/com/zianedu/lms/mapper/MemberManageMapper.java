@@ -66,7 +66,7 @@ public interface MemberManageMapper {
 
     List<MemberListDTO> selectSearchTeacherList();
 
-    Integer selectUserCountByUserId(@Param("userId"));
+    Integer selectUserCountByUserId(@Param("userId") String userId);
 
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);

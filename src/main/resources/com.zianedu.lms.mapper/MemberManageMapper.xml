@@ -411,7 +411,7 @@
         ORDER BY B.NAME
     </select>
 
-    <select id="selectUserCountByUserId">
+    <select id="selectUserCountByUserId" resultType="Integer">
         SELECT COUNT(USER_KEY) FROM T_USER WHERE USER_ID = #{userId}
     </select>
 
