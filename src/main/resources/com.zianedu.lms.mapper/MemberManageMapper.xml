@@ -456,12 +456,12 @@
         </selectKey>
         INSERT INTO T_TEACHER
         (
-            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_VIEW, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW, IMAGE_MAIN_LIST, IMAGE_CONTENTS,
+            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_VIEW, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW,
             GREETING, HISTORY, BOOK_WRITING, ONLINELEC_CALCULATE_RATE, OFFLINELEC_CALCULATE_RATE, SAMPLE_VOD_FILE
         )
         VALUES
         (
-            #{teacherKey}, #{userKey}, #{imageList}, #{imageView}, #{imageTeacherList}, #{imageTeacherView}, #{imageMainList}, #{imageContents},
+            #{teacherKey}, #{userKey}, #{imageList}, #{imageView}, #{imageTeacherList}, #{imageTeacherView},
             #{greeting}, #{history}, #{bookWriting}, #{onlinelecCalculateRate}, #{offlinelecCalculateRate}, #{sampleVodFile}
         )
     </insert>
