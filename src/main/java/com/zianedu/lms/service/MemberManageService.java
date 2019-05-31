@@ -419,10 +419,11 @@ public class MemberManageService {
     }
 
     /**
-     * 아이디 중복확인 
+     * 아이디 중복확인
      * @param userId
      * @return
      */
+    @Transactional(readOnly = true)
     public boolean isUser(String userId) {
         if ("".equals(userId)) return false;
         int userCount = memberManageMapper.selectUserCountByUserId(userId);
