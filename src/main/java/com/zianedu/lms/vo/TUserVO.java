@@ -1,5 +1,6 @@
 package com.zianedu.lms.vo;
 
+import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.utils.Aes256;
 import com.zianedu.lms.utils.SecurityUtil;
 import com.zianedu.lms.utils.Util;
@@ -12,7 +13,7 @@ public class TUserVO implements Serializable {
 
     private int userKey;
 
-    private Long cKey;
+    private int cKey;
     //아이디
     private String userId;
     //등록일
@@ -28,9 +29,9 @@ public class TUserVO implements Serializable {
     //생년월일
     private String birth;
     //음력
-    private String lunar;
+    private int lunar;
     //성별
-    private String gender;
+    private int gender;
 
     private String telephone;
 
@@ -100,13 +101,15 @@ public class TUserVO implements Serializable {
 
     public TUserVO(TUserVO tUserVO) throws Exception {
         this.userId = tUserVO.getUserId();
-        this.indate = tUserVO.getIndate();
+        this.cKey = ZianCoreManage.ZIAN_COMPANY_CODE;
         this.name = tUserVO.getName();
         this.authority = tUserVO.getAuthority();
         this.pwd = SecurityUtil.encryptSHA256(tUserVO.getPwd());
         this.birth = Util.isNullValue(tUserVO.getBirth(), "");
-        this.lunar = tUserVO.getLunar();
-        this.gender = tUserVO.getGender();
+        this.indate = Util.returnNow();
+        this.status = tUserVO.getStatus();
+        this.lunar = tUserVO.getLunar() == 0 ? 0: tUserVO.getLunar();
+        this.gender = tUserVO.getGender() == 0 ? 0: tUserVO.getGender();
         this.telephone = Util.isNullValue(tUserVO.getTelephone(), "");
         this.telephoneMobile = Util.isNullValue(tUserVO.getTelephoneMobile(), "");
         this.zipcode = Util.isNullValue(tUserVO.getZipcode(), "");
@@ -118,7 +121,7 @@ public class TUserVO implements Serializable {
         this.recvEmail = tUserVO.getRecvEmail();
         this.grade = tUserVO.getGrade();
         this.interestCtgKey0 = tUserVO.getInterestCtgKey0();
-        this.adminAuthorityKey = tUserVO.getAdminAuthorityKey();
+        this.adminAuthorityKey = 5;
         this.isMobileReg = tUserVO.getIsMobileReg();
         this.gradePrice = tUserVO.getGradePrice();
         this.note = Util.isNullValue(tUserVO.getNote(), "");

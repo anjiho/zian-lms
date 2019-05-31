@@ -422,16 +422,16 @@
         INSERT INTO T_USER
         (
             USER_KEY, C_KEY, USER_ID, INDATE, NAME, AUTHORITY, STATUS, PWD, BIRTH, LUNAR, GENDER, TELEPHONE,
-            TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, EMAIL, RECV_SMS, RECV_EMAIL,
-            WELFARE_DC_PERCENT, GRADE, INTEREST_CTG_KEY_0, INTEREST_CTG_KEY_1, IS_MOBILE_REG,
-            ADMIN_AUTHORITY_KEY, GRADE_G_KEY, GRADE_PRICE, NOTE, USER_PWD
+            TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, ADDRESS_NUMBER, ADDRESS, EMAIL,
+            GRADE, INTEREST_CTG_KEY_0, IS_MOBILE_REG,
+            ADMIN_AUTHORITY_KEY, USER_PWD
         )
         VALUES
         (
-            #{userKey}, 100, #{userId}, sysdate, #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
-            #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{email}, #{recvSms}, #{recvEmail},
-            0, #{grade}, #{interestCtgKey0}, 0, #{isMobileReg},
-            #{adminAuthorityKey}, 0, #{gradePrice}, #{note}, #{userPwd}
+            #{userKey}, #{cKey}, #{userId}, sysdate, #{name}, #{authority}, #{status}, #{pwd}, TO_DATE(#{birth}, 'YYYY-MM-DD hh:mi:ss'), #{lunar}, #{gender}, #{telephone},
+            #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{addressNumber}, #{address}, #{email},
+            #{grade}, #{interestCtgKey0}, #{isMobileReg},
+            #{adminAuthorityKey}, #{userPwd}
         )
     </insert>
 
@@ -460,12 +460,12 @@
         </selectKey>
         INSERT INTO T_TEACHER
         (
-            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_VIEW, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW,
+            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW,
             GREETING, HISTORY, BOOK_WRITING, ONLINELEC_CALCULATE_RATE, OFFLINELEC_CALCULATE_RATE, SAMPLE_VOD_FILE
         )
         VALUES
         (
-            #{teacherKey}, #{userKey}, #{imageList}, #{imageView}, #{imageTeacherList}, #{imageTeacherView},
+            #{teacherKey}, #{userKey}, #{imageList}, #{imageTeacherList}, #{imageTeacherView},
             #{greeting}, #{history}, #{bookWriting}, #{onlinelecCalculateRate}, #{offlinelecCalculateRate}, #{sampleVodFile}
         )
     </insert>

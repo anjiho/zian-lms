@@ -441,12 +441,12 @@ public class MemberManageService {
     @Transactional(propagation = Propagation.REQUIRED)
     public int saveMember(TUserVO tUserVO, TTeacherVO tTeacherVO) throws Exception {
         TUserVO userVO = new TUserVO(tUserVO);
-        Integer userKey = memberManageMapper.insertTUSer(userVO);
-        if (userKey != null) {
+        memberManageMapper.insertTUSer(userVO);
+        if (userVO.getUserKey() > 0) {
             //강사면 강사 테이블 저장
             if (tUserVO.getAuthority() == 5) {
                 TTeacherVO vo = new TTeacherVO(
-                        tUserVO.getUserKey(), Util.isNullValue(tTeacherVO.getImageList(), ""), Util.isNullValue(tTeacherVO.getImageTeacherList(), ""),
+                        userVO.getUserKey(), Util.isNullValue(tTeacherVO.getImageList(), ""), Util.isNullValue(tTeacherVO.getImageTeacherList(), ""),
                         Util.isNullValue(tTeacherVO.getImageTeacherView(), ""), Util.isNullValue(tTeacherVO.getGreeting(), ""),
                         Util.isNullValue(tTeacherVO.getHistory(), ""), Util.isNullValue(tTeacherVO.getBookWriting(), ""),
                         tTeacherVO.getOnlinelecCalculateRate(), tTeacherVO.getOfflinelecCalculateRate(), Util.isNullValue(tTeacherVO.getSampleVodFile(), "")
@@ -454,7 +454,7 @@ public class MemberManageService {
                 memberManageMapper.insertTTeacher(vo);
             }
         }
-        return userKey;
+        return userVO.getUserKey();
     }
 
     /**
