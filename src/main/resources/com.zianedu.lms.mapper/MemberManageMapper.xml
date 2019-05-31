@@ -428,7 +428,7 @@
         )
         VALUES
         (
-            #{userKey}, 100, #{userId}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
+            #{userKey}, 100, #{userId}, sysdate, #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
             #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{email}, #{recvSms}, #{recvEmail},
             0, #{grade}, #{interestCtgKey0}, 0, #{isMobileReg},
             #{adminAuthorityKey}, 0, #{gradePrice}, #{note}, #{userPwd}
