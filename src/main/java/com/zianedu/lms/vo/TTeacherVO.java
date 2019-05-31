@@ -32,4 +32,21 @@ public class TTeacherVO {
     private int offlinelecCalculateRate;
     //샘플강의
     private String sampleVodFile;
+
+    public TTeacherVO(){}
+
+    public TTeacherVO(int userKey, String imageList, String imageTeacherList, String imageTeacherView,
+                      String greeting, String history, String bookWriting, int onlinelecCalculateRate,
+                      int offlinelecCalculateRate, String sampleVodFile) {
+        this.userKey = userKey;
+        this.imageList = imageList;
+        this.imageTeacherList = imageTeacherList;
+        this.imageTeacherView = imageTeacherView;
+        this.greeting = greeting;
+        this.history = history;
+        this.bookWriting = bookWriting;
+        this.onlinelecCalculateRate = onlinelecCalculateRate;
+        this.offlinelecCalculateRate = offlinelecCalculateRate;
+        this.sampleVodFile = sampleVodFile;
+    }
 }

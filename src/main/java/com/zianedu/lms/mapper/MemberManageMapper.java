@@ -71,7 +71,7 @@ public interface MemberManageMapper {
 
     void insertTCounsel(TCounselVO tCounselVO);
 
-    void insertTTeacher(@Param("userKey") int userKey);
+    void insertTTeacher(TTeacherVO tTeacherVO);
 
     void insertScTran(ScTranVO scTranVO);
 

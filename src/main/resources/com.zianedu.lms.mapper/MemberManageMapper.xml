@@ -450,11 +450,20 @@
         )
     </insert>
 
-    <insert id="insertTTeacher" parameterType="Integer">
+    <insert id="insertTTeacher" parameterType="com.zianedu.lms.vo.TTeacherVO">
+        <selectKey resultType="Integer" keyProperty="teacherKey" order="BEFORE">
+            SELECT T_TEACHER_SEQ.nextval FROM DUAL
+        </selectKey>
         INSERT INTO T_TEACHER
-        ( TEACHER_KEY, USER_KEY )
+        (
+            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_VIEW, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW, IMAGE_MAIN_LIST, IMAGE_CONTENTS,
+            GREETING, HISTORY, BOOK_WRITING, ONLINELEC_CALCULATE_RATE, OFFLINELEC_CALCULATE_RATE, SAMPLE_VOD_FILE
+        )
         VALUES
-        ( T_TEACHER_SEQ.nextval, #{userKey})
+        (
+            #{teacherKey}, #{userKey}, #{imageList}, #{imageView}, #{imageTeacherList}, #{imageTeacherView}, #{imageMainList}, #{imageContents},
+            #{greeting}, #{history}, #{bookWriting}, #{onlinelecCalculateRate}, #{offlinelecCalculateRate}, #{sampleVodFile}
+        )
     </insert>
 
     <insert id="insertScTran" parameterType="com.zianedu.lms.vo.ScTranVO">
