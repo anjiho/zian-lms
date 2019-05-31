@@ -5,6 +5,7 @@
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
     var examQuestionBankKey = '<%=examQuestionBankKey%>';
     function init() {

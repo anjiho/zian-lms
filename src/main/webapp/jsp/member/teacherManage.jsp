@@ -1,13 +1,14 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
-<script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
+<script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 <script>
     function init() {
         menuActive('menu-5', 5);
         getEmailSelectbox('deliveryUserEmail2', '');//이메일
         getSelectboxListForCtgKey('interestCtgKey0','133', "");
-        getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
+       //getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
         getAuthoritySelectbox("teacherAuthority","");
         getAuthorityGradeSelectbox("teacherGrade", "");
     }
@@ -26,60 +27,92 @@
         else $('#InputEmail').val(val);
     }
     function teacherSave() {
-        var teacherInfoObj = getJsonObjectFromDiv("section1");
+        var data = new FormData();
+        $.each($('#imageTeacherList')[0].files, function (i, file) {
+            data.append('listImageFile', file);
+        });
+        $.each($('#imageTeacherView')[0].files, function (i, file) {
+            data.append('listImageViewFile', file);
+        });
+        data.append('uploadType', 'TEACHER');
+        if (confirm("저장 하시겠습니까?")) {//TEACHER
+            $.ajax({
+                url: "/file/imageFileUpload",
+                method: "post",
+                dataType: "JSON",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if (data.result) {
+                        var teacherInfoObj = getJsonObjectFromDiv("section1");
+                        var teacherInfoObj2 = getJsonObjectFromDiv("section2");
 
-        var authority = getSelectboxValue("authoritSel");//권한
-        var authoritGrade = getSelectboxValue("authoritGradeSel");//권한등급
-        var welfareDcPercent = getSelectboxValue("twelfareDcPercentSel");//복지할인율
-        var interestCtgKey0 = getSelectboxValue("sel_1");//직렬 키
+                        teacherInfoObj2.imageTeacherList = data.result.listImageFilePath;
+                        teacherInfoObj2.imageTeacherView = data.result.viewImageFilePath;
+                        teacherInfoObj2.imageList = data.result.listImageFilePath;
+                        teacherInfoObj2.imageView = "";
+                        teacherInfoObj2.imageMainList = "";
+                        teacherInfoObj2.imageContents = "";
+                        teacherInfoObj2.teacherKey = 0;
+                        teacherInfoObj2.userKey = 0;
+                        var authority = getSelectboxValue("authoritSel");//권한
+                        var authoritGrade = getSelectboxValue("authoritGradeSel");//권한등급
+                        var interestCtgKey0 = getSelectboxValue("sel_1");//직렬 키
 
-        var phone1 = getInputTextValue("phone1");
-        var phone2 = getInputTextValue("phone2");
-        var phone3 = getInputTextValue("phone3");
-        var phone = phone1+phone2+phone3;
+                        var phone1 = getInputTextValue("phone1");
+                        var phone2 = getInputTextValue("phone2");
+                        var phone3 = getInputTextValue("phone3");
+                        var phone = phone1+phone2+phone3;
 
-        var email = getInputTextValue("InputEmail1")+"@"+getInputTextValue("InputEmail");
+                        var email = getInputTextValue("InputEmail1")+"@"+getInputTextValue("InputEmail");
 
-        var zipcode = getInputTextValue("postcode");
-        var addressRoad =getInputTextValue("roadAddress");
-        var addressNumber =getInputTextValue("jibunAddress");
-        var address = getInputTextValue("detailAddress");
+                        var zipcode = getInputTextValue("postcode");
+                        var addressRoad =getInputTextValue("roadAddress");
+                        var addressNumber =getInputTextValue("jibunAddress");
+                        var address = getInputTextValue("detailAddress");
 
-        var userId = getInputTextValue("userId");
-        var pwd = getInputTextValue("pwd");
-        var name = getInputTextValue("name");
-        var indate = getInputTextValue("indate");
-        var birth = getInputTextValue("birth");
-        var recvEmail = $('input[name="recvEmail"]:checked').val();
-        var recvSms = $('input[name="recvSms"]:checked').val();
+                        var userId = getInputTextValue("userId");
+                        var pwd = getInputTextValue("pwd");
+                        var name = getInputTextValue("name");
+                        var indate = getInputTextValue("indate");
+                        var birth = getInputTextValue("birth");
+                        var recvEmail = $('input[name="recvEmail"]:checked').val();
+                        var recvSms = $('input[name="recvSms"]:checked').val();
 
-        var teacherObj = {
-            userKey : 0,
-            cKey : 0,
-            userId : userId,
-            indate : indate,
-            name : name,
-            authority : authority,
-            status : 0, //가입상태
-            pwd : pwd,
-            birth : birth,
-            lunar : "",
-            gender : "",
-            telephone: "",
-            telephoneMobile : phone,
-            zipcode: zipcode,
-            addressRoad : addressRoad,
-            addressNumber : addressNumber,
-            address : address,
-            email : email,
-            recvSms : recvSms,
-            recvEmail : recvEmail,
-            welfareDcPercent : welfareDcPercent,
-            grade : authoritGrade,
-            interestCtgKey0 : interestCtgKey0
-        };
-
-        memberManageService.saveMember(teacherObj, function(info) {});
+                        var teacherObj = {
+                            userKey : 0,
+                            cKey : 0,
+                            userId : userId,
+                            indate : indate,
+                            name : name,
+                            authority : authority,
+                            status : 10, //가입상태
+                            pwd : pwd,
+                            birth : birth,
+                            lunar : "",
+                            gender : "",
+                            telephone: "",
+                            telephoneMobile : phone,
+                            zipcode: zipcode,
+                            addressRoad : addressRoad,
+                            addressNumber : addressNumber,
+                            address : address,
+                            email : email,
+                            recvSms : "",
+                            recvEmail : "",
+                            welfareDcPercent : 0,
+                            grade : authoritGrade,
+                            interestCtgKey0 : Number(interestCtgKey0)
+                        };
+                        console.log(teacherObj);
+                        console.log(teacherInfoObj2);
+                        memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {alert(info);});
+                    }
+                }
+            });
+        }
     }
 </script>
 <div class="page-breadcrumb">
@@ -229,12 +262,14 @@
                         <h3>강사 정보</h3>
                         <section class="col-md-auto">
                             <div id="section2">
+                                <input type="hidden" name="teacherKey" value="0">
+                                <input type="hidden" name="userKey" value="0">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
+                                                <input type="file" class="custom-file-input" id="imageTeacherList"  name="imageTeacherList" required>
                                                 <span class="custom-file-control custom-file-label"></span>
                                             </div>
                                         </div>
@@ -243,34 +278,34 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">뷰 이미지</label>
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input addFile"  id="imageViewFile" name="imageViewFile" required>
+                                                <input type="file" class="custom-file-input addFile"  id="imageTeacherView" name="imageTeacherView" required>
                                                 <span class="custom-file-control1 custom-file-label"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">샘플강의</label>
-                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id="writer">
+                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="sampleVodFile" id="sampleVodFile">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">온라인강좌 정산율</label>
-                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id=""> %
+                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="onlinelecCalculateRate" id="onlinelecCalculateRate"> %
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">오프라인강좌 정산율</label>
-                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id=""> %
+                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="offlinelecCalculateRate" id="offlinelecCalculateRate"> %
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">인사말</label>
-                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;"></textarea>
+                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;" id="greeting" name="greeting"></textarea>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">약력</label>
-                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;"></textarea>
+                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;" name="history"></textarea>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">저서</label>
-                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;"></textarea>
+                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;" id="bookWriting" name="bookWriting"></textarea>
                                     </div>
                                 </div>
                             </div>
