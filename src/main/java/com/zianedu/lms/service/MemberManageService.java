@@ -419,6 +419,20 @@ public class MemberManageService {
     }
 
     /**
+     * 아이디 중복확인 
+     * @param userId
+     * @return
+     */
+    public boolean isUser(String userId) {
+        if ("".equals(userId)) return false;
+        int userCount = memberManageMapper.selectUserCountByUserId(userId);
+        if (userCount > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 회원 추가( 권한이 강사면 강사 테이블 추가 입력 )
      * @param tUserVO
      * @return
@@ -567,6 +581,16 @@ public class MemberManageService {
     public void updateUserInfo(TUserVO tUserVO) {
         if (tUserVO.getUserKey() == 0) return;
         memberManageMapper.updateTUser(tUserVO);
+    }
+
+    /**
+     * 강사정보 수정
+     * @param tTeacherVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateTeacherInfo(TTeacherVO tTeacherVO) {
+        if (tTeacherVO.getTeacherKey() == 0) return;
+        memberManageMapper.updateTTeacher(tTeacherVO);
     }
 
 }
