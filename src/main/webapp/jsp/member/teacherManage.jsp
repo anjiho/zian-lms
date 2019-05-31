@@ -115,6 +115,19 @@
             });
         }
     }
+    
+    function isUserId() {
+        var userId = $("#userId").val();
+        memberManageService.isUser(userId, function(info) {
+            if(info == false){
+                $("#userId").addClass('is-invalid');
+                $("#isChkId").hide();
+            }else{
+                $("#userId").removeClass('is-invalid');
+                $("#isChkId").show();
+            }
+        });
+    }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -154,7 +167,9 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="userId" name="userId">
-                                        <button type="button"  class="btn btn-info btn-sm">중복체크</button>
+                                        <button type="button"  class="btn btn-info btn-sm" onclick="isUserId();">중복체크</button>
+                                        <span class="invalid-feedback">중복된 아이디 입니다.</span>
+                                        <span id="isChkId" style="display: none;margin-top: 0.28rem;font-size: 80%;margin-left: 10px;color: blue;">사용 가능한 아이디 입니다.</span>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -268,7 +283,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
+                                        <div class="col-sm-5 pl-0 pr-0">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="imageTeacherList"  name="imageTeacherList" required>
                                                 <span class="custom-file-control custom-file-label"></span>
@@ -277,7 +292,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">뷰 이미지</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
+                                        <div class="col-sm-5 pl-0 pr-0">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input addFile"  id="imageTeacherView" name="imageTeacherView" required>
                                                 <span class="custom-file-control1 custom-file-label"></span>
