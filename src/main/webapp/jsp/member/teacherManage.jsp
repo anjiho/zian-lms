@@ -76,16 +76,16 @@
                         var userId = getInputTextValue("userId");
                         var pwd = getInputTextValue("pwd");
                         var name = getInputTextValue("name");
-                        var indate = getInputTextValue("indate");
+                        //var indate = getInputTextValue("indate");
                         var birth = getInputTextValue("birth");
-                        var recvEmail = $('input[name="recvEmail"]:checked').val();
-                        var recvSms = $('input[name="recvSms"]:checked').val();
+                        //var recvEmail = $('input[name="recvEmail"]:checked').val();
+                        //var recvSms = $('input[name="recvSms"]:checked').val();
 
                         var teacherObj = {
                             userKey : 0,
                             cKey : 0,
                             userId : userId,
-                            indate : indate,
+                            indate : "",
                             name : name,
                             authority : authority,
                             status : 10, //가입상태
@@ -104,6 +104,7 @@
                             recvEmail : "",
                             welfareDcPercent : 0,
                             grade : authoritGrade,
+                            note : "",
                             interestCtgKey0 : Number(interestCtgKey0)
                         };
                         console.log(teacherObj);
