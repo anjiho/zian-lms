@@ -13,71 +13,6 @@
     }
 
     $( document ).ready(function() {
-        $('textarea[name=description]').summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-        $('#contentList').summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            },
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
@@ -144,9 +79,7 @@
             interestCtgKey0 : interestCtgKey0
         };
 
-        memberManageService.saveMember(teacherObj, function(info) {
-
-        });
+        memberManageService.saveMember(teacherObj, function(info) {});
     }
 </script>
 <div class="page-breadcrumb">
@@ -187,6 +120,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="userId" name="userId">
+                                        <button type="button"  class="btn btn-info btn-sm">중복체크</button>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -247,7 +181,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <!--<div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail 수신여부</label>
                                         <input type="radio" name="recvEmail"  class="custom-radio" value="1">동의&nbsp;
                                         <input type="radio" name="recvEmail"  class="custom-radio" value="0">동의안함
@@ -256,7 +190,7 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">SMS 수신여부</label>
                                         <input type="radio" name="recvSms"  class="custom-radio" value="1">동의&nbsp;
                                         <input type="radio" name="recvSms"  class="custom-radio" value="0">동의안함
-                                    </div>
+                                    </div>-->
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label  mt-4" style="margin-bottom: 0">주소</label>
                                         <div class="col-sm-8 pl-0 pr-0">
@@ -275,12 +209,12 @@
 
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                   <!-- <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">복지할인율</label>
                                         <div class="col-sm-2 pl-0 pr-0">
                                             <span id="welfareDcPercent"></span>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
                                         <div class="col-sm-2 pl-0 pr-0">

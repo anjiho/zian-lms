@@ -10,72 +10,26 @@
     function init() {
         menuActive('menu-5', 4);
         getCategoryList("sel_category","214");
+        getEmailSelectbox('deliveryUserEmail2', '');//이메일
+        getSelectboxListForCtgKey('interestCtgKey0','133', "");
+        getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
+        getAuthoritySelectbox("teacherAuthority","");
+        getAuthorityGradeSelectbox("teacherGrade", "");
     }
+
     $( document ).ready(function() {
-        getCategoryList("sel_category","214");
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
         });
-
-        $("textarea[name=pcdescription]").summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            }
-        });
-        $("textarea[name=mobiledescription]").summernote({ //기본정보-에디터
-            height: 250,
-            minHeight: null,
-            maxHeight: null,
-            focus: false,
-            lang: 'ko-KR',
-            placeholder: '내용을 적어주세요.'
-            ,hint: {
-                match: /:([\-+\w]+)$/,
-                search: function (keyword, callback) {
-                    callback($.grep(emojis, function (item) {
-                        return item.indexOf(keyword) === 0;
-                    }));
-                },
-                template: function (item) {
-                    var content = emojiUrls[item];
-                    return '<img src="' + content + '" width="20" /> :' + item + ':';
-                },
-                content: function (item) {
-                    var url = emojiUrls[item];
-                    if (url) {
-                        return $('<img />').attr('src', url).css('width', 20)[0];
-                    }
-                    return '';
-                }
-            }
-        });
     });
 
+    function emailSelChange(val) {
+        if(val == '1') $('#InputEmail').val('');
+        else $('#InputEmail').val(val);
+    }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
@@ -83,16 +37,6 @@
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-
-    function addDescription(val) {
-        if(val == 'pc'){
-            var desHtml = $("#pcDescription").clone();
-            desHtml.appendTo("#textareaList");
-        }else if(val == 'mobile'){
-            var desHtml = $("#mobileDescription").clone();
-            desHtml.appendTo("#textareaList1");
-        }
-    }
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
@@ -115,6 +59,48 @@
         if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
+
+    //에디터 추가 기능
+    $(function() {
+        $("#add_field_button").click(function (e) {
+            var newProd = $('#prod_form_template')
+                .clone()
+                .removeClass('hide')
+                .removeAttr('id')
+                .appendTo('#prod_list');
+            $('#prod_list').append(newProd);
+            $(newProd).summernote({
+                height: 250,
+                width: 1300,
+                focus: true,
+            });
+        });
+        $('#prod_list textarea').summernote({
+            height: 250,
+            width: 1300,
+            focus: true,
+        });
+    });
+    $(function() {
+        $("#add_field_button1").click(function (e) {
+            var newProd = $('#prod_form_template1')
+                .clone()
+                .removeClass('hide')
+                .removeAttr('id')
+                .appendTo('#prod_list1');
+            $('#prod_list1').append(newProd);
+            $(newProd).summernote({
+                height: 250,
+                width: 1300,
+                focus: true,
+            });
+        });
+        $('#prod_list1 textarea').summernote({
+            height: 250,
+            width: 1300,
+            focus: true,
+        });
+    });
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -209,7 +195,7 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <!--<div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail 수신여부</label>
                                         <input type="radio" name="recvEmail"  class="custom-radio" value="1">동의&nbsp;
                                         <input type="radio" name="recvEmail"  class="custom-radio" value="0">동의안함
@@ -218,7 +204,7 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">SMS 수신여부</label>
                                         <input type="radio" name="recvSms"  class="custom-radio" value="1">동의&nbsp;
                                         <input type="radio" name="recvSms"  class="custom-radio" value="0">동의안함
-                                    </div>
+                                    </div>-->
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label  mt-4" style="margin-bottom: 0">주소</label>
                                         <div class="col-sm-8 pl-0 pr-0">
@@ -237,12 +223,12 @@
 
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <!--<div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">복지할인율</label>
                                         <div class="col-sm-2 pl-0 pr-0">
                                             <span id="welfareDcPercent"></span>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
                                         <div class="col-sm-2 pl-0 pr-0">
@@ -378,16 +364,14 @@
                             <div id="section4">
                                 <div class="col-md-12">
                                     <label class="control-label col-form-label">과목그룹별 설명내용 (PC 전용)</label>
-                                    <button type="button" class="btn btn-outline-secondary" style="float: right;" onclick="addDescription('pc');">추가</button>
-                                    <div id="pcDescription">
-                                        <div class="row">
-                                            <div class="col-md-11">
-                                                <textarea  name="pcdescription"  value=""></textarea>
-                                            </div>
-                                            <a class="fas fa-trash-alt" style='color: red;'></a>
-                                        </div>
+                                    <button type="button" class="btn btn-outline-secondary" style="float: right;" id="add_field_button">추가</button>
+                                    <div id='prod_list'>
+                                        <textarea></textarea>
                                     </div>
-                                    <div id="textareaList"></div>
+                                    <div id='prod_form_template'>
+                                        <textarea  class="hide"></textarea>
+                                        <a class="fas fa-trash-alt" style="color: red"></a>
+                                    </div>
                                 </div>
                             </div>
                         </section>
@@ -397,16 +381,11 @@
                             <div id="section5">
                                 <div class="col-md-12">
                                     <label class="control-label col-form-label">과목그룹별 설명내용 (MOBILE 전용)</label>
-                                    <button type="button" class="btn btn-outline-secondary" style="float: right;" onclick="addDescription('mobile');">추가</button>
-                                    <div id="mobileDescription">
-                                        <div class="row">
-                                            <div class="col-md-11">
-                                                <textarea  name="mobiledescription"  value="" ></textarea>
-                                            </div>
-                                            <a class="fas fa-trash-alt" style='color: red;'></a>
-                                        </div>
-                                     </div>
-                                <div id="textareaList1"></div>
+                                    <button type="button" class="btn btn-outline-secondary" style="float: right;" id="add_field_button1">추가</button>
+                                    <div id='prod_list1'>
+                                        <textarea></textarea>
+                                    </div>
+                                    <textarea id='prod_form_template1' class="hide" size="75">  </textarea>
                                 </div>
                             </div>
                         </section>
