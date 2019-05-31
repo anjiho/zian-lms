@@ -411,6 +411,10 @@
         ORDER BY B.NAME
     </select>
 
+    <select id="selectUserCountByUserId">
+        SELECT COUNT(USER_KEY) FROM T_USER WHERE USER_ID = #{userId}
+    </select>
+
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">
             SELECT T_USER_SEQ.nextval FROM DUAL
@@ -523,6 +527,24 @@
         </set>
         <if test="userKey > 0">
             WHERE USER_KEY = #{userKey}
+        </if>
+    </update>
+
+    <update id="updateTTeacher" parameterType="com.zianedu.lms.vo.TTeacherVO">
+        UPDATE T_TEACHER
+        <set>
+            <if test="imageList != ''">IMAGE_LIST = #{imageList},</if>
+            <if test="imageTeacherList != ''">IMAGE_TEACHER_LIST = #{imageTeacherList},</if>
+            <if test="imageTeacherView != ''">IMAGE_TEACHER_VIEW = #{imageTeacherView},</if>
+            <if test="greeting != ''">GREETING = #{greeting},</if>
+            <if test="history != ''">HISTORY = #{history},</if>
+            <if test="bookWriting != ''">BOOK_WRITING = #{bookWriting},</if>
+            <if test="onlinelecCalculateRate != ''">ONLINELEC_CALCULATE_RATE = #{onlinelecCalculateRate},</if>
+            <if test="offlinelecCalculateRate != ''">OFFLINELEC_CALCULATE_RATE = #{offlinelecCalculateRate},</if>
+            <if test="sampleVodFile != ''">SAMPLE_VOD_FILE = #{sampleVodFile},</if>
+        </set>
+        <if test="teacherKey > 0">
+            WHERE TEACHER_KEY = #{teacherKey}
         </if>
     </update>
 

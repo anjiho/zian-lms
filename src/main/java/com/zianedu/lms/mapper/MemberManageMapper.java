@@ -66,6 +66,8 @@ public interface MemberManageMapper {
 
     List<MemberListDTO> selectSearchTeacherList();
 
+    Integer selectUserCountByUserId(@Param("userId"));
+
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
 
@@ -81,6 +83,8 @@ public interface MemberManageMapper {
     void updateTLinkKeyPos(@Param("linkKey") int linkKey, @Param("pos") int pos);
 
     void updateTUser(TUserVO tUserVO);
+
+    void updateTTeacher(TTeacherVO tTeacherVO);
 
     void updateTUserSecessionObtainDate(@Param("secessionKey") int secessionKey);
 
