@@ -80,6 +80,8 @@ public interface MemberManageMapper {
 
     void updateTLinkKeyPos(@Param("linkKey") int linkKey, @Param("pos") int pos);
 
+    void updateTUser(TUserVO tUserVO);
+
     void updateTUserSecessionObtainDate(@Param("secessionKey") int secessionKey);
 
     void deleteTUserSecession(@Param("secessionKey") int secessionKey);

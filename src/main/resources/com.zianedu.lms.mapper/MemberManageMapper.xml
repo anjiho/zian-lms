@@ -504,6 +504,28 @@
         UPDATE T_USER_SECESSION SET OBTAIN_DATE = sysdate WHERE SECESSION_KEY = #{secessionKey}
     </update>
 
+    <update id="updateTUser" parameterType="com.zianedu.lms.vo.TUserVO">
+        UPDATE T_USER
+        <set>
+            <if test="name != ''">NAME = #{name},</if>
+            <if test="authority > -1">AUTHORITY = #{authority},</if>
+            <if test="status > -1">STATUS = #{status},</if>
+            <if test="userPwd != ''">USER_PWD = #{userPwd},</if>
+            <if test="birth != ''">BIRTH = #{birth},</if>
+            <if test="telephone != ''">TELEPHONE = #{telephone},</if>
+            <if test="telephoneMobile != ''">TELEPHONE_MOBILE = #{telephoneMobile},</if>
+            <if test="zipcode != ''">ZIPCODE = #{zipcode},</if>
+            <if test="addressRoad != ''">ADDRESS_ROAD = #{addressRoad},</if>
+            <if test="addressNumber != ''">ADDRESS_NUMBER = #{addressNumber},</if>
+            <if test="address != ''">ADDRESS = #{address},</if>
+            <if test="email != ''">EMAIL = #{email},</if>
+            <if test="interestCtgKey0 != ''">INTEREST_CTG_KEY_0 = #{interestCtgKey0},</if>
+        </set>
+        <if test="userKey > 0">
+            WHERE USER_KEY = #{userKey}
+        </if>
+    </update>
+
     <delete id="deleteTUserSecession" parameterType="Integer">
         DELETE FROM T_USER_SECESSION WHERE SECESSION_KEY = #{secessionKey}
     </delete>

@@ -559,5 +559,14 @@ public class MemberManageService {
         memberManageMapper.deleteTUserSecession(secessionKey);
     }
 
+    /**
+     * 회원정보 수정
+     * @param tUserVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUserInfo(TUserVO tUserVO) {
+        if (tUserVO.getUserKey() == 0) return;
+        memberManageMapper.updateTUser(tUserVO);
+    }
 
 }
