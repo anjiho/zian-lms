@@ -120,5 +120,6 @@ public class TUserVO implements Serializable {
         this.isMobileReg = tUserVO.getIsMobileReg();
         this.gradePrice = tUserVO.getGradePrice();
         this.note = Util.isNullValue(tUserVO.getNote(), "");
+        this.userPwd = SecurityUtil.encryptSHA256(tUserVO.getPwd());
     }
 }

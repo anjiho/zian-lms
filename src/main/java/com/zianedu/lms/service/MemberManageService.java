@@ -424,13 +424,19 @@ public class MemberManageService {
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public int saveMember(TUserVO tUserVO) throws Exception {
+    public int saveMember(TUserVO tUserVO, TTeacherVO tTeacherVO) throws Exception {
         TUserVO userVO = new TUserVO(tUserVO);
         Integer userKey = memberManageMapper.insertTUSer(userVO);
         if (userKey != null) {
             //강사면 강사 테이블 저장
             if (tUserVO.getAuthority() == 5) {
-                memberManageMapper.insertTTeacher(userKey);
+                TTeacherVO vo = new TTeacherVO(
+                        tUserVO.getUserKey(), Util.isNullValue(tTeacherVO.getImageList(), ""), Util.isNullValue(tTeacherVO.getImageTeacherList(), ""),
+                        Util.isNullValue(tTeacherVO.getImageTeacherView(), ""), Util.isNullValue(tTeacherVO.getGreeting(), ""),
+                        Util.isNullValue(tTeacherVO.getHistory(), ""), Util.isNullValue(tTeacherVO.getBookWriting(), ""),
+                        tTeacherVO.getOnlinelecCalculateRate(), tTeacherVO.getOfflinelecCalculateRate(), Util.isNullValue(tTeacherVO.getSampleVodFile(), "")
+                );
+                memberManageMapper.insertTTeacher(vo);
             }
         }
         return userKey;
@@ -553,5 +559,14 @@ public class MemberManageService {
         memberManageMapper.deleteTUserSecession(secessionKey);
     }
 
+    /**
+     * 회원정보 수정
+     * @param tUserVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUserInfo(TUserVO tUserVO) {
+        if (tUserVO.getUserKey() == 0) return;
+        memberManageMapper.updateTUser(tUserVO);
+    }
 
 }

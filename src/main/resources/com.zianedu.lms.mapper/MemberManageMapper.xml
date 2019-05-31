@@ -411,6 +411,10 @@
         ORDER BY B.NAME
     </select>
 
+    <select id="selectUserCountByUserId">
+        SELECT COUNT(USER_KEY) FROM T_USER WHERE USER_ID = #{userId}
+    </select>
+
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">
             SELECT T_USER_SEQ.nextval FROM DUAL
@@ -420,14 +424,14 @@
             USER_KEY, C_KEY, USER_ID, INDATE, NAME, AUTHORITY, STATUS, PWD, BIRTH, LUNAR, GENDER, TELEPHONE,
             TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, EMAIL, RECV_SMS, RECV_EMAIL,
             WELFARE_DC_PERCENT, GRADE, INTEREST_CTG_KEY_0, INTEREST_CTG_KEY_1, IS_MOBILE_REG,
-            ADMIN_AUTHORITY_KEY, GRADE_G_KEY, GRADE_PRICE, NOTE
+            ADMIN_AUTHORITY_KEY, GRADE_G_KEY, GRADE_PRICE, NOTE, USER_PWD
         )
         VALUES
         (
             #{userKey}, 100, #{userId}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
             #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{email}, #{recvSms}, #{recvEmail},
             0, #{grade}, #{interestCtgKey0}, 0, #{isMobileReg},
-            #{adminAuthorityKey}, 0, #{gradePrice}, #{note}
+            #{adminAuthorityKey}, 0, #{gradePrice}, #{note}, #{userPwd}
         )
     </insert>
 
@@ -450,11 +454,20 @@
         )
     </insert>
 
-    <insert id="insertTTeacher" parameterType="Integer">
+    <insert id="insertTTeacher" parameterType="com.zianedu.lms.vo.TTeacherVO">
+        <selectKey resultType="Integer" keyProperty="teacherKey" order="BEFORE">
+            SELECT T_TEACHER_SEQ.nextval FROM DUAL
+        </selectKey>
         INSERT INTO T_TEACHER
-        ( TEACHER_KEY, USER_KEY )
+        (
+            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_VIEW, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW,
+            GREETING, HISTORY, BOOK_WRITING, ONLINELEC_CALCULATE_RATE, OFFLINELEC_CALCULATE_RATE, SAMPLE_VOD_FILE
+        )
         VALUES
-        ( T_TEACHER_SEQ.nextval, #{userKey})
+        (
+            #{teacherKey}, #{userKey}, #{imageList}, #{imageView}, #{imageTeacherList}, #{imageTeacherView},
+            #{greeting}, #{history}, #{bookWriting}, #{onlinelecCalculateRate}, #{offlinelecCalculateRate}, #{sampleVodFile}
+        )
     </insert>
 
     <insert id="insertScTran" parameterType="com.zianedu.lms.vo.ScTranVO">
@@ -493,6 +506,46 @@
 
     <update id="updateTUserSecessionObtainDate" parameterType="Integer">
         UPDATE T_USER_SECESSION SET OBTAIN_DATE = sysdate WHERE SECESSION_KEY = #{secessionKey}
+    </update>
+
+    <update id="updateTUser" parameterType="com.zianedu.lms.vo.TUserVO">
+        UPDATE T_USER
+        <set>
+            <if test="name != ''">NAME = #{name},</if>
+            <if test="authority > -1">AUTHORITY = #{authority},</if>
+            <if test="status > -1">STATUS = #{status},</if>
+            <if test="userPwd != ''">USER_PWD = #{userPwd},</if>
+            <if test="birth != ''">BIRTH = #{birth},</if>
+            <if test="telephone != ''">TELEPHONE = #{telephone},</if>
+            <if test="telephoneMobile != ''">TELEPHONE_MOBILE = #{telephoneMobile},</if>
+            <if test="zipcode != ''">ZIPCODE = #{zipcode},</if>
+            <if test="addressRoad != ''">ADDRESS_ROAD = #{addressRoad},</if>
+            <if test="addressNumber != ''">ADDRESS_NUMBER = #{addressNumber},</if>
+            <if test="address != ''">ADDRESS = #{address},</if>
+            <if test="email != ''">EMAIL = #{email},</if>
+            <if test="interestCtgKey0 != ''">INTEREST_CTG_KEY_0 = #{interestCtgKey0},</if>
+        </set>
+        <if test="userKey > 0">
+            WHERE USER_KEY = #{userKey}
+        </if>
+    </update>
+
+    <update id="updateTTeacher" parameterType="com.zianedu.lms.vo.TTeacherVO">
+        UPDATE T_TEACHER
+        <set>
+            <if test="imageList != ''">IMAGE_LIST = #{imageList},</if>
+            <if test="imageTeacherList != ''">IMAGE_TEACHER_LIST = #{imageTeacherList},</if>
+            <if test="imageTeacherView != ''">IMAGE_TEACHER_VIEW = #{imageTeacherView},</if>
+            <if test="greeting != ''">GREETING = #{greeting},</if>
+            <if test="history != ''">HISTORY = #{history},</if>
+            <if test="bookWriting != ''">BOOK_WRITING = #{bookWriting},</if>
+            <if test="onlinelecCalculateRate != ''">ONLINELEC_CALCULATE_RATE = #{onlinelecCalculateRate},</if>
+            <if test="offlinelecCalculateRate != ''">OFFLINELEC_CALCULATE_RATE = #{offlinelecCalculateRate},</if>
+            <if test="sampleVodFile != ''">SAMPLE_VOD_FILE = #{sampleVodFile},</if>
+        </set>
+        <if test="teacherKey > 0">
+            WHERE TEACHER_KEY = #{teacherKey}
+        </if>
     </update>
 
     <delete id="deleteTUserSecession" parameterType="Integer">
