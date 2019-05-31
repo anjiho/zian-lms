@@ -107,11 +107,13 @@ public class TUserVO implements Serializable {
         this.birth = Util.isNullValue(tUserVO.getBirth(), "");
         this.lunar = tUserVO.getLunar();
         this.gender = tUserVO.getGender();
-        this.telephone = Util.isNullValue(Aes256.encrypt(tUserVO.getTelephone()), "");
-        this.telephoneMobile = Util.isNullValue(Aes256.encrypt(tUserVO.getTelephoneMobile()), "");
+        this.telephone = Util.isNullValue(tUserVO.getTelephone(), "");
+        this.telephoneMobile = Util.isNullValue(tUserVO.getTelephoneMobile(), "");
         this.zipcode = Util.isNullValue(tUserVO.getZipcode(), "");
+        this.addressRoad = Util.isNullValue(tUserVO.getAddressRoad(), "");
+        this.addressNumber = Util.isNullValue(tUserVO.getAddressNumber(), "");
         this.address = Util.isNullValue(tUserVO.getAddress(), "");
-        this.email = Util.isNullValue(Aes256.encrypt(tUserVO.getEmail()), "");
+        this.email = Util.isNullValue(tUserVO.getEmail(), "");
         this.recvSms = tUserVO.getRecvSms();
         this.recvEmail = tUserVO.getRecvEmail();
         this.grade = tUserVO.getGrade();
