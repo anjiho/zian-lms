@@ -612,4 +612,13 @@ public class MemberManageService {
         productManageMapper.insertTLinkKey(tLinkKeyVO);
     }
 
+    /**
+     * 강사 카테고리 삭제
+     * @param resKey
+     */
+    public void deleteTeacherCategory(int resKey) {
+        if (resKey == 0) return;
+        productManageMapper.deleteTLinkKeyByResKey(resKey);
+    }
+
 }
