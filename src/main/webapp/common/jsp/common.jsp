@@ -92,6 +92,9 @@
     <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.8/summernote.js"></script>
     <!-- dwr common -->
     <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
+
+    <!--daum map api-->
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">

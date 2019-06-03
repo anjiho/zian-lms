@@ -8,7 +8,6 @@
     }
     function saveClassfication(){ /* 분류저장 */
         var subject =  getInputTextValue("subject");
-        alert(subject);
         if(subject != ""){
             if(confirm("과목추가 하시겠습니까?")) {
                 dataManageService.saveClassficationInfo("SUBJECT", subject, function () {isReloadPage(true);});
@@ -66,7 +65,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="form-group row" style="margin-bottom: 0px;">
-                        <label  class="col-sm-3 text-center control-label col-form-label card-title"">과목등록</label>
+                        <label  class="col-sm-3 text-center control-label col-form-label card-title">과목등록</label>
                             <div class="col-sm-7">
                                 <input type="text" class="form-control" width="50px" id="subject" required="required">
                             </div>

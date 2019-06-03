@@ -107,8 +107,6 @@
                             note : "",
                             interestCtgKey0 : Number(interestCtgKey0)
                         };
-                        console.log(teacherObj);
-                        console.log(teacherInfoObj2);
                         memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {alert(info);});
                     }
                 }
