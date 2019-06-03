@@ -594,4 +594,22 @@ public class MemberManageService {
         memberManageMapper.updateTTeacher(tTeacherVO);
     }
 
+    /**
+     * 과목그룹별 설명내용 저장
+     * @param tResVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertTResAtTeacherSubject(TResVO tResVO) {
+        productManageMapper.insertTResAtTeacherSubject(tResVO);
+    }
+
+    /**
+     * 강사 카테고리 저장
+     * @param tLinkKeyVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertTeacherCategory(TLinkKeyVO tLinkKeyVO) {
+        productManageMapper.insertTLinkKey(tLinkKeyVO);
+    }
+
 }
