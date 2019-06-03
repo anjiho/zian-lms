@@ -734,7 +734,7 @@
                         <h3>옵션</h3>
                         <section>
                             <div class="float-right mb-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateOptionInfo();">수정</button>
+                                <!--<button type="button" class="btn btn-outline-primary btn-sm" onclick="updateOptionInfo();">수정</button>-->
                                 <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
                             </div>
                             <div id="section2">
@@ -762,7 +762,7 @@
                         <h3>카테고리</h3>
                         <section>
                             <div class="float-right mb-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateCategoryInfo();">수정</button>
+                                <!--<button type="button" class="btn btn-outline-primary btn-sm" onclick="updateCategoryInfo();">수정</button>-->
                                 <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo()">추가</button>
                             </div>
                             <div id="section3">

@@ -15,16 +15,64 @@
         getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
         getAuthoritySelectbox("teacherAuthority","");
         getAuthorityGradeSelectbox("teacherGrade", "");
-    }
 
-    $( document ).ready(function() {
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
         });
-    });
+
+        //강사 기본정보 가져오기
+        memberManageService.getMemberDetailInfo(userKey, function (info) {
+            var result = info.result;
+            innerValue("userId", result.userId);
+            innerValue("name", result.name);
+            innerValue("pwd", result.pwd);
+            innerValue("indeate", result.indate);
+            innerValue("birth", result.birth);
+
+            var phoneNum = result.telephoneMobile;
+            var phoneNumSplit = phoneNum.split("-");
+            innerValue("phone1", phoneNumSplit[0]);
+            innerValue("phone2", phoneNumSplit[1]);
+            innerValue("phone3", phoneNumSplit[2]);
+
+            var emailStr = result.email;
+            var emailSplit = emailStr.split("@");
+            innerValue("InputEmail", emailSplit[1]);
+            innerValue("InputEmail1", emailSplit[0]);
+
+            getAuthoritySelectbox("teacherAuthority", result.authority);
+            getAuthorityGradeSelectbox("teacherGrade", result.grade);
+
+            innerValue("postcode", result.zipcode);
+            innerValue("roadAddress", result.addressRoad);
+            innerValue("jibunAddress", result.addressNumber);
+            innerValue("detailAddress", result.address);
+
+            getSelectboxListdivisionCtgKey('interestCtgKey0','133', result.interestCtgKey0);
+        });
+
+        //강사정보 가져오기
+        memberManageService.getTeacherDetailInfo(userKey, function (info) {
+            console.log(info);
+            var teacherInfo = info.teacherInfo;
+            if (teacherInfo.imageTeacherList != null) {
+                $('.custom-file-control').html(fn_clearFilePath(teacherInfo.imageTeacherList));//리스트이미지
+            }
+            if (teacherInfo.imageTeacherView != null) {
+                $('.custom-file-control1').html(fn_clearFilePath(teacherInfo.imageTeacherView));//상세이미지
+            }
+            innerValue("sampleVodFile", teacherInfo.sampleVodFile);
+            innerValue("onlinelecCalculateRate", teacherInfo.onlinelecCalculateRate);
+            innerValue("offlinelecCalculateRate", teacherInfo.offlinelecCalculateRate);
+            innerValue("greeting", teacherInfo.greeting);
+            innerValue("history", teacherInfo.history);
+            innerValue("bookWriting", teacherInfo.bookWriting);
+
+        });
+    }
 
     function emailSelChange(val) {
         if(val == '1') $('#InputEmail').val('');
@@ -249,7 +297,7 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
+                                                <input type="file" class="custom-file-input" id="imageTeacherList"  name="imageTeacherList" required>
                                                 <span class="custom-file-control custom-file-label"></span>
                                             </div>
                                         </div>
@@ -258,34 +306,34 @@
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">뷰 이미지</label>
                                         <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input addFile"  id="imageViewFile" name="imageViewFile" required>
+                                                <input type="file" class="custom-file-input addFile"  id="imageTeacherView" name="imageTeacherView" required>
                                                 <span class="custom-file-control1 custom-file-label"></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">샘플강의</label>
-                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id="writer">
+                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="sampleVodFile">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">온라인강좌 정산율</label>
-                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id=""> %
+                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id="onlinelecCalculateRate"> %
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">오프라인강좌 정산율</label>
-                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id=""> %
+                                        <input type="number" class="col-sm-3 form-control" style="display: inline-block;" name="writer" id="offlinelecCalculateRate"> %
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">인사말</label>
-                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;"></textarea>
+                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;" id="greeting"></textarea>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">약력</label>
-                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;"></textarea>
+                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;" id="history"></textarea>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">저서</label>
-                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;"></textarea>
+                                        <textarea class="col-sm-6 form-control" style="height: 150px;width: 2000px;" id="bookWriting"></textarea>
                                     </div>
                                 </div>
                             </div>

@@ -82,7 +82,6 @@
              */
             var resultList = info.resultList;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-            console.log(resultList);
             if(resultList.length == 0){
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},

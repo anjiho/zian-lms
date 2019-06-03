@@ -64,7 +64,7 @@
                         var phone1 = getInputTextValue("phone1");
                         var phone2 = getInputTextValue("phone2");
                         var phone3 = getInputTextValue("phone3");
-                        var phone = phone1+phone2+phone3;
+                        var phone = phone1+"-"+ phone2+"-"+phone3;
 
                         var email = getInputTextValue("InputEmail1")+"@"+getInputTextValue("InputEmail");
 
@@ -167,7 +167,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="userId" name="userId">
-                                        <button type="button"  class="btn btn-info btn-sm" onclick="isUserId();">중복체크</button>
+                                        <button type="button"  class="btn btn-default2" onclick="isUserId();">중복체크</button>
                                         <span class="invalid-feedback">중복된 아이디 입니다.</span>
                                         <span id="isChkId" style="display: none;margin-top: 0.28rem;font-size: 80%;margin-left: 10px;color: blue;">사용 가능한 아이디 입니다.</span>
                                     </div>

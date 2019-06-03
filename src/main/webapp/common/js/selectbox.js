@@ -1168,18 +1168,29 @@ function searchCounselSelectBox(tagId) {
     innerHTML(tagId, html);
 }
 
+//강사정보 권한
 function getAuthoritySelectbox(tagId, val) {
     var html = "<select id='authoritSel' class='form-control'>";
-    html += "<option value=0>관리자</option>";
-    html += "<option value=5>강사</option>";
+    var selected = "";
+
+    if(val == '0') selected = 'selected';
+    else if(val == '5') selected = 'selected';
+
+    html += "<option value=0 "+ selected +">관리자</option>";
+    html += "<option value=5 "+ selected +">강사</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
 
+//강사정보 관리자권한등급
 function getAuthorityGradeSelectbox(tagId, val) {
     var html = "<select id='authoritGradeSel' class='form-control'>";
-    html += "<option value=0>관리자</option>";
-    html += "<option value=5>강사</option>";
+    var selected = "";
+
+    if(val == '0') selected = 'selected';
+    else if(val == '5') selected = 'selected';
+    html += "<option value=0 "+ selected +">관리자</option>";
+    html += "<option value=5 "+ selected +">강사</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

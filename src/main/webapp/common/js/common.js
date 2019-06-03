@@ -1927,7 +1927,7 @@ function phoneNumber_sum(phone1, phone2, phone3) {
     var phone1 = $("#" + phone1).val();
     var phone2 = $("#" + phone2).val();
     var phone3 = $("#" + phone3).val();
-    var allPhoneNum = phone1 + phone2 + phone3;
+    var allPhoneNum = phone1+"-"+ phone2+"-"+phone3;
     return allPhoneNum;
 
 }
@@ -1946,6 +1946,8 @@ function get_allphonenum(phone1, phone2, phone3) {
     var all_phonenum = phonenum1 + phonenum2 + phonenum3;
     return all_phonenum;
 }
+
+
 
 //쌍따옴표 제거
 function remove_double_quotation(val) {
