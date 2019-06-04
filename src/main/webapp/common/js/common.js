@@ -1995,6 +1995,8 @@ function get_array_values_by_name(type, name) {
     return array;
 }
 
+
+
 //브라우저 종류 값 가져오기
 function get_browser_type() {
     var browser = "";

@@ -15,8 +15,9 @@
         getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
         getAuthoritySelectbox("teacherAuthority","");
         getAuthorityGradeSelectbox("teacherGrade", "");
-        getNewSelectboxListForCtgKey2("pcSubjectSel", "70", "");
-        getNewSelectboxListForCtgKey4("mobileSubjectSel", "70", "");
+        //getNewSelectboxListForCtgKey5("pcSubjectSel", "3710", ""); //pc에디터 과목 셀렉트박스
+        getTeacherSubjectCategoryList("pcSubjectSel","");
+        getTeacherSubjectCategoryList1("mobileSubjectSel", "70", "");
 
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
@@ -28,7 +29,6 @@
         //강사 기본정보 가져오기
         memberManageService.getMemberDetailInfo(userKey, function (info) {
             var result = info.result;
-            console.log(result);
             innerValue("userId", result.userId);
             innerValue("name", result.name);
             innerValue("pwd", result.pwd);
@@ -59,7 +59,6 @@
 
         //강사정보 가져오기
         memberManageService.getTeacherDetailInfo(userKey, function (info) {
-            console.log(info);
             var teacherInfo = info.teacherInfo;
             if (teacherInfo.imageTeacherList != null) {
                 $('.custom-file-control').html(fn_clearFilePath(teacherInfo.imageTeacherList));//리스트이미지
@@ -116,6 +115,28 @@
                 tr.children().eq(0).attr("style", "display:none");
                 tr.children().eq(11).attr("style", "display:none");
             });
+
+            /*과목별 그룹 설명내용*/
+            var subjectGroupInfo = info.subjectGroupInfo;
+            console.log(subjectGroupInfo);
+            for(var i=0; i < subjectGroupInfo.length; i++){
+                var cmpList = subjectGroupInfo[i];
+                if(cmpList.device == 1){
+                    var cmpList = subjectGroupInfo[i];
+                    var cellData = [
+                        function() {return cmpList.resKey;},
+                        function() {return cmpList.valueText;}
+                    ];
+                    dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
+                }else if(cmpList.device == 3){ //mobile
+                    var cmpList = subjectGroupInfo[i];
+                    var cellData = [
+                        function() {return cmpList.resKey;},
+                        function() {return cmpList.valueText;}
+                    ];
+                    dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});
+                }
+            }
         });
     }
 
@@ -160,102 +181,16 @@
     //에디터 추가 기능
     $(function() {
         $("#add_field_button").click(function (e) {
-            $("#mobileSubjectSel").show();
-            $("#newCateLabel").show();
-                var newProd = $('#prod_form_template')
-                    .clone()
-                    .removeClass('hide')
-                    .removeAttr('id')
-                    .appendTo('#newList');
-                var selectCate =  $("#mobileSubjectSel").clone();
-                var newCateLabel =  $("#newCateLabel").clone();
-                $('#newList').append(newProd);
-                $('#newList').append(selectCate);
-                $('#newList').append(newCateLabel);
-                $('#newList').append(newProd);
-                    $(newProd).summernote({
-                        height: 250,
-                        width: 1300,
-                        placeholder: '내용을 적어주세요1.',
-                        popover: {
-                            image: [],
-                            link: [],
-                            air: []
-                        }
-                    });
-        });
-        $('#prod_list textarea').summernote({
-            height: 250,
-            width: 1300,
-            placeholder: '내용을 적어주세요1.',
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-    });
-   /* $(function() {
-        $("#add_field_button").click(function (e) {
-            if($("#selSubjectCtgKey").val() == ""){
-                alert("카테고리를 선택해 주세요.");
-                return false;
-            }else{
-                var cateKey = get_array_values_by_name("input", "cateKey");
-                $.each(cateKey, function(index, key) {
-                   if(key == ""){
-                       $("#prod_list").show();
-                       $('#prod_list textarea').summernote({
-                           height: 250,
-                           width: 1300,
-                           placeholder: '내용을 적어주세요.',
-                           popover: {
-                               image: [],
-                               link: [],
-                               air: []
-                           }
-                       });
-
-                       $("input[name=cateKey]").val($("#selSubjectCtgKey").val());
-
-                       var cateText = $("#selSubjectCtgKey option:selected").text();
-                       var name = $("#name").val();
-                       cateStr = name+"  "+ ">" +"  "+cateText;
-                       var html = "<div class='note-btn-group btn-group'>";
-                       html += cateStr;
-                       html += "</div>";
-                       $(".note-toolbar").append(html);
-                   }else{
-                       var newProd = $('#prod_list')
-                           .clone()
-                           .removeClass('hide')
-                           .removeAttr('id')
-                           .appendTo('#prod_form_template');
-                       $('#prod_form_template').append(newProd);
-                       $(newProd).summernote({
-                           height: 250,
-                           width: 1300,
-                           placeholder: '내용을 적어주세요1.',
-                           popover: {
-                               image: [],
-                               link: [],
-                               air: []
-                           }
-                       });
-                   }
-                });
-            }
-        });
-    });*/
-    $(function() {
-        $("#add_field_button1").click(function (e) {
-            var newProd = $('#prod_form_template1')
+            var newProd = $('.pcContent')
                 .clone()
                 .removeClass('hide')
-
                 .removeAttr('id')
-                .appendTo('#prod_list1');
-            $('#prod_list1').append(newProd);
+                .appendTo('#newList');
+            var newSel = $("#pcSubjectSel").clone();
+            var newLabel = $("#cateLabel").clone();
+            $('#newList').append(newLabel);
+            $('#newList').append(newSel);
+            $('#newList').append(newProd);
             $(newProd).summernote({
                 height: 250,
                 width: 1300,
@@ -267,10 +202,10 @@
                 }
             });
         });
-        $('#prod_list1 textarea').summernote({
+        $('.pcContent').summernote({
             height: 250,
             width: 1300,
-            placeholder: '내용을 적어주세요.',
+            placeholder: '내용을 적어주세요1.',
             popover: {
                 image: [],
                 link: [],
@@ -278,7 +213,41 @@
             }
         });
     });
-    
+    //에디터 추가 기능
+    $(function() {
+        $("#add_field_button1").click(function (e) {
+            var newProd = $('.mobileContent')
+                .clone()
+                .removeClass('hide')
+                .removeAttr('id')
+                .appendTo('#newList1');
+            var newSel = $("#mobileSubjectSel").clone();
+            var newLabel = $("#cateLabel1").clone();
+            $('#newList1').append(newLabel);
+            $('#newList1').append(newSel);
+            $('#newList1').append(newProd);
+            $(newProd).summernote({
+                height: 250,
+                width: 1300,
+                placeholder: '내용을 적어주세요.',
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
+        });
+        $('.mobileContent').summernote({
+            height: 250,
+            width: 1300,
+            placeholder: '내용을 적어주세요1.',
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
+    });
     function modifyBasicInfo() {
         var authority = getSelectboxValue("authoritSel");//권한
         var authoritGrade = getSelectboxValue("authoritGradeSel");//권한등급
@@ -407,40 +376,48 @@
             }
         //}
     }
+
     function teacherPcSubjectInfoSave() {
         var teacherKey = getInputTextValue("teacherKey");
-        var subjectCtgKey = get_array_values_by_name("select", "subjectCtgKey");
-
-        var arr = [];
-        $('.note-editable').each(function () {
-            arr.push($(this).text());
-        });
-
-        $.each(arr, function (index, key) {
-            console.log(index+"."+key);
-        });
+        var subjectCtgKey = get_array_values_by_name("select", "subjectCtgKey"); //카테고리 키값
 
 
         $.each(subjectCtgKey, function(index, key) {
-            if(index != 1){
-                var data = {
-                    resKey : 0,
-                    type : 0,
-                    device : 1,
-                    key00 : teacherKey,
-                    key02 : key,
-                   // valueText : ,
-                };
-            }
+            var data = {};
+            data.resKey = 0;
+            data.type = 0;
+            data.device = 1;
+            data.key00 = teacherKey;
+            data.key02 = key;
+            data.key01 = 0;
+            data.key00Type = 0;
+            data.key01Type = 0;
+            data.key02Type = 0;
+            data.value = "";
+            data.valueText = $('.pcContent').eq(index).val();
+          memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
         });
-
-        /*(memberManageService.insertTResAtTeacherSubject(data, function () {
-            isReloadPage(true);
-            $("#description").summernote("code", selList.productInfo.description);
-        });*/
     }
+
     function teacherMobileSubjectInfoSave() {
-        
+        var teacherKey = getInputTextValue("teacherKey");
+        var mobileSubjectCtgKey = get_array_values_by_name("select", "subjectCtgKey1"); //카테고리 키값
+
+        $.each(mobileSubjectCtgKey, function(index, key) {
+            var data = {};
+            data.resKey = 0;
+            data.type = 0;
+            data.device = 3;
+            data.key00 = teacherKey;
+            data.key02 = key;
+            data.key01 = 0;
+            data.key00Type = 0;
+            data.key01Type = 0;
+            data.key02Type = 0;
+            data.value = "";
+            data.valueText = $('.mobileContent').eq(index).val();
+            memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
+        });
     }
 </script>
 <div class="page-breadcrumb">
@@ -665,8 +642,8 @@
                             </div>
                         </section>
                         <!-- //3.카테고리 목록 Tab -->
-                        <!-- 2 강사 정보 -->
-                        <h3>과목그룹별 설명내용(PC 전용)</h3>
+                        <!-- 과목그룹 PC -->
+                        <h3>과목그룹별 설명내용(PC)</h3>
                         <section>
                             <div id="section4">
                                 <div class="col-md-12">
@@ -674,49 +651,42 @@
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="teacherPcSubjectInfoSave();">수정</button>
                                         <button type="button" class="btn btn-info btn-sm" id="add_field_button">추가</button>
                                     </div>
-                                    <!--<div id='prod_list'>
-                                       <textarea></textarea>
-                                    </div>
-                                    <div id='prod_form_template'>
-                                        <span id="mobileSubjectSel" style="display: none;"></span>
-                                        <textarea  class="hide"></textarea>
-                                    </div>-->
-                                    <div id="prod_list">
-                                        <label class="col-sm-2 control-label col-form-label">카테고리 선택</label>
-                                        <span id="pcSubjectSel"></span>
-                                        <textarea  class="textAreaList" ></textarea>
-                                    </div>
-                                    <div style="display: none;">
-                                        <label class="col-sm-2 control-label col-form-label" id="newCateLabel" style="display: none;">카테고리 선택</label>
-                                        <span id="mobileSubjectSel" style="display: none;"></span>
-                                    </div>
-                                    <div id='prod_form_template'>
-                                        <textarea  class="hide textAreaList"  style="width: 10px;"></textarea>
-                                    </div>
-                                    <div id="newList">
-                                    </div>
+                                    <table id="prod_list">
+                                        <tbody id="newList">
+                                            <tr>
+                                                <label class="col-sm-2 control-label col-form-label" id="cateLabel">카테고리 선택</label>
+                                                <span id="pcSubjectSel"></span>
+                                                <textarea name="pcContent" class="pcContent"></textarea>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </section>
-                        <!--// 2 강사 정보 -->
-                        <h3>과목그룹별 설명내용(Mobile 전용)</h3>
-                        <section class="col-md-auto">
+                        <!-- //과목그룹 PC -->
+                        <!-- 과목그룹 Mobile -->
+                        <!-- 과목그룹 PC -->
+                        <h3>과목그룹별 설명내용(MOBILE 전용)</h3>
+                        <section>
                             <div id="section5">
                                 <div class="col-md-12">
                                     <div class="float-right mb-3">
                                         <button type="button" class="btn btn-outline-primary btn-sm" onclick="teacherMobileSubjectInfoSave();">수정</button>
                                         <button type="button" class="btn btn-info btn-sm" id="add_field_button1">추가</button>
                                     </div>
-                                    <!--<div id='prod_list1'>
-                                        <textarea></textarea>
-                                    </div>-->
-                                    <div id='prod_form_template1'>
-                                        <textarea  class="hide"></textarea>
-                                        <a class="fas fa-trash-alt" style="color: red"></a>
-                                    </div>
+                                    <table id="prod_list1">
+                                        <tbody id="newList1">
+                                        <tr>
+                                            <label class="col-sm-2 control-label col-form-label" id="cateLabel1">카테고리 선택</label>
+                                            <span id="mobileSubjectSel"></span>
+                                            <textarea name="mobileContent" class="mobileContent"></textarea>
+                                        </tr>
+                                        </tbody>
+                                    </table>
                                 </div>
                             </div>
                         </section>
+                        <!-- //과목그룹 Mobile -->
                     </div>
                 </div>
             </div>

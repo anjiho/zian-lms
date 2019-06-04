@@ -249,6 +249,23 @@ function getNewSelectboxListForCtgKey4(tag_id, val, val2) {
     });
 }
 
+//급수,과목,유형
+function getNewSelectboxListForCtgKey5(tag_id, val, val2) {
+    selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var html = "<select name='subjectCtgKey' class=\"col-sm-5 select2 form-control custom-select\">";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val2) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            } else {
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
 
 //선생님 리스트
 function selectTeacherSelectbox(tag_id,val) {
@@ -431,6 +448,26 @@ function getCategoryNoTag(tableId, val, tdNum) {
     });
 }
 
+
+//강사관리 - 과목 셀렉트박스
+function getTeacherSubjectCategoryList2(tagId, val, index) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+
+
 //학원강의 등록 카테고리
 function getCategoryNoTag2(tableId, val, tdNum) {
     var nextTdNum = Number(tdNum)+2;
@@ -450,6 +487,40 @@ function getCategoryNoTag2(tableId, val, tdNum) {
 function getMockCategoryList(tagId, val) {
     selectboxService.getCategoryList(688, function (list) {
         var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+//강사관리 - 과목 셀렉트박스
+function getTeacherSubjectCategoryList(tagId, val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value='' selected>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
+
+function getTeacherSubjectCategoryList1(tagId, val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey1' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if(list[i].ctgKey == val){

@@ -575,7 +575,7 @@
 		)
 		VALUES
 		(
-			#{resKey}, 2, #{device}, #{teacherKey}, #{ctgKey}, 0, 200, 100, 0, '', #{valueText}
+			#{resKey}, 2, #{device}, #{key00}, #{key02}, 0, 200, 100, 0, '', #{valueText}
 		)
 	</insert>
 
