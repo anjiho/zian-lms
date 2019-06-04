@@ -1927,7 +1927,7 @@ function phoneNumber_sum(phone1, phone2, phone3) {
     var phone1 = $("#" + phone1).val();
     var phone2 = $("#" + phone2).val();
     var phone3 = $("#" + phone3).val();
-    var allPhoneNum = phone1 + phone2 + phone3;
+    var allPhoneNum = phone1+"-"+ phone2+"-"+phone3;
     return allPhoneNum;
 
 }
@@ -1946,6 +1946,8 @@ function get_allphonenum(phone1, phone2, phone3) {
     var all_phonenum = phonenum1 + phonenum2 + phonenum3;
     return all_phonenum;
 }
+
+
 
 //쌍따옴표 제거
 function remove_double_quotation(val) {
@@ -2484,4 +2486,53 @@ function deleteTableRow(tableId, className) {
         var rowspan = $("."+cls).length;
         $("."+cls+":first td:eq(0)").attr("rowspan", rowspan);
     }
+}
+
+//다음지도
+function execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            var extraRoadAddr = ''; // 참고 항목 변수
+
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                extraRoadAddr += data.bname;
+            }
+
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+
+            if(extraRoadAddr !== ''){
+                extraRoadAddr = ' (' + extraRoadAddr + ')';
+            }
+
+            document.getElementById('postcode').value = data.zonecode;
+            document.getElementById("roadAddress").value = roadAddr;
+            document.getElementById("jibunAddress").value = data.jibunAddress;
+
+            // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+            /*if(roadAddr !== ''){
+                document.getElementById("extraAddress").value = extraRoadAddr;
+            } else {
+                document.getElementById("extraAddress").value = '';
+            }*/
+
+            var guideTextBox = document.getElementById("guide");
+            // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+            if(data.autoRoadAddress) {
+                var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                guideTextBox.style.display = 'block';
+
+            } else if(data.autoJibunAddress) {
+                var expJibunAddr = data.autoJibunAddress;
+                guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                guideTextBox.style.display = 'block';
+            } else {
+                guideTextBox.innerHTML = '';
+                guideTextBox.style.display = 'none';
+            }
+        }
+    }).open();
 }

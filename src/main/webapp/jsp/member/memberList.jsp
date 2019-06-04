@@ -48,18 +48,19 @@
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 memberManageService.getMemeberList(sPage, 10, searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
+                    alert(selList);
                         if (selList.length == 0) return;
                        dwr.util.addRows("dataList", selList, [
                             function(data) {return data.userKey == null ? "-" : data.userKey;},
                             function(data) {return data.userId == null ? "-" : data.userId;},
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
                             function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
-                           function(data) {return data.email == null ? "-" : data.email;},
-                           function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
-                           function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
-                           function(data) {return data.gradeName == null ? "-" : data.gradeName;},
-                           function(data) {return data.authorityName == null ? "-" : data.authorityName;},
-                           function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                            function(data) {return data.email == null ? "-" : data.email;},
+                            function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
+                            function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
+                            function(data) {return data.gradeName == null ? "-" : data.gradeName;},
+                            function(data) {return data.authorityName == null ? "-" : data.authorityName;},
+                            function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                         ], {escapeHtml:false});
                     });
             });

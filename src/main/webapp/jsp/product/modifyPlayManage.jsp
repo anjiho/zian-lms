@@ -10,7 +10,7 @@
 <script src="common/js/bookGiftListPopup.js"></script>
 <script>
     function init() {
-        menuActive('menu-1', 1);
+        menuActive('menu-1', 2);
         getProductSearchTypeSelectbox("l_productSearch");
     }
     var gKey = '<%=gKey%>';
@@ -24,7 +24,7 @@
             lang: 'ko-KR',
             placeholder: '내용을 적어주세요.'
             ,hint: {
-                match: /:([\-+\w]+)$/,ㅊ
+                match: /:([\-+\w]+)$/,
                 search: function (keyword, callback) {
                     callback($.grep(emojis, function (item) {
                         return item.indexOf(keyword) === 0;
