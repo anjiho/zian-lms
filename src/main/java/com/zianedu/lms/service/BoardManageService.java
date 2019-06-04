@@ -31,15 +31,6 @@ public class BoardManageService extends PagingSupport {
     private MemberManageMapper memberManageMapper;
 
     /**
-     *
-     * @param sPage
-     * @param listLimit
-     * @param searchType
-     * @param searchText
-     * @return
-     * @throws Exception
-     */
-    /**
      * QNA 리스트
      * @param sPage
      * @param listLimit
