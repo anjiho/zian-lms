@@ -60,6 +60,7 @@
         //강사정보 가져오기
         memberManageService.getTeacherDetailInfo(userKey, function (info) {
             var teacherInfo = info.teacherInfo;
+            console.log(info);
             if (teacherInfo.imageTeacherList != null) {
                 $('.custom-file-control').html(fn_clearFilePath(teacherInfo.imageTeacherList));//리스트이미지
             }
@@ -76,6 +77,7 @@
 
             /*카테고리 정보 가져오기*/
             var teacherCategoryInfo = info.teacherCategoryInfo;
+            console.log(teacherCategoryInfo);
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
             if (teacherCategoryInfo.length == 0) {
                 var cellData = [
@@ -106,8 +108,8 @@
                 function(data) {return data[1].name;},
                 function() {return nextIcon},
                 function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
+                function() {return '<input type=\'button\' onclick=\'deleteCategory();\' class=\'btn btn-outline-danger btn-sm\' value=\'삭제\'>'},
+                function() {return ""},
             ], {escapeHtml:false});
 
             $('#categoryList tr').each(function(){
@@ -118,7 +120,6 @@
 
             /*과목별 그룹 설명내용*/
             var subjectGroupInfo = info.subjectGroupInfo;
-            console.log(subjectGroupInfo);
             for(var i=0; i < subjectGroupInfo.length; i++){
                 var cmpList = subjectGroupInfo[i];
                 if(cmpList.device == 1){
@@ -140,6 +141,10 @@
         });
     }
 
+    function deleteCate(val) {
+        
+    }
+    
     function emailSelChange(val) {
         if(val == '1') $('#InputEmail').val('');
         else $('#InputEmail').val(val);
@@ -164,12 +169,15 @@
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
+            var delBtn = "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
             $trNew.find("td input").eq(0).val("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(10).attr("style","display:none;");
+            $trNew.find("td").eq(11).html(delBtn);
         }
     }
 
@@ -325,7 +333,7 @@
 
                         var teacherKey = getInputTextValue("teacherKey");
                         var userKey =  getInputTextValue("userKey");
-
+                        console.log(data.result);
                         teacherInfoObj2.imageTeacherList = data.result.listImageFilePath;
                         teacherInfoObj2.imageTeacherView = data.result.viewImageFilePath;
                         teacherInfoObj2.imageList = data.result.listImageFilePath;
@@ -343,35 +351,26 @@
 
 
     }
+
     function teacherCategorySave() {
         var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-
+        var teacherKey = getInputTextValue("teacherKey");
         if(confirm("카테고리를 수정 하시겠습니까?")){
-
-            //var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-            /*if (fistTrStyle == "display:none") {
-                productManageService.deleteTCategoryGoods(gKey, function(){
-                    isReloadPage(true);
-                });
-            } else {*/
-                var teacherKey = getInputTextValue("teacherKey");
                 var dataArr = new Array();
-                //$.each(ctgKeys, function(index, key) {
+                $.each(ctgKeys, function(index, key) {
                     var data = {
                         linkKey: 0,
-                        reqKey : 341,
+                        reqKey : key,
                         resKey : Number(teacherKey),
                         reqType : 100,
                         resType : 200,
                         pos : 0,
                         valueBit : 0
                     };
-                    //dataArr.push(data);
-                //});
-
-                memberManageService.insertTeacherCategory(data, function () {
-                    isReloadPage(true);
+                    dataArr.push(data);
+                    memberManageService.insertTeacherCategory(data, function () {
+                        isReloadPage(true);
+                    });
                 });
             }
         //}
