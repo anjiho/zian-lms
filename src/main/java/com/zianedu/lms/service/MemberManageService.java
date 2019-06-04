@@ -380,18 +380,27 @@ public class MemberManageService {
         List<TResVO>subjectGroupInfo = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
         List<TLinkKeyVO>linkKeyList = memberManageMapper.selectTLinkKeyByTeacher(teacherVO.getTeacherKey());
 
+        List<TeacherCategoryListDTO> teacherCategoryList = new ArrayList<>();
         List<List<TCategoryVO>> teacherCategoryInfo = new ArrayList<>();
         if (linkKeyList.size() > 0) {
             for (TLinkKeyVO tLinkKeyVO : linkKeyList) {
                 List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryList(tLinkKeyVO.getReqKey());
                 //Collections.reverse(tCategoryVOList);
                 teacherCategoryInfo.add(tCategoryVOList);
+
+                TeacherCategoryListDTO dto = new TeacherCategoryListDTO();
+                dto.setLinkKey(tLinkKeyVO.getLinkKey());
+                dto.setTeacherCategoryInfo(tCategoryVOList);
+
+                teacherCategoryList.add(dto);
             }
         }
+        //teacherCategoryList.setTeacherCategoryInfo(teacherCategoryInfo);
+
         TeacherDetailDTO teacherDetailDTO = new TeacherDetailDTO(
                 teacherVO,
                 subjectGroupInfo,
-                teacherCategoryInfo
+                teacherCategoryList
         );
         return teacherDetailDTO;
     }
@@ -614,12 +623,12 @@ public class MemberManageService {
 
     /**
      * 강사 카테고리 삭제
-     * @param resKey
+     * @param linkKey
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void deleteTeacherCategory(int resKey) {
-        if (resKey == 0) return;
-        productManageMapper.deleteTLinkKeyByResKey(resKey);
+    public void deleteTeacherCategory(int linkKey) {
+        if (linkKey == 0) return;
+        productManageMapper.deleteTLinkKeyByLinkKey(linkKey);
     }
 
 }

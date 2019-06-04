@@ -26,4 +26,6 @@ public class TCategoryVO {
     private String value;
 
     private int valueNumber;
+
+    private int resKey;
 }

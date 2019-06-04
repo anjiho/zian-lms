@@ -14,13 +14,15 @@ public class TeacherDetailDTO {
 
     List<TResVO> subjectGroupInfo;
 
-    List<List<TCategoryVO>> teacherCategoryInfo;
+    //List<List<TCategoryVO>> teacherCategoryInfo;
+
+    List<TeacherCategoryListDTO> teacherCategoryInfoList;
 
     public TeacherDetailDTO(){}
 
-    public TeacherDetailDTO(TTeacherVO teacherInfo, List<TResVO> subjectGroupInfo, List<List<TCategoryVO>> teacherCategoryInfo) {
+    public TeacherDetailDTO(TTeacherVO teacherInfo, List<TResVO> subjectGroupInfo, List<TeacherCategoryListDTO> teacherCategoryInfoList) {
         this.teacherInfo = teacherInfo;
         this.subjectGroupInfo = subjectGroupInfo;
-        this.teacherCategoryInfo = teacherCategoryInfo;
+        this.teacherCategoryInfoList = teacherCategoryInfoList;
     }
 }

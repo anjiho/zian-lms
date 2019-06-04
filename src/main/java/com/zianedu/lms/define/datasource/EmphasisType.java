@@ -25,7 +25,7 @@ public enum EmphasisType {
         for (EmphasisType emphasisType : EmphasisType.values()) {
             SelectboxDTO selectboxDTO = new SelectboxDTO(
                     emphasisType.emphasis,
-                    emphasisType.emphasisStr.toString()
+                    emphasisType.emphasisStr
             );
         list.add(selectboxDTO);
         }

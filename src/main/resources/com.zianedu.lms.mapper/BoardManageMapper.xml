@@ -52,7 +52,7 @@
     </select>
 
     <select id="selectQnaDetailInfo" resultType="QnaListDTO">
-         SELECT
+        SELECT
             A.BBS_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.READ_COUNT,
             B.NAME as userName, B.USER_ID, A.WRITE_USER_KEY, A.CONTENTS, A.CTG_KEY as teacherKey, A.CTG_KEY_02 as ctgKey, C.FILENAME as fileName
         FROM T_BBS_DATA A
