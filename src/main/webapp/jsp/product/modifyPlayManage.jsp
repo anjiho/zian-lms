@@ -10,7 +10,7 @@
 <script src="common/js/bookGiftListPopup.js"></script>
 <script>
     function init() {
-        menuActive('menu-1', 2);
+        menuActive('menu-1', 1);
         getProductSearchTypeSelectbox("l_productSearch");
     }
     var gKey = '<%=gKey%>';

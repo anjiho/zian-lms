@@ -15,15 +15,25 @@
         getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
         getAuthoritySelectbox("teacherAuthority","");
         getAuthorityGradeSelectbox("teacherGrade", "");
-        //getNewSelectboxListForCtgKey5("pcSubjectSel", "3710", ""); //pc에디터 과목 셀렉트박스
         getTeacherSubjectCategoryList("pcSubjectSel","");
         getTeacherSubjectCategoryList1("mobileSubjectSel", "70", "");
-
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
+
+        function emailSelChange(val) {
+            if(val == '1') $('#InputEmail').val('');
+            else $('#InputEmail').val(val);
+        }
+        //파일 선택시 파일명 보이게 하기
+        $(document).on('change', '.custom-file-input', function() {
+            $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
+        });
+        $(document).on('change', '.addFile', function() {
+            $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
         });
 
         //강사 기본정보 가져오기
@@ -76,10 +86,10 @@
             innerValue("teacherKey", teacherInfo.teacherKey);
 
             /*카테고리 정보 가져오기*/
-            var teacherCategoryInfo = info.teacherCategoryInfo;
-            console.log(teacherCategoryInfo);
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-            if (teacherCategoryInfo.length == 0) {
+            var teacherCategoryInfoList = info.teacherCategoryInfoList;
+
+            if(teacherCategoryInfoList.length == 0){
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                     function() {return "지안에듀";},
@@ -94,68 +104,146 @@
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                //$('#categoryList tr').eq(0).attr("style", "display:none");
+                $('#categoryList tr').eq(0).attr("style", "display:none");
+            }else{
+                for(var i=0; i < teacherCategoryInfoList.length; i++){
+                    var delBtn = "<input type='button' onclick='deleteCategory("+ teacherCategoryInfoList[i].linkKey +");' class='btn btn-outline-danger btn-sm' value='삭제'>";
+                    var categoryList =  teacherCategoryInfoList[i].teacherCategoryInfo;
+                    var cellData = [
+                        function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ categoryList[0].ctgKey +"'>";},
+                        function() {return "지안에듀";},
+                        function() {return nextIcon},
+                        function() {return categoryList[3].name;},
+                        function() {return nextIcon},
+                        function() {return categoryList[2].name;},
+                        function() {return nextIcon},
+                        function() {return categoryList[1].name;},
+                        function() {return nextIcon},
+                        function() {return categoryList[0].name;},
+                        function() {return delBtn},
+                        function() {return ""},
+                    ];
+                    dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+                    $('#categoryList tr').each(function(){
+                        var tr = $(this);
+                    });
+                }
             }
-
-            dwr.util.addRows("categoryList", teacherCategoryInfo, [
-                function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function() {return "지안에듀";},
-                function() {return nextIcon},
-                function(data) {return data[3].name;},
-                function() {return nextIcon},
-                function(data) {return data[2].name;},
-                function() {return nextIcon},
-                function(data) {return data[1].name;},
-                function() {return nextIcon},
-                function(data) {return data[0].name;},
-                function() {return '<input type=\'button\' onclick=\'deleteCategory();\' class=\'btn btn-outline-danger btn-sm\' value=\'삭제\'>'},
-                function() {return ""},
-            ], {escapeHtml:false});
-
-            $('#categoryList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(11).attr("style", "display:none");
-            });
 
             /*과목별 그룹 설명내용*/
             var subjectGroupInfo = info.subjectGroupInfo;
-            for(var i=0; i < subjectGroupInfo.length; i++){
-                var cmpList = subjectGroupInfo[i];
-                if(cmpList.device == 1){
+
+                if(subjectGroupInfo.length == 0){
+                    /*pc*/
+                  var html = "<div id=\"test_div\"  class=\"form-group\">";
+                  html += "<div class=\"row testContent\">";
+                    html += "<span>" + getTeacherSubjectCategoryList4("")+ "</span>";
+                    html += "<textarea name=\"pcContent\" class=\"pcContent\" ></textarea>";
+                    html += "</div>";
+                    html += "</div>";
+                    $("#test_div2").html(html);
+                    $(".pcContent").summernote({
+                        height: 250,
+                        width: 1300,
+                        placeholder: '내용을 적어주세요1.',
+                        popover: {
+                            image: [],
+                            link: [],
+                            air: []
+                        }
+                    });
+                    /*mobile*/
+                    var html1 = "<div id=\"mobile_div\"  class=\"form-group\">";
+                    html1 += "<div class=\"row mobiletestContent1\">";
+                    html1 += "<span>" + getTeacherSubjectCategoryList5("")+ "</span>";
+                    html1 += "<textarea name=\"mobileContent\" class=\"mobileContent\" ></textarea>";
+                    html1 += "</div>";
+                    html1 += "</div>";
+                    $("#mobile_div2").html(html1);
+                    $(".mobileContent").summernote({
+                        height: 250,
+                        width: 1300,
+                        placeholder: '내용을 적어주세요1.',
+                        popover: {
+                            image: [],
+                            link: [],
+                            air: []
+                        }
+                    });
+            }else{
+                $("#studyVal").val(1);
+               // gfn_display("mobile_div", false);
+                for(var i=0; i < subjectGroupInfo.length; i++){
                     var cmpList = subjectGroupInfo[i];
-                    var cellData = [
-                        function() {return cmpList.resKey;},
-                        function() {return cmpList.valueText;}
-                    ];
-                    dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
-                }else if(cmpList.device == 3){ //mobile
-                    var cmpList = subjectGroupInfo[i];
-                    var cellData = [
-                        function() {return cmpList.resKey;},
-                        function() {return cmpList.valueText;}
-                    ];
-                    dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});
+                    if(subjectGroupInfo.length > 0){
+                        if(cmpList.device == 1){ //pc
+                            var cmpList = subjectGroupInfo[i];
+                            var cellData = [
+                                function() {return "<input type='hidden' name='hiddenKey' value='"+ cmpList.resKey +"'>";},
+                                function() {return getTeacherSubjectCategoryList3(cmpList.resKey, i);},
+                                function() {return "<textarea name=\"RePcContent\"  class=\"RePcContent\">"+ cmpList.valueText +"</textarea>";}
+                            ];
+                            dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
+                           // $('#newList tr').eq(0).attr("style", "display:none");
+                            $('.RePcContent').summernote({
+                                height: 250,
+                                width: 1300,
+                                placeholder: '내용을 적어주세요1.',
+                                popover: {
+                                    image: [],
+                                    link: [],
+                                    air: []
+                                }
+                            });
+                        }else if(cmpList.device == 3){ //mobile
+                            var cmpList = subjectGroupInfo[i];
+                            var cellData = [
+                                function() {return "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";},
+                                function() {return getTeacherSubjectCategoryList6(cmpList.resKey, i);},
+                                function() {return "<textarea name=\"RemobileContent\"  class=\"RemobileContent\">"+ cmpList.valueText +"</textarea>";}
+                            ];
+                            dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});
+                            // $('#newList tr').eq(0).attr("style", "display:none");
+                            $('.RemobileContent').summernote({
+                                height: 250,
+                                width: 1300,
+                                placeholder: '내용을 적어주세요1.',
+                                popover: {
+                                    image: [],
+                                    link: [],
+                                    air: []
+                                }
+                            });
+                        }
+                    }
                 }
-            }
+            }//else
+
         });
     }
+    /*
+    function formatter(memoList) {
+                    return "<label></label>" +
+                            "<div>" +
+                                "<h4><span><i class='tag'>" + convert_memo_type(memoList.memoType) + "</i>" + memoList.memberName + "</span>"+
+                                "<em>" + getDateTimeSplitComma(memoList.createDate) + "</em></h4>"+
+                                "<p>" + ellipsis(memoList.memoContent, 30) + "</p>" +
+                                   "<h4><em>전화번호 : " + fn_tel_tag(memoList.phoneNumber) + "</em></h4>" +
+                            "</div>" +
+                            "<div class='manage'>" +
+                                "<button type='button' onclick='goStudentReg("+ '"' + 'student' + '"' + ","+ '"' + 'save_student' + '"' + ","+ '"' + memoList.phoneNumber + '"' + ");'>학생등록" +
+                                "<button type='button' onclick='deleteConsultMemo("+ memoList.earlyConsultMemoId + ");'>삭제" +
+                            "</div>";
+                }
+                dwr.util.addOptions("dataList", memoList, formatter, {escapeHtml:false});
+     */
 
-    function deleteCate(val) {
-        
+    //카테고리 삭제 linkKey
+    function deleteCategory(linkKey) {
+        if(confirm("삭제하시겠습니까?")) {
+            memberManageService.deleteTeacherCategory(linkKey, function () {isReloadPage();});
+        }
     }
-    
-    function emailSelChange(val) {
-        if(val == '1') $('#InputEmail').val('');
-        else $('#InputEmail').val(val);
-    }
-    //파일 선택시 파일명 보이게 하기
-    $(document).on('change', '.custom-file-input', function() {
-        $(this).parent().find('.custom-file-control').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
-    $(document).on('change', '.addFile', function() {
-        $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
-    });
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
@@ -170,7 +258,7 @@
             $trLast.after($trNew);
 
             var delBtn = "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
-            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td").eq(0).html("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
@@ -183,79 +271,11 @@
 
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
+        if(tdNum == '11') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
-    //에디터 추가 기능
-    $(function() {
-        $("#add_field_button").click(function (e) {
-            var newProd = $('.pcContent')
-                .clone()
-                .removeClass('hide')
-                .removeAttr('id')
-                .appendTo('#newList');
-            var newSel = $("#pcSubjectSel").clone();
-            var newLabel = $("#cateLabel").clone();
-            $('#newList').append(newLabel);
-            $('#newList').append(newSel);
-            $('#newList').append(newProd);
-            $(newProd).summernote({
-                height: 250,
-                width: 1300,
-                placeholder: '내용을 적어주세요.',
-                popover: {
-                    image: [],
-                    link: [],
-                    air: []
-                }
-            });
-        });
-        $('.pcContent').summernote({
-            height: 250,
-            width: 1300,
-            placeholder: '내용을 적어주세요1.',
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-    });
-    //에디터 추가 기능
-    $(function() {
-        $("#add_field_button1").click(function (e) {
-            var newProd = $('.mobileContent')
-                .clone()
-                .removeClass('hide')
-                .removeAttr('id')
-                .appendTo('#newList1');
-            var newSel = $("#mobileSubjectSel").clone();
-            var newLabel = $("#cateLabel1").clone();
-            $('#newList1').append(newLabel);
-            $('#newList1').append(newSel);
-            $('#newList1').append(newProd);
-            $(newProd).summernote({
-                height: 250,
-                width: 1300,
-                placeholder: '내용을 적어주세요.',
-                popover: {
-                    image: [],
-                    link: [],
-                    air: []
-                }
-            });
-        });
-        $('.mobileContent').summernote({
-            height: 250,
-            width: 1300,
-            placeholder: '내용을 적어주세요1.',
-            popover: {
-                image: [],
-                link: [],
-                air: []
-            }
-        });
-    });
+    //기본정보 수정
     function modifyBasicInfo() {
         var authority = getSelectboxValue("authoritSel");//권한
         var authoritGrade = getSelectboxValue("authoritGradeSel");//권한등급
@@ -309,79 +329,112 @@
 
         memberManageService.updateUserInfo(teacherObj, function () {isReloadPage();});
     }
+
+    //강사정보 수정
     function modifyTeacherInfo() {
-        var data = new FormData();
-        $.each($('#imageTeacherList')[0].files, function (i, file) {
-            data.append('listImageFile', file);
-        });
-        $.each($('#imageTeacherView')[0].files, function (i, file) {
-            data.append('listImageViewFile', file);
-        });
-        data.append('uploadType', 'TEACHER');
-        if (confirm("저장 하시겠습니까?")) {//TEACHER
-            $.ajax({
-                url: "/file/imageFileUpload",
-                method: "post",
-                dataType: "JSON",
-                data: data,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    if (data.result) {
-                        var teacherInfoObj2 = getJsonObjectFromDiv("section2");
+        if($("#imageTeacherList").val() == ""){
+                var teacherInfoObj2 = getJsonObjectFromDiv("section2");
+                var teacherKey = getInputTextValue("teacherKey");
+                var userKey =  getInputTextValue("userKey");
+                teacherInfoObj2.imageTeacherList = "";
+                teacherInfoObj2.imageTeacherView = "";
+                teacherInfoObj2.imageList = "";
+                teacherInfoObj2.imageView = "";
+                teacherInfoObj2.imageMainList = "";
+                teacherInfoObj2.imageContents = "";
+                teacherInfoObj2.teacherKey = teacherKey;
+                teacherInfoObj2.userKey = userKey;
 
-                        var teacherKey = getInputTextValue("teacherKey");
-                        var userKey =  getInputTextValue("userKey");
-                        console.log(data.result);
-                        teacherInfoObj2.imageTeacherList = data.result.listImageFilePath;
-                        teacherInfoObj2.imageTeacherView = data.result.viewImageFilePath;
-                        teacherInfoObj2.imageList = data.result.listImageFilePath;
-                        teacherInfoObj2.imageView = "";
-                        teacherInfoObj2.imageMainList = "";
-                        teacherInfoObj2.imageContents = "";
-                        teacherInfoObj2.teacherKey = teacherKey;
-                        teacherInfoObj2.userKey = userKey;
-
-                        memberManageService.updateTeacherInfo(teacherInfoObj2, function(info) {isReloadPage();});
-                    }
-                }
+                memberManageService.updateTeacherInfo(teacherInfoObj2, function(info) {isReloadPage();});
+        }else{
+            var data = new FormData();
+            $.each($('#imageTeacherList')[0].files, function (i, file) {
+                data.append('listImageFile', file);
             });
-        }
+            $.each($('#imageTeacherView')[0].files, function (i, file) {
+                data.append('listImageViewFile', file);
+            });
+            data.append('uploadType', 'TEACHER');
+            if (confirm("저장 하시겠습니까?")) {//TEACHER
+                $.ajax({
+                    url: "/file/imageFileUpload",
+                    method: "post",
+                    dataType: "JSON",
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.result) {
+                            var teacherInfoObj2 = getJsonObjectFromDiv("section2");
+                            var teacherKey = getInputTextValue("teacherKey");
+                            var userKey =  getInputTextValue("userKey");
+                            teacherInfoObj2.imageTeacherList = data.result.listImageFilePath;
+                            teacherInfoObj2.imageTeacherView = data.result.viewImageFilePath;
+                            teacherInfoObj2.imageList = data.result.listImageFilePath;
+                            teacherInfoObj2.imageView = "";
+                            teacherInfoObj2.imageMainList = "";
+                            teacherInfoObj2.imageContents = "";
+                            teacherInfoObj2.teacherKey = teacherKey;
+                            teacherInfoObj2.userKey = userKey;
 
-
-    }
-
-    function teacherCategorySave() {
-        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-        var teacherKey = getInputTextValue("teacherKey");
-        if(confirm("카테고리를 수정 하시겠습니까?")){
-                var dataArr = new Array();
-                $.each(ctgKeys, function(index, key) {
-                    var data = {
-                        linkKey: 0,
-                        reqKey : key,
-                        resKey : Number(teacherKey),
-                        reqType : 100,
-                        resType : 200,
-                        pos : 0,
-                        valueBit : 0
-                    };
-                    dataArr.push(data);
-                    memberManageService.insertTeacherCategory(data, function () {
-                        isReloadPage(true);
-                    });
+                            memberManageService.updateTeacherInfo(teacherInfoObj2, function(info) {isReloadPage();});
+                        }
+                    }
                 });
             }
-        //}
+        }
     }
 
+    //카테고리 저장
+    function teacherCategorySave() {
+        var teacherKey = getInputTextValue("teacherKey");
+        var categoryArr = new Array();
+        $('#categoryTable tbody tr').each(function (index) {
+            if($(this).find("td").eq(0).html() == ""){
+                var ctgKey = $(this).find("td select").eq(3).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey : ctgKey,
+                    resKey : Number(teacherKey),
+                    reqType : 100,
+                    resType : 200,
+                    pos : 0,
+                    valueBit : 0
+                };
+                memberManageService.insertTeacherCategory(data, function () {
+                    isReloadPage(true);
+                });
+            }
+        });
+    }
+
+    //과목그룹별 pc 저장
     function teacherPcSubjectInfoSave() {
         var teacherKey = getInputTextValue("teacherKey");
-        var subjectCtgKey = get_array_values_by_name("select", "subjectCtgKey"); //카테고리 키값
+        var subjectCtgKey = get_array_values_by_name("select", "subjectCtgKey"); //기존데이터 카테고리 셀렉트박스
+        var subjectCtgKey4 = get_array_values_by_name("select", "subjectCtgKey4"); //추가시 카테고리 셀렉트박스
+       var hiddenKey = get_array_values_by_name("input", "hiddenKey");
 
+       if(subjectCtgKey4.length > 0){ //추가된 카테고리
+           $.each(subjectCtgKey4, function(index, key) {
+               var data = {};
+               data.resKey = 0;
+               data.type = 0;
+               data.device = 1;
+               data.key00 = teacherKey;
+               data.key02 = key;
+               data.key01 = 0;
+               data.key00Type = 0;
+               data.key01Type = 0;
+               data.key02Type = 0;
+               data.value = "";
+               data.valueText = $("#section4 .pcContent").val();
 
-        $.each(subjectCtgKey, function(index, key) {
+              memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
+           });
+       }
+       /* $.each(subjectCtgKey, function(index, key) {
             var data = {};
             data.resKey = 0;
             data.type = 0;
@@ -393,14 +446,16 @@
             data.key01Type = 0;
             data.key02Type = 0;
             data.value = "";
-            data.valueText = $('.pcContent').eq(index).val();
-          memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
-        });
+            data.valueText = $("#section4 .pcContent").val();
+            console.log(data);
+          //memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
+        });*/
     }
 
+    //과목그룹별 mobile 저장
     function teacherMobileSubjectInfoSave() {
         var teacherKey = getInputTextValue("teacherKey");
-        var mobileSubjectCtgKey = get_array_values_by_name("select", "subjectCtgKey1"); //카테고리 키값
+        var mobileSubjectCtgKey = get_array_values_by_name("select", "mobilesubjectCtgKey"); //카테고리 키값
 
         $.each(mobileSubjectCtgKey, function(index, key) {
             var data = {};
@@ -418,6 +473,73 @@
             memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
         });
     }
+
+
+    //에디터 추가 기능
+    $(function() {
+        /*-------PC--------*/
+        $("#add_field_button").click(function (e) {
+            $includeDiv = $("#test_div2");
+            var html = "<div class=\"row testContent1\" name=\"testContent1\">\n" +
+                        "<input type='hidden' name='hiddenKey' value=''>"+
+                       "<span>" + getTeacherSubjectCategoryList9("") + "</span>\n" +
+                       "<textarea name=\"pcContent\" class=\"pcContent\" ></textarea>\n" +
+                       "</div>";
+                $includeDiv.after(html);
+                //$("#test_div").show();
+                $("textarea[name=pcContent]").summernote({
+                        height: 250,
+                        width: 1300,
+                        placeholder: '내용을 적어주세요.',
+                        popover: {
+                            image: [],
+                            link: [],
+                            air: []
+                        }
+                });
+        });
+        $('.pcContent').summernote({
+            height: 250,
+            width: 1300,
+            placeholder: '내용을 적어주세요1.',
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
+
+        /*-------MOBILE--------*/
+        $("#add_field_button1").click(function (e) {
+            $includeDiv = $("#mobile_div2");
+            var html = "<div class=\"row mobiletestContent2\" name=\"mobiletestContent2\">\n" +
+                "<input type='hidden' name='hiddenKey1' value=''>"+
+                "<span>" + getTeacherSubjectCategoryList10("") + "</span>\n" +
+                "<textarea name=\"mobileContent\" class=\"mobileContent\" ></textarea>\n" +
+                "</div>";
+            $includeDiv.after(html);
+            $("textarea[name=mobileContent]").summernote({
+                height: 250,
+                width: 1300,
+                placeholder: '내용을 적어주세요.',
+                popover: {
+                    image: [],
+                    link: [],
+                    air: []
+                }
+            });
+        });
+        $('.mobileContent').summernote({
+            height: 250,
+            width: 1300,
+            placeholder: '내용을 적어주세요1.',
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
+        });
+    });
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -636,6 +758,8 @@
                                     </tr>
                                     </thead>
                                     <tbody id="categoryList">
+
+
                                     </tbody>
                                 </table>
                             </div>
@@ -651,37 +775,38 @@
                                         <button type="button" class="btn btn-info btn-sm" id="add_field_button">추가</button>
                                     </div>
                                     <table id="prod_list">
-                                        <tbody id="newList">
-                                            <tr>
-                                                <label class="col-sm-2 control-label col-form-label" id="cateLabel">카테고리 선택</label>
-                                                <span id="pcSubjectSel"></span>
-                                                <textarea name="pcContent" class="pcContent"></textarea>
-                                            </tr>
-                                        </tbody>
+                                        <thead>
+                                        <th scope="col" style="width:25%;"></th>
+                                            <th scope="col" style="width:25%;"></th>
+                                            <th scope="col" style="width:75%;"></th>
+                                        </thead>
+                                        <tbody id="newList"></tbody>
                                     </table>
+
+                                    <div id="test_div2"></div>
                                 </div>
                             </div>
                         </section>
                         <!-- //과목그룹 PC -->
                         <!-- 과목그룹 Mobile -->
                         <!-- 과목그룹 PC -->
-                        <h3>과목그룹별 설명내용(MOBILE 전용)</h3>
+                        <h3>과목그룹별 설명내용(Mobile)</h3>
                         <section>
                             <div id="section5">
                                 <div class="col-md-12">
                                     <div class="float-right mb-3">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="teacherMobileSubjectInfoSave();">수정</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="teacherPcSubjectInfoSave();">수정</button>
                                         <button type="button" class="btn btn-info btn-sm" id="add_field_button1">추가</button>
                                     </div>
                                     <table id="prod_list1">
-                                        <tbody id="newList1">
-                                        <tr>
-                                            <label class="col-sm-2 control-label col-form-label" id="cateLabel1">카테고리 선택</label>
-                                            <span id="mobileSubjectSel"></span>
-                                            <textarea name="mobileContent" class="mobileContent"></textarea>
-                                        </tr>
-                                        </tbody>
+                                        <thead>
+                                        <th scope="col" style="width:25%;"></th>
+                                        <th scope="col" style="width:25%;"></th>
+                                        <th scope="col" style="width:75%;"></th>
+                                        </thead>
+                                        <tbody id="newList1"></tbody>
                                     </table>
+                                    <div id="mobile_div2"></div>
                                 </div>
                             </div>
                         </section>

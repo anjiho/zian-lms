@@ -504,6 +504,156 @@ function getMockCategoryList(tagId, val) {
 function getTeacherSubjectCategoryList(tagId, val) {
     selectboxService.getCategoryList(3710, function (list) {
         var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+        //$("#prod_list").find("tbody").find("tr:last").find("td").eq(1).html(html);
+    });
+}
+
+//강사관리 - 과목 셀렉트박스
+function getTeacherSubjectCategoryList3(val, index) {
+
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        $("#newList").find("tr").eq(0).find("td").eq(1).html(html);
+        $("#newList").find("tr").eq(2).find("td").eq(1).html(html);
+    });
+}
+
+function getTeacherSubjectCategoryList4(val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey4' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
+        $(".testContent").find("span").eq(0).html(html);
+    });
+}
+
+
+function getTeacherSubjectCategoryList9(val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey4' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
+        $(".testContent1").find("span").eq(0).html(html);
+    });
+}
+
+function getTeacherSubjectCategoryList5(val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='mobilesubjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
+        $(".mobiletestContent1").find("span").eq(0).html(html);
+    });
+}
+
+function getTeacherSubjectCategoryList10(val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='mobilesubjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
+        $(".mobiletestContent2").find("span").eq(0).html(html);
+    });
+}
+
+
+
+function getTeacherSubjectCategoryList6(val, index) {
+    selectboxService.getCategoryList(3710, function (list) {
+        // index =  index+1;
+        var html = "<select name='mobilesubjectCtgKey6' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        $("#newList1").find("tr").eq(index).find("td").eq(1).html(html);
+    });
+}
+
+function getTeacherSubjectCategoryList7(val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='mobilesubjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if(list[i].ctgKey == val){
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            }else{
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        //innerHTML(tagId, html);
+        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
+        $(".mobiletestContent").find("span").eq(0).html(html);
+    });
+}
+
+
+//강사관리 - 과목 셀렉트박스 123
+function getMemberTeacerCategoryList(val) {
+    selectboxService.getCategoryList(3710, function (list) {
+        var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if(list[i].ctgKey == val){
@@ -516,6 +666,8 @@ function getTeacherSubjectCategoryList(tagId, val) {
         innerHTML(tagId, html);
     });
 }
+
+
 
 
 function getTeacherSubjectCategoryList1(tagId, val) {

@@ -384,119 +384,206 @@
 
     //수정
     function promotionPacakgeSave() {
-        var data = new FormData();
-        var fileData = new FormData();
-        $.each($('#imageListFile')[0].files, function(i, file) {
-            fileData.append('imageListFile', file);
-        });
+        if($('#imageListFile').val() == "" || $('#imageViewFile').val() == ""){
+            var basicObj = getJsonObjectFromDiv("section1");
+            if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
+            else basicObj.isShow = '0';
+            if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
+            else basicObj.isSell = '0';
+            if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
+            else basicObj.isFree = '0';
+            if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
+            else basicObj.isFreebieDeliveryFree = '0';
+            if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
+            else basicObj.isQuickDelivery = '0';;
+                basicObj.imageList = "";
+                basicObj.imageView = "";
 
-        $.each($('#imageViewFile')[0].files, function(i, file) {
-            fileData.append('imageViewFile', file);
-        });
+            /*  2.옵션 obj */
+            var optionArray = new Array();
+            $('#optionTable tbody tr').each(function(index){
+                var i =0;
+                var optionName = $(this).find("td select").eq(0).val();
+                var price = $(this).find("td input").eq(0).val();
+                var sellPrice = $(this).find("td input").eq(1).val();
+                var point = $(this).find("td input").eq(2).val();
+                var extendPercent = $(this).find("td input").eq(3).val();
+                var data = {
+                    priceKey:'0',
+                    gKey:gKey,
+                    kind:optionName,
+                    ctgKey:'0',
+                    name:'',
+                    price:price,
+                    sellPrice:sellPrice,
+                    point:point,
+                    extendPercent:extendPercent
+                };
+                optionArray.push(data);
+            });
 
-        fileData.append('uploadType', 'PACKAGE');
+            /* 3. 카테고리 저장 */
+            var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
 
-        $.ajax({
-            url: "/file/imageFileUpload",
-            method: "post",
-            dataType: "JSON",
-            data: fileData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                var basicObj = getJsonObjectFromDiv("section1");
-                if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-                else basicObj.isShow = '0';
-                if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
-                else basicObj.isSell = '0';
-                if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
-                else basicObj.isFree = '0';
-                if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
-                else basicObj.isFreebieDeliveryFree = '0';
-                if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
-                else basicObj.isQuickDelivery = '0';
-                var result = JSON.stringify(data.result);
-                if(result != "") {
-                    var parse = JSON.parse(result);
-                    basicObj.imageList = parse.imageListFilePath;
-                    basicObj.imageView = parse.imageViewFilePath;
-                }else{
-                    basicObj.imageList = "";
-                    basicObj.imageView = "";
-                }
-
-                /*  2.옵션 obj */
-                var optionArray = new Array();
-                $('#optionTable tbody tr').each(function(index){
-                    var i =0;
-                    var optionName = $(this).find("td select").eq(0).val();
-                    var price = $(this).find("td input").eq(0).val();
-                    var sellPrice = $(this).find("td input").eq(1).val();
-                    var point = $(this).find("td input").eq(2).val();
-                    var extendPercent = $(this).find("td input").eq(3).val();
+            if (fistTrStyle == "display:none") {
+                /*productManageService.deleteTCategoryGoods(gKey, function(){
+                    isReloadPage(true);
+                });*/
+            } else {
+                var categoryArr = new Array();
+                $.each(ctgKeys, function(index, key) {
                     var data = {
-                        priceKey:'0',
+                        ctgGKey:0,
+                        ctgKey:key,
                         gKey:gKey,
-                        kind:optionName,
-                        ctgKey:'0',
-                        name:'',
-                        price:price,
-                        sellPrice:sellPrice,
-                        point:point,
-                        extendPercent:extendPercent
+                        pos:0
                     };
-                    optionArray.push(data);
+                    categoryArr.push(data);
                 });
-
-                /* 3. 카테고리 저장 */
-                var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-                var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-                if (fistTrStyle == "display:none") {
-                    /*productManageService.deleteTCategoryGoods(gKey, function(){
-                        isReloadPage(true);
-                    });*/
-                } else {
-                    var categoryArr = new Array();
-                    $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:gKey,
-                            pos:0
-                        };
-                        categoryArr.push(data);
-                    });
-                }
-
-                /* 4. 프로모션정보 저장 */
-                var promotionInfo = getJsonObjectFromDiv("section4");
-
-                /* 5. 포함된온라인강좌 저장 */
-                var onlineLecInfo = new Array();
-                $('#promotionOnlineTable tbody tr').each(function(index){
-                    var onlineKey = $(this).find("td input").eq(0).val();
-                    var linkKey = $(this).find("td input").eq(1).val();
-                    var reqKey = $(this).find("td input").eq(2).val();
-
-                    var data = {
-                        linkKey: 0,
-                        reqKey: gKey,
-                        resKey: onlineKey,
-                        resType: 5,
-                        pos: 0,
-                    };
-                    onlineLecInfo.push(data);
-                });
-
-                if(confirm("수정 하시겠습니까?")) {
-                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
-                        isReloadPage(true);
-                    });
-                }
             }
-        });
+
+            /* 4. 프로모션정보 저장 */
+            var promotionInfo = getJsonObjectFromDiv("section4");
+
+            /* 5. 포함된온라인강좌 저장 */
+            var onlineLecInfo = new Array();
+            $('#promotionOnlineTable tbody tr').each(function(index){
+                var onlineKey = $(this).find("td input").eq(0).val();
+                var linkKey = $(this).find("td input").eq(1).val();
+                var reqKey = $(this).find("td input").eq(2).val();
+
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey: onlineKey,
+                    resType: 5,
+                    pos: 0,
+                };
+                onlineLecInfo.push(data);
+            });
+
+            if(confirm("수정 하시겠습니까?")) {
+                promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
+                    isReloadPage(true);
+                });
+            }
+        }else{
+            var data = new FormData();
+            var fileData = new FormData();
+            $.each($('#imageListFile')[0].files, function(i, file) {
+                fileData.append('imageListFile', file);
+            });
+
+            $.each($('#imageViewFile')[0].files, function(i, file) {
+                fileData.append('imageViewFile', file);
+            });
+
+            fileData.append('uploadType', 'PACKAGE');
+
+            $.ajax({
+                url: "/file/imageFileUpload",
+                method: "post",
+                dataType: "JSON",
+                data: fileData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    var basicObj = getJsonObjectFromDiv("section1");
+                    if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
+                    else basicObj.isShow = '0';
+                    if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
+                    else basicObj.isSell = '0';
+                    if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
+                    else basicObj.isFree = '0';
+                    if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
+                    else basicObj.isFreebieDeliveryFree = '0';
+                    if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
+                    else basicObj.isQuickDelivery = '0';
+                    var result = JSON.stringify(data.result);
+
+                    if(result != "") {
+                        var parse = JSON.parse(result);
+                        basicObj.imageList = parse.imageListFilePath;
+                        basicObj.imageView = parse.imageViewFilePath;
+                    }else{
+                        basicObj.imageList = "";
+                        basicObj.imageView = "";
+                    }
+
+                    /*  2.옵션 obj */
+                    var optionArray = new Array();
+                    $('#optionTable tbody tr').each(function(index){
+                        var i =0;
+                        var optionName = $(this).find("td select").eq(0).val();
+                        var price = $(this).find("td input").eq(0).val();
+                        var sellPrice = $(this).find("td input").eq(1).val();
+                        var point = $(this).find("td input").eq(2).val();
+                        var extendPercent = $(this).find("td input").eq(3).val();
+                        var data = {
+                            priceKey:'0',
+                            gKey:gKey,
+                            kind:optionName,
+                            ctgKey:'0',
+                            name:'',
+                            price:price,
+                            sellPrice:sellPrice,
+                            point:point,
+                            extendPercent:extendPercent
+                        };
+                        optionArray.push(data);
+                    });
+
+                    /* 3. 카테고리 저장 */
+                    var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+                    var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+
+                    if (fistTrStyle == "display:none") {
+                        /*productManageService.deleteTCategoryGoods(gKey, function(){
+                            isReloadPage(true);
+                        });*/
+                    } else {
+                        var categoryArr = new Array();
+                        $.each(ctgKeys, function(index, key) {
+                            var data = {
+                                ctgGKey:0,
+                                ctgKey:key,
+                                gKey:gKey,
+                                pos:0
+                            };
+                            categoryArr.push(data);
+                        });
+                    }
+
+                    /* 4. 프로모션정보 저장 */
+                    var promotionInfo = getJsonObjectFromDiv("section4");
+
+                    /* 5. 포함된온라인강좌 저장 */
+                    var onlineLecInfo = new Array();
+                    $('#promotionOnlineTable tbody tr').each(function(index){
+                        var onlineKey = $(this).find("td input").eq(0).val();
+                        var linkKey = $(this).find("td input").eq(1).val();
+                        var reqKey = $(this).find("td input").eq(2).val();
+
+                        var data = {
+                            linkKey: 0,
+                            reqKey: gKey,
+                            resKey: onlineKey,
+                            resType: 5,
+                            pos: 0,
+                        };
+                        onlineLecInfo.push(data);
+                    });
+
+                    if(confirm("수정 하시겠습니까?")) {
+                        promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
+                            isReloadPage(true);
+                        });
+                    }
+                }
+            });
+        }
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
