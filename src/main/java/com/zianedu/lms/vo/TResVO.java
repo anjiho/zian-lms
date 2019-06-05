@@ -28,4 +28,6 @@ public class TResVO {
     private String valueText;//내용
 
     private String ctgName;
+
+    private int ctgKey;
 }
