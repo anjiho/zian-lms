@@ -5,6 +5,7 @@
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
+<script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
     var userKey = '<%=userKey%>';
     function init() {
@@ -104,7 +105,7 @@
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                $('#categoryList tr').eq(0).attr("style", "display:none");
+                //$('#categoryList tr').eq(0).attr("style", "display:none");
             }else{
                 for(var i=0; i < teacherCategoryInfoList.length; i++){
                     var delBtn = "<input type='button' onclick='deleteCategory("+ teacherCategoryInfoList[i].linkKey +");' class='btn btn-outline-danger btn-sm' value='삭제'>";
@@ -178,10 +179,12 @@
                     if(subjectGroupInfo.length > 0){
                         if(cmpList.device == 1){ //pc
                             var cmpList = subjectGroupInfo[i];
+                            var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
                             var cellData = [
                                 function() {return "<input type='hidden' name='hiddenKey' value='"+ cmpList.resKey +"'>";},
-                                function() {return getTeacherSubjectCategoryList3(cmpList.resKey, i);},
-                                function() {return "<textarea name=\"RePcContent\"  class=\"RePcContent\">"+ cmpList.valueText +"</textarea>";}
+                                function() {return getTeacherSubjectCategoryList3(cmpList.ctgKey, i);},
+                                function() {return "<textarea name=\"RePcContent\"  class=\"RePcContent\">"+ cmpList.valueText +"</textarea>";},
+                                function() {return deleteBtn;}
                             ];
                             dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
                            // $('#newList tr').eq(0).attr("style", "display:none");
@@ -197,10 +200,12 @@
                             });
                         }else if(cmpList.device == 3){ //mobile
                             var cmpList = subjectGroupInfo[i];
+                            var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
                             var cellData = [
                                 function() {return "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";},
-                                function() {return getTeacherSubjectCategoryList6(cmpList.resKey, i);},
-                                function() {return "<textarea name=\"RemobileContent\"  class=\"RemobileContent\">"+ cmpList.valueText +"</textarea>";}
+                                function() {return getTeacherSubjectCategoryList6(cmpList.ctgKey, i);},
+                                function() {return "<textarea name=\"RemobileContent\"  class=\"RemobileContent\">"+ cmpList.valueText +"</textarea>";},
+                                function() {return deleteBtn;}
                             ];
                             dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});
                             // $('#newList tr').eq(0).attr("style", "display:none");
@@ -221,23 +226,13 @@
 
         });
     }
-    /*
-    function formatter(memoList) {
-                    return "<label></label>" +
-                            "<div>" +
-                                "<h4><span><i class='tag'>" + convert_memo_type(memoList.memoType) + "</i>" + memoList.memberName + "</span>"+
-                                "<em>" + getDateTimeSplitComma(memoList.createDate) + "</em></h4>"+
-                                "<p>" + ellipsis(memoList.memoContent, 30) + "</p>" +
-                                   "<h4><em>전화번호 : " + fn_tel_tag(memoList.phoneNumber) + "</em></h4>" +
-                            "</div>" +
-                            "<div class='manage'>" +
-                                "<button type='button' onclick='goStudentReg("+ '"' + 'student' + '"' + ","+ '"' + 'save_student' + '"' + ","+ '"' + memoList.phoneNumber + '"' + ");'>학생등록" +
-                                "<button type='button' onclick='deleteConsultMemo("+ memoList.earlyConsultMemoId + ");'>삭제" +
-                            "</div>";
-                }
-                dwr.util.addOptions("dataList", memoList, formatter, {escapeHtml:false});
-     */
 
+    function editDelete(resKey) {
+        if(confirm("삭제 하시겠습니까?")){
+            productManageService.deletePreviewInfo(resKey, function () {isReloadPage();});
+        }
+    }
+    
     //카테고리 삭제 linkKey
     function deleteCategory(linkKey) {
         if(confirm("삭제하시겠습니까?")) {
@@ -391,7 +386,7 @@
         var teacherKey = getInputTextValue("teacherKey");
         var categoryArr = new Array();
         $('#categoryTable tbody tr').each(function (index) {
-            if($(this).find("td").eq(0).html() == ""){
+            if($(this).find("td").eq(0).val() == ""){
                 var ctgKey = $(this).find("td select").eq(3).val();
                 var data = {
                     linkKey: 0,
@@ -434,22 +429,6 @@
               memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
            });
        }
-       /* $.each(subjectCtgKey, function(index, key) {
-            var data = {};
-            data.resKey = 0;
-            data.type = 0;
-            data.device = 1;
-            data.key00 = teacherKey;
-            data.key02 = key;
-            data.key01 = 0;
-            data.key00Type = 0;
-            data.key01Type = 0;
-            data.key02Type = 0;
-            data.value = "";
-            data.valueText = $("#section4 .pcContent").val();
-            console.log(data);
-          //memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
-        });*/
     }
 
     //과목그룹별 mobile 저장
@@ -757,10 +736,7 @@
                                         <th scope="col"></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="categoryList">
-
-
-                                    </tbody>
+                                    <tbody id="categoryList"></tbody>
                                 </table>
                             </div>
                         </section>
@@ -795,7 +771,7 @@
                             <div id="section5">
                                 <div class="col-md-12">
                                     <div class="float-right mb-3">
-                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="teacherPcSubjectInfoSave();">수정</button>
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="teacherMobileSubjectInfoSave();">수정</button>
                                         <button type="button" class="btn btn-info btn-sm" id="add_field_button1">추가</button>
                                     </div>
                                     <table id="prod_list1">

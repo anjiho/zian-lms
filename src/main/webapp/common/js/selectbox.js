@@ -627,7 +627,7 @@ function getTeacherSubjectCategoryList6(val, index) {
         }
         html += "</select>";
         //innerHTML(tagId, html);
-        $("#newList1").find("tr").eq(index).find("td").eq(1).html(html);
+        $("#newList1").find("tr").eq(0).find("td").eq(1).html(html);
     });
 }
 
