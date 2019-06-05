@@ -206,7 +206,7 @@
 	</select>
 
 	<select id="selectTResListByTeacherKey" parameterType="Integer" resultType="com.zianedu.lms.vo.TResVO">
-		SELECT A.RES_KEY, A.DEVICE,
+		SELECT A.RES_KEY, A.DEVICE, KEY_01 as ctgKey,
 			   (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = A.KEY_01) as ctg_name, VALUE_TEXT
 		FROM T_RES A
 		WHERE TYPE = 2 AND A.KEY_00 = #{teacherKey} ORDER BY A.DEVICE ASC
