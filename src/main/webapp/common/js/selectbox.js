@@ -1417,3 +1417,40 @@ function getAuthorityGradeSelectbox(tagId, val) {
     html += "</select>";
     innerHTML(tagId, html);
 }
+
+//sms관리 년도 셀렉박스
+function getSmsYearSelectbox(tagId, val) {
+    var yearAgo   = getYearAgo(1460);
+    var today = new Date();
+    var mm = today.getMonth() + 1;
+    var yyyy = today.getFullYear();
+    var html = "<select id='searchYearMonth' name='searchYearMonth' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    for (var i=yyyy; i>=yearAgo; i--) {
+        if(i == yyyy || i == yearAgo){
+            for(var j=mm; j>0; j--) {
+                if(j < 10) j = "0"+j;
+                if (i == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
+                else html += "<option value=" + i + j + ">" + i + "년" + j + "월" + "</option>";
+            }
+        }else{
+            for(var j=12; j>0; j--) {
+                if(j < 10) j = "0"+j;
+                if (i == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
+                else html += "<option value=" + i + j + ">" + i + "년" + j + "월" + "</option>";
+            }
+        }
+    }
+   innerHTML(tagId, html);
+}
+
+function getSmsSearchSelectbox(tagId) {
+    var html = "<select id='searchType' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='name'>이름</option>";
+    html += "<option value='id'>아이디</option>";
+    html += "<option value='phone'>휴대전화번호</option>";
+    html += "<option value='content'>내용</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}

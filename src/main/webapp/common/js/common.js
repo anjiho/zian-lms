@@ -2128,7 +2128,7 @@ function getAnnual(registerDate) {
     return parseInt(diff / currYear);
 }
 
-// 날짜 구하기
+// 날짜 구하기 == 년도만
 function getYearAgo(dayCount) {
     var today = new Date();
     var oldday = new Date(today - (3600000 * 24 * dayCount));
@@ -2144,6 +2144,24 @@ function getYearAgo(dayCount) {
     }
 
     return year;
+}
+
+// 날짜 구하기 = 년도 & 월
+function getYearMonthAgo(dayCount) {
+    var today = new Date();
+    var oldday = new Date(today - (3600000 * 24 * dayCount));
+    var year = oldday.getFullYear();
+    var month = oldday.getMonth() + 1;
+    var day = oldday.getDate();
+
+    if (("" + month).length == 1) {
+        month = "0" + month;
+    }
+    if (("" + day).length == 1) {
+        day = "0" + day;
+    }
+
+    return year+"년"+month+"월";
 }
 
 // 10년후 날짜 구하기
@@ -2537,4 +2555,29 @@ function execDaumPostcode() {
             }
         }
     }).open();
+}
+
+//textarea Byte수 제한하기
+function pubByteCheckTextarea(oid, tid, maxlength){
+    var isKorean = $(oid).val();
+    var strlength = 0;
+
+    for(var i = 0; i < isKorean.length; i++){
+        if(escape(isKorean.charAt(i)).length == 6){
+            strlength++;
+        }
+        strlength++;
+    }
+
+    if(parseInt(maxlength-strlength) <= 0){
+        alert(maxlength +"자 이상 입력 할 수 없습니다.");
+        return false;
+    }else{
+        //SET
+        $(tid).html( strlength +"/"+ maxlength);
+    }
+};
+
+function  InputPhoneNumCheck(phoneNum) {
+    return phoneNum.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/,"$1-$2-$3");
 }

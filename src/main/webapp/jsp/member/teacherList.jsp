@@ -41,7 +41,6 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             memberManageService.getTeacherList(sPage, 10, searchType, searchText, regStartDate, regEndDate, function (selList) {
-                console.log(selList);
                     if (selList.length == 0) return;
                     dwr.util.addRows("dataList", selList, [
                         function(data) {return listNum--;},

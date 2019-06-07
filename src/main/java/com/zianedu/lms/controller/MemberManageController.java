@@ -38,6 +38,10 @@ public class MemberManageController {
             mvc.setViewName("member/teacherManage");
         }else if("modifyTeacher".equals(page_gbn)) {
             mvc.setViewName("member/modifyTeacher");
+        }else if("sendSms".equals(page_gbn)) {
+            mvc.setViewName("member/sendSms");
+        }else if("smsSendList".equals(page_gbn)) {
+            mvc.setViewName("member/smsSendList");
         }
 
         return mvc;

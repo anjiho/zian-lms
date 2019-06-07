@@ -141,54 +141,30 @@
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 목록</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 등록</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
-                    </ul>
-                </li>
-
-                <li class="sidebar-item"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-pencil"></i><span class="hide-menu">게시판관리</span></a>
-                    <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 게시판관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 게시판관리 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 내강의실 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 복습동영상신청 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><spa상품/모바일 디바이스 관리
-                            주문관리
-                            n class="hide-menu"> 행정직 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 커뮤니티 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 공지사항 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 기술직 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 커뮤니티 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 공지사항 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 계리직 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 학습질문하기 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 시험정보 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 커뮤니티 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 공지사항 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 온라인서점 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 커뮤니티 </span></a></li>
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 고객센터 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 고객센터 </span></a></li
-                        <li class="sidebar-item" ><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 교수소개 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 공지사항 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'sendSms'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">SMS 보내기</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'smsSendList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">SMS 발송내역</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
                 <li class="sidebar-item" id="menu-7"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-move-resize-variant"></i><span class="hide-menu">통계</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="void(0)" onclick="goPage('statisManage', 'productStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 상품통계 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 프로모션 통계 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원가입 통계 </span></a></li>
-<%--                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 회원통계 </span></a></li>--%>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'productStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">상품통계</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">프로모션 통계</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">회원가입 통계</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
                 <li class="sidebar-item" id="menu-8"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">교수</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item" ><a href="#" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 정산내역 </span></a></li>
-                        <li class="sidebar-item"><a href="icon-material.html" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 월별 정산내역 </span></a></li>
-                        <li class="sidebar-item"><a href="icon-material.html" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 기간별 정산내역 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalcGraph'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 매출 그래프 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class="fas fa-minus"></i><span class="hide-menu"> 게시글관리 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 학습자료실 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> Q&A </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" class="sidebar-link"><i class=""></i><span class="hide-menu"> 리뷰 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">월별 정산내역</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">기간별 정산내역</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalcGraph'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">매출 그래프</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">게시글관리</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학습자료실</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">Q&A</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">리뷰</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
             </ul>

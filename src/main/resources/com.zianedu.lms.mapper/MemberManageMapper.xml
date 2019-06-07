@@ -479,7 +479,7 @@
         )
         VALUES
         (
-            SC_TRAN_SEQ.nextval, #{trSenddate}, #{trId}, #{trSendstat}, #{trRsltstat}, #{trMsgtype}, #{trPhone}, #{trCallback},
+            SC_TRAN_SEQ.nextval, TO_DATE(#{trSenddate}, 'YYYY-MM-DD hh24:mi:ss'), #{trId}, #{trSendstat}, #{trRsltstat}, #{trMsgtype}, #{trPhone}, #{trCallback},
             #{trRsltdate}, #{trModified}, #{trMsg}, #{trNet}, #{trEtc1}, #{trEtc2}, #{trEtc3}, #{trEtc4}, #{trEtc5}, #{trEtc6},
             #{trRealsenddate}, #{trRouteid}
         )
