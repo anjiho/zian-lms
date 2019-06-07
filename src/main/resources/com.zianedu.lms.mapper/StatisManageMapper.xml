@@ -224,7 +224,7 @@
     <select id="selectTCalculateOptionList" resultType="com.zianedu.lms.vo.TCalculateOptionVO">
         SELECT * FROM T_CALCULATE_OPTION
         WHERE TEACHER_KEY = #{teacherKey}
-        AND TARGET_DATE = #{targetDate}
+        AND TO_CHAR(TARGET_DATE, 'YYYY-MM') = #{targetDate}
     </select>
 
     <select id="selectTeacherStatisGraphByMonth" resultType="StatisResultDTO">
