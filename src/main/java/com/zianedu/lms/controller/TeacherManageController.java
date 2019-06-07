@@ -23,7 +23,12 @@ public class TeacherManageController {
 
         if("teacherCalcGraph".equals(page_gbn)) {
             mvc.setViewName("teacher/teacherCalcStatistics");
+        }else if("teacherCalculateMonthList".equals(page_gbn)) {
+            mvc.setViewName("teacher/teacherCalculateMonthList");
+        }else if("teacherCalculateSectionList".equals(page_gbn)) {
+            mvc.setViewName("teacher/teacherCalculateSectionList");
         }
+
 
         return mvc;
     }
