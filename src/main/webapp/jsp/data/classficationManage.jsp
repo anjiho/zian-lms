@@ -58,7 +58,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="#">카테고리관리</a></li>
+                        <li class="breadcrumb-item">데이터 관리</li>
                         <li class="breadcrumb-item active" aria-current="page">분류관리</li>
                     </ol>
                 </nav>
@@ -71,9 +71,8 @@
         <div class="col-md-5">
             <div class="card">
               <div class="card-body">
-                    <h5 class="card-title" style="position: absolute;left: -9999px;top: -9999px">분류등록</h5>
                     <div class="form-group row" style="margin-bottom: 0px;">
-                        <label class="col-sm-3 text-center control-label col-form-label card-title"  style="margin-bottom: 0px;">직렬직선택</label>
+                        <label class="col-sm-3 text-center control-label col-form-label card-title"  style="margin-bottom: 0px;">분류등록</label>
                         <div class="col-sm-7">
                              <input type="text" class="form-control" width="50px" id="subject" required="required">
                         </div>

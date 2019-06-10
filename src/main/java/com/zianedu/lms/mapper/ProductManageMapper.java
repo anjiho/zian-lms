@@ -1,9 +1,6 @@
 package com.zianedu.lms.mapper;
 
-import com.zianedu.lms.dto.PagingSearchDTO;
-import com.zianedu.lms.dto.ProblemBankListDTO;
-import com.zianedu.lms.dto.ProblemBankSubjectDTO;
-import com.zianedu.lms.dto.VideoListDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.vo.*;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,6 +19,10 @@ public interface ProductManageMapper {
     TGoodsVO selectTGoodsInfo(@Param("gKey") int gKey);
 
     List<TGoodsPriceOptionVO> selectTGoodsPriceOptionList(@Param("gKey") int gKey);
+
+    TGoodsPriceOptionVO selectTGoodsPriceOptionSingle(@Param("gKey") int gKey);
+
+    TGoodsPriceOptionVO selectTGoodsPriceOptionInfo(@Param("priceKey") int priceKey);
 
     List<TCategoryGoods> selectTCategoryGoodsList(@Param("gKey") int gKey);
 
@@ -86,6 +87,17 @@ public interface ProductManageMapper {
 
     List<String> selectTeacherNameListByVideoProduct(@Param("gKey") int gKey);
 
+    List<FreeInjectDTO> selectVideoProductListByFreeLectureInject(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                                  @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<TCpVO> selectTCpList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                              @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    int selectTCpListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+
+    int selectVideoProductListCountByFreeLectureInject(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 
@@ -103,7 +115,7 @@ public interface ProductManageMapper {
 
     void insertTBook(TBookVO tBookVO);
 
-    void insertTRes(TResVO tResVO);
+    Integer insertTRes(TResVO tResVO);
 
     void insertTResAtTeacherSubject(TResVO tResVO);
 
@@ -114,9 +126,11 @@ public interface ProductManageMapper {
     void insertTBankSubjectQuesLink(@Param("examQuesBankSubjectKey") int examQuesBankSubjectKey, @Param("examQuesBankKey") int examQuesBankKey,
                                     @Param("pos") int pos);
 
-    void insertTExamQuestionBankSubject(@Param("name") String name, @Param("subjectCtgKey") int subjectCtgKey);
+    //void insertTExamQuestionBankSubject(@Param("name") String name, @Param("subjectCtgKey") int subjectCtgKey);
 
-    //void insertTBankSubjectExamLink(TBankSubjectExamLinkVO);
+    void insertTExamQuestionBankSubject(TExamQuestionBankSubjectVO tExamQuestionBankSubjectVO);
+
+    void insertTBankSubjectExamLink(TBankSubjectExamLinkVO tBankSubjectExamLinkVO);
 
 
     /** DELETE **/
@@ -127,6 +141,8 @@ public interface ProductManageMapper {
     void deleteTLinkKeyByResType(@Param("reqKey") int reqKey, @Param("resType") int resType);
 
     void deleteTLinkKeyByLinkKey(@Param("linkKey") int linkKey);
+
+    void deleteTLinkKeyByResKey(@Param("resKey") int resKey);
 
     void deleteTGoodsTeacherLink(@Param("gTeacherKey") int gTeacherKey);
 
@@ -141,6 +157,8 @@ public interface ProductManageMapper {
     void deleteTBankSubjectQuesLink(@Param("bankSubjectQuesLinkKey") int bankSubjectQuesLinkKey);
 
     void deleteTGoodsPriceOption(@Param("gKey") int gKey);
+
+    void deleteTRes(@Param("resKey") int resKey);
 
     /** UPDATE **/
     void updateTGoods(TGoodsVO tGoodsVO);

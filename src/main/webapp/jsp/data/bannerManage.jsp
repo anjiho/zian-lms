@@ -8,10 +8,9 @@
     $(document).ready(function() {
         getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
         changeBox2('216');
-
     });
     function init() {
-        menuActive('menu-0', 2);
+        menuActive('menu-0', 3);
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -33,7 +32,6 @@
     function changeBox2(val) {
         $(".card").remove();
         dataManageService.getBannerList(val,function (selList) {
-            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -85,15 +83,13 @@
                         var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm">삭제</button>';
                         var bitText = "";
 
-                        if(cmpList1.valueBit1 == "1") bitText = "<span style='color: blue;'>O</span>";
-                        else bitText = "<span style='color: red;'>X</span>";
+                        if(cmpList1.valueBit1 == "1") bitText = "<i class=\"mdi mdi-check\" style=\"color:green;\"></i>";
+                        else bitText = "<i class=\"mdi mdi-close\" style=\"color: red\"></i>";
 
                         if (cmpList1 != undefined) {
                             var cellData = [
                                 function(data) {return cmpList1.value5 == null ? "-" : cmpList1.value5;},
                                 function(data) {return cmpList1.value1 == null ? "-" : fn_clearFilePath(cmpList1.value1);},
-                                //function(data) {return cmpList1.value2 == null ? "-" : cmpList1.value2;},
-                                //function(data) {return cmpList1.value3 == null ? "-" : cmpList1.value3;},
                                 function(data) {return cmpList1.valueBit1 == null ? "-" : bitText;},
                                 function(data) {return cmpList1.value4 == null ? "-" : gfn_substr(cmpList1.value4, 1, 30)+"...";},
                                 function(data) {return btn;}
@@ -117,7 +113,6 @@
     function popup(val,ctgKey,pos) { //수정팝업
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
-            console.log(selList);
             $("#bannerKey").val(val);
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
@@ -163,11 +158,13 @@
         var bannerColor= getInputTextValue("bannerColor");
         var bannerLink = getInputTextValue("bannerLink");
         var checkYn = "";
-        if($("input:checkbox[id='newPopYn']:checked").val()=='on'){
-            checkYn = '1';
-        }else{
-            checkYn = '0';
-        }
+        if($("input:checkbox[id='newPopYn']:checked").val()=='on') checkYn = '1';
+        else checkYn = '0';
+
+        var saveModifttext = '';
+        if(bannerKey == '0') saveModifttext = '저장 하시겠습니까?';
+        else saveModifttext = '수정 하시겠습니까?';
+
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
         data.append("ctgKey", ctgKey);
@@ -175,7 +172,7 @@
         data.append("value3", bannerColor);
         data.append("valueBit1", checkYn);
         data.append("value4", bannerLink);
-        if(confirm("저장하시겠습니까?")) {
+        if(confirm(saveModifttext)) {
             $.ajax({
                 url: "/file/bannerUpload",
                 method: "post",
@@ -193,9 +190,7 @@
 
     function bannerDelete(val,ctgKey,pos) {
         if(confirm("삭제하시겠습니까?")) {
-            dataManageService.deleteBannerInfo(val, ctgKey, function () {
-                location.reload();
-            });
+            dataManageService.deleteBannerInfo(val, ctgKey, function () {});
         }
     }
 
@@ -214,9 +209,7 @@
                 arr.push(data);
 
             });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
+            dataManageService.changeBannerPosition(arr, function () {});
         }else if(val == "1"){
             $("#dragtable_1 tbody tr").each(function(index) {
                 var id = $(this).attr("id");
@@ -284,7 +277,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">배너관리</li>
+                        <li class="breadcrumb-item">데이터관리</li>
                         <li class="breadcrumb-item active" aria-current="page">배너관리</li>
                     </ol>
                 </nav>

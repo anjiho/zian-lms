@@ -5,17 +5,17 @@ import lombok.Data;
 @Data
 public class TResVO {
 
-    private int resKey;
+    private int resKey;//0
 
-    private int type;
+    private int type;//0
 
-    private int device;
+    private int device;//pc 1, mobile 3
     //파일명
-    private int key00;
+    private int key00;//techerkey
 
     private int key01;
 
-    private int key02;
+    private int key02;//카테고리 키값
 
     private int key00Type;
 
@@ -25,7 +25,9 @@ public class TResVO {
 
     private String value;
 
-    private String valueText;
+    private String valueText;//내용
 
     private String ctgName;
+
+    private int ctgKey;
 }

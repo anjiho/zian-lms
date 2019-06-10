@@ -1,6 +1,7 @@
 package com.zianedu.lms.utils;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
@@ -128,6 +129,16 @@ public class StringUtils {
     public static String implode(String separator, String[] data) {
         StringJoiner sj = new StringJoiner(separator);
         for (String str : data) {
+            if (!COMMA.matcher(str).matches()) {
+                sj.add(str);
+            }
+        }
+        return sj.toString();
+    }
+
+    public static String implodeList(String separator, List<String>dataList) {
+        StringJoiner sj = new StringJoiner(separator);
+        for (String str : dataList) {
             if (!COMMA.matcher(str).matches()) {
                 sj.add(str);
             }
@@ -285,8 +296,10 @@ public class StringUtils {
     }
 
     public static void main(String[] args) {
-        String[] strs = {"1","2","3"};
-        System.out.println(stringArrayToString(strs, ","));
+        List<String>list = new ArrayList<>();
+        list.add("1");
+        list.add("2");
+        System.out.println(implodeList(",", list));
     }
 
     String lottoNumbers() {
@@ -319,6 +332,17 @@ public class StringUtils {
         }
         String str = builder.toString();
         return str;
+    }
+
+    //일단위 0으로 만들기
+    public static int convertLastNumberZero(int number) {
+        int convertNumber = 0;
+        if (number > 0) {
+            BigDecimal incm_civil_amt = new BigDecimal (number);
+            incm_civil_amt = incm_civil_amt.setScale(-1, BigDecimal.ROUND_DOWN);
+            return incm_civil_amt.intValue();
+        }
+        return convertNumber;
     }
 
 }

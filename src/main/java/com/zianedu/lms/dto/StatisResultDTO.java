@@ -43,4 +43,9 @@ public class StatisResultDTO {
         this.academyPrices = academyPrices;
         this.bookPrices = bookPrices;
     }
+
+    public StatisResultDTO(String[] years, long[] prices) {
+        this.years = years;
+        this.prices = prices;
+    }
 }

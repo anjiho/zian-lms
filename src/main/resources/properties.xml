@@ -15,6 +15,10 @@
     <entry key="logger.name">${logger.name}</entry>
     <entry key="file.upload.path">${file.upload.path}</entry>
     <entry key="file.domain.url">${file.domain.url}</entry>
+    <entry key="is.schedule">${is.schedule}</entry>
+    <entry key="algisa.oracle.db.url">${algisa.oracle.db.url}</entry>
+    <entry key="algisa.oracle.db.username">${algisa.oracle.db.username}</entry>
+    <entry key="algisa.oracle.db.password">${algisa.oracle.db.password}</entry>
     <!--<entry key="mysql.zian.oracle.db.url">${mysql.zian.oracle.db.url}</entry>-->
     <!--<entry key="mysql.zian.oracle.db.username">${mysql.zian.oracle.db.username}</entry>-->
     <!--<entry key="mysql.zian.oracle.db.password">${mysql.zian.oracle.db.password}</entry>-->

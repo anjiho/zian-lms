@@ -27,21 +27,21 @@ public class TExamQuestionBankVO {
 
     private int subjectCtgKey;
 
-    private int stepCtgKey;
+    private int stepCtgKey;//유형
 
-    private int patternCtgKey;
+    private int patternCtgKey;//패턴
 
-    private int unitCtgKey;
+    private int unitCtgKey;//단원
 
-    private int examYear;
+    private int examYear;//출제년도
 
-    private int examLevel;
+    private int examLevel;//난이도
 
-    private String subjectCode;
+    private String subjectCode;//과목코드
 
-    private String review;
+    private String review;//총평
 
-    private String commentaryUrl;
+    private String commentaryUrl;//해설강의링크
 
     private String answer1Reason;
 

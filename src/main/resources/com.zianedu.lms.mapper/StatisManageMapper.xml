@@ -178,6 +178,105 @@
         ORDER BY DAY ASC
     </select>
 
+    <select id="selectTeacherStatisByMonth" resultType="TeacherCalculateDTO">
+        SELECT
+            C.G_KEY, B.KIND, C.NAME,
+            COUNT (DECODE(B.PAY_STATUS, 2, 1)) PAY_CNT,
+            SUM (DECODE(B.PAY_STATUS, 2, B.CALC_PRICE, 0)) PAY_PRICE,
+            COUNT (DECODE(B.PAY_STATUS, 8, 1)) CANCEL_CNT,
+            SUM (DECODE(B.PAY_STATUS, 8, B.CALC_PRICE, 0)) CANCEL_PRICE
+        FROM T_CALCULATE A
+        RIGHT JOIN T_CALCULATE_DATA B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        INNER JOIN T_GOODS C
+        ON B.G_KEY = C.G_KEY
+        WHERE A.TEACHER_KEY = #{teacherKey}
+        AND B.TYPE = #{goodsType}
+        AND A.YEAR_MONTH = #{month}
+        GROUP BY C.G_KEY, B.KIND, C.NAME
+        ORDER BY C.G_KEY ASC
+    </select>
 
+    <select id="selectTeacherStatisBySection" resultType="TeacherCalculateDTO">
+        SELECT
+            C.G_KEY, B.KIND, C.NAME,
+            COUNT (DECODE(B.PAY_STATUS, 2, 1)) PAY_CNT,
+            SUM (DECODE(B.PAY_STATUS, 2, B.CALC_PRICE, 0)) PAY_PRICE,
+            COUNT (DECODE(B.PAY_STATUS, 8, 1)) CANCEL_CNT,
+            SUM (DECODE(B.PAY_STATUS, 8, B.CALC_PRICE, 0)) CANCEL_PRICE
+        FROM T_CALCULATE A
+        RIGHT JOIN T_CALCULATE_DATA B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        INNER JOIN T_GOODS C
+        ON B.G_KEY = C.G_KEY
+        WHERE A.TEACHER_KEY = #{teacherKey}
+        AND B.TYPE = #{goodsType}
+        <![CDATA[
+            AND TO_CHAR(B.INDATE, 'YYYY-MM-DD') >= TO_DATE(#{searchStartDate}, 'YYYY-MM-DD')
+        ]]>
+        <![CDATA[
+            AND TO_CHAR(B.INDATE, 'YYYY-MM-DD') <= TO_DATE(#{searchEndDate}, 'YYYY-MM-DD') + 1
+        ]]>
+        GROUP BY C.G_KEY, B.KIND, C.NAME
+        ORDER BY C.G_KEY ASC
+    </select>
+
+    <select id="selectTCalculateOptionList" resultType="com.zianedu.lms.vo.TCalculateOptionVO">
+        SELECT * FROM T_CALCULATE_OPTION
+        WHERE TEACHER_KEY = #{teacherKey}
+        AND TO_CHAR(TARGET_DATE, 'YYYYMM') = #{targetDate}
+    </select>
+
+    <select id="selectTeacherStatisGraphByMonth" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM') as DAY,
+            SUM(CALC_PRICE) as PRICE
+        FROM T_CALCULATE_DATA A
+        INNER JOIN T_CALCULATE B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        WHERE B.TEACHER_KEY = #{teacherKey}
+        AND TO_CHAR(A.INDATE, 'YYYY') = #{year}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectTeacherStatisGraphByYear" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY') as DAY,
+            SUM(CALC_PRICE) as PRICE
+        FROM T_CALCULATE_DATA A
+        INNER JOIN T_CALCULATE B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        WHERE B.TEACHER_KEY = #{teacherKey}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY')
+        ORDER BY DAY ASC
+    </select>
+
+    <select id="selectTeacherStatisGraphByDay" resultType="StatisResultDTO">
+        SELECT
+            TO_CHAR(A.INDATE, 'YYYY-MM-DD') as DAY,
+            SUM(CALC_PRICE) as PRICE
+        FROM T_CALCULATE_DATA A
+        INNER JOIN T_CALCULATE B
+        ON A.CALCULATE_KEY = B.CALCULATE_KEY
+        WHERE B.TEACHER_KEY = #{teacherKey}
+        AND TO_CHAR(A.INDATE, 'YYYY-MM') = #{month}
+        GROUP BY TO_CHAR(A.INDATE, 'YYYY-MM-DD')
+        ORDER BY DAY ASC
+    </select>
+
+    <insert id="insertTCalculateOption" parameterType="com.zianedu.lms.vo.TCalculateOptionVO">
+        <selectKey resultType="Integer" keyProperty="calculateOptionKey" order="BEFORE">
+            SELECT T_CALCULATE_OPTION_SEQ.nextval FROM DUAL
+        </selectKey>
+        INSERT INTO T_CALCULATE_OPTION
+        (
+          CALCULATE_OPTION_KEY, TEACHER_KEY, TARGET_DATE, TITLE, PRICE
+        )
+        VALUES
+        (
+          #{calculateOptionKey}, #{teacherKey}, sysdate, #{title}, #{price}
+        )
+    </insert>
 
 </mapper>

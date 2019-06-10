@@ -38,6 +38,30 @@ public class ProductManageController {
             mvc.setViewName("product/modifyBook");
         }else if("academyLectureSave".equals(page_gbn)) {
             mvc.setViewName("product/academyLectureSave");
+        }else if("mokExamManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokExamManage");
+        }else if("mokExamList".equals(page_gbn)) {
+            mvc.setViewName("product/mokExamList");
+        }else if("modifyMokExam".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokExam");//mokProductList
+        }else if("mokProductList".equals(page_gbn)) {
+            mvc.setViewName("product/mokProductList");
+        }else if("mokProductManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokProductManage");
+        }else if("modifyMokProduct".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokProduct");
+        }else if("mokProblemBankManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemBankManage");
+        }else if("mokProblemBankList".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemBankList");
+        }else if("modifyMokProblemBank".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokProblemBank");
+        }else if("mokProblemSubjectBankList".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemSubjectBankList");
+        }else if("mokProblemSubjectBankManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokProblemSubjectBankManage");
+        }else if("modifyMokProblemSubjectBank".equals(page_gbn)) {
+            mvc.setViewName("product/modifyMokProblemSubjectBank");
         }
         return mvc;
     }

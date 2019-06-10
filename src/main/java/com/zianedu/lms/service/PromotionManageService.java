@@ -79,7 +79,7 @@ public class PromotionManageService {
             if (PromotionPmType.getPromotionPmTypeKey(productPromotionInfo.getPmTypeStr()) == 51
                 || PromotionPmType.getPromotionPmTypeKey(productPromotionInfo.getPmTypeStr()) == 101) {
                 this.upsultPromotionInfo(
-                        0, gKey, productPromotionInfo.getPmTypeStr(), 0, 0, 0, 0);
+                        0, gKey, productPromotionInfo.getPmTypeStr(), 0, 0, 0, 0, 0);
             } else {
                 //패키지, 연간회원제, 지안패스
                 this.upsultPromotionInfo(
@@ -89,7 +89,8 @@ public class PromotionManageService {
                         productPromotionInfo.getExamYear(),
                         productPromotionInfo.getLimitDay(),
                         productPromotionInfo.getAffiliationCtgKey(),
-                        productPromotionInfo.getClassGroupCtgKey()
+                        productPromotionInfo.getClassGroupCtgKey(),
+                        productPromotionInfo.getDeviceLimitCount()
                 );
             }
             //온라인강좌, 프리패스 입력
@@ -109,9 +110,9 @@ public class PromotionManageService {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void upsultPromotionInfo(int pmKey, int gKey, String pmTypeStr, int examYear,
-                                    int limitDay, int affiliationCtgKey, int classGroupCtgKey) {
+                                    int limitDay, int affiliationCtgKey, int classGroupCtgKey, int deviceLimitCount) {
         TPromotionVO promotionVO = new TPromotionVO(
-                pmKey, gKey, pmTypeStr, examYear, limitDay, affiliationCtgKey, classGroupCtgKey
+                pmKey, gKey, pmTypeStr, examYear, limitDay, affiliationCtgKey, classGroupCtgKey, deviceLimitCount
         );
         if (promotionVO.getPmKey() == 0) {
             promotionManageMapper.insertTPromotion(promotionVO);

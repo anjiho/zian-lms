@@ -5,17 +5,18 @@ import com.google.common.primitives.Ints;
 import com.google.common.primitives.Longs;
 import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.PromotionPmType;
-import com.zianedu.lms.dto.MemberStatisDTO;
-import com.zianedu.lms.dto.PromotionStatisDTO;
-import com.zianedu.lms.dto.StatisResultDTO;
+import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.StatisManageMapper;
+import com.zianedu.lms.repository.GoodsKindNameRepository;
 import com.zianedu.lms.utils.StringUtils;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.utils.ZianUtils;
+import com.zianedu.lms.vo.TCalculateOptionVO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -28,6 +29,9 @@ public class StatisManageService {
 
     @Autowired
     private StatisManageMapper statisManageMapper;
+
+    @Autowired
+    private GoodsKindNameRepository goodsKindNameRepository;
 
     /**
      * 전체 결제 월별 통계
@@ -399,6 +403,189 @@ public class StatisManageService {
         long[] userCounts = Longs.toArray(memberRegResult);
 
         return new MemberStatisDTO(userCounts);
+    }
+
+    /**
+     * 월별 정산내역(강사)
+     * @param teacherKey
+     * @param searchMonth
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TeacherCalculateResultDTO getTeacherCalculateByMonth(int teacherKey, String searchMonth) {
+        if (teacherKey == 0 && "".equals(searchMonth)) return null;
+
+        List<TeacherCalculateDTO> videoCalculateResult = statisManageMapper.selectTeacherStatisByMonth(
+                teacherKey,
+                GoodsType.getGoodsTypeKey(GoodsType.VIDEO.toString()),
+                Util.isNullValue(searchMonth, "")
+        );
+        //상품 구분명 주입하기
+        if (videoCalculateResult != null && videoCalculateResult.size() > 0) {
+            goodsKindNameRepository.injectGoodsKindNameAny(videoCalculateResult);
+        }
+
+        List<TeacherCalculateDTO> academyCalculateResult = statisManageMapper.selectTeacherStatisByMonth(
+                teacherKey,
+                GoodsType.getGoodsTypeKey(GoodsType.ACADEMY.toString()),
+                Util.isNullValue(searchMonth, "")
+        );
+        //상품 구분명 주입하기
+        if (academyCalculateResult != null && academyCalculateResult.size() > 0) {
+            goodsKindNameRepository.injectGoodsKindNameAny(academyCalculateResult);
+        }
+
+        List<TeacherCalculateDTO> packageCalculateResult = statisManageMapper.selectTeacherStatisByMonth(
+                teacherKey,
+                GoodsType.getGoodsTypeKey(GoodsType.PACKAGE.toString()),
+                Util.isNullValue(searchMonth, "")
+        );
+        //상품 구분명 주입하기
+        if (packageCalculateResult != null && packageCalculateResult.size() > 0) {
+            goodsKindNameRepository.injectGoodsKindNameAny(packageCalculateResult);
+        }
+        //옵션 정보 가져오기
+        List<TCalculateOptionVO>calculateOptionList = statisManageMapper.selectTCalculateOptionList(teacherKey, searchMonth);
+
+        return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult, calculateOptionList);
+    }
+
+    /**
+     * 기간별 정산내역(강사)
+     * @param teacherKey
+     * @param searchStartDate
+     * @param searchEndDate
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TeacherCalculateResultDTO getTeacherCalculateBySection(int teacherKey, String searchStartDate, String searchEndDate) {
+        if (teacherKey == 0 && "".equals(searchStartDate) && "".equals(searchEndDate)) return null;
+
+        List<TeacherCalculateDTO> videoCalculateResult = statisManageMapper.selectTeacherStatisBySection(
+                teacherKey,
+                GoodsType.getGoodsTypeKey(GoodsType.VIDEO.toString()),
+                Util.isNullValue(searchStartDate, ""),
+                Util.isNullValue(searchEndDate, "")
+        );
+        //상품 구분명 주입하기
+        if (videoCalculateResult != null && videoCalculateResult.size() > 0) {
+            goodsKindNameRepository.injectGoodsKindNameAny(videoCalculateResult);
+        }
+
+        List<TeacherCalculateDTO> academyCalculateResult = statisManageMapper.selectTeacherStatisBySection(
+                teacherKey,
+                GoodsType.getGoodsTypeKey(GoodsType.ACADEMY.toString()),
+                Util.isNullValue(searchStartDate, ""),
+                Util.isNullValue(searchEndDate, "")
+        );
+        //상품 구분명 주입하기
+        if (academyCalculateResult != null && academyCalculateResult.size() > 0) {
+            goodsKindNameRepository.injectGoodsKindNameAny(academyCalculateResult);
+        }
+
+        List<TeacherCalculateDTO> packageCalculateResult = statisManageMapper.selectTeacherStatisBySection(
+                teacherKey,
+                GoodsType.getGoodsTypeKey(GoodsType.PACKAGE.toString()),
+                Util.isNullValue(searchStartDate, ""),
+                Util.isNullValue(searchEndDate, "")
+        );
+        //상품 구분명 주입하기
+        if (packageCalculateResult != null && packageCalculateResult.size() > 0) {
+            goodsKindNameRepository.injectGoodsKindNameAny(packageCalculateResult);
+        }
+        return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult, null);
+    }
+
+    /**
+     * 강사 매출 그래프 ( 월별 )
+     * @param teacherKey
+     * @param searchYear
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public StatisResultDTO getTeacherStatisGraphByMonth(int teacherKey, String searchYear) {
+        if (teacherKey == 0 && "".equals(searchYear)) return null;
+
+        List<Integer>priceResult = new ArrayList<>();
+        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByMonth(teacherKey, searchYear);
+
+        if (list.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                Integer price = Integer.parseInt(resultDTO.getPrice());
+                priceResult.add(price);
+            }
+        }
+        long[] prices = Longs.toArray(priceResult);
+
+        return new StatisResultDTO(prices);
+    }
+
+    /**
+     * 강사 매출 그래프 ( 년별 )
+     * @param teacherKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public StatisResultDTO getTeacherStatisGraphByYear(int teacherKey) {
+        if (teacherKey == 0) return null;
+
+        List<String>yearList = new ArrayList<>();
+        List<Integer>priceResult = new ArrayList<>();
+        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByYear(teacherKey);
+
+        if (list.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                String year = resultDTO.getDay();
+                Integer price = Integer.parseInt(resultDTO.getPrice());
+
+                yearList.add(year);
+                priceResult.add(price);
+            }
+        }
+        String[] years = StringUtils.arrayListToStringArray(yearList);
+        long[] prices = Longs.toArray(priceResult);
+
+        return new StatisResultDTO(years, prices);
+    }
+
+    /**
+     * 강사 매출 그래프 ( 일별 )
+     * @param teacherKey
+     * @param yyyyMM
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public StatisResultDTO getTeacherStatisGraphByDay(int teacherKey, String yyyyMM) {
+        if (teacherKey == 0 && "".equals(yyyyMM)) return null;
+
+        List<Integer>priceResult = new ArrayList<>();
+        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByDay(teacherKey, yyyyMM);
+
+        if (list.size() > 0) {
+            for (StatisResultDTO resultDTO : list) {
+                Integer price = Integer.parseInt(resultDTO.getPrice());
+                priceResult.add(price);
+            }
+        }
+        long[] prices = Longs.toArray(priceResult);
+
+        return new StatisResultDTO(prices);
+    }
+
+    /**
+     * 교수 > 정산내역 > 옵션추가
+     * @param teacherKey
+     * @param targetDate
+     * @param title
+     * @param price
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveTeacherCalculateOptionInfo(int teacherKey, String title, int price) {
+        if (teacherKey == 0 && "".equals(title)) return;
+        TCalculateOptionVO tCalculateOptionVO = new TCalculateOptionVO(
+                teacherKey, title, price
+        );
+        statisManageMapper.insertTCalculateOption(tCalculateOptionVO);
     }
 
 }

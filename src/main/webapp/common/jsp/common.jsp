@@ -5,6 +5,7 @@
     TUserVO tUserVO = (TUserVO)session.getAttribute("user_info");
     int authority = tUserVO.getAuthority();
     String name = tUserVO.getName();
+    int httpStatusCode = response.getStatus();
 %>
 <!DOCTYPE html>
 <html lang="ko">
@@ -92,6 +93,8 @@
     <!-- dwr common -->
     <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 
+    <!--daum map api-->
+    <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">
@@ -100,6 +103,9 @@
 <!-- form 시작-->
 <form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
+<input type="hidden" name="param_key" id="param_key">
+<input type="hidden" id="type" name="type" value=""><!--주문관리 : 페이지 왼쪽메뉴 스타일 type-->
+</form>
 <%
     if (authority == 4) {
 %>
@@ -124,6 +130,11 @@
 }
 %>
 <script>
+    var httpCode = '<%=httpStatusCode%>';
+    if (httpCode == '901') {
+        alert("세션이 만료되어 로그인 페이지로 이동합니다.");
+    }
+
     function serializeDiv( $div, serialize_method ) {
         // Accepts 'serialize', 'serializeArray'; Implicit 'serialize'
         serialize_method = serialize_method || 'serialize';

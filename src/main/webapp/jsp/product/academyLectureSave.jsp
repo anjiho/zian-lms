@@ -9,6 +9,19 @@
     function init() {
         menuActive('menu-1', 4);
         getOptionSelectboxAddTag("", "sel_option");//옵션명 셀렉트박스
+        getCategoryList("sel_category","214");
+        getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
+        getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
+        getLectureStatusSelectbox("status", "");//강좌정보- 진행상태
+        getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
+        getClassRegistraionDaySelectbox("limitDay", "");//수강일수
+        getLectureCountSelectbox("lecTime", "");//강좌시간
+        getExamPrepareSelectbox("examYear", "");//시험대비년도 셀렉트박스
+        getSelectboxListForCtgKeyNoTag2('teacherTable', '70', 0);
+        selectTeacherSelectboxNoTag2('teacherTable', 1);
+        getProductSearchTypeSelectbox("l_productSearch");
+        getEmphasisSelectbox("l_emphasis", "");
     }
     $( document ).ready(function() {
         $('#description').summernote({ //기본정보-에디터
@@ -36,6 +49,11 @@
                     }
                     return '';
                 }
+            },
+            popover: {
+                image: [],
+                link: [],
+                air: []
             }
         });
 
@@ -44,6 +62,13 @@
             var ul = $(this);
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
+
+        //모달 초기화
+        $('.bookModal').on('hidden.bs.modal', function (e) {
+            $('form').each(function(){
+                this.reset();
+            });
         });
     });
 
@@ -72,26 +97,21 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+        var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
+            $('#categoryTable tr').eq(0).removeAttr("style", null);
         } else {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
-            $trNew.find("td").eq(1).html("지안에듀");
-            getCategoryNoTag('categoryTable','1183', '3');
-            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(7).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+            getCategoryNoTag2('categoryTable','1183', '2');
         }
     }
 
-    //교사 추가 버튼
+    //강사 추가 버튼
     function addTeacherInfo() {
         var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
 
@@ -103,39 +123,12 @@
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
-            $trNew.find("td input").eq(1).val("");
-            $trNew.find("td input").eq(2).val("");
+            $trNew.find("td input").eq(0).val("100");
+            //$trNew.find("td input").eq(1).val("");
+            //$trNew.find("td input").eq(2).val("");
 
-            getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);
-            selectTeacherSelectboxNoTag('teacherTable', 4);
-        }
-    }
-
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
+            getSelectboxListForCtgKeyNoTag2('teacherTable', '70', 0);
+            selectTeacherSelectboxNoTag2('teacherTable', 1);
         }
     }
 
@@ -147,7 +140,6 @@
 
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
-        alert(sellPrice);
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
         td.find("span").html(sum);
@@ -155,7 +147,8 @@
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        getCategoryNoTag(val, tableId, tdNum);
+        //if(tdNum == '5') return false;
+        getCategoryNoTag2(val, tableId, tdNum);
     }
 
     //강사목록 새로 등록하는 값 주입하기(강사키)
@@ -167,6 +160,131 @@
     function injectTeacherKey(val) {
         $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
     }
+    
+    function academyLectureSave() {
+        var data = new FormData();
+        $.each($('#imageListFile')[0].files, function(i, file) {
+            data.append('imageListFile', file);
+        });
+
+        $.each($('#imageViewFile')[0].files, function(i, file) {
+            data.append('imageViewFile', file);
+        });
+
+        /* 1. 기본정보 obj */
+        var obj = getJsonObjectFromDiv("section1");
+        if(obj.isShow == 'on')  obj.isShow = '1';//노출 checkbox
+        else obj.isShow = '0';
+        if(obj.isSell == 'on')  obj.isSell = '1';//판매
+        else obj.isSell = '0';
+        if(obj.isFree == 'on')  obj.isFree = '1';//무료
+        else obj.isFree = '0';
+        if(obj.isFreebieDeliveryFree == 'on')  obj.isFreebieDeliveryFree = '1';//사은품배송비무료
+        else obj.isFreebieDeliveryFree = '0';
+        /*  //기본정보 obj */
+
+
+        /*  2.옵션 obj */
+        var array = new Array();
+        $('#optionTable tbody tr').each(function(index){
+            var i =0;
+            var optionName = $(this).find("td select").eq(0).val();
+            var price = $(this).find("td input").eq(0).val();
+            var sellPrice = $(this).find("td input").eq(1).val();
+            var point = $(this).find("td input").eq(2).val();
+            var extendPercent = $(this).find("td input").eq(3).val();
+            var data = {
+                priceKey:'0',
+                gKey:'0',
+                kind:optionName,
+                ctgKey:'0',
+                name:'0',
+                price:price,
+                sellPrice:sellPrice,
+                point:point,
+                extendPercent:extendPercent
+            };
+            array.push(data);
+        });
+
+        /* 3. 카테고리 저장 */
+        var categoryArr = new Array();
+        $('#categoryTable tbody tr').each(function(index){
+            var ctgKey = $(this).find("td select").eq(4).val();
+
+            var data = {
+                ctgGKey:0,
+                ctgKey:ctgKey,
+                gKey:0,
+                pos:0
+            };
+            categoryArr.push(data);
+        });
+
+        /* 2. 강좌정보 저장 */
+        var lectureObj = getJsonObjectFromDiv("section4");
+        var array2 = new Array();
+        $('#teacherTable tbody tr').each(function(index){
+            var teacher = $(this).find("td select").eq(0).val();
+            var teacher1 = $(this).find("td select").eq(1).val();
+            var teacher2 = $(this).find("td input").eq(0).val();
+
+            var data = {
+                gTeacherKey:'0',
+                gKey:'0',
+                isPublicSubject:'0',
+                subjectCtgKey:teacher,
+                teacherKey:teacher1,
+                calculateRate:teacher2,
+                subjectName: "",
+                teacherName: ""
+            };
+            array2.push(data);
+        });
+
+        var array3 = new Array();
+        $('#bookTable tbody tr').each(function(index){
+            var bookKey = $(this).find("td input").eq(0).val();
+            var isBookMainId = "isBookMain_" + bookKey;
+            var isBookMain = $("input:checkbox[id=" + "'" + isBookMainId + "'" + "]").is(":checked");
+            //주교재 여부 값 변환
+            if (isBookMain) valueBit = 1;
+            else valueBit = 0;
+
+            var data = {
+                linkKey: 0,
+                reqKey: 0,
+                resKey:bookKey,
+                resType: 5,
+                pos: 0,
+                valueBit: valueBit
+            };
+            array3.push(data);
+        });
+        data.append("videoInfo", JSON.stringify(obj));
+        data.append("videoOptionInfo",JSON.stringify(array));
+        data.append("videoCategoryInfo",JSON.stringify(categoryArr));
+        data.append("videoLectureInfo",JSON.stringify(lectureObj));
+        data.append("videoTeacherInfo",JSON.stringify(array2));
+        data.append("videoOtherInfo",JSON.stringify(array3));
+
+        if(confirm("저장하시겠습니까?")) {
+            $.ajax({
+                url: "/file/productUpload",
+                method: "post",
+                dataType: "JSON",
+                data: data,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (data) {
+                    if(data.result){
+                        goPage('productManage', 'academyLectureList');
+                    }
+                }
+            });
+        }
+    }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
 <div class="page-breadcrumb">
@@ -177,7 +295,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">학원강의 상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">학원강의 등록</li>
                     </ol>
                 </nav>
@@ -206,13 +323,14 @@
                                 <input type="hidden" value="0" name="tags">
                                 <input type="hidden" value="0" name="calculateRate">
                                 <input type="hidden" value="0" name="isQuickDelivery">
-                                <input type="hidden" value="" name="goodsId">
+                                <input type="hidden" value="0" name="goodsId">
                                 <input type="hidden" value="" name="goodsTypeName">
                                 <input type="hidden" value="" name="summary">
-                                <div class="col-md-6">
+                                <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                         <span>학원강의</span>
+                                        <input type="hidden" class="col-sm-6 bg-light required form-control" id="type" name='type' value="2">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -277,7 +395,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                        <div class="col-sm-8 pl-0 pr-0">
+                                        <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
                                                 <span class="custom-file-control custom-file-label"></span>
@@ -286,7 +404,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                        <div class="col-sm-8 pl-0 pr-0">
+                                        <div class="col-sm-6 pl-0 pr-0">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input addFile" id="imageViewFile" name="imageViewFile" required>
                                                 <span class="custom-file-control1 custom-file-label"></span>
@@ -295,7 +413,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
+                                        <div class="col-sm-7 pl-0 pr-0">
                                             <span id="l_emphasis"></span>
                                         </div>
                                     </div>
@@ -325,9 +443,9 @@
                         <!-- 2.옵션 Tab -->
                         <h3>옵션</h3>
                         <section>
-                            <div class="float-right mb-3">
+                            <!--<div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
-                            </div>
+                            </div>-->
                             <div id="section2">
                                 <table class="table" id="optionTable">
                                     <input type="hidden" value="0" name="goodsTypeName">
@@ -344,7 +462,7 @@
                                     <tbody id="optionList">
                                         <tr>
                                             <td style="padding: 0.3rem;vertical-align: middle">
-                                                <select class="select2 form-control custom-select" style="height:36px;" id="sel_option">
+                                                <select class="select2 form-control custom-select" style="height:36px;" id="sel_option" name='selOption[]'>
                                                     <option>선택</option>
                                                 </select>
                                             </td>
@@ -365,7 +483,7 @@
                                                 <span id="sum_0"></span>
                                             </td>
                                             <td style="vertical-align: middle">
-                                                <button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>
+                                                <!--<button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>-->
                                             </td>
                                         </tr>
                                     </tbody>
@@ -397,7 +515,45 @@
                                         <th scope="col"></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="categoryList"></tbody>
+                                    <tbody id="categoryList">
+                                    <tr>
+                                        <td><!--옵션명selbox-->
+                                            <select class='form-control'  id='sel_category' onchange="getCategoryNoTag2('categoryTable','1183', '2');">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'  name="ctgKey">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </section>
@@ -407,7 +563,7 @@
                         <h3>강좌정보</h3>
                         <section>
                             <div id="section4">
-                                <input type="hidden" name="lecKey" id="lecKey">
+                                <input type="hidden" name="lecKey" value="0">
                                 <input type="hidden" name="gKey" value="0">
                                 <input type="hidden" name="teacherKey" value="0">
                                 <input type="hidden" name="regdate" value="">
@@ -482,18 +638,32 @@
                                     <colgroup>
                                         <col width="30%" />
                                         <col width="10%" />
-                                        <col width="30%" />
-                                        <col width="30%" />
+                                        <col width="60%" />
                                     </colgroup>
                                     <thead>
                                     <tr style="">
                                         <th>과목</th>
-                                        <th></th>
                                         <th>선생님명</th>
-                                        <th>정산률(%)</th>
+                                        <th style="padding-left: 9%;">정산률(%)</th>
+                                        <th></th>
                                     </tr>
                                     </thead>
-                                    <tbody id="teacherList"></tbody>
+                                    <tbody id="teacherList">
+                                    <tr>
+                                        <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
+                                            <select class="select2 form-control custom-select" style="height:36px;" name="teacherKeys[]"></select>
+                                        </td>
+                                        <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
+                                            <select class="select2 form-control custom-select" style="height:36px;" name="subjectKeys[]"></select>
+                                        </td>
+                                        <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
+                                            <input type="text" class="form-control text-right" style="display: inline-block;width:60%;text-align: right" name='calcRate[]' value="100"> %
+                                        </td>
+                                        <td style="padding: 0.3rem;width: 20%">
+                                            <button type="button" onclick="deleteTableRow('teacherTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
                                 </table>
                             </div>
                         </section>
@@ -702,7 +872,7 @@
         saveState : true, //현재 단계 쿠키저장
         enablePagination : true,
         onFinished: function(event, currentIndex) {
-            playSave();
+            academyLectureSave();
         },
         // onContentLoaded: function (event, currentIndex) {
         //

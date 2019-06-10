@@ -17,6 +17,10 @@
     -moz-transform: rotate(45deg)
 }
 
+span{
+    vertical-align: middle;
+}
+
 /*!
  * Bootstrap v4.1.0 (https://getbootstrap.com/)
  * Copyright 2011-2018 The Bootstrap Authors
@@ -233,6 +237,7 @@ svg:not(:root) {
 table {
     border-collapse: collapse
 }
+
 
 caption {
     padding-top: 1rem;
@@ -1861,6 +1866,10 @@ pre code {
     background-color: #f8f9fa
 }
 
+.table thead tr{ /*추가*/
+    background-color: #d4d4d4;
+}
+
 .table-primary, .table-primary > td, .table-primary > th {
     background-color: #d8d2fa
 }
@@ -2180,6 +2189,11 @@ select.form-control:focus::-ms-value {
     background-color: #fff
 }
 
+select:focus{
+    box-shadow: 1px 1px 1px 1px
+    rgba(102, 186, 255, 0.4);
+}
+
 .form-control-file, .form-control-range {
     display: block;
     width: 100%
@@ -2394,10 +2408,10 @@ select.form-control:focus::-ms-value {
 
 .invalid-feedback {
     display: none;
-    width: 100%;
-    margin-top: 0.25rem;
+    margin-top: 0.28rem;
     font-size: 80%;
-    color: #da542e
+    color: #da542e;
+    margin-left: 10px;
 }
 
 .invalid-tooltip {
@@ -11259,11 +11273,12 @@ ul.list-style-none li a:hover {
 }
 
 .sidebar-nav ul .sidebar-item .sidebar-link.active, .sidebar-nav ul .sidebar-item .sidebar-link:hover {
+    background: #27a9e3;
     opacity: 1
 }
 
 .sidebar-nav ul .sidebar-item.selected > .sidebar-link {
-    background: #27a9e3;
+    background: black;
     opacity: 1
 }
 

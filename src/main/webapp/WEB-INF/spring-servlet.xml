@@ -18,22 +18,23 @@
 
 	<tx:annotation-driven proxy-target-class="true"/>
 
-  	<!-- 세션 인터셉터 설정 -->
-	<!--<mvc:interceptors>-->
-		<!--<mvc:interceptor>-->
-			<!--<mvc:mapping path="/academy.do"/>-->
-			<!--<mvc:mapping path="/lecture.do"/>-->
-			<!--<mvc:mapping path="/member.do"/>-->
-			<!--<mvc:mapping path="/student.do"/>-->
-			<!--<mvc:mapping path="/file.do"/>-->
-			<!--<mvc:mapping path="/dashboard.do"/>-->
-			<!--<mvc:mapping path="/lecture.do"/>-->
-			<!--<mvc:mapping path="/consult.do"/>-->
-			<!--<mvc:mapping path="/bus.do"/>-->
-			<!--<mvc:mapping path="/payment.do"/>-->
-   			<!--<bean class="com.flowedu.config.SessionInterceptor"/>-->
-		<!--</mvc:interceptor>-->
-	<!--</mvc:interceptors>-->
+<!--  	 세션 인터셉터 설정-->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/dashboard"/>
+			<mvc:mapping path="/dataManage"/>
+			<mvc:mapping path="/file"/>
+<!--			<mvc:mapping path="/login"/>-->
+			<mvc:mapping path="/memberManage"/>
+			<mvc:mapping path="/orderManage"/>
+			<mvc:mapping path="/popupCouponManage"/>
+			<mvc:mapping path="/productManage"/>
+			<mvc:mapping path="/teacherManage"/>
+			<mvc:mapping path="/promotionManage"/>
+			<mvc:mapping path="/statisManage"/>
+   			<bean class="com.zianedu.lms.config.SessionInterceptor"/>
+		</mvc:interceptor>
+	</mvc:interceptors>
 
   	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<!--<property name="defaultEncoding" value="EUC-KR" />-->

@@ -1,0 +1,188 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.BoardManageMapper">
+
+    <select id="selectQnAList" resultType="QnaListDTO">
+        SELECT * FROM (
+            SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS,
+                    (SELECT COUNT(BBS_COMMNET_KEY) FROM T_BBS_COMMENT T WHERE T.BBS_KEY = A.BBS_KEY) commentCount
+            FROM T_BBS_DATA A
+            WHERE A.IS_NOTICE = 0
+            AND A.BBS_MASTER_KEY = #{bbsMasterKey}
+            <if test="teacherKey > 0">
+                AND A.CTG_KEY = #{teacherKey}
+            </if>
+            START WITH A.BBS_PARENT_KEY = 0
+            CONNECT BY PRIOR A.BBS_KEY = A.BBS_PARENT_KEY
+            ORDER SIBLINGS BY A.BBS_PARENT_KEY DESC, A.BBS_KEY DESC
+        ) Z
+        WHERE 1=1
+        <if test="searchType == 'title'">
+            AND Z.TITLE LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'contents'">
+            AND Z.CONTENTS LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'writer'">
+            AND Z.WRITE_USER_KEY IN ( SELECT USER_KEY FROM T_USER WHERE 1=1 AND NAME LIKE '%'||#{searchText}||'%' )
+        </if>
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectQnAListCount" resultType="Integer">
+        SELECT COUNT(Z.BBS_KEY) FROM (
+            SELECT A.BBS_KEY, A.BBS_PARENT_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.WRITE_USER_KEY, A.READ_COUNT, LEVEL, CONTENTS
+            FROM T_BBS_DATA A
+            WHERE A.IS_NOTICE = 0
+            AND A.BBS_MASTER_KEY = #{bbsMasterKey}
+            <if test="teacherKey > 0">
+                AND A.CTG_KEY = #{teacherKey}
+            </if>
+        ) Z
+        WHERE 1=1
+        <if test="searchType == 'title'">
+            AND Z.TITLE LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'contents'">
+            AND Z.CONTENTS LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'writer'">
+            AND Z.WRITE_USER_KEY IN ( SELECT USER_KEY FROM T_USER WHERE 1=1 AND NAME LIKE '%'||#{searchText}||'%' )
+        </if>
+    </select>
+
+    <select id="selectQnaDetailInfo" resultType="QnaListDTO">
+        SELECT
+            A.BBS_KEY, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.TITLE, A.READ_COUNT,
+            B.NAME as userName, B.USER_ID, A.WRITE_USER_KEY, A.CONTENTS, A.CTG_KEY as teacherKey, A.CTG_KEY_02 as ctgKey, C.FILENAME as fileName
+        FROM T_BBS_DATA A
+        INNER JOIN T_USER B
+        ON A.WRITE_USER_KEY = B.USER_KEY
+        LEFT OUTER JOIN T_BBS_DATA_FILE C
+        ON A.BBS_KEY = C.BBS_KEY
+        WHERE A.BBS_KEY = #{bbsKey}
+    </select>
+
+    <select id="selectQnaCommentList" resultType="BbsCommentDTO">
+        SELECT
+            A.BBS_COMMNET_KEY as bbsCommentKey, B.NAME as userName, TO_CHAR(A.INDATE,'YYYY-MM-DD') as indate, A.COMMENT_ as commentContents
+        FROM T_BBS_COMMENT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE BBS_KEY = #{bbsKey}
+        ORDER BY A.BBS_COMMNET_KEY ASC
+    </select>
+
+    <select id="selectGoodsReviewSubjectList" resultType="HashMap">
+        SELECT T.G_KEY, CONCAT( CONCAT( CONCAT(T.NAME, '+'), T.reviewCnt), '개') as name
+        FROM (
+            SELECT B.G_KEY, B.NAME, (SELECT COUNT(G_REVIEW_KEY) FROM T_GOODS_REVIEW Z WHERE Z.G_KEY = B.G_KEY) as reviewCnt
+            FROM T_GOODS_TEACHER_LINK A
+            INNER JOIN T_GOODS B
+            ON A.G_KEY = B.G_KEY
+            WHERE A.TEACHER_KEY = #{teacherKey}
+            AND B.TYPE = 1
+            ORDER BY B.G_KEY DESC
+        ) T
+        WHERE T.reviewCnt > 0
+    </select>
+
+    <select id="selectGoodsReviewList" resultType="GoodsReviewDTO">
+        SELECT
+            A.G_REVIEW_KEY, A.TITLE, A.POINT, B.NAME, TO_CHAR(A.indate, 'YYYY-MM-dd') as indate, A.CONTENTS
+        FROM T_GOODS_REVIEW A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <if test="gKey == 0">
+            AND A.G_KEY IN ( SELECT G_KEY FROM T_GOODS_TEACHER_LINK WHERE TEACHER_KEY = #{teacherKey} )
+        </if>
+        <if test="gKey > 0">
+            AND A.G_KEY = #{gKey}
+        </if>
+        ORDER BY A.G_REVIEW_KEY DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectGoodsReviewListCount" resultType="Integer">
+        SELECT COUNT(A.G_REVIEW_KEY)
+        FROM T_GOODS_REVIEW A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        <if test="gKey == 0">
+            AND A.G_KEY IN ( SELECT G_KEY FROM T_GOODS_TEACHER_LINK WHERE TEACHER_KEY = #{teacherKey} )
+        </if>
+        <if test="gKey > 0">
+            AND A.G_KEY = #{gKey}
+        </if>
+    </select>
+
+    <insert id="insertTBbsData" parameterType="com.zianedu.lms.vo.TBbsDataVO">
+        <selectKey resultType="Integer" keyProperty="bbsKey" order="BEFORE">
+            SELECT T_BBS_DATA_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO T_BBS_DATA
+        (
+            BBS_KEY, BBS_MASTER_KEY, BBS_PARENT_KEY, INDATE, TITLE, WRITE_USER_KEY, CTG_KEY, CTG_KEY_02, IS_NOTICE, CONTENTS, BBS_CUSTOM_KEY
+        )
+        VALUES
+        (
+            #{bbsKey}, #{bbsMasterKey}, #{bbsParentKey}, sysdate, #{title}, #{writeUserKey}, #{ctgKey}, #{ctgKey02}, #{isNotice}, #{contents}, #{bbsCustomKey}
+        )
+    </insert>
+
+    <insert id="insertTBbsComment" parameterType="com.zianedu.lms.vo.TBbsCommentVO">
+        <selectKey resultType="Integer" keyProperty="bbsCommentKey" order="BEFORE">
+            SELECT T_BBS_COMMENT_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO T_BBS_COMMENT
+        (
+            BBS_COMMNET_KEY, BBS_KEY, USER_KEY, INDATE, COMMENT_
+        )
+        VALUES
+        (
+            #{bbsCommentKey}, #{bbsKey}, #{userKey}, sysdate, #{comment_}
+        )
+    </insert>
+
+    <insert id="insertTNotice" parameterType="com.zianedu.lms.vo.TBbsVO">
+        <selectKey resultType="Integer" keyProperty="idx" order="BEFORE">
+            SELECT T_NOTICE_SEQ.NEXTVAL FROM DUAL
+        </selectKey>
+        INSERT INTO T_NOTICE
+        (
+            IDX, TITLE, CONTENTS, BBS_MASTER_KEY, IS_HEAD, CREATE_DATE, CREATE_USER_KEY, NOTICE_FILE
+        )
+        VALUES
+        (
+            #{idx}, #{title}, #{contents}, #{bbsMasterKey}, #{isHead}, TO_DATE(#{createDate}, 'YYYY-MM-DD hh24:mi:ss')
+        )
+    </insert>
+
+    <update id="updateTBbsData">
+        UPDATE T_BBS_DATA
+        <set>
+            <if test="title != ''">TITLE = #{title},</if>
+            <if test="contents != ''">CONTENTS = #{contents},</if>
+        </set>
+        WHERE BBS_KEY = #{bbsKey}
+    </update>
+
+    <update id="updateTBbsComment">
+        UPDATE T_BBS_COMMENT
+        <set>
+            <if test="contents != ''">COMMENT_ = #{contents}</if>
+        </set>
+        WHERE BBS_COMMNET_KEY = #{bbsCommentKey}
+    </update>
+
+    <delete id="deleteTBbsComment">
+        DELETE FROM T_BBS_COMMENT WHERE BBS_COMMNET_KEY = #{bbsCommentKey}
+    </delete>
+
+    <delete id="deleteTBbsData">
+        DELETE FROM T_BBS_DATA WHERE BBS_KEY = #{bbsKey}
+    </delete>
+
+</mapper>

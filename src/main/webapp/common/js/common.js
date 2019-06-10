@@ -1468,7 +1468,7 @@ function isCheckbox(checkbox_id, boolean) {
  */
 function isCheckboxByNumber(checkbox_id, number) {
     var boolean = false;
-    if (number == "1") boolean = true;
+    if (number == "1" || number == "2") boolean = true; //number2 = 모의고사(온라인)
 
     if (checkbox_id != "") {
         $("#" + checkbox_id).attr("checked", boolean);
@@ -1927,7 +1927,7 @@ function phoneNumber_sum(phone1, phone2, phone3) {
     var phone1 = $("#" + phone1).val();
     var phone2 = $("#" + phone2).val();
     var phone3 = $("#" + phone3).val();
-    var allPhoneNum = phone1 + phone2 + phone3;
+    var allPhoneNum = phone1+"-"+ phone2+"-"+phone3;
     return allPhoneNum;
 
 }
@@ -1946,6 +1946,8 @@ function get_allphonenum(phone1, phone2, phone3) {
     var all_phonenum = phonenum1 + phonenum2 + phonenum3;
     return all_phonenum;
 }
+
+
 
 //쌍따옴표 제거
 function remove_double_quotation(val) {
@@ -1992,6 +1994,8 @@ function get_array_values_by_name(type, name) {
     }
     return array;
 }
+
+
 
 //브라우저 종류 값 가져오기
 function get_browser_type() {
@@ -2067,6 +2071,7 @@ function getTimeStamp(name, check_mode) {
 
     $("input[name='" + name + "']:checked").each(function () {
         var inputValue = $(this).val();
+
         if ($("#class_" + check_mode + "_" + inputValue).val() == "") {
             $("#class_" + check_mode + "_" + inputValue).val(time);
         }
@@ -2097,6 +2102,7 @@ function split_minute_getDay(day) {
     return day[0];
 }
 
+
 //현재날짜기준으로 연차 구하기
 function getAnnual(registerDate) {
     var today = new Date();
@@ -2120,6 +2126,50 @@ function getAnnual(registerDate) {
     var driver_year = parseInt(diff / currYear);
 
     return parseInt(diff / currYear);
+}
+
+// 날짜 구하기 == 년도만
+function getYearAgo(dayCount) {
+    var today = new Date();
+    var oldday = new Date(today - (3600000 * 24 * dayCount));
+    var year = oldday.getFullYear();
+    var month = oldday.getMonth() + 1;
+    var day = oldday.getDate();
+
+    if (("" + month).length == 1) {
+        month = "0" + month;
+    }
+    if (("" + day).length == 1) {
+        day = "0" + day;
+    }
+
+    return year;
+}
+
+// 날짜 구하기 = 년도 & 월
+function getYearMonthAgo(dayCount) {
+    var today = new Date();
+    var oldday = new Date(today - (3600000 * 24 * dayCount));
+    var year = oldday.getFullYear();
+    var month = oldday.getMonth() + 1;
+    var day = oldday.getDate();
+
+    if (("" + month).length == 1) {
+        month = "0" + month;
+    }
+    if (("" + day).length == 1) {
+        day = "0" + day;
+    }
+
+    return year+"년"+month+"월";
+}
+
+// 10년후 날짜 구하기
+function getYearAfter(dayCount) {
+    var today = new Date();
+    var year  = today.getFullYear() + 11;
+
+    return year;
 }
 
 // 쿠키 생성
@@ -2353,3 +2403,199 @@ function menuActive(mainMenuId, index) {
     $("#" + mainMenuId).find("ul").addClass('in');
 
 }
+
+//모의고사 - 년도자르고 HH 구하기
+function split_HH_getTime(day, id, index) {
+    var day = day.split(" ");
+    if(day[1]){
+        var HH =  day[1].split(":");
+    }
+    $("select[name="+id+"]").eq(index).val(HH[0]);
+}
+
+//모의고사 - 년도자르고 MM 구하기
+function split_MM_getTime(day, id, index) {
+    var day = day.split(" ");
+    if(day[1]){
+        var MM = day[1].split(":");
+    }
+    $("select[name="+id+"]").eq(index).val(MM[1]);
+}
+
+//달력 - 기간별조회
+function getFormatDate(date){
+    var year = date.getFullYear();
+    var month = (1 + date.getMonth());
+    month = month >= 10 ? month : '0' + month;
+    var day = date.getDate();
+    day = day >= 10 ? day : '0' + day;
+    return  year +'-'+ month +'-'+ day;
+}
+
+//달력 - 기간별조회
+function setSearchDate(start, startId, endId){
+    var num = start.substring(0,1);
+    var str = start.substring(1,2);
+
+    var today = new Date();
+
+    var endDate = getFormatDate(today);
+
+    $('#'+endId).val(endDate);
+
+    if(str == 'd'){
+        today.setDate(today.getDate() - num);
+    }else if (str == 'w'){
+        today.setDate(today.getDate() - (num*7));
+    }else if (str == 'm'){
+        today.setMonth(today.getMonth() - num);
+        today.setDate(today.getDate() + 1);
+    }
+
+    var startDate = getFormatDate(today);
+
+    if(start == 'all'){
+        $('#'+startId).val("");
+        $('#'+endId).val("");
+    }else{
+        $('#'+startId).val(startDate);
+    }
+
+}
+
+//금액 컴마표시
+function format(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+function allChk(obj, chkId){
+    var chkObj = document.getElementsByName(chkId);
+    var rowCnt = chkObj.length - 1;
+    var check = obj.checked;
+    if (check) {﻿
+          for (var i=0; i<=rowCnt; i++){
+              if(chkObj[i].type == "checkbox")
+                  chkObj[i].checked = true;
+          }
+    } else {
+        for (var i=0; i<=rowCnt; i++) {
+            if(chkObj[i].type == "checkbox"){
+                chkObj[i].checked = false;
+            }
+        }
+    }
+}
+
+function deleteTableRow(tableId, className) {
+    $("#"+tableId).on("click", "."+className, function(){
+        var clickedRow = $(this).parent().parent();
+        var cls = clickedRow.attr("class");
+        // 각 항목의 첫번째 row를 삭제한 경우 다음 row에 td 하나를 추가해 준다.
+        if( clickedRow.find("td:eq(0)").attr("rowspan") ){
+            if( clickedRow.next().hasClass(cls) ){
+                clickedRow.next().prepend(clickedRow.find("td:eq(0)"));
+            }
+        }
+        clickedRow.remove();
+        // rowspan 조정
+        resizeRowspan(cls);
+    });
+    // cls : rowspan 을 조정할 class ex) item1, item2, ...
+    function resizeRowspan(cls){
+        var rowspan = $("."+cls).length;
+        $("."+cls+":first td:eq(0)").attr("rowspan", rowspan);
+    }
+}
+
+//다음지도
+function execDaumPostcode() {
+    new daum.Postcode({
+        oncomplete: function(data) {
+            var roadAddr = data.roadAddress; // 도로명 주소 변수
+            var extraRoadAddr = ''; // 참고 항목 변수
+
+            if(data.bname !== '' && /[동|로|가]$/g.test(data.bname)){
+                extraRoadAddr += data.bname;
+            }
+
+            if(data.buildingName !== '' && data.apartment === 'Y'){
+                extraRoadAddr += (extraRoadAddr !== '' ? ', ' + data.buildingName : data.buildingName);
+            }
+
+            if(extraRoadAddr !== ''){
+                extraRoadAddr = ' (' + extraRoadAddr + ')';
+            }
+
+            document.getElementById('postcode').value = data.zonecode;
+            document.getElementById("roadAddress").value = roadAddr;
+            document.getElementById("jibunAddress").value = data.jibunAddress;
+
+            // 참고항목 문자열이 있을 경우 해당 필드에 넣는다.
+            /*if(roadAddr !== ''){
+                document.getElementById("extraAddress").value = extraRoadAddr;
+            } else {
+                document.getElementById("extraAddress").value = '';
+            }*/
+
+            var guideTextBox = document.getElementById("guide");
+            // 사용자가 '선택 안함'을 클릭한 경우, 예상 주소라는 표시를 해준다.
+            if(data.autoRoadAddress) {
+                var expRoadAddr = data.autoRoadAddress + extraRoadAddr;
+                guideTextBox.innerHTML = '(예상 도로명 주소 : ' + expRoadAddr + ')';
+                guideTextBox.style.display = 'block';
+
+            } else if(data.autoJibunAddress) {
+                var expJibunAddr = data.autoJibunAddress;
+                guideTextBox.innerHTML = '(예상 지번 주소 : ' + expJibunAddr + ')';
+                guideTextBox.style.display = 'block';
+            } else {
+                guideTextBox.innerHTML = '';
+                guideTextBox.style.display = 'none';
+            }
+        }
+    }).open();
+}
+
+//textarea Byte수 제한하기
+function pubByteCheckTextarea(oid, tid, maxlength){
+    var isKorean = $(oid).val();
+    var strlength = 0;
+
+    for(var i = 0; i < isKorean.length; i++){
+        if(escape(isKorean.charAt(i)).length == 6){
+            strlength++;
+        }
+        strlength++;
+    }
+
+    if(parseInt(maxlength-strlength) <= 0){
+        alert(maxlength +"자 이상 입력 할 수 없습니다.");
+        return false;
+    }else{
+        //SET
+        $(tid).html( strlength +"/"+ maxlength);
+    }
+};
+
+function  InputPhoneNumCheck(phoneNum) {
+    return phoneNum.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/,"$1-$2-$3");
+}
+
+
+/* input text onkeyup 금액표시 */
+function inputNumberFormat(obj) {
+    obj.value = comma(uncomma(obj.value));
+}
+
+function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
+
+}
+
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+/* input text onkeyup 금액표시 */

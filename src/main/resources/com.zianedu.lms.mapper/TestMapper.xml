@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.zianedu.lms.mapper.TestMapper">
+
+	<select id="selectNotice" resultType="com.zianedu.lms.vo.TBbsVO">
+		SELECT A.BBS_MASTER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as indate, A.TITLE, A.WRITE_USER_KEY, A.IS_NOTICE, A.CONTENTS, B.FILENAME
+		FROM T_BBS_DATA A
+		LEFT OUTER JOIN T_BBS_DATA_FILE B
+		ON A.bbs_key = B.bbs_key
+		WHERE A.BBS_MASTER_KEY IN (10001,10007,10008,10009, 10010,10026,10027,10028,10029,10030,10041,10042,10043,10044)
+		ORDER BY A.bbs_key DESC
+	</select>
+
+
+</mapper>

@@ -3,6 +3,8 @@ package com.zianedu.lms.define.datasource;
 public enum PromotionPmType {
     //패키지
     PACKAGE(1),
+    //자유패키지
+    FREE_PACKAGE(2),
     //연간회원제
     YEAR_MEMBER(50),
     //연간회원제 페이지

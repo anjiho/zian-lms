@@ -52,7 +52,8 @@ public class ScTranVO {
         this.trSenddate = Util.returnNow();
         this.trId = "";
         this.trSendstat = String.valueOf(0);
-        this.trSendstat = "";
+        this.trSendstat = "0";
+        this.trRsltstat = "";
         this.trMsgtype = String.valueOf(0);
         this.trPhone = receiverPhoneNumber;
         this.trCallback = sendNumber;

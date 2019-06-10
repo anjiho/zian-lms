@@ -20,6 +20,29 @@ public class MemberManageController {
     public ModelAndView memeberManage(@RequestParam(value = "page_gbn", required = false) String page_gbn) {
         ModelAndView mvc = new ModelAndView();
         Util.isNullValue(page_gbn, "");
+        if("memberList".equals(page_gbn)) {
+            mvc.setViewName("member/memberList");
+        }else if("memeberSecessionList".equals(page_gbn)) {
+            mvc.setViewName("member/memeberSecessionList");
+        }else if("counselList".equals(page_gbn)) {
+            mvc.setViewName("member/counselList");
+        }else if("counselManage".equals(page_gbn)) {
+            mvc.setViewName("member/counselManage");
+        }else if("modifyCounsel".equals(page_gbn)) {
+            mvc.setViewName("member/modifyCounsel");
+        }else if("memberManage".equals(page_gbn)) {
+            mvc.setViewName("member/memberManage");
+        }else if("teacherList".equals(page_gbn)) {
+            mvc.setViewName("member/teacherList");
+        }else if("teacherManage".equals(page_gbn)) {
+            mvc.setViewName("member/teacherManage");
+        }else if("modifyTeacher".equals(page_gbn)) {
+            mvc.setViewName("member/modifyTeacher");
+        }else if("sendSms".equals(page_gbn)) {
+            mvc.setViewName("member/sendSms");
+        }else if("smsSendList".equals(page_gbn)) {
+            mvc.setViewName("member/smsSendList");
+        }
 
         return mvc;
     }

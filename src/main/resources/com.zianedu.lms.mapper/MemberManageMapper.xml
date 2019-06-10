@@ -147,11 +147,15 @@
     </select>
 
     <select id="selectTCounselList" resultType="UserConsultListDTO">
-      SELECT COUNSEL_KEY, TYPE,
+      SELECT COUNSEL_KEY, TYPE, TELEPHONE, TELEPHONE_MOBILE,
              TO_CHAR(INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
              TO_CHAR(PROC_START_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_START_DATE,
              TO_CHAR(PROC_END_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_END_DATE
       FROM T_COUNSEL WHERE USER_KEY = #{userKey}
+    </select>
+
+    <select id="selectTCounselInfo" resultType="com.zianedu.lms.vo.TCounselVO">
+      SELECT * FROM T_COUNSEL WHERE COUNSEL_KEY = #{counselKey}
     </select>
 
     <select id="selectTUserSecessionApplyList" resultType="com.zianedu.lms.vo.TUserSecessionVO">
@@ -168,7 +172,7 @@
     </select>
 
     <select id="selectTUserSecessionApplyListCount" resultType="Integer">
-        SELECT * FROM T_USER_SECESSION
+        SELECT COUNT(*) FROM T_USER_SECESSION
         WHERE OBTAIN_DATE IS NULL
         <if test="searchType == 'name'">
             AND NAME LIKE '%'||#{searchText}||'%'
@@ -387,6 +391,29 @@
         </if>
     </select>
 
+    <select id="selectCalculateTeacherList" resultType="com.zianedu.lms.vo.TTeacherVO">
+        SELECT A.TEACHER_KEY, A.ONLINELEC_CALCULATE_RATE, A.OFFLINELEC_CALCULATE_RATE
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.STATUS = 10
+        AND A.ONLINELEC_CALCULATE_RATE IS NOT NULL
+        ORDER BY A.TEACHER_KEY ASC
+    </select>
+
+    <select id="selectSearchTeacherList" resultType="MemberListDTO">
+        SELECT
+            A.TEACHER_KEY, B.NAME
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.STATUS = 10
+        ORDER BY B.NAME
+    </select>
+
+    <select id="selectUserCountByUserId" resultType="Integer">
+        SELECT COUNT(USER_KEY) FROM T_USER WHERE USER_ID = #{userId}
+    </select>
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">
@@ -395,37 +422,52 @@
         INSERT INTO T_USER
         (
             USER_KEY, C_KEY, USER_ID, INDATE, NAME, AUTHORITY, STATUS, PWD, BIRTH, LUNAR, GENDER, TELEPHONE,
-            TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, EMAIL, RECV_SMS, RECV_EMAIL,
-            WELFARE_DC_PERCENT, GRADE, INTEREST_CTG_KEY_0, INTEREST_CTG_KEY_1, IS_MOBILE_REG,
-            ADMIN_AUTHORITY_KEY, GRADE_G_KEY, GRADE_PRICE, NOTE
+            TELEPHONE_MOBILE, ZIPCODE, ADDRESS_ROAD, ADDRESS_NUMBER, ADDRESS, EMAIL,
+            GRADE, INTEREST_CTG_KEY_0, IS_MOBILE_REG,
+            ADMIN_AUTHORITY_KEY, USER_PWD
         )
         VALUES
         (
-            #{userKey}, 100, #{userId}, #{indate}, #{name}, #{authority}, 10, #{pwd}, #{birth}, #{lunar}, #{gender}, #{telephone},
-            #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{email}, #{recvSms}, #{recvEmail},
-            0, #{grade}, #{interestCtgKey0}, 0, #{isMobileReg},
-            #{adminAuthorityKey}, 0, #{gradePrice}, #{note}
+            #{userKey}, #{cKey}, #{userId}, sysdate, #{name}, #{authority}, #{status}, #{pwd}, TO_DATE(#{birth}, 'YYYY-MM-DD hh:mi:ss'), #{lunar}, #{gender}, #{telephone},
+            #{telephoneMobile}, #{zipcode}, #{addressRoad}, #{addressNumber}, #{address}, #{email},
+            #{grade}, #{interestCtgKey0}, #{isMobileReg},
+            #{adminAuthorityKey}, #{userPwd}
         )
     </insert>
 
     <insert id="insertTCounsel" parameterType="com.zianedu.lms.vo.TCounselVO">
         INSERT INTO T_COUNSEL
         (
-            COUNSEL_KEY, C_KEY, USER_KEY, WRITE_USER_KEY, TYPE, STATUS, INDATE,
-            PROC_START_DATE, PROC_END_DATE, TELEPHONE, TELEPHONE_MOBILE, MEMO, CONTENTS
+            COUNSEL_KEY, C_KEY, USER_KEY, WRITE_USER_KEY, TYPE, STATUS,
+            <if test="indate != ''">INDATE,</if>
+            <if test="procStartDate != ''">PROC_START_DATE,</if>
+            <if test="procEndDate != ''">PROC_END_DATE,</if>
+            TELEPHONE, TELEPHONE_MOBILE, MEMO, CONTENTS
         )
         VALUES
         (
-            T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status}, TO_DATE(#{indate}, 'YYYY-mm-dd hh:mi:ss'),
-            TO_DATE(#{procStartDate}, 'YYYY-mm-dd hh:mi:ss'), TO_DATE(#{procEndDate}, 'YYYY-mm-dd hh:mi:ss'), #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
+            T_COUNSEL_SEQ.nextval, 100, #{userKey}, #{writeUserKey}, #{type}, #{status},
+            <if test="indate != ''">sysdate,</if>
+            <if test="procStartDate != ''">sysdate,</if>
+            <if test="procEndDate != ''">sysdate,</if>
+            #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
         )
     </insert>
 
-    <insert id="insertTTeacher" parameterType="Integer">
+    <insert id="insertTTeacher" parameterType="com.zianedu.lms.vo.TTeacherVO">
+        <selectKey resultType="Integer" keyProperty="teacherKey" order="BEFORE">
+            SELECT T_TEACHER_SEQ.nextval FROM DUAL
+        </selectKey>
         INSERT INTO T_TEACHER
-        ( TEACHER_KEY, USER_KEY )
+        (
+            TEACHER_KEY, USER_KEY, IMAGE_LIST, IMAGE_TEACHER_LIST, IMAGE_TEACHER_VIEW,
+            GREETING, HISTORY, BOOK_WRITING, ONLINELEC_CALCULATE_RATE, OFFLINELEC_CALCULATE_RATE, SAMPLE_VOD_FILE
+        )
         VALUES
-        ( T_TEACHER_SEQ.nextval, #{userKey})
+        (
+            #{teacherKey}, #{userKey}, #{imageList}, #{imageTeacherList}, #{imageTeacherView},
+            #{greeting}, #{history}, #{bookWriting}, #{onlinelecCalculateRate}, #{offlinelecCalculateRate}, #{sampleVodFile}
+        )
     </insert>
 
     <insert id="insertScTran" parameterType="com.zianedu.lms.vo.ScTranVO">
@@ -437,7 +479,7 @@
         )
         VALUES
         (
-            SC_TRAN_SEQ.nextval, #{trSenddate}, #{trId}, #{trSendstat}, #{trRsltstat}, #{trMsgtype}, #{trPhone}, #{trCallback},
+            SC_TRAN_SEQ.nextval, TO_DATE(#{trSenddate}, 'YYYY-MM-DD hh24:mi:ss'), #{trId}, #{trSendstat}, #{trRsltstat}, #{trMsgtype}, #{trPhone}, #{trCallback},
             #{trRsltdate}, #{trModified}, #{trMsg}, #{trNet}, #{trEtc1}, #{trEtc2}, #{trEtc3}, #{trEtc4}, #{trEtc5}, #{trEtc6},
             #{trRealsenddate}, #{trRouteid}
         )
@@ -461,5 +503,53 @@
         SET POS = #{pos}
         WHERE LINK_KEY = #{linkKey}
     </update>
+
+    <update id="updateTUserSecessionObtainDate" parameterType="Integer">
+        UPDATE T_USER_SECESSION SET OBTAIN_DATE = sysdate WHERE SECESSION_KEY = #{secessionKey}
+    </update>
+
+    <update id="updateTUser" parameterType="com.zianedu.lms.vo.TUserVO">
+        UPDATE T_USER
+        <set>
+            <if test="name != ''">NAME = #{name},</if>
+            <if test="authority > -1">AUTHORITY = #{authority},</if>
+            <if test="status > -1">STATUS = #{status},</if>
+            <if test="userPwd != ''">USER_PWD = #{userPwd},</if>
+            <if test="birth != ''">BIRTH = #{birth},</if>
+            <if test="telephone != ''">TELEPHONE = #{telephone},</if>
+            <if test="telephoneMobile != ''">TELEPHONE_MOBILE = #{telephoneMobile},</if>
+            <if test="zipcode != ''">ZIPCODE = #{zipcode},</if>
+            <if test="addressRoad != ''">ADDRESS_ROAD = #{addressRoad},</if>
+            <if test="addressNumber != ''">ADDRESS_NUMBER = #{addressNumber},</if>
+            <if test="address != ''">ADDRESS = #{address},</if>
+            <if test="email != ''">EMAIL = #{email},</if>
+            <if test="interestCtgKey0 != ''">INTEREST_CTG_KEY_0 = #{interestCtgKey0},</if>
+        </set>
+        <if test="userKey > 0">
+            WHERE USER_KEY = #{userKey}
+        </if>
+    </update>
+
+    <update id="updateTTeacher" parameterType="com.zianedu.lms.vo.TTeacherVO">
+        UPDATE T_TEACHER
+        <set>
+            <if test="imageList != ''">IMAGE_LIST = #{imageList},</if>
+            <if test="imageTeacherList != ''">IMAGE_TEACHER_LIST = #{imageTeacherList},</if>
+            <if test="imageTeacherView != ''">IMAGE_TEACHER_VIEW = #{imageTeacherView},</if>
+            <if test="greeting != ''">GREETING = #{greeting},</if>
+            <if test="history != ''">HISTORY = #{history},</if>
+            <if test="bookWriting != ''">BOOK_WRITING = #{bookWriting},</if>
+            <if test="onlinelecCalculateRate != ''">ONLINELEC_CALCULATE_RATE = #{onlinelecCalculateRate},</if>
+            <if test="offlinelecCalculateRate != ''">OFFLINELEC_CALCULATE_RATE = #{offlinelecCalculateRate},</if>
+            <if test="sampleVodFile != ''">SAMPLE_VOD_FILE = #{sampleVodFile},</if>
+        </set>
+        <if test="teacherKey > 0">
+            WHERE TEACHER_KEY = #{teacherKey}
+        </if>
+    </update>
+
+    <delete id="deleteTUserSecession" parameterType="Integer">
+        DELETE FROM T_USER_SECESSION WHERE SECESSION_KEY = #{secessionKey}
+    </delete>
 
 </mapper>

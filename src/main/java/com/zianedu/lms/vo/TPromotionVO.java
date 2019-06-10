@@ -27,7 +27,7 @@ public class TPromotionVO {
     public TPromotionVO(){}
 
     public TPromotionVO(int pmKey, int gKey, String pmTypeStr, int examYear, int limitDay,
-                        int affiliationCtgKey, int classGroupCtgKey) {
+                        int affiliationCtgKey, int classGroupCtgKey, int deviceLimitCount) {
         this.pmKey = pmKey;
         this.gKey = gKey;
         this.pmType = PromotionPmType.getPromotionPmTypeKey(pmTypeStr);
@@ -36,7 +36,7 @@ public class TPromotionVO {
         this.deviceLimitCount = 0;
         this.affiliationCtgKey = affiliationCtgKey;
         this.classGroupCtgKey = classGroupCtgKey;
-
+        this.deviceLimitCount = deviceLimitCount;
     }
 
 }

@@ -1,5 +1,6 @@
 package com.zianedu.lms.vo;
 
+import com.zianedu.lms.define.datasource.ZianCoreManage;
 import com.zianedu.lms.utils.Aes256;
 import com.zianedu.lms.utils.SecurityUtil;
 import com.zianedu.lms.utils.Util;
@@ -12,11 +13,11 @@ public class TUserVO implements Serializable {
 
     private int userKey;
 
-    private Long cKey;
+    private int cKey;
     //아이디
     private String userId;
     //등록일
-    private String inDate;
+    private String indate;
     //이름
     private String name;
     //권한
@@ -28,15 +29,15 @@ public class TUserVO implements Serializable {
     //생년월일
     private String birth;
     //음력
-    private String lunar;
+    private int lunar;
     //성별
-    private String gender;
+    private int gender;
 
     private String telephone;
 
     private String telephoneMobile;
 
-    private String zipCode;
+    private String zipcode;
 
     private String addressRoad;
 
@@ -88,6 +89,8 @@ public class TUserVO implements Serializable {
 
     private String appDeviceType;
 
+    private String userPwd;
+
     public TUserVO() {}
 
     public TUserVO(int userKey, String userName, int authority) {
@@ -98,25 +101,30 @@ public class TUserVO implements Serializable {
 
     public TUserVO(TUserVO tUserVO) throws Exception {
         this.userId = tUserVO.getUserId();
-        this.inDate = tUserVO.getInDate();
+        this.cKey = ZianCoreManage.ZIAN_COMPANY_CODE;
         this.name = tUserVO.getName();
         this.authority = tUserVO.getAuthority();
         this.pwd = SecurityUtil.encryptSHA256(tUserVO.getPwd());
         this.birth = Util.isNullValue(tUserVO.getBirth(), "");
-        this.lunar = tUserVO.getLunar();
-        this.gender = tUserVO.getGender();
-        this.telephone = Util.isNullValue(Aes256.encrypt(tUserVO.getTelephone()), "");
-        this.telephoneMobile = Util.isNullValue(Aes256.encrypt(tUserVO.getTelephoneMobile()), "");
-        this.zipCode = Util.isNullValue(tUserVO.getZipCode(), "");
+        this.indate = Util.returnNow();
+        this.status = tUserVO.getStatus();
+        this.lunar = tUserVO.getLunar() == 0 ? 0: tUserVO.getLunar();
+        this.gender = tUserVO.getGender() == 0 ? 0: tUserVO.getGender();
+        this.telephone = Util.isNullValue(tUserVO.getTelephone(), "");
+        this.telephoneMobile = Util.isNullValue(tUserVO.getTelephoneMobile(), "");
+        this.zipcode = Util.isNullValue(tUserVO.getZipcode(), "");
+        this.addressRoad = Util.isNullValue(tUserVO.getAddressRoad(), "");
+        this.addressNumber = Util.isNullValue(tUserVO.getAddressNumber(), "");
         this.address = Util.isNullValue(tUserVO.getAddress(), "");
-        this.email = Util.isNullValue(Aes256.encrypt(tUserVO.getEmail()), "");
+        this.email = Util.isNullValue(tUserVO.getEmail(), "");
         this.recvSms = tUserVO.getRecvSms();
         this.recvEmail = tUserVO.getRecvEmail();
         this.grade = tUserVO.getGrade();
         this.interestCtgKey0 = tUserVO.getInterestCtgKey0();
-        this.adminAuthorityKey = tUserVO.getAdminAuthorityKey();
+        this.adminAuthorityKey = 5;
         this.isMobileReg = tUserVO.getIsMobileReg();
         this.gradePrice = tUserVO.getGradePrice();
         this.note = Util.isNullValue(tUserVO.getNote(), "");
+        this.userPwd = SecurityUtil.encryptSHA256(tUserVO.getPwd());
     }
 }

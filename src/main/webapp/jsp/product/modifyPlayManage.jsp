@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String gKey = request.getParameter("gKey");
+    String gKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
@@ -11,6 +11,7 @@
 <script>
     function init() {
         menuActive('menu-1', 1);
+        getProductSearchTypeSelectbox("l_productSearch");
     }
     var gKey = '<%=gKey%>';
     $( document ).ready(function() {
@@ -57,37 +58,10 @@
     $(document).on('change', '.dataAddFile', function() {
         $(this).parent().find('.custom-file-control2').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
-
     $(document).on('change', '.addFile', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTable > tbody > tr").length == 1) {
-                $('#teacherTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTable > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }
-    }
     //옵션 추가 버튼
     function addProductOptionInfo() {
         var fistTrStyle = $("#optionList tr").eq(0).attr("style");
@@ -183,15 +157,14 @@
 
         function playDetailList() { //동영상정보
             productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
-                console.log(">");
-                console.log(selList);
                 if (selList.productInfo) {/*---기본정보---*/
                     innerValue("name", selList.productInfo.name);//이름
                     innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일
                     innerValue("sellstartdate", split_minute_getDay(selList.productInfo.sellstartdate));//판매시작일
-                    isCheckbox("isShow", selList.productInfo.isShow);//노출
-                    isCheckbox("isSell", selList.productInfo.isSell);//판매
-                    isCheckbox("isFree", selList.productInfo.isFree);//무료
+                    isCheckboxByNumber("isShow", selList.productInfo.isShow);//노출
+                    isCheckboxByNumber("isSell", selList.productInfo.isSell);//판매
+                    isCheckboxByNumber("isFree", selList.productInfo.isFree);//무료
+                    isCheckboxByNumber("isFreebieDeliveryFree", selList.productInfo.isFreebieDeliveryFree);//무료
                     if (selList.productInfo.imageList != null) {
                         $('.custom-file-control').html(fn_clearFilePath(selList.productInfo.imageList));//리스트이미지
                     }
@@ -199,40 +172,37 @@
                         $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
                     }
                     $("#emphasis").val(selList.productInfo.emphasis);//강조표시
-                    isCheckbox("isFreebieDeliveryFree", true);//사은품 배송비무료
-                    //innerValue("description", selList.productInfo.description);//상세설명
                     $("#description").summernote("code", selList.productInfo.description);
-                    //console.log(">>" + selList.productInfo.description);
                 }
             /**
-             * 학원 옵션정보 가져오기
+             * 옵션정보 가져오기
              */
                 var productOptionInfo = selList.productOptionInfo;
+
                 if (productOptionInfo.length == 0) {
                     var cellData = [
-                        function() {return getOptionSelectbox("", true);},
+                        function() {return getVideoOptionTypeSelectbox("");},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
                         function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
                         function() {return "%"},
                         function() {return "<span id='sum_0'></span>"},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ];
                     dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
                     $('#optionList tr').eq(0).attr("style", "display:none");
 
                 } else {
                     dwr.util.addRows("optionList", productOptionInfo, [
-                        function(data) {return getOptionSelectbox(data.kind, true);},
+                        function(data) {return getVideoOptionTypeSelectbox(data.kind);},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
-                        //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                         function(data) {return "%"},
                         function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ], {escapeHtml:false});
                     $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
                 }
@@ -254,7 +224,7 @@
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
@@ -271,7 +241,7 @@
                 function(data) {return data[1].name;},
                 function() {return nextIcon},
                 function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productCategory');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
@@ -325,8 +295,6 @@
             });
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
-                    console.log(">>");
-                    console.log(selList);
                     var cmpList = selList[i];
                     if (cmpList != undefined) {
                         var text = "'CURRI'";
@@ -347,7 +315,6 @@
                             function (data) {return textShow;},
                             function (data) {return modifyBtn+deleteBtn;}
                         ];
-                        //dwr.util.addRows("lectureCurriList", [0], cellData, {escapeHtml: false});
                         dwr.util.addRows(lectureCurriList, [0], cellData, {
                             rowCreator:function(options) {
                                 var row = document.createElement("tr");
@@ -361,7 +328,6 @@
                 }
             }
         });
-
 
         /**
          * 강사 목록 가져오기
@@ -377,7 +343,7 @@
                 function() {return nextIcon},
                 function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
                 function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' style=\"display: inline-block;width:60%\">%"},
-                function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
             ];
             dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
             $('#teacherList tr').eq(0).attr("style", "display:none");
@@ -396,7 +362,7 @@
                     function() {return nextIcon},
                     function() {return cmpList.teacherName},
                     function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' value='"+ cmpList.calculateRate +"' style=\"display: inline-block;width:60%\">%"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('productTeacher');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
             }
@@ -418,7 +384,7 @@
                         function(data) {return data.goodsName;},
                         function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                         function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                     ], {escapeHtml:false});
 
                     for (var i=0; i<productOtherInfo[0].length; i++) {
@@ -490,6 +456,7 @@
             innerValue("vodTime", info.vodTime);
         });
     }
+
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
         var checkBtn = val;
@@ -502,6 +469,7 @@
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
         td.find("span").html(sum);
+        //innerHTML(calcPrice, sum);
     }
 
     //강의목록- 입력 저장
@@ -521,7 +489,6 @@
             contentType: false,
             success: function (data) {
                 var result = JSON.stringify(data);
-                console.log(result);
                 if(result != "") {
                     var parse = JSON.parse(result);
                 }
@@ -559,26 +526,25 @@
                     productManageService.saveVideoLectureInfo(data, function (data) {
                         if(data){//lectureListPopup
                             alert("저장되었습니다.");
-                            innerValue("lectureName",'');
-                            isCheckbox("lectureIsShow", false);//노출
-                            isCheckbox("isSample", false);//노출
-                            innerValue("vodFileLow",'');
-                            innerValue("vodFileHigh",'');
-                            innerValue("vodFileMobileLow",'');
-                            innerValue("vodFileMobileHigh",'');
-                            innerValue("vodTime",'');
+                            $("#lectureName").val('');
+                            $("#lectureIsShow").prop('checked', false);
+                            $("#isSample").prop('checked', false);
+                            $("#vodFileLow").val('');
+                            $("#vodFileHigh").val('');
+                            $("#vodFileMobileLow").val('');
+                            $("#vodFileMobileHigh").val('');
+                            $("#vodTime").val('');
                             $('.custom-file-control2').html('');
                         }
                     });
                 } else {
                     productManageService.updateTLecCurri(data, function () {
-                            alert("수정되었습니다.");
+                        alert("수정되었습니다.");
                     });
                 }
             }
         });
     }
-
     //기본정보 수정 함수
     function basicModify() {
         var fileData = new FormData();
@@ -619,8 +585,9 @@
                         imageListFile = parse.imageListFilePath;
                         imageViewFile = parse.imageViewFilePath;
                     }
+
                     productManageService.updateGoodsInfo(data, data.gKey, imageListFile, imageViewFile,function (data) {
-                        isReloadPage(true);
+                        //isReloadPage(true);
                     });
                 }
             });
@@ -629,7 +596,6 @@
     //강의교재 수정 버튼
     function updateLectureBookList() {
         var bookKeys = get_array_values_by_name("input", "res_key[]");
-        console.log(bookKeys);
         if (confirm("강의교재 정보를 수정 하시겠습니까?")) {
             var dataArr = new Array();
             for (var i = 0; i < bookKeys.length; i++) {
@@ -662,67 +628,65 @@
             }
         }
     }
-        //옵션정보 수정
-        function updateOptionInfo() {
-            var optionNames = get_array_values_by_name("select", "selOption[]");
-            var optionPrices = get_array_values_by_name("input", "price[]");
-            var sellPrices = get_array_values_by_name("input", "sellPrice[]");
-            var points = get_array_values_by_name("input", "point[]");
-            var expendPercents = get_array_values_by_name("input", "expendPercent[]");
+    //옵션정보 수정
+    function updateOptionInfo() {
+        var optionNames = get_array_values_by_name("select", "selOption[]");
+        var optionPrices = get_array_values_by_name("input", "price[]");
+        var sellPrices = get_array_values_by_name("input", "sellPrice[]");
+        var points = get_array_values_by_name("input", "point[]");
+        var expendPercents = get_array_values_by_name("input", "expendPercent[]");
 
-            var dataArr = new Array();
-            for (var i=0; i<optionNames.length; i++) {
-                var data = {
-                    priceKey:'0',
-                    gKey:'0',
-                    kind:optionNames[i],
-                    ctgKey:'0',
-                    name:'0',
-                    price:optionPrices[i],
-                    sellPrice:sellPrices[i],
-                    point:points[i],
-                    extendPercent:expendPercents[i]
-                }
-                dataArr.push(data)
+        var dataArr = new Array();
+        for (var i=0; i<optionNames.length; i++) {
+            var data = {
+                priceKey:'0',
+                gKey:'0',
+                kind:optionNames[i],
+                ctgKey:'0',
+                name:'0',
+                price:optionPrices[i],
+                sellPrice:sellPrices[i],
+                point:points[i],
+                extendPercent:expendPercents[i]
             }
-            if(confirm("옵션정보를 수정 하시겠습니까?")){
-                productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
+            dataArr.push(data)
+        }
+        if(confirm("옵션정보를 수정 하시겠습니까?")){
+            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
+                isReloadPage(true);
+            });
+        }
+    }
+
+    //카테고리정보 수정
+    function updateCategoryInfo() {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+
+        if(confirm("카테고리를 수정 하시겠습니까?")){
+
+            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+
+            if (fistTrStyle == "display:none") {
+                productManageService.deleteTCategoryGoods(gKey, function(){
+                    isReloadPage(true);
+                });
+            } else {
+                var dataArr = new Array();
+                $.each(ctgKeys, function(index, key) {
+                    var data = {
+                        ctgGKey:0,
+                        ctgKey:key,
+                        gKey:0,
+                        pos:0
+                    };
+                    dataArr.push(data);
+                });
+                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
                     isReloadPage(true);
                 });
             }
         }
-
-        //카테고리정보 수정
-        function updateCategoryInfo() {
-            var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-
-            if(confirm("카테고리를 수정 하시겠습니까?")){
-
-                var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-                if (fistTrStyle == "display:none") {
-                    productManageService.deleteTCategoryGoods(gKey, function(){
-                        isReloadPage(true);
-                    });
-                } else {
-                    var dataArr = new Array();
-                    $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:0,
-                            pos:0
-                        };
-                        dataArr.push(data);
-                    });
-                    productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
-                        isReloadPage(true);
-                    });
-                }
-            }
-        }
-
-
+    }
 
     //강좌정보 수정
     function updateLectureInfo() {
@@ -769,70 +733,67 @@
         }
     }
 
-                            function mocklISTModify() {
-                                if(confirm("수정 하시겠습니까?")){
-                                    /*  6.선택 obj  */
-                                    var array3 = new Array();
-                                    $('#allMockList tbody tr').each(function(index){
-                                        //var mockTitle = $(this).find("td input").eq(0).val();
-                                        var mockKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:mockKey,
-                                            resType: 8,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    $('#examQuestionList tbody tr').each(function(index){
-                                        //var examQuestionTitle = $(this).find("td input").eq(0).val();
-                                        var examKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:examKey,
-                                            resType: 9,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    $('#bookList tbody tr').each(function(index){
-                                        //var bookTitle = $(this).find("td input").eq(0).val();
-                                        var bookKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:bookKey,
-                                            resType: 5,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    $('#giftList tbody tr').each(function(index){
-                                        //var giftTitle = $(this).find("td input").eq(0).val();
-                                        var gifyKey = $(this).find("td input").eq(1).val();
-                                        var data = {
-                                            linkKey: 0,
-                                            reqKey: gKey,
-                                            resKey:gifyKey,
-                                            resType: 4,
-                                            pos: 0,
-                                            valueBit: 0
-                                        };
-                                        array3.push(data);
-                                    });
-                                    productManageService.upsultTLinkKink(array3, gKey,function () {
+    function mocklISTModify() {
+        if(confirm("수정 하시겠습니까?")){
+            /*  6.선택 obj  */
+            var array3 = new Array();
+            $('#allMockList tbody tr').each(function(index){
+                //var mockTitle = $(this).find("td input").eq(0).val();
+                var mockKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:mockKey,
+                    resType: 8,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            $('#examQuestionList tbody tr').each(function(index){
+                //var examQuestionTitle = $(this).find("td input").eq(0).val();
+                var examKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:examKey,
+                    resType: 9,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            $('#bookList tbody tr').each(function(index){
+                //var bookTitle = $(this).find("td input").eq(0).val();
+                var bookKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:bookKey,
+                    resType: 5,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            $('#giftList tbody tr').each(function(index){
+                //var giftTitle = $(this).find("td input").eq(0).val();
+                var gifyKey = $(this).find("td input").eq(1).val();
+                var data = {
+                    linkKey: 0,
+                    reqKey: gKey,
+                    resKey:gifyKey,
+                    resType: 4,
+                    pos: 0,
+                    valueBit: 0
+                };
+                array3.push(data);
+            });
+            productManageService.upsultTLinkKink(array3, gKey,function () {
 
-                                    });
-                                }
-                            }
-
-
-
+            });
+        }
+    }
 </script>
 <div class="page-breadcrumb">
 <div class="row">
@@ -874,11 +835,11 @@
                         <input type="hidden" value="" name="goodsId">
                         <input type="hidden" value="" name="goodsTypeName">
                         <input type="hidden" value="" name="summary">
-                        <button type="button" class="btn btn-outline-primary btn-sm float-right" onclick="basicModify();">수정</button>
-                        <div class="col-md-6">
+                        <div class="col-md-12">
+                            <button type="button" class="btn btn-outline-primary btn-sm float-right" onclick="basicModify();">수정</button>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
-                                <span>온라인강좌</span>
+                                <span style="margin-left: 20px">온라인강좌</span>
                                 <input type="hidden" id="type" name='type' class="col-sm-6 bg-light required form-control" value="1" readonly>
                             </div>
                             <div class="form-group row">
@@ -897,7 +858,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
                                 <div class="col-sm-6 input-group pl-0 pr-0">
-                                    <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="sellstartdate" id="sellstartdate">
+                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
@@ -906,7 +867,7 @@
                             <div class="form-group row mt-4">
                                 <label class="col-sm-2 text-left control-label col-form-label">노출</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isShow" name="isShow" style="display:none;" />
@@ -919,7 +880,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 text-left control-label col-form-label">판매</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isSell" name="isSell" style="display:none;">
@@ -932,7 +893,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 text-left control-label col-form-label">무료</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
                                             <input type="checkbox" id="isFree" name="isFree" style="display:none;">
@@ -944,26 +905,25 @@
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                <div class="col-sm-8 pl-0 pr-0">
+                                <div class="col-sm-6 pl-0 pr-0">
                                     <div class="custom-file">
                                         <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
-                                        <label class="custom-file-control custom-file-label">Choose file...</label>
-
+                                        <span class="custom-file-control custom-file-label"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                <div class="col-sm-8 pl-0 pr-0">
+                                <div class="col-sm-6 pl-0 pr-0">
                                     <div class="custom-file">
-                                        <input type="file" class="custom-file-input"  id="imageViewFile" name="imageViewFile" required>
+                                        <input type="file" class="custom-file-input addFile"  id="imageViewFile" name="imageViewFile" required>
                                         <span class="custom-file-control1 custom-file-label"></span>
                                     </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                                <div class="col-sm-6 pl-0 pr-0">
+                                <div class="col-sm-2 pl-0 pr-0">
                                     <select class="select2 form-control custom-select" id="emphasis" name="emphasis">
                                         <option value="0">없음</option>
                                         <option value="1">BEST</option>
@@ -972,27 +932,28 @@
                                 </div>
                             </div>
                             <div class="form-group row">
-                                <label class="col-sm-2 control-label col-form-label">사은품 배송비무료</label>
+                                <label class="col-sm-2 text-left control-label col-form-label">사은품 배송비무료</label>
                                 <div class="col-sm-10">
-                                    <div style="margin-top: -23px;">
+                                    <div style="margin-top: -23px;margin-left: 20px">
                                         OFF
                                         <label class="switch">
-                                            <input type="checkbox"  id="isFreebieDeliveryFree" name="isFreebieDeliveryFree" style="display:none;">
+                                            <input type="checkbox" id="isFreebieDeliveryFree" name="isFreebieDeliveryFree" style="display:none;">
                                             <span class="slider"></span>
                                         </label>
                                         ON
                                     </div>
                                 </div>
                             </div>
-                            <div class="form-group row">
-                                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세설명</label>
-                                <textarea class="col-sm-10 form-control" value="" id="description" name="description"></textarea>
+                            <div class="form-group">
+                                <label class="control-label col-form-label">상세설명</label>
+                                <div>
+                                    <textarea name="description"  value="" id="description"></textarea>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </section>
-<!-- // 1.기본정보 Tab -->
-
+            <!-- // 1.기본정보 Tab -->
             <!-- 2.옵션 Tab -->
             <h3>옵션</h3>
             <section>
@@ -1011,9 +972,11 @@
                             <th scope="col" style="text-align:center;">포인트</th>
                             <th scope="col" colspan="2" style="text-align:center;">재수강</th>
                             <th scope="col" style="text-align:center;"></th>
+                            <th scope="col" style="text-align:center;"></th>
                         </tr>
                         </thead>
-                        <tbody id="optionList"> </tbody>
+                        <tbody id="optionList">
+                        </tbody>
                     </table>
                 </div>
             </section>
@@ -1043,7 +1006,8 @@
                             <th scope="col"></th>
                         </tr>
                         </thead>
-                        <tbody id="categoryList"></tbody>
+                        <tbody id="categoryList">
+                        </tbody>
                     </table>
                 </div>
             </section>
@@ -1188,111 +1152,6 @@
 </div>
 </form>
 <!-- // 기본소스-->
-<!-- 6.선택 전범위 모의고사 팝업창 -->
-<div class="modal fade" id="sModal3" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">강의 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="searchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="searchText">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">시험명</th>
-                        <th style="width:15%">시험신청기간</th>
-                        <th style="width:15%">시험기간</th>
-                        <th style="width:15%">진행시간</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList"></tbody>
-                    <tr>
-                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //선택 전범위 모의고사 추가 팝업창 -->
-
-<!-- 기출문제 회차별 팝업창 -->
-<div class="modal fade" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document" style="max-width: 900px">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">강의 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="examPopupClose">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <form>
-        <!-- modal body -->
-        <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
-                    <select class="form-control" id="examsearchType">
-                        <option>선택</option>
-                    </select>
-                </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="examsearchText">
-                </div>
-                <div style=" float: left; width: 33%">
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search2('new')">검색</button>
-                </div>
-            </div>
-            <div class="table-responsive">
-                <input type="hidden" id="sPage2" >
-                <table id="zero_config" class="table table-hover text-center">
-                    <thead class="thead-light">
-                    <tr>
-                        <th style="width:45%">시험명</th>
-                        <th style="width:15%">시험신청기간</th>
-                        <th style="width:15%">시험기간</th>
-                        <th style="width:15%">진행시간</th>
-                        <th style="width:5%"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList2"></tbody>
-                    <tr>
-                        <td id="emptys2" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi2.inc" %>
-            </div>
-        </div>
-        <!-- //modal body -->
-    </form>
-</div>
-</div>
-</div>
-<!-- //기출문제 회차별 팝업창 -->
 
 <!-- 6.선택 강의교재  팝업창 -->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1309,12 +1168,10 @@
         <div class="modal-body">
             <div style=" display:inline;">
                 <div style=" float: left; width: 10%">
-                    <select class="form-control" id="booksearchType">
-                        <option>선택</option>
-                    </select>
+                    <span id="l_productSearch"></span>
                 </div>
                 <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="booksearchTextBook">
+                    <input type="text" class="form-control" id="productSearchType">
                 </div>
                 <div style=" float: left; width: 33%">
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
@@ -1440,31 +1297,7 @@
 </div>
 </div>
 <!-- //강의목록 추가 팝업창 -->
-<!-- 시험일정 추가 팝업창 -->
-<div class="modal fade" id="sModal2" tabindex="-1" role="dialog" aria-hidden="true">
-<div class="modal-dialog" role="document">
-<div class="modal-content">
-    <div class="modal-header">
-        <h5 class="modal-title">텍스트 입력</h5>
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
-        </button>
-    </div>
-    <!-- modal body -->
-    <div class="modal-body">
-        <div class="form-group row">
-            <label class="col-sm-3 text-right control-label col-form-label">텍스트</label>
-            <div class="col-sm-9">
-                <input type="text" class="form-control">
-            </div>
-        </div>
-        <button type="button" class="btn btn-info float-right">확인</button>
-    </div>
-    <!-- //modal body -->
-</div>
-</div>
-</div>
-<!-- //시험일정 추가 팝업창 -->
+
 <!-- End Container fluid  -->
 <%@include file="/common/jsp/footer.jsp" %>
 <script>

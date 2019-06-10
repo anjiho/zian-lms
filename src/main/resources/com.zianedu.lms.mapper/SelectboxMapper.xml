@@ -11,5 +11,13 @@
 		SELECT * FROM T_CATEGORY WHERE PARENT_KEY = #{parentKey}
 	</select>
 
+	<select id="selectDeliveryCompanyList" resultType="com.zianedu.lms.vo.DeliveryVO">
+		SELECT A.DELIVERY_MASTER_KEY, A.NAME
+		FROM T_DELIVERY_MASTER A
+		INNER JOIN T_DELIVERY B
+		ON A.DELIVERY_MASTER_KEY = B.DELIVERY_MASTER_KEY
+		WHERE B.IS_USE = 1
+	</select>
+
 
 </mapper>

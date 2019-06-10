@@ -162,6 +162,7 @@ public class ProductManageService extends PagingSupport {
                 );
             }
         } else {
+
             List<VideoListDTO> videoListDTOList = productManageMapper.selectProductList(
                     startNumber,
                     listLimit,
@@ -181,6 +182,13 @@ public class ProductManageService extends PagingSupport {
                     }
 
                     listDTO.setTeacherName(Util.isNullValue(teacherName, ""));
+                }
+            } else if (GoodsType.getGoodsTypeKey(goodsTypeStr) == 2) {
+                for (VideoListDTO listDTO : videoListDTOList) {
+                    int gKey = listDTO.getGKey();
+                    TGoodsPriceOptionVO priceOptionVO = productManageMapper.selectTGoodsPriceOptionSingle(gKey);
+                    listDTO.setKind(priceOptionVO.getKind());
+                    listDTO.setSellPrice(priceOptionVO.getSellPrice());
                 }
             }
             return videoListDTOList;
@@ -521,42 +529,71 @@ public class ProductManageService extends PagingSupport {
         return subjectDetailDTO;
     }
 
-//    /**
-//     * 상품종류 리스트
-//     * @param sPage
-//     * @param listLimit
-//     * @param searchType
-//     * @param searchText
-//     * @param goodsTypeStr(GoodsType 클래스 정의 / 동영상 : VIDEO, 책 : BOOK)
-//     * @return
-//     */
-//    @Transactional(readOnly = true)
-//    public List<TGoodsVO>getGoodList(int sPage, int listLimit, String searchType, String searchText, String goodsTypeStr) {
-//        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-//        return productManageMapper.selectTGoodsListByType(
-//                startNumber,
-//                listLimit,
-//                Util.isNullValue(searchType, ""),
-//                Util.isNullValue(searchText, ""),
-//                GoodsType.getGoodsTypeKey(goodsTypeStr)
-//        );
-//    }
-//
-//    /**
-//     * 상품종류 리스트 개수
-//     * @param searchType
-//     * @param searchText
-//     * @param goodsTypeStr
-//     * @return
-//     */
-//    @Transactional(readOnly = true)
-//    public int getGoodListCount(String searchType, String searchText, String goodsTypeStr) {
-//        return productManageMapper.selectTGoodsListByTypeCount(
-//                Util.isNullValue(searchType, ""),
-//                Util.isNullValue(searchText, ""),
-//                GoodsType.getGoodsTypeKey(goodsTypeStr)
-//        );
-//    }
+    /**
+     * 수강관리 > 무료수강입력 > 상품목록 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<FreeInjectDTO> getVideoProductListByFreeLectureInject(int sPage, int listLimit,
+                                                                      String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<FreeInjectDTO>list = productManageMapper.selectVideoProductListByFreeLectureInject(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 수강관리 > 무료수강입력 > 상품목록 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getVideoProductListCountByFreeLectureInject(String searchType, String searchText) {
+        return productManageMapper.selectVideoProductListCountByFreeLectureInject(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
+    /**
+     * 출판사 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TCpVO> getCpList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<TCpVO>list = productManageMapper.selectTCpList(
+                startNumber, listLimit, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+        return list;
+    }
+
+    /**
+     * 출판사 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getCpListCoubt(String searchType, String searchText) {
+        return productManageMapper.selectTCpListCount(
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+        );
+    }
+
 
     /**
      * 상품기본정보 저장및 수정
@@ -572,6 +609,8 @@ public class ProductManageService extends PagingSupport {
         tGoodsVO.setIndate(Util.isNullValue(tGoodsVO.getIndate(), ""));
         tGoodsVO.setSellstartdate(Util.isNullValue(tGoodsVO.getSellstartdate(), ""));
         tGoodsVO.setDescription(Util.isNullValue(tGoodsVO.getDescription(), ""));
+        tGoodsVO.setTags(Util.isNullValue(tGoodsVO.getTags(), ""));
+        tGoodsVO.setSummary(Util.isNullValue(tGoodsVO.getSummary(), ""));
 
         if (tGoodsVO.getGKey() == 0) productManageMapper.insertTGoods(tGoodsVO);
         else productManageMapper.updateTGoods(tGoodsVO);
@@ -797,9 +836,10 @@ public class ProductManageService extends PagingSupport {
      * @param tResVO
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveBookPreviewInfo(TResVO tResVO) {
-        if (tResVO == null)return;
+    public Integer saveBookPreviewInfo(TResVO tResVO) {
+        if (tResVO == null)return null;
         productManageMapper.insertTRes(tResVO);
+        return tResVO.getResKey();
     }
 
     /**
@@ -884,6 +924,18 @@ public class ProductManageService extends PagingSupport {
     }
 
     /**
+     * 모의고사 > 시험과목 저장하기
+     * @param examKey
+     * @param examQuestionBankSubjectKey
+     * @param required
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void saveTBankSubjectExamLink(int examKey, int examQuestionBankSubjectKey, int required) {
+        TBankSubjectExamLinkVO tBankSubjectExamLinkVO = new TBankSubjectExamLinkVO(examKey, examQuestionBankSubjectKey, required);
+        productManageMapper.insertTBankSubjectExamLink(tBankSubjectExamLinkVO);
+    }
+
+    /**
      * 모의고사 문제은행 과목 수정 목록 > "x"표시로 항목 삭제
      * @param bankSubjectQuesLinkKey
      */
@@ -912,14 +964,31 @@ public class ProductManageService extends PagingSupport {
      * @param subjectCtgKey
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void upsultProblemBankTitleInfo(int examQuestionBankSubjectKey, String subjectName, int subjectCtgKey) {
-        if ("".equals(subjectName) && subjectCtgKey == 0) return;
+    public Integer upsultProblemBankTitleInfo(int examQuestionBankSubjectKey, String subjectName, int subjectCtgKey) {
+        int resultKey = 0;
+        if ("".equals(subjectName) && subjectCtgKey == 0) return 0;
 
         if (examQuestionBankSubjectKey == 0) {
-            productManageMapper.insertTExamQuestionBankSubject(subjectName, subjectCtgKey);
+            TExamQuestionBankSubjectVO tExamQuestionBankSubjectVO = new TExamQuestionBankSubjectVO();
+            tExamQuestionBankSubjectVO.setName(subjectName);
+            tExamQuestionBankSubjectVO.setSubjectCtgKey(subjectCtgKey);
+            productManageMapper.insertTExamQuestionBankSubject(tExamQuestionBankSubjectVO);
+            resultKey = tExamQuestionBankSubjectVO.getExamQuestionBankSubjectKey();
+            //productManageMapper.insertTExamQuestionBankSubject(subjectName, subjectCtgKey);
         } else {
             productManageMapper.updateTExamQuestionBankSubject(examQuestionBankSubjectKey, subjectName, subjectCtgKey);
         }
+        return resultKey;
+    }
+
+    /**
+     * 도서 > 미리보기 삭제
+     * @param resKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deletePreviewInfo(int resKey) {
+        if (resKey == 0) return;
+        productManageMapper.deleteTRes(resKey);
     }
 
 }

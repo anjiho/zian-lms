@@ -7,10 +7,17 @@
 <script>
     function init() {
         menuActive('menu-1', 2);
+        getProductSearchTypeSelectbox("l_productSearch");
+        //탭 메뉴 색상 변경
+        $("#playForm ul").each(function(idx) {
+            var ul = $(this);
+            ul.find("li").addClass("done").attr("aria-selected", "false");
+            ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
+        });
     }
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
-        getCategoryList("selCate1","214");
+        getCategoryList("sel_category","214");
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");//급수
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
         getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");//유형
@@ -25,10 +32,14 @@
         getExamPrepareSelectbox("examYear","");//시험대비년도 셀렉트박스
         getLectureStatusSelectbox("status","");//강좌정보- 진행상태
         $('#description').summernote({ //기본정보-에디터
-            width: 750,
-            height: 300,
+            height: 430,
             focus: true,
-            theme: 'cerulean'
+            theme: 'cerulean',
+            popover: {
+                image: [],
+                link: [],
+                air: []
+            }
         });
         $('.sModal3').on('hidden.bs.modal', function (e) { /*modal 초기화*/
             $('form').each(function(){
@@ -46,55 +57,6 @@
             });
         });
     });
-
-    function changesel(id, val){ //카테고리 셀렉트박스 불러오기
-        getCategoryList(id, val);
-    }
-
-    /*function optionDelete(val) {
-        if(val == 'optionDelete'){
-            $('#optionTable > tbody:last > tr:last').remove();
-        }else if(val == 'allMockTitleDelete'){
-            $('#allMockList > tbody:last > tr:last').remove();
-        }else if(val == 'examQuestionDelete'){
-            $('#examQuestionList > tbody:last > tr:last').remove();
-        }else if(val == 'setOptionDelete'){
-            $('#optionTable > tbody:last > tr:last').remove();
-        }else if(val == 'bookTitleDelete'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }else if(val == 'categoryDelete'){//teacherDelete
-            $('#categoryTable > tbody:last > tr:last').remove();
-        }else if(val == 'teacherDelete'){//teacherDelete
-            $('#teacherTabel > tbody:last > tr:last').remove();
-        }
-    }*/
-
-    //테이블 로우 삭제
-    function deleteTableRow(tableId) {
-        $("#categoryTable > tbody > tr").length;
-
-        if (tableId == "productOption") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productCategory") {
-            if ($("#categoryTable > tbody > tr").length == 1) {
-                $('#categoryTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#categoryTable > tbody:last > tr:last').remove();
-            }
-        } else if (tableId == "productTeacher") {
-            if ($("#teacherTabel > tbody > tr").length == 1) {
-                $('#teacherTabel > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#teacherTabel > tbody:last > tr:last').remove();
-            }
-        }  else if(tableId == 'productBook'){
-            $('#bookTable > tbody:last > tr:last').remove();
-        }
-    }
 
     function addOption(){ //옵션명 추가
         var optionCnt = $("#optionTable tr").length-1;
@@ -122,7 +84,7 @@
                     optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
                 optionHtml += "</td>";
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productOption')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\">삭제</button>";
                 optionHtml += "</a>";
                 optionHtml += "</td>";
         optionHtml += "</tr>";
@@ -145,17 +107,17 @@
          optionHtml  += "<td style=\"padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;\">";
          optionHtml  += "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
          optionHtml  += "</td>";
-         optionHtml  += "<td style=\"padding: 0.3rem;width: 20%\">";
+         optionHtml  += "<td style=\"padding: 0.3rem;width: 20%;vertical-align: middle\">";
          optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_"+optionCnt+"'>";
          optionHtml  += " <option>선택</option>";
          optionHtml  += "</select>";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"padding: 0.3rem;width:60%;text-align:right;vertical-align: middle\">";
          optionHtml  += "<label style=\"display: inline-block\">조건 : </label>";
-         optionHtml  += "<input type=\"text\" class=\"form-control\" style=\"display: inline-block;width:60%\"> %";
+         optionHtml  += "<input type=\"text\" class=\"form-control\" value='100' style=\"display: inline-block;width:60%;text-align: right;\"> %";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
-         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('productTeacher')\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\">삭제</button>";
+         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('teacherTabel', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\">삭제</button>";
          optionHtml  += "</td>";
          optionHtml  += "</tr>";
         $('#teacherTabel > tbody:first').append(optionHtml);
@@ -169,9 +131,6 @@
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
 
-
-
-
     //옵션 - 판매가 재수강시 할인율적용 함수
     function saleInputPrice(val,cnt) {
         selPriceCnt = "sellPrice_"+cnt;
@@ -181,44 +140,25 @@
         innerValue(resultPirceCnt,totalprice);
     }
 
-    //카테고리 리스트 추가
-    function addCategory() {
-        var categoryCnt = $("#categoryTable tr").length-1;
+    //카테고리 추가 버튼
+    function addCategoryInfo() {
+        var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
 
-        var selOption = "sel_"+categoryCnt;
+        if (fistTrStyle == "display:none") {
+            $('#categoryTable tr').eq(0).removeAttr("style", null);
+        } else {
+            var $tableBody = $("#categoryTable").find("tbody"),
+                $trLast = $tableBody.find("tr:last"),
+                $trNew = $trLast.clone();
+            $trLast.after($trNew);
 
-        getCategoryList(selOption, 214);
-
-        var categoryHtml = "<tr>";
-        categoryHtml += "<td>";                                                                                                 //saleInputPrice(this.value"+","+optionCnt+")' >"
-        categoryHtml += "<select class=\"col-sm-8 form-control custom-select\"  id='sel_"+categoryCnt+"' onchange='changesel("+'"'+'2sel_'+categoryCnt+'"'+","+"this.value)' >";
-        categoryHtml += " <option>선택</option>";
-        categoryHtml += " </select>";
-        categoryHtml += "<td>";
-        categoryHtml += " <select class=\"col-sm-8 form-control custom-select\" id='2sel_"+categoryCnt+"' onchange='changesel("+'"'+'3sel_'+categoryCnt+'"'+","+"this.value)' >";
-        categoryHtml += "<option>선택</option>";
-        categoryHtml += "</select>";
-        categoryHtml += "</td>";
-        categoryHtml += " <td>";
-        categoryHtml += "<select class=\"col-sm-8 form-control custom-select\" id='3sel_"+categoryCnt+"' onchange='changesel("+'"'+'4sel_'+categoryCnt+'"'+","+"this.value)' >";
-        categoryHtml += " <option>선택</option>";
-        categoryHtml += " </select>";
-        categoryHtml += "</td>";
-        categoryHtml += "<td>";
-        categoryHtml += " <select class=\"col-sm-8 form-control custom-select\"  id='4sel_"+categoryCnt+"' onchange='changesel("+'"'+'5sel_'+categoryCnt+'"'+","+"this.value)' >";
-        categoryHtml += "<option>선택</option>";
-        categoryHtml += " </select>";
-        categoryHtml += "</td>";
-        categoryHtml += "<td>";
-        categoryHtml += " <select class=\"col-sm-8 form-control custom-select\"  id='5sel_"+categoryCnt+"' name=\"ctgKey\" >";
-        categoryHtml += " <option>선택</option>";
-        categoryHtml += "  </select>";
-        categoryHtml += " </td>";
-        categoryHtml += "<td>";
-        categoryHtml += "<button type=\"button\" onclick=\"deleteTableRow('productCategory')\" class='btn btn-outline-danger btn-sm' style=\"margin-top:8%;\">삭제</button>";
-        categoryHtml += "</td>";
-        categoryHtml += "</tr>";
-        $('#categoryTable > tbody:first').append(categoryHtml);
+            getCategoryNoTag2('categoryTable','1183', '2');
+        }
+    }
+    //카테코리 셀렉트 박스 변경 시
+    function changeCategory(tableId, val, tdNum) {
+        if(tdNum == '5') return false;
+        getCategoryNoTag2(val, tableId, tdNum);
     }
 
     //저장
@@ -242,8 +182,9 @@
         else obj.isFree = '0';
         if(obj.isFreebieDeliveryFree == 'on')  obj.isFreebieDeliveryFree = '1';//사은품배송비무료
         else obj.isFreebieDeliveryFree = '0';
+
         /*  //기본정보 obj */
-            console.log(obj);
+
         /*  2.옵션 obj */
         var array = new Array();
         $('#optionTable tbody tr').each(function(index){
@@ -267,28 +208,23 @@
             array.push(data);
         });
         /* //옵션 obj */
-        console.log(array);
 
-        /*  3.카테고리 obj  */
-        var array1 = new Array();
+        /* 3. 카테고리 저장 */
+        var categoryArr = new Array();
         $('#categoryTable tbody tr').each(function(index){
-            var cate4 = $(this).find("td select").eq(4).val();
-            if(cate4 == '선택')  cate4 = "";
+            var ctgKey = $(this).find("td select").eq(4).val();
+            alert(ctgKey);
             var data = {
                 ctgGKey:0,
-                ctgKey:cate4,
+                ctgKey:ctgKey,
                 gKey:0,
                 pos:0
             };
-            array1.push(data);
+            categoryArr.push(data);
         });
-        console.log(array1);
-        /*  //카테고리 obj  */
-
 
         /*  4.강좌정보 obj  */
         var lectureObj = getJsonObjectFromDiv("section4");
-        console.log(lectureObj);
         /*  //강좌정보 obj  */
 
         /*  5.강사정보 obj  */
@@ -310,7 +246,6 @@
             };
             array2.push(data);
         });
-        console.log(array2);
         /*  //강사정보 obj  */
 
         /*  6.선택 obj  */
@@ -333,10 +268,10 @@
             };
             array3.push(data);
         });
-            console.log(array3);
+
         data.append("videoInfo", JSON.stringify(obj));
         data.append("videoOptionInfo",JSON.stringify(array));
-        data.append("videoCategoryInfo",JSON.stringify(array1));
+        data.append("videoCategoryInfo",JSON.stringify(categoryArr));
         data.append("videoLectureInfo",JSON.stringify(lectureObj));
         data.append("videoTeacherInfo",JSON.stringify(array2));
         data.append("videoOtherInfo",JSON.stringify(array3));
@@ -351,7 +286,6 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                        alert(data.result); //107003
                         goPage('productManage', 'playList');
                     }else{
                         alert("result 값이없음, 에러 ");
@@ -372,7 +306,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">동영상상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">동영상 등록</li>
                     </ol>
                 </nav>
@@ -404,7 +337,7 @@
                             <input type="hidden" value="0" name="goodsId">
                             <input type="hidden" value="" name="goodsTypeName">
                             <input type="hidden" value="" name="summary">
-                            <div class="col-md-6">
+                            <div class="col-md-12">
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                     <span>온라인강좌</span>
@@ -473,7 +406,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                    <div class="col-sm-8 pl-0 pr-0">
+                                    <div class="col-sm-6 pl-0 pr-0">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
                                             <span class="custom-file-control custom-file-label"></span>
@@ -482,7 +415,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                    <div class="col-sm-8 pl-0 pr-0">
+                                    <div class="col-sm-6 pl-0 pr-0">
                                         <div class="custom-file">
                                             <input type="file" class="custom-file-input addFile"  id="imageViewFile" name="imageViewFile" required>
                                             <span class="custom-file-control1 custom-file-label"></span>
@@ -491,7 +424,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강조표시</label>
-                                    <div class="col-sm-6 pl-0 pr-0">
+                                    <div class="col-sm-2 pl-0 pr-0">
                                         <select class="select2 form-control custom-select" id="emphasis" name="emphasis">
                                             <option value="0">없음</option>
                                             <option value="1">BEST</option>
@@ -515,7 +448,7 @@
                                 <div class="form-group">
                                     <label class="control-label col-form-label">상세설명</label>
                                     <div>
-                                        <textarea  value="" id="description" name="description"></textarea>
+                                        <textarea  name="description"  value="" id="description"></textarea>
                                     </div>
                                 </div>
                             </div>
@@ -526,6 +459,9 @@
                     <!-- 2.옵션 Tab -->
                     <h3>옵션</h3>
                     <section>
+                        <div class="float-right mb-3">
+                            <button type="button" class="btn btn-info btn-sm" onclick="addOption();">추가</button>
+                        </div>
                         <div id="section2">
                             <table class="table" id="optionTable">
                                 <input type="hidden" value="0" name="goodsTypeName">
@@ -562,14 +498,11 @@
                                         <input type="number" class="form-control" id="resultPrice_0" readonly>
                                     </td>
                                     <td style="padding: 0.3rem;">
-                                        <button type="button" onclick="deleteTableRow('optionDelete');" class="btn btn-outline-danger btn-sm" style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="deleteTableRow('optionTable' , 'delBtn');" class="btn btn-outline-danger btn-sm delBtn" style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <div class="mx-auto" style="width:5.5%">
-                                <button type="button" class="btn btn-outline-info mx-auto" onclick="addOption();">추가</button>
-                            </div>
                         </div>
                     </section>
                     <!-- //2.옵션 Tab -->
@@ -578,7 +511,7 @@
                     <h3>카테고리</h3>
                     <section>
                         <div class="float-right mb-3">
-                            <button type="button" class="btn btn-info btn-sm" onclick="addCategory();">추가</button>
+                            <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo();">추가</button>
                         </div>
                         <div id="section3">
                                 <table class="table" id="categoryTable">
@@ -586,45 +519,55 @@
                                     <input type="hidden" name="gKey" value="0">
                                     <input type="hidden" name="pos" value="0">
                                     <thead>
-                                    <tr style="border-top:0">
-                                        <th scope="col" style="text-align:center;width:20%"></th>
-                                        <th scope="col" style="text-align:center;"></th>
-                                        <th scope="col" style="text-align:center;width:20%"></th>
-                                        <th scope="col" style="text-align:center;width:20%"></th>
-                                        <th scope="col" colspan="2" style="text-align:center;width:20%"></th>
+                                    <tr style="display:none;">
+                                        <th></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
                                     </tr>
                                     </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td><!--옵션명selbox-->
-                                                <select class="col-sm-8 form-control custom-select" id="selCate1" onchange="changesel('selCate2', this.value);">
-                                                    <option>선택</option>
-                                                </select>
-                                            </td>
-                                            <td><!--원가-->
-                                                <select class="col-sm-8 form-control custom-select" id="selCate2"  onchange="changesel('selCate3', this.value);">
-                                                    <option>선택</option>
-                                                </select>
-                                            </td>
-                                            <td><!--판매가-->
-                                                <select class="col-sm-8 form-control custom-select" id="selCate3" onchange="changesel('selCate4', this.value);">
-                                                    <option>선택</option>
-                                                </select>
-                                            </td>
-                                            <td><!--포인트-->
-                                                <select class="col-sm-8 form-control custom-select" id="selCate4" onchange="changesel('selCate5', this.value);">
-                                                    <option>선택</option>
-                                                </select>
-                                            </td>
-                                            <td><!--재수강1-->
-                                                <select class="col-sm-8 form-control custom-select" id="selCate5" name="ctgKey">
-                                                    <option>선택</option>
-                                                </select>
-                                            </td>
-                                            <td>
-                                            <button type="button" onclick="deleteTableRow('productOption')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
-                                            </td>
-                                        </tr>
+                                    <tbody id="categoryList">
+                                    <tr>
+                                        <td><!--옵션명selbox-->
+                                            <select class='form-control'  id='sel_category' onchange="getCategoryNoTag2('categoryTable','1183', '2');">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'  name="ctgKey">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
+                                        </td>
+                                    </tr>
                                     </tbody>
                                 </table>
                         </div>
@@ -722,17 +665,17 @@
                                     <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
                                         <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                     </td>
-                                    <td style="padding: 0.3rem;width: 20%">
+                                    <td style="padding: 0.3rem;width: 20%;vertical-align: middle">
                                         <select class="select2 form-control custom-select" style="height:36px;" id="teacherList_0">
                                             <option>선택</option>
                                         </select>
                                     </td>
                                     <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
                                         <label style="display: inline-block">조건 : </label>
-                                        <input type="text" class="form-control" style="display: inline-block;width:60%" name="calculate_rate"> %
+                                        <input type="text" class="form-control" style="display: inline-block;width:60%;text-align: right" name="calculate_rate" value="100"> %
                                     </td>
                                     <td style="width:3%;vertical-align: middle">
-                                        <button type="button" onclick="deleteTableRow('productTeacher')" class='btn btn-outline-danger btn-sm' style="margin-top:8%;">삭제</button>
+                                        <button type="button" onclick="deleteTableRow('teacherTabel', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -756,70 +699,6 @@
                         </div>
                     </section>
                     <!-- //6.선택 Tab -->
-
-                    <!-- 7.강의 목록 Tab -->
-                    <!--<h3>강의목록</h3>
-                    <section>
-                        <div class="mb-3 float-right">
-                            <button type="button" class="btn btn-outline-info btn-sm">순서변경</button>
-                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sModal4">추가</button>
-                        </div>
-                        <table class="table text-center table-hover">
-                            <thead>
-                            <tr>
-                                <th scope="col" colspan="1" style="width:8%">번호</th>
-                                <th scope="col" colspan="1" style="width:50%">강의제목</th>
-                                <th scope="col" colspan="1" style="width:15%">시간</th>
-                                <th scope="col" colspan="1" style="width:10%">출력</th>
-                                <th scope="col" colspan="1" style="width:10%">샘플사용</th>
-                                <th scope="col" colspan="1" style="width:7%"></th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
-                                    <span>1</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem; vertical-align: middle;">
-                                    <span>text</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <span>10</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <i class="mdi mdi-close" style="color: red"></i>
-                                </td>
-                                <td style="vertical-align: middle">
-                                    <i class="mdi mdi-check" style="color:green;"></i>
-                                </td>
-                                <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td class="text-center" style="padding: 0.3rem;vertical-align: middle">
-                                    <span>2</span>
-                                </td>
-                                <td class="text-left" style="padding: 0.3rem; vertical-align: middle;">
-                                    <span>text</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <span>120</span>
-                                </td>
-                                <td style="padding: 0.3rem;vertical-align: middle">
-                                    <i class="mdi mdi-check" style="color:green;"></i>
-                                </td>
-                                <td style="vertical-align: middle">
-                                    <i class="mdi mdi-check" style="color:green;"></i>
-                                </td>
-                                <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
-                                    <button type="button" class="btn btn-outline-danger btn-sm">삭제</button>
-                                </td>
-                            </tr>
-                            </tbody>
-                        </table>
-                    </section>
-                 //7.강의 목록 Tab -->
                 </div>
             </div>
         </div>
@@ -844,9 +723,7 @@
                 <div class="modal-body">
                     <div style=" display:inline;">
                         <div style=" float: left; width: 10%">
-                            <select class="form-control" id="searchType">
-                                <option>선택</option>
-                            </select>
+                            <span id="l_productSearch"></span>
                         </div>
                         <div style=" float: left; width: 33%">
                             <input type="text" class="form-control" id="productSearchType">
@@ -1050,14 +927,6 @@
             onFinished: function(event, currentIndex) {
                 playSave();
             },
-            /*onFinishing: function(event, currentIndex) {
-                //form.validate().settings.ignore = ":disabled";
-                //return form.valid();
-            },
-            onFinished: function(event, currentIndex) {
-                //alert("Submitted!");
-            }*/
-            // aria-selected:"false"
         });
         $('#indate').datepicker({
             format: "yyyy-mm-dd",

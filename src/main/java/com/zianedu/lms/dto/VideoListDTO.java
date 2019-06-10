@@ -24,6 +24,10 @@ public class VideoListDTO {
 
     private String statusStr;
 
+    private int kind;
+
+    private int sellPrice;
+
     VideoListDTO() {
         this.gKey = getGKey();
         this.goodsName = getGoodsName();

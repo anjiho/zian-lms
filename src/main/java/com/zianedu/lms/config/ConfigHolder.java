@@ -21,6 +21,8 @@ public class ConfigHolder {
     private String fileUploadPath;
     @Value("#{config['file.domain.url']}")
     private String fileDomainUrl;
+    @Value("#{config['is.schedule']}")
+    private boolean isSchedule;
 
     public static String getFileUploadPath() {
         return configHolder.fileUploadPath;
@@ -28,6 +30,10 @@ public class ConfigHolder {
 
     public static String getFileDomainUrl() {
         return configHolder.fileDomainUrl;
+    }
+
+    public static boolean isSchedule() {
+        return configHolder.isSchedule;
     }
 
     @PostConstruct

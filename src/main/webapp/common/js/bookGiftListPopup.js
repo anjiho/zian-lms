@@ -19,7 +19,6 @@ function fn_search3(val) {
         paging.count3(sPage, cnt, '10', '10', comment.blank_list);
         var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
         productManageService.getProductList(sPage, '10',searchType, searchText, 'BOOK', function (selList) {
-            console.log(selList);
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
@@ -94,7 +93,7 @@ function sendChildValue_2(val) {
     bookkListHtml     += "</div>";
     bookkListHtml     += "</td>";
     bookkListHtml     += " <td>";
-    bookkListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productBook');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+    bookkListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
     bookkListHtml     += "</td>";
 
 

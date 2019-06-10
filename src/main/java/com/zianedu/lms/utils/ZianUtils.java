@@ -18,7 +18,21 @@ public class ZianUtils {
         return monthList;
     }
 
+    /**
+     * T_ORDER.j_id 값 만들기
+     * @return
+     */
+    public static String getJId() {
+        String jId = "";
+        String yyyyMM = Util.getYearMonth();
+        String[] splitHHmm = Util.split(Util.returnHourMinute(), ":");
+        String hhmm = splitHHmm[0] + splitHHmm[1];
+        String ranNumber = RandomUtil.getRandomNumber(6);
+
+        jId = yyyyMM + "-" + hhmm + "-" + ranNumber;
+        return jId;
+    }
     public static void main(String[] args) {
-        System.out.println(getMonthList());
+        System.out.println(getJId());
     }
 }

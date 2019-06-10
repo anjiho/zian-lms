@@ -53,6 +53,10 @@ public class FileUploadUtil {
                     } else {
                         filePath = "100/promotion/";
                     }
+                } else if ("QUESTION_BANK".equals(uploadType)) {
+                    filePath = "100/exam_question_bank/";
+                } else if ("TEACHER".equals(uploadType)) {
+                    filePath = "100/teacher/";
                 }
 
                 if (uploadFileName != null || !"".equals(uploadFileName)) {
@@ -112,6 +116,21 @@ public class FileUploadUtil {
                             map.put("imageListFilePath", filePath + fileName);
                         } else {
                             map.put("imageViewFilePath", filePath + fileName);
+                        }
+                    } else if ("QUESTION_BANK".equals(uploadType)) {
+                        filePath = "100/exam_question_bank/";
+                        if("questionImage".equals(uploadFileName)) {
+                            map.put("questionImagePath", filePath + fileName);
+                        } else {
+                            map.put("commentaryImagePath", filePath + fileName);
+                        }
+
+                    } else if ("TEACHER".equals(uploadType)) {  //강사 이미지 업로드
+                        filePath = "100/teacher/";
+                        if("listImageFile".equals(uploadFileName)) {
+                            map.put("listImageFilePath", filePath + fileName);
+                        } else {
+                            map.put("viewImageFilePath", filePath + fileName);
                         }
                     }
 

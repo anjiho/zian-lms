@@ -2,6 +2,7 @@ package com.zianedu.lms.vo;
 
 import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.define.datasource.ZianCoreManage;
+import com.zianedu.lms.utils.Util;
 import lombok.Data;
 
 @Data
@@ -68,8 +69,8 @@ public class TGoodsVO {
         this.imageList = imageList;
         this.imageView = imageView;
         this.emphasis = emphasis;
-        this.tags = tags;
-        this.summary = summary;
+        this.tags = Util.isNullValue(tags, "");
+        this.summary = Util.isNullValue(summary, "");
         this.description = description;
         this.calculateRate = calculateRate;
         this.isFreebieDeliveryFree = isFreebieDeliveryFree;

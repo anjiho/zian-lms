@@ -380,18 +380,27 @@ public class MemberManageService {
         List<TResVO>subjectGroupInfo = productManageMapper.selectTResListByTeacherKey(teacherVO.getTeacherKey());
         List<TLinkKeyVO>linkKeyList = memberManageMapper.selectTLinkKeyByTeacher(teacherVO.getTeacherKey());
 
+        List<TeacherCategoryListDTO> teacherCategoryList = new ArrayList<>();
         List<List<TCategoryVO>> teacherCategoryInfo = new ArrayList<>();
         if (linkKeyList.size() > 0) {
             for (TLinkKeyVO tLinkKeyVO : linkKeyList) {
                 List<TCategoryVO> tCategoryVOList = dataManageService.getSequentialCategoryList(tLinkKeyVO.getReqKey());
                 //Collections.reverse(tCategoryVOList);
                 teacherCategoryInfo.add(tCategoryVOList);
+
+                TeacherCategoryListDTO dto = new TeacherCategoryListDTO();
+                dto.setLinkKey(tLinkKeyVO.getLinkKey());
+                dto.setTeacherCategoryInfo(tCategoryVOList);
+
+                teacherCategoryList.add(dto);
             }
         }
+        //teacherCategoryList.setTeacherCategoryInfo(teacherCategoryInfo);
+
         TeacherDetailDTO teacherDetailDTO = new TeacherDetailDTO(
                 teacherVO,
                 subjectGroupInfo,
-                teacherCategoryInfo
+                teacherCategoryList
         );
         return teacherDetailDTO;
     }
@@ -408,21 +417,53 @@ public class MemberManageService {
     }
 
     /**
+     * 상담내역 상세정보 가져오기
+     * @param counselKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TCounselVO getCounselDetailInfo(int counselKey) {
+        if (counselKey == 0) return null;
+        return memberManageMapper.selectTCounselInfo(counselKey);
+    }
+
+    /**
+     * 아이디 중복확인
+     * @param userId
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public boolean isUser(String userId) {
+        if ("".equals(userId)) return false;
+        int userCount = memberManageMapper.selectUserCountByUserId(userId);
+        if (userCount > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
      * 회원 추가( 권한이 강사면 강사 테이블 추가 입력 )
      * @param tUserVO
      * @return
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public int saveMember(TUserVO tUserVO) throws Exception {
+    public int saveMember(TUserVO tUserVO, TTeacherVO tTeacherVO) throws Exception {
         TUserVO userVO = new TUserVO(tUserVO);
-        Integer userKey = memberManageMapper.insertTUSer(userVO);
-        if (userKey != null) {
+        memberManageMapper.insertTUSer(userVO);
+        if (userVO.getUserKey() > 0) {
             //강사면 강사 테이블 저장
             if (tUserVO.getAuthority() == 5) {
-                memberManageMapper.insertTTeacher(userKey);
+                TTeacherVO vo = new TTeacherVO(
+                        userVO.getUserKey(), Util.isNullValue(tTeacherVO.getImageList(), ""), Util.isNullValue(tTeacherVO.getImageTeacherList(), ""),
+                        Util.isNullValue(tTeacherVO.getImageTeacherView(), ""), Util.isNullValue(tTeacherVO.getGreeting(), ""),
+                        Util.isNullValue(tTeacherVO.getHistory(), ""), Util.isNullValue(tTeacherVO.getBookWriting(), ""),
+                        tTeacherVO.getOnlinelecCalculateRate(), tTeacherVO.getOfflinelecCalculateRate(), Util.isNullValue(tTeacherVO.getSampleVodFile(), "")
+                );
+                memberManageMapper.insertTTeacher(vo);
             }
         }
-        return userKey;
+        return userVO.getUserKey();
     }
 
     /**
@@ -501,6 +542,7 @@ public class MemberManageService {
         } else if (tCounselVO.getStatus() == 2) {
             tCounselVO.setProcStartDate("");
             tCounselVO.setProcEndDate(Util.returnNow());
+
         }
 
         TCounselVO counselVO = new TCounselVO(tCounselVO);
@@ -522,6 +564,71 @@ public class MemberManageService {
         }
     }
 
+    /**
+     * 회원탈퇴 승인
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void approveSecession(int secessionKey) {
+        if (secessionKey == 0) return;
+        memberManageMapper.updateTUserSecessionObtainDate(secessionKey);
+    }
 
+    /**
+     * 회원탈퇴 취소
+     * @param secessionKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void cancelSecession(int secessionKey) {
+        if (secessionKey == 0) return;
+        memberManageMapper.deleteTUserSecession(secessionKey);
+    }
+
+    /**
+     * 회원정보 수정
+     * @param tUserVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateUserInfo(TUserVO tUserVO) {
+        if (tUserVO.getUserKey() == 0) return;
+        memberManageMapper.updateTUser(tUserVO);
+    }
+
+    /**
+     * 강사정보 수정
+     * @param tTeacherVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateTeacherInfo(TTeacherVO tTeacherVO) {
+        if (tTeacherVO.getTeacherKey() == 0) return;
+        memberManageMapper.updateTTeacher(tTeacherVO);
+    }
+
+    /**
+     * 과목그룹별 설명내용 저장
+     * @param tResVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertTResAtTeacherSubject(TResVO tResVO) {
+        productManageMapper.insertTResAtTeacherSubject(tResVO);
+    }
+
+    /**
+     * 강사 카테고리 저장
+     * @param tLinkKeyVO
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void insertTeacherCategory(TLinkKeyVO tLinkKeyVO) {
+        productManageMapper.insertTLinkKey(tLinkKeyVO);
+    }
+
+    /**
+     * 강사 카테고리 삭제
+     * @param linkKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTeacherCategory(int linkKey) {
+        if (linkKey == 0) return;
+        productManageMapper.deleteTLinkKeyByLinkKey(linkKey);
+    }
 
 }

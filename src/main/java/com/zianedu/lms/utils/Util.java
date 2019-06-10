@@ -49,7 +49,7 @@ public class Util {
 
     public static String getYearMonth(){
         Date date = new Date();
-        SimpleDateFormat formatter =new SimpleDateFormat("yyyyMMdd", Locale.KOREA);
+        SimpleDateFormat formatter =new SimpleDateFormat("yyMMdd", Locale.KOREA);
         return formatter.format(date);
     }
 
@@ -633,6 +633,12 @@ public class Util {
         return sdf.format(today);
     }
 
+    public static String returnHourMinute() {
+        Date today = new Date();
+        SimpleDateFormat sdf = new SimpleDateFormat("kk:mm");
+        return sdf.format(today);
+    }
+
     public static String yesterDay(String date) {
         long chStart = 0;
         DateFormat df = new SimpleDateFormat("yyyyMMdd");
@@ -1023,43 +1029,37 @@ public class Util {
 
     }
 
+    // yyyy-mm -> yyyymm 변환
+    public static String convertDateFormat2(String date) throws Exception {
+        SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyy-mm");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymm");
+        Date originDate = fromDateFormat.parse(date);
+
+        String newDate = dateFormat.format(originDate);
+
+        return newDate;
+
+    }
+
+    // yyyy-mm-dd -> yyyymmdd 변환
+    public static String convertDateFormat3(String date) throws Exception {
+        SimpleDateFormat fromDateFormat = new SimpleDateFormat("yyyy-mm-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyymmdd");
+        Date originDate = fromDateFormat.parse(date);
+
+        String newDate = dateFormat.format(originDate);
+
+        return newDate;
+
+    }
+
 
 
     public static void main(String[] args) throws Exception {
-//        String host = "smtp.hiworks.com";
-//        final String username = "admin@ideepstudy.com";
-//        final String password = "solbox12!@";
-//        int port=465; //포트번호
-//        // 메일 내용
-//        String recipient = "anjo0080@gmail.com";
-//        String subject = "메일테스트";
-//        String body = username+"님으로 부터 메일을 받았습니다.";
-//        Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성
-//        // SMTP 서버 정보 설정
-//        props.put("mail.smtp.host", host);
-//        props.put("mail.smtp.port", port);
-//        props.put("mail.smtp.auth", "true");
-//        props.put("mail.smtp.ssl.enable", "true");
-//        props.put("mail.smtp.ssl.trust", host);
-//        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
-//            String un=username;
-//            String pw=password;
-//            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
-//                return new javax.mail.PasswordAuthentication(un, pw);
-//            }
-//        });
-//        session.setDebug(true); //for debug
-//        Message mimeMessage = new MimeMessage(session); //MimeMessage 생성
-//        mimeMessage.setFrom(new InternetAddress("admin@ideepstudy.com")); //발신자 셋팅 , 보내는 사람의 이메일주소를 한번 더 입력합니다. 이때는 이메일 풀 주소를 다 작성해주세요.
-//        mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //수신자셋팅 //.TO 외에 .CC(참조) .BCC(숨은참조) 도 있음
-//
-//        mimeMessage.setSubject(subject); //제목셋팅
-//        mimeMessage.setText(body); //내용셋팅
-//        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
-        String str = "c7684301";
-        SecurityUtil securityUtil = new SecurityUtil();
+        String date = convertDateFormat3(plusDate(Util.returnNow(), -10));
+        String date2 = convertDateFormat3("2019-05-27");
+        System.out.println(getDiffDayCount(date, date2));
 
-        System.out.println(convertDateFormat("201507"));
 
     }
 }

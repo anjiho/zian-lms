@@ -5,6 +5,7 @@
 <script>
     $( document ).ready(function() {
         examList(); //시험일정 리스트 불러오기
+        menuActive('menu-0', 5);
         /*modal 초기화*/
         $('.modal').on('hidden.bs.modal', function (e) {
             $('form').each(function(){
@@ -18,7 +19,6 @@
         dataManageService.getExamSchedule( function (selList) {
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {
-                    console.log(selList);
                     var cmpList = selList[i];
                     var Btn = "<button type=\"button\" class=\"btn btn-outline-primary btn-sm\" onclick='getExam("+ cmpList.scheduleKey +");' data-toggle=\"modal\" data-target=\"#sModal\">수정</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick='examDelete("+ cmpList.scheduleKey +");'>삭제</button>";
 
@@ -91,7 +91,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">데이터관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">일정/검색어관리</li>
                         <li class="breadcrumb-item active" aria-current="page">시험일정관리</li>
                     </ol>
                 </nav>

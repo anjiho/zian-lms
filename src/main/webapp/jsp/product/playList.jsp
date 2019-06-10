@@ -3,25 +3,17 @@
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
-
 <script>
-
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 1);
+        fn_search('new');
     }
 
     function play_modify(gKey) {
-        innerValue("gKey", gKey);
+        innerValue("param_key", gKey);
         goPage("productManage","modifyPlayManage");
     }
-
-    // function enterkey() {
-    //     if (window.event.keyCode == 13) {
-    //        fn_search('new');
-    //     }
-    // }
-
 
     function fn_search(val) {
         var paging = new Paging();
@@ -33,27 +25,24 @@
 
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("searchText");
-
+        if(searchType == null) searchType = "";
         productManageService.getProductListCount(searchType, searchText, "VIDEO", function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
                 if (selList.length > 0) {
-                    console.log(selList);
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
                         var goosNameHtml = "<a href='javascript:void(0);' color='blue' style='float:left' onclick='play_modify(" + cmpList.GKey + ");'>"+cmpList.goodsName +"</a>";
                         if (cmpList != undefined) {
-                            console.log(cmpList.isShow);
                             var cellData = [
                                 function(data) {return listNum--;},
-                                // function(data) {return i+1;},
                                 function(data) {return cmpList.GKey;},
                                 function(data) {return goosNameHtml;},
                                 function(data) {return split_minute_getDay(cmpList.indate);},
-                                function(data) {return cmpList.isShow == 0 ? "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
-                                function(data) {return cmpList.isSell == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";},
-                                function(data) {return cmpList.isFree == 0 ?  "<span style='color: red'>X</span>" : "<span style='color: blue'>O</span>";}
+                                function(data) {return cmpList.isShow == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                                function(data) {return cmpList.isSell == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                                function(data) {return cmpList.isFree == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                             ];
                             dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
                         }
@@ -67,17 +56,15 @@
 
     function contentYn(val) {
         var content = "";
-        if(val == '1'){
-            content = 'O';
-        }else {
-            content = 'X';
-        }
+        if(val == '1') content = 'O';
+        else content = 'X';
         return content;
     }
 
 </script>
-<input type="hidden" id="sPage" >
+<input type="hidden" id="sPage">
 <input type="hidden" id="gKey"  name="gKey">
+<input type="hidden" id="param_key" name="param_key" value="">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
@@ -86,7 +73,6 @@
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">상품관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">동영상 상품관리</li>
                         <li class="breadcrumb-item active" aria-current="page">동영상 목록</li>
                     </ol>
                 </nav>
