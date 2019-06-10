@@ -580,10 +580,10 @@ public class StatisManageService {
      * @param price
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveTeacherCalculateOptionInfo(int teacherKey, String targetDate, String title, int price) {
-        if (teacherKey == 0 && "".equals(targetDate) && "".equals(title)) return;
+    public void saveTeacherCalculateOptionInfo(int teacherKey, String title, int price) {
+        if (teacherKey == 0 && "".equals(title)) return;
         TCalculateOptionVO tCalculateOptionVO = new TCalculateOptionVO(
-                teacherKey, targetDate, title, price
+                teacherKey, title, price
         );
         statisManageMapper.insertTCalculateOption(tCalculateOptionVO);
     }

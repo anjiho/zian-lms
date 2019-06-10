@@ -1425,7 +1425,7 @@ function getSmsYearSelectbox(tagId, val) {
     var mm = today.getMonth() + 1;
     var yyyy = today.getFullYear();
     var html = "<select id='searchYearMonth' name='searchYearMonth' class='form-control'>";
-    html += "<option value=''>선택</option>";
+    html += "<option value=''>년월선택</option>";
     for (var i=yyyy; i>=yearAgo; i--) {
         if(i == yyyy || i == yearAgo){
             for(var j=mm; j>0; j--) {

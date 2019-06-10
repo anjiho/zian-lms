@@ -18,9 +18,8 @@ public class TCalculateOptionVO {
 
     public TCalculateOptionVO(){}
 
-    public TCalculateOptionVO(int teacherKey, String targetDate, String title, int price) {
+    public TCalculateOptionVO(int teacherKey, String title, int price) {
         this.teacherKey = teacherKey;
-        this.targetDate = targetDate;
         this.title = Util.isNullValue(title, "");
         this.price = price;
     }

@@ -10,7 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
  * <PRE>
  *     1. 내용 : 교수관리 컨트롤러
  *     2. 작성자 : 안지호
- *     3. 작성일 : 2019. 04. 01
+ *     3. 작성일 : 2019. 04. 017k
  * </PRE>
  */
 @Controller
@@ -28,8 +28,6 @@ public class TeacherManageController {
         }else if("teacherCalculateSectionList".equals(page_gbn)) {
             mvc.setViewName("teacher/teacherCalculateSectionList");
         }
-
-
         return mvc;
     }
 }

@@ -101,10 +101,12 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TCouponMasterVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TUserSecessionVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCounselVO"/>
+
 		<convert converter="bean" match="com.zianedu.lms.vo.TTeacherVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCategoryGoods"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCpVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TOrderDeliveryVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TCalculateOptionVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>

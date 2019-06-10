@@ -5,7 +5,7 @@
 <script>
     function init() {
         getSmsSearchSelectbox("l_searchSel");
-        menuActive('menu-5', 2);
+        menuActive('menu-5', 7);
         fn_search('new');
         getSmsYearSelectbox("l_monthYearSel","");
     }

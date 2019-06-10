@@ -2581,3 +2581,21 @@ function pubByteCheckTextarea(oid, tid, maxlength){
 function  InputPhoneNumCheck(phoneNum) {
     return phoneNum.replace(/(^02.{0}|^01.{1}|[0-9]{3})([0-9]+)([0-9]{4})/,"$1-$2-$3");
 }
+
+
+/* input text onkeyup 금액표시 */
+function inputNumberFormat(obj) {
+    obj.value = comma(uncomma(obj.value));
+}
+
+function uncomma(str) {
+    str = String(str);
+    return str.replace(/[^\d]+/g, '');
+
+}
+
+function comma(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+/* input text onkeyup 금액표시 */
