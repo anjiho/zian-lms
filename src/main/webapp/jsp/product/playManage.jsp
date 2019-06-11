@@ -32,7 +32,7 @@
         getExamPrepareSelectbox("examYear","");//시험대비년도 셀렉트박스
         getLectureStatusSelectbox("status","");//강좌정보- 진행상태
         $('#description').summernote({ //기본정보-에디터
-            height: 430,
+            height: 300,
             focus: true,
             theme: 'cerulean',
             popover: {

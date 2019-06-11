@@ -7,7 +7,7 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 1);
-        fn_search('new');
+        //fn_search('new');
     }
 
     function play_modify(gKey) {
@@ -85,7 +85,6 @@
         <div class="col-12">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:10px;">동영상 목록</h5>
                     <div>
                         <div style=" float: left; width: 10%">
                             <span id="l_searchSel"></span>

@@ -125,9 +125,9 @@
 
 	<insert id="insertTCategoryInfo">
 		INSERT INTO T_CATEGORY
-		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME )
+		( CTG_KEY, C_KEY, PARENT_KEY, POS, NAME, IS_STATIC, ROLE_TYPE )
     	VALUES
-		( T_CATEGORY_SEQ.NEXTVAL, 100, #{parentKey}, #{pos}, #{name} )
+		( T_CATEGORY_SEQ.NEXTVAL, 100, #{parentKey}, #{pos}, #{name}, 0, 0 )
 	</insert>
 
 	<insert id="insertTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">

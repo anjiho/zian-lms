@@ -50,21 +50,6 @@
             </div>
         </div>
     </div>
-    <!--end row cloumn-->
-    <div class="row">
-        <div class="col-md-12">
-            <div class="card">
-                <div class="card-body">
-                    <h5 class="card-title">Real Time Chart</h5>
-                    <div id="real-time" style="height:400px;"></div>
-                    <p>Time between updates:
-                        <input id="updateInterval" type="text" value="" style="text-align: right; width:5em"> milliseconds
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- ENd chart-1 -->
 </div>
     <!--end container-fluid-->
 

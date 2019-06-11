@@ -6,26 +6,44 @@
 <script>
     function init() {
         menuActive('menu-0', 1);
+        /* 리스트 불러오기 */
+        categoryList();
+        subjectList();
     }
     function saveClassfication(){ /* 분류저장 */
-        var subject =  getInputTextValue("subject");
-        if(subject != ""){
-            if(confirm("분류추가 하시겠습니까?")) {
-                dataManageService.saveClassficationInfo("CLASSFICATION", subject, function () {
-                    isReloadPage(true);
-                });
+        var classfication =  getInputTextValue("classfication");
+        if(classfication != ""){
+            if(confirm("분류 등록을 하시겠습니까?")) {
+                dataManageService.saveClassficationInfo("CLASSFICATION", classfication, function () {isReloadPage(true);});
             }
         }else{
             alert("분류를 입력해 주세요.");
             return false;
         }
     }
+    function saveSubject(){ /* 과목저장 */
+        var subject =  getInputTextValue("subject");
+        if(subject != ""){
+            if(confirm("과목 등록을 하시겠습니까?")) {
+                dataManageService.saveClassficationInfo("SUBJECT", subject, function () {isReloadPage(true);});
+            }
+        }else{
+            alert("과목을 입력해 주세요.");
+            return false;
+        }
+    }
 
-    function deleteSubject(val) { /*과목 삭제*/
+    function deleteClassfication(val) { /*과목 삭제*/
         if(confirm("삭제하시겠습니까?")) {
             dataManageService.deleteClassSubject(val, function () {
                 isReloadPage(true);
             });
+        }
+    }
+
+    function deleteSubject(val) { /* 과목 삭제 */
+        if(confirm("삭제하시겠습니까?")) {
+            dataManageService.deleteClassSubject(val, function () {isReloadPage(true);});
         }
     }
 
@@ -35,31 +53,47 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     if (cmpList != undefined) {
-                        var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
+                        var deleteBtn  = "<button type=\"button\" onclick='deleteClassfication("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
                         var cellData = [
                             function(data) {return cmpList.name;},
                             function(data) {return deleteBtn;},
                         ];
-                        dwr.util.addRows("dataList", [0], cellData, {escapeHtml:false});
+                        dwr.util.addRows("classficationList", [0], cellData, {escapeHtml:false});
                     }
                 }
             }
         });
     }
-    $( document ).ready(function() {
-        categoryList(); //분류 리스트 불러오기
-    });
+
+    function subjectList() { /* 과목 리스트 */
+        dataManageService.getTcategoryList("SUBJECT", function (selList) {
+            if (selList.length > 0) {
+                for (var i = 0; i < selList.length; i++) {
+                    var cmpList = selList[i];
+                    if (cmpList != undefined) {
+                        var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
+                        var cellData = [
+                            function(data) {return cmpList.name;},
+                            function(data) {return deleteBtn;}
+                        ];
+                        dwr.util.addRows("subjectList", [0], cellData, {escapeHtml:false});
+                    }
+                }
+            }
+
+        });
+    }
 
 </script>
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">분류관리</h4>
+            <h4 class="page-title">분류 / 과목 관리</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">데이터 관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">분류관리</li>
+                        <li class="breadcrumb-item active" aria-current="page">분류 / 과목 관리</li>
                     </ol>
                 </nav>
             </div>
@@ -68,31 +102,60 @@
 </div>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-5">
+        <!-- 분류관리 -->
+        <div class="col-md-6">
             <div class="card">
-              <div class="card-body">
+            <div class="card-body">
+                <div class="form-group row" style="margin-bottom: 0px;">
+                    <label class="col-sm-3 text-center control-label col-form-label card-title">분류등록</label>
+                    <div class="col-sm-7">
+                        <input type="text" class="form-control" width="50px" id="classfication" onkeypress="if(event.keyCode==13) {saveClassfication(); return false;}">
+                    </div>
+                    <div>
+                        <button type="button" class="btn btn-info" style="float:right;" onclick="saveClassfication();">추가</button>
+                    </div>
+                </div>
+            </div>
+            <table class="table table-hover text-center">
+                <thead>
+                <tr>
+                    <th scope="col" style="width:50%;">분류명</th>
+                    <th scope="col" style="width:50%;">관리</th>
+                </tr>
+                </thead>
+                <tbody id="classficationList"></tbody>
+            </table>
+        </div>
+        </div>
+        <!-- //분류관리 -->
+
+        <!-- 과목관리 -->
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
                     <div class="form-group row" style="margin-bottom: 0px;">
-                        <label class="col-sm-3 text-center control-label col-form-label card-title"  style="margin-bottom: 0px;">분류등록</label>
+                        <label  class="col-sm-3 text-center control-label col-form-label card-title">과목등록</label>
                         <div class="col-sm-7">
-                             <input type="text" class="form-control" width="50px" id="subject" required="required">
+                            <input type="text" class="form-control" width="50px" id="subject" onkeypress="if(event.keyCode==13) {saveSubject(); return false;}">
                         </div>
                         <div>
-                            <button type="button" class="btn btn-info" style="float:right;" onclick="saveClassfication();">추가</button>
+                            <button type="button" class="btn btn-info" style="float:right;" onclick="saveSubject();">추가</button>
                         </div>
                     </div>
-              </div>
-              <table class="table table-hover text-center">
+                </div>
+                <table class="table table-hover text-center">
                     <thead>
                     <tr>
-                        <th scope="col" style="width:75%;">분류명</th>
-                        <th scope="col" style="width:25%;">관리</th>
-                        <th scope="col" style="width:25%;"></th>
+                        <th scope="col" style="width:50%;">과목명</th>
+                        <th scope="col" style="width:50%;">관리</th>
                     </tr>
                     </thead>
-                    <tbody id="dataList"></tbody>
-              </table>
+                    <tbody id="subjectList"></tbody>
+                </table>
             </div>
         </div>
+
+        <!-- //과목관리 -->
     </div>
 </div>
 <!-- End Container fluid  -->

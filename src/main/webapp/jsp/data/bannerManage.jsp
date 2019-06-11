@@ -1,16 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String subDomainSel = request.getParameter("param_key");
+%>
 <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/dataManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 <script>
-    $(document).ready(function() {
-        getSubDomainList("sel_subDomain", "");//서브도메인 select 불러오기
-        changeBox2('216');
-    });
+    var subDomainSel = '<%=subDomainSel%>';
     function init() {
-        menuActive('menu-0', 3);
+        menuActive('menu-0', 2);
+        getSubDomainList("sel_subDomain", subDomainSel);//서브도메인 select 불러오기
+        changeBox2('216');
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -36,7 +38,7 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     var result = cmpList.result;
-                    var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
+                    var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
                     var posListBtn = "  <button type=\"button\" class=\"btn btn-outline-info btn-sm float-right mr-3 mb-3\" onclick=\"changeBannerList("+i+");\">순서변경저장</button>";
                     if(result.name){
                         var bannerNameHtml = "<div class='card'>";
@@ -80,7 +82,7 @@
                     var dataList =  "dataList"+i;
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
-                        var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm">삭제</button>';
+                        var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm delBtn">삭제</button>';
                         var bitText = "";
 
                         if(cmpList1.valueBit1 == "1") bitText = "<i class=\"mdi mdi-check\" style=\"color:green;\"></i>";
@@ -113,6 +115,7 @@
     function popup(val,ctgKey,pos) { //수정팝업
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
+            console.log(selList);
             $("#bannerKey").val(val);
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
@@ -132,7 +135,7 @@
         $("#title").val("");
         $("#bannerColor").val("");
         $("#bannerLink").val("");
-        $("#cma_image").css('display', 'none');
+        //$("#cma_image").css('display', 'none');
         $('.custom-file-control').html("");
         $("#bannerKey").val(val);
         $("#ctgKey").val(ctgKey);
@@ -142,7 +145,7 @@
     //팝업 Close 기능
     function close_pop(flag) {
         $('#myModal').hide();
-    };
+    }
 
     function modify() {
         //저장일경우 pos, ctgingoKey == 0 , ctgKey값만 넘김
@@ -182,15 +185,22 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
-                    location.reload();
+                    //location.reload();
+                    var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    innerValue("param_key", sel_subDomain);
+                    goPage('dataManage', 'bannerSave');
                 }
             });
         }
     }
 
-    function bannerDelete(val,ctgKey,pos) {
+    function bannerDelete(val, ctgKey, pos) {
         if(confirm("삭제하시겠습니까?")) {
-            dataManageService.deleteBannerInfo(val, ctgKey, function () {});
+            dataManageService.deleteBannerInfo(val, ctgKey, function () {
+                var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                innerValue("param_key", sel_subDomain);
+                goPage('dataManage', 'bannerSave');
+            });
         }
     }
 
@@ -198,79 +208,90 @@
         var arr = new Array();    // 배열 선언
         var tableName =  "dragtable_"+val;
         if(val == '0'){
-            $("#dragtable_0 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
-                arr.push(data);
+            if(confirm("순서변경 하시겠습니까?")){
+                $("#dragtable_0 tbody tr").each(function(index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey : ctgInfoKey,
+                        pos : pos
+                    };
+                    arr.push(data);
 
-            });
-            dataManageService.changeBannerPosition(arr, function () {});
+                });
+                dataManageService.changeBannerPosition(arr, function () {});
+            }
         }else if(val == "1"){
-            $("#dragtable_1 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
-                arr.push(data);
-            });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
+            if(confirm("순서변경 하시겠습니까?")) {
+                $("#dragtable_1 tbody tr").each(function (index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey: ctgInfoKey,
+                        pos: pos
+                    };
+                    arr.push(data);
+                });
+                dataManageService.changeBannerPosition(arr, function () {
+                    location.reload();
+                });
+            }
         }else if(val == "2"){
-            $("#dragtable_2 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
-                arr.push(data);
-            });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
+            if(confirm("순서변경 하시겠습니까?")) {
+                $("#dragtable_2 tbody tr").each(function (index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey: ctgInfoKey,
+                        pos: pos
+                    };
+                    arr.push(data);
+                });
+                dataManageService.changeBannerPosition(arr, function () {
+                    location.reload();
+                });
+            }
         }else if(val == "3"){
-            $("#dragtable_3 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
-                arr.push(data);
-            });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
+            if(confirm("순서변경 하시겠습니까?")) {
+                $("#dragtable_3 tbody tr").each(function (index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey: ctgInfoKey,
+                        pos: pos
+                    };
+                    arr.push(data);
+                });
+                dataManageService.changeBannerPosition(arr, function () {
+                    location.reload();
+                });
+            }
         }else if(val == "4"){
-            $("#dragtable_4 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
+            if(confirm("순서변경 하시겠습니까?")) {
+                $("#dragtable_4 tbody tr").each(function (index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey: ctgInfoKey,
+                        pos: pos
+                    };
 
-                arr.push(data);
-            });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
+                    arr.push(data);
+                });
+                dataManageService.changeBannerPosition(arr, function () {
+                    location.reload();
+                });
+            }
         }
     }
 </script>
 <div class="page-breadcrumb">
+    <input type="hidden" id="param_key" value="">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">배너관리</h4>
@@ -325,9 +346,9 @@
                             <label class="col-sm-3 text-center control-label col-form-label">이미지</label>
                             <div class="col-md-9">
                                 <div class="custom-file">
-                                    <input type="file" class="custom-file-input" id="attachFile"  onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
+                                    <input type="file" class="custom-file-input" id="attachFile"  required>
                                     <span class="custom-file-control custom-file-label"></span>
-                                    <div id="cma_image" style="width:30%;max-width:30%;display:none;"></div>
+                                    <!--<div id="cma_image" style="width:30%;max-width:30%;display:none;"></div>-->
                                 </div>
                             </div>
                         </div>
@@ -356,7 +377,9 @@
                                 <input type="text" class="form-control" id="bannerLink">
                             </div>
                         </div>
-                        <button type="button" class="btn btn-info float-right m-l-2" onclick="modify();">저장</button>
+                        <div style="text-align: center;">
+                            <button type="button" class="btn btn-info" style="text-align: center" onclick="modify();">저장</button>
+                        </div>
                     </div>
                     <!-- //modal body -->
                 </form>
@@ -386,26 +409,4 @@
 
         return tmpStr;
     }
-    /*
-    $(document).ready(function() {
-        $( "#dragtable_0 tbody" ).sortable( {
-            update: function( event, ui ) {
-                alert("1");
-                $(this).children().each(function(index) {
-                    $(this).find('tr').last().html(index + 1);
-                });
-            }
-        });
-    })
-    */
 </script>
-<style>
-    .sidebar-nav ul .sidebar-item.selected>.sidebar-link {
-        background: #27a9e3;
-        opacity: 1;
-    }
-    .collapse.in {
-        display: block;
-    }
-
-</style>

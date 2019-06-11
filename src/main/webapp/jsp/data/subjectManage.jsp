@@ -6,7 +6,7 @@
     function init() {
         menuActive('menu-0', 2);
     }
-    function saveClassfication(){ /* 분류저장 */
+    function saveSubject(){ /* 분류저장 */
         var subject =  getInputTextValue("subject");
         if(subject != ""){
             if(confirm("과목추가 하시겠습니까?")) {
@@ -22,7 +22,7 @@
             dataManageService.deleteClassSubject(val, function () {isReloadPage(true);});
         }
     }
-    function categoryList() { /* 분류 리스트 */
+    function subjectList() { /* 분류 리스트 */
         dataManageService.getTcategoryList("SUBJECT", function (selList) {
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {

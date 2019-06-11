@@ -8,7 +8,7 @@
 <script>
     $(document).ready(function() {
         changeBox2();
-        menuActive('menu-0', 4);
+        menuActive('menu-0', 3);
     });
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -17,6 +17,7 @@
     $(document).on('change', '.custom-file-input1', function() {
         $(this).parent().find('.custom-file-control1').html($(this).val().replace(/C:\\fakepath\\/i, ''));
     });
+
     function changeBox2() {
         $(".card").remove();
         dataManageService.getSideBarBannerList(4200,function (selList) {
@@ -59,7 +60,11 @@
                         update: function( event, ui ) {
                             $(this).children().each(function(index) {
                                 $(this).find('tr').last().html(index + 1);
+                                //$(this).attr("style", 'background-color:gray');
                             });
+                        },
+                        hover: function() {
+                            $(this).css('backgroundColor', 'red');
                         }
                     });
 
@@ -182,36 +187,36 @@
     }
 
     function changeBannerList(val) {
-        var arr = new Array();    // 배열 선언
-        var tableName =  "dragtable_"+val;
-        if(val == '0'){
-            $("#dragtable_0 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
-                arr.push(data);
-            });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
-        }else if(val == "1"){
-            $("#dragtable_1 tbody tr").each(function(index) {
-                var id = $(this).attr("id");
-                var ctgInfoKey = id;
-                var pos = index;
-                var data = {
-                    ctgInfoKey : ctgInfoKey,
-                    pos : pos
-                };
-                arr.push(data);
-            });
-            dataManageService.changeBannerPosition(arr, function () {
-                location.reload();
-            });
+        if(confirm("순서변경을 하시겠습니까?")){
+            var arr = new Array();    // 배열 선언
+            var tableName =  "dragtable_"+val;
+            if(val == '0'){
+                $("#dragtable_0 tbody tr").each(function(index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey : ctgInfoKey,
+                        pos : pos
+                    };
+                    arr.push(data);
+                });
+                dataManageService.changeBannerPosition(arr, function () {
+                    location.reload();
+                });
+            }else if(val == "1"){
+                $("#dragtable_1 tbody tr").each(function(index) {
+                    var id = $(this).attr("id");
+                    var ctgInfoKey = id;
+                    var pos = index;
+                    var data = {
+                        ctgInfoKey : ctgInfoKey,
+                        pos : pos
+                    };
+                    arr.push(data);
+                });
+                dataManageService.changeBannerPosition(arr, function () {location.reload();});
+            }
         }
     }
 </script>
@@ -234,13 +239,13 @@
     <div id="bannerName"></div>
 </div>
 <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 581px;">
+    <div class="modal-dialog" role="document" style="max-width:600px;max-height: 200px;">
         <div class="modal-content">
             <input type="hidden" id="bannerKey" value="">
             <input type="hidden" id="pos" value="">
             <input type="hidden" id="ctgKey" value="">
             <div class="modal-header">
-                <h5 class="modal-title">배너추가</h5>
+                <h5 class="modal-title">사이드배너 추가</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -250,14 +255,14 @@
                 <!-- modal body -->
                 <div class="modal-body">
                     <div class="form-group row">
-                        <label class="col-sm-3 text-center control-label col-form-label">타이틀명</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-2 text-center control-label col-form-label">타이틀명</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="title">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 text-center control-label col-form-label">이미지명</label>
-                        <div class="col-md-9">
+                        <label class="col-sm-2 text-center control-label col-form-label">이미지명</label>
+                        <div class="col-md-10">
                             <div class="custom-file">
                                 <input type="file" class="custom-file-input" id="attachFile"  onchange="getThumbnailPrivew(this,$('#cma_image'))" required>
                                 <span class="custom-file-control custom-file-label"></span>
@@ -266,14 +271,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 text-center control-label col-form-label">배경색상</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-2 text-center control-label col-form-label">배경색상</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="bannerColor">
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 text-center control-label col-form-label">새창열기</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-2 text-center control-label col-form-label">새창열기</label>
+                        <div class="col-sm-10">
                             <div style="margin-top: -23px;">
                                 OFF
                                 <label class="switch">
@@ -285,12 +290,14 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="col-sm-3 text-center control-label col-form-label">링크url</label>
-                        <div class="col-sm-9">
+                        <label class="col-sm-2 text-center control-label col-form-label">링크url</label>
+                        <div class="col-sm-10">
                             <input type="text" class="form-control" id="bannerLink">
                         </div>
                     </div>
-                    <button type="button" class="btn btn-info float-right m-l-2" onclick="modify();">저장</button>
+                    <div style="text-align: center;">
+                        <button type="button" class="btn btn-info" style="text-align: center" onclick="modify();">저장</button>
+                    </div>
                 </div>
                 <!-- //modal body -->
             </form>
