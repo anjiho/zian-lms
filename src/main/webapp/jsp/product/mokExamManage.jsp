@@ -21,7 +21,7 @@
         getTimeMinuteSelectbox("onlineStartMinute",24);
         getTimeMinuteSelectbox("onlineEndMinute",24);
     }
-    
+
     function mockExamSave() {
 
         var mockInfoObj = getJsonObjectFromDiv("section1");
@@ -192,7 +192,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">오프라인 시험일</label>
                                         <div class="col-sm-6 input-group pl-0 pr-0">
-                                            <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" name="offlineDate" id="offlineDate">
+                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="offlineDate" id="offlineDate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>

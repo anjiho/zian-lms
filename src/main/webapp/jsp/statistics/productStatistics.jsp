@@ -17,7 +17,7 @@
 
 <script>
     function init() {
-        menuActive('menu-7', 1);
+        menuActive('menu-6', 1);
 
         getExamYearSelectbox("l_year");
         getMonthsSelectbox("l_month");

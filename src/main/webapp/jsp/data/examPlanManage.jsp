@@ -14,7 +14,7 @@
             });
         });
     });
-    
+
     function examList() {
         dataManageService.getExamSchedule( function (selList) {
             if (selList.length > 0) {
@@ -35,7 +35,7 @@
             }
         });
     }
-    
+
     function examSave() {
         var title = $("#title").val();
         var datetimepicker12 = $("#datetimepicker12").val();
@@ -70,7 +70,7 @@
             });
         }
     }
-    
+
     function getExam(val) {
         $("#key").val('modify');
         dataManageService.getExamScheduleDetailInfo(val, function (selList) {
@@ -158,7 +158,7 @@
                     <label class="col-sm-3 text-right control-label col-form-label">날짜</label>
                     <div class="col-sm-9">
                         <div class="input-group">
-                            <input type="text" class="form-control mydatepicker" placeholder="mm/dd/yyyy" id="datetimepicker12">
+                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" id="datetimepicker12">
                             <div class="input-group-append">
                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
