@@ -171,6 +171,7 @@
                     if (selList.productInfo.imageView != null) {
                         $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
                     }
+                    innerValue("calculateRate", selList.productInfo.calculateRate);
                     $("#emphasis").val(selList.productInfo.emphasis);//강조표시
                     $("#description").summernote("code", selList.productInfo.description);
                 }
@@ -929,6 +930,12 @@
                                         <option value="1">BEST</option>
                                         <option value="2">NEW</option>
                                     </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">정산률</label>
+                                <div class="col-sm-0 pl-0 pr-0">
+                                    <input type="text" class="col-sm-6 form-control" id="calculateRate" name="calculateRate">
                                 </div>
                             </div>
                             <div class="form-group row">

@@ -14,7 +14,7 @@
             });
         });
     });
-    
+
     function examList() {
         dataManageService.getExamSchedule( function (selList) {
             if (selList.length > 0) {
@@ -35,7 +35,7 @@
             }
         });
     }
-    
+
     function examSave() {
         var title = $("#title").val();
         var datetimepicker12 = $("#datetimepicker12").val();
@@ -67,7 +67,7 @@
             });
         }
     }
-    
+
     function getExam(val) {
         $("#key").val('modify');
         dataManageService.getExamScheduleDetailInfo(val, function (selList) {
