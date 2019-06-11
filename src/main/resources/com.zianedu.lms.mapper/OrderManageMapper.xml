@@ -4,14 +4,20 @@
 
     <select id="selectOrderList" resultType="OrderResultDTO">
         SELECT
-            DISTINCT A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
-                     A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
-                     A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY
+            A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
+             A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
+             A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,
+            ( SELECT G_NAME FROM (
+                    SELECT /*+index_desc (T_ORDER_GOODS PK_T_ORDER_GOODS) */ G_NAME
+                    FROM T_ORDER_GOODS T
+                    WHERE T.J_KEY = A.J_KEY
+                    )
+                WHERE ROWNUM = 1
+            ) as orderGoodsName,
+            ( SELECT count(T.J_G_KEY) FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY ) - 1 as orderGoodsCount
         FROM T_ORDER A
-        INNER JOIN T_USER B
+        LEFT JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
-        INNER JOIN T_ORDER_GOODS C
-        ON A.J_KEY = C.J_KEY
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
@@ -28,7 +34,7 @@
             AND A.PAY_STATUS = #{payStatus}
         </if>
         <if test="goodsType != '' and goodsType != null">
-            AND C.TYPE = #{goodsType}
+            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
             <if test="goodsType != 5">
                 AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
             </if>
@@ -61,10 +67,10 @@
         </if>
         <!-- 동영상 재수강 여부 -->
         <if test="isVideoReply == 0">
-            AND C.EXTEND_DAY = -1
+            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY = -1)
         </if>
         <if test="isVideoReply == 1">
-            AND C.EXTEND_DAY > -1
+            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY > -1)
         </if>
         ORDER BY A.J_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -73,28 +79,25 @@
     <select id="selectGoodsNameAtLimitOne" resultType="OrderGoodsNameDTO">
         SELECT * FROM
         (
-            SELECT G_NAME,
-                    (
-                        ( SELECT count(J_G_KEY) FROM T_ORDER_GOODS WHERE J_KEY = A.J_KEY ) - 1
-                    ) as CNT
+           SELECT /*+index_desc (T_ORDER_GOODS PK_T_ORDER_GOODS) */
+                G_NAME,
+                (
+                    ( SELECT count(J_G_KEY) FROM T_ORDER_GOODS WHERE J_KEY = #{jKey} ) - 1
+                ) as CNT
             FROM T_ORDER_GOODS A
             WHERE A.J_KEY = #{jKey}
-            ORDER BY A.J_G_KEY ASC
+
         )
-        WHERE ROWNUM = 1
+       WHERE ROWNUM = 1
     </select>
 
     <select id="selectOrderListCount" resultType="Integer">
         SELECT COUNT(J_KEY)
         FROM (
-                SELECT DISTINCT A.J_KEY
+                SELECT A.J_KEY
                 FROM T_ORDER A
-                INNER JOIN T_USER B
-                ON A.USER_KEY = B.USER_KEY
-                INNER JOIN T_ORDER_GOODS C
+                LEFT JOIN T_ORDER_GOODS C
                 ON A.J_KEY = C.J_KEY
-                LEFT OUTER JOIN T_ORDER_DELIVERY D
-                ON A.J_KEY = D.J_KEY
                 WHERE 1=1
                 <![CDATA[
                     AND A.INDATE  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -127,10 +130,10 @@
                     AND A.IS_MOBILE = #{isMobile}
                 </if>
                 <if test="searchType == 'orderUserId'">
-                    AND B.USER_ID = #{searchText}
+                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID = #{searchText})
                 </if>
                 <if test="searchType == 'orderUserName'">
-                    AND B.NAME LIKE '%'||#{searchText}||'%'
+                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderId'">
                     AND A.J_ID = #{searchText}
@@ -145,6 +148,7 @@
                 <if test="isVideoReply == 1">
                     AND C.EXTEND_DAY > -1
                 </if>
+                GROUP BY A.J_KEY
         )
     </select>
 

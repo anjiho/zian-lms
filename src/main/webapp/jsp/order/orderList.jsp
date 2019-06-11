@@ -12,6 +12,15 @@
     .searchDate li .chkbox2 input{position:absolute;z-index:-1}
     .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
     .searchDate li .chkbox2.on label{background:#ec6a6a}
+
+    #test123 {
+        position: absolute;
+        width: 300px;
+        height: 150px;
+        margin: -150px 0 0 -75px;
+        top: 50%;
+        left: 50%;
+    }
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -28,8 +37,16 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        fn_search('new');
+        //fn_search('new');
+
+        // $('.sModal4').on('hidden.bs.modal', function (e) {
+        //     $('form').each(function(){
+        //         this.reset();
+        //     });
+        // });
     }
+
+
 
     function fn_search(val) {
         var paging = new Paging();
@@ -76,13 +93,14 @@
                    function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
+
         });
     }
-    
+
     function changeList() {
         fn_search('new');
     }
-    
+
     function goOrderDetail(val) {
         innerValue('param_key', val);
         innerValue('type', 'orderList');
@@ -240,7 +258,8 @@
                 <div class="row">
                     <div class="col">
                         <div style=" float: right;">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+<%--                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>--%>
+                            <button type="button" class="btn btn-outline-info mx-auto" data-toggle="modal" data-target="#sModal4" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
                 </div>
@@ -296,6 +315,15 @@
 </div>
 </div>
 <!-- // 기본소스-->
+
+<div class="modal" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="d-flex align-items-center" id="test123">
+        <strong>Loading...</strong>
+        <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
+    </div>
+    <div class="modal-dialog" role="document" style="max-width:620px;"></div>
+</div>
+
 </div>
 
 <script>

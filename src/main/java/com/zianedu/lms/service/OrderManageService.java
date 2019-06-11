@@ -84,17 +84,17 @@ public class OrderManageService {
                         .isNullValue(searchType, ""), isVideoReply
         );
 
-        if (list != null && list.size() > 0) {
-            for (OrderResultDTO orderResultDTO : list) {
-                OrderGoodsNameDTO goodsNameDTO = orderManageMapper.selectGoodsNameAtLimitOne(orderResultDTO.getJKey());
-                if (goodsNameDTO != null) {
-                    orderResultDTO.setOrderGoodsName(goodsNameDTO.getGName());
-                    orderResultDTO.setOrderGoodsCount(goodsNameDTO.getCnt());
-                    orderResultDTO.setPayTypeName(OrderPayType.getOrderPayTypeStr(orderResultDTO.getPayType()));
-                    orderResultDTO.setPayStatusName(OrderPayStatusType.getOrderPayStatusStr(orderResultDTO.getPayStatus()));
-                }
-            }
-        }
+//        if (list != null && list.size() > 0) {
+//            for (OrderResultDTO orderResultDTO : list) {
+//                OrderGoodsNameDTO goodsNameDTO = orderManageMapper.selectGoodsNameAtLimitOne(orderResultDTO.getJKey());
+//                if (goodsNameDTO != null) {
+//                    orderResultDTO.setOrderGoodsName(goodsNameDTO.getGName());
+//                    orderResultDTO.setOrderGoodsCount(goodsNameDTO.getCnt());
+//                    orderResultDTO.setPayTypeName(OrderPayType.getOrderPayTypeStr(orderResultDTO.getPayType()));
+//                    orderResultDTO.setPayStatusName(OrderPayStatusType.getOrderPayStatusStr(orderResultDTO.getPayStatus()));
+//                }
+//            }
+//        }
         return list;
     }
 
