@@ -24,7 +24,7 @@
         orderSearchSelectbox('orderSearch', 'orderUserName');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        fn_search("new");
+        //fn_search("new");
     }
 
     function fn_search(val) {
@@ -44,6 +44,14 @@
         var searchText = getInputTextValue('searchText');
 
         //var isVideoReply = 0;
+
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
 
         orderManageService.getVideoLectureWatchListCount(startSearchDate, endSearchDate, payStatus, orderLecStatus, searchType, searchText, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -65,6 +73,7 @@
                             function(data) {return data.status == 1 ? "결제완료" : '결제취소';},
                         ], {escapeHtml:false});
                     });
+            loadingOut(loading);
             });
     }
 

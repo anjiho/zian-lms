@@ -3,18 +3,16 @@
 <mapper namespace="com.zianedu.lms.mapper.OrderManageMapper">
 
     <select id="selectOrderList" resultType="OrderResultDTO">
-        SELECT
+        SELECT /*+ PARALLEL(4) */
             A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
              A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
              A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,
-            ( SELECT G_NAME FROM (
-                    SELECT /*+index_desc (T_ORDER_GOODS PK_T_ORDER_GOODS) */ G_NAME
-                    FROM T_ORDER_GOODS T
-                    WHERE T.J_KEY = A.J_KEY
-                    )
-                WHERE ROWNUM = 1
+            ( SELECT G_NAME FROM
+                (
+                    SELECT /*+ PARALLEL(4) */ G_NAME FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+                ) WHERE ROWNUM = 1
             ) as orderGoodsName,
-            ( SELECT count(T.J_G_KEY) FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY ) - 1 as orderGoodsCount
+            ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount
         FROM T_ORDER A
         LEFT JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
@@ -62,7 +60,7 @@
                 AND A.J_ID = #{searchText}
             </if>
             <if test="searchType == 'orderGoodsName'">
-                AND C.G_NAME LIKE '%'||#{searchText}||'%'
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND Z.G_NAME LIKE '%'||#{searchText}||'%')
             </if>
         </if>
         <!-- 동영상 재수강 여부 -->
@@ -86,7 +84,6 @@
                 ) as CNT
             FROM T_ORDER_GOODS A
             WHERE A.J_KEY = #{jKey}
-
         )
        WHERE ROWNUM = 1
     </select>
@@ -94,7 +91,7 @@
     <select id="selectOrderListCount" resultType="Integer">
         SELECT COUNT(J_KEY)
         FROM (
-                SELECT A.J_KEY
+                SELECT /*+FIRST_ROWS*/ A.J_KEY
                 FROM T_ORDER A
                 LEFT JOIN T_ORDER_GOODS C
                 ON A.J_KEY = C.J_KEY
@@ -160,8 +157,6 @@
         FROM T_ORDER A
         INNER JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
-        INNER JOIN T_ORDER_GOODS C
-        ON A.J_KEY = C.J_KEY
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
@@ -193,10 +188,10 @@
             AND A.IS_MOBILE = #{isMobile}
         </if>
         <if test="searchType == 'orderUserId'">
-            AND B.USER_ID = #{searchText}
+            AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID = #{searchText})
         </if>
         <if test="searchType == 'orderUserName'">
-            AND B.NAME LIKE '%'||#{searchText}||'%'
+            AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
         </if>
         <if test="searchType == 'orderId'">
             AND A.J_ID = #{searchText}
@@ -324,7 +319,7 @@
         <if test="searchType == 'orderGoodsName'">
             AND D.NAME LIKE '%'||#{searchText}||'%'
         </if>
-        ORDER BY A.J_LEC_KEY DESC
+        ORDER BY B.J_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
 

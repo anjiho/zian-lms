@@ -6,7 +6,7 @@
     function init() {
         getSmsSearchSelectbox("l_searchSel");
         menuActive('menu-5', 7);
-        fn_search('new');
+        //fn_search('new');
         getSmsYearSelectbox("l_monthYearSel","");
     }
 
@@ -21,6 +21,18 @@
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
+
+        if (yyyyMM == undefined) {
+            yyyyMM = getYYYYMM();
+        }
+
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
 
         memberManageService.getSmsSendListCount(yyyyMM, searchType, searchText,function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -37,9 +49,10 @@
                     function(data) {return data.receiverName;},
                 ], {escapeHtml:false});
             });
+            loadingOut(loading);
         });
     }
-    
+
     function MemberDetail(userKey) {
         innerValue("param_key", userKey);
         goPage('memberManage', 'memberManage');

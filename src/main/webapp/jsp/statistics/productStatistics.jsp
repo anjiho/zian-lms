@@ -39,6 +39,14 @@
             gfn_display("container2", false);
             gfn_display("container3", false);
 
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
+
             statisManageService.getTotalStatisAtMonth(year, function(result) {
                 var totalPrice = result.totalPrices;
                 var videoPrice = result.videoPrices;
@@ -88,11 +96,21 @@
                         data: bookPrice
                     }]
                 });
+                loadingOut(loading);
             });
+
         } else if (searchType == "year") {
             gfn_display("container", false);
             gfn_display("container2", true);
             gfn_display("container3", false);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             statisManageService.getTotalStatisAtYear(function(result) {
                 var yearList = result.years;
@@ -162,11 +180,20 @@
                         }]
                     }
                 });
+                loadingOut(loading);
             });
         } else if (searchType == "day") {
             gfn_display("container", false);
             gfn_display("container2", false);
             gfn_display("container3", true);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             var year = getSelectboxValue("selYear");
             var month = getSelectboxValue("selMonth");
@@ -253,7 +280,9 @@
                         }]
                     }
                 });
+                loadingOut(loading);
             });
+
         }
     }
     function changeStaticsType(val) {

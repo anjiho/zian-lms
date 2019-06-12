@@ -21,7 +21,7 @@
     function changeExamUnit(val,tableId , tdNum) {
         getSelectboxstepCtgKey(tableId, val, tdNum);//단원
     }
-    
+
     function goModifyProblemBank(val) {
         innerValue("param_key", val);
         goPage("productManage","modifyMokProblemBank");
@@ -67,6 +67,15 @@
             examYear: examYear,
             subjectCode: subjectCode
         };
+
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         productManageService.getProblemBankListCount(searchVO, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -84,6 +93,7 @@
                     function(data) {return data.unitName == null ? "-" : data.unitName;},
                 ], {escapeHtml:false});
             });
+            loadingOut(loading);
         });
     }
 </script>

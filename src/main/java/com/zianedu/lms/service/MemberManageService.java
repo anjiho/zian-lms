@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -340,11 +341,16 @@ public class MemberManageService {
         SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
                 startNumber, listLimit, Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
         );
-        List<SmsSendListDTO>list = memberManageMapper.selectSmsSendLogList(paramDTO);
-        if (list.size() > 0) {
-            for (SmsSendListDTO smsSendListDTO : list) {
-                smsSendListDTO.setReceiverName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
+        List<SmsSendListDTO>list = new ArrayList<>();
+        try {
+            list = memberManageMapper.selectSmsSendLogList(paramDTO);
+            if (list.size() > 0) {
+                for (SmsSendListDTO smsSendListDTO : list) {
+                    smsSendListDTO.setReceiverName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
+                }
             }
+        } catch (Exception e) {
+            return null;
         }
         return list;
     }
@@ -360,11 +366,17 @@ public class MemberManageService {
     public int getSmsSendListCount(String yyyyMM, String searchType, String searchText) {
         if ("".equals(yyyyMM)) return 0;
 
+        int cnt = 0;
         String tableName = "SC_LOG_" + yyyyMM;
         SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
                 Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
         );
-        return memberManageMapper.selectSmsSendLogListCount(paramDTO);
+        try {
+            cnt = memberManageMapper.selectSmsSendLogListCount(paramDTO);
+        } catch (Exception e) {
+            return 0;
+        }
+        return cnt;
     }
 
     /**

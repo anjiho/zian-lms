@@ -25,6 +25,14 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         productManageService.getProductListCount(searchType, searchText, "ZIAN_PASS", function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -42,6 +50,7 @@
                     function(data) {return data.isFree == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                 ], {escapeHtml:false});
             });
+            loadingOut(loading);
         });
     }
 </script>

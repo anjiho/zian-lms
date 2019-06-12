@@ -28,8 +28,9 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        fn_search("new");
+        //fn_search("new");
     }
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
@@ -54,6 +55,14 @@
         var goodsType = 'BOOK'; //도서주문목록
         var isVideoReply = 0;
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
             payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -71,10 +80,11 @@
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                             function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                         ], {escapeHtml:false});
                     });
+                loadingOut(loading);
             });
     }
 
@@ -279,7 +289,7 @@
                         <th scope="col" width="5%">결제방법</th>
                         <th scope="col" width="8%">진행상태</th>
                         <th scope="col" width="8%">모바일</th>
-                        <th scope="col" width="8%">배송상태</th>
+<%--                        <th scope="col" width="8%">배송상태</th>--%>
                         <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
                     </tr>
                     </thead>

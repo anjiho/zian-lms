@@ -13,14 +13,6 @@
     .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
     .searchDate li .chkbox2.on label{background:#ec6a6a}
 
-    #test123 {
-        position: absolute;
-        width: 300px;
-        height: 150px;
-        margin: -150px 0 0 -75px;
-        top: 50%;
-        left: 50%;
-    }
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -38,12 +30,6 @@
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
         //fn_search('new');
-
-        // $('.sModal4').on('hidden.bs.modal', function (e) {
-        //     $('form').each(function(){
-        //         this.reset();
-        //     });
-        // });
     }
 
 
@@ -74,6 +60,14 @@
         var goodsType = '';
         var isVideoReply = 0;
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
                                                 payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -93,7 +87,7 @@
                    function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
-
+            loadingOut(loading);
         });
     }
 
@@ -315,15 +309,6 @@
 </div>
 </div>
 <!-- // 기본소스-->
-
-<div class="modal" id="sModal4" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="d-flex align-items-center" id="test123">
-        <strong>Loading...</strong>
-        <div class="spinner-border ml-auto" role="status" aria-hidden="true"></div>
-    </div>
-    <div class="modal-dialog" role="document" style="max-width:620px;"></div>
-</div>
-
 </div>
 
 <script>

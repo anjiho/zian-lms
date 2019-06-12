@@ -38,6 +38,14 @@
         $("#alltotalCnt").html(0);
         $("#alltotalPrice").html(0);
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         statisManageService.getTeacherCalculateByMonth(teacherKey, searchYearMonth, function (selList) {
             if (selList.length == 0) return;
             var videoCalculateResult   = selList.videoCalculateResult; //온라인강좌
@@ -236,13 +244,14 @@
             innerHTML("alltotalCnt", alltotalCnt);
             innerHTML("alltotalPrice", format(alltotalPrice));
         });
+        loadingOut(loading);
     }
 
     function MemberDetail(userKey) {
         innerValue("param_key", userKey);
         goPage('memberManage', 'memberManage');
     }
-    
+
     function optionAdd() {
         var optionTitles = get_array_values_by_name("input", "optionTitle");
         var teacherKey   = getSelectboxValue("sel_1"); //31, "201903",
@@ -266,7 +275,7 @@
 
              $("#sumList").append(html);
     }
-    
+
     function optionSave() {
         var teacherKey     = getSelectboxValue("sel_1"); //31, "201903",
         var optionTitle     = $("#optionTitle").val();

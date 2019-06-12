@@ -252,7 +252,7 @@
 
     <select id="selectTeacherList" resultType="MemberListDTO">
         SELECT
-            B.USER_KEY, B.NAME, B.TELEPHONE_MOBILE, B.EMAIL, B.INDATE,
+            B.USER_KEY, B.NAME, B.TELEPHONE_MOBILE, B.EMAIL, B.INDATE, B.USER_ID,
             (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as affiliationName,
             B.GRADE, TO_CHAR(B.GRADE_DATE, 'YYYY-MM-DD') as GRADE_DATE, B.AUTHORITY
         FROM T_TEACHER A
