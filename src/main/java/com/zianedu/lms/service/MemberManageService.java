@@ -254,6 +254,11 @@ public class MemberManageService {
                 Util.isNullValue(searchText, ""),
                 Util.isNullValue(searchType, "")
         );
+        if (list.size() > 0) {
+            for (CounselListDTO dto : list) {
+                dto.setTypeName(CounselType.getCounselTypeStr(dto.getType()));
+            }
+        }
         return list;
     }
 
@@ -558,6 +563,8 @@ public class MemberManageService {
         }
 
         TCounselVO counselVO = new TCounselVO(tCounselVO);
+        counselVO.setCounselKey(tCounselVO.getCounselKey());
+
         memberManageMapper.updateTCounsel(counselVO);
     }
 

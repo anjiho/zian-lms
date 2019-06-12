@@ -173,7 +173,7 @@
                     imageFile5: ""
                 };
                 memberManageService.updateCounselInfo(counselObj, function (selList) {});
-    }
+             }
         }
     }
 </script>
@@ -394,14 +394,6 @@
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원이름</label>
                                     <span id="modalName"></span>
                                 </div>
-                                <!--<div class="form-group row">
-                                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
-                                    <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile1">
-                                    -
-                                    <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile2">
-                                    -
-                                    <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="telephoneMobile3">
-                                </div>-->
                                 <div class="form-group row" style="display: none;" id="modalstartDate">
                                     <label class="col-sm-4 control-label col-form-label" style="margin-bottom: 0">처리시작일</label>
                                     <div class="col-sm-6 pl-0 pr-0">
@@ -418,51 +410,6 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
                         <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="contents" name="contents">
                     </div>
-                    <!--<div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지1</label>
-                        <div class="col-sm-6 pl-0 pr-0">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile1" id="imageFile1"  name="imageFile1" required>
-                                <span class="custom-file-control1 custom-file-label"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지2</label>
-                        <div class="col-sm-6 pl-0 pr-0">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile2" id="imageFile2" name="imageFile2" required>
-                                <span class="custom-file-control2 custom-file-label"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지3</label>
-                        <div class="col-sm-6 pl-0 pr-0">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile3" id="imageFile3" name="imageFile3" required>
-                                <span class="custom-file-control3 custom-file-label"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지4</label>
-                        <div class="col-sm-6 pl-0 pr-0">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile4" id="imageFile4" name="imageFile4" required>
-                                <span class="custom-file-control4 custom-file-label"></span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="form-group row">
-                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">첨부 이미지5</label>
-                        <div class="col-sm-6 pl-0 pr-0">
-                            <div class="custom-file">
-                                <input type="file" class="custom-file-input addFile5" id="imageFile5" name="imageFile5" required>
-                                <span class="custom-file-control5 custom-file-label"></span>
-                            </div>
-                        </div>
-                    </div>-->
                         <button type="button" class="btn btn-info float-right m-l-2" style="margin-bottom: 10px;" id="saveBtn" onclick="counseltSave();">저장</button>
                 </div>
                 </div>
