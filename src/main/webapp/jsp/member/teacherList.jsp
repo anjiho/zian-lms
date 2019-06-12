@@ -33,9 +33,9 @@
         gfn_emptyView("H", "");//페이징 예외사항처리
 
         var regStartDate = getInputTextValue('searchStartDate');
-        var regEndDate = getInputTextValue('searchEndDate');
-        var searchText = getInputTextValue('searchText');
-        var searchType = getSelectboxValue("memberSel");//검색타입
+        var regEndDate   = getInputTextValue('searchEndDate');
+        var searchText   = getInputTextValue('searchText');
+        var searchType   = getSelectboxValue("memberSel");//검색타입
 
         memberManageService.getTeacherListCount(searchType, searchText, regStartDate, regEndDate, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);

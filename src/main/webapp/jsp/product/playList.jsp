@@ -7,7 +7,7 @@
     function init() {
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-1', 1);
-        //fn_search('new');
+        fn_search('new');
     }
 
     function play_modify(gKey) {

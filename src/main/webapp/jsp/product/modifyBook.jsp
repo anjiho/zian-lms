@@ -88,17 +88,16 @@
 
             dwr.util.addRows("categoryList", productCategoryInfo, [
                 function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function() {return "지안에듀";},
-                function() {return nextIcon},
-                function(data) {return data[3].name;},
-                function() {return nextIcon},
-                function(data) {return data[2].name;},
-                function() {return nextIcon},
-                function(data) {return data[1].name;},
-                function() {return nextIcon},
-                function(data) {return data[0].name;},
+                function()     {return "지안에듀";},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
                 function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
             $('#categoryList tr').each(function(){
@@ -132,7 +131,11 @@
                 dwr.util.addRows("previewImgList", previewInfo, [
                     function(data) {return "<input type='hidden' id='reskey' value='"+ data.resKey +"'>"},
                     function(data) {return fn_clearFilePath(data.value)},
-                    function(data) {return "<button type='button' onclick='deleteImg("+ data.resKey +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
+                    function(data) {return "<button type='button' onclick='deleteImg("+ data.resKey +")' class='btn btn-outline-danger btn-sm'>삭제</button>"},
+                    function(data) {return ""},
+                    function(data) {return ""},
+                    function(data) {return ""},
+                    function(data) {return ""},
                 ], {escapeHtml:false});
                 $('#previewImgList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
@@ -442,7 +445,7 @@
                 var cpKey = $("#cpKey").val();
                 var basicObj = getJsonObjectFromDiv("section1");
                 if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-                else basicObj.isShow = '0';
+                else basicObj.isShow = '0';미
                 if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
                 else basicObj.isSell = '0';
                 if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
@@ -510,6 +513,12 @@
                 if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
                 else bookObj.isSet = '0';
 
+
+                console.log(basicObj);
+                console.log(optionArray);
+                console.log(categoryArr);
+                console.log(bookObj);
+
                 if(confirm("수정 하시겠습니까?")) {
                     productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
                         isReloadPage(true);
@@ -521,42 +530,48 @@
     }
 
     function imageSave() {
-        //previewFileUpload
-        var data = new FormData();
-        $.each($('#PreviewFile')[0].files, function(i, file) {
-            data.append('PreviewFile', file);
-            if(confirm("이미지를 저장 하시겠습니까?")) {
-                $.ajax({
-                    url: "/file/previewFileUpload",
-                    method: "post",
-                    dataType: "JSON",
-                    data: data,
-                    cache: false,
-                    processData: false,
-                    contentType: false,
-                    success: function (data) {
-                        $(".custom-file-control3").html('');
-                        if(data.result){
-                            var fileName = fn_clearFilePath(data.result);
-                            var tResVO = {
-                                key00 : gKey,
-                                value : data.result
-                            };
-                            productManageService.saveBookPreviewInfo(tResVO , function (resKey) {
-                                if(resKey != null){
-                                    var cellData = [
-                                        function() {return "<input type='hidden' id='reskey' value='"+ resKey +"'>"},
-                                        function() {return fileName},
-                                        function() {return "<button type='button' onclick='deleteImg("+ resKey +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
-                                    ];
-                                    dwr.util.addRows("previewImgList", [0], cellData, {escapeHtml: false});
-                                }
-                            });
-                        }
-                    }//success
-                });
-            }
-        });
+        var fileName =$(".custom-file-control3").html();
+        if(fileName == ""){
+            alert("이미지를 첨부해 주세요.");
+            return false;
+        }else{
+            //previewFileUpload
+            var data = new FormData();
+            $.each($('#PreviewFile')[0].files, function(i, file) {
+                data.append('PreviewFile', file);
+                if(confirm("이미지를 저장 하시겠습니까?")) {
+                    $.ajax({
+                        url: "/file/previewFileUpload",
+                        method: "post",
+                        dataType: "JSON",
+                        data: data,
+                        cache: false,
+                        processData: false,
+                        contentType: false,
+                        success: function (data) {
+                            $(".custom-file-control3").html('');
+                            if(data.result){
+                                var fileName = fn_clearFilePath(data.result);
+                                var tResVO = {
+                                    key00 : gKey,
+                                    value : data.result
+                                };
+                                productManageService.saveBookPreviewInfo(tResVO , function (resKey) {
+                                    if(resKey != null){
+                                        var cellData = [
+                                            function() {return "<input type='hidden' id='reskey' value='"+ resKey +"'>"},
+                                            function() {return fileName},
+                                            function() {return "<button type='button' onclick='deleteImg("+ resKey +")' class='btn btn-outline-danger btn-sm' style='margin-top:8%;'>삭제</button>"}
+                                        ];
+                                        dwr.util.addRows("previewImgList", [0], cellData, {escapeHtml: false});
+                                    }
+                                });
+                            }
+                        }//success
+                    });
+                }
+            });
+        }
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
@@ -897,15 +912,26 @@
                         <!-- 5. 미리보기 이미지 Tab -->
                         <h3>미리보기이미지</h3>
                         <section>
-                            <div class="float-right mb-3">
-                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#sModal">추가</button>
+                            <div class="form-group row" style="width:80%;margin: auto;">
+                                <label class="col-sm-3 text-right control-label col-form-label">이미지 추가</label>
+                                <div class="col-sm-8">
+                                    <div class="custom-file">
+                                        <input type="file" class="custom-file-input PreviewFile" id="PreviewFile" name="PreviewFile" required>
+                                        <span class="custom-file-control3 custom-file-label"></span>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn btn-info btn-sm" style="height: 35px;" onclick="imageSave();">추가</button>
                             </div>
-                            <div id="section6">
-                                <table class="table text-center table-hover" id="bookTable">
+                            <div id="section6" style="text-align: center">
+                                <table class="table text-center table-hover" id="bookTable" style="width:80%;margin: auto;">
                                     <thead>
                                     <tr style="display:none;">
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
+                                        <th style="width:45%"></th>
+                                        <th style="width:5%"></th>
+                                        <th style="width:10%"></th>
+                                        <th style="width:10%"></th>
+                                        <th style="width:10%"></th>
+                                        <th style="width:10%"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="previewImgList"></tbody>
@@ -920,37 +946,6 @@
     </div>
 </form>
 <!-- // 기본소스-->
-
-<!--미리보기 이미지 팝업창-->
-<div class="modal fade" id="sModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <input type="hidden" id="key" value="modify">
-            <input type="hidden" id="searchKeywordKey" value="">
-            <div class="modal-header">
-                <h5 class="modal-title">리소스 수정</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- modal body -->
-            <div class="modal-body">
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">이미지</label>
-                    <div class="col-sm-9">
-                        <div class="custom-file">
-                            <input type="file" class="custom-file-input PreviewFile" id="PreviewFile" name="PreviewFile" required>
-                            <span class="custom-file-control3 custom-file-label"></span>
-                        </div>
-                    </div>
-                </div>
-                <button type="button" class="btn btn-info float-right" onclick="imageSave();">저장</button>
-            </div>
-            <!-- //modal body -->
-        </div>
-    </div>
-</div>
-
 <!-- 과년도 도서 팝업창-->
 <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 900px">

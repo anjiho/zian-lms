@@ -106,11 +106,7 @@
                         function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ categoryList[0].ctgKey +"'>";},
                         function() {return "지안에듀";},
                         function() {return nextIcon},
-                        function() {return categoryList[3].name;},
-                        function() {return nextIcon},
                         function() {return categoryList[2].name;},
-                        function() {return nextIcon},
-                        function() {return categoryList[1].name;},
                         function() {return nextIcon},
                         function() {return categoryList[0].name;},
                         function() {return delBtn},
@@ -135,7 +131,7 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+        /*var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
             $('#categoryList tr').eq(0).removeAttr("style", null);
@@ -154,7 +150,14 @@
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
             $trNew.find("td").eq(10).attr("style","display:none;");
             $trNew.find("td").eq(11).html(delBtn);
-        }
+        }*/
+        var tableBody =  $("#categoryTable").find("#cloneCategory");
+        var trLast = $("#categoryList").find("tr:last");
+        var trNew = tableBody.clone();
+
+        $(".cloneCategory").find("tr").eq(1).remo;
+
+        trLast.after(trNew);
     }
 
     //카테코리 셀렉트 박스 변경 시
@@ -325,9 +328,43 @@
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
-                                        <th scope="col"></th>
+                                    </tr>
+                                    <tr class="cloneCategory" style="display: none;">
+                                        <td><!--옵션명selbox-->
+                                            <select class='form-control'  id='sel_category' disabled>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'>
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td>
+                                            <select class='form-control'  name="ctgKey">
+                                            </select>
+                                        </td>
+                                        <td>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
+                                        </td>
                                     </tr>
                                     </thead>
                                     <tbody id="categoryList"></tbody>

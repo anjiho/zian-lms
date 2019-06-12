@@ -2488,7 +2488,6 @@ function allChk(obj, chkId){
 }
 
 function deleteTableRow(tableId, className) {
-    alert();
     $("#"+tableId).on("click", "."+className, function(){
         var clickedRow = $(this).parent().parent();
         var cls = clickedRow.attr("class");

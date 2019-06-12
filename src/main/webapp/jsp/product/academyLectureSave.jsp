@@ -9,7 +9,10 @@
     function init() {
         menuActive('menu-1', 4);
         getOptionSelectboxAddTag("", "sel_option");//옵션명 셀렉트박스
-        getCategoryList("sel_category","214");
+        /*카테고리*/
+        getNewCategoryList("sel_category","214",'1183');
+        getCategoryNoTag2('categoryTable','1183', '2');
+        /*//카테고리*/
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
         getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
@@ -25,7 +28,7 @@
     }
     $( document ).ready(function() {
         $('#description').summernote({ //기본정보-에디터
-            height: 430,
+            height: 300,
             minHeight: null,
             maxHeight: null,
             focus: false,
@@ -97,6 +100,25 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
+        /* 카테고리 추가시 예외처리 */
+        for(var i=0; i < $("#categoryList").find("tr").length; i++){
+            var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
+            var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
+            var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
+            if(cateName1 == "" || cateName1 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
+                return false;
+            }else if(cateName2 == "" || cateName2 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
+                return false;
+            }else if(cateName3 == "" || cateName3 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
+                return false;
+            }
+        }
         var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
@@ -142,7 +164,8 @@
         var extendPercent = td.find("input").eq(3).val();
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
-        td.find("span").html(sum);
+        //td.find("span").html(sum);
+        $("#sum_0").val(sum);
         //innerHTML(calcPrice, sum);
     }
     //카테코리 셀렉트 박스 변경 시
@@ -334,11 +357,11 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="name" name="name">
+                                        <input type="text" class="col-sm-5 form-control" style="display: inline-block;" id="name" name="name">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0" id="dateRangePicker">
+                                        <div class="col-sm-5 input-group pl-0 pr-0" id="dateRangePicker">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -347,7 +370,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">판매시작일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0">
+                                        <div class="col-sm-5 input-group pl-0 pr-0">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -395,7 +418,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트이미지</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
+                                        <div class="col-sm-5 pl-0 pr-0">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input" id="imageListFile"  name="imageListFile" required>
                                                 <span class="custom-file-control custom-file-label"></span>
@@ -404,7 +427,7 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상세이미지</label>
-                                        <div class="col-sm-6 pl-0 pr-0">
+                                        <div class="col-sm-5 pl-0 pr-0">
                                             <div class="custom-file">
                                                 <input type="file" class="custom-file-input addFile" id="imageViewFile" name="imageViewFile" required>
                                                 <span class="custom-file-control1 custom-file-label"></span>
@@ -456,7 +479,6 @@
                                         <th scope="col" style="text-align:center;width:13%">판매가</th>
                                         <th scope="col" style="text-align:center;widht:13%">포인트</th>
                                         <th scope="col" colspan="2" style="text-align:center;width:35%">재수강</th>
-                                        <th scope="col" style="text-align:center;width:5%"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="optionList">
@@ -480,10 +502,7 @@
                                                 <!--<span style="display: inline-block;">%</span>-->
                                             </td>
                                             <td style="padding: 0.3rem;vertical-align: middle;width:15%">
-                                                <span id="sum_0"></span>
-                                            </td>
-                                            <td style="vertical-align: middle">
-                                                <!--<button type="button" class="btn btn-outline-danger btn-sm"  onclick="deleteTableRow('productOption');">삭제</button>-->
+                                                <input type="number" class="form-control" id="sum_0" readonly>
                                             </td>
                                         </tr>
                                     </tbody>
@@ -518,7 +537,7 @@
                                     <tbody id="categoryList">
                                     <tr>
                                         <td><!--옵션명selbox-->
-                                            <select class='form-control'  id='sel_category' onchange="getCategoryNoTag2('categoryTable','1183', '2');">
+                                            <select class='form-control'  id='sel_category'  name="sel_category" disabled>
                                             </select>
                                         </td>
                                         <td>
@@ -550,7 +569,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:1%;">삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -706,14 +725,14 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="productSearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>

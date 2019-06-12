@@ -5,7 +5,10 @@
 <script>
     function init() {
         menuActive('menu-1', 6);
-        getCategoryList("sel_category","214");
+        /*카테고리*/
+        getNewCategoryList("sel_category","214",'1183');
+        getCategoryNoTag2('categoryTable','1183', '2');
+        /*카테고리*/
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
         getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
@@ -107,7 +110,7 @@
             $trLast.after($trNew);
 
             $trNew.find("td input").val('');
-            $trNew.find("td input").eq(0).val('');
+            $trNew.find("td input").eq(0).val('기본옵션');
             $trNew.find("td input").eq(1).val('');
             $trNew.find("td input").eq(2).val('');
             $trNew.find("td input").eq(3).val('');
@@ -119,6 +122,32 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
+
+        /* 카테고리 추가시 예외처리 */
+        for(var i=0; i < $("#categoryList").find("tr").length; i++){
+            var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
+            var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
+            var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
+            if(cateName1 == "" || cateName1 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
+                return false;
+            }else if(cateName2 == "" || cateName2 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
+                return false;
+            }else if(cateName3 == "" || cateName3 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
+                return false;
+            }
+        }
+
+        var sel_category  = get_array_last_value_by_name("select", "sel_category");
+        if(sel_category == ""){
+            alert("상위 카테고리를 선택해 주세요.");
+            return false;
+        }
         var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
@@ -257,7 +286,7 @@
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
-                        var cpSelBtn = '<input type="button" onclick="sendChildValue_1($(this))" value="선택" class="btn btn-outline-info mx-auto"/>';
+                        var cpSelBtn = '<input type="button" onclick="sendChildValue_1($(this))" value="선택" class="btn btn-outline-info btn-sm"/>';
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return '<input name="bookKey[]" value=' + "'" + cmpList.cpKey + "'" + '>';},
@@ -595,7 +624,7 @@
                                     <tbody id="optionList">
                                     <tr>
                                         <td style="padding: 0.3rem;vertical-align: middle">
-                                            <input type="text" value="기본옵션" readonly>
+                                            <input type="text" value="기본옵션" class="form-control text-center" readonly>
                                         </td>
                                         <td style="padding: 0.3rem;vertical-align: middle">
                                             <input type="text" class="form-control" name="price[]" id='price_0'>
@@ -649,7 +678,7 @@
                                     <tbody id="categoryList">
                                     <tr>
                                         <td><!--옵션명selbox-->
-                                            <select class='form-control'  id='sel_category' onchange="getCategoryNoTag2('categoryTable','1183', '2');">
+                                            <select class='form-control'  id='sel_category' name="sel_category" disabled>
                                             </select>
                                         </td>
                                         <td>
@@ -852,17 +881,18 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="productSearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>
+
                     <div class="table-responsive">
                         <input type="hidden" id="sPage3" >
                         <table id="zero_config" class="table table-hover text-center">
@@ -902,14 +932,14 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body" style="padding: 1.25rem;">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
-                            <span>이름</span>
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;margin-top: 6px;">
+                            <label>이름 </label>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="CpSearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="CpSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>

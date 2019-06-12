@@ -423,7 +423,7 @@ function getOptionSelectbox(val) {
 function getOptionSelectboxAddTag(val, tagId) {
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
     html += "<option value=''>선택</option>";
-    for (var i=1; i<13; i++) {
+    for (var i=1; i<25; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"개월</option>";
         } else {

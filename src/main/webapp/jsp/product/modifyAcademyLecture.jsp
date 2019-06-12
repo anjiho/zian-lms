@@ -133,15 +133,15 @@
 
             dwr.util.addRows("categoryList", productCategoryInfo, [
                 function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function() {return "지안에듀";},
-                function() {return nextIcon},
-                function(data) {return data[3].name;},
-                function() {return nextIcon},
-                function(data) {return data[2].name;},
-                function() {return nextIcon},
-                function(data) {return data[1].name;},
-                function() {return nextIcon},
-                function(data) {return data[0].name;},
+                function()     {return "지안에듀";},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
                 function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});

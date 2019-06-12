@@ -28,7 +28,7 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        fn_search('new');
+        //fn_search('new');
     }
 
     function fn_search(val) {
