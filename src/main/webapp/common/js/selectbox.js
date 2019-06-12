@@ -1073,14 +1073,14 @@ function orderPayTypeSelectbox(tagId, val) {
 /* 주문관리 - 결제방법  */
 function orderSearchSelectbox(tagId, val) {
     var html = "<select id='searchType' class='col-sm-5 select2 form-control custom-select'>";
-    html +=     '<option value="">선택</option>';
-    if(val == 'orderUserId') html += "<option value='orderUserId' selected>주문자 ID</option>";
+    html +=     '<option value="" selected>선택</option>';
+    if(val == 'orderUserId') html += "<option value='orderUserId'>주문자 ID</option>";
     else html += "<option value='orderUserId'>주문자 ID</option>";
-    if(val == 'orderUserName') html += "<option value='orderUserName' selected>주문자 이름</option>";
+    if(val == 'orderUserName') html += "<option value='orderUserName' >주문자 이름</option>";
     else html += "<option value='orderUserName'>주문자 이름</option>";
-    if(val == 'orderId') html += "<option value='orderId' selected>주문번호</option>";
+    if(val == 'orderId') html += "<option value='orderId'>주문번호</option>";
     else html += "<option value='orderId'>주문번호</option>";
-    if(val == 'orderGoodsName') html += "<option value='orderGoodsName' selected>상품명</option>";
+    if(val == 'orderGoodsName') html += "<option value='orderGoodsName'>상품명</option>";
     else html += "<option value='orderGoodsName'>상품명</option>";
     html += "</select>";
     innerHTML(tagId, html);

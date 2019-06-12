@@ -26,6 +26,15 @@
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("searchText");
         if(searchType == null) searchType = "";
+
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         productManageService.getProductListCount(searchType, searchText, "VIDEO", function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -51,6 +60,7 @@
                     gfn_emptyView("V", comment.blank_list2);
                 }
             });
+            loadingOut(loading);
         });
     }
 

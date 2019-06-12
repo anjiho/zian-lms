@@ -22,6 +22,14 @@
         dwr.util.removeAllRows("dataList");
         gfn_emptyView("H", "");
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         memberManageService.getCounselListCount(searchType, searchText, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -49,6 +57,7 @@
                 }
 
             });
+            loadingOut(loading);
         });
     }
 

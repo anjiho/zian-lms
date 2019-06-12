@@ -12,6 +12,7 @@
     .searchDate li .chkbox2 input{position:absolute;z-index:-1}
     .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
     .searchDate li .chkbox2.on label{background:#ec6a6a}
+
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -30,6 +31,8 @@
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
         //fn_search('new');
     }
+
+
 
     function fn_search(val) {
         var paging = new Paging();
@@ -57,6 +60,14 @@
         var goodsType = '';
         var isVideoReply = 0;
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
                                                 payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -76,13 +87,14 @@
                    function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
+            loadingOut(loading);
         });
     }
-    
+
     function changeList() {
         fn_search('new');
     }
-    
+
     function goOrderDetail(val) {
         innerValue('param_key', val);
         innerValue('type', 'orderList');
@@ -240,7 +252,8 @@
                 <div class="row">
                     <div class="col">
                         <div style=" float: right;">
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+<%--                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>--%>
+                            <button type="button" class="btn btn-outline-info mx-auto" data-toggle="modal" data-target="#sModal4" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
                 </div>

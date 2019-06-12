@@ -29,8 +29,9 @@
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
         setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
-        fn_search("new");
+        //fn_search("new");
     }
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
@@ -53,6 +54,13 @@
         var cancelEndDate = getInputTextValue('cancelEndDate');
         var searchText = getInputTextValue('searchText');
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
 
         if(searchType == null) searchType = "";
         orderManageService.getCancelOrderListCount(startSearchDate, endSearchDate, cancelStartDate, cancelEndDate, orderPayStatus, isOffline,
@@ -77,6 +85,7 @@
                             function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                         ], {escapeHtml:false});
                     });
+                loadingOut(loading);
             });
     }
 

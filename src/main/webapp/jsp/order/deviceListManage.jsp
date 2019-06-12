@@ -21,6 +21,14 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         orderManageService.getPcDeviceListCount(searchType, searchText, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -34,6 +42,7 @@
                     function(data) {return "<button type='button' onclick='DeviceDelete("+ data.deviceLimitKey +");' class='btn btn-outline-danger btn-sm'>삭제</button>";},
                 ], {escapeHtml:false});
             });
+            loadingOut(loading);
         });
     }
 
@@ -92,7 +101,7 @@
             fn_search3('new');
         }
     }
-    
+
     function search() {
         var deviceType = getSelectboxValue('deivceSel');
         if(deviceType == '0') fn_search('new');

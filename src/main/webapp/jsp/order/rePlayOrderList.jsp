@@ -28,8 +28,9 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        fn_search('new');
+        //fn_search('new');
     }
+
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
@@ -54,6 +55,14 @@
         var goodsType = 'VIDEO';
         var isVideoReply = 1; //재수강
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
             payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -75,6 +84,7 @@
                             function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                         ], {escapeHtml:false});
                     });
+                loadingOut(loading);
             });
     }
 

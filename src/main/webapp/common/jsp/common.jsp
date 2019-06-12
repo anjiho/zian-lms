@@ -42,6 +42,8 @@
     <link rel="stylesheet" type="text/css" href="common/assets/extra-libs/multicheck/multicheck.css">
     <link href="common/assets/libs/datatables.net-bs4/css/dataTables.bootstrap4.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="common/dist/css/datepicker3.css" />
+    <!-- loading CSS -->
+    <link rel="stylesheet" type="text/css" href="common/css/loading.css" />
 
     <!-- All Jquery -->
     <!-- ============================================================== -->
@@ -95,6 +97,10 @@
 
     <!--daum map api-->
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
+
+    <!-- loading -->
+    <script src="common/js/loading.js"></script>
+    <script type="text/javascript" src="https://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">

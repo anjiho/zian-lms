@@ -39,6 +39,14 @@
             gfn_display("container2", false);
             gfn_display("container3", false);
 
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
+
             statisManageService.selectMemberRegStatisByMonth(year, function(result) {
                 var userCounts = result.userCounts;
 
@@ -76,11 +84,20 @@
                         data: userCounts
                     }]
                 });
+                loadingOut(loading);
             });
         } else if (searchType == "year") {
             gfn_display("container", false);
             gfn_display("container2", true);
             gfn_display("container3", false);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             statisManageService.selectMemberRegStatisByYear(function(result) {
                 var yearList = result.years;
@@ -139,6 +156,7 @@
                         }]
                     }
                 });
+                loadingOut(loading);
             });
         } else if (searchType == "day") {
             gfn_display("container", false);
@@ -160,6 +178,14 @@
             }
 
             var yyyyMM = makeYYYY_MM(year, month);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             statisManageService.selectMemberRegStatisByDay(yyyyMM, function(result) {
 
@@ -218,6 +244,7 @@
                         }]
                     }
                 });
+                loadingOut(loading);
             });
         }
     }

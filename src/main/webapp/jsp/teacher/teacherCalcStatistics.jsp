@@ -17,7 +17,7 @@
 
 <script>
     function init() {
-        menuActive('menu-8', 3);
+        menuActive('menu-7', 3);
 
         selectTeacherSelectbox("l_teacherList", "");
         getExamYearSelectbox("l_year");
@@ -47,6 +47,14 @@
             gfn_display("container", true);
             gfn_display("container2", false);
             gfn_display("container3", false);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             statisManageService.getTeacherStatisGraphByMonth(teacherKey, year, function(result) {
                 var prices = result.prices;
@@ -85,11 +93,20 @@
                         data: prices
                     }]
                 });
+                loadingOut(loading);
             });
         } else if (searchType == "year") {
             gfn_display("container", false);
             gfn_display("container2", true);
             gfn_display("container3", false);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             statisManageService.getTeacherStatisGraphByYear(teacherKey, function(result) {
                 var yearList = result.years;
@@ -148,6 +165,7 @@
                         }]
                     }
                 });
+                loadingOut(loading);
             });
         } else if (searchType == "day") {
             gfn_display("container", false);
@@ -169,6 +187,14 @@
             }
 
             var yyyyMM = makeYYYY_MM(year, month);
+
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '검색중',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
 
             statisManageService.getTeacherStatisGraphByDay(teacherKey, yyyyMM, function(result) {
                 var prices = result.prices;
@@ -226,6 +252,7 @@
                         }]
                     }
                 });
+                loadingOut(loading);
             });
         }
     }

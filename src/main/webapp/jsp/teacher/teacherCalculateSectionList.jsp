@@ -38,6 +38,14 @@
         var endDate =  searchEndDate.split("-");
         searchEndDate = endDate[0]+endDate[1]+endDate[2];
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         statisManageService.getTeacherCalculateBySection(teacherKey, searchStartDate, searchEndDate, function (selList) {
             if (selList.length == 0) return;
            var calculateOptionList     = selList.calculateOptionList; // 옵션 리스트
@@ -237,6 +245,7 @@
             innerHTML("alltotalCnt", alltotalCnt);
             innerHTML("alltotalPrice", format(alltotalPrice));
         });
+        loadingOut(loading);
     }
 
     function MemberDetail(userKey) {

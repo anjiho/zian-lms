@@ -44,6 +44,14 @@
         if(grade == null) grade = "";
         if(affiliationCtgKey == null) affiliationCtgKey = "";
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
@@ -62,6 +70,7 @@
                             function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                         ], {escapeHtml:false});
                     });
+            loadingOut(loading);
             });
     }
 

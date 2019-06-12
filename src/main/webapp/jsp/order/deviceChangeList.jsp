@@ -39,6 +39,14 @@
         var searchText = getInputTextValue('searchText');
         var deviceType = getSelectboxValue('deviceSel');
 
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
 
         orderManageService.getDeviceChangeLogListCount(startSearchDate, endSearchDate, deviceType, searchType, searchText, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -70,6 +78,7 @@
                             }
                         }
                     });
+            loadingOut(loading);
             });
     }
 
