@@ -43,6 +43,14 @@ public class TCounselVO {
 
     private String imageFile5;
 
+    private String userId;
+
+    private String userName;
+
+    private String writeUserId;
+
+    private String writeUserName;
+
     public TCounselVO(){}
 
     public TCounselVO(TCounselVO tCounselVO) {

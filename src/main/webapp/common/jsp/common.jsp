@@ -31,7 +31,8 @@
     <link href="https://fonts.googleapis.com/css?family=Lato:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
 
     <!-- Favicon icon -->
-    <link rel="icon" type="image/png" sizes="16x16" href="common/assets/images/favicon.png">
+
+    <link rel="icon" type="image/png" sizes="16x16" href="img/logo.png">
     <!-- Custom CSS -->
     <link href="common/assets/libs/flot/css/float-chart.css" rel="stylesheet">
     <!-- Custom CSS -->

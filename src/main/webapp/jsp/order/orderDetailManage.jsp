@@ -10,6 +10,7 @@
 <script>
     var JKey = '<%=JKey%>';
     var type = '<%=type%>';
+
     function init() {
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
@@ -127,12 +128,12 @@
                 orderDeliveryInfoSelectbox('deliveryStatusSel', deliveryInfo.status);//
                 innerHTML("deliveryStartDate", deliveryInfo.deliveryStartDate);//시작일자
                 innerHTML("deliveryEndDate", deliveryInfo.deliveryEndDate);//완료일자
-                innerValue("deliveryNo", deliveryInfo.deliveryNo);//완료일자
+                innerValue("deliveryNo", deliveryInfo.deliveryNo);//송장번호
                 innerValue("JDeliveryKey", deliveryInfo.JDeliveryKey);//JDeliveryKey
             }
         });
     }
-    
+
     function emailSelChange(val) {
         if(val == '1') $('#InputEmail').val('');
         else $('#InputEmail').val(val);
@@ -172,8 +173,17 @@
     }
 
     function copyDeliveryInfo() { //주문자정보 복사
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '주문자 정보를 가져오는중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
         orderManageService.getOrderDetail(JKey, function(info) {
             var orderUserInfo = info.orderUserInfo;
+
             innerValue("deliveryUserName", orderUserInfo.name);
             if(orderUserInfo.email){
                 var email = orderUserInfo.email;
@@ -200,6 +210,8 @@
             innerValue("roadAddress", orderUserInfo.addressRoad);
             innerValue("jibunAddress", orderUserInfo.addressNumber);
             innerValue("detailAddress", orderUserInfo.address);
+
+            loadingOut(loading);
         });
     }
 
@@ -213,6 +225,13 @@
         if(confirm('배송정보를 저장하시겠습니까?')){
             orderManageService.saveDeliveryInfo(JDeliveryKey, JKey, deliveryMasterKey, status, deliveryNo, function() {isReloadPage();});
         }
+    }
+
+    //배송조회 팝업
+    function trackingDelivery() {
+        var deliveryNumber = getInputTextValue("deliveryNo");
+        var targetUrl = "https://www.doortodoor.co.kr/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=" + deliveryNumber;
+        gfn_winPop(1000, 2000, targetUrl, '');
     }
 </script>
 <div class="page-breadcrumb">
@@ -530,7 +549,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">송장번호</label>
                                         <input type="text" id="deliveryNo"  class="col-sm-4 form-control" style="display: inline-block;">
-                                        <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline-block;">배송추적</button>
+                                        <button type="button" class="btn btn-outline-danger btn-sm" style="display: inline-block;" onclick="trackingDelivery();">배송추적</button>
                                     </div>
                                 </div>
                             </div>

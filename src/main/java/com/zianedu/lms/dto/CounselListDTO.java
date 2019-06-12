@@ -23,4 +23,6 @@ public class CounselListDTO {
 
     private String procEndDate;
 
+    private String userId;
+
 }

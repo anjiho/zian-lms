@@ -155,7 +155,13 @@
     </select>
 
     <select id="selectTCounselInfo" resultType="com.zianedu.lms.vo.TCounselVO">
-      SELECT * FROM T_COUNSEL WHERE COUNSEL_KEY = #{counselKey}
+      SELECT A.*,
+            (SELECT USER_ID FROM T_USER T WHERE T.USER_KEY = A.USER_KEY) as userId,
+            (SELECT NAME FROM T_USER T WHERE T.USER_KEY = A.USER_KEY) as userNAME,
+            (SELECT USER_ID FROM T_USER T WHERE T.USER_KEY = A.WRITE_USER_KEY) as writeUserId,
+            (SELECT NAME FROM T_USER T WHERE T.USER_KEY = A.WRITE_USER_KEY) as writeUserName
+      FROM T_COUNSEL A
+      WHERE A.COUNSEL_KEY = #{counselKey}
     </select>
 
     <select id="selectTUserSecessionApplyList" resultType="com.zianedu.lms.vo.TUserSecessionVO">
@@ -210,11 +216,13 @@
     </select>
 
     <select id="selectTCounselListByPaging" resultType="CounselListDTO">
-         SELECT A.COUNSEL_KEY,
+         SELECT /*+ PARALLEL(4) */
+                A.COUNSEL_KEY,
                 B.NAME,
                 A.TYPE,
                 B.TELEPHONE,
                 B.TELEPHONE_MOBILE,
+                B.USER_ID,
                 TO_CHAR(A.INDATE, 'YYYY-MM-DD HH:mi:ss') as INDATE,
                 TO_CHAR(A.PROC_START_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_START_DATE,
                 TO_CHAR(A.PROC_END_DATE, 'YYYY-MM-DD HH24:mi:ss') as PROC_END_DATE
@@ -235,10 +243,11 @@
     </select>
 
     <select id="selectTCounselListByPagingCount" resultType="Integer">
-        SELECT COUNT (A.COUNSEL_KEY)
+        SELECT /*+FIRST_ROWS*/ COUNT (A.COUNSEL_KEY)
         FROM T_COUNSEL A
-        INNER JOIN T_USER B
+        LEFT JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
         <if test="searchType == 'number'">
             AND A.COUNSEL_KEY = #{searchText}
         </if>
@@ -490,10 +499,10 @@
         <set>
             <if test="type != null">TYPE = #{type},</if>
             <if test="status != null">STATUS = #{status},</if>
-            <if test="procStartDate != '' and procStartDate != ''">PROC_START_DATE = #{procStartDate},</if>
-            <if test="procEndDate != '' and procEndDate != ''">PROC_END_DATE = #{procEndDate},</if>
-            <if test="memo != '' and memo != ''">MEMO = #{memo},</if>
-            <if test="contents != '' and contents != ''">CONTENTS = #{contents},</if>
+            <if test="procStartDate != '' or procStartDate != null">PROC_START_DATE = #{procStartDate},</if>
+            <if test="procEndDate != '' or procEndDate != null">PROC_END_DATE = #{procEndDate},</if>
+            <if test="memo != '' or memo != null">MEMO = #{memo},</if>
+            <if test="contents != '' or contents != null">CONTENTS = #{contents},</if>
         </set>
         WHERE COUNSEL_KEY = #{counselKey}
     </update>
