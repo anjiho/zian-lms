@@ -95,12 +95,13 @@
     <!-- dwr common -->
     <script type='text/javascript' src='/dwr/interface/selectboxService.js'></script>
 
+    <!-- loading -->
+    <script src="common/js/loading.js"></script>
+    <!--<script type="text/javascript" src="https://pagead2.googlesyndication.com/pagead/show_ads.js"></script>-->
+
     <!--daum map api-->
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
-    <!-- loading -->
-    <script src="common/js/loading.js"></script>
-    <script type="text/javascript" src="https://pagead2.googlesyndication.com/pagead/show_ads.js"></script>
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">

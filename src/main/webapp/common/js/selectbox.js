@@ -829,6 +829,7 @@ function leadingZeros(date, num) {
 //시간(Hour) 셀렉트박스
 function getTimeHourSelectbox(tagId, val) {
     var html = "<select id='timeHour' name='timeHour' class='form-control'>";
+    html += "<option value=''>선택</option>";
     for (var i=0; i<25; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ leadingZeros(i,2) +"</option>";
@@ -843,6 +844,7 @@ function getTimeHourSelectbox(tagId, val) {
 //시간(분) 셀렉트박스
 function getTimeMinuteSelectbox(tagId, val) {
     var html = "<select id='timeMinute' name='timeMinute' class='form-control'>";
+    html += "<option value=''>선택</option>";
     for (var i=0; i<60; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ leadingZeros(i,2) +"</option>";

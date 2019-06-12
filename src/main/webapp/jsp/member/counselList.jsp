@@ -34,6 +34,7 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             memberManageService.getCounselList(sPage, pagingListCount(), searchType, searchText, function (selList) {
+                console.log(selList);
                 if (selList.length == 0) return;
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
@@ -43,7 +44,7 @@
                                 function(data) {return listNum--;},
                                 function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},//유저id
                                 function(data) {return cmpList.name == null ? "-" : cmpList.name;},
-                                function(data) {return cmpList.indate == null ? "-" : cmpList.type;},//상담구분
+                                function(data) {return cmpList.type == null ? "-" : cmpList.type;},//상담구분
                                 function(data) {return cmpList.telephone+"<br>"+cmpList.telephoneMobile;},//연락처
                                 function(data) {return cmpList.indate == null ? "-" : cmpList.indate;},
                                 function(data) {return cmpList.procStartDate == null ? "-" : cmpList.procStartDate;},

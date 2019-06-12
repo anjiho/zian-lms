@@ -9,7 +9,8 @@
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
     var popupKey = '<%=popupKey%>';
-    $( document ).ready(function() {
+
+    function init() {
         $('textarea[name=contents]').summernote({ //기본정보-에디터
             height: 250,
             minHeight: null,
@@ -49,15 +50,15 @@
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
         });
-    });
-
-    function init() {
         menuActive('menu-4', 1);
-        getTimeHourSelectbox("acceptStartHour",0);
-        getTimeHourSelectbox("acceptEndHour",0);
-        getTimeMinuteSelectbox("acceptStartMinute",24);
-        getTimeMinuteSelectbox("acceptEndMinute",24);
-        getCategoryList("sel_category","214");
+        getTimeHourSelectbox("acceptStartHour", "");
+        getTimeHourSelectbox("acceptEndHour", "");
+        getTimeMinuteSelectbox("acceptStartMinute", "");
+        getTimeMinuteSelectbox("acceptEndMinute", "");
+        /*카테고리*/
+        getNewCategoryList("sel_category","214",'1183');
+        getCategoryNoTag2('categoryTable1','1183', '2');
+        /*카테고리*/
 
         /* 패키시상품 정보 가져오기 */
         popupCouponManageService.getPopupDetailInfo(popupKey, function(info) {
@@ -87,14 +88,14 @@
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                     function() {return "지안에듀";},
                     function() {return nextIcon},
-                    function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                    function() {return getCategoryNoTag('categoryTable1','1183', '3');},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable1', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
@@ -104,13 +105,13 @@
                     var categoryList =  resultList[i].categoryList;
                     var cellData = [
                         function() {return "<input type='hidden' name='inputCtgKey[]' value='"+ categoryList[0].ctgKey +"'>";},
-                        function() {return "지안에듀";},
-                        function() {return nextIcon},
-                        function() {return categoryList[2].name;},
-                        function() {return nextIcon},
+                        //function() {return "지안에듀";},
+                        //function() {return nextIcon},
+                        //function() {return categoryList[2].name;},
+                        //function() {return nextIcon},
                         function() {return categoryList[0].name;},
                         function() {return delBtn},
-                        function() {return ""},
+                        //function() {return ""},
                     ];
                     dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                     $('#categoryList tr').each(function(){
@@ -131,33 +132,27 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        /*var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+        for(var i=0; i < $("#categoryList1").find("tr").length; i++){
+            var cateName1 =  $("#categoryList1").find("tr").eq(i).find("td select").eq(1).val();
+            if(cateName1 == "" || cateName1 == undefined){
+                alert("카테고리 선택후 추가해 주세요.");
+                $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
+                return false;
+            }
+        }
+
+        var fistTrStyle = $("#categoryTable1 tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
+            $('#categoryTable1 tr').eq(0).removeAttr("style", null);
         } else {
-            var $tableBody = $("#categoryTable").find("tbody"),
+            var $tableBody = $("#categoryTable1").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
-            //추가 - 삭제버튼
-            var delBtn = "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
-            $trNew.find("td").eq(0).html("");
-            $trNew.find("td").eq(1).html("지안에듀");
-            getCategoryNoTag2('categoryTable','1183', '3');
-            $trNew.find("td").eq(5).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(7).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(9).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(10).attr("style","display:none;");
-            $trNew.find("td").eq(11).html(delBtn);
-        }*/
-        var tableBody =  $("#categoryTable").find("#cloneCategory");
-        var trLast = $("#categoryList").find("tr:last");
-        var trNew = tableBody.clone();
 
-        $(".cloneCategory").find("tr").eq(1).remo;
-
-        trLast.after(trNew);
+            getCategoryNoTag2('categoryTable1','1183', '2');
+        }
     }
 
     //카테코리 셀렉트 박스 변경 시
@@ -172,17 +167,37 @@
         if (basicObj.isShow == 'on') basicObj.isShow = '1';//노출 checkbox
         else basicObj.isShow = '0';
 
-        basicObj.startDate = basicObj.startDate+" "+$('select[name=timeHour]').eq(0).val()+":"+$('select[name=timeMinute]').eq(0).val()+":"+"00";
-        basicObj.endDate   = basicObj.endDate+" "+$('select[name=timeHour]').eq(1).val()+":"+$('select[name=timeMinute]').eq(1).val()+":"+"00";
+        var timeHour    = 0;
+        var timeHour1   = 0;
+        var timeMinute  = 0;
+        var timeMinute1 = 0;
+
+        if($('select[name=timeHour]').eq(0).val() == null) timeHour = "00";
+        else timeHour = $('select[name=timeHour]').eq(0).val();
+
+        if($('select[name=timeMinute]').eq(0).val()  == null) timeMinute = "00";
+        else timeMinute = $('select[name=timeMinute]').eq(0).val();
+
+        if($('select[name=timeHour]').eq(1).val()  == null) timeHour1 = "00";
+        else timeHour1 = $('select[name=timeHour]').eq(1).val();
+
+        if($('select[name=timeMinute]').eq(1).val()  == null) timeMinute1 = "00";
+        else timeMinute1 = $('select[name=timeMinute]').eq(1).val();
+
+
+        basicObj.startDate = basicObj.startDate+" "+timeHour+":"+timeMinute+":"+"00";
+        basicObj.endDate   = basicObj.endDate+" "+timeHour1+":"+timeMinute1+":"+"00";
 
         var categoryArr = new Array();
-        $('#categoryTable tbody tr').each(function (index) {
-            //alert($(this).find("td select").eq(3).val());
-            if($(this).find("td").eq(0).html() == ""){
-                var ctgKey = $(this).find("td select").eq(3).val();
-                categoryArr.push(ctgKey);
-            }
+        $('#categoryTable1 tbody tr').each(function (index) {
+            var ctgKey = $(this).find("td select").eq(1).val();
+                categoryArr.push(Number(ctgKey));
         });
+
+        if( !categoryArr.length ){
+            alert(1);
+        }
+
         if(confirm("수정 하시겠습니까?")) {
             popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {});
             popupCouponManageService.updatePopupInfo(basicObj, function () {isReloadPage(true);});
@@ -318,8 +333,21 @@
                                 <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo()">추가</button>
                             </div>
                             <div id="section3">
+                                <!--카테고리 가져오기-->
                                 <table class="table" id="categoryTable">
+                                    <thead>
+                                    <tr style="display:none;">
+                                        <th></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="categoryList"></tbody>
+                                </table>
+                                <!--새로운카테고리 추가-->
+                                <table class="table" id="categoryTable1">
                                     <input type="hidden" name="ctgGKey" value="0">
+                                    <input type="hidden" name="gKey" value="0">
                                     <input type="hidden" name="pos" value="0">
                                     <thead>
                                     <tr style="display:none;">
@@ -328,8 +356,13 @@
                                         <th scope="col"></th>
                                         <th scope="col"></th>
                                         <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
+                                        <th scope="col"></th>
                                     </tr>
-                                    <tr class="cloneCategory" style="display: none;">
+                                    </thead>
+                                    <tbody id="categoryList1">
+                                    <tr>
                                         <td><!--옵션명selbox-->
                                             <select class='form-control'  id='sel_category' disabled>
                                             </select>
@@ -338,36 +371,32 @@
                                             <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                         </td>
                                         <td>
-                                            <select class='form-control'>
-                                            </select>
+                                            <select class='form-control'></select>
                                         </td>
                                         <td>
                                             <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                         </td>
                                         <td>
-                                            <select class='form-control'>
-                                            </select>
+                                            <select class='form-control'></select>
                                         </td>
                                         <td>
                                             <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                         </td>
                                         <td>
-                                            <select class='form-control'>
-                                            </select>
+                                            <select class='form-control'></select>
                                         </td>
                                         <td>
                                             <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
                                         </td>
                                         <td>
-                                            <select class='form-control'  name="ctgKey">
-                                            </select>
+                                            <select class='form-control'  name="ctgKey"></select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable1', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
                                         </td>
                                     </tr>
-                                    </thead>
-                                    <tbody id="categoryList"></tbody>
+
+                                    </tbody>
                                 </table>
                             </div>
                         </section>
