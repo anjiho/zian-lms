@@ -48,7 +48,7 @@
 
     function fn_search3(val) {//모바일
         var paging = new Paging();
-        var sPage = $("#sPage3").val();
+        var sPage = getInputTextValue("sPage3");
         var searchType = getSelectboxValue("searchType");
         var searchText = getInputTextValue("searchText");
 
@@ -66,7 +66,7 @@
                         var btn = "<button type='button' onclick='DeviceDelete("+ cmpList.deviceLimitKey +")' class='btn btn-outline-danger btn-sm'>삭제</button>";
                         if (cmpList != undefined) {
                             var cellData = [
-                                function(data) {return cmpList.userKey == null ? "-" : cmpList.userKey;},
+                                function(data) {return cmpList.userKey == null ? "-" : cmpList.userName;},
                                 function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},
                                 function(data) {return cmpList.deviceId == null ? "-" : cmpList.deviceId;},
                                 function(data) {return cmpList.deviceModel == null ? "-" : cmpList.deviceModel;},
@@ -77,8 +77,6 @@
                             dwr.util.addRows("dataList3", [0], cellData, {escapeHtml: false});
                         }
                     }
-                }else{
-                    gfn_emptyView3("V", comment.blank_list2);
                 }
             });
         });
@@ -130,7 +128,7 @@
         <div class="col-12">
             <div class="form-group row">
                 <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">디바이스 선택</label>
-                <div class="col-sm-6 pl-0 pr-0">
+                <div class="col-sm-1 pl-0 pr-0">
                     <span id="deviceSel"></span>
                 </div>
             </div>
@@ -141,7 +139,7 @@
                             <span id="l_searchSel"></span>
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px">
-                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {search(); return false;}">
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px;">
                             <!--<button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>-->
