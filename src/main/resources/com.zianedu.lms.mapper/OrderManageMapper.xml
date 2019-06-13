@@ -3,7 +3,7 @@
 <mapper namespace="com.zianedu.lms.mapper.OrderManageMapper">
 
     <select id="selectOrderList" resultType="OrderResultDTO">
-        SELECT /*+ PARALLEL(4) */
+        SELECT /*+ PARALLEL(4) */ /*+index_desc (T_ORDER PK_T_ORDER) */
             A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
              A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
              A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,

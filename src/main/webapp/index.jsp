@@ -9,7 +9,6 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="content-Type" content="text/html;charset=utf-8">
-    <%--<meta http-equiv="X-UA-Compatible" content="IE=edge">--%>
     <!-- Tell the browser to be responsive to screen width -->
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <!-- Favicon icon -->
@@ -54,7 +53,6 @@
         var userPass = getInputTextValue("userPass");
 
         loginService.login(userId, userPass, function(data) {
-            //console.log(data);
             if (data != null) {
                 with(document.frm) {
                     innerValue("userKey", data.userKey);
@@ -64,7 +62,7 @@
                     goPage("login", "session");
                 }
             } else {
-                alert("error");
+                alert("아이디 또는 비밀번호가 틀렸습니다.");
             }
         });
     }
