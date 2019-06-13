@@ -95,13 +95,13 @@
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
                     function(data) {return getOptionSelectbox(data.kind, true);},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
-                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
                     //function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('productOption');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
@@ -393,19 +393,15 @@
                 kind:optionNames[i],
                 ctgKey:'0',
                 name:'0',
-                price:optionPrices[i],
-                sellPrice:sellPrices[i],
-                point:points[i],
+                price:removeComma(optionPrices[i]),
+                sellPrice:removeComma(sellPrices[i]),
+                point:removeComma(points[i]),
                 extendPercent:expendPercents[i]
             }
             dataArr.push(data)
         }
         if(confirm("옵션정보를 수정 하시겠습니까?")){
-            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
-                //isReloadPage(true);
-                //$('#steps-uid-0-t-1').click();
-
-            });
+            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {isReloadPage(true);});
         }
     }
 
@@ -529,7 +525,7 @@
         var sellPrice = td.find("input").eq(0).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
     }

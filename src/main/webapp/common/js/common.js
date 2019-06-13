@@ -2115,8 +2115,14 @@ function getDayAgo(dayCount) {
 
 //시분초 자른 날짜 구하기
 function split_minute_getDay(day) {
-    var day = day.split(" ");
-    return day[0];
+    var Reday = "";
+    if(day != null){
+        day = day.split(" ");
+        Reday = day[0];
+    }else{
+        Reday = "";
+    }
+    return Reday;
 }
 
 
@@ -2616,3 +2622,12 @@ function comma(str) {
     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
 }
 /* input text onkeyup 금액표시 */
+
+// 콤마제거
+function removeComma(n) {
+    if ( typeof n == "undefined" || n == null || n == "" ) {
+        return "";
+    }
+    var txtNumber = '' + n;
+    return txtNumber.replace(/(,)/g, "");
+}

@@ -62,9 +62,9 @@
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
                     function(data) {return getAllListOptionSelectbox(data.kind, true);},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
@@ -100,16 +100,16 @@
 
             dwr.util.addRows("categoryList", productCategoryInfo, [
                 function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function() {return "지안에듀";},
-                function() {return nextIcon},
-                function(data) {return data[3].name;},
-                function() {return nextIcon},
-                function(data) {return data[2].name;},
-                function() {return nextIcon},
-                function(data) {return data[1].name;},
-                function() {return nextIcon},
-                function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\"  class=\"btn btn-outline-danger btn-sm delBtn\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" style=\"margin-top:8%;\" >삭제</button>"},
+                function()     {return "지안에듀";},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
@@ -176,7 +176,7 @@
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
     }
@@ -219,9 +219,9 @@
                 kind:optionNames[i],
                 ctgKey:'0',
                 name:'0',
-                price:optionPrices[i],
-                sellPrice:sellPrices[i],
-                point:points[i],
+                price:removeComma(optionPrices[i]),
+                sellPrice:removeComma(sellPrices[i]),
+                point:removeComma(points[i]),
                 extendPercent:expendPercents[i]
             }
             dataArr.push(data)
@@ -278,8 +278,7 @@
                 resType: obj.resType,
                 valueBit: 0,
                 pos: 0
-            }
-            console.log(TLinkKeyVO);
+            };
             dataArr.push(TLinkKeyVO);
            productManageService.upsultTLinkKink(dataArr, gKey,function () {
                 isReloadPage(true);
@@ -604,17 +603,18 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_mockSearchType"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="SearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="SearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
+
                     <div class="table-responsive">
                         <input type="hidden" id="sPage" >
                         <table id="zero_config" class="table table-hover text-center">

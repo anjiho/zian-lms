@@ -27,6 +27,7 @@
 
         /* 패키시상품 정보 가져오기 */
         promotionManageService.getPackageDetailInfo(gKey, function(info) {
+            console.log(info);
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
@@ -43,7 +44,7 @@
             }
             getEmphasisSelectbox("l_emphasis", productInfo.emphasis);
             innerValue("calculateRate", productInfo.calculateRate);
-            $("#description").summernote("code", productInfo.description);
+            $("#description1").summernote("code", productInfo.description);
 
             /**
              * 옵션정보 가져오기
@@ -103,26 +104,28 @@
                 $('#categoryList tr').eq(0).attr("style", "display:none");
             }
 
-            dwr.util.addRows("categoryList", productCategoryInfo, [
-                function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function() {return "지안에듀";},
-                function() {return nextIcon},
-                function(data) {return data[3].name;},
-                function() {return nextIcon},
-                function(data) {return data[2].name;},
-                function() {return nextIcon},
-                function(data) {return data[1].name;},
-                function() {return nextIcon},
-                function(data) {return data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-            ], {escapeHtml:false});
+            if(productCategoryInfo.length>0){
+                dwr.util.addRows("categoryList", productCategoryInfo, [
+                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
+                    function()     {return "지안에듀";},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                    function(data) {return nextIcon;},
+                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
+                ], {escapeHtml:false});
 
-            $('#categoryList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(11).attr("style", "display:none");
-            });
+                $('#categoryList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(11).attr("style", "display:none");
+                });
+            }
 
             //프로모션정보 가져오기
             var productPromotionInfo = info.productPromotionInfo;
@@ -282,7 +285,7 @@
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
     }
@@ -316,7 +319,7 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
-                console.log(selList);
+
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -370,6 +373,12 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
+        onlineListHtml     += "<span></span>";
+        onlineListHtml     += "</td>";
+        onlineListHtml     += " <td>";
+        onlineListHtml     += "<span></span>";
+        onlineListHtml     += "</td>";
+        onlineListHtml     += " <td>";
         onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         onlineListHtml     += "</td>";
 
@@ -395,7 +404,7 @@
             if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
             else basicObj.isFreebieDeliveryFree = '0';
             if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
-            else basicObj.isQuickDelivery = '0';;
+            else basicObj.isQuickDelivery = '0';
                 basicObj.imageList = "";
                 basicObj.imageView = "";
 
@@ -414,9 +423,9 @@
                     kind:optionName,
                     ctgKey:'0',
                     name:'',
-                    price:price,
-                    sellPrice:sellPrice,
-                    point:point,
+                    price:removeComma(price),
+                    sellPrice:removeComma(sellPrice),
+                    point:removeComma(point),
                     extendPercent:extendPercent
                 };
                 optionArray.push(data);
@@ -435,7 +444,7 @@
                 $.each(ctgKeys, function(index, key) {
                     var data = {
                         ctgGKey:0,
-                        ctgKey:key,
+                        ctgKey:Number(key),
                         gKey:gKey,
                         pos:0
                     };
@@ -511,7 +520,6 @@
                         basicObj.imageList = "";
                         basicObj.imageView = "";
                     }
-
                     /*  2.옵션 obj */
                     var optionArray = new Array();
                     $('#optionTable tbody tr').each(function(index){
@@ -527,14 +535,13 @@
                             kind:optionName,
                             ctgKey:'0',
                             name:'',
-                            price:price,
-                            sellPrice:sellPrice,
-                            point:point,
+                            price:removeComma(price),
+                            sellPrice:removeComma(sellPrice),
+                            point:removeComma(point),
                             extendPercent:extendPercent
                         };
                         optionArray.push(data);
                     });
-
                     /* 3. 카테고리 저장 */
                     var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
                     var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
@@ -576,6 +583,7 @@
                         onlineLecInfo.push(data);
                     });
 
+
                     if(confirm("수정 하시겠습니까?")) {
                         promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
                             isReloadPage(true);
@@ -585,17 +593,18 @@
             });
         }
     }
+
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">패키지상품 등록</h4>
+            <h4 class="page-title">패키지상품 수정</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">프로모션 관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">패키지상품 등록</li>
+                        <li class="breadcrumb-item active" aria-current="page">패키지상품 수정</li>
                     </ol>
                 </nav>
             </div>
@@ -848,8 +857,8 @@
                             <div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#promotionOnlineModal" onclick="fn_search('new');">추가</button>
                             </div>
-                            <div id="section6">
-                                <table class="table text-center table-hover" id="promotionOnlineTable">
+                            <div id="section6" style="text-align: center">
+                                <table class="table text-center table-hover" id="promotionOnlineTable" style="width:80%;margin: auto;">
                                     <thead>
                                     </thead>
                                     <tbody id="promotionOnlineList"></tbody>
@@ -879,14 +888,14 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
                             <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>

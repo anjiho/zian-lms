@@ -52,13 +52,13 @@
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
                     function(data) {return "기본옵션"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
-                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
                     function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
@@ -280,7 +280,7 @@
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
     }
@@ -372,10 +372,10 @@
 
         dwr.util.removeAllRows("dataList");
         gfn_emptyView3("H", "");//페이징 예외사항처리
-        productManageService.getCpListCoubt("title", searchText, function(cnt) {
+        productManageService.getCpListCount("name", searchText, function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            productManageService.getCpList(sPage, '10', "title", searchText, function (selList) {
+            productManageService.getCpList(sPage, '10', "name", searchText, function (selList) {
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -445,7 +445,7 @@
                 var cpKey = $("#cpKey").val();
                 var basicObj = getJsonObjectFromDiv("section1");
                 if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-                else basicObj.isShow = '0';미
+                else basicObj.isShow = '0';
                 if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
                 else basicObj.isSell = '0';
                 if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
@@ -479,9 +479,9 @@
                         kind:'0',
                         ctgKey:'0',
                         name:'0',
-                        price:price,
-                        sellPrice:sellPrice,
-                        point:point,
+                        price:removeComma(price),
+                        sellPrice:removeComma(sellPrice),
+                        point:removeComma(point),
                         extendPercent:extendPercent
                     };
                     optionArray.push(data);
@@ -959,14 +959,14 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="productSearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>
@@ -998,7 +998,7 @@
 
 <!-- 출판사 팝업창-->
 <div class="modal fade" id="cpModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 900px">
+    <div class="modal-dialog" role="document" style="max-width: 500px">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title">CP사 선택</h5>
@@ -1009,14 +1009,14 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
-                            <span> 이름 </span>
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
+                            <label style="margin-top:6px;">이름</label>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="CpSearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="CpSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>

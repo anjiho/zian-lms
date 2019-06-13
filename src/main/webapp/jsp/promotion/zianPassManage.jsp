@@ -309,7 +309,7 @@
                                 <input type="hidden" value="0" name="isSell">
                                 <input type="hidden" value="0" name="isFree">
                                 <input type="hidden" value="0" name="isNodc">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                         <span>프로모션</span>

@@ -588,7 +588,7 @@ public class ProductManageService extends PagingSupport {
      * @return
      */
     @Transactional(readOnly = true)
-    public int getCpListCoubt(String searchType, String searchText) {
+    public int getCpListCount(String searchType, String searchText) {
         return productManageMapper.selectTCpListCount(
                 Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
         );

@@ -45,9 +45,7 @@
                     function(data) {return data.GKey;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='goModifyPackage(" + data.GKey + ");'>" + data.goodsName + "</a>";},
                     function(data) {return split_minute_getDay(data.indate);},
-                    function(data) {return data.isShow == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                     function(data) {return data.isSell == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                    function(data) {return data.isFree == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                 ], {escapeHtml:false});
             });
             loadingOut(loading);
@@ -95,9 +93,7 @@
                         <th scope="col" style="width: 5%;">CODE</th>
                         <th scope="col" style="width: 45%;">상품명</th>
                         <th scope="col" style="width: 10%;">등록일</th>
-                        <th scope="col" style="width: 5%;">노출</th>
                         <th scope="col" style="width: 5%;">판매</th>
-                        <th scope="col" style="width: 5%;">무료</th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>

@@ -37,13 +37,16 @@
     </select>
 
     <insert id="insertTPromotion" parameterType="com.zianedu.lms.vo.TPromotionVO">
+        <selectKey resultType="Integer" keyProperty="pmKey" order="BEFORE">
+            SELECT T_PROMOTION_SEQ.nextval FROM DUAL
+        </selectKey>
         INSERT INTO T_PROMOTION
         (
             PM_KEY, G_KEY, PM_TYPE, EXAM_YEAR, LIMIT_DAY, DEVICE_LIMIT_COUNT, AFFILIATION_CTG_KEY, CLASS_GROUP_CTG_KEY
         )
         VALUES
         (
-            T_PROMOTION_SEQ.nextval, #{gKey}, #{pmType}, #{examYear}, #{limitDay}, #{deviceLimitCount}, #{affiliationCtgKey}, #{classGroupCtgKey}
+            #{pmKey}, #{gKey}, #{pmType}, #{examYear}, #{limitDay}, #{deviceLimitCount}, #{affiliationCtgKey}, #{classGroupCtgKey}
         )
     </insert>
 

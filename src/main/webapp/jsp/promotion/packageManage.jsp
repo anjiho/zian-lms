@@ -8,7 +8,7 @@
         menuActive('menu-2', 2);
         /*카테고리*/
         getNewCategoryList("sel_category","214",'1183');
-        getCategoryNoTag2('categoryTable','1183', '2');
+        getCategoryNoTag2('categoryTable','1183', '3');
         /*카테고리*/
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
         getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
@@ -123,13 +123,13 @@
         /* 카테고리 추가시 예외처리 */
         for(var i=0; i < $("#categoryList").find("tr").length; i++){
             var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
-            var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
-            var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
+            //var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
+            //var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
             if(cateName1 == "" || cateName1 == undefined){
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
                 return false;
-            }else if(cateName2 == "" || cateName2 == undefined){
+            }/*else if(cateName2 == "" || cateName2 == undefined){
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
                 return false;
@@ -137,7 +137,7 @@
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
                 return false;
-            }
+            }*/
         }
         var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
 
@@ -168,7 +168,6 @@
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
@@ -241,7 +240,7 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
-        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
+        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         onlineListHtml     += "</td>";
 
         $('#promotionOnlineTable > tbody:first').append(onlineListHtml);//선택 모의고사 리스트 뿌리기
@@ -321,10 +320,10 @@
                 /* 3. 카테고리 저장 */
                 var categoryArr = new Array();
                 $('#categoryTable tbody tr').each(function(index){
-                    var ctgKey = $(this).find("td select").eq(4).val();
+                    var ctgKey = get_array_values_by_name("input", "inputCtgKey[]");
                     var data = {
                         ctgGKey:0,
-                        ctgKey:ctgKey,
+                        ctgKey:Number(ctgKey),
                         gKey:0,
                         pos:0
                     };
@@ -347,12 +346,13 @@
                     };
                     onlineLecInfo.push(data);
                 });
+                console.log(basicObj);
+                console.log(optionArray);
+                console.log(categoryArr);
+                console.log(promotionInfo);
+                console.log(onlineLecInfo);
 
-                if(confirm("저장하시겠습니까?")) {
-                    promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
-                        isReloadPage(true);
-                    });
-                }
+
             }
         });
     }
@@ -594,6 +594,9 @@
                                     </thead>
                                     <tbody id="categoryList">
                                     <tr>
+                                        <td>
+                                            <input type='hidden' name='inputCtgKey[]' value=''>
+                                        </td>
                                         <td><!--옵션명selbox-->
                                             <select class='form-control'  id='sel_category' disabled>
                                             </select>

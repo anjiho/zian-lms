@@ -91,9 +91,9 @@ public interface ProductManageMapper {
                                                                   @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     List<TCpVO> selectTCpList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                              @Param("searchText") String searchText, @Param("searchType") String searchType);
+                              @Param("searchType") String searchType, @Param("searchText") String searchText);
 
-    int selectTCpListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectTCpListCount(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
 
     int selectVideoProductListCountByFreeLectureInject(@Param("searchText") String searchText, @Param("searchType") String searchType);

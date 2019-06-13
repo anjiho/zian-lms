@@ -126,13 +126,13 @@
         /* 카테고리 추가시 예외처리 */
         for(var i=0; i < $("#categoryList").find("tr").length; i++){
             var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
-            var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
-            var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
+            //var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
+            //var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
             if(cateName1 == "" || cateName1 == undefined){
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
                 return false;
-            }else if(cateName2 == "" || cateName2 == undefined){
+            }/*else if(cateName2 == "" || cateName2 == undefined){
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
                 return false;
@@ -140,7 +140,7 @@
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
                 return false;
-            }
+            }*/
         }
 
         var sel_category  = get_array_last_value_by_name("select", "sel_category");

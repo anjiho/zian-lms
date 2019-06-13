@@ -156,7 +156,7 @@
                                 <input type="hidden" value="0" name="goodsId">
                                 <input type="hidden" value="" name="goodsTypeName">
                                 <input type="hidden" value="" name="summary">
-                                <div class="col-md-12">
+                                <div class="col-md-6">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품타입</label>
                                         <span>프로모션</span>

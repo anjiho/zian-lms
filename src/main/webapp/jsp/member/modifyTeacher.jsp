@@ -89,7 +89,7 @@
             /*카테고리 정보 가져오기*/
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
             var teacherCategoryInfoList = info.teacherCategoryInfoList;
-
+            console.log(teacherCategoryInfoList);
             if(teacherCategoryInfoList.length == 0){
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},

@@ -236,19 +236,18 @@
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
-                            <div class="col-sm-5 pl-0 pr-0" >
+                <div class="col">
+                    <div class="form-group row">
+                        <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
+                        <div class="col-sm-4 input-group pl-0 pr-0">
+                            <div class="col-sm-6">
                                 <span id="orderSearch"></span>
-                                <div style="width:50%">
-                                    <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                                </div>
                             </div>
+                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
                     </div>
                 </div>
+
                 <div class="row">
                     <div class="col">
                         <div style=" float: right;">
@@ -260,21 +259,27 @@
 
             </div>
         </div>
-        <div class="col">
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
-                <div class="col-sm-8 pl-0 pr-0">
-                    <span id="orderStatusChangeSel"></span>
-                    <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
+
+        <div class="row">
+            <div class="col">
+                <div class="form-group row">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
+                    <div class="col-sm-8">
+                        <span id="orderStatusChangeSel"></span>
+                        <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
+                    </div>
                 </div>
             </div>
-            <div class="form-group row">
-                <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
-                <div class="col-sm-8 pl-0 pr-0">
-                    <span id="listNumberSel"></span>
+            <div class="col">
+                <div class="form-group row" style="">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
+                    <div class="col-sm-8">
+                        <span id="listNumberSel"></span>
+                    </div>
                 </div>
             </div>
         </div>
+
     </div>
 </div>
 <!-- //formgroup -->
