@@ -913,6 +913,13 @@
         AND RES_TYPE = 200
 	</delete>
 
+    <delete id="deletePopupCategoryInfo" parameterType="Integer">
+		DELETE FROM T_LINK_KEY
+		WHERE LINK_KEY = #{linkKey}
+		AND REQ_TYPE = 100
+        AND RES_TYPE = 300
+	</delete>
+
 	<delete id="deleteTLinkKeyByResKey" parameterType="Integer">
 		DELETE FROM T_LINK_KEY WHERE RES_KEY = #{resKey}
 	</delete>
