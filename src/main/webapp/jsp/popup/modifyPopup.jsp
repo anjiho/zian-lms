@@ -127,7 +127,7 @@
 
     function deleteCategory(linkKey){
         if(confirm("삭제하시겠습니까?")) {
-            productManageService.deleteVideoOtherInfo(linkKey, 'TLINK',function () {isReloadPage();});
+            productManageService.deleteVideoOtherInfo(linkKey, 'POPUP',function () {isReloadPage();});
         }
     }
 
