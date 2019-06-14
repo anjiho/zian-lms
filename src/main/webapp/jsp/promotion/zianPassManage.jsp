@@ -122,8 +122,7 @@
         var extendPercent = td.find("input").eq(3).val();
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
-        td.find("span").html(sum);
-        //innerHTML(calcPrice, sum);
+        td.find("input").eq(4).val(sum);
     }
 
     //포함된 온라인강좌 팝업창
@@ -195,7 +194,7 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
-        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
+        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         onlineListHtml     += "</td>";
         $('#promotionOnlineTable > tbody:first').append(onlineListHtml);
         $('#promotionOnlineTable tr').each(function(){
@@ -378,12 +377,11 @@
                                         <td style="padding: 0.3rem;vertical-align: middle">
                                             <input type="text" class="form-control" name="point[]" id='point_0'>
                                         </td>
-                                        <td style="padding:0.3rem;vertical-align:middle;width:20%">
-                                            <input type="text" class="form-control text-right" name="expendPercent[]"  onkeypress='saleInputPrice($(this));' style="width:93%;display:inline-block;">
-                                            <!--<span style="display: inline-block;">%</span>-->
+                                        <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
+                                            <input type="number" class="form-control text-right" id="extendPercent" name="extendPercent" style="display: inline-block;width:60%;text-align: right"  onchange="saleInputPrice($(this))"> %
                                         </td>
-                                        <td style="padding: 0.3rem;vertical-align: middle;width:15%">
-                                            <span id="sum_0"></span>
+                                        <td style="padding: 0.3rem;"><!--재수강2-->
+                                            <input type="number" class="form-control"  style="margin-top: 6px;" id="resultPrice" name="resultPrice" readonly>
                                         </td>
                                         <td style="vertical-align: middle">
                                             <button type="button" class="btn btn-outline-danger btn-sm delBtn"  onclick="deleteTableRow('optionTable', 'delBtn');">삭제</button>
@@ -448,6 +446,9 @@
                             <div id="section6">
                                 <table class="table text-center table-hover" id="promotionOnlineTable">
                                     <thead>
+                                    <tr>
+                                        <th scope="col" colspan="5" style="text-align:center;width:30%">포함온라인강좌 목록</th>
+                                    </tr>
                                     </thead>
                                     <tbody id="promotionOnlineList"></tbody>
                                 </table>
@@ -476,20 +477,20 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
                             <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:48%">상품명</th>

@@ -87,22 +87,36 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
-        } else {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (ctgKeys.length > 0) {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
             $trNew.find("td input").eq(0).html("");
-            $trNew.find("td").eq(1).html("지안에듀");
+            $trNew.find("td").eq(1).html(getNewCategoryList2("categoryTable","214",'1183'));
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
@@ -157,7 +171,6 @@
 
         function playDetailList() { //동영상정보
             productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
-                console.log(selList);
                 if (selList.productInfo) {/*---기본정보---*/
                     innerValue("name", selList.productInfo.name);//이름
                     innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일
@@ -200,10 +213,10 @@
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
                         function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
-                        function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
-                        function(data) {return "<span style='margin-top: 6px;'>%</span>"},
+                        function(data) {return "<input type=\"text\" class=\"form-control\" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
+                        function(data) {return "%"},
                         function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
-                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
                     ], {escapeHtml:false});
                     $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
                 }
@@ -358,30 +371,30 @@
                 /**
                  * 강의교재 항목 가져오기
                  */
-                var productOtherInfo = selList.productOtherInfo;
-                 if(productOtherInfo.legth > 0) {
-                    dwr.util.addRows("bookList", productOtherInfo[0], [
-                        function(data) {return data.goodsName;},
-                        function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
-                        function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
-                    ], {escapeHtml:false});
+                if(selList.productOtherInfo.length > 0){
+                    var productOtherInfo = selList.productOtherInfo;
+                        dwr.util.addRows("bookList", productOtherInfo[0], [
+                            function(data) {return data.goodsName;},
+                            function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
+                            function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
+                            function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                        ], {escapeHtml:false});
 
-                    for (var i=0; i<productOtherInfo[0].length; i++) {
-                        var cmpList = productOtherInfo[0][i];
-                        var valueBit = cmpList.valueBit;
-                        var resKey = cmpList.resKey;
-                        var checkboxId = "isBookMain_" + resKey;
+                        for (var i=0; i<productOtherInfo[0].length; i++) {
+                            var cmpList = productOtherInfo[0][i];
+                            var valueBit = cmpList.valueBit;
+                            var resKey = cmpList.resKey;
+                            var checkboxId = "isBookMain_" + resKey;
 
-                        var isCheck = true;
-                        if (valueBit == "0") isCheck = false;
-                        isCheckbox(checkboxId, isCheck);
+                            var isCheck = true;
+                            if (valueBit == "0") isCheck = false;
+                            isCheckbox(checkboxId, isCheck);
 
-                    }
-                    $('#bookList tr').each(function(){
-                        var tr = $(this);
-                        tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
-                    });
+                        }
+                        $('#bookList tr').each(function(){
+                            var tr = $(this);
+                            tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
+                        });
                 }
             });
     }
@@ -635,25 +648,15 @@
             dataArr.push(data)
         }
         if(confirm("옵션정보를 수정 하시겠습니까?")){
-            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {
-                isReloadPage(true);
-            });
+            productManageService.upsultTGoodsPriceOption(dataArr, gKey,function () {isReloadPage(true);});
         }
     }
 
     //카테고리정보 수정
     function updateCategoryInfo() {
         var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-
         if(confirm("카테고리를 수정 하시겠습니까?")){
-
-            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-            if (fistTrStyle == "display:none") {
-                productManageService.deleteTCategoryGoods(gKey, function(){
-                    isReloadPage(true);
-                });
-            } else {
+            if (ctgKeys.length > 0) {
                 var dataArr = new Array();
                 $.each(ctgKeys, function(index, key) {
                     var data = {
@@ -664,9 +667,9 @@
                     };
                     dataArr.push(data);
                 });
-                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
-                    isReloadPage(true);
-                });
+                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {isReloadPage(true);});
+            } else { //카테고리 없을 경우
+                productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
             }
         }
     }
@@ -706,7 +709,7 @@
                         calculateRate : calcRates[i],
                         subjectName: "",
                         teacherName: ""
-                    }
+                    };
                     dataArr.push(data);
                 }
                 productManageService.upsultTGoodTeacherLink(dataArr, gKey,function () {
@@ -975,7 +978,7 @@
             <section>
                 <div class="float-right mb-3">
                     <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateCategoryInfo();">수정</button>
-                    <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo('new');">추가</button>
+                    <button type="button" class="btn btn-info btn-sm" onclick="addCategoryInfo();">추가</button>
                 </div>
                 <div id="section3">
                     <table class="table" id="categoryTable">
@@ -997,6 +1000,7 @@
                         <tbody id="categoryList">
                         </tbody>
                     </table>
+
                 </div>
             </section>
             <!-- //3.카테고리 목록 Tab -->
@@ -1103,8 +1107,11 @@
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                     </div>
                     <div id="section6">
-                        <table class="table text-center table-hover" id="bookTable">
+                        <table class="table table-hover" id="bookTable">
                             <thead>
+                            <tr>
+                                <th scope="col" colspan="5" style="text-align:center;width:30%">강의교재목록</th>
+                            </tr>
                             </thead>
                             <tbody id="bookList"></tbody>
                         </table>
@@ -1118,7 +1125,7 @@
                         <button type="button" class="btn btn-outline-info btn-sm" onclick="changelectureListSave();">순서변경</button>
                         <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#lectureListPopup">추가</button>
                     </div>
-                    <table class="table text-center table-hover"  id="lectureCurriTabel">
+                    <table class="table table-hover"  id="lectureCurriTabel">
                         <thead>
                         <tr>
                             <th scope="col" colspan="1" style="width:40%">강의제목</th>

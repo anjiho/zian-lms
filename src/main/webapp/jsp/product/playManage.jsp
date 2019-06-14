@@ -18,8 +18,8 @@
     $( document ).ready(function() {
         getVideoOptionTypeList("kind_0","");
         /*카테고리*/
-        getNewCategoryList("sel_category","214",'1183');
-        getCategoryNoTag2('categoryTable','1183', '2');
+        getNewCategoryList2("categoryTable","214",'1183');
+        getCategoryNoTag2('categoryTable','1183', '3');
         /*카테고리*/
         getNewSelectboxListForCtgKey("l_classGroup", "4309", "");//급수
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
@@ -80,14 +80,14 @@
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
                     optionHtml += "<input type=\"text\" class=\"form-control\" >";
                 optionHtml += "</td>";
-                optionHtml += " <td style=\"padding: 0.3rem;\">";
-                     optionHtml += "<input type=\"number\" style=\"display: inline-block\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange='saleInputPrice(this.value"+","+optionCnt+")' >";
+                optionHtml += " <td style=\"text-align: center;vertical-align: middle\">";
+                     optionHtml += "<input type=\"number\"  style=\"display: inline-block;width:70%;text-align: right\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange='saleInputPrice(this.value"+","+optionCnt+")' >%";
                 optionHtml += "</td>";
-                optionHtml += "<td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"'  readonly>";
+                optionHtml += "<td style=\"padding: 0.3rem;vertical-align: middle;\">";
+                    optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"' readonly>";
                 optionHtml += "</td>";
-                optionHtml += " <td style=\"padding: 0.3rem;\">";
-                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\">삭제</button>";
+                optionHtml += " <td style=\"padding: 0.3rem;vertical-align: middle;\">";
+                    optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
                 optionHtml += "</a>";
                 optionHtml += "</td>";
         optionHtml += "</tr>";
@@ -140,48 +140,58 @@
         resultPirceCnt = "resultPrice_"+cnt;
         var sellPrice = getInputTextValue(selPriceCnt);
         totalprice = Math.round(sellPrice -((sellPrice * val) / 100));
-        innerValue(resultPirceCnt,totalprice);
+        innerValue(resultPirceCnt, totalprice);
     }
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        /* 카테고리 추가시 예외처리 */
+        /* 카테고리 추가시 예외처리
         for(var i=0; i < $("#categoryList").find("tr").length; i++){
             var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
-            //var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
-            //var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
             if(cateName1 == "" || cateName1 == undefined){
                 alert("카테고리 선택후 추가해 주세요.");
                 $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
                 return false;
-            }/*else if(cateName2 == "" || cateName2 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
-                return false;
-            }else if(cateName3 == "" || cateName3 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
-                return false;
-            }*/
-        }
-
-        var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#categoryTable tr').eq(0).removeAttr("style", null);
-        } else {
+            }
+        }*/
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (ctgKeys.length > 0) {
+            for(var i=0; i < $("#categoryList").find("tr").length; i++) {
+                var cateName1 = $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
+                if (cateName1 == "" || cateName1 == undefined) {
+                    alert("카테고리 선택후 추가해 주세요.");
+                    $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
+                    return false;
+                }
+            }
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            getCategoryNoTag2('categoryTable','1183', '2');
+            getCategoryNoTag2('categoryTable','1183', '3');
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        if(tdNum == '5') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
@@ -213,6 +223,7 @@
         var array = new Array();
         $('#optionTable tbody tr').each(function(index){
             var i =0;
+
             var optionName = $(this).find("td select").eq(0).val();
             var price = $(this).find("td input").eq(0).val();
             var sellPrice = $(this).find("td input").eq(1).val();
@@ -235,17 +246,19 @@
 
         /* 3. 카테고리 저장 */
         var categoryArr = new Array();
-        $('#categoryTable tbody tr').each(function(index){
-            var ctgKey = $(this).find("td select").eq(4).val();
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+        if(ctgKeys.length > 0){
+            $.each(ctgKeys, function(index, key) {
+                var data = {
+                    ctgGKey:0,
+                    ctgKey:key,
+                    gKey:0,
+                    pos:0
+                };
+                categoryArr.push(data);
+            });
+        }
 
-            var data = {
-                ctgGKey:0,
-                ctgKey:ctgKey,
-                gKey:0,
-                pos:0
-            };
-            categoryArr.push(data);
-        });
         /*  4.강좌정보 obj  */
         var lectureObj = getJsonObjectFromDiv("section4");
         /*  //강좌정보 obj  */
@@ -271,7 +284,7 @@
         });
         /*  //강사정보 obj  */
 
-        /*  6.선택 obj  */
+        /*  6.교재선택 obj  */
         var array3 = new Array();
         $('#bookTable tbody tr').each(function(index){
             var bookKey = $(this).find("td input").eq(0).val();
@@ -298,6 +311,7 @@
         data.append("videoLectureInfo",JSON.stringify(lectureObj));
         data.append("videoTeacherInfo",JSON.stringify(array2));
         data.append("videoOtherInfo",JSON.stringify(array3));
+
         if(confirm("저장하시겠습니까?")) {
             $.ajax({
                 url: "/file/productUpload",
@@ -309,7 +323,7 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                        goPage('productManage', 'playList');
+                       goPage('productManage', 'playList');
                     }
                 }
             });
@@ -366,11 +380,11 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                    <input type="text" class="col-sm-5 form-control" id="name" name="name">
+                                    <input type="text" class="col-sm-4 form-control" id="name" name="name">
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                    <div class="col-sm-5 input-group pl-0 pr-0" id="dateRangePicker">
+                                    <div class="col-sm-3 input-group pl-0 pr-0" id="dateRangePicker">
                                         <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
                                         <div class="input-group-append">
                                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -379,7 +393,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매시작일</label>
-                                    <div class="col-sm-5 input-group pl-0 pr-0">
+                                    <div class="col-sm-3 input-group pl-0 pr-0">
                                         <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
                                         <div class="input-group-append">
                                             <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -503,7 +517,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                    <td style="padding: 0.3rem;text-align: center;"><!--옵션명selbox-->
+                                    <td style="padding: 0.3rem;text-align: center;">
                                         <select class="select2 form-control custom-select" style="height:36px;" id="kind_0" name="kind_0">
                                             <option>선택</option>
                                         </select>
@@ -517,8 +531,8 @@
                                     <td style="padding: 0.3rem;"><!--포인트-->
                                         <input type="text" class="form-control" id="point" name="point">
                                     </td>
-                                    <td style="padding: 0.3rem;"><!--재수강1-->
-                                        <input type="number" class="form-control" id="extendPercent" name="extendPercent" onchange="saleInputPrice(this.value,0)">
+                                    <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
+                                        <input type="number" class="form-control text-right" id="extendPercent" name="extendPercent" style="display: inline-block;width:60%;text-align: right"  onchange="saleInputPrice(this.value,0)"> %
                                     </td>
                                     <td style="padding: 0.3rem;"><!--재수강2-->
                                         <input type="number" class="form-control" id="resultPrice_0" readonly>
@@ -558,7 +572,10 @@
                                     </thead>
                                     <tbody id="categoryList">
                                     <tr>
-                                        <td><!--옵션명selbox-->
+                                        <td style="display: none">
+                                            <input type='hidden' name='inputCtgKey[]' value=''>
+                                        </td>
+                                        <td>
                                             <select class='form-control'  id='sel_category' name='sel_category' onchange="getCategoryNoTag2('categoryTable','1183', '2');" disabled>
                                             </select>
                                         </td>
@@ -714,11 +731,14 @@
                     <h3>강의 교재선택</h3>
                     <section>
                         <div class="float-right mb-3">
-                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
+                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">교재 추가</button>
                         </div>
                         <div id="section6">
                             <table class="table text-center table-hover" id="bookTable">
                                 <thead>
+                                <tr>
+                                    <th scope="col" colspan="5" style="text-align:center;width:30%">강의교재목록</th>
+                                </tr>
                                 </thead>
                                 <tbody id="bookList"></tbody>
                             </table>
@@ -739,7 +759,7 @@
     <div class="modal-dialog" role="document" style="max-width: 900px">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title">상품선택</h5>
+                <h5 class="modal-title">강의교재 선택</h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="lectureBookClose">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -760,14 +780,14 @@
                     </div>
                     <div class="table-responsive">
                         <input type="hidden" id="sPage3" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:45%">상품명</th>
-                                <th style="width:15%">노출</th>
-                                <th style="width:15%">판매</th>
-                                <th style="width:15%">무료</th>
-                                <th style="width:15%"></th>
+                                <th style="width:10%">노출</th>
+                                <th style="width:10%">판매</th>
+                                <th style="width:10%">무료</th>
+                                <th style="width:10%"></th>
                             </tr>
                             </thead>
                             <tbody id="dataList3"></tbody>

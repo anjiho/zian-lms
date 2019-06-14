@@ -145,7 +145,26 @@ function getNewCategoryList(tag_id, val, val2) {
         html += "</select>";
         innerHTML(tag_id, html);
     });
+
 }
+
+//카테고리 - depth1 지안에듀 고정
+function getNewCategoryList2(tableId, val, val2) {
+    var html = "<select id='sel_category' name='selCategory[]' class='form-control' disabled>";
+    selectboxService.getCategoryList(val, function (list) {
+        for (var i=0; i<list.length; i++) {
+            if (list[i].ctgKey == val2) {
+                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+            } else {
+                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+            }
+        }
+        html += "</select>";
+        $("#"+ tableId).find("tbody").find("tr:last").find("td").eq(1).html(html);
+    });
+}
+
+
 
 //급수,과목,유형
 function getSelectboxListForCtgKey(tag_id, val) {
@@ -831,6 +850,7 @@ function getTimeHourSelectbox(tagId, val) {
     var html = "<select id='timeHour' name='timeHour' class='form-control'>";
     html += "<option value=''>선택</option>";
     for (var i=0; i<25; i++) {
+        if (i == 0) i = "00";
         if (i == val) {
             html += "<option value="+i+" selected>"+ leadingZeros(i,2) +"</option>";
         } else {
@@ -846,6 +866,7 @@ function getTimeMinuteSelectbox(tagId, val) {
     var html = "<select id='timeMinute' name='timeMinute' class='form-control'>";
     html += "<option value=''>선택</option>";
     for (var i=0; i<60; i++) {
+        if (i == 0) i = "00";
         if (i == val) {
             html += "<option value="+i+" selected>"+ leadingZeros(i,2) +"</option>";
         } else {

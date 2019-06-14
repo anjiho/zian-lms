@@ -438,8 +438,11 @@
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#promotionOnlineModal" onclick="fn_search('new');">추가</button>
                             </div>
                             <div id="section6">
-                                <table class="table text-center table-hover" id="promotionOnlineTable">
+                                <table class="table table-hover" id="promotionOnlineTable">
                                     <thead>
+                                    <tr>
+                                        <th scope="col" colspan="5" style="text-align:center;width:30%">포함온라인강좌 목록</th>
+                                    </tr>
                                     </thead>
                                     <tbody id="promotionOnlineList"></tbody>
                                 </table>
@@ -468,20 +471,20 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
                             <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:48%">상품명</th>

@@ -52,8 +52,7 @@
         var extendPercent = td.find("input").eq(3).val();
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
-        td.find("span").html(sum);
-        //innerHTML(calcPrice, sum);
+        td.find("input").eq(4).val(sum);
     }
 
     function promotionPacakgeSave() {
@@ -225,12 +224,11 @@
                                         <td style="padding: 0.3rem;vertical-align: middle">
                                             <input type="text" class="form-control" name="point[]" id='point_0'>
                                         </td>
-                                        <td style="padding:0.3rem;vertical-align:middle;width:20%">
-                                            <input type="text" class="form-control text-right" name="expendPercent[]"  onkeypress='saleInputPrice($(this));' style="width:93%;display:inline-block;">
-                                            <!--<span style="display: inline-block;">%</span>-->
+                                        <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
+                                            <input type="number" class="form-control text-right" id="extendPercent" name="extendPercent" style="display: inline-block;width:60%;text-align: right"  onchange="saleInputPrice($(this))"> %
                                         </td>
-                                        <td style="padding: 0.3rem;vertical-align: middle;width:15%">
-                                            <span id="sum_0"></span>
+                                        <td style="padding: 0.3rem;"><!--재수강2-->
+                                            <input type="number" class="form-control"  style="margin-top: 6px;" id="resultPrice" name="resultPrice" readonly>
                                         </td>
                                         <td style="vertical-align: middle">
                                             <button type="button" class="btn btn-outline-danger btn-sm delBtn"  onclick="deleteTableRow('optionTable', 'delBtn');">삭제</button>

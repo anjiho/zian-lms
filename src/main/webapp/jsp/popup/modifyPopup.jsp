@@ -75,6 +75,7 @@
             isCheckboxByNumber("isShow", result.isShow);//노출
             $("#contents").summernote("code", result.contents);
             split_HH_getTime(result.startDate, "timeHour", 0);
+
             split_MM_getTime(result.startDate, "timeMinute", 0);
             split_HH_getTime(result.endDate, "timeHour", 1);
             split_MM_getTime(result.endDate, "timeMinute", 1);

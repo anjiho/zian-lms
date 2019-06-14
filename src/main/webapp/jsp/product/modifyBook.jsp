@@ -513,12 +513,6 @@
                 if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
                 else bookObj.isSet = '0';
 
-
-                console.log(basicObj);
-                console.log(optionArray);
-                console.log(categoryArr);
-                console.log(bookObj);
-
                 if(confirm("수정 하시겠습니까?")) {
                     productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
                         isReloadPage(true);

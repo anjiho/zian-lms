@@ -119,37 +119,39 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-
-        /* 카테고리 추가시 예외처리 */
-        for(var i=0; i < $("#categoryList").find("tr").length; i++){
-            var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
-            //var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
-            //var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
-            if(cateName1 == "" || cateName1 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
-                return false;
-            }/*else if(cateName2 == "" || cateName2 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
-                return false;
-            }else if(cateName3 == "" || cateName3 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
-                return false;
-            }*/
-        }
-        var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#categoryTable tr').eq(0).removeAttr("style", null);
-        } else {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (ctgKeys.length > 0) {
+            for(var i=0; i < $("#categoryList").find("tr").length; i++) {
+                var cateName1 = $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
+                if (cateName1 == "" || cateName1 == undefined) {
+                    alert("카테고리 선택후 추가해 주세요.");
+                    $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
+                    return false;
+                }
+            }
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
             getCategoryNoTag2('categoryTable','1183', '3');
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
@@ -163,8 +165,7 @@
         var extendPercent = td.find("input").eq(3).val();
 
         var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
-        td.find("span").html(sum);
-        //innerHTML(calcPrice, sum);
+        td.find("input").eq(4).val(sum);
     }
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
@@ -319,16 +320,19 @@
 
                 /* 3. 카테고리 저장 */
                 var categoryArr = new Array();
-                $('#categoryTable tbody tr').each(function(index){
-                    var ctgKey = get_array_values_by_name("input", "inputCtgKey[]");
-                    var data = {
-                        ctgGKey:0,
-                        ctgKey:Number(ctgKey),
-                        gKey:0,
-                        pos:0
-                    };
-                    categoryArr.push(data);
-                });
+                var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+                if(ctgKeys.length > 0){
+                    $.each(ctgKeys, function(index, key) {
+                        var data = {
+                            ctgGKey:0,
+                            ctgKey:key,
+                            gKey:0,
+                            pos:0
+                        };
+                        categoryArr.push(data);
+                    });
+                }
+
 
                 /* 4. 프로모션정보 저장 */
                 var promotionInfo = getJsonObjectFromDiv("section4");
@@ -552,12 +556,11 @@
                                         <td style="padding: 0.3rem;vertical-align: middle">
                                             <input type="text" class="form-control" name="point[]" id='point_0'>
                                         </td>
-                                        <td style="padding:0.3rem;vertical-align:middle;width:20%">
-                                            <input type="text" class="form-control text-right" name="expendPercent[]"  onkeypress='saleInputPrice($(this));' style="width:93%;display:inline-block;">
-                                            <!--<span style="display: inline-block;">%</span>-->
+                                        <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
+                                            <input type="number" class="form-control text-right" id="extendPercent" name="extendPercent" style="display: inline-block;width:60%;text-align: right"  onchange="saleInputPrice($(this))"> %
                                         </td>
-                                        <td style="padding: 0.3rem;vertical-align: middle;width:15%">
-                                            <span id="sum_0"></span>
+                                        <td style="padding: 0.3rem;vertical-align: middle"><!--재수강2-->
+                                            <input type="number" class="form-control" id="resultPrice" name="resultPrice" readonly>
                                         </td>
                                         <td style="vertical-align: middle">
                                             <button type="button" class="btn btn-outline-danger btn-sm delBtn"  onclick="deleteTableRow('optionTable', 'delBtn');">삭제</button>
@@ -691,8 +694,11 @@
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#promotionOnlineModal" onclick="fn_search('new');">추가</button>
                             </div>
                             <div id="section6">
-                                <table class="table text-center table-hover" id="promotionOnlineTable">
+                                <table class="table table-hover" id="promotionOnlineTable">
                                     <thead>
+                                    <tr>
+                                        <th scope="col" colspan="5" style="text-align:center;width:30%">포함온라인강좌 목록</th>
+                                    </tr>
                                     </thead>
                                     <tbody id="promotionOnlineList"></tbody>
                                 </table>
@@ -721,20 +727,20 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
                             <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
                     <div class="table-responsive">
                         <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:48%">상품명</th>

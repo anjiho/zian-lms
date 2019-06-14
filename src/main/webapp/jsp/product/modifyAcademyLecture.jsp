@@ -125,7 +125,7 @@
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                 $('#categoryList tr').eq(0).attr("style", "display:none");
@@ -142,7 +142,7 @@
                 function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
                 function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
                 function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                 // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
             ], {escapeHtml:false});
 
@@ -266,7 +266,7 @@
     }
 
     //옵션 추가 버튼
-    function addProductOptionInfo() {
+    /*function addProductOptionInfo() {
         var fistTrStyle = $("#optionList tr").eq(0).attr("style");
 
         if (fistTrStyle == "display:none") {
@@ -286,36 +286,50 @@
             $trNew.find("td button").attr('disabled', false);
             $trNew.find("td").eq(7).attr('style', "display:''");
         }
-    }
+    }*/
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+        var inputCtgKey = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
 
-        if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
-        } else {
+        if (inputCtgKey.length > 0) {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td input").eq(0).html("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+        } else { //카테고리 없을 경우
+            alert(2);
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
     //교사 추가 버튼
     function addTeacherInfo() {
-        var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#teacherList tr').eq(0).removeAttr("style", null);
-        } else {
+        var teacherKeys = get_array_values_by_name("input", "teacherKeys[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (teacherKeys.length > 0) {
             var $tableBody = $("#teacherTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
@@ -327,6 +341,22 @@
 
             getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);
             selectTeacherSelectboxNoTag('teacherTable', 4);
+        }else{
+            var cellData = [
+                function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
+                function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
+                function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
+                function() {return nextIcon},
+                function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
+                function() {return "<input type='text' name='calcRate[]' class='form-control' >"},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+            ];
+            dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+            $('#teacherList tr').each(function(){
+                var tr = $(this);
+                tr.children().eq(0).attr("style", "display:none");
+                tr.children().eq(1).attr("style", "display:none");
+            });
         }
     }
 
@@ -397,7 +427,7 @@
                 sellPrice:removeComma(sellPrices[i]),
                 point:removeComma(points[i]),
                 extendPercent:expendPercents[i]
-            }
+            };
             dataArr.push(data)
         }
         if(confirm("옵션정보를 수정 하시겠습니까?")){
@@ -408,16 +438,8 @@
     //카테고리정보 수정
     function updateCategoryInfo() {
         var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-
         if(confirm("카테고리를 수정 하시겠습니까?")){
-
-            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-            if (fistTrStyle == "display:none") {
-                productManageService.deleteTCategoryGoods(gKey, function(){
-                    isReloadPage(true);
-                });
-            } else {
+            if (ctgKeys.length > 0) {
                 var dataArr = new Array();
                 $.each(ctgKeys, function(index, key) {
                     var data = {
@@ -428,9 +450,9 @@
                     };
                     dataArr.push(data);
                 });
-                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
-                    isReloadPage(true);
-                });
+                productManageService.upsultTCategoryGoods(dataArr, gKey,function () {isReloadPage(true);});
+            } else { //카테고리 없을 경우
+                productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
             }
         }
     }
@@ -501,7 +523,7 @@
                     resType: 5,
                     pos: 0,
                     valueBit: valueBit
-                }
+                };
                 dataArr.push(data);
             }
             if (dataArr.length == 0) {

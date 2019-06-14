@@ -74,7 +74,7 @@
                             </div>
                     </div>
                 </div>
-                <table class="table table-hover text-center">
+                <table class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col">과목명</th>

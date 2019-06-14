@@ -11,7 +11,7 @@
         getTimeMinuteSelectbox("acceptEndMinute",24);
         /*카테고리*/
         getNewCategoryList("sel_category","214",'1183');
-        getCategoryNoTag2('categoryTable','1183', '2');
+        getCategoryNoTag2('categoryTable','1183', '3');
         /*카테고리*/
     }
 
@@ -114,37 +114,39 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        /* 카테고리 추가시 예외처리 */
-        for(var i=0; i < $("#categoryList").find("tr").length; i++){
-            var cateName1 =  $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
-            //var cateName2 =  $("#categoryList").find("tr").eq(i).find("td select").eq(2).val();
-            //var cateName3 =  $("#categoryList").find("tr").eq(i).find("td select").eq(3).val();
-            if(cateName1 == "" || cateName1 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
-                return false;
-            }/*else if(cateName2 == "" || cateName2 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(2).focus();
-                return false;
-            }else if(cateName3 == "" || cateName3 == undefined){
-                alert("카테고리 선택후 추가해 주세요.");
-                $("#categoryList").find("tr").eq(i).find("td select").eq(3).focus();
-                return false;
-            }*/
-        }
-
-        var fistTrStyle = $("#categoryTable tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#categoryTable tr').eq(0).removeAttr("style", null);
-        } else {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (ctgKeys.length > 0) {
+            for(var i=0; i < $("#categoryList").find("tr").length; i++) {
+                var cateName1 = $("#categoryList").find("tr").eq(i).find("td select").eq(1).val();
+                if (cateName1 == "" || cateName1 == undefined) {
+                    alert("카테고리 선택후 추가해 주세요.");
+                    $("#categoryList").find("tr").eq(i).find("td select").eq(1).focus();
+                    return false;
+                }
+            }
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            getCategoryNoTag2('categoryTable','1183', '2');
+            getCategoryNoTag2('categoryTable','1183', '3');
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
@@ -322,6 +324,9 @@
                                     </thead>
                                     <tbody id="categoryList">
                                     <tr>
+                                        <td style="display: none">
+                                            <input type='hidden' name='inputCtgKey[]' value=''>
+                                        </td>
                                         <td><!--옵션명selbox-->
                                             <select class='form-control'  id='sel_category' disabled>
                                             </select>

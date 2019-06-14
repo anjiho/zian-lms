@@ -103,14 +103,13 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:-2px;">일정관리</h5>
                     <button type="button" style="vertical-align: middle;display:inline-block;float:right" class="btn btn-info btn-sm examadd" data-toggle="modal" data-target="#sModal">추가</button>
                 </div>
-                <table class="table table-hover text-center">
+                <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col" style="width: 5%;">CODE</th>
-                        <th scope="col" style="width: 65%;">일정이름</th>
+                        <th scope="col" style="width: 10%;">CODE</th>
+                        <th scope="col" style="width: 55%;">일정이름</th>
                         <th scope="col" style="width: 15%;">날짜</th>
                         <th scope="col" style="width: 15%;">관리</th>
                     </tr>

@@ -257,22 +257,36 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
-        } else {
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (ctgKeys.length > 0) {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
-            $trNew.find("td").eq(1).html("지안에듀");
-            getCategoryNoTag2('categoryTable','1183', '3');
+            $trNew.find("td input").eq(0).html("");
+            $trNew.find("td").eq(1).html(getNewCategoryList2("categoryTable","214",'1183'));
+            getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 

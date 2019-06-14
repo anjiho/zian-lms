@@ -83,11 +83,11 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-hover text-center">
+                <table class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col" style="width: 5%;">No.</th>
-                        <th scope="col" style="width: 5%;">과목</th>
+                        <th scope="col" style="width: 20%;">과목</th>
                         <th scope="col" style="width: 45%;">이름</th>
                         <th scope="col" style="width: 10%;">문제수</th>
                     </tr>

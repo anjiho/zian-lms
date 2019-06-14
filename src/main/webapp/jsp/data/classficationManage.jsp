@@ -103,12 +103,12 @@
 <div class="container-fluid">
     <div class="row">
         <!-- 분류관리 -->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
             <div class="card-body">
                 <div class="form-group row" style="margin-bottom: 0px;">
                     <label class="col-sm-3 text-center control-label col-form-label card-title">분류등록</label>
-                    <div class="col-sm-7">
+                    <div>
                         <input type="text" class="form-control" width="50px" id="classfication" onkeypress="if(event.keyCode==13) {saveClassfication(); return false;}">
                     </div>
                     <div>
@@ -116,11 +116,11 @@
                     </div>
                 </div>
             </div>
-            <table class="table table-hover text-center">
+            <table class="table table-hover">
                 <thead>
                 <tr>
-                    <th scope="col" style="width:50%;">분류명</th>
-                    <th scope="col" style="width:50%;">관리</th>
+                    <th scope="col" style="width:80%; text-align: center">분류명</th>
+                    <th scope="col" style="width:20%;">관리</th>
                 </tr>
                 </thead>
                 <tbody id="classficationList"></tbody>
@@ -130,12 +130,12 @@
         <!-- //분류관리 -->
 
         <!-- 과목관리 -->
-        <div class="col-md-6">
+        <div class="col-md-4">
             <div class="card">
                 <div class="card-body">
                     <div class="form-group row" style="margin-bottom: 0px;">
                         <label  class="col-sm-3 text-center control-label col-form-label card-title">과목등록</label>
-                        <div class="col-sm-7">
+                        <div>
                             <input type="text" class="form-control" width="50px" id="subject" onkeypress="if(event.keyCode==13) {saveSubject(); return false;}">
                         </div>
                         <div>
@@ -143,11 +143,11 @@
                         </div>
                     </div>
                 </div>
-                <table class="table table-hover text-center">
+                <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col" style="width:50%;">과목명</th>
-                        <th scope="col" style="width:50%;">관리</th>
+                        <th scope="col" style="width:80%;text-align: center">과목명</th>
+                        <th scope="col" style="width:20%;">관리</th>
                     </tr>
                     </thead>
                     <tbody id="subjectList"></tbody>
