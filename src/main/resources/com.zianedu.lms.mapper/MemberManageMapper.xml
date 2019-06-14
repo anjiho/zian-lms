@@ -46,7 +46,7 @@
     </select>
 
     <select id="selectTUserList" resultType="MemberListDTO">
-        SELECT
+        SELECT  /*+index_desc (T_USER PK_USER_KEY) */
                 USER_KEY, USER_ID, NAME, TELEPHONE_MOBILE, EMAIL, INDATE,
                 (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = T_USER.interest_ctg_key_0) as AFFILIATION_NAME,
                 GRADE,
@@ -84,7 +84,6 @@
         <if test="affiliationCtgKey > 0">
             AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey} OR INTEREST_CTG_KEY_1 = #{affiliationCtgKey}
         </if>
-        ORDER BY INDATE DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
 

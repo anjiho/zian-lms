@@ -342,7 +342,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">종료일</label>
                                 <div class="col-sm-3 input-group pl-0 pr-0" id="dateRangePicker">
-                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy.mm.dd" name="searchEndDate" id="searchEndDate">
+                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>

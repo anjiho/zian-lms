@@ -12,7 +12,7 @@
     function init() {
         menuActive('menu-0', 2);
         getSubDomainList("sel_subDomain", subDomainSel);//서브도메인 select 불러오기
-        changeBox2('216');
+        changeBox2(subDomainSel);
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -33,6 +33,7 @@
 
     function changeBox2(val) {
         $(".card").remove();
+
         dataManageService.getBannerList(val,function (selList) {
             if (selList.length > 0) {
                 for (var i = 0; i < selList.length; i++) {

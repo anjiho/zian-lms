@@ -59,13 +59,13 @@ public class UserService {
 
     //게시판 -->  공지사항 테이블로 이동하기
     @Transactional(propagation = Propagation.REQUIRED)
-    public void test() {
+    public void convertNoticeData() {
         String sql = "";
         List<TBbsVO> noticeList = testMapper.selectNotice();
 
         if (noticeList.size() > 0) {
-            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, BBS_MASTER_KEY, IS_HEAD, CREATE_DATE, CREATE_USER_KEY, NOTICE_FILE) " +
-                    "VALUES (T_NOTICE_SEQ.nextval, ?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD hh24:mi:ss'), ?, ?)";
+            sql = "INSERT INTO T_NOTICE (IDX, TITLE, CONTENTS, BBS_MASTER_KEY, IS_HEAD, CREATE_DATE, CREATE_USER_KEY, NOTICE_FILE, BBS_KEY) " +
+                    "VALUES (T_NOTICE_SEQ.nextval, ?, ?, ?, ?, TO_DATE(?, 'YYYY-MM-DD hh24:mi:ss'), ?, ?, ?)";
             jdbcTemplate.batchUpdate(
                     sql,
                     noticeList,
@@ -80,6 +80,7 @@ public class UserService {
                             ps.setString(5, tBbsVO.getIndate());
                             ps.setInt(6, tBbsVO.getWriteUserKey());
                             ps.setString(7, tBbsVO.getFilename());
+                            ps.setInt(8, tBbsVO.getBbsKey());
                         }
                     });
 

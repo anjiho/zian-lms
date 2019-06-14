@@ -3,7 +3,7 @@
 <mapper namespace="com.zianedu.lms.mapper.TestMapper">
 
 	<select id="selectNotice" resultType="com.zianedu.lms.vo.TBbsVO">
-		SELECT A.BBS_MASTER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as indate, A.TITLE, A.WRITE_USER_KEY, A.IS_NOTICE, A.CONTENTS, B.FILENAME
+		SELECT A.BBS_KEY, A.BBS_MASTER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as indate, A.TITLE, A.WRITE_USER_KEY, A.IS_NOTICE, A.CONTENTS, B.FILENAME
 		FROM T_BBS_DATA A
 		LEFT OUTER JOIN T_BBS_DATA_FILE B
 		ON A.bbs_key = B.bbs_key

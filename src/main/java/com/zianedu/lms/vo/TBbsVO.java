@@ -7,6 +7,8 @@ import java.util.Date;
 @Data
 public class TBbsVO {
 
+    private int bbsKey;
+
     private int bbsMasterKey;
 
     private String indate;

@@ -68,6 +68,9 @@
             defaultApply: 	true,
         });
 
+        var check = " <label class=\"customcheckbox m-b-20\">\n" +
+            "                            <input type=\"checkbox\" id=\"mainCheckbox\" id=\"allCheck\" onclick=\"allChk(this, 'rowChk');\">\n" +
+            "                            <span class=\"checkmark\"></span>";
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
                                                 payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -84,7 +87,8 @@
                    function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                   function(data) {return "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
+                   function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
+                   // function(data) {return  "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
             loadingOut(loading);
@@ -299,7 +303,13 @@
                         <th scope="col" width="8%">진행상태</th>
                         <th scope="col" width="8%">모바일</th>
                         <!--<th scope="col" width="8%">배송상태</th>-->
-                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
+                        <th  width="3%">
+                            <label class="customcheckbox m-b-20">
+                            <input type="checkbox" id="mainCheckbox" id="allCheck" onclick="allChk(this, 'rowChk');">
+                            <span class="checkmark"></span>
+                            </label>
+                        </th>
+<%--                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>--%>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>

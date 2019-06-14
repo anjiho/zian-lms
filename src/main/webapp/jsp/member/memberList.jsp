@@ -40,9 +40,10 @@
         var grade        = getSelectboxValue("memberGradeSel");
         var affiliationCtgKey = getSelectboxValue("sel_1");
 
-        if(searchType == null) searchType = "";
+        if(searchType == null || searchText == "") searchType = "";
         if(grade == null) grade = "";
         if(affiliationCtgKey == null) affiliationCtgKey = "";
+
 
         var loading = new Loading({
             direction: 'hor',

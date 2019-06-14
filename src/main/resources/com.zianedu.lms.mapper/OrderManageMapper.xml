@@ -3,7 +3,7 @@
 <mapper namespace="com.zianedu.lms.mapper.OrderManageMapper">
 
     <select id="selectOrderList" resultType="OrderResultDTO">
-        SELECT /*+ PARALLEL(4) */
+        SELECT /*+ PARALLEL(4) */ /*+index_desc (T_ORDER PK_T_ORDER) */
             A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
              A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
              A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,
@@ -466,7 +466,7 @@
             AND C.USER_ID = #{searchText}
         </if>
         <if test="searchType == 'name'">
-            AND C.USER_NAME LIKE '%'||#{searchText}||'%'
+            AND C.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'device'">
             AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
@@ -487,7 +487,7 @@
             AND C.USER_ID = #{searchText}
         </if>
         <if test="searchType == 'name'">
-            AND C.USER_NAME LIKE '%'||#{searchText}||'%'
+            AND C.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'device'">
             AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
@@ -496,7 +496,7 @@
 
     <select id="selectMobileDeviceList" resultType="DeviceListDTO">
         SELECT
-            B.NAME, B.USER_ID, B.USER_KEY, A.DEVICE_LIMIT_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            B.NAME as userName, B.USER_ID, B.USER_KEY, A.DEVICE_LIMIT_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
             A.DEVICE_ID, A.DEVICE_MODEL, A.OS_VERSION, A.APP_VERSION
         FROM T_DEVICE_LIMIT A
         INNER JOIN T_USER B
@@ -506,7 +506,7 @@
             AND B.USER_ID = #{searchText}
         </if>
         <if test="searchType == 'name'">
-            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+            AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'device'">
             AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
@@ -525,7 +525,7 @@
             AND B.USER_ID = #{searchText}
         </if>
         <if test="searchType == 'name'">
-            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+            AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'device'">
             AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
@@ -559,7 +559,7 @@
             AND B.USER_ID = #{searchText}
         </if>
         <if test="searchType == 'name'">
-            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+            AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'device'">
             AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
@@ -592,7 +592,7 @@
             AND B.USER_ID = #{searchText}
         </if>
         <if test="searchType == 'name'">
-            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+            AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'device'">
             AND A.DEVICE_ID LIKE '%'||#{searchText}||'%'
