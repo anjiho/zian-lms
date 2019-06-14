@@ -748,6 +748,8 @@ public class ProductManageService extends PagingSupport {
             productManageMapper.deleteTLinkKeyByLinkKey(key);
         } else if ("CURRI".equals(menuType)) {  // 강의목록
             productManageMapper.deleteTLecCurri(key);
+        } else if ("POPUP".equals(menuType)) {  //팝업 카테코리 정보 삭제
+            productManageMapper.deletePopupCategoryInfo(key);
         }
     }
 

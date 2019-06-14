@@ -142,6 +142,8 @@ public interface ProductManageMapper {
 
     void deleteTLinkKeyByLinkKey(@Param("linkKey") int linkKey);
 
+    void deletePopupCategoryInfo(@Param("linkKey") int linkKey);
+
     void deleteTLinkKeyByResKey(@Param("resKey") int resKey);
 
     void deleteTGoodsTeacherLink(@Param("gTeacherKey") int gTeacherKey);
