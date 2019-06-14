@@ -149,7 +149,7 @@
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            getCategoryNoTag2('categoryTable','1183', '2');
+            getCategoryNoTag2('categoryTable','1183', '3');
         }
     }
 
