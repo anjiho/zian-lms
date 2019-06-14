@@ -1074,7 +1074,7 @@ function orderPayTypeSelectbox(tagId, val) {
 
 /* 주문관리 - 결제방법  */
 function orderSearchSelectbox(tagId, val) {
-    var html = "<select id='searchType' class='col-sm-5 select2 form-control custom-select'>";
+    var html = "<select id='searchType' class='form-control'>";
     html +=     '<option value="" selected>선택</option>';
     if(val == 'orderUserId') html += "<option value='orderUserId'>주문자 ID</option>";
     else html += "<option value='orderUserId'>주문자 ID</option>";

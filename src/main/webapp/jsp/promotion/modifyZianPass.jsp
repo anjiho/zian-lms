@@ -45,13 +45,13 @@
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
                     function(data) {return getAllListOptionSelectbox(data.kind);},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ data.price +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ data.sellPrice +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ data.point +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
-                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
                     function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
@@ -75,7 +75,7 @@
                     function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                     function(data) {return "<input type='hidden' name='linkKey[]' value='" + data.linkKey + "'>";},
                     function(data) {return "<input type='hidden' name='reqKey[]' value='" + data.reqKey + "'>";},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
                 ], {escapeHtml:false});
                 $('#promotionOnlineList tr').each(function(){
                     var tr = $(this);
@@ -126,7 +126,7 @@
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
     }
@@ -200,7 +200,7 @@
         onlineListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
         onlineListHtml     += "</td>";
         onlineListHtml     += " <td>";
-        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
+        onlineListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('promotionOnlineTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         onlineListHtml     += "</td>";
         $('#promotionOnlineTable > tbody:first').append(onlineListHtml);
         $('#promotionOnlineTable tr').each(function(){
@@ -235,9 +235,9 @@
                 kind:optionName,
                 ctgKey:'0',
                 name:'',
-                price:price,
-                sellPrice:sellPrice,
-                point:point,
+                price:removeComma(price),
+                sellPrice:removeComma(sellPrice),
+                point:removeComma(point),
                 extendPercent:extendPercent
             };
             optionArray.push(data);
@@ -269,11 +269,7 @@
             };
             onlineLecInfo.push(data);
         });
-        console.log(basicObj);
-        console.log(optionArray);
-        console.log(categoryArr);
-        console.log(promotionInfo);
-        console.log(onlineLecInfo);
+
         if(confirm("수정 하시겠습니까?")) {
             promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
                 isReloadPage(true);

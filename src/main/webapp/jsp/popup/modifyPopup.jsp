@@ -57,7 +57,7 @@
         getTimeMinuteSelectbox("acceptEndMinute", "");
         /*카테고리*/
         getNewCategoryList("sel_category","214",'1183');
-        getCategoryNoTag2('categoryTable1','1183', '2');
+        getCategoryNoTag2('categoryTable1','1183', '3');
         /*카테고리*/
 
         /* 패키시상품 정보 가져오기 */
@@ -82,6 +82,7 @@
              * 카테고리 정보 가져오기
              */
             var resultList = info.resultList;
+
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
             if(resultList.length == 0){
                 var cellData = [
@@ -190,16 +191,15 @@
 
         var categoryArr = new Array();
         $('#categoryTable1 tbody tr').each(function (index) {
-            var ctgKey = $(this).find("td select").eq(1).val();
-                categoryArr.push(Number(ctgKey));
+            var ctgKeys = get_array_values_by_name("input", "inputCtgKey1[]");
+                categoryArr.push(Number(ctgKeys));
         });
 
-        if( !categoryArr.length ){
-            alert(1);
-        }
-
-        if(confirm("수정 하시겠습니까?")) {
-            popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {});
+       if(confirm("수정 하시겠습니까?")) {
+            var ctgkey = $("#categoryList1").find("tr").eq(0).find("td select").eq(1).val();
+            if(ctgkey != "") {
+                popupCouponManageService.updatePopupCategoryInfo(popupKey, categoryArr, function () {});
+            }
             popupCouponManageService.updatePopupInfo(basicObj, function () {isReloadPage(true);});
         }
     }
@@ -363,9 +363,11 @@
                                     </thead>
                                     <tbody id="categoryList1">
                                     <tr>
+                                        <td style="display: none">
+                                            <input type='hidden' name='inputCtgKey1[]' value=''>
+                                        </td>
                                         <td><!--옵션명selbox-->
-                                            <select class='form-control'  id='sel_category' disabled>
-                                            </select>
+                                            <select class='form-control'  id='sel_category' disabled></select>
                                         </td>
                                         <td>
                                             <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>

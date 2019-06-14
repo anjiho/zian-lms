@@ -97,7 +97,7 @@
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td input").eq(0).html("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
@@ -157,6 +157,7 @@
 
         function playDetailList() { //동영상정보
             productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
+                console.log(selList);
                 if (selList.productInfo) {/*---기본정보---*/
                     innerValue("name", selList.productInfo.name);//이름
                     innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일
@@ -212,25 +213,7 @@
                 var productCategoryInfo = selList.productCategoryInfo;
                 var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
 
-                if (productCategoryInfo.length == 0) {
-                    var cellData = [
-                        function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
-                        function() {return "지안에듀";},
-                        function() {return nextIcon},
-                        function() {return getCategoryNoTag('categoryTable','1183', '3');},
-                        function() {return nextIcon},
-                        function() {return defaultCategorySelectbox();},
-                        function() {return nextIcon},
-                        function() {return defaultCategorySelectbox();},
-                        function() {return nextIcon},
-                        function() {return defaultCategorySelectbox();},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                    ];
-                    dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                    $('#categoryList tr').eq(0).attr("style", "display:none");
-                }
-
-                dwr.util.addRows("categoryList", productCategoryInfo, [
+               dwr.util.addRows("categoryList", productCategoryInfo, [
                     function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
                     function()     {return "지안에듀";},
                     function()     {return nextIcon},
@@ -241,7 +224,7 @@
                     function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
                     function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
                     function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                     // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
                 ], {escapeHtml:false});
 
@@ -284,102 +267,99 @@
                     innerValue("lecKey", productLectureInfo.lecKey);//leckey
                 }
 
-        //동영상 - 강의목록 불러오기
-        productManageService.getLectureCurriList(selList.productLectureInfo.lecKey, function (selList) {
-            $( "#lectureCurriTabel tbody" ).sortable({
-                update: function( event, ui ) {
-                    $(this).children().each(function(index) {
-                        $(this).find('tr').last().html(index + 1);
+                //동영상 - 강의목록 불러오기
+                productManageService.getLectureCurriList(selList.productLectureInfo.lecKey, function (selList) {
+                    $( "#lectureCurriTabel tbody" ).sortable({
+                        update: function( event, ui ) {
+                            $(this).children().each(function(index) {
+                                $(this).find('tr').last().html(index + 1);
+                            });
+                        }
+                    });
+                    if (selList.length > 0) {
+                        for (var i = 0; i < selList.length; i++) {
+                            var cmpList = selList[i];
+                            if (cmpList != undefined) {
+                                var text = "'CURRI'";
+                                var deleteBtn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
+                                var modifyBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+')"  class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#lectureListPopup">수정</button>';
+                                var textYn = "";
+                                var textShow = "";
+                                if(cmpList.isShow == '1') textYn = '<i class="mdi mdi-check" style="color:green;"></i>';
+                                else textYn = '<i class="mdi mdi-close" style="color: red"></i>';
+
+                                if(cmpList.isSample =='1') textShow = '<i class="mdi mdi-check" style="color:green;"></i>';
+                                else textShow = '<i class="mdi mdi-close" style="color: red"></i>';
+
+                                var cellData = [
+                                    function (data) {return cmpList.name;},
+                                    function (data) {return cmpList.vodTime;},
+                                    function (data) {return textYn;},
+                                    function (data) {return textShow;},
+                                    function (data) {return modifyBtn+deleteBtn;}
+                                ];
+                                dwr.util.addRows(lectureCurriList, [0], cellData, {
+                                    rowCreator:function(options) {
+                                        var row = document.createElement("tr");
+                                        var index = options.rowIndex * 50;
+                                        row.id = cmpList.curriKey;
+                                        row.className = "ui-state-default even ui-sortable-handle";
+                                        return row;
+                                    },
+                                    escapeHtml:false});
+                            }
+                        }
+                    }
+                });
+
+                /**
+                 * 강사 목록 가져오기
+                 */
+                var productTeacherInfo = selList.productTeacherInfo;
+                var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+
+                if (productTeacherInfo.length == 0) {
+                    var cellData = [
+                        function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
+                        function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
+                        function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
+                        function() {return nextIcon},
+                        function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
+                        function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' style=\"display: inline-block;width:60%\">%"},
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    ];
+                    dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                    $('#teacherList tr').eq(0).attr("style", "display:none");
+                    $('#teacherList tr').each(function(){
+                        var tr = $(this);
+                        tr.children().eq(0).attr("style", "display:none");
+                        tr.children().eq(1).attr("style", "display:none");
+                    });
+                } else {
+                    for (var i = 0; i < productTeacherInfo.length; i++) {
+                        var cmpList = productTeacherInfo[i];
+                        var cellData = [
+                            function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
+                            function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
+                            function() {return cmpList.subjectName},
+                            function() {return nextIcon},
+                            function() {return cmpList.teacherName},
+                            function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' value='"+ cmpList.calculateRate +"' style=\"display: inline-block;width:60%\">%"},
+                            function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                        ];
+                        dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                    }
+                    $('#teacherList tr').each(function(){
+                        var tr = $(this);
+                        tr.children().eq(0).attr("style", "display:none");
+                        tr.children().eq(1).attr("style", "display:none");
                     });
                 }
-            });
-            if (selList.length > 0) {
-                for (var i = 0; i < selList.length; i++) {
-                    var cmpList = selList[i];
-                    if (cmpList != undefined) {
-                        var text = "'CURRI'";
-                        var deleteBtn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
-                        var modifyBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+')"  class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#lectureListPopup">수정</button>';
-                        var textYn = "";
-                        var textShow = "";
-                        if(cmpList.isShow == '1') textYn = '<i class="mdi mdi-check" style="color:green;"></i>';
-                        else textYn = '<i class="mdi mdi-close" style="color: red"></i>';
-
-                        if(cmpList.isSample =='1') textShow = '<i class="mdi mdi-check" style="color:green;"></i>';
-                        else textShow = '<i class="mdi mdi-close" style="color: red"></i>';
-
-                        var cellData = [
-                            function (data) {return cmpList.name;},
-                            function (data) {return cmpList.vodTime;},
-                            function (data) {return textYn;},
-                            function (data) {return textShow;},
-                            function (data) {return modifyBtn+deleteBtn;}
-                        ];
-                        dwr.util.addRows(lectureCurriList, [0], cellData, {
-                            rowCreator:function(options) {
-                                var row = document.createElement("tr");
-                                var index = options.rowIndex * 50;
-                                row.id = cmpList.curriKey;
-                                row.className = "ui-state-default even ui-sortable-handle";
-                                return row;
-                            },
-                            escapeHtml:false});
-                    }
-                }
-            }
-        });
-
-        /**
-         * 강사 목록 가져오기
-         */
-        var productTeacherInfo = selList.productTeacherInfo;
-        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-
-        if (productTeacherInfo.length == 0) {
-            var cellData = [
-                function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
-                function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
-                function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
-                function() {return nextIcon},
-                function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
-                function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' style=\"display: inline-block;width:60%\">%"},
-                function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-            ];
-            dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
-            $('#teacherList tr').eq(0).attr("style", "display:none");
-            $('#teacherList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(1).attr("style", "display:none");
-            });
-        } else {
-            for (var i = 0; i < productTeacherInfo.length; i++) {
-                var cmpList = productTeacherInfo[i];
-                var cellData = [
-                    function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
-                    function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
-                    function() {return cmpList.subjectName},
-                    function() {return nextIcon},
-                    function() {return cmpList.teacherName},
-                    function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' value='"+ cmpList.calculateRate +"' style=\"display: inline-block;width:60%\">%"},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                ];
-                dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
-            }
-            $('#teacherList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(1).attr("style", "display:none");
-            });
-        }
                 /**
                  * 강의교재 항목 가져오기
                  */
                 var productOtherInfo = selList.productOtherInfo;
-
-                if (productOptionInfo.length == 0) {
-
-                } else {
+                 if(productOtherInfo.legth > 0) {
                     dwr.util.addRows("bookList", productOtherInfo[0], [
                         function(data) {return data.goodsName;},
                         function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
@@ -403,8 +383,7 @@
                         tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
                     });
                 }
-        });
-
+            });
     }
 
     //강의목록 순서변경저장
@@ -467,7 +446,7 @@
         var sellPrice = td.find("input").eq(0).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").eq(1).html(sum);
         //innerHTML(calcPrice, sum);
     }
@@ -638,17 +617,21 @@
 
         var dataArr = new Array();
         for (var i=0; i<optionNames.length; i++) {
+            if(optionNames[i] == ""){
+                alert("옵션명을 선택해 주세요.");
+                return false;
+            }
             var data = {
                 priceKey:'0',
                 gKey:'0',
                 kind:optionNames[i],
                 ctgKey:'0',
                 name:'0',
-                price:optionPrices[i],
-                sellPrice:sellPrices[i],
-                point:points[i],
+                price:removeComma(optionPrices[i]),
+                sellPrice:removeComma(sellPrices[i]),
+                point:removeComma(points[i]),
                 extendPercent:expendPercents[i]
-            }
+            };
             dataArr.push(data)
         }
         if(confirm("옵션정보를 수정 하시겠습니까?")){
@@ -1171,17 +1154,18 @@
     <form>
         <!-- modal body -->
         <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
+            <div style="margin-bottom: 45px;">
+                <div style=" float: left;">
                     <span id="l_productSearch"></span>
                 </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="productSearchType">
+                <div style=" float: left; width: 33%; margin-left: 5px">
+                    <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                 </div>
-                <div style=" float: left; width: 33%">
+                <div style=" float: left; width: 33%; margin-left: 5px;">
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                 </div>
             </div>
+
             <div class="table-responsive">
                 <input type="hidden" id="sPage3" >
                 <table id="zero_config" class="table table-hover text-center">

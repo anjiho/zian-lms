@@ -27,6 +27,15 @@
     function mockSubjectBanksave() {
         var subjectName = $("#name").val();
         var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
+        var name = $("#name").val();
+        if(name == ""){
+            alert("과목이름을 입력해 주세요.");
+            return false;
+        }
+        if(subjectCtgKey == ""){
+            alert("과목을 선택해 주세요.");
+            return false;
+        }
 
         //상단내용 저장
         if(confirm('저장 하시겠습니까?')){

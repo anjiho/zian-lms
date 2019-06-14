@@ -24,6 +24,7 @@
         /* 지안패스 정보 가져오기 */
         promotionManageService.getPackageDetailInfo(gKey, function (info) {
             var productInfo = info.productInfo;
+            console.log(productInfo);
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
             innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
@@ -32,6 +33,7 @@
              * 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
+            console.log(productOptionInfo);
             if (productOptionInfo.length == 0) {
                 var cellData = [
                     function () {
@@ -133,7 +135,7 @@
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
 
-        var sum = Math.round(sellPrice -((sellPrice * extendPercent) / 100));
+        var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
     }
@@ -160,15 +162,16 @@
             var sellPrice = $(this).find("td input").eq(1).val();
             var point = $(this).find("td input").eq(2).val();
             var extendPercent = $(this).find("td input").eq(3).val();
+
             var data = {
                 priceKey:'0',
                 gKey:gKey,
                 kind:optionName,
                 ctgKey:'0',
                 name:'',
-                price:price,
-                sellPrice:sellPrice,
-                point:point,
+                price:removeComma(price),
+                sellPrice:removeComma(sellPrice),
+                point:removeComma(point),
                 extendPercent:extendPercent
             };
             optionArray.push(data);
