@@ -3,13 +3,19 @@
 <mapper namespace="com.zianedu.lms.mapper.UserMapper">
 
 	<select id="getUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
-		SELECT * FROM T_USER
-		WHERE USER_ID = #{userId}
-		AND USER_PWD = #{userPass}
+		SELECT A.*, B.TEACHER_KEY
+		FROM T_USER A
+		LEFT OUTER JOIN  T_TEACHER B
+		ON A.USER_KEY = B.USER_KEY
+		WHERE A.USER_ID = #{userId}
+		AND A.USER_PWD = #{userPass}
 	</select>
 
 	<select id="getUserInfoByUserKey" resultType="com.zianedu.lms.vo.TUserVO">
-		SELECT * FROM T_USER
+		SELECT A.*, B.TEACHER_KEY
+		FROM T_USER A
+		INNER JOIN T_TEACHER B
+		ON A.USER_KEY = B.USER_KEY
 		WHERE USER_KEY = #{userKey}
 	</select>
 

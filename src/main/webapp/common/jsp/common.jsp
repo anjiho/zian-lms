@@ -5,7 +5,9 @@
     TUserVO tUserVO = (TUserVO)session.getAttribute("user_info");
     int authority = tUserVO.getAuthority();
     String name = tUserVO.getName();
+    int teacherKey = tUserVO.getTeacherKey();
     int httpStatusCode = response.getStatus();
+
 %>
 <!DOCTYPE html>
 <html lang="ko">

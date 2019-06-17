@@ -19,10 +19,12 @@ public class CreateSESSION {
 		int userKey = Integer.parseInt(request.getParameter("userKey"));
 		String userName = new String(request.getParameter("userName").getBytes("ISO-8859-1"), "UTF-8");
 		String authority = request.getParameter("authority");
+		String teacherKey = request.getParameter("teacherKey");
 
+		logger.info(">>>>>>>>>>>>>>" + teacherKey);
 		logger.info(">>>>>>>>>>>>>>" + authority);
 
-		TUserVO tUserVO = new TUserVO(userKey, userName, Integer.parseInt(authority));
+		TUserVO tUserVO = new TUserVO(userKey, userName, Integer.parseInt(authority), Integer.parseInt(teacherKey));
 		UserSession.set(tUserVO);
 		request.setAttribute("userInfo", tUserVO);
 

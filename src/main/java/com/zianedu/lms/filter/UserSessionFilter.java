@@ -24,7 +24,7 @@ public class UserSessionFilter extends DelegatingFilterProxy {
             if (tUserVO != null) {
                 if (UserSession.get() == null) {
                     TUserVO vo = loginService.getUserInfoByUserKey(tUserVO.getUserKey());
-                    UserSession.set(new TUserVO(vo.getUserKey(), vo.getName(), vo.getAuthority()));
+                    UserSession.set(new TUserVO(vo.getUserKey(), vo.getName(), vo.getAuthority(), vo.getTeacherKey()));
                     logger.info("userSession >>>>>>>>>>>>>>> " + vo);
                 }
             }

@@ -91,12 +91,15 @@ public class TUserVO implements Serializable {
 
     private String userPwd;
 
+    private int teacherKey;
+
     public TUserVO() {}
 
-    public TUserVO(int userKey, String userName, int authority) {
+    public TUserVO(int userKey, String userName, int authority, int teacherKey) {
         this.userKey = userKey;
         this.name = userName;
         this.authority = authority;
+        this.teacherKey = teacherKey;
     }
 
     public TUserVO(TUserVO tUserVO) throws Exception {
@@ -121,7 +124,7 @@ public class TUserVO implements Serializable {
         this.recvEmail = tUserVO.getRecvEmail();
         this.grade = tUserVO.getGrade();
         this.interestCtgKey0 = tUserVO.getInterestCtgKey0();
-        this.adminAuthorityKey = 5;
+        this.adminAuthorityKey = tUserVO.getAuthority();
         this.isMobileReg = tUserVO.getIsMobileReg();
         this.gradePrice = tUserVO.getGradePrice();
         this.note = Util.isNullValue(tUserVO.getNote(), "");

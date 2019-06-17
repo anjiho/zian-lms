@@ -28,4 +28,8 @@ public class UserSession {
     public static int getUserKey() {
         return local.get().getUserKey();
     }
+
+    public static int getTeacherKey() {
+        return local.get().getTeacherKey();
+    }
 }
