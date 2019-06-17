@@ -24,6 +24,10 @@ public class CreateSESSION {
 		logger.info(">>>>>>>>>>>>>>" + teacherKey);
 		logger.info(">>>>>>>>>>>>>>" + authority);
 
+		if ("".equals(teacherKey)) {
+			teacherKey = "10000";
+		}
+
 		TUserVO tUserVO = new TUserVO(userKey, userName, Integer.parseInt(authority), Integer.parseInt(teacherKey));
 		UserSession.set(tUserVO);
 		request.setAttribute("userInfo", tUserVO);

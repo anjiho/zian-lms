@@ -58,7 +58,7 @@
                     innerValue("userKey", data.userKey);
                     innerValue("authority", data.adminAuthorityKey);
                     innerValue("userName", data.name);
-                    innerValue("teacherKey", data.teacherKey)
+                    innerValue("teacherKey", data.teacherKey);
                     innerValue("targetUrl", gfn_isnullvalue(URL, ""));
                     goPage("login", "session");
                 }

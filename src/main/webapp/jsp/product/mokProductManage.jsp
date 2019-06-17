@@ -151,18 +151,21 @@
                     var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
                     if(ctgKeys.length > 0){
                         $.each(ctgKeys, function(index, key) {
-                            var data = {
-                                ctgGKey:0,
-                                ctgKey:key,
-                                gKey:0,
-                                pos:0
-                            };
-                            categoryArr.push(data);
+                            if(key != '1183'){
+                                var data = {
+                                    ctgGKey:0,
+                                    ctgKey:key,
+                                    gKey:0,
+                                    pos:0
+                                };
+                                categoryArr.push(data);
+                            }
                         });
                     }
-
                 }
-                productManageService.upsultTGoodsPriceOption(optionArray, gKey, function () {});
+                if(categoryArr.length > 0){
+                    productManageService.upsultTGoodsPriceOption(optionArray, gKey, function () {});
+                }
                 productManageService.upsultTCategoryGoods(categoryArr, gKey, function () {});
             });
         }

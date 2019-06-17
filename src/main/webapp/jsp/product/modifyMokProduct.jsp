@@ -33,7 +33,6 @@
 
             /*모의고사 정보 가져오기*/
             var productOtherInfo = info.productOtherInfo;
-            console.log(productOtherInfo);
             for(var i = 0; i < productOtherInfo.length; i++ ){
                 innerValue("linkKey", productOtherInfo[i].linkKey);
                 isCheckboxByNumber("resType", productOtherInfo[i].resType);
@@ -79,8 +78,28 @@
              */
             var productCategoryInfo = info.productCategoryInfo;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+            if(productCategoryInfo.length > 0){
+                dwr.util.addRows("categoryList", productCategoryInfo, [
+                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
+                    function()     {return "지안에듀";},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                    function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
+                ], {escapeHtml:false});
 
-            if (productCategoryInfo.length == 0) {
+                $('#categoryList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(11).attr("style", "display:none");
+                });
+            }else{
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                     function() {return "지안에듀";},
@@ -92,32 +111,10 @@
                     function() {return defaultCategorySelectbox();},
                     function() {return nextIcon},
                     function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                $('#categoryList tr').eq(0).attr("style", "display:none");
             }
-
-            dwr.util.addRows("categoryList", productCategoryInfo, [
-                function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function()     {return "지안에듀";},
-                function()     {return nextIcon},
-                function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
-                function()     {return nextIcon},
-                function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
-                function()     {return nextIcon},
-                function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
-                function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
-                function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-            ], {escapeHtml:false});
-
-            $('#categoryList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(11).attr("style", "display:none");
-            });
         });
 
     }
@@ -248,14 +245,17 @@
             } else {
                 var dataArr = new Array();
                 $.each(ctgKeys, function(index, key) {
-                    var data = {
-                        ctgGKey:0,
-                        ctgKey:key,
-                        gKey:0,
-                        pos:0
-                    };
-                    dataArr.push(data);
+                    if(key == '1183'){
+                        var data = {
+                            ctgGKey:0,
+                            ctgKey:key,
+                            gKey:0,
+                            pos:0
+                        };
+                        dataArr.push(data);
+                    }
                 });
+                console.log(dataArr);
                 productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
                     isReloadPage(true);
                 });

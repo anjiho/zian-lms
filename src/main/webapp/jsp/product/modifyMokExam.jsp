@@ -19,12 +19,14 @@
         getTimeHourSelectbox("acceptStartHour",0);
         getTimeHourSelectbox("acceptEndHour",0);
         getTimeHourSelectbox("onlineStartHour",0);
-        getTimeHourSelectbox("onlineEndHour",0);
+        getTimeHourSelectbox("onlineEndHour",0)
+        getTimeHourSelectbox("offlineHour",0);
 
         getTimeMinuteSelectbox("acceptStartMinute",24);
         getTimeMinuteSelectbox("acceptEndMinute",24);
         getTimeMinuteSelectbox("onlineStartMinute",24);
         getTimeMinuteSelectbox("onlineEndMinute",24);
+        getTimeMinuteSelectbox("offlineMinute",24);
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
@@ -66,6 +68,8 @@
             split_MM_getTime(mokExamInfo.onlineStartDate, "timeMinute", 2);
             split_HH_getTime(mokExamInfo.onlineEndDate, "timeHour", 3);
             split_MM_getTime(mokExamInfo.onlineEndDate, "timeMinute", 3);
+            split_HH_getTime(mokExamInfo.offlineDate, "timeHour", 4);//오프라인시험일
+            split_MM_getTime(mokExamInfo.offlineDate, "timeMinute", 4);//오프라인시험일
 
             /* 시험과목 리스트 가져오기 */
             var examSubjectInfo = info.examSubjectInfo;
@@ -440,13 +444,15 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">오프라인 시험일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0">
+                                        <div class="col-sm-4 input-group pl-0 pr-0">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="offlineDate" id="offlineDate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                            </div>
+                                            </div>&nbsp;
+                                            <span id="offlineHour"></span><span class="pt-2">시</span><span id="offlineMinute"></span><span class="pt-2">분</span>
                                         </div>
                                     </div>
+
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">오프라인 시험 시간(표시용)</label>
                                         <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="offlineTimePeriod" name="offlineTimePeriod">
