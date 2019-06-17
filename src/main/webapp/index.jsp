@@ -58,6 +58,7 @@
                     innerValue("userKey", data.userKey);
                     innerValue("authority", data.adminAuthorityKey);
                     innerValue("userName", data.name);
+                    innerValue("teacherKey", data.teacherKey)
                     innerValue("targetUrl", gfn_isnullvalue(URL, ""));
                     goPage("login", "session");
                 }
@@ -95,6 +96,7 @@
                     <input type="hidden" id="userName" name="userName">
                     <input type="hidden" id="authority" name="authority">
                     <input type="hidden" id="targetUrl" name="targetUrl">
+                    <input type="hidden" id="teacherKey" name="teacherKey">
 
                     <div class="row p-b-30" style="margin-bottom: 20px;">
                         <div class="col-12">
