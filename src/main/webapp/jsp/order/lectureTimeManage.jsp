@@ -20,7 +20,6 @@
 
             if(info.resultList != null) {
                 var resultList = info.resultList;
-                console.log(resultList);
                 if(resultList.length > 0){
                     var i = 0;
                     dwr.util.addRows("dataList", resultList, [
@@ -28,7 +27,8 @@
                         function(data) {return "<input type='hidden' name='JCurriKey[]' value='"+ data.JCurriKey +"'>"},
                         function(data) {return leadingZeros(i++,2)},//코드
                         function(data) {return data.name},
-                        function(data) {return "<input type='text' name='lectureTime[]' value='"+ data.remainTime +"' class='form-control col-md-2' style='float: left' >/"+data.vodTime;},//출제년도
+                        //function(data) {return "<input type='text' name='lectureTime[]' value='"+ data.remainTime +"' class='form-control col-md-2' style='float: left' >/"+data.vodTime;},//출제년도
+                        function(data) {return "<input type='text' name='lectureTime[]' value='"+ data.remainTime +"' class='form-control col-md-2' style='float: left' >/"+"<span style='padding: 0.3rem;vertical-align: middle'>"+data.vodTime+"</span>";},//출제년도
                     ], {escapeHtml:false});
                     $('#dataList tr').each(function(){
                         var tr = $(this);
@@ -101,8 +101,10 @@
 <div class="row">
     <div class="col-md-12">
         <div class="card">
-            <button type="button" class="btn btn-outline-primary btn-sm" style="width:100px;margin-left:1330px;"  onclick="saveLectureTime();">수강시간 저장</button>
-            <div class="card-body">
+            <div class="card-body  scrollable" style="height:650px;">
+                <div class="float-right mb-3">
+                    <button type="button" class="btn btn-info btn-sm" onclick="saveLectureTime();">수강시간 저장</button>
+                </div>
                 <table class="table table-hover">
                     <thead>
                     <tr>

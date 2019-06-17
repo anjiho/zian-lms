@@ -61,7 +61,7 @@
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return data.JId == null ? "-" : data.JId;},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
+                            function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.userName == null ? "-" : data.userName;},
                             function(data) {return data.kindName == null ? "-" : data.kindName;},
                             function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
@@ -104,7 +104,7 @@
     </div>
 </div>
 <!-- 기본 소스-->
-<div class="">
+<div class="container-fluid">
     <div class="form-group">
         <div class="card">
             <div class="card-body">
@@ -112,7 +112,7 @@
                     <div class="col">
                         <div class="form-group row">
                             <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
-                            <div class="col-sm-5 pl-0 pr-0">
+                            <div class="col-sm-4">
                                 <tr>
                                     <td>
                                         <ul class="searchDate">
@@ -212,42 +212,41 @@
             </div>
         </div>
     </div>
-</div>
-<!-- //formgroup -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col" width="10%">주문번호</th>
-                        <th scope="col" width="8%">ID</th>
-                        <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="7%">수강타입</th>
-                        <th scope="col" width="30%">강좌명</th>
-                        <th scope="col" width="7%">진행상태</th>
-                        <th scope="col" width="8%">시작일자</th>
-                        <th scope="col" width="8%">종료일자</th>
-                        <th scope="col" width="5%">수강일수</th>
-                        <th scope="col" width="5%">총 중지일수</th>
-                        <th scope="col" width="8%">결제상태</th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList"></tbody>
-                    <tr>
-                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi.inc" %>
+    <!-- //formgroup -->
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col" width="10%">주문번호</th>
+                            <th scope="col" width="8%">ID</th>
+                            <th scope="col" width="8%">주문자</th>
+                            <th scope="col" width="7%">수강타입</th>
+                            <th scope="col" width="30%">강좌명</th>
+                            <th scope="col" width="7%">진행상태</th>
+                            <th scope="col" width="8%">시작일자</th>
+                            <th scope="col" width="8%">종료일자</th>
+                            <th scope="col" width="5%">수강일수</th>
+                            <th scope="col" width="5%">총 중지일수</th>
+                            <th scope="col" width="8%">결제상태</th>
+                        </tr>
+                        </thead>
+                        <tbody id="dataList"></tbody>
+                        <tr>
+                            <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
+                        </tr>
+                    </table>
+                    <%@ include file="/common/inc/com_pageNavi.inc" %>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 <!-- // 기본소스-->
 </div>
-
+</div>
 <script>
     $("#searchStartDate , #searchEndDate").datepicker({
         language: "kr",

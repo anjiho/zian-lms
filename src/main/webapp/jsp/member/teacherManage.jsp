@@ -11,21 +11,18 @@
        //getwelfareDcPercentSelectBox("welfareDcPercent", "");//teacherGrade
         getAuthoritySelectbox("teacherAuthority","");
         getAuthorityGradeSelectbox("teacherGrade", "");
-    }
-
-    $( document ).ready(function() {
-        //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
             ul.find("li").addClass("done").attr("aria-selected", "false");
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
         });
-    });
+    }
 
     function emailSelChange(val) {
         if(val == '1') $('#InputEmail').val('');
         else $('#InputEmail').val(val);
     }
+
     function teacherSave() {
         var data = new FormData();
         $.each($('#imageTeacherList')[0].files, function (i, file) {
@@ -35,6 +32,18 @@
             data.append('listImageViewFile', file);
         });
         data.append('uploadType', 'TEACHER');
+
+        var userId = getInputTextValue("userId");
+        var pwd = getInputTextValue("pwd");
+        if(userId == ""){
+            alert("아이디를 입력해 주세요.");
+            return false;
+        }
+        if(pwd == ""){
+            alert("비밀번호를 입력해 주세요.");
+            return false;
+        }
+
         if (confirm("저장 하시겠습니까?")) {//TEACHER
             $.ajax({
                 url: "/file/imageFileUpload",
@@ -107,7 +116,7 @@
                             note : "",
                             interestCtgKey0 : Number(interestCtgKey0)
                         };
-                        memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {alert(info);});
+                        memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {});
                     }
                 }
             });
@@ -349,17 +358,6 @@
         onFinished: function(event, currentIndex) {
             teacherSave();
         },
-        // onContentLoaded: function (event, currentIndex) {
-        //
-        // }
-        /*onFinishing: function(event, currentIndex) {
-            //form.validate().settings.ignore = ":disabled";
-            //return form.valid();
-        },
-        onFinished: function(event, currentIndex) {
-            //alert("Submitted!");
-        }*/
-        // aria-selected:"false"
     });
 
     $('#indate , #birth').datepicker({

@@ -615,9 +615,9 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive scrollable" style="height:800px;">
                         <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:45%">시험명</th>

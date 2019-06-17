@@ -55,6 +55,7 @@
                     if (cmpList != undefined) {
                         var deleteBtn  = "<button type=\"button\" onclick='deleteClassfication("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
                         var cellData = [
+                            function(data) {return "";},
                             function(data) {return cmpList.name;},
                             function(data) {return deleteBtn;},
                         ];
@@ -73,6 +74,7 @@
                     if (cmpList != undefined) {
                         var deleteBtn  = "<button type=\"button\" onclick='deleteSubject("+cmpList.ctgKey+")' class=\"btn btn-outline-danger btn-sm\">삭제</button>";
                         var cellData = [
+                            function(data) {return "";},
                             function(data) {return cmpList.name;},
                             function(data) {return deleteBtn;}
                         ];
@@ -105,26 +107,27 @@
         <!-- 분류관리 -->
         <div class="col-md-4">
             <div class="card">
-            <div class="card-body">
-                <div class="form-group row" style="margin-bottom: 0px;">
-                    <label class="col-sm-3 text-center control-label col-form-label card-title">분류등록</label>
-                    <div>
-                        <input type="text" class="form-control" width="50px" id="classfication" onkeypress="if(event.keyCode==13) {saveClassfication(); return false;}">
-                    </div>
-                    <div>
-                        <button type="button" class="btn btn-info" style="float:right;" onclick="saveClassfication();">추가</button>
-                    </div>
+            <div class="row"  style="margin-top: 30px;text-align: center;margin-left: 25px;">
+                <label class="col-sm-3 text-center control-label col-form-label card-title">분류등록</label>
+                <div style="width: 45%;">
+                    <input type="text" class="form-control" width="50px" id="classfication" onkeypress="if(event.keyCode==13) {saveClassfication(); return false;}">
+                </div>
+                <div  style="width: 5%; margin-left: 2px;">
+                    <button type="button" class="btn btn-info" onclick="saveClassfication();">추가</button>
                 </div>
             </div>
-            <table class="table table-hover">
-                <thead>
-                <tr>
-                    <th scope="col" style="width:80%; text-align: center">분류명</th>
-                    <th scope="col" style="width:20%;">관리</th>
-                </tr>
-                </thead>
-                <tbody id="classficationList"></tbody>
-            </table>
+            <div class="card-body scrollable" style="height:650px;">
+                <table class="table table-hover  text-center">
+                    <thead>
+                    <tr>
+                        <th scope="col"></th>
+                        <th scope="col" style="width:80%; text-align: center">분류명</th>
+                        <th scope="col" style="width:20%;">관리</th>
+                    </tr>
+                    </thead>
+                    <tbody id="classficationList"></tbody>
+                </table>
+            </div>
         </div>
         </div>
         <!-- //분류관리 -->
@@ -132,26 +135,27 @@
         <!-- 과목관리 -->
         <div class="col-md-4">
             <div class="card">
-                <div class="card-body">
-                    <div class="form-group row" style="margin-bottom: 0px;">
-                        <label  class="col-sm-3 text-center control-label col-form-label card-title">과목등록</label>
-                        <div>
-                            <input type="text" class="form-control" width="50px" id="subject" onkeypress="if(event.keyCode==13) {saveSubject(); return false;}">
-                        </div>
-                        <div>
-                            <button type="button" class="btn btn-info" style="float:right;" onclick="saveSubject();">추가</button>
-                        </div>
+                <div class="row" style="margin-top: 30px;text-align: center;margin-left: 25px;">
+                    <label  class="col-sm-3 control-label col-form-label card-title">과목등록</label>
+                    <div style="width: 45%;">
+                        <input type="text" class="form-control" id="subject" onkeypress="if(event.keyCode==13) {saveSubject(); return false;}">
+                    </div>
+                    <div  style="width: 5%; margin-left: 2px;">
+                        <button type="button" class="btn btn-info" onclick="saveSubject();">추가</button>
                     </div>
                 </div>
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col" style="width:80%;text-align: center">과목명</th>
-                        <th scope="col" style="width:20%;">관리</th>
-                    </tr>
-                    </thead>
-                    <tbody id="subjectList"></tbody>
-                </table>
+                <div class="card-body scrollable" style="height:650px;">
+                    <table class="table table-hover text-center">
+                        <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" style="width:80%;text-align: center">과목명</th>
+                            <th scope="col" style="width:20%;">관리</th>
+                        </tr>
+                        </thead>
+                        <tbody id="subjectList"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 

@@ -570,23 +570,23 @@
             <form>
                 <!-- modal body -->
                 <div class="modal-body">
-                    <div style=" display:inline;">
-                        <div style=" float: left; width: 10%">
+                    <div style="margin-bottom: 45px;">
+                        <div style=" float: left;">
                             <span id="l_productSearch"></span>
                         </div>
-                        <div style=" float: left; width: 33%">
-                            <input type="text" class="form-control" id="productSearchType">
+                        <div style=" float: left; width: 33%; margin-left: 5px">
+                            <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                         </div>
-                        <div style=" float: left; width: 33%">
+                        <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive  scrollable" style="height:800px;">
                         <input type="hidden" id="sPage3" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
-                                <th style="width:15%">과목</th>
+                                <th style="width:20%">과목</th>
                                 <th style="width:45%">이름</th>
                                 <th style="width:15%">문제수</th>
                                 <th style="width:7%"></th>

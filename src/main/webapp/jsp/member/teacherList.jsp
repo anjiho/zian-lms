@@ -95,93 +95,91 @@
     </div>
 </div>
 <!-- 기본 소스-->
-<div class="">
-    <div class="form-group">
-        <div class="card">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group row">
-                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
-                            <div class="col-sm-5 pl-0 pr-0">
-                                <tr>
-                                    <td>
-                                        <ul class="searchDate">
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType1">당일</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType3">1주</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType4" onclick="setSearchDate('2w', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType4">2주</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType5">1개월</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType6" onclick="setSearchDate('3m', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType6">3개월</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType7">6개월</label>
-                                                </span>
-                                            </li>
-                                            <li>
-                                                <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType8" onclick="setSearchDate('all', 'searchStartDate', 'searchEndDate')"/>
-                                                    <label for="dateType8">전체</label>
-                                                </span>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                </tr>
+<div class="form-group" style="    padding: 20px;">
+    <div class="card">
+        <div class="card-body">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group row">
+                        <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
+                        <div class="col-sm-5 pl-0 pr-0">
+                            <tr>
+                                <td>
+                                    <ul class="searchDate">
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType1">당일</label>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType3">1주</label>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType4" onclick="setSearchDate('2w', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType4">2주</label>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType5">1개월</label>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType6" onclick="setSearchDate('3m', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType6">3개월</label>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType7">6개월</label>
+                                            </span>
+                                        </li>
+                                        <li>
+                                            <span class="chkbox2">
+                                                <input type="radio" name="dateType" id="dateType8" onclick="setSearchDate('all', 'searchStartDate', 'searchEndDate')"/>
+                                                <label for="dateType8">전체</label>
+                                            </span>
+                                        </li>
+                                    </ul>
+                                </td>
+                            </tr>
+                        </div>
+                        <div class="col-sm-5 input-group pl-0 pr-0">
+                            <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
-                            <div class="col-sm-5 input-group pl-0 pr-0">
-                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
-                                <span> ~ </span>
-                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
-                                <div class="input-group-append">
-                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                </div>
+                            <span> ~ </span>
+                            <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
+                            <div class="input-group-append">
+                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col">
-                        <div class="form-group row">
-                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
-                            <div class="col-sm-10" >
-                                <div>
-                                    <div style=" float: left; width: 10%">
-                                        <span id="l_searchSel"></span>
-                                    </div>
-                                    <div style=" float: left; width: 33%; margin-left: 10px">
-                                        <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                                    </div>
-                                    <div style=" float: left; width: 33%; margin-left: 10px;">
-                                        <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                                    </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group row">
+                        <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
+                        <div class="col-sm-10" >
+                            <div>
+                                <div style=" float: left; width: 10%">
+                                    <span id="l_searchSel"></span>
+                                </div>
+                                <div style=" float: left; width: 33%; margin-left: 10px">
+                                    <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                                </div>
+                                <div style=" float: left; width: 33%; margin-left: 10px;">
+                                    <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                                 </div>
                             </div>
                         </div>
@@ -190,7 +188,6 @@
             </div>
         </div>
     </div>
-</div>
 <!-- //formgroup -->
 <div class="row">
     <div class="col-md-12">
@@ -221,6 +218,7 @@
             </div>
         </div>
     </div>
+</div>
 </div>
 </div>
 <!-- // 기본소스-->

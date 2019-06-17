@@ -56,6 +56,7 @@
             /**
              * 학원강의 기본정보 가져오기
              */
+            console.log(info);
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);   //상품이름
             innerValue("indate", split_minute_getDay(productInfo.indate));//등록일
@@ -112,8 +113,28 @@
              */
             var productCategoryInfo = info.productCategoryInfo;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+            if(productCategoryInfo.length > 0){
+                dwr.util.addRows("categoryList", productCategoryInfo, [
+                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
+                    function()     {return "지안에듀";},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                    function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
+                ], {escapeHtml:false});
 
-            if (productCategoryInfo.length == 0) {
+                $('#categoryList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(11).attr("style", "display:none");
+                });
+            }else{
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                     function() {return "지안에듀";},
@@ -128,30 +149,7 @@
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                $('#categoryList tr').eq(0).attr("style", "display:none");
             }
-
-            dwr.util.addRows("categoryList", productCategoryInfo, [
-                function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                function()     {return "지안에듀";},
-                function()     {return nextIcon},
-                function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
-                function()     {return nextIcon},
-                function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
-                function()     {return nextIcon},
-                function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
-                function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
-                function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-            ], {escapeHtml:false});
-
-            $('#categoryList tr').each(function(){
-                var tr = $(this);
-                tr.children().eq(0).attr("style", "display:none");
-                tr.children().eq(11).attr("style", "display:none");
-            });
-
             /**
              * 학원 강좌정보 가져오기
              */
@@ -236,15 +234,13 @@
              */
             var productOtherInfo = info.productOtherInfo;
             //MockTitle
-            if (productOptionInfo.length == 0) {
-
-            } else {
+            if (productOptionInfo.length > 0) {
                 dwr.util.addRows("bookList", productOtherInfo[0], [
                     function(data) {return data.goodsName;},
                     function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                     function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
-                    ], {escapeHtml:false});
+                ], {escapeHtml:false});
 
                 for (var i=0; i<productOtherInfo[0].length; i++) {
                     var cmpList = productOtherInfo[0][i];
@@ -306,7 +302,6 @@
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
         } else { //카테고리 없을 경우
-            alert(2);
             var cellData = [
                 function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                 function() {return getNewCategoryList2("categoryTable","214",'1183');},
@@ -890,6 +885,9 @@
                     <div id="section6">
                         <table class="table text-center table-hover" id="bookTable">
                             <thead>
+                            <tr>
+                                <th scope="col" colspan="5" style="text-align:center;width:30%">강의교재목록</th>
+                            </tr>
                             </thead>
                             <tbody id="bookList"></tbody>
                         </table>
@@ -910,7 +908,7 @@
 <div class="modal-dialog" role="document" style="max-width: 900px">
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title">상품선택</h5>
+        <h5 class="modal-title">강의교재 선택</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="lectureBookClose">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -918,18 +916,18 @@
     <form>
         <!-- modal body -->
         <div class="modal-body">
-            <div style=" display:inline;">
-                <div style=" float: left; width: 10%">
+            <div style="margin-bottom: 45px;">
+                <div style=" float: left;">
                     <span id="l_productSearch"></span>
                 </div>
-                <div style=" float: left; width: 33%">
-                    <input type="text" class="form-control" id="productSearchType">
+                <div style=" float: left; width: 33%; margin-left: 5px">
+                    <input type="text" class="form-control" id="productSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                 </div>
-                <div style=" float: left; width: 33%">
+                <div style=" float: left; width: 33%; margin-left: 5px;">
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                 </div>
             </div>
-            <div class="table-responsive">
+            <div class="table-responsive scrollable" style="height:800px;">
                 <table id="zero_config" class="table table-hover text-center">
                     <thead class="thead-light">
                     <tr>

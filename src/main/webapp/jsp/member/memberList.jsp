@@ -12,6 +12,7 @@
     .searchDate li .chkbox2 input{position:absolute;z-index:-1}
     .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
     .searchDate li .chkbox2.on label{background:#ec6a6a}
+
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
@@ -54,35 +55,31 @@
         });
 
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (cnt) {
-                paging.count(sPage, cnt, '10', '10', comment.blank_list);
-                var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-                memberManageService.getMemeberList(sPage, 10, searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
-                        if (selList.length == 0) return;
-                       dwr.util.addRows("dataList", selList, [
-                            function(data) {return data.userKey == null ? "-" : data.userKey;},
-                            function(data) {return data.userId == null ? "-" : data.userId;},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
-                            function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
-                            function(data) {return data.email == null ? "-" : data.email;},
-                            function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
-                            function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
-                            function(data) {return data.gradeName == null ? "-" : data.gradeName;},
-                            function(data) {return data.authorityName == null ? "-" : data.authorityName;},
-                            function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                        ], {escapeHtml:false});
-                    });
-            loadingOut(loading);
+            paging.count(sPage, cnt, '10', '10', comment.blank_list);
+            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+            memberManageService.getMemeberList(sPage, 10, searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
+                if (selList.length == 0) return;
+                dwr.util.addRows("dataList", selList, [
+                    function(data) {return data.userKey == null ? "-" : data.userKey;},
+                    function(data) {return data.userId == null ? "-" : data.userId;},
+                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
+                    function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
+                    function(data) {return data.email == null ? "-" : data.email;},
+                    function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
+                    function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
+                    function(data) {return data.gradeName == null ? "-" : data.gradeName;},
+                    function(data) {return data.authorityName == null ? "-" : data.authorityName;},
+                    function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                ], {escapeHtml:false});
             });
-    }
-
-    function goMemberDetail(val) {
-        innerValue('param_key', val);
-        goPage('memberManage', 'memberManage');
+            loadingOut(loading);
+        });
     }
 
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
+    <input type="hidden" id="JKey" name="JKey" value="">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">회원 목록</h4>
@@ -105,7 +102,7 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group row">
-                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">가입일</label>
+                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
                             <div class="col-sm-5 pl-0 pr-0">
                                 <tr>
                                     <td>
@@ -164,35 +161,45 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원등급</label>
-                    <div class="col-sm-8 pl-0 pr-0">
-                        <span id="memberGrageSel"></span>
-                        <!--<span id="orderPayStatus"></span>-->
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
-                    <div class="col-sm-8 pl-0 pr-0">
-                        <span id="affiliationCtgKey"></span>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
-                    <div class="col-sm-10" >
-                        <div>
-                            <div style=" float: left; width: 10%">
-                                <span id="l_searchSel"></span>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원등급</label>
+                            <div class="col-sm-8 pl-0 pr-0">
+                                <span id="memberGrageSel"></span>
+                                <!--<span id="orderPayStatus"></span>-->
                             </div>
-                            <div style=" float: left; width: 33%; margin-left: 10px">
-                                <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                            </div>
-                            <div style=" float: left; width: 33%; margin-left: 10px;">
-                                <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group row" style="">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
+                            <div class="col-sm-8 pl-0 pr-0">
+                                <span id="affiliationCtgKey"></span>
                             </div>
                         </div>
                     </div>
                 </div>
+                <div class="col">
+                    <div class="form-group row">
+                        <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
+                        <div class="col-sm-4 input-group pl-0 pr-0">
+                            <div class="col-sm-6">
+                                <span id="l_searchSel"></span>
+                            </div>
+                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div style=" float: right;">
+                            <button type="button" class="btn btn-outline-info mx-auto" data-toggle="modal" data-target="#sModal4" onclick="fn_search('new')">검색</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <!-- //formgroup -->

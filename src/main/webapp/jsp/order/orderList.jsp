@@ -80,7 +80,7 @@
                 if (selList.length == 0) return;
                dwr.util.addRows("dataList", selList, [
                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
-                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
+                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                    function(data) {return data.depositUser == null ? "-" : data.depositUser;},
                    function(data) {return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
@@ -104,6 +104,7 @@
         innerValue('type', 'orderList');
         goPage('orderManage', 'orderDetailManage');
     }
+
 
     //결제상태변경
     function changePayStatus() {
@@ -143,7 +144,7 @@
     </div>
 </div>
 <!-- 기본 소스-->
-<div class="">
+<div class="container-fluid">
     <div class="form-group">
         <div class="card">
             <div class="card-body">
@@ -283,9 +284,7 @@
                 </div>
             </div>
         </div>
-
     </div>
-</div>
 <!-- //formgroup -->
 <div class="row">
     <div class="col-md-12">
@@ -325,7 +324,7 @@
 </div>
 <!-- // 기본소스-->
 </div>
-
+</div>
 <script>
     $("#searchStartDate , #searchEndDate").datepicker({
         language: "kr",

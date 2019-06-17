@@ -17,6 +17,7 @@
 
 <script>
     function init() {
+
         menuActive('menu-7', 3);
 
         selectTeacherSelectbox("l_teacherList", "");

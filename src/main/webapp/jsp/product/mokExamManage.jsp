@@ -15,16 +15,37 @@
         getTimeHourSelectbox("acceptEndHour",0);
         getTimeHourSelectbox("onlineStartHour",0);
         getTimeHourSelectbox("onlineEndHour",0);
+        getTimeHourSelectbox("offlineHour",0);
 
         getTimeMinuteSelectbox("acceptStartMinute",24);
         getTimeMinuteSelectbox("acceptEndMinute",24);
         getTimeMinuteSelectbox("onlineStartMinute",24);
         getTimeMinuteSelectbox("onlineEndMinute",24);
+        getTimeMinuteSelectbox("offlineMinute",24);
     }
 
     function mockExamSave() {
 
-        var mockInfoObj = getJsonObjectFromDiv("section1");
+        var acceptStartDate = getInputTextValue("acceptStartDate");
+        var acceptEndDate   = getInputTextValue("acceptEndDate");
+        var onlineStartDate = getInputTextValue("onlineStartDate");
+        var onlineEndDate   = getInputTextValue("onlineEndDate");
+        var offlineDate     = getInputTextValue("offlineDate");
+
+        if(acceptStartDate == "" || acceptEndDate == ""){
+            alert("시험 신청기간을 입력해 주세요.");
+            return false;
+        }
+        if(onlineStartDate == "" || onlineEndDate == ""){
+            alert("온라인 시험기간을 입력해 주세요.");
+            return false;
+        }
+        if(offlineDate == ""){
+            alert("오프라인 시험일을 입력해 주세요.");
+            return false;
+        }
+
+        var mockInfoObj     = getJsonObjectFromDiv("section1");
         if(mockInfoObj.isRealFree == 'on')  mockInfoObj.isRealFree = '1'; //주간모의고사
         else mockInfoObj.isRealFree = '0';
         if(mockInfoObj.isGichul == 'on')  mockInfoObj.isGichul = '1';//기출문제
@@ -40,13 +61,14 @@
         mockInfoObj.acceptEndDate   = mockInfoObj.acceptEndDate+" "+$('select[name=timeHour]').eq(1).val()+":"+$('select[name=timeMinute]').eq(1).val()+":"+"00";
         mockInfoObj.onlineStartDate = mockInfoObj.onlineStartDate+" "+$('select[name=timeHour]').eq(2).val()+":"+$('select[name=timeMinute]').eq(2).val()+":"+"00";
         mockInfoObj.onlineEndDate   = mockInfoObj.onlineEndDate+" "+$('select[name=timeHour]').eq(3).val()+":"+$('select[name=timeMinute]').eq(3).val()+":"+"00";
-
+        mockInfoObj.offlineDate  = mockInfoObj.offlineDate+" "+$('select[name=timeHour]').eq(4).val()+":"+$('select[name=timeMinute]').eq(4).val()+":"+"00";//오프라인 시험일
         mockInfoObj.printQuestionFile = "";
         mockInfoObj.printCommentaryFile = "";
 
+
         if(confirm("저장 하시겠습니까?")) {
             productManageService.upsultMokExamInfo(mockInfoObj, function () {
-                //isReloadPage(true);
+                isReloadPage(true);
             });
         }
     }
@@ -70,7 +92,7 @@
 <!--//순서-->
 
 <!-- 기본 소스-->
-<form id="basic">
+
     <div class="container-fluid">
         <div class="card">
             <div class="card-body wizard-content">
@@ -191,12 +213,13 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">오프라인 시험일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0">
-                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="offlineDate" id="offlineDate">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                            <div class="col-sm-4 input-group pl-0 pr-0">
+                                                <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="offlineDate" id="offlineDate">
+                                                <div class="input-group-append">
+                                                    <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                                </div>&nbsp;
+                                                <span id="offlineHour"></span><span class="pt-2">시</span><span id="offlineMinute"></span><span class="pt-2">분</span>
                                             </div>
-                                        </div>
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">오프라인 시험 시간(표시용)</label>
@@ -285,7 +308,7 @@
         </div>
         <!-- //div.card -->
     </div>
-</form>
+
 <!-- End Container fluid  -->
 <%@include file="/common/jsp/footer.jsp" %>
 <script>

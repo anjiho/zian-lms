@@ -115,7 +115,7 @@
     </div>
 </div>
 <!-- 기본 소스-->
-<div class="">
+<div class="container-fluid">
     <div class="form-group">
         <div class="card">
             <div class="card-body">
@@ -187,7 +187,6 @@
                 </div>
             </div>
         </div>
-    </div>
     <!-- //formgroup -->
     <div class="row">
         <div class="col-md-12">
@@ -234,7 +233,7 @@
             <!-- modal body -->
             <div class="modal-body">
                 <div class="form-group row">
-                    <label for="lname" class="col-sm-3 text-right control-label col-form-label">텍스트</label>
+                    <label class="col-sm-3 text-right control-label col-form-label">텍스트</label>
                     <div class="col-sm-9">
                         <input type="text" class="form-control" id="scode">
                     </div>
@@ -273,7 +272,7 @@
     </div>
 </div>
 
-
+</div>
 </div>
 <!--main wapper-->
 <%@include file="/common/jsp/footer.jsp" %>

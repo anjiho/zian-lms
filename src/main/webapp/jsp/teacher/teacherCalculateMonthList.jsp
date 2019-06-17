@@ -6,15 +6,22 @@
     function init() {
         menuActive('menu-7', 1);
         getSmsYearSelectbox("l_monthYearSel","");
-        selectTeacherSelectbox("teacherList","");//선생님 셀렉트박스
+
+        var authority =  <%=authority%>;
+        var userKey = <%=userKey%>;
+        alert(1);
+        alert(userKey);
+        if(authority == 5){
+            selectTeacherSelectbox("teacherList", 169);//선생님 셀렉트박스
+        }else{
+            selectTeacherSelectbox("teacherList", "");//선생님 셀렉트박스
+        }
     }
 
     function fn_search(val) {
         dwr.util.removeAllRows("onlineList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("acaList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("pacakgeList"); //테이블 리스트 초기화
-
-
 
         var teacherKey     = getSelectboxValue("sel_1"); //31, "201903",
         var searchYearMonth = getSelectboxValue("searchYearMonth");
@@ -277,7 +284,7 @@
     }
 
     function optionSave() {
-        var teacherKey     = getSelectboxValue("sel_1"); //31, "201903",
+        var teacherKey      = getSelectboxValue("sel_1"); //31, "201903",
         var optionTitle     = $("#optionTitle").val();
         var optionPrice     = $("#optionPrice").val();
 

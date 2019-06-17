@@ -72,7 +72,7 @@
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='test(" + data.userKey + ");'>" + data.userId + "</a>";},
+                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.depositUser == null ? "-" : data.depositUser;},
                             //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
                             function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
@@ -117,7 +117,7 @@
     </div>
 </div>
 <!-- 기본 소스-->
-<div class="">
+<div class="container-fluid">
     <div class="form-group">
         <div class="card">
             <div class="card-body">
@@ -245,41 +245,39 @@
             <span id="listNumberSel"></span>
         </div>
     </div>
-</div>
-<!-- //formgroup -->
-<div class="row">
-    <div class="col-md-12">
-        <div class="card">
-            <div class="card-body">
-                <table class="table table-hover">
-                    <thead>
-                    <tr>
-                        <th scope="col" width="10%">주문번호</th>
-                        <th scope="col" width="8%">ID</th>
-                        <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="30%">주문내역</th>
-                        <th scope="col" width="7%">결제금액</th>
-                        <th scope="col" width="5%">결제방법</th>
-                        <th scope="col" width="8%">진행상태</th>
-                        <th scope="col" width="8%">모바일</th>
-                        <th scope="col" width="8%">배송상태</th>
-                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="dataList"></tbody>
-                    <tr>
-                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                    </tr>
-                </table>
-                <%@ include file="/common/inc/com_pageNavi.inc" %>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card">
+                <div class="card-body">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col" width="10%">주문번호</th>
+                            <th scope="col" width="8%">ID</th>
+                            <th scope="col" width="8%">주문자</th>
+                            <th scope="col" width="30%">주문내역</th>
+                            <th scope="col" width="7%">결제금액</th>
+                            <th scope="col" width="5%">결제방법</th>
+                            <th scope="col" width="8%">진행상태</th>
+                            <th scope="col" width="8%">모바일</th>
+                            <th scope="col" width="8%">배송상태</th>
+                            <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="dataList"></tbody>
+                        <tr>
+                            <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
+                        </tr>
+                    </table>
+                    <%@ include file="/common/inc/com_pageNavi.inc" %>
+                </div>
             </div>
         </div>
     </div>
 </div>
-</div>
 <!-- // 기본소스-->
 </div>
-
+</div>
 <script>
     $("#searchStartDate , #searchEndDate").datepicker({
         language: "kr",

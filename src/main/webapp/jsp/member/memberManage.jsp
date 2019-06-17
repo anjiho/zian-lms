@@ -88,7 +88,6 @@
         $(".modal-title").text("상담 수정");//팝업창 헤드text값
         $("#counselKey").val(counselKey);
         memberManageService.getCounselDetailInfo(counselKey, function (info) {
-            console.log(info);
             innerHTML("wirter", info.writeUserKey);
             innerHTML("modalUserId", info.userKey);
             innerHTML("modalName", info.userKey);

@@ -2631,3 +2631,9 @@ function removeComma(n) {
     var txtNumber = '' + n;
     return txtNumber.replace(/(,)/g, "");
 }
+
+//회원 상세정보
+function goMemberDetail(val) {
+    innerValue('param_key', val);
+    goPage('memberManage', 'memberManage');
+}

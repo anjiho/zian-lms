@@ -120,7 +120,7 @@
          optionHtml  += "<input type=\"text\" class=\"form-control\" value='100' style=\"display: inline-block;width:60%;text-align: right;\"> %";
          optionHtml  += "</td>";
          optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
-         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('teacherTabel', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\">삭제</button>";
+         optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('teacherTabel', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
          optionHtml  += "</td>";
          optionHtml  += "</tr>";
         $('#teacherTabel > tbody:first').append(optionHtml);
@@ -608,7 +608,7 @@
                                             </select>
                                         </td>
                                         <td>
-                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
+                                            <button type="button" onclick="deleteTableRow('categoryTable', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn'>삭제</button>
                                         </td>
                                     </tr>
                                     </tbody>
@@ -778,7 +778,7 @@
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive scrollable" style="height:800px;">
                         <input type="hidden" id="sPage3" >
                         <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">

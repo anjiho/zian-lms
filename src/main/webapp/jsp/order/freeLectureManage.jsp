@@ -33,11 +33,10 @@
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate,
             grade, affiliationCtgKey, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
-                var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 memberManageService.getMemeberList(sPage, 5, searchType, searchText,
                     regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
                         if (selList.length == 0) return;
-                        var SelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-outline-info"/>';
+                        var SelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-info btn-sm"/>';
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return '<input name="userKey[]" value=' + "'" + data.userKey + "'" + '>';},
                             function(data) {return data.userId;},
@@ -83,9 +82,10 @@
                         var vodMobiletext = '"VOD + MOBILE"';
                         var vodtext = '"VOD"';
 
-                        if(cmpList.mobilePriceKey > 0 )   mobileChkBtn  = "<input type='checkbox' name='mobileChk' onclick='sendChildValue2($(this),"+ cmpList.mobilePriceKey +","+ mobiletext +");'>"+"MOBILE"+"<br>";
+                        if(cmpList.mobilePriceKey > 0 )    mobileChkBtn     = "<input type='checkbox' name='mobileChk' onclick='sendChildValue2($(this),"+ cmpList.mobilePriceKey +","+ mobiletext +");'>"+"MOBILE"+"<br>";
                         if(cmpList.vodMobilePriceKey > 0 ) vodMobileChkBtn  = "<input type='checkbox' name='vodMobileChk' onclick='sendChildValue2($(this),"+ cmpList.vodMobilePriceKey +","+ vodMobiletext +");'>" + "VOD + MOBILE"+"<br>";
-                        if(cmpList.vodPriceKey > 0) vodChkBtn  = "<input type='checkbox' name='vodChk' onclick='sendChildValue2($(this),"+ cmpList.vodPriceKey +","+ vodtext +");'>" + "VOD"+"<br>";
+                        if(cmpList.vodPriceKey > 0)        vodChkBtn        = "<input type='checkbox' name='vodChk' onclick='sendChildValue2($(this),"+ cmpList.vodPriceKey +","+ vodtext +");'>" + "VOD"+"<br>";
+
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.GKey == null ? "-" : cmpList.GKey;},
@@ -132,7 +132,7 @@
         optionListHtml     += "<span>" + type + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
+        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('productTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         optionListHtml     += "</td>";
         $('#productTable > tbody:first').append(optionListHtml);
         $('#productList  tr').each(function(){
@@ -169,7 +169,7 @@
         optionListHtml     += "<span>" + userName + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('memberTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
+        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('memberTable', 'delBtn');\"  class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         optionListHtml     += "</td>";
         $('#memberTable > tbody:first').append(optionListHtml);
         $('#memberList tr').each(function(){
@@ -325,6 +325,9 @@
             <div class="card">
                 <div id="section1">
                     <div class="card-body">
+                        <div class="form-group float-right mb-3">
+                            <button type="button" class="btn btn-info btn-sm" onclick="freeLectureSave();">무료강의제공</button>
+                        </div>
                         <div id="daySetDiv" style="display: none;">
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">강의시작일</label>
@@ -407,9 +410,6 @@
                                     </table>
                                 </div>
                             </div>
-                        </div>
-                        <div class="form-group">
-                            <button type="button" class="btn btn-info float-right" onclick="freeLectureSave();">무료강의제공</button>
                         </div>
                     </div>
                 </div>

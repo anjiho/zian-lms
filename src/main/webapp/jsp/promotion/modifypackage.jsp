@@ -85,8 +85,28 @@
              */
             var productCategoryInfo = info.productCategoryInfo;
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+            if(productCategoryInfo.length > 0){
+                dwr.util.addRows("categoryList", productCategoryInfo, [
+                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
+                    function()     {return "지안에듀";},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                    function()     {return nextIcon},
+                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                    function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
+                ], {escapeHtml:false});
 
-            if (productCategoryInfo.length == 0) {
+                $('#categoryList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(11).attr("style", "display:none");
+                });
+            }else{
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
                     function() {return "지안에듀";},
@@ -101,30 +121,6 @@
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
                 ];
                 dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-                $('#categoryList tr').eq(0).attr("style", "display:none");
-            }
-
-            if(productCategoryInfo.length>0){
-                dwr.util.addRows("categoryList", productCategoryInfo, [
-                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                    function()     {return "지안에듀";},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
-                    function(data) {return nextIcon;},
-                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-                ], {escapeHtml:false});
-
-                $('#categoryList tr').each(function(){
-                    var tr = $(this);
-                    tr.children().eq(0).attr("style", "display:none");
-                    tr.children().eq(11).attr("style", "display:none");
-                });
             }
 
             //프로모션정보 가져오기
@@ -266,7 +262,7 @@
             $trLast.after($trNew);
 
             $trNew.find("td input").eq(0).html("");
-            $trNew.find("td").eq(1).html(getNewCategoryList2("categoryTable","214",'1183'));
+            $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
@@ -274,7 +270,7 @@
         } else { //카테고리 없을 경우
             var cellData = [
                 function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
-                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return "지안에듀";},
                 function() {return nextIcon},
                 function() {return getCategoryNoTag('categoryTable','1183', '3');},
                 function() {return nextIcon},
@@ -447,24 +443,21 @@
 
             /* 3. 카테고리 저장 */
             var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-            var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-            if (fistTrStyle == "display:none") {
-                /*productManageService.deleteTCategoryGoods(gKey, function(){
-                    isReloadPage(true);
-                });*/
-            } else {
+            if (ctgKeys.length > 0) {
                 var categoryArr = new Array();
                 $.each(ctgKeys, function(index, key) {
                     var data = {
                         ctgGKey:0,
-                        ctgKey:Number(key),
-                        gKey:gKey,
+                        ctgKey:key,
+                        gKey:0,
                         pos:0
                     };
                     categoryArr.push(data);
                 });
+            } else { //카테고리 없을 경우
+                productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
             }
+
 
             /* 4. 프로모션정보 저장 */
             var promotionInfo = getJsonObjectFromDiv("section4");
@@ -558,23 +551,19 @@
                     });
                     /* 3. 카테고리 저장 */
                     var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-                    var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-                    if (fistTrStyle == "display:none") {
-                        /*productManageService.deleteTCategoryGoods(gKey, function(){
-                            isReloadPage(true);
-                        });*/
-                    } else {
+                    if (ctgKeys.length > 0) {
                         var categoryArr = new Array();
                         $.each(ctgKeys, function(index, key) {
                             var data = {
                                 ctgGKey:0,
                                 ctgKey:key,
-                                gKey:gKey,
+                                gKey:0,
                                 pos:0
                             };
                             categoryArr.push(data);
                         });
+                    } else { //카테고리 없을 경우
+                        productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
                     }
 
                     /* 4. 프로모션정보 저장 */
@@ -871,9 +860,12 @@
                             <div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#promotionOnlineModal" onclick="fn_search('new');">추가</button>
                             </div>
-                            <div id="section6" style="text-align: center">
-                                <table class="table text-center table-hover" id="promotionOnlineTable" style="width:80%;margin: auto;">
+                            <div id="section6">
+                                <table class="table text-center table-hover" id="promotionOnlineTable">
                                     <thead>
+                                    <tr>
+                                        <th scope="col" colspan="5" style="text-align:center;width:30%">온라인강좌 목록</th>
+                                    </tr>
                                     </thead>
                                     <tbody id="promotionOnlineList"></tbody>
                                 </table>
@@ -913,9 +905,9 @@
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive   scrollable" style="height:800px;">>
                         <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
                                 <th style="width:48%">상품명</th>

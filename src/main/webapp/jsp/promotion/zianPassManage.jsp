@@ -488,7 +488,7 @@
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
-                    <div class="table-responsive">
+                    <div class="table-responsive   scrollable" style="height:800px;">>
                         <input type="hidden" id="sPage" >
                         <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">

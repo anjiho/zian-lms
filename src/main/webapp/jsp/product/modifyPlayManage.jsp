@@ -1153,7 +1153,7 @@
 <div class="modal-dialog" role="document" style="max-width: 900px">
 <div class="modal-content">
     <div class="modal-header">
-        <h5 class="modal-title">상품선택</h5>
+        <h5 class="modal-title">강의교재 선택</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close" id="lectureBookClose">
             <span aria-hidden="true">&times;</span>
         </button>
@@ -1172,8 +1172,7 @@
                     <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
                 </div>
             </div>
-
-            <div class="table-responsive">
+            <div class="table-responsive scrollable" style="height:800px;">
                 <input type="hidden" id="sPage3" >
                 <table id="zero_config" class="table table-hover text-center">
                     <thead class="thead-light">
