@@ -53,7 +53,6 @@
         var userPass = getInputTextValue("userPass");
 
         loginService.login(userId, userPass, function(data) {
-            alert(data.teacherKey);
             if (data != null) {
                 with(document.frm) {
                     innerValue("userKey", data.userKey);
