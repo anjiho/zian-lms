@@ -111,45 +111,8 @@
             /**
              * 학원 카테고리 정보 가져오기
              */
-            var productCategoryInfo = info.productCategoryInfo;
-            var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-            if(productCategoryInfo.length > 0){
-                dwr.util.addRows("categoryList", productCategoryInfo, [
-                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                    function()     {return "지안에듀";},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
-                    function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
-                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-                ], {escapeHtml:false});
 
-                $('#categoryList tr').each(function(){
-                    var tr = $(this);
-                    tr.children().eq(0).attr("style", "display:none");
-                    tr.children().eq(11).attr("style", "display:none");
-                });
-            }else{
-                var cellData = [
-                    function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
-                    function() {return "지안에듀";},
-                    function() {return nextIcon},
-                    function() {return getCategoryNoTag('categoryTable','1183', '3');},
-                    function() {return nextIcon},
-                    function() {return defaultCategorySelectbox();},
-                    function() {return nextIcon},
-                    function() {return defaultCategorySelectbox();},
-                    function() {return nextIcon},
-                    function() {return defaultCategorySelectbox();},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                ];
-                dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
-            }
+
             /**
              * 학원 강좌정보 가져오기
              */

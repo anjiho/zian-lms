@@ -271,7 +271,7 @@ function getNewSelectboxListForCtgKey4(tag_id, val, val2) {
 //급수,과목,유형
 function getNewSelectboxListForCtgKey5(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select name='subjectCtgKey' class=\"col-sm-5 select2 form-control custom-select\">";
+        var html = "<select name='subjectCtgKey' class=\"col-sm-5 select2 form-control custom-select\" disabled>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val2) {
@@ -290,6 +290,24 @@ function getNewSelectboxListForCtgKey5(tag_id, val, val2) {
 function selectTeacherSelectbox(tag_id,val) {
     selectboxService.selectTeacherSelectbox(function (list) {
        var html = "<select id='sel_1' name='sel_1' class='form-control'>";
+        html += "<option value='' selected>강사선택</option>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].teacherKey == val) {
+                html += "<option value="+list[i].teacherKey+" selected>"+ list[i].teacherName +"</option>";
+            } else {
+                html += "<option value="+list[i].teacherKey+">"+ list[i].teacherName +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tag_id, html);
+    });
+}
+
+
+//선생님 리스트
+function selectTeacherSelectbox2(tag_id,val) {
+    selectboxService.selectTeacherSelectbox(function (list) {
+        var html = "<select id='sel_1' name='sel_1' class='form-control' disabled>";
         html += "<option value='' selected>강사선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].teacherKey == val) {
@@ -463,7 +481,9 @@ function getCategoryNoTag(tableId, val, tdNum) {
         }
         html += "</select>";
         $("#"+ tableId).find("tbody").find("tr:last").find("td").eq(tdNum).html(html);
-        $("#"+ tableId).find("tbody").find("tr:last").find("td input").eq(0).val(val);
+        if(val != '1183'){
+            $("#"+ tableId).find("tbody").find("tr:last").find("td input").eq(0).val(val);
+        }
     });
 }
 
@@ -538,10 +558,43 @@ function getTeacherSubjectCategoryList(tagId, val) {
 }
 
 //강사관리 - 과목 셀렉트박스
-function getTeacherSubjectCategoryList3(val, index) {
+function getTeacherSubjectCategoryList3(val, i) {
+    if(i == 0){
+        var html = "<select name='subjectCtgKey' class='col-sm-5 select2 form-control custom-select'>";
+        html += "<option value=''>선택</option>";
+        selectboxService.getCategoryList(3710, function (list) {
+            for (var i=0; i<list.length; i++) {
+                if(list[i].ctgKey == val){
+                    html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+                }else{
+                    html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+                }
+            }
+            html += "</select>";
+            $("#newList").find(".pcSel").eq(0).html(html);
+        });
+    }else if(i == 1) {
+        var html1 = "<select name='subjectCtgKey' class='col-sm-5 select2 form-control custom-select'>";
+        html1 += "<option value=''>선택</option>";
+        selectboxService.getCategoryList(3710, function (list) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].ctgKey == val) {
+                    html1 += "<option value=" + list[i].ctgKey + " selected>" + list[i].name + "</option>";
+                } else {
+                    html1 += "<option value=" + list[i].ctgKey + ">" + list[i].name + "</option>";
+                }
+            }
+            html1 += "</select>";
+            $("#newList").find(".pcSel").eq(1).html(html1);
+        });
+    }
+}
 
+
+/*
+function getTeacherSubjectCategoryList4(val) {
     selectboxService.getCategoryList(3710, function (list) {
-        var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
+        var html = "<select name='subjectCtgKey4' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value=''>선택</option>";
         for (var i=0; i<list.length; i++) {
             if(list[i].ctgKey == val){
@@ -552,10 +605,13 @@ function getTeacherSubjectCategoryList3(val, index) {
         }
         html += "</select>";
         //innerHTML(tagId, html);
-        $("#newList").find("tr").eq(0).find("td").eq(1).html(html);
-        $("#newList").find("tr").eq(2).find("td").eq(1).html(html);
+        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
+        $(".testContent").find("span").eq(0).html(html);
     });
 }
+ */
+
+
 
 function getTeacherSubjectCategoryList4(val) {
     selectboxService.getCategoryList(3710, function (list) {
@@ -632,22 +688,36 @@ function getTeacherSubjectCategoryList10(val) {
 
 
 
-function getTeacherSubjectCategoryList6(val, index) {
-    selectboxService.getCategoryList(3710, function (list) {
-        // index =  index+1;
-        var html = "<select name='mobilesubjectCtgKey6' class='col-sm-3 select2 form-control custom-select'>";
+function getTeacherSubjectCategoryList6(val, i) {
+    if(i == 0 || i == 2){
+        var html = "<select name='subjectCtgKey' class='col-sm-5 select2 form-control custom-select'>";
         html += "<option value=''>선택</option>";
-        for (var i=0; i<list.length; i++) {
-            if(list[i].ctgKey == val){
-                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
-            }else{
-                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+        selectboxService.getCategoryList(3710, function (list) {
+            for (var i=0; i<list.length; i++) {
+                if(list[i].ctgKey == val){
+                    html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
+                }else{
+                    html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
+                }
             }
-        }
-        html += "</select>";
-        //innerHTML(tagId, html);
-        $("#newList1").find("tr").eq(0).find("td").eq(1).html(html);
-    });
+            html += "</select>";
+            $("#newList1").find(".pcSel").eq(0).html(html);
+        });
+    }else if(i == 1) {
+        var html1 = "<select name='subjectCtgKey' class='col-sm-5 select2 form-control custom-select'>";
+        html1 += "<option value=''>선택</option>";
+        selectboxService.getCategoryList(3710, function (list) {
+            for (var i = 0; i < list.length; i++) {
+                if (list[i].ctgKey == val) {
+                    html1 += "<option value=" + list[i].ctgKey + " selected>" + list[i].name + "</option>";
+                } else {
+                    html1 += "<option value=" + list[i].ctgKey + ">" + list[i].name + "</option>";
+                }
+            }
+            html1 += "</select>";
+            $("#newList1").find(".pcSel").eq(1).html(html1);
+        });
+    }
 }
 
 function getTeacherSubjectCategoryList7(val) {
@@ -1322,10 +1392,9 @@ function deviceSelectbox1(tagId, val) {
     innerHTML(tagId, html);
 }
 
-//selectMemberGradeTypeSelectbox
 function memberGrageSelectBox(tagId, val) {
     selectboxService.selectMemberGradeTypeSelectbox(function (list) {
-        var html = "<select id='memberGradeSel'  class='col-sm-5 select2 form-control custom-select'>";
+        var html = "<select id='memberGradeSel'  name='memberGradeSel' class='col-sm-5 select2 form-control custom-select'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -1337,6 +1406,22 @@ function memberGrageSelectBox(tagId, val) {
         innerHTML(tagId, html);
     });
 }
+
+function memberGrageSelectBox1(tagId, val) {
+    selectboxService.selectMemberGradeTypeSelectbox(function (list) {
+        var html = "<select id='memberGradeSel'  name='memberGradeSel' class='col-sm-5 select2 form-control custom-select' disabled>";
+        for (var i=0; i<list.length; i++) {
+            if (list[i].key == val) {
+                html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
+            }else{
+                html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
+            }
+        }
+        html += "</select>";
+        innerHTML(tagId, html);
+    });
+}
+
 
 function getwelfareDcPercentSelectBox(tagId, val) {
     var html = "<select id='twelfareDcPercentSel'  class='col-sm-5 select2 form-control custom-select'>";

@@ -6,13 +6,11 @@
     function init() {
         menuActive('menu-7', 1);
         getSmsYearSelectbox("l_monthYearSel","");
-
         var authority =  <%=authority%>;
-        var userKey = <%=userKey%>;
-        alert(1);
-        alert(userKey);
+        var teacherKey = <%=teacherKey%>;
+
         if(authority == 5){
-            selectTeacherSelectbox("teacherList", 169);//선생님 셀렉트박스
+            selectTeacherSelectbox2("teacherList", teacherKey);//선생님 셀렉트박스
         }else{
             selectTeacherSelectbox("teacherList", "");//선생님 셀렉트박스
         }

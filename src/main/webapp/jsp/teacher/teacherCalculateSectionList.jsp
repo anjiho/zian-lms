@@ -5,7 +5,14 @@
 <script>
     function init() {
         menuActive('menu-7', 2);
-        selectTeacherSelectbox("teacherList","");//선생님 셀렉트박스
+        var authority =  <%=authority%>;
+        var teacherKey = <%=teacherKey%>;
+
+        if(authority == 5){
+            selectTeacherSelectbox2("teacherList", teacherKey);//선생님 셀렉트박스
+        }else{
+            selectTeacherSelectbox("teacherList", "");//선생님 셀렉트박스
+        }
     }
 
     function fn_search(val) {
@@ -22,7 +29,7 @@
             return false;
         }
         if(searchStartDate == "" || searchEndDate == "") {
-            alert("날짜를 선택해주세요");
+            alert("날짜를 입력해주세요.");
             return false;
         }
 

@@ -17,12 +17,18 @@
 
 <script>
     function init() {
-
         menuActive('menu-7', 3);
-
-        selectTeacherSelectbox("l_teacherList", "");
         getExamYearSelectbox("l_year");
         getMonthsSelectbox("l_month");
+
+        var authority =  <%=authority%>;
+        var teacherKey = <%=teacherKey%>;
+
+        if(authority == 5){
+            selectTeacherSelectbox2("l_teacherList", teacherKey);//선생님 셀렉트박스
+        }else{
+            selectTeacherSelectbox("l_teacherList", "");//선생님 셀렉트박스
+        }
     }
 
     function chartInit() {

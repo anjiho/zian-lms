@@ -37,6 +37,7 @@
             innerHTML("name", result.name);
             innerHTML("modalName",result.name);
             innerHTML("indate1", result.indate);
+
             innerHTML("birth", result.birth);
             innerHTML("telephone", result.telephone);
             innerHTML("telephoneMobile", result.telephoneMobile);
@@ -45,8 +46,8 @@
             innerHTML("addressRoad", result.addressRoad);
             innerHTML("addressNumber", result.addressNumber);
             innerHTML("address", result.address);
-            getSelectboxListForCtgKey('interestCtgKey0','133', result.interestCtgKey0);
-            memberGrageSelectBox("memberGrageSel", result.grade);
+            getNewSelectboxListForCtgKey5('interestCtgKey0','133', result.interestCtgKey0);
+            memberGrageSelectBox1("memberGrageSel", result.grade);
             getwelfareDcPercentSelectBox("welfareDcPercent", result.welfareDcPercent);
             innerHTML("isMobileReg", result.isMobileReg == '0' ? "PC" : "Mobile");
             innerHTML("note", result.note == null ? "-" : result.note);
@@ -88,9 +89,10 @@
         $(".modal-title").text("상담 수정");//팝업창 헤드text값
         $("#counselKey").val(counselKey);
         memberManageService.getCounselDetailInfo(counselKey, function (info) {
-            innerHTML("wirter", info.writeUserKey);
-            innerHTML("modalUserId", info.userKey);
-            innerHTML("modalName", info.userKey);
+            console.log(info);
+            innerHTML("wirter", info.writeUserName);
+            innerHTML("modalUserId", info.userId);
+            innerHTML("modalName", info.userName);
             innerValue("memo", info.memo);
             innerValue("contents", info.contents);
             innerHTML("indate", info.indate);
@@ -112,14 +114,15 @@
     /* 상담 저장 */
     function counseltSave(){
         var counselKey = $("#counselKey").val();
+
         if(counselKey == "") { // 신규 상담내역 저장일때,
             if (confirm("저장 하시겠습니까?")) {
                 var type = getSelectboxValue("consultDivisionSel");
                 var status = getSelectboxValue("consultStatusSel");
                 var memo = getInputTextValue("memo");
                 var contents = getInputTextValue("contents");
-                var telephone = getInputTextValue("telephone1") + "-" + getInputTextValue("telephone2") + "-" + getInputTextValue("telephone3");
-                var telephoneMobile = getInputTextValue("telephoneMobile1") + "-" + getInputTextValue("telephoneMobile2") + "-" + getInputTextValue("telephoneMobile3");
+                var telephone = "";
+                var telephoneMobile = "";
                 var counselObj = {
                     counselKey: 0,
                     cKey: 0,
@@ -140,8 +143,7 @@
                     imageFile4: "",
                     imageFile5: ""
                 };
-                memberManageService.saveCounselInfo(counselObj, function (selList) {
-                });
+                memberManageService.saveCounselInfo(counselObj, function (selList) {isReloadPage();});
             }
         }else{
             if (confirm("수정 하시겠습니까?")) {
@@ -149,15 +151,15 @@
                 var status    = getSelectboxValue("consultStatusSel");
                 var memo      = getInputTextValue("memo");
                 var contents  = getInputTextValue("contents");
-                var telephone = getInputTextValue("telephone1") + "-" + getInputTextValue("telephone2") + "-" + getInputTextValue("telephone3");
-                var telephoneMobile = getInputTextValue("telephoneMobile1") + "-" + getInputTextValue("telephoneMobile2") + "-" + getInputTextValue("telephoneMobile3");
+                var telephone = "";
+                var telephoneMobile = "";
                 var counselObj = {
-                    counselKey: counselKey,
+                    counselKey: Number(counselKey),
                     cKey: 0,
-                    userKey: userKey,
+                    userKey: Number(userKey),
                     writeUserKey: "",
-                    type: type,
-                    status: status,
+                    type: Number(type),
+                    status: Number(status),
                     telephone: telephone,
                     telephoneMobile: telephoneMobile,
                     memo: memo,
@@ -171,7 +173,7 @@
                     imageFile4: "",
                     imageFile5: ""
                 };
-                memberManageService.updateCounselInfo(counselObj, function (selList) {});
+                memberManageService.updateCounselInfo(counselObj, function (selList) {isReloadPage();});
              }
         }
     }
@@ -299,7 +301,7 @@
                                 <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#consultModal">상담내용 추가</button>
                             </div>
                             <div id="section3">
-                                <table class="table table-hover text-center">
+                                <table class="table table-hover">
                                     <thead>
                                     <tr>
                                         <th scope="col" style="width: 15%;">상담번호</th>

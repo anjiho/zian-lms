@@ -498,8 +498,16 @@
         <set>
             <if test="type != null">TYPE = #{type},</if>
             <if test="status != null">STATUS = #{status},</if>
-            <if test="procStartDate != '' or procStartDate != null">PROC_START_DATE = #{procStartDate},</if>
-            <if test="procEndDate != '' or procEndDate != null">PROC_END_DATE = #{procEndDate},</if>
+            <if test="status != null">
+                <if test="status == 1">
+                    PROC_START_DATE = sysdate,
+                </if>
+                <if test="status == 2">
+                    PROC_END_DATE = sysdate,
+                </if>
+            </if>
+<!--            <if test="procStartDate != '' or procStartDate != null">PROC_START_DATE = sysdate,</if>-->
+<!--            <if test="procEndDate != '' or procEndDate != null">PROC_END_DATE = sysdate,</if>-->
             <if test="memo != '' or memo != null">MEMO = #{memo},</if>
             <if test="contents != '' or contents != null">CONTENTS = #{contents},</if>
         </set>

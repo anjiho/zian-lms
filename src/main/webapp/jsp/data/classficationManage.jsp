@@ -116,7 +116,7 @@
                     <button type="button" class="btn btn-info" onclick="saveClassfication();">추가</button>
                 </div>
             </div>
-            <div class="card-body scrollable" style="height:650px;">
+            <div class="card-body scrollable" style="height:800px;">
                 <table class="table table-hover  text-center">
                     <thead>
                     <tr>
@@ -144,7 +144,7 @@
                         <button type="button" class="btn btn-info" onclick="saveSubject();">추가</button>
                     </div>
                 </div>
-                <div class="card-body scrollable" style="height:650px;">
+                <div class="card-body scrollable" style="height:800px;">
                     <table class="table table-hover text-center">
                         <thead>
                         <tr>

@@ -168,14 +168,28 @@
         basicObj.endDate   = basicObj.endDate+" "+$('select[name=timeHour]').eq(1).val()+":"+$('select[name=timeMinute]').eq(1).val()+":"+"00";
 
         var categoryArr = new Array();
-        $('#categoryTable tbody tr').each(function (index) {
-            var ctgKey = $(this).find("td select").eq(4).val();
-            categoryArr.push(ctgKey);
-        });
+        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
 
-         if(confirm("저장하시겠습니까?")) {
-              popupCouponManageService.savePopupInfo(basicObj, categoryArr, function () {isReloadPage(true);});
-         }
+        if(ctgKeys.length > 0){
+            $.each(ctgKeys, function(index, key) {
+                if(key != '1183'){
+                    categoryArr.push(key);
+                }
+            });
+        }
+
+        if($("#startDate").val() == "" || $("#endDate").val() == ""){
+            alert("노출시간을 입력해 주세요.");
+            return false;
+        }
+        if($("#contents").val() == ""){
+            alert("팝업 상세설명을 입력해 주세요.");
+            return false;
+        }
+
+       if(confirm("저장 하시겠습니까?")) {
+              popupCouponManageService.savePopupInfo(basicObj, categoryArr, function () {goPage('popupCouponManage', 'popupList');});
+        }
     }
     
     function isSizeChk(px, id) {

@@ -43,7 +43,6 @@
             innerValue("userId", result.userId);
             innerValue("name", result.name);
             innerValue("pwd", result.pwd);
-            //innerValue("indeate", result.indate);
             innerValue("birth", result.birth);
 
             var phoneNum = result.telephoneMobile;
@@ -71,7 +70,7 @@
         //강사정보 가져오기
         memberManageService.getTeacherDetailInfo(userKey, function (info) {
             var teacherInfo = info.teacherInfo;
-            console.log(info);
+
             if (teacherInfo.imageTeacherList != null) {
                 $('.custom-file-control').html(fn_clearFilePath(teacherInfo.imageTeacherList));//리스트이미지
             }
@@ -89,7 +88,7 @@
             /*카테고리 정보 가져오기*/
             var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
             var teacherCategoryInfoList = info.teacherCategoryInfoList;
-            console.log(teacherCategoryInfoList);
+
             if(teacherCategoryInfoList.length == 0){
                 var cellData = [
                     function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
@@ -122,7 +121,6 @@
                         function() {return categoryList[3].name == "지안에듀"? "" : nextIcon;},
                         function() {return categoryList[3].name == "지안에듀"? "" : categoryList[0].name;},
                         function() {return delBtn},
-                        function() {return ""},
                     ];
                     dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
                     $('#categoryList tr').each(function(){
@@ -131,95 +129,135 @@
                 }
             }
 
-            /*과목별 그룹 설명내용*/
+            /*과목그룹별 설명내용 가져오기*/
             var subjectGroupInfo = info.subjectGroupInfo;
+            var pc_deleteBtn  = "<button type=\"button\" onclick=\"deleteTableRow('test_div2', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
+            var mobile_deleteBtn  = "<button type=\"button\" onclick=\"deleteTableRow('mobile_div2', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
+            if(subjectGroupInfo.length == 0){
+                /*pc*/
+              var html = "<div id=\"test_div\"  class=\"form-group row testContent\">";
+                  html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
+                     html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                            html += "<span>" + getTeacherSubjectCategoryList4("")+ "</span>";
+                            html += pc_deleteBtn;
+                    html += "</div>";
+                    html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                        html += "<textarea name=\"pcContent\" class=\"pcContent\" ></textarea>";
+                    html += "</div>";
+                  html += "</div>";
+                $("#test_div2").html(html);
+                $(".pcContent").summernote({
+                    height: 250,
+                    width: 1300,
+                    placeholder: '내용을 적어주세요1.',
+                    popover: {
+                        image: [],
+                        link: [],
+                        air: []
+                    }
+                });
+                /*mobile*/
+                var html1 = "<div id=\"mobile_div\"  class=\"form-group row mobiletestContent1\">";
+                html1 += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
+                html1 += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                html1 += "<span>" + getTeacherSubjectCategoryList5("")+ "</span>";
+                html1 += mobile_deleteBtn;
+                html1 += "</div>";
+                html1 += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                html1 += "<textarea name=\"mobileContent\" class=\"mobileContent\" ></textarea>";
+                html1 += "</div>";
+                html1 += "</div>";
 
-                if(subjectGroupInfo.length == 0){
-                    /*pc*/
-                  var html = "<div id=\"test_div\"  class=\"form-group\">";
-                  html += "<div class=\"row testContent\">";
-                    html += "<span>" + getTeacherSubjectCategoryList4("")+ "</span>";
-                    html += "<textarea name=\"pcContent\" class=\"pcContent\" ></textarea>";
-                    html += "</div>";
-                    html += "</div>";
-                    $("#test_div2").html(html);
-                    $(".pcContent").summernote({
-                        height: 250,
-                        width: 1300,
-                        placeholder: '내용을 적어주세요1.',
-                        popover: {
-                            image: [],
-                            link: [],
-                            air: []
-                        }
-                    });
-                    /*mobile*/
-                    var html1 = "<div id=\"mobile_div\"  class=\"form-group\">";
-                    html1 += "<div class=\"row mobiletestContent1\">";
-                    html1 += "<span>" + getTeacherSubjectCategoryList5("")+ "</span>";
-                    html1 += "<textarea name=\"mobileContent\" class=\"mobileContent\" ></textarea>";
-                    html1 += "</div>";
-                    html1 += "</div>";
-                    $("#mobile_div2").html(html1);
-                    $(".mobileContent").summernote({
-                        height: 250,
-                        width: 1300,
-                        placeholder: '내용을 적어주세요1.',
-                        popover: {
-                            image: [],
-                            link: [],
-                            air: []
-                        }
-                    });
+
+                $("#mobile_div2").html(html1);
+                $(".mobileContent").summernote({
+                    height: 250,
+                    width: 1300,
+                    placeholder: '내용을 적어주세요1.',
+                    popover: {
+                        image: [],
+                        link: [],
+                        air: []
+                    }
+                });
             }else{
                 $("#studyVal").val(1);
-               // gfn_display("mobile_div", false);
                 for(var i=0; i < subjectGroupInfo.length; i++){
                     var cmpList = subjectGroupInfo[i];
                     if(subjectGroupInfo.length > 0){
-                        if(cmpList.device == 1){ //pc
-                            var cmpList = subjectGroupInfo[i];
-                            var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
-                            var cellData = [
-                                function() {return "<input type='hidden' name='hiddenKey' value='"+ cmpList.resKey +"'>";},
-                                function() {return getTeacherSubjectCategoryList3(cmpList.ctgKey, i);},
-                                function() {return "<textarea name=\"RePcContent\"  class=\"RePcContent\">"+ cmpList.valueText +"</textarea>";},
-                                function() {return deleteBtn;}
-                            ];
-                            dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
-                           // $('#newList tr').eq(0).attr("style", "display:none");
-                            $('.RePcContent').summernote({
-                                height: 250,
-                                width: 1300,
-                                placeholder: '내용을 적어주세요1.',
-                                popover: {
-                                    image: [],
-                                    link: [],
-                                    air: []
-                                }
-                            });
-                        }else if(cmpList.device == 3){ //mobile
-                            var cmpList = subjectGroupInfo[i];
-                            var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
-                            var cellData = [
-                                function() {return "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";},
-                                function() {return getTeacherSubjectCategoryList6(cmpList.ctgKey, i);},
-                                function() {return "<textarea name=\"RemobileContent\"  class=\"RemobileContent\">"+ cmpList.valueText +"</textarea>";},
-                                function() {return deleteBtn;}
-                            ];
-                            dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});
-                            // $('#newList tr').eq(0).attr("style", "display:none");
-                            $('.RemobileContent').summernote({
-                                height: 250,
-                                width: 1300,
-                                placeholder: '내용을 적어주세요1.',
-                                popover: {
-                                    image: [],
-                                    link: [],
-                                    air: []
-                                }
-                            });
-                        }
+                            if(cmpList.device == 1){ //pc
+                                var cmpList = subjectGroupInfo[i];
+                                var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
+                                /*var cellData = [
+                                    function() {return "<input type='hidden' name='hiddenKey' value='"+ cmpList.resKey +"'>";},
+                                    function() {return getTeacherSubjectCategoryList3(cmpList.ctgKey, i);},
+                                    function() {return "<textarea name=\"RePcContent\"  class=\"RePcContent\">"+ cmpList.valueText +"</textarea>";},
+                                    function() {return deleteBtn;}
+                                ];
+                                dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
+                                $('#newList tr').find("td").eq(0).attr("style", "display:none");*/
+
+                                var html = "<div name=\"\" class=\"form-group row\">";
+                                    html += "<input type='hidden' name='hiddenKey' value=''>";
+                                    html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
+                                    html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                                    html += "<span class='pcSel'>" + getTeacherSubjectCategoryList3(cmpList.ctgKey, i)+ "</span>";
+                                    html += deleteBtn;
+                                    html += "</div>";
+                                    html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                                    html += "<textarea name=\"RePcContent\" class=\"RePcContent\" >"+ cmpList.valueText +"</textarea>";
+                                    html += "</div>";
+                                html += "</div>";
+
+                                $("#newList").append(html);
+
+                                $('.RePcContent').summernote({
+                                    height: 250,
+                                    width: 1300,
+                                    placeholder: '내용을 적어주세요1.',
+                                    popover: {
+                                        image: [],
+                                        link: [],
+                                        air: []
+                                    }
+                                });
+                            }else if(cmpList.device == 3){ //mobile
+                                var cmpList = subjectGroupInfo[i];
+                                var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
+                               /* var cellData = [
+                                    function() {return "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";},
+                                    function() {return getTeacherSubjectCategoryList6(cmpList.ctgKey, i);},
+                                    function() {return "<textarea name=\"RemobileContent\"  class=\"RemobileContent\">"+ cmpList.valueText +"</textarea>";},
+                                    function() {return deleteBtn;}
+                                ];
+                                dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});*/
+
+                                var html = "<div name=\"\" class=\"form-group row\">";
+                                html += "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";
+                                html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
+                                html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                                html += "<span class='pcSel'>" + getTeacherSubjectCategoryList6(cmpList.ctgKey, i)+ "</span>";
+                                html += deleteBtn;
+                                html += "</div>";
+                                html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+                                html += "<textarea name=\"RemobileContent\" class=\"RemobileContent\" >"+ cmpList.valueText +"</textarea>";
+                                html += "</div>";
+                                html += "</div>";
+
+                                $("#newList1").append(html);
+
+                                // $('#newList tr').eq(0).attr("style", "display:none");
+                                $('.RemobileContent').summernote({
+                                    height: 250,
+                                    width: 1300,
+                                    placeholder: '내용을 적어주세요1.',
+                                    popover: {
+                                        image: [],
+                                        link: [],
+                                        air: []
+                                    }
+                                });
+                            }
                     }
                 }
             }//else
@@ -242,31 +280,42 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
-
-        if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
-        } else {
+        var inputCtgKey = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        if (inputCtgKey.length > 0) {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            var delBtn = "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>";
-            $trNew.find("td").eq(0).html("");
+            $trNew.find("td input").eq(0).val("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
+            $trNew.find("td").eq(8).html(nextIcon);
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
-            $trNew.find("td").eq(10).attr("style","display:none;");
-            $trNew.find("td").eq(11).html(delBtn);
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return "지안에듀";},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
     //카테코리 셀렉트 박스 변경 시
     function changeCategory(tableId, val, tdNum) {
-        if(tdNum == '11') return false;
         getCategoryNoTag2(val, tableId, tdNum);
     }
 
@@ -384,13 +433,12 @@
     //카테고리 저장
     function teacherCategorySave() {
         var teacherKey = getInputTextValue("teacherKey");
-        var categoryArr = new Array();
         $('#categoryTable tbody tr').each(function (index) {
-            if($(this).find("td").eq(0).val() == ""){
-                var ctgKey = $(this).find("td select").eq(3).val();
+            var ctgKey = $(this).find("td").eq(0).find("input").val();
+            if($(this).find("td").eq(3).find("select").val() != undefined){
                 var data = {
                     linkKey: 0,
-                    reqKey : ctgKey,
+                    reqKey : Number(ctgKey),
                     resKey : Number(teacherKey),
                     reqType : 100,
                     resType : 200,
@@ -458,12 +506,25 @@
     $(function() {
         /*-------PC--------*/
         $("#add_field_button").click(function (e) {
+            var pc_deleteBtn  = "<button type=\"button\" onclick=\"deleteTableRow('test_div2', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
             $includeDiv = $("#test_div2");
-            var html = "<div class=\"row testContent1\" name=\"testContent1\">\n" +
+           /* var html = "<div class=\"row testContent1\" name=\"testContent1\">\n" +
                         "<input type='hidden' name='hiddenKey' value=''>"+
                        "<span>" + getTeacherSubjectCategoryList9("") + "</span>\n" +
                        "<textarea name=\"pcContent\" class=\"pcContent\" ></textarea>\n" +
-                       "</div>";
+                       "</div>";*/
+            var html = "<div name=\"testContent1\" class=\"form-group row testContent1\">";
+            html += "<input type='hidden' name='hiddenKey' value=''>";
+            html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
+            html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+            html += "<span>" + getTeacherSubjectCategoryList9("")+ "</span>";
+            html += pc_deleteBtn;
+            html += "</div>";
+            html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+            html += "<textarea name=\"pcContent\" class=\"pcContent\" ></textarea>";
+            html += "</div>";
+            html += "</div>";
+
                 $includeDiv.after(html);
                 //$("#test_div").show();
                 $("textarea[name=pcContent]").summernote({
@@ -490,12 +551,25 @@
 
         /*-------MOBILE--------*/
         $("#add_field_button1").click(function (e) {
+            var mobile_deleteBtn  = "<button type=\"button\" onclick=\"deleteTableRow('mobile_div2', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
             $includeDiv = $("#mobile_div2");
-            var html = "<div class=\"row mobiletestContent2\" name=\"mobiletestContent2\">\n" +
+           /* var html = "<div class=\"row mobiletestContent2\" name=\"mobiletestContent2\">\n" +
                 "<input type='hidden' name='hiddenKey1' value=''>"+
                 "<span>" + getTeacherSubjectCategoryList10("") + "</span>\n" +
                 "<textarea name=\"mobileContent\" class=\"mobileContent\" ></textarea>\n" +
-                "</div>";
+                "</div>";*/
+            var html = "<div name=\"mobiletestContent2\" class=\"form-group row mobiletestContent2\">";
+            html += "<input type='hidden' name='hiddenKey1' value=''>";
+            html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
+            html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+            html += "<span>" + getTeacherSubjectCategoryList10("")+ "</span>";
+            html += mobile_deleteBtn;
+            html += "</div>";
+            html += "<div class=\"col-sm-6 pl-0 pr-0\">";
+            html += "<textarea name=\"mobileContent\" class=\"mobileContent\" ></textarea>";
+            html += "</div>";
+            html += "</div>";
+
             $includeDiv.after(html);
             $("textarea[name=mobileContent]").summernote({
                 height: 250,
