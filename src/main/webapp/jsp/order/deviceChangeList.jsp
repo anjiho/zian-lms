@@ -52,6 +52,7 @@
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getDeviceChangeLogList(sPage, pagingListCount(), startSearchDate, endSearchDate, deviceType, searchType, searchText, function (selList) {
+                    console.log(selList);
                         if (selList.length == 0) return;
                         if(selList.length > 0){
                             for (var i = 0; i < selList.length; i++) {
@@ -61,8 +62,8 @@
                                     var deviceId = cmpList.deviceId == null ? "-" : cmpList.deviceId;
                                     var deviceProductHtml = deviceId+"<br>"+"<a color='grey' >"+goodsName+"</a>";
                                     var cellData = [
-                                        function(data) {return cmpList.userId == null ? "-" : cmpList.userId;},
-                                        function(data) {return cmpList.userId == null ? "-" : "<a href='javascript:void(0);' style='float:left' color='blue'>"+cmpList.userId+"</a>";},
+                                        function(data) {return cmpList.userName == null ? "-" : cmpList.userName;},
+                                        function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + cmpList.userKey + ");'>" + cmpList.userId + "</a>";},
                                         function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
                                         function(data) {return cmpList.deleteDate == null ? "-" : split_minute_getDay(cmpList.deleteDate);},
                                         function(data) {return deviceProductHtml;},
@@ -100,7 +101,7 @@
     </div>
 </div>
 <!-- 기본 소스-->
-<div class="">
+<div class="container-fluid">
     <div class="form-group">
         <div class="card">
             <div class="card-body">
@@ -179,24 +180,23 @@
             </div>
         </div>
     </div>
-</div>
 <!-- //formgroup -->
 <div class="row">
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <div class="form-group row">
-                    <div style=" float: left; width: 10%">
+                <div>
+                    <div style=" float: left; width: 15%">
                         <span id="l_searchSel"></span>
                     </div>
-                    <div style=" float: left; width: 33%; margin-left: 10px">
+                    <div style=" float: left; width: 33%; margin-left: -62px">
                         <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                     </div>
                     <div style=" float: left; width: 33%; margin-left: 10px;">
-                        <!--<button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>-->
                         <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                     </div>
                 </div>
+            </div>
                 <table class="table table-hover">
                     <thead>
                     <tr>
@@ -217,7 +217,6 @@
                     </tr>
                 </table>
                 <%@ include file="/common/inc/com_pageNavi.inc" %>
-            </div>
         </div>
     </div>
 </div>

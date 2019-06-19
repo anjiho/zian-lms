@@ -21,8 +21,8 @@
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
-            if(productInfo.sellstartdate == null) productInfo.sellstartdate = "";
-            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
+            //if(productInfo.sellstartdate == null) productInfo.sellstartdate = "";
+            //innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             /**
              * 옵션정보 가져오기
@@ -326,18 +326,18 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="name" name="name">
+                                        <input type="text" class="col-sm-4 form-control" style="display: inline-block;" id="name" name="name">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0" id="dateRangePicker">
+                                        <div class="col-sm-4 input-group pl-0 pr-0" id="dateRangePicker">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <!--<div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">판매시작일</label>
                                         <div class="col-sm-6 input-group pl-0 pr-0">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
@@ -345,7 +345,7 @@
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                     <div class="form-group row">
                                         <label class="col-sm-2 text-left control-label col-form-label" style="margin-bottom: 0">판매</label>
                                         <div class="col-sm-10">
@@ -528,10 +528,6 @@
     });
 
     $('#indate').datepicker({
-        format: "yyyy-mm-dd",
-        language: "kr"
-    });
-    $('#sellstartdate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });

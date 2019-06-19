@@ -140,7 +140,6 @@
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
-                console.log(selList);
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
@@ -316,18 +315,18 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="name" name="name">
+                                        <input type="text" class="col-sm-4 form-control" style="display: inline-block;" id="name" name="name">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0" id="dateRangePicker">
+                                        <div class="col-sm-4 input-group pl-0 pr-0" id="dateRangePicker">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="form-group row">
+                                    <!--<div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">판매시작일</label>
                                         <div class="col-sm-6 input-group pl-0 pr-0">
                                             <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
@@ -335,7 +334,7 @@
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div>-->
                                 </div>
                             </div>
                         </section>
@@ -534,10 +533,6 @@
     });
 
     $('#indate').datepicker({
-        format: "yyyy-mm-dd",
-        language: "kr"
-    });
-    $('#sellstartdate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });

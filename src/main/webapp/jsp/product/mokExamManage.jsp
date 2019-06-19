@@ -33,42 +33,16 @@
         var offlineDate     = getInputTextValue("offlineDate");
         var indate          = getInputTextValue("indate");
         var offlineTimePlace =  getInputTextValue("offlineTimePlace");
+        var offlineTimePeriod = getInputTextValue("offlineTimePeriod");
 
-        if(indate == ""){
-            alert("등록일을 입력해 주세요.");
-            $("#indate").focus();
-            return false;
-        }
-        if(acceptStartDate == ""){
-            alert("시험 신청기간을 입력해 주세요.");
-            $("#acceptStartDate").focus();
-            return false;
-        }
-        if(acceptEndDate == ""){
-            alert("시험 신청기간을 입력해 주세요.");
-            $("#acceptEndDate").focus();
-            return false;
-        }
-        if(onlineEndDate == ""){
-            alert("온라인 시험기간을 입력해 주세요.");
-            $("#onlineEndDate").focus();
-            return false;
-        }
-        if(onlineStartDate == ""){
-            alert("온라인 시험기간을 입력해 주세요.");
-            $("#onlineStartDate").focus();
-            return false;
-        }
-        if(offlineDate == ""){
-            alert("오프라인 시험일을 입력해 주세요.");
-            $("#offlineDate").focus();
-            return false;
-        }
-        if(offlineTimePlace == ""){
-            alert("오프라인 장소를 입력해 주세요.");
-            $("#offlineDate").focus();
-            return false;
-        }
+        if(indate == ""){alert("등록일을 입력해 주세요.");$("#indate").focus();return false;}
+        if(acceptStartDate == ""){alert("시험 신청기간을 입력해 주세요.");$("#acceptStartDate").focus();return false;}
+        if(acceptEndDate == ""){alert("시험 신청기간을 입력해 주세요.");$("#acceptEndDate").focus();return false;}
+        if(onlineEndDate == ""){alert("온라인 시험기간을 입력해 주세요.");$("#onlineEndDate").focus();return false;}
+        if(onlineStartDate == ""){alert("온라인 시험기간을 입력해 주세요.");$("#onlineStartDate").focus();return false;}
+        if(offlineDate == ""){alert("오프라인 시험일을 입력해 주세요.");$("#offlineDate").focus();return false;}
+        if(offlineTimePlace == ""){alert("오프라인 장소를 입력해 주세요.");$("#offlineTimePlace").focus();return false;}
+        if(offlineTimePeriod == ''){alert("오프라인 시험 시간(표시용)을 입력해 주세요.");$("#offlineTimePeriod").focus();return false;}
 
         var mockInfoObj     = getJsonObjectFromDiv("section1");
         if(mockInfoObj.isRealFree == 'on')  mockInfoObj.isRealFree = '1'; //주간모의고사

@@ -239,7 +239,7 @@
                     function(data) {return data.goodsName;},
                     function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
                     function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
-                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
                 ], {escapeHtml:false});
 
                 for (var i=0; i<productOtherInfo[0].length; i++) {
@@ -883,7 +883,7 @@
                         <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>
                     </div>
                     <div id="section6">
-                        <table class="table text-center table-hover" id="bookTable">
+                        <table class="table table-hover" id="bookTable">
                             <thead>
                             <tr>
                                 <th scope="col" colspan="5" style="text-align:center;width:30%">강의교재목록</th>

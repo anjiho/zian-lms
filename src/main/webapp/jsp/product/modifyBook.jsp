@@ -13,7 +13,6 @@
         getProductSearchTypeSelectbox("l_productSearch");
         $('#bookTable tr').eq(0).attr("style", "display:none");
         productManageService.getBookDetailInfo(gKey, function(info) {
-            console.log(info);
             /*1. 기본정보 가져오기 */
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);

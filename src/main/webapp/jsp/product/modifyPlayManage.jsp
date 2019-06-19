@@ -171,6 +171,7 @@
 
         function playDetailList() { //동영상정보
             productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
+                console.log(selList);
                 if (selList.productInfo) {/*---기본정보---*/
                     innerValue("name", selList.productInfo.name);//이름
                     innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일

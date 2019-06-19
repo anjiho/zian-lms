@@ -534,7 +534,7 @@
 
     <select id="selectDeviceChangeLogList" resultType="DeviceListDTO">
         SELECT
-            B.USER_ID, B.NAME, B.USER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+            B.USER_ID, B.NAME as userName, B.USER_KEY, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
             TO_CHAR(A.DELETE_DATE, 'YYYY-MM-DD hh24:mi:ss') as DELETE_DATE, A.DEVICE_ID, A.TYPE, A.DEVICE_MODEL,
             A.OS_VERSION, A.APP_VERSION, A.DATA_KEY
         FROM T_DEVICE_LIMIT_LOG A

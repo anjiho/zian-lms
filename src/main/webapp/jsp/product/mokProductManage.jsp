@@ -166,7 +166,7 @@
                 if(categoryArr.length > 0){
                     productManageService.upsultTGoodsPriceOption(optionArray, gKey, function () {});
                 }
-                productManageService.upsultTCategoryGoods(categoryArr, gKey, function () {});
+                productManageService.upsultTCategoryGoods(categoryArr, gKey, function () {isReloadPage();});
             });
         }
     }

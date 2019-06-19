@@ -89,7 +89,6 @@
         $(".modal-title").text("상담 수정");//팝업창 헤드text값
         $("#counselKey").val(counselKey);
         memberManageService.getCounselDetailInfo(counselKey, function (info) {
-            console.log(info);
             innerHTML("wirter", info.writeUserName);
             innerHTML("modalUserId", info.userId);
             innerHTML("modalName", info.userName);
@@ -242,16 +241,30 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail수신여부</label>
-                                            <input type="radio" name="recvEmail"  class="custom-radio" value="1">동의
-                                            <input type="radio" name="recvEmail"  class="custom-radio" value="0">동의안함
-
+                                            <!--<input type="radio" name="recvEmail"  class="custom-radio" value="1">동의
+                                            <input type="radio" name="recvEmail"  class="custom-radio" value="0">동의안함-->
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" value="1" id="customControlValidation3" name="recvEmail" required="">
+                                                <label class="custom-control-label" for="customControlValidation3">동의</label>
+                                            </div>&nbsp; &nbsp;
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" value="0" id="customControlValidation4" name="recvEmail" required="">
+                                                <label class="custom-control-label" for="customControlValidation4">동의안함</label>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">SMS 수신여부</label>
-                                            <input type="radio" name="recvSms"  class="custom-radio" value="1">동의
-                                            <input type="radio" name="recvSms"  class="custom-radio" value="0">동의안함
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="customControlValidation1" value="1" name="recvSms">
+                                                <label class="custom-control-label" for="customControlValidation1">동의</label>
+                                            </div>
+                                            &nbsp; &nbsp;
+                                            <div class="custom-control custom-radio">
+                                                <input type="radio" class="custom-control-input" id="customControlValidation2" value="0" name="recvSms">
+                                                <label class="custom-control-label" for="customControlValidation2">동의안함</label>
+                                            </div>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>

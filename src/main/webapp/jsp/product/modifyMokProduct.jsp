@@ -44,13 +44,14 @@
              * 모의고사 상품 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
+            console.log(productOptionInfo);
             if (productOptionInfo.length == 0) {
                 var cellData = [
                     function() {return getAllListOptionSelectbox("", true);},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
-                    function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeyup='saleInputPrice($(this));'>"},
                     function() {return "%"},
                     function() {return "<span id='sum_0'></span>"},
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable','delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
@@ -64,11 +65,10 @@
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
-                    //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeyup='saleInputPrice($(this));'>"},
                     function(data) {return "%"},
-                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100)) + "</span>"},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable','delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable','delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
                 ], {escapeHtml:false});
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
@@ -172,7 +172,6 @@
 
         var sellPrice = td.find("input").eq(1).val();
         var extendPercent = td.find("input").eq(3).val();
-
         var sum = Math.round(removeComma(sellPrice) -((removeComma(sellPrice) * extendPercent) / 100));
         td.find("span").html(sum);
         //innerHTML(calcPrice, sum);
@@ -511,6 +510,7 @@
                                         <th scope="col" style="text-align:center;">판매가</th>
                                         <th scope="col" style="text-align:center;">포인트</th>
                                         <th scope="col" colspan="2" style="text-align:center;">재수강</th>
+                                        <th scope="col" style="text-align:center;"></th>
                                         <th scope="col" style="text-align:center;"></th>
                                     </tr>
                                     </thead>

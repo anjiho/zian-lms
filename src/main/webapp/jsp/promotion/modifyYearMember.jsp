@@ -24,10 +24,8 @@
         /* 지안패스 정보 가져오기 */
         promotionManageService.getPackageDetailInfo(gKey, function (info) {
             var productInfo = info.productInfo;
-            console.log(productInfo);
             innerValue("name", productInfo.name);
             innerValue("indate", split_minute_getDay(productInfo.indate));
-            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             /**
              * 옵션정보 가져오기
@@ -268,15 +266,6 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">판매</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0">
-                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
                                         <label class="col-sm-2 text-left control-label col-form-label" style="margin-bottom: 0">판매</label>
                                         <div class="col-sm-10">
                                             <div style="margin-top: -23px;">
@@ -380,10 +369,6 @@
     });
 
     $('#indate').datepicker({
-        format: "yyyy-mm-dd",
-        language: "kr"
-    });
-    $('#sellstartdate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });

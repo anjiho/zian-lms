@@ -90,6 +90,7 @@
                                 <span id="l_subjectGroup"></span>
                             </div>
                         </div>
+                        <button type="button" class="btn btn-info float-right m-l-2" onclick="mockSubjectBanksave();">저장</button>
                     </div>
                 </div>
             </div>
@@ -120,7 +121,6 @@
                     </thead>
                     <tbody id="dataList"></tbody>
                 </table>
-                <button type="button" class="btn btn-info float-right m-l-2" onclick="mockSubjectBanksave();">저장</button>
             </div>
         </div>
     </div>
@@ -218,10 +218,10 @@
                                     <thead>
                                     <tr>
                                         <th scope="col" width="5%">코드</th>
-                                        <th scope="col" width="5%">출제구분</th>
-                                        <th scope="col" width="5%">출제년도</th>
+                                        <th scope="col" width="8%">출제구분</th>
+                                        <th scope="col" width="8%">출제년도</th>
                                         <th scope="col" width="10%">과목</th>
-                                        <th scope="col" width="5%">난이도</th>
+                                        <th scope="col" width="8%">난이도</th>
                                         <th scope="col" width="10%">유형</th>
                                         <th scope="col" width="10%">패턴</th>
                                         <th scope="col" width="40%">단원</th>

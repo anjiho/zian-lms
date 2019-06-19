@@ -30,7 +30,6 @@
                     <li class="nav-item">
                         <span class=" nav-link text-muted waves-effect waves-dark pro-pic"><%=name%></span>
                         <button type="button" class="btn btn-outline-secondary" onclick="goPage('login', 'logout')"><i class="fa fa-power-off m-r-5 m-l-5"></i>  로그아웃</button>
-                        <button type="button" class="btn btn-outline-warning">사이트이동</button>
                     </li>
                 </ul>
             </div>

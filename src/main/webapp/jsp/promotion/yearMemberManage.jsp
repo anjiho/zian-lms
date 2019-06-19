@@ -65,6 +65,8 @@
         basicObj.calculateRate = 0;
         basicObj.isFreebieDeliveryFree = 0;
         basicObj.isQuickDelivery = 0;
+        if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
+        else basicObj.isSell = '0';
 
         /*  2.옵션 obj */
         var optionArray = new Array();
@@ -175,11 +177,15 @@
                                         </div>
                                     </div>
                                     <div class="form-group row">
-                                        <label class="col-sm-2 control-label col-form-label"  style="margin-bottom: 0">판매</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0">
-                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="sellstartdate" id="sellstartdate">
-                                            <div class="input-group-append">
-                                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+                                        <label class="col-sm-2 text-left control-label col-form-label" style="margin-bottom: 0">판매</label>
+                                        <div class="col-sm-10">
+                                            <div style="margin-top: -23px;">
+                                                OFF
+                                                <label class="switch">
+                                                    <input type="checkbox" id="isSell" name="isSell" style="display:none;">
+                                                    <span class="slider"></span>
+                                                </label>
+                                                ON
                                             </div>
                                         </div>
                                     </div>

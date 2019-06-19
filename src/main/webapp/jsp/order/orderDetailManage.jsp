@@ -441,13 +441,8 @@
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">주소</label>
                                     <div class="col-lg-6">
-                                        <span id='zipcode'></span>
-                                        <span id='addressRoad'></span>
-                                    </div>
-                                    <div class="col-lg-6">
-                                        <span id="addressNumber"></span>
-                                    </div>
-                                    <div class="col-lg-3">
+                                        <span id='zipcode'></span><br>
+                                        <span id='addressRoad'></span><br><span id="addressNumber"></span><br>
                                         <span id='address'></span>
                                     </div>
                                 </div>
@@ -457,15 +452,15 @@
                         <!-- 2.배송지정보 Tab -->
                       <h3>배송지정보</h3>
                         <section>
-                            <div class="mb-3 flaot-right">
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryAddressInfo();">저장</button>
-                                <button type="button" class="btn btn-info btn-sm" onclick="copyDeliveryInfo();">주문자 정보 복사</button>
-                            </div>
                             <div id="section2">
                                 <div class="col-md-12">
+                                    <div class="mb-3 float-right">
+                                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryAddressInfo();">저장</button>
+                                        <button type="button" class="btn btn-info btn-sm" onclick="copyDeliveryInfo();">주문자 정보 복사</button>
+                                    </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">수취인</label>
-                                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;" id="deliveryUserName">
+                                        <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="deliveryUserName">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-Mail</label>
@@ -480,19 +475,19 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">연락처</label>
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel1">
+                                        <input type="text" class="col-sm-1 form-control" style="display: inline-block;" id="tel1">
                                         <span style="padding:8px 6px 0px;">-</span><!--0-->
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel2">
+                                        <input type="text" class="col-sm-1 form-control" style="display: inline-block;" id="tel2">
                                         <span style="padding:8px 6px 0px;;">-</span><!--0-->
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel3">
+                                        <input type="text" class="col-sm-1 form-control" style="display: inline-block;" id="tel3">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone1">
+                                        <input type="text" class="col-sm-1 form-control" style="display: inline-block;" id="phone1">
                                         <span style="padding:8px 6px 0px;">-</span>
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone2">
+                                        <input type="text" class="col-sm-1 form-control" style="display: inline-block;" id="phone2">
                                         <span style="padding:8px 6px 0px;">-</span>
-                                        <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone3">
+                                        <input type="text" class="col-sm-1 form-control" style="display: inline-block;" id="phone3">
                                     </div>
                                     <!--주소 -->
                                     <div class="form-group">

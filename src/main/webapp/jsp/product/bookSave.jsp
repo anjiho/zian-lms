@@ -272,7 +272,7 @@
 
         dwr.util.removeAllRows("dataList");
         gfn_emptyView3("H", "");//페이징 예외사항처리
-        productManageService.getCpListCoubt("title", searchText, function(cnt) {
+        productManageService.getCpListCount("title", searchText, function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getCpList(sPage, '10', "title", searchText, function (selList) {
@@ -385,13 +385,15 @@
                 var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
                 if(ctgKeys.length > 0){
                     $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:0,
-                            pos:0
-                        };
-                        categoryArr.push(data);
+                        if(key != '1183'){
+                            var data = {
+                                ctgGKey:0,
+                                ctgKey:key,
+                                gKey:0,
+                                pos:0
+                            };
+                            categoryArr.push(data);
+                        }
                     });
                 }
 
@@ -414,7 +416,7 @@
                     }
                 });
 
-
+                console.log(categoryArr);
                 if(confirm("저장하시겠습니까?")) {
                     productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
                         isReloadPage(true);
@@ -893,13 +895,13 @@
 
                     <div class="table-responsive">
                         <input type="hidden" id="sPage3" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
-                                <th style="width:45%">상품명</th>
-                                <th style="width:15%">노출</th>
-                                <th style="width:15%">판매</th>
-                                <th style="width:15%">무료</th>
+                                <th style="width:45%;text-align: center">상품명</th>
+                                <th style="width:15%;text-align: center">노출</th>
+                                <th style="width:15%;text-align: center">판매</th>
+                                <th style="width:15%;text-align: center">무료</th>
                                 <th style="width:15%"></th>
                             </tr>
                             </thead>
@@ -944,10 +946,10 @@
                     </div>
                     <div class="table-responsive">
                         <input type="hidden" id="sPage" >
-                        <table id="zero_config" class="table table-hover text-center">
+                        <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
                             <tr>
-                                <th style="width:45%">출판사명</th>
+                                <th style="width:45%;text-align: center">출판사명</th>
                                 <th style="width:15%"></th>
                             </tr>
                             </thead>

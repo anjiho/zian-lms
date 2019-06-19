@@ -66,6 +66,11 @@ function getAllOptionSelectboxAddTag(tagId, val) {
     selectboxService.getVideoOptionTypeList(function (list) {
         var html = "<select id='selOption' name='selOption[]' onchange='' class='form-control'>";
         html += "<option value=''>선택</option>";
+        if(val == 0){
+            html += "<option value='0' selected>기본옵션</option>";
+        } else{
+            html += "<option value='0'>기본옵션</option>";
+        }
         for (var i=1; i<13; i++) {
             if (i == val) {
                 html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -91,6 +96,12 @@ function getAllListOptionSelectbox(val) {
     var html = "<select id='sel_option' name='selOption[]' class='col-sm-7 select2 form-control custom-select'>";
         html += "<option value=''>선택</option>";
 
+        if(val == 0){
+            html += "<option value='0' selected>기본옵션</option>";
+        } else{
+            html += "<option value='0'>기본옵션</option>";
+        }
+
     for (var i=1; i<13; i++) {
         if (i == val) {
             html += "<option value="+i+" selected>"+ i +"개월</option>";
@@ -100,7 +111,6 @@ function getAllListOptionSelectbox(val) {
     }
 
     for (var i = 100; i < 103; i++) {
-
         if(i == 100) optionName = 'VOD';
         else if(i == 101) optionName = 'Mobile';
         else optionName = 'VOD + Mobile';

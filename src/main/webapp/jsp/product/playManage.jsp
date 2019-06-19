@@ -80,13 +80,13 @@
                 optionHtml += " <td style=\"padding: 0.3rem;\">";
                     optionHtml += "<input type=\"text\" class=\"form-control\" >";
                 optionHtml += "</td>";
-                optionHtml += " <td style=\"text-align: center;vertical-align: middle\">";
+                optionHtml += " <td style=\"text-align: center;\">";
                      optionHtml += "<input type=\"number\"  style=\"display: inline-block;width:70%;text-align: right\" class=\"form-control\" id=\"extendPercent\" name=\"extendPercent\" onchange='saleInputPrice(this.value"+","+optionCnt+")' >%";
                 optionHtml += "</td>";
-                optionHtml += "<td style=\"padding: 0.3rem;vertical-align: middle;\">";
+                optionHtml += "<td style=\"padding: 0.3rem;\">";
                     optionHtml += "<input type=\"number\" class=\"form-control\" id='resultPrice_"+optionCnt+"' readonly>";
                 optionHtml += "</td>";
-                optionHtml += " <td style=\"padding: 0.3rem;vertical-align: middle;\">";
+                optionHtml += " <td style=\"padding: 0.3rem;\">";
                     optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
                 optionHtml += "</a>";
                 optionHtml += "</td>";
@@ -223,8 +223,8 @@
 
         /*  2.옵션 obj */
         var array = new Array();
-        if($("#optionTable tbody tr").length == 1){
-            if($("#resultPrice_0").val() == "") array = [];
+        if($("#optionTable tbody tr").length == 1 && $("#resultPrice_0").val() == ""){
+                array = [];
         }else{
             $('#optionTable tbody tr').each(function(index){
                 var i =0;
@@ -250,7 +250,6 @@
         }
         /* //옵션 obj */
 
-
         /* 3. 카테고리 저장 */
         var categoryArr = new Array();
         var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
@@ -259,13 +258,15 @@
         }else{
             if(ctgKeys.length > 0){
                 $.each(ctgKeys, function(index, key) {
-                    var data = {
-                        ctgGKey:0,
-                        ctgKey:key,
-                        gKey:0,
-                        pos:0
-                    };
-                    categoryArr.push(data);
+                    if(key != '1183') {
+                        var data = {
+                            ctgGKey: 0,
+                            ctgKey: key,
+                            gKey: 0,
+                            pos: 0
+                        };
+                        categoryArr.push(data);
+                    }
                 });
             }
         }
@@ -334,7 +335,7 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                       goPage('productManage', 'playList');
+                      // goPage('productManage', 'playList');
                     }
                 }
             });

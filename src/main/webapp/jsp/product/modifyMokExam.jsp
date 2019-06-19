@@ -36,7 +36,6 @@
 
         /* 모의고사 정보 가져오기 */
         productManageService.getMockExamInfo(examKey, function(info) {
-            console.log(info);
             var mokExamInfo = info.mokExamInfo;
             innerValue("name", mokExamInfo.name);
             isCheckboxByNumber("isRealFree", mokExamInfo.isRealFree);//노출
@@ -125,13 +124,7 @@
 
     function deletebankInfo(bankKey) {
         if(confirm("삭제 하시겠습니까?")) {
-            productManageService.deleteExamSubject(bankKey, function () {
-                if ($("#examSubTable > tbody > tr").length == 1) {
-                    $('#examSubTable > tbody:first > tr:first').attr("style", "display:none");
-                } else {
-                    $('#examSubTable > tbody:last > tr:last').remove();
-                }
-            });
+            productManageService.deleteExamSubject(bankKey, function () {isReloadPage();});
         }
     }
 
@@ -170,11 +163,7 @@
                     productManageService.saveTBankSubjectExamLink(examKey, bankSubKey[i] ,required, function () {});
                 }
             }
-
-            /*기본정보 저장*/
-            productManageService.upsultMokExamInfo(mockInfoObj, function () {
-                 //isReloadPage(true);
-            });
+            productManageService.upsultMokExamInfo(mockInfoObj, function () {isReloadPage(true);});
         }
     }
 
@@ -540,13 +529,13 @@
                             <div class="mb-3 float-right">
                                 <button type="button" class="btn btn-info btn-sm"  data-toggle="modal" data-target="#examSubModal" onclick="fn_search3('new');">추가</button>
                             </div>
-                            <table class="table text-center table-hover"  id="examSubTable">
+                            <table class="table table-hover"  id="examSubTable">
                                 <thead>
                                 <tr>
                                     <th scope="col" colspan="1" style="width:20%">과목명</th>
                                     <th scope="col" colspan="1" style="width:40%">등록명</th>
                                     <th scope="col" colspan="1" style="width:10%">문제수</th>
-                                    <th scope="col" colspan="1" style="width:15%">필수과목</th>
+                                    <th scope="col" colspan="1" style="width:15%;">필수과목</th>
                                     <th scope="col" colspan="1" style="width:7%"></th>
                                 </tr>
                                 </thead>
