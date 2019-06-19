@@ -335,7 +335,7 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                      // goPage('productManage', 'playList');
+                      goPage('productManage', 'playList');
                     }
                 }
             });

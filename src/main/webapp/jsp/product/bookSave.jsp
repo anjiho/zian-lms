@@ -415,11 +415,10 @@
                     success: function (data) {
                     }
                 });
-
-                console.log(categoryArr);
                 if(confirm("저장하시겠습니까?")) {
                     productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
-                        isReloadPage(true);
+                        //isReloadPage(true);
+                        goPage('productManage', 'bookList');
                     });
                 }
             }

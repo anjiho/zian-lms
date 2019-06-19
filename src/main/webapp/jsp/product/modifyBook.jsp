@@ -107,6 +107,7 @@
 
             /*4. 도서정보 가져오기*/
             var bookInfo = info.bookInfo;
+            console.log(bookInfo);
             innerValue("bookKey", bookInfo.bookKey);
             innerHTML("bookCode", bookInfo.bookKey);
             getLectureStatusSelectbox("status", bookInfo.status);//판매상태
