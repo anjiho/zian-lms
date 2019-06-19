@@ -197,6 +197,8 @@
 
     //저장
     function playSave() {
+        if($("#name").val() == "") {alert("동영상 이름을 입력해 주세요."); return false;}
+
         var data = new FormData();
         $.each($('#imageListFile')[0].files, function(i, file) {
             data.append('imageListFile', file);
@@ -221,42 +223,51 @@
 
         /*  2.옵션 obj */
         var array = new Array();
-        $('#optionTable tbody tr').each(function(index){
-            var i =0;
+        if($("#optionTable tbody tr").length == 1){
+            if($("#resultPrice_0").val() == "") array = [];
+        }else{
+            $('#optionTable tbody tr').each(function(index){
+                var i =0;
 
-            var optionName = $(this).find("td select").eq(0).val();
-            var price = $(this).find("td input").eq(0).val();
-            var sellPrice = $(this).find("td input").eq(1).val();
-            var point = $(this).find("td input").eq(2).val();
-            var extendPercent = $(this).find("td input").eq(3).val();
-            var data = {
-                priceKey:'0',
-                gKey:'0',
-                kind:optionName,
-                ctgKey:'0',
-                name:'0',
-                price:price,
-                sellPrice:sellPrice,
-                point:point,
-                extendPercent:extendPercent
-            };
-            array.push(data);
-        });
+                var optionName = $(this).find("td select").eq(0).val();
+                var price = $(this).find("td input").eq(0).val();
+                var sellPrice = $(this).find("td input").eq(1).val();
+                var point = $(this).find("td input").eq(2).val();
+                var extendPercent = $(this).find("td input").eq(3).val();
+                var data = {
+                    priceKey:'0',
+                    gKey:'0',
+                    kind:optionName,
+                    ctgKey:'0',
+                    name:'0',
+                    price:price,
+                    sellPrice:sellPrice,
+                    point:point,
+                    extendPercent:extendPercent
+                };
+                array.push(data);
+            });
+        }
         /* //옵션 obj */
+
 
         /* 3. 카테고리 저장 */
         var categoryArr = new Array();
         var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-        if(ctgKeys.length > 0){
-            $.each(ctgKeys, function(index, key) {
-                var data = {
-                    ctgGKey:0,
-                    ctgKey:key,
-                    gKey:0,
-                    pos:0
-                };
-                categoryArr.push(data);
-            });
+        if(ctgKeys.length == 1 && ctgKeys[0] == '1183'){
+            categoryArr = [];
+        }else{
+            if(ctgKeys.length > 0){
+                $.each(ctgKeys, function(index, key) {
+                    var data = {
+                        ctgGKey:0,
+                        ctgKey:key,
+                        gKey:0,
+                        pos:0
+                    };
+                    categoryArr.push(data);
+                });
+            }
         }
 
         /*  4.강좌정보 obj  */
@@ -380,7 +391,7 @@
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                    <input type="text" class="col-sm-4 form-control" id="name" name="name">
+                                    <input type="text" class="col-sm-4 form-control required" id="name" name="name" >
                                 </div>
                                 <div class="form-group row">
                                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
@@ -963,7 +974,6 @@
 <!-- End Container fluid  -->
     <%@include file="/common/jsp/footer.jsp" %>
     <script>
-        // Basic Example with form
         var form = $("#playForm");
         form.children("div").steps({
             headerTag: "h3",

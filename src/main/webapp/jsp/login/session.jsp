@@ -14,6 +14,8 @@
 
 	String page_gbn = "";
 
+	String teacherKey = request.getParameter("teacherKey");
+
 	try {
 		TUserVO tUserVO = CreateSESSION.createSession(request);
 		System.out.println(" >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>  " + tUserVO.toString());
@@ -28,6 +30,7 @@
 <script type="text/javascript">
 	var page_gbn = "<%=page_gbn%>";
 	function init() {
+		var teacherKey =  "<%=teacherKey%>";
 		var url =  '<%=targetUrl%>';
 		if (url == "null") url = "";
 
@@ -35,8 +38,13 @@
 			location.replace(url);
 		} else {
 			with(document.frm) {
-				action = "/dashboard";
-				page_gbn.value = "dashboard";
+				if(teacherKey != ""){
+					action = "/teacherManage";
+					page_gbn.value = "teacherCalculateMonthList";
+				}else{
+					action = "/dataManage";
+					page_gbn.value = "classficationSave";
+				}
 				submit();
 			}
 		}

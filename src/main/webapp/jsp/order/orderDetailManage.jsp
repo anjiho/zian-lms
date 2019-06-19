@@ -278,7 +278,7 @@
                                         <span></span>
                                     </div>
                                 </div>
-                                <div class="row mb-2" style="background-color:#dee2e6 ;height: 35px;">
+                                <div class="row mb-2 buyInfo" style="padding-left:10px;padding-top: 8px">
                                     <h4>결제정보</h4>
                                 </div>
                                 <div class="row mb-3">
@@ -399,7 +399,7 @@
                                         <span></span>
                                     </div>
                                 </div>
-                                <div class="row mb-2" style="background-color:#dee2e6 ;height: 35px;">
+                                <div class="row mb-2 buyInfo" style="padding-left:10px;padding-top: 8px">
                                     <h4>주문상품정보</h4>
                                 </div>
                                 <table class="table table-hover text-center">
@@ -415,8 +415,8 @@
                                     </thead>
                                     <tbody id="dataList"></tbody>
                                 </table>
-                                <div class="row mb-2" style="background-color:#dee2e6 ;height: 35px;">
-                                    <h4>주문자정보</h4>
+                                <div class="row mb-2 buyInfo" style="padding-left:10px;padding-top: 8px">
+                                    <h4>주문자정보</h4><!--0-->
                                 </div>
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">이름</label>
@@ -457,7 +457,7 @@
                         <!-- 2.배송지정보 Tab -->
                       <h3>배송지정보</h3>
                         <section>
-                            <div class="mb-3">
+                            <div class="mb-3 flaot-right">
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryAddressInfo();">저장</button>
                                 <button type="button" class="btn btn-info btn-sm" onclick="copyDeliveryInfo();">주문자 정보 복사</button>
                             </div>
@@ -470,7 +470,7 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-Mail</label>
                                         <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="deliveryUserEmail1" >
-                                        @
+                                        <span style="padding:2px 6px 0px">@</span>
                                         <div class="col-lg-5 row">
                                             <input type="text" id="InputEmail" class="col-sm-4 form-control">
                                             <div class="col-sm-7 pl-0 pr-0">
@@ -481,17 +481,17 @@
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">연락처</label>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel1">
-                                        -
+                                        <span style="padding:8px 6px 0px;">-</span><!--0-->
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel2">
-                                        -
+                                        <span style="padding:8px 6px 0px;;">-</span><!--0-->
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="tel3">
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone1">
-                                        -
+                                        <span style="padding:8px 6px 0px;">-</span>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone2">
-                                        -
+                                        <span style="padding:8px 6px 0px;">-</span>
                                         <input type="text" class="col-sm-2 form-control" style="display: inline-block;" id="phone3">
                                     </div>
                                     <!--주소 -->
@@ -502,25 +502,24 @@
                                         <span id="address1"></span><br>
                                         <span id="address2"></span>
                                         <input type="text" class="col-sm-4 form-control" style="display: inline-block;" id="detailAddress">-->
-                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
-                                        <input type="text" id="postcode" class="col-sm-2 form-control" style="display: inline-block;" placeholder="우편번호">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 5px;padding:0px">주소</label>
+                                        <input type="text" id="postcode" class="col-sm-2 form-control" style="display: inline-block;margin-bottom:6px;margin-left: -10px" placeholder="우편번호">
                                         <input type="button" onclick="execDaumPostcode()" class="btn btn-info btn-sm" style="display: inline-block;" value="우편번호 찾기"><br>
-                                        <input type="text" id="roadAddress" class="col-sm-4 form-control" style="display: inline-block;" placeholder="도로명주소">
+                                        <label class="col-sm-2"></label>
+                                        <input type="text" id="roadAddress" class="col-sm-4 form-control" style="display: inline-block;margin-bottom:6px;margin-left: -10px"  placeholder="도로명주소">
                                         <input type="text" id="jibunAddress"  class="col-sm-4 form-control" style="display: inline-block;" placeholder="지번주소">
                                         <span id="guide" style="color:#999;display:none"></span>
-                                        <input type="text" id="detailAddress" class="col-sm-4 form-control" placeholder="상세주소">
+                                        <label class="col-sm-2 control-label col-form-label"></label>
+                                        <input type="text" id="detailAddress" class="col-sm-4 form-control" style="display: inline-block;margin-left: -10px" placeholder="상세주소">
                                         <!--<input type="text" id="sample4_extraAddress"  class="form-control" placeholder="참고항목">-->
                                     </div>
-
-
-
                                 </div>
                             </div>
                         </section>
                       <!--3.배송지정보 Tab -->
                         <h3>배송정보</h3>
                         <section>
-                            <div class="mb-3">
+                            <div class="mb-3 float-right">
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryInfo();">저장</button>
                             </div>
                             <div id="section3">

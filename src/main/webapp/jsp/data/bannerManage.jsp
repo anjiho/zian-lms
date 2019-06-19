@@ -116,7 +116,6 @@
     function popup(val,ctgKey,pos) { //수정팝업
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
-            console.log(selList);
             $("#bannerKey").val(val);
             innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);

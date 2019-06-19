@@ -134,22 +134,21 @@
             </div>
             <div class="card">
                 <div class="card-body">
-                    <div class="form-group row">
-                        <div style=" float: left; width: 10%">
+                    <div>
+                        <div style=" float: left; width: 13%">
                             <span id="l_searchSel"></span>
                         </div>
-                        <div style=" float: left; width: 33%; margin-left: 10px">
-                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {search(); return false;}">
+                        <div style=" float: left; width: 33%;">
+                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px;">
-                            <!--<button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>-->
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="search()">검색</button>
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
                 </div>
                 <div id="productDeviceTable" style="display:none">
                     <!--상품별 디바이스 TABLE-->
-                    <table class="table table-hover text-center">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th scope="col" style="width: 5%;">사용자</th>
@@ -169,7 +168,7 @@
                 <!--//상품별 디바이스 TABLE-->
                 <div id="mobileDeviceTable" style="display:none">
                 <!--모바일 디바이스 TABLE-->
-                    <table class="table table-hover text-center">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th scope="col" style="width: 5%;">사용자</th>

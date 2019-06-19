@@ -68,9 +68,6 @@
             defaultApply: 	true,
         });
 
-        var check = " <label class=\"customcheckbox m-b-20\">\n" +
-            "                            <input type=\"checkbox\" id=\"mainCheckbox\" id=\"allCheck\" onclick=\"allChk(this, 'rowChk');\">\n" +
-            "                            <span class=\"checkmark\"></span>";
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
                                                 payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
@@ -108,8 +105,11 @@
 
     //결제상태변경
     function changePayStatus() {
+        if($("input[name=rowChk]:checked").length == 0){
+            alert("회원을 선택해 주세요.");
+            return false;
+        }
         var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
-
         var arr =  new Array();
         $("input[name=rowChk]:checked").each(function() {
             var jKey = $(this).val();
@@ -146,7 +146,7 @@
 <!-- 기본 소스-->
 <div class="container-fluid">
     <div class="form-group">
-        <div class="card">
+        <div class="card" >
             <div class="card-body">
                 <div class="row">
                     <div class="col">
@@ -241,34 +241,29 @@
                         </div>
                     </div>
                 </div>
-                <div class="col">
-                    <div class="form-group row">
-                        <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
-                        <div class="col-sm-4 input-group pl-0 pr-0">
-                            <div class="col-sm-6">
-                                <span id="orderSearch"></span>
-                            </div>
-                            <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
-                        </div>
-                    </div>
-                </div>
-
                 <div class="row">
                     <div class="col">
-                        <div style=" float: right;">
-<%--                            <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#bookModal" onclick="fn_search3('new');">추가</button>--%>
-                            <button type="button" class="btn btn-outline-info mx-auto" data-toggle="modal" data-target="#sModal4" onclick="fn_search('new')">검색</button>
+                        <div class="form-group row">
+                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label><!--0-->
+                            <div class="col-sm-2 pl-0 pr-0 mr-3"><!--0-->
+                                <span id="orderSearch"></span>
+                            </div>
+                            <div class="col-sm-2 pl-0 pr-0 mr-3"><!--0-->
+                                <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                            </div>
+                            <div class="col-sm-2 pl-0 pr-0 mr-3"><!--0-->
+                                <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                            </div>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
 
         <div class="row">
             <div class="col">
                 <div class="form-group row">
-                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제상태변경</label>
+                    <label class="col-sm-2 control-label col-form-label"  style="margin-bottom:0;padding-left:30px">결제상태변경</label>
                     <div class="col-sm-8">
                         <span id="orderStatusChangeSel"></span>
                         <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
@@ -277,13 +272,15 @@
             </div>
             <div class="col">
                 <div class="form-group row" style="">
-                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">리스트개수</label>
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0;padding-left:12px">리스트개수</label>
                     <div class="col-sm-8">
                         <span id="listNumberSel"></span>
                     </div>
                 </div>
             </div>
         </div>
+
+
     </div>
 <!-- //formgroup -->
 <div class="row">
@@ -301,14 +298,12 @@
                         <th scope="col" width="5%">결제방법</th>
                         <th scope="col" width="8%">진행상태</th>
                         <th scope="col" width="8%">모바일</th>
-                        <!--<th scope="col" width="8%">배송상태</th>-->
                         <th  width="3%">
                             <label class="customcheckbox m-b-20">
                             <input type="checkbox" id="mainCheckbox" id="allCheck" onclick="allChk(this, 'rowChk');">
                             <span class="checkmark"></span>
                             </label>
                         </th>
-<%--                        <th scope="col" width="3%"><input type="checkbox" id="allCheck" onclick="allChk(this, 'rowChk');"></th>--%>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>

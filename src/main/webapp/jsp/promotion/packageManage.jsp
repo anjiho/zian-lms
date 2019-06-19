@@ -350,13 +350,6 @@
                     };
                     onlineLecInfo.push(data);
                 });
-                console.log(basicObj);
-                console.log(optionArray);
-                console.log(categoryArr);
-                console.log(promotionInfo);
-                console.log(onlineLecInfo);
-
-
             }
         });
     }

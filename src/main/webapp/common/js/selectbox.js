@@ -1372,7 +1372,7 @@ function deviceSelectbox(tagId, val) {
 
 //디바이스관리 - 검색 셀렉트박스
 function getSearchDeviceSelectbox(tagId) {
-    var html = "<select id='searchType' class='form-control'>";
+    var html = "<select id='searchType' class='col-sm-8 select2 form-control custom-select'>";
     html += "<option value=''>선택</option>";
     html += "<option value='id'>회원ID</option>";
     html += "<option value='name' >회원이름</option>";

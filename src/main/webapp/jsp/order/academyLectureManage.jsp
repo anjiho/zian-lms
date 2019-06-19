@@ -51,9 +51,8 @@
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 memberManageService.getMemeberList(sPage, 5, searchType, searchText,
                     regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
-                        console.log(selList);
                         if (selList.length == 0) return;
-                        var SelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-outline-info"/>';
+                        var SelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" style="margin-top: -6px;" class="btn btn-info btn-sm"/>';
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return '<input name="userKey[]" value=' + "'" + data.userKey + "'" + '>';},
                             function(data) {return data.userId;},
@@ -100,8 +99,7 @@
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, 5, searchType, searchText, "ACADEMY", function (selList) {
                 if (selList.length == 0) return;
-                console.log(selList);
-                var SelBtn = '<input type="button" onclick="sendChildValue_2($(this))" value="선택" class="btn btn-outline-info"/>';
+                var SelBtn = '<input type="button" onclick="sendChildValue_2($(this))" value="선택" style="margin-top: -6px;" class="btn btn-info btn-sm"/>';
                 dwr.util.addRows("dataList3", selList, [
                     function(data) {return '<input name="GKey[]" value=' + "'" + data.GKey + "'" + '>';},
                     function(data) {return '<input name="sellPrice[]" value=' + "'" + data.sellPrice + "'" + '>';},
@@ -152,7 +150,7 @@
         optionListHtml     += "<span>" + kind + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('optionTable');\" class=\"btn btn-outline-danger btn-sm\" style=\"margin-top:8%;\" >삭제</button>";
+        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('optionTable');\" class=\"btn btn-outline-danger btn-sm\">삭제</button>";
         optionListHtml     += "</td>";
         $('#optionTable > tbody:first').append(optionListHtml);
         $('#optionList tr').each(function(){
@@ -283,60 +281,64 @@
                 </div>
             </div>
     </div>
-        <!-- //formgroup -->
-
 <div class="col-md-12">
     <div class="card">
         <div class="card-body">
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원ID</label>
-                <input type="hidden" id="userKey" name="userKey" value="">
-                <input type="text" class="col-sm-2 form-control"  id="userId" readonly>
+            <div class="row">
+                <div class="col-md-6">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0"></label>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">회원ID</label>
+                        <input type="hidden" id="userKey" name="userKey" value="">
+                        <input type="text" class="col-sm-4 form-control"  id="userId" readonly>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
+                        <div class="col-sm-6 pl-0 pr-0">
+                            <span id="affiliationCtgKey"></span>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매금액</label>
+                        <input type="text" class="col-sm-4 form-control" id="sellPrice" readonly>
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제금액</label>
+                        <input type="number" class="col-sm-4 form-control" id="price">
+                    </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
+                        <div class="col-sm-8 pl-0 pr-0">
+                            <span id="payType"></span>
+                            <span id="cardCode"></span>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">제목</label>
+                            <input type="text" class="col-sm-10 form-control" id="memoTitle">
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
+                            <textarea class="col-sm-10 form-control" id="memoContent" style="height: 150px;"></textarea>
+                        </div>
+                    </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">준비직렬</label>
-                <div class="col-sm-6 pl-0 pr-0">
-                    <span id="affiliationCtgKey"></span>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">옵션</label>
+                    <table class="table table-hover" id="optionTable">
+                        <thead>
+                        <tr>
+                            <th scope="col" style="width:75%;">상품명</th>
+                            <th scope="col" style="width:25%;">옵션</th>
+                            <th scope="col" style="width:5%;"></th>
+                        </tr>
+                        </thead>
+                        <tbody id="optionList"></tbody>
+                    </table>
                 </div>
             </div>
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">판매금액</label>
-                <input type="text" class="col-sm-2 form-control" id="sellPrice" readonly>
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제금액</label>
-                <input type="number" class="col-sm-2 form-control" id="price">
-            </div>
-            <div class="form-group row">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
-                <div class="col-sm-6 pl-0 pr-0">
-                    <span id="payType"></span>
-                    <span id="cardCode"></span>
-                </div>
-
-            </div>
-            <div class="form-group">
-                <div class="form-group row">
-                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">제목</label>
-                    <input type="text" class="col-sm-6 form-control" id="memoTitle">
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
-                    <textarea class="col-sm-6 form-control" id="memoContent" style="height: 150px;"></textarea>
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">옵션</label>
-                <table class="table table-hover text-center" id="optionTable">
-                    <thead>
-                    <tr>
-                        <th scope="col" style="width:75%;">상품명</th>
-                        <th scope="col" style="width:25%;">옵션</th>
-                        <th scope="col" style="width:5%;"></th>
-                    </tr>
-                    </thead>
-                    <tbody id="optionList"></tbody>
-                </table>
             </div>
             <button type="button" class="btn btn-info float-right" onclick="academyLectureInfoSave();">저장</button>
         </div>

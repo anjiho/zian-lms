@@ -36,7 +36,7 @@
                 memberManageService.getMemeberList(sPage, 5, searchType, searchText,
                     regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
                         if (selList.length == 0) return;
-                        var SelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-info btn-sm"/>';
+                        var SelBtn = '<input type="button" onclick="sendChildValue($(this))" value="선택" class="btn btn-info btn-sm" style="margin-top: -3px;"/>';
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return '<input name="userKey[]" value=' + "'" + data.userKey + "'" + '>';},
                             function(data) {return data.userId;},
@@ -267,7 +267,7 @@
                     </div>
                 </div>
                     <input type="hidden" id="sPage3" >
-                    <table id="zero_config" class="table table-hover text-center">
+                    <table id="zero_config" class="table table-hover">
                         <thead>
                         <tr>
                             <th style="width:5%">CODE</th>
@@ -300,7 +300,7 @@
                     </div>
                 </div>
                     <input type="hidden" id="sPage">
-                    <table class="table table-hover text-center">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th scope="col" style="width:20%;">ID</th>

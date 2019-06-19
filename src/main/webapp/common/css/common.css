@@ -87,3 +87,27 @@ input:checked + .slider {
 /*팝업*/
 
 .wizard-content .wizard>.content{background: #f9f9f9}
+
+
+hr {
+    border: 1;
+    height: 1px;
+    background-image: linear-gradient(left, #f0f0f0, #8c8c8c, #f0f0f0);
+    margin-bottom: 0px;
+    margin-top: 0px;
+}
+
+.buyInfo{
+    position: relative;
+    margin-top:50px
+}
+
+.buyInfo:before{
+    content: '';
+    width:6px;
+    height:16px;
+    background:#26a9e2;
+    position: absolute;
+    left:0px;
+    top:8px;
+}
