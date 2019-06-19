@@ -168,7 +168,7 @@
             }
         }
     }
-    
+
     function academyLectureInfoSave() {
         var userKey = getInputTextValue('userKey');
         var memoTitle = getInputTextValue('memoTitle');

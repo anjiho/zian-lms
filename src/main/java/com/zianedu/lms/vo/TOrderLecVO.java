@@ -36,7 +36,7 @@ public class TOrderLecVO {
         this.jGKey = jGKey;
         this.indate = Util.returnNow();
         this.status = status;
-        this.startDt = startDt + " 00:00:00";
+        this.startDt = "".equals(startDt) ? "" : startDt + " 00:00:00";
         this.limitDay = limitDay;
         this.pauseStartDt = "";
         this.pauseCnt = 0;
