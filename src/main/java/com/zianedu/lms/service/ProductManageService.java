@@ -661,8 +661,7 @@ public class ProductManageService extends PagingSupport {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void upsultTCategoryGoods(List<TCategoryGoods>tCategoryGoodsList, int gKey) {
-        if (tCategoryGoodsList.size() == 0) return;
-
+        //if (tCategoryGoodsList.size() == 0) return;
         productManageMapper.deleteTCategoryGoods(gKey);
         for (TCategoryGoods categoryGoods : tCategoryGoodsList) {
             categoryGoods.setGKey(gKey);
