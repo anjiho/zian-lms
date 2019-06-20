@@ -824,13 +824,12 @@ public class ProductManageService extends PagingSupport {
     public void upsultBookInfo(TBookVO tBookVO, int gKey) {
         if (tBookVO == null) return;
 
+        tBookVO.setGKey(gKey);
         if (tBookVO.getBookKey() == 0) {
-            tBookVO.setGKey(gKey);
             productManageMapper.insertTBook(tBookVO);
         } else {
             productManageMapper.updateTBook(tBookVO);
         }
-
     }
 
     /**
