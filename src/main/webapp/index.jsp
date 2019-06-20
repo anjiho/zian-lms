@@ -1,3 +1,5 @@
+<%@ page import="com.zianedu.lms.session.UserSession" %>
+<%@ page import="com.zianedu.lms.vo.TUserVO" %>
 <%@ page language="java" contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%
     response.setCharacterEncoding("UTF-8");
@@ -83,7 +85,7 @@
         </div>
     </div>
     <div class="auth-wrapper d-flex no-block justify-content-center align-items-center bg-dark">
-        <div class="auth-box bg-dark border-top border-secondary">
+        <div class="auth-box bg-dark">
             <div id="loginform">
                 <div class="text-center" style="margin-bottom: 20px;">
                     <span style="font-size:20px;color: white;">지안에듀 관리자</span>
@@ -114,7 +116,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row border-top border-secondary">
+                    <div class="row">
                         <div class="col-12">
                             <div class="form-group">
                                 <div style="margin-bottom: 10px;"><!--onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}-->
