@@ -252,22 +252,37 @@
 
     //카테고리 추가 버튼
     function addCategoryInfo() {
-        var fistTrStyle = $("#categoryList tr").eq(0).attr("style");
+        var inputCtgKey = get_array_values_by_name("input", "inputCtgKey[]");
+        var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
 
-        if (fistTrStyle == "display:none") {
-            $('#categoryList tr').eq(0).removeAttr("style", null);
-        } else {
+        if (inputCtgKey.length > 0) {
             var $tableBody = $("#categoryTable").find("tbody"),
                 $trLast = $tableBody.find("tr:last"),
                 $trNew = $trLast.clone();
             $trLast.after($trNew);
 
-            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td input").eq(0).html("");
             $trNew.find("td").eq(1).html("지안에듀");
             getCategoryNoTag('categoryTable','1183', '3');
             $trNew.find("td").eq(5).html(defaultCategorySelectbox());
             $trNew.find("td").eq(7).html(defaultCategorySelectbox());
             $trNew.find("td").eq(9).html(defaultCategorySelectbox());
+        } else { //카테고리 없을 경우
+            var cellData = [
+                function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return nextIcon},
+                function() {return getCategoryNoTag('categoryTable','1183', '3');},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return nextIcon},
+                function() {return defaultCategorySelectbox();},
+                function() {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+            ];
+            dwr.util.addRows("categoryList", [0], cellData, {escapeHtml: false});
+            //$('#categoryList tr').eq(0).attr("style", "display:none");
         }
     }
 
@@ -492,13 +507,15 @@
                 if (ctgKeys.length > 0) {
                     var categoryArr = new Array();
                     $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:0,
-                            pos:0
-                        };
-                        categoryArr.push(data);
+                        if(key == '1183'){
+                            var data = {
+                                ctgGKey:0,
+                                ctgKey:key,
+                                gKey:0,
+                                pos:0
+                            };
+                            categoryArr.push(data);
+                        }
                     });
                 } else { //카테고리 없을 경우
                     productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
