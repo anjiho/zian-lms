@@ -661,12 +661,15 @@ public class ProductManageService extends PagingSupport {
      */
     @Transactional(propagation = Propagation.REQUIRED)
     public void upsultTCategoryGoods(List<TCategoryGoods>tCategoryGoodsList, int gKey) {
-        //if (tCategoryGoodsList.size() == 0) return;
-        productManageMapper.deleteTCategoryGoods(gKey);
-        for (TCategoryGoods categoryGoods : tCategoryGoodsList) {
-            categoryGoods.setGKey(gKey);
-            categoryGoods.setPos(0);
-            productManageMapper.insertTCategoryGoods(categoryGoods);
+        if (tCategoryGoodsList.size() == 0 && gKey > 0) {
+            productManageMapper.deleteTCategoryGoods(gKey);
+        } else {
+            productManageMapper.deleteTCategoryGoods(gKey);
+            for (TCategoryGoods categoryGoods : tCategoryGoodsList) {
+                categoryGoods.setGKey(gKey);
+                categoryGoods.setPos(0);
+                productManageMapper.insertTCategoryGoods(categoryGoods);
+            }
         }
     }
 
