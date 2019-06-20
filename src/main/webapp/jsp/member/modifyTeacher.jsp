@@ -473,9 +473,11 @@
                data.key02Type = 0;
                data.value = "";
                data.valueText = $("#section4 .pcContent").val();
-
               memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
            });
+       }else{
+           alert("추가된 내용이 없습니다.");
+           return false;
        }
     }
 

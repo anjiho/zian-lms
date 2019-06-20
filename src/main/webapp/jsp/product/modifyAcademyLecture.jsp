@@ -304,7 +304,7 @@
         } else { //카테고리 없을 경우
             var cellData = [
                 function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
-                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return "지안에듀";},
                 function() {return nextIcon},
                 function() {return getCategoryNoTag('categoryTable','1183', '3');},
                 function() {return nextIcon},

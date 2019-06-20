@@ -599,9 +599,9 @@
                         <!-- 2.옵션 Tab -->
                         <h3>옵션</h3>
                         <section>
-                            <div class="float-right mb-3">
+                            <!--<div class="float-right mb-3">
                                 <button type="button" class="btn btn-info btn-sm" onclick="addProductOptionInfo();">추가</button>
-                            </div>
+                            </div>-->
                             <div id="section2">
                                 <table class="table" id="optionTable">
                                     <input type="hidden" name="priceKey" value="0">
@@ -631,7 +631,7 @@
                                             <input type="number" class="form-control" id="sellPrice_0" name="sellPrice_0">
                                         </td>
                                         <td style="padding: 0.3rem;"><!--포인트-->
-                                            <input type="text" class="form-control" id="point" name="point">
+                                            <input type="number" class="form-control" id="point" name="point">
                                         </td>
                                         <td style="padding: 0.3rem;text-align: center;vertical-align: middle">
                                             <input type="number" class="form-control text-right" id="extendPercent" name="extendPercent" style="display: inline-block;width:60%;text-align: right"  onchange="saleInputPrice($(this))"> %
@@ -639,9 +639,9 @@
                                         <td style="padding: 0.3rem;"><!--재수강2-->
                                             <input type="number" class="form-control" id="resultPrice" name="resultPrice" readonly>
                                         </td>
-                                        <td style="padding: 0.3rem;">
+                                        <!--<td style="padding: 0.3rem;">
                                             <button type="button" onclick="deleteTableRow('optionTable' , 'delBtn');" class="btn btn-outline-danger btn-sm delBtn" style="margin-top:8%;">삭제</button>
-                                        </td>
+                                        </td>-->
                                     </tr>
                                     </tbody>
                                 </table>
