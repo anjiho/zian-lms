@@ -601,28 +601,6 @@ function getTeacherSubjectCategoryList3(val, i) {
 }
 
 
-/*
-function getTeacherSubjectCategoryList4(val) {
-    selectboxService.getCategoryList(3710, function (list) {
-        var html = "<select name='subjectCtgKey4' class='col-sm-3 select2 form-control custom-select'>";
-        html += "<option value=''>선택</option>";
-        for (var i=0; i<list.length; i++) {
-            if(list[i].ctgKey == val){
-                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
-            }else{
-                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
-            }
-        }
-        html += "</select>";
-        //innerHTML(tagId, html);
-        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
-        $(".testContent").find("span").eq(0).html(html);
-    });
-}
- */
-
-
-
 function getTeacherSubjectCategoryList4(val) {
     selectboxService.getCategoryList(3710, function (list) {
         var html = "<select name='subjectCtgKey4' class='col-sm-3 select2 form-control custom-select'>";
@@ -712,8 +690,10 @@ function getTeacherSubjectCategoryList6(val, i) {
             }
             html += "</select>";
             $("#newList1").find(".pcSel").eq(0).html(html);
+            $("#newList1").find(".pcSel").eq(2).html(html1);
+            $("#newList1").find(".pcSel").eq(3).html(html1);
         });
-    }else if(i == 1) {
+    }else{
         var html1 = "<select name='subjectCtgKey' class='col-sm-5 select2 form-control custom-select'>";
         html1 += "<option value=''>선택</option>";
         selectboxService.getCategoryList(3710, function (list) {
@@ -725,7 +705,9 @@ function getTeacherSubjectCategoryList6(val, i) {
                 }
             }
             html1 += "</select>";
+            $("#newList1").find(".pcSel").eq(0).html(html1);
             $("#newList1").find(".pcSel").eq(1).html(html1);
+            $("#newList1").find(".pcSel").eq(3).html(html1);
         });
     }
 }

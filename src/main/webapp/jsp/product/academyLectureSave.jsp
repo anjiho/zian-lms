@@ -266,6 +266,7 @@
         /* 2. 강좌정보 저장 */
         var lectureObj = getJsonObjectFromDiv("section4");
 
+
         /* 강사목록 */
         var array2 = new Array();
         $('#teacherTable tbody tr').each(function(index){
@@ -310,8 +311,17 @@
         data.append("videoLectureInfo",JSON.stringify(lectureObj));
         data.append("videoTeacherInfo",JSON.stringify(array2));
         data.append("videoOtherInfo",JSON.stringify(array3));
-        
-        if(confirm("저장하시겠습니까?")) {
+
+        if($("#price_0").val() == ""){alert("옵션정보를 입력해 주세요."); return false;}
+        else if(lectureObj.classGroupCtgKey == ""){alert("강좌정보 (급수)를 선택해 주세요."); return  false;}
+        else if(lectureObj.examYear == ""){alert("강좌정보 (시험대비년도)를 선택해 주세요."); return  false;}
+        else if(lectureObj.multiple == ""){alert("강좌정보 (배수)를 선택해 주세요."); return  false;}
+        else if(lectureObj.status == ""){alert("강좌정보 (진행상태)를 선택해 주세요."); return  false;}
+        else if(lectureObj.subjectCtgKey == ""){alert("강좌정보 (과목)을 선택해 주세요."); return  false;}
+        else if(lectureObj.stepCtgKey == ""){alert("강좌정보 (유형)를 선택해 주세요."); return  false;}
+        else if(lectureObj.limitCount == ""){alert("강좌정보 (강좌수)를 선택해 주세요."); return  false;}
+        else if(lectureObj.lecTime == ""){alert("강좌정보 (수강시간)를 선택해 주세요."); return  false;}
+        else {(confirm("저장하시겠습니까?"))
             $.ajax({
                 url: "/file/productUpload",
                 method: "post",
@@ -322,13 +332,11 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                        goPage('productManage', 'academyLectureList');
+                       // goPage('productManage', 'academyLectureList');
                     }
                 }
             });
         }
-
-
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
