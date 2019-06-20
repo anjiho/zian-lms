@@ -514,21 +514,21 @@
                                 gKey:0,
                                 pos:0
                             };
-                            alert(key);
                             categoryArr.push(data);
                         }
                     });
-                } else { //카테고리 없을 경우
-                    productManageService.deleteTCategoryGoods(gKey, function(){});
                 }
-                console.log(categoryArr);
                 /* 4. 도서정보 obj */
                 var bookObj = getJsonObjectFromDiv("section4");
                 if(bookObj.isDeliveryFree == 'on')  bookObj.isDeliveryFree = '1';//무료
                 else bookObj.isDeliveryFree = '0';
                 if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
                 else bookObj.isSet = '0';
-                console.log(basicObj);
+
+                if(categoryArr == undefined){
+                    categoryArr = [];
+                }
+                console.log(categoryArr);
                     if(confirm("수정 하시겠습니까?")) {
                     productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
                         isReloadPage(true);
