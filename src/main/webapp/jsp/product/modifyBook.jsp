@@ -90,7 +90,7 @@
                 });
             }else{
                 var cellData = [
-                    function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
+                    function() {return "<input type='hidden' name='inputCtgKey[]' value='0'>";},
                     function() {return "지안에듀";},
                     function() {return nextIcon},
                     function() {return getCategoryNoTag('categoryTable','1183', '3');},
@@ -270,7 +270,7 @@
         } else { //카테고리 없을 경우
             var cellData = [
                 function() {return "<input type='hidden' name='inputCtgKey[]' value=''>";},
-                function() {return getNewCategoryList2("categoryTable","214",'1183');},
+                function() {return "지안에듀";},
                 function() {return nextIcon},
                 function() {return getCategoryNoTag('categoryTable','1183', '3');},
                 function() {return nextIcon},
@@ -507,18 +507,19 @@
                 if (ctgKeys.length > 0) {
                     var categoryArr = new Array();
                     $.each(ctgKeys, function(index, key) {
-                        if(key != '1183'){
+                        if(key != '0'){
                             var data = {
                                 ctgGKey:0,
                                 ctgKey:Number(key),
                                 gKey:0,
                                 pos:0
                             };
+                            alert(key);
                             categoryArr.push(data);
                         }
                     });
                 } else { //카테고리 없을 경우
-                    productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
+                    productManageService.deleteTCategoryGoods(gKey, function(){});
                 }
                 console.log(categoryArr);
                 /* 4. 도서정보 obj */
@@ -529,9 +530,9 @@
                 else bookObj.isSet = '0';
                 console.log(basicObj);
                     if(confirm("수정 하시겠습니까?")) {
-                    /*productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
+                    productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
                         isReloadPage(true);
-                    });*/
+                    });
                 }
 
             }
