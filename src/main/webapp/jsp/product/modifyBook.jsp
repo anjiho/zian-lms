@@ -41,7 +41,7 @@
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
                     function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
-                    function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeyup='saleInputPrice($(this));'>"},
                     function() {return "%"},
                     function() {return "<span id='sum_0'></span>"},
                     function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
@@ -55,7 +55,7 @@
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
                     function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
-                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeyup='saleInputPrice($(this));'>"},
                     //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
                     function(data) {return "%"},
                     function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
@@ -507,10 +507,10 @@
                 if (ctgKeys.length > 0) {
                     var categoryArr = new Array();
                     $.each(ctgKeys, function(index, key) {
-                        if(key == '1183'){
+                        if(key != '1183'){
                             var data = {
                                 ctgGKey:0,
-                                ctgKey:key,
+                                ctgKey:Number(key),
                                 gKey:0,
                                 pos:0
                             };
@@ -520,18 +520,18 @@
                 } else { //카테고리 없을 경우
                     productManageService.deleteTCategoryGoods(gKey, function(){isReloadPage(true);});
                 }
-
+                console.log(categoryArr);
                 /* 4. 도서정보 obj */
                 var bookObj = getJsonObjectFromDiv("section4");
                 if(bookObj.isDeliveryFree == 'on')  bookObj.isDeliveryFree = '1';//무료
                 else bookObj.isDeliveryFree = '0';
                 if(bookObj.isSet == 'on')  bookObj.isSet = '1';//사은품배송비무료
                 else bookObj.isSet = '0';
-
-                if(confirm("수정 하시겠습니까?")) {
-                    productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
+                console.log(basicObj);
+                    if(confirm("수정 하시겠습니까?")) {
+                    /*productManageService.saveBook(basicObj, optionArray, categoryArr, bookObj, function (selList) {
                         isReloadPage(true);
-                    });
+                    });*/
                 }
 
             }
@@ -817,6 +817,7 @@
                             <div id="section4">
                                 <input type="hidden" value="" name="bookKey" id="bookKey">
                                 <input type="hidden" value="0" name="goodsId">
+                                <input type="hidden" value="<%=gKey%>" name="gKey">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">도서코드</label>

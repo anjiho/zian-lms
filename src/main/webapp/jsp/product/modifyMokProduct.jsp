@@ -244,10 +244,10 @@
             } else {
                 var dataArr = new Array();
                 $.each(ctgKeys, function(index, key) {
-                    if(key == '1183'){
+                    if(key != '1183'){
                         var data = {
                             ctgGKey:0,
-                            ctgKey:key,
+                            ctgKey:Number(key),
                             gKey:0,
                             pos:0
                         };
