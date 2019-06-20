@@ -396,7 +396,7 @@
                         }
                     });
                 }
-
+                console.log(categoryArr);
                 /* 4. 도서정보  */
                 var bookObj = getJsonObjectFromDiv("section4");
                 if(bookObj.isDeliveryFree == 'on')  bookObj.isDeliveryFree = '1';//무료
