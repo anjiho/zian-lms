@@ -126,6 +126,7 @@
 
         var gKey =  td.find("input").eq(0).val();
         var sellPrice = td.find("input").eq(1).val();
+
         var goodsName = td.eq(3).text();
         var kind = td.eq(4).text();
         var GKeys = get_array_values_by_name("input", "res_key[]");
@@ -133,6 +134,7 @@
             alert("이미 선택된 옵션입니다.");
             return;
         }
+
         if(sellPrice > 0){
             var sellPrice1 =  Number($("#sellPrice").val());
             sellPrice1 += Number(sellPrice);
@@ -140,8 +142,9 @@
         }
 
         var optionListHtml = "<tr scope='col' colspan='3'>";
-        optionListHtml     += " <td>";
+        optionListHtml     += " <td>";//sellPrice1
         optionListHtml     += "<input type='hidden'  value='" + gKey + "' name='res_key[]'>";
+        optionListHtml     += "<input type='hidden'  value='" + sellPrice1 + "' name='res_price[]'>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
         optionListHtml     += "<span>" + goodsName + "</span>";
@@ -150,7 +153,7 @@
         optionListHtml     += "<span>" + kind + "</span>";
         optionListHtml     += "</td>";
         optionListHtml     += " <td>";
-        optionListHtml     += "<button type=\"button\" onclick=\"deleteTableRow('optionTable');\" class=\"btn btn-outline-danger btn-sm\">삭제</button>";
+        optionListHtml     += "<button type=\"button\" onclick=\"sellPriceChk\("+ sellPrice +");deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
         optionListHtml     += "</td>";
         $('#optionTable > tbody:first').append(optionListHtml);
         $('#optionList tr').each(function(){
@@ -158,15 +161,11 @@
             tr.children().eq(0).attr("style", "display:none");
         });
     }
-
-    function deleteTableRow(val) {
-        if (val == "optionTable") {
-            if ($("#optionTable > tbody > tr").length == 1) {
-                $('#optionTable > tbody:first > tr:first').attr("style", "display:none");
-            } else {
-                $('#optionTable > tbody:last > tr:last').remove();
-            }
-        }
+    
+    function sellPriceChk(selPrice) {
+        var sellPrice1 =  getInputTextValue("sellPrice");
+        var result = Number(sellPrice1) -  Number(selPrice);
+        $("#sellPrice").val(result);
     }
 
     function academyLectureInfoSave() {

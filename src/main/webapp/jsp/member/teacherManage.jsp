@@ -24,114 +24,118 @@
     }
 
     function teacherSave() {
-        var data = new FormData();
-        $.each($('#imageTeacherList')[0].files, function (i, file) {
-            data.append('listImageFile', file);
-        });
-        $.each($('#imageTeacherView')[0].files, function (i, file) {
-            data.append('listImageViewFile', file);
-        });
-        data.append('uploadType', 'TEACHER');
-
-        var userId = getInputTextValue("userId");
-        var pwd = getInputTextValue("pwd");
-        if(userId == ""){
-            alert("아이디를 입력해 주세요.");
-            return false;
-        }
-        if(pwd == ""){
-            alert("비밀번호를 입력해 주세요.");
-            return false;
-        }
-
-        if (confirm("저장 하시겠습니까?")) {//TEACHER
-            $.ajax({
-                url: "/file/imageFileUpload",
-                method: "post",
-                dataType: "JSON",
-                data: data,
-                cache: false,
-                processData: false,
-                contentType: false,
-                success: function (data) {
-                    if (data.result) {
-                        var teacherInfoObj = getJsonObjectFromDiv("section1");
-                        var teacherInfoObj2 = getJsonObjectFromDiv("section2");
-
-                        teacherInfoObj2.imageTeacherList = data.result.listImageFilePath;
-                        teacherInfoObj2.imageTeacherView = data.result.viewImageFilePath;
-                        teacherInfoObj2.imageList = data.result.listImageFilePath;
-                        teacherInfoObj2.imageView = "";
-                        teacherInfoObj2.imageMainList = "";
-                        teacherInfoObj2.imageContents = "";
-                        teacherInfoObj2.teacherKey = 0;
-                        teacherInfoObj2.userKey = 0;
-                        var authority = getSelectboxValue("authoritSel");//권한
-                        var authoritGrade = getSelectboxValue("authoritGradeSel");//권한등급
-                        var interestCtgKey0 = getSelectboxValue("sel_1");//직렬 키
-
-                        var phone1 = getInputTextValue("phone1");
-                        var phone2 = getInputTextValue("phone2");
-                        var phone3 = getInputTextValue("phone3");
-                        var phone = phone1+"-"+ phone2+"-"+phone3;
-
-                        var email = getInputTextValue("InputEmail1")+"@"+getInputTextValue("InputEmail");
-
-                        var zipcode = getInputTextValue("postcode");
-                        var addressRoad =getInputTextValue("roadAddress");
-                        var addressNumber =getInputTextValue("jibunAddress");
-                        var address = getInputTextValue("detailAddress");
-
-                        var userId = getInputTextValue("userId");
-                        var pwd = getInputTextValue("pwd");
-                        var name = getInputTextValue("name");
-                        //var indate = getInputTextValue("indate");
-                        var birth = getInputTextValue("birth");
-                        //var recvEmail = $('input[name="recvEmail"]:checked').val();
-                        //var recvSms = $('input[name="recvSms"]:checked').val();
-
-                        var teacherObj = {
-                            userKey : 0,
-                            cKey : 0,
-                            userId : userId,
-                            indate : "",
-                            name : name,
-                            authority : authority,
-                            status : 10, //가입상태
-                            pwd : pwd,
-                            birth : birth,
-                            lunar : "",
-                            gender : "",
-                            telephone: "",
-                            telephoneMobile : phone,
-                            zipcode: zipcode,
-                            addressRoad : addressRoad,
-                            addressNumber : addressNumber,
-                            address : address,
-                            email : email,
-                            recvSms : "",
-                            recvEmail : "",
-                            welfareDcPercent : 0,
-                            grade : authoritGrade,
-                            note : "",
-                            interestCtgKey0 : Number(interestCtgKey0)
-                        };
-                        memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {});
-                    }
-                }
+        if($("#chkId").val() == 1) {
+            var data = new FormData();
+            $.each($('#imageTeacherList')[0].files, function (i, file) {
+                data.append('listImageFile', file);
             });
+            $.each($('#imageTeacherView')[0].files, function (i, file) {
+                data.append('listImageViewFile', file);
+            });
+            data.append('uploadType', 'TEACHER');
+
+            var userId = getInputTextValue("userId");
+            var pwd = getInputTextValue("pwd");
+            if(userId == ""){
+                alert("아이디를 입력해 주세요.");
+                return false;
+            }
+            if(pwd == ""){
+                alert("비밀번호를 입력해 주세요.");
+                return false;
+            }
+
+            if (confirm("저장 하시겠습니까?")) {//TEACHER
+                $.ajax({
+                    url: "/file/imageFileUpload",
+                    method: "post",
+                    dataType: "JSON",
+                    data: data,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        if (data.result) {
+                            var teacherInfoObj = getJsonObjectFromDiv("section1");
+                            var teacherInfoObj2 = getJsonObjectFromDiv("section2");
+
+                            teacherInfoObj2.imageTeacherList = data.result.listImageFilePath;
+                            teacherInfoObj2.imageTeacherView = data.result.viewImageFilePath;
+                            teacherInfoObj2.imageList = data.result.listImageFilePath;
+                            teacherInfoObj2.imageView = "";
+                            teacherInfoObj2.imageMainList = "";
+                            teacherInfoObj2.imageContents = "";
+                            teacherInfoObj2.teacherKey = 0;
+                            teacherInfoObj2.userKey = 0;
+                            var authority = getSelectboxValue("authoritSel");//권한
+                            var authoritGrade = getSelectboxValue("authoritGradeSel");//권한등급
+                            var interestCtgKey0 = getSelectboxValue("sel_1");//직렬 키
+
+                            var phone1 = getInputTextValue("phone1");
+                            var phone2 = getInputTextValue("phone2");
+                            var phone3 = getInputTextValue("phone3");
+                            var phone = phone1+"-"+ phone2+"-"+phone3;
+
+                            var email = getInputTextValue("InputEmail1")+"@"+getInputTextValue("InputEmail");
+
+                            var zipcode = getInputTextValue("postcode");
+                            var addressRoad =getInputTextValue("roadAddress");
+                            var addressNumber =getInputTextValue("jibunAddress");
+                            var address = getInputTextValue("detailAddress");
+
+                            var userId = getInputTextValue("userId");
+                            var pwd = getInputTextValue("pwd");
+                            var name = getInputTextValue("name");
+                            var birth = getInputTextValue("birth");
+
+                            var teacherObj = {
+                                userKey : 0,
+                                cKey : 0,
+                                userId : userId,
+                                indate : "",
+                                name : name,
+                                authority : authority,
+                                status : 10, //가입상태
+                                pwd : pwd,
+                                birth : birth,
+                                lunar : "",
+                                gender : "",
+                                telephone: "",
+                                telephoneMobile : phone,
+                                zipcode: zipcode,
+                                addressRoad : addressRoad,
+                                addressNumber : addressNumber,
+                                address : address,
+                                email : email,
+                                recvSms : "",
+                                recvEmail : "",
+                                welfareDcPercent : 0,
+                                grade : authoritGrade,
+                                note : "",
+                                interestCtgKey0 : Number(interestCtgKey0)
+                            };
+                            memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {});
+                        }
+                    }
+                });
+            }
+        }else{
+            alert("아이디 중복체크 해주세요.");
+            return false;
         }
     }
-    
+
     function isUserId() {
         var userId = $("#userId").val();
         memberManageService.isUser(userId, function(info) {
             if(info == false){
                 $("#userId").addClass('is-invalid');
-                $("#isChkId").hide();
+                gfn_display("isChkId", false);
+                $("#chkId").val(0);
             }else{
                 $("#userId").removeClass('is-invalid');
-                $("#isChkId").show();
+                gfn_display("isChkId", true);
+                $("#chkId").val(1);
             }
         });
     }
@@ -170,6 +174,7 @@
                                 <input type="hidden" name="cKey" value="0">
                                 <input type="hidden" name="lunar" value="">
                                 <input type="hidden" name="gender" value="">
+                                <input type="hidden" id="chkId" value="">
                                 <div class="col-md-12">
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>

@@ -326,7 +326,7 @@
                     </div>
                 </div>
                 <!--온라인강좌-->
-                <table class="table text-center" id="onlineTable" style="display: none;">
+                <table class="table" id="onlineTable" style="display: none;">
                     <div style="float: left;display: none;" id="onlineLable">
                         <label  class="col-sm-3 control-label col-form-label card-title">온라인강좌</label>
                     </div>
@@ -380,7 +380,7 @@
                 </table>
                 <!--//학원강의-->
                 <!--패키지-->
-                <table class="table text-center calculate-list" id="pacakgeTable" style="display: none;">
+                <table class="table calculate-list" id="pacakgeTable" style="display: none;">
                     <div style="float: left;display: none;"  id="pacakgeLable">
                         <label  class="col-sm-3 control-label col-form-label">패키지</label>
                     </div>

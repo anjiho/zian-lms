@@ -112,7 +112,7 @@
                     };
                     SmsArr.push(data);
                 });
-                memberManageService.sendSms(SmsArr, function (selList) {});
+                memberManageService.sendSms(SmsArr, function () {isReloadPage();});
             }
         }else{
             alert("추가된 회원목록이 없습니다.");

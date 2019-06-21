@@ -168,7 +168,6 @@
                 html1 += "</div>";
                 html1 += "</div>";
 
-
                 $("#mobile_div2").html(html1);
                 $(".mobileContent").summernote({
                     height: 250,
@@ -188,15 +187,6 @@
                             if(cmpList.device == 1){ //pc
                                 var cmpList = subjectGroupInfo[i];
                                 var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
-                                /*var cellData = [
-                                    function() {return "<input type='hidden' name='hiddenKey' value='"+ cmpList.resKey +"'>";},
-                                    function() {return getTeacherSubjectCategoryList3(cmpList.ctgKey, i);},
-                                    function() {return "<textarea name=\"RePcContent\"  class=\"RePcContent\">"+ cmpList.valueText +"</textarea>";},
-                                    function() {return deleteBtn;}
-                                ];
-                                dwr.util.addRows("newList", [0], cellData, {escapeHtml: false});
-                                $('#newList tr').find("td").eq(0).attr("style", "display:none");*/
-
                                 var html = "<div name=\"\" class=\"form-group row\">";
                                     html += "<input type='hidden' name='hiddenKey' value=''>";
                                     html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
@@ -224,14 +214,6 @@
                             }else if(cmpList.device == 3){ //mobile
                                 var cmpList = subjectGroupInfo[i];
                                 var deleteBtn = "<button type='button' class='btn btn-outline-danger btn-sm' onclick='editDelete("+ cmpList.resKey +")'>삭제</button>";
-                               /* var cellData = [
-                                    function() {return "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";},
-                                    function() {return getTeacherSubjectCategoryList6(cmpList.ctgKey, i);},
-                                    function() {return "<textarea name=\"RemobileContent\"  class=\"RemobileContent\">"+ cmpList.valueText +"</textarea>";},
-                                    function() {return deleteBtn;}
-                                ];
-                                dwr.util.addRows("newList1", [0], cellData, {escapeHtml: false});*/
-
                                 var html = "<div name=\"\" class=\"form-group row\">";
                                 html += "<input type='hidden' name='hiddenKey1' value='"+ cmpList.resKey +"'>";
                                 html += "<label  class=\"col-sm-1 control-label col-form-label\" style=\"margin-bottom: 0\">과목선택</label>";
@@ -246,7 +228,6 @@
 
                                 $("#newList1").append(html);
 
-                                // $('#newList tr').eq(0).attr("style", "display:none");
                                 $('.RemobileContent').summernote({
                                     height: 250,
                                     width: 1300,
@@ -370,7 +351,6 @@
             note: "",
             interestCtgKey0: Number(interestCtgKey0)
         };
-
         memberManageService.updateUserInfo(teacherObj, function () {isReloadPage();});
     }
 

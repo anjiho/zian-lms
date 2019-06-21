@@ -20,7 +20,7 @@
         popupCouponManageService.getPopupListCount( function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
-            popupCouponManageService.getPopupList(sPage, 20, function (selList) {
+            popupCouponManageService.getPopupList(sPage, 10, function (selList) {
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return listNum--;},
