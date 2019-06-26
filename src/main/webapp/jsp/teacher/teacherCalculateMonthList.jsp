@@ -20,6 +20,17 @@
         dwr.util.removeAllRows("onlineList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("acaList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("pacakgeList"); //테이블 리스트 초기화
+        //옵션 목록 삭제
+        $("#sumList tr").each(function () {
+            var tr = $(this);
+            if (tr.attr("id") == 'option') {
+                tr.remove();
+            }
+        });
+
+
+        //alert(tr[0].id);
+
 
         var teacherKey     = getSelectboxValue("sel_1"); //31, "201903",
         var searchYearMonth = getSelectboxValue("searchYearMonth");
@@ -66,8 +77,12 @@
                         optionPirceSum += cmpList.price;
                         if (cmpList != undefined) {
                             var cloneTr = $("#sumList").find("tr:last").clone();
-                            $("#sumList").append(cloneTr);
+                            //$("#sumList").append(cloneTr);
+                            $('#sumList > tr').eq(1).after(cloneTr);
+                            //$("#sumList").find("tr").eq(1). append(cloneTr);
+                            cloneTr.attr('id', 'option');
                             cloneTr.find("td").eq(0).html(cmpList.title);
+                            //cloneTr.find("td").eq(1).attr('id', 'option');
                             cloneTr.find("td").eq(4).html(format(cmpList.price));
                         }
                     }
