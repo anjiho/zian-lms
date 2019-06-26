@@ -1528,6 +1528,7 @@ function getSmsYearSelectbox(tagId, val) {
         if(i == yyyy || i == yearAgo){
             for(var j=mm; j>0; j--) {
                 if(j < 10) j = "0"+j;
+                alert(i+j);
                 if (i+j == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
                 else html += "<option value=" + i + j + ">" + i + "년" + j + "월" + "</option>";
             }
