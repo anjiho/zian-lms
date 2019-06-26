@@ -17,7 +17,7 @@
         <nav class="navbar top-navbar navbar-expand-md navbar-dark">
             <div class="navbar-header" data-logobg="skin5">
                 <a class="nav-toggler waves-effect waves-light d-block d-md-none" href="javascript:void(0)"><i class="ti-menu ti-close"></i></a>
-                <a class="navbar-brand" href="javascript:void(0)" attr-a="onclick: attr-a">
+                <a class="navbar-brand" href="javascript:void(0)" onclick="goPage('dataManage', 'classficationSave'); return false;" attr-a="onclick: attr-a">
                     <img src="img/logo.png" alt="user" class="rounded-circle" width="31">
                     <span class="logo-text">
                         지안에듀

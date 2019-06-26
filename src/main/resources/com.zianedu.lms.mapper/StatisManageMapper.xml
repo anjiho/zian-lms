@@ -275,7 +275,7 @@
         )
         VALUES
         (
-          #{calculateOptionKey}, #{teacherKey}, sysdate, #{title}, #{price}
+          #{calculateOptionKey}, #{teacherKey}, TO_DATE(#{targetDate}, 'YYYY-MM-DD hh24:mi:ss'), #{title}, #{price}
         )
     </insert>
 
