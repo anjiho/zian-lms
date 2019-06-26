@@ -1,18 +1,25 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String teacherDateSel = request.getParameter("teacher_date_key");
+    String teacherNameSel = request.getParameter("teacher_name_key");
+%>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/statisManageService.js'></script>
 <script>
+    var teacherDateSel = '<%=teacherDateSel%>';
+    var teacherNameSel = '<%=teacherNameSel%>';
+    alert(teacherDateSel);
     function init() {
         menuActive('menu-7', 1);
-        getSmsYearSelectbox("l_monthYearSel","");
+        getSmsYearSelectbox("l_monthYearSel", teacherDateSel);
         var authority =  <%=authority%>;
         var teacherKey = <%=teacherKey%>;
 
         if(authority == 5){
             selectTeacherSelectbox2("teacherList", teacherKey);//선생님 셀렉트박스
         }else{
-            selectTeacherSelectbox("teacherList", "");//선생님 셀렉트박스
+            selectTeacherSelectbox("teacherList", teacherNameSel);//선생님 셀렉트박스
         }
     }
 
@@ -50,7 +57,6 @@
             animationOut: false,
             defaultApply: 	true,
         });
-
         statisManageService.getTeacherCalculateByMonth(teacherKey, searchYearMonth, function (selList) {
             if (selList.length == 0) return;
             var videoCalculateResult   = selList.videoCalculateResult; //온라인강좌
@@ -260,12 +266,17 @@
     function optionAdd() {
         var optionTitles = get_array_values_by_name("input", "optionTitle");
         var teacherKey   = getSelectboxValue("sel_1"); //31, "201903",
-
+        var searchYearMonth  = getSelectboxValue("searchYearMonth");
         if(optionTitles.length >= 1){
             alert("상위 옵션을 추가해 주세요.");
             return false;
+        }else if(searchYearMonth == ""){
+            alert("년월을 선택해 주세요.");
+            $("#searchYearMonth").focus();
+            return false;
         }else if(teacherKey == ""){
             alert("강사선택을 해주세요.");
+            $("#sel_1").focus();
             return false;
         }
 
@@ -273,8 +284,8 @@
             html += "<tr>";
                 html += " <td colspan=\"4\"><input type='text' placeholder='제목을 입력해주세요.' style='width:300px;' id='optionTitle' name='optionTitle'></td>";
                 html += " <td></td>";
-                html += " <td></td>";//onkeyup='inputNumberFormat(this);'
-                html += " <td><input type='text' placeholder='가격을 입력해 주세요.' style='width:200px;' id='optionPrice'></td>";
+                html += " <td></td>";
+                html += " <td><input type='number' placeholder='가격을 입력해 주세요.' style='width:200px;' id='optionPrice'></td>";
                 html += " <td><button type='button' class='btn btn-sm' onclick='optionSave();'>옵션저장</button></td>";
              html += "</tr>";
 
@@ -285,15 +296,34 @@
         var teacherKey      = getSelectboxValue("sel_1"); //31, "201903",
         var optionTitle     = $("#optionTitle").val();
         var optionPrice     = $("#optionPrice").val();
-
+        var searchYearMonth  = getSelectboxValue("searchYearMonth");
+        if(optionTitle == ""){
+            alert("옵션명을 입력해 주세요.");
+            $("#optionTitle").focus();
+            return false;
+        }
+        if(optionPrice == ""){
+            alert("추가된 옵션 가격을 입력해 주세요.");
+            $("#optionPrice").focus();
+            return false;
+        }
         if(confirm("옵션을 저장하시겠습니까?")){
-            statisManageService.saveTeacherCalculateOptionInfo(teacherKey, optionTitle, optionPrice, function () {});
+           statisManageService.saveTeacherCalculateOptionInfo(teacherKey, optionTitle, optionPrice, function () {
+               //isReloadPage();
+               var searchYearMonth =  getSelectboxValue('searchYearMonth');
+               var teacherName =  getSelectboxValue('sel_1');
+               innerValue("teacher_date_key", searchYearMonth);
+               innerValue("teacher_name_key", teacherName);
+               goPage('teacherManage', 'teacherCalculateMonthList');
+           });
         }
     }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="param_key" name="param_key" value="">
+    <input type="hidden" id="teacher_date_key" name="teacher_date_key" value="">
+    <input type="hidden" id="teacher_name_key" name="teacher_name_key" value="">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">월별 정산내역</h4>
