@@ -114,6 +114,8 @@
 <form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
 <input type="hidden" name="param_key" id="param_key">
+<input type="hidden" name="teacher_date_key" id="teacher_date_key">
+<input type="hidden" name="teacher_name_key" id="teacher_name_key">
 <input type="hidden" id="type" name="type" value=""><!--주문관리 : 페이지 왼쪽메뉴 스타일 type-->
 </form>
 <%
