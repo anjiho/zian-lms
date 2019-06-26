@@ -9,7 +9,7 @@
 <script>
     var teacherDateSel = '<%=teacherDateSel%>';
     var teacherNameSel = '<%=teacherNameSel%>';
-    alert(teacherDateSel);
+
     function init() {
         menuActive('menu-7', 1);
         getSmsYearSelectbox("l_monthYearSel", teacherDateSel);
@@ -21,6 +21,10 @@
         }else{
             selectTeacherSelectbox("teacherList", teacherNameSel);//선생님 셀렉트박스
         }
+
+        if(teacherNameSel > 0){
+            fn_search('new');
+        }
     }
 
     function fn_search(val) {
@@ -28,7 +32,7 @@
         dwr.util.removeAllRows("acaList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("pacakgeList"); //테이블 리스트 초기화
 
-        var teacherKey     = getSelectboxValue("sel_1"); //31, "201903",
+        var teacherKey      = getSelectboxValue("sel_1");
         var searchYearMonth = getSelectboxValue("searchYearMonth");
 
         if(searchYearMonth == ""){
@@ -57,7 +61,12 @@
             animationOut: false,
             defaultApply: 	true,
         });
-        statisManageService.getTeacherCalculateByMonth(teacherKey, searchYearMonth, function (selList) {
+
+        var teacherSelKey = 0;
+        if(teacherKey) teacherSelKey = teacherKey;
+        else teacherSelKey = teacherNameSel;
+
+        statisManageService.getTeacherCalculateByMonth(teacherSelKey, searchYearMonth, function (selList) {
             if (selList.length == 0) return;
             var videoCalculateResult   = selList.videoCalculateResult; //온라인강좌
             var academyCalculateResult = selList.academyCalculateResult; //학원강의
@@ -75,6 +84,12 @@
                             $("#sumList").append(cloneTr);
                             cloneTr.find("td").eq(0).html(cmpList.title);
                             cloneTr.find("td").eq(4).html(format(cmpList.price));
+                            /*var html = "";
+                            html += "<tr>";
+                                html += " <td>"+ cmpList.title +"</td>";
+                                html += " <td>" + cmpList.price + "</td>";
+                            html += "</tr>";
+                            $("#test").append(html);*/
                         }
                     }
                 }
@@ -239,7 +254,7 @@
             var result = Math.ceil(taxPrice).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 
             var duesPrice  = 0; //사우회비
-            if(totalPrice > 10000) duesPrice = -10000;
+            if(totalPrice > 100000) duesPrice = -10000;
             else  duesPrice = 0;
 
             var actualPay = alltotalPrice+taxPrice+duesPrice+optionPirceSum;//실지급액
@@ -308,7 +323,8 @@
             return false;
         }
         if(confirm("옵션을 저장하시겠습니까?")){
-           statisManageService.saveTeacherCalculateOptionInfo(teacherKey, optionTitle, optionPrice, function () {
+            alert(searchYearMonth);
+           statisManageService.saveTeacherCalculateOptionInfo(teacherKey, optionTitle, optionPrice, searchYearMonth, function () {
                //isReloadPage();
                var searchYearMonth =  getSelectboxValue('searchYearMonth');
                var teacherName =  getSelectboxValue('sel_1');
@@ -451,6 +467,8 @@
                             <td></td>
                             <td id="cancelTotalCnt"></td>
                             <td id="cancelTotalPrice"></td>
+                        </tr>
+                        <tr id="test">
                         </tr>
                         <tr>
                             <td colspan="4">총 합계</td>
