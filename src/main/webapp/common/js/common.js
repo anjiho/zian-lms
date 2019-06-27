@@ -2485,13 +2485,6 @@ function setSearchDate(start, startId, endId){
     }
 
 }
-
-//금액 컴마표시
-function format(str) {
-    str = String(str);
-    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-}
-
 function allChk(obj, chkId){
     var chkObj = document.getElementsByName(chkId);
     var rowCnt = chkObj.length - 1;
@@ -2636,6 +2629,14 @@ function removeComma(n) {
 function goMemberDetail(val) {
     innerValue('param_key', val);
     goPage('memberManage', 'memberManage');
+}
+
+
+//금액 컴마표시
+function format(str) {
+    console.log(str);
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
 }
 
 //원단위 절사하기

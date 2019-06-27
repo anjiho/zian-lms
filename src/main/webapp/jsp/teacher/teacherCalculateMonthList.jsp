@@ -141,9 +141,9 @@
                         }
                     }
                     innerHTML("onlineTotalCnt", onlineTotalCnt); //온라인강좌 - 인원 합계
-                    innerHTML("onlinePayPriceTotal", format(onlinePayPriceTotal)); //온라인강좌 - 금액 합계
+                    innerHTML("onlinePayPriceTotal", format(roundingDownWon(onlinePayPriceTotal))); //온라인강좌 - 금액 합계
                     innerHTML("onlineCancelCntTotal", onlineCancelCntTotal); //온라인강좌 - 환불인원 합계
-                    innerHTML("onlineCancelPriceTotal", format(onlineCancelPriceTotal)); //온라인강좌 - 환불금액 합계
+                    innerHTML("onlineCancelPriceTotal", format(roundingDownWon(onlineCancelPriceTotal))); //온라인강좌 - 환불금액 합계
                 } else {
                     $("#onlineTable").hide();
                     $("#onlineLable").hide();
@@ -190,9 +190,9 @@
                         }
                     }
                     innerHTML("acaTotalCnt", acaTotalCnt); //학원강의 - 인원 합계
-                    innerHTML("acaPayPriceTotal", format(acaPayPriceTotal)); //학원강의 - 금액 합계
+                    innerHTML("acaPayPriceTotal", format(roundingDownWon(acaPayPriceTotal))); //학원강의 - 금액 합계
                     innerHTML("acaCancelTotalCnt", acaCancelTotalCnt); //학원강의 - 환불인원 합계
-                    innerHTML("acaCancelPriceTotal", format(acaCancelPriceTotal)); //학원강의 - 환불금액 합계
+                    innerHTML("acaCancelPriceTotal", format(roundingDownWon(acaCancelPriceTotal))); //학원강의 - 환불금액 합계
                 } else {
                     $("#acaTable").hide();
                     $("#acaLable").hide();
@@ -245,9 +245,9 @@
                         }
                     }
                     innerHTML("packageTotalCnt", packageTotalCnt); //패키지 - 인원 합계
-                    innerHTML("packagePayPriceTotal", format(packagePayPriceTotal)); //패키지 - 금액 합계
+                    innerHTML("packagePayPriceTotal", format(roundingDownWon(packagePayPriceTotal))); //패키지 - 금액 합계
                     innerHTML("packageCancelCntTotal", packageCancelCntTotal); //패키지 - 환불인원 합계
-                    innerHTML("packageCancelPriceTotal", format(packageCancelPriceTotal)); //패키지 - 환불금액 합계
+                    innerHTML("packageCancelPriceTotal", format(roundingDownWon(packageCancelPriceTotal))); //패키지 - 환불금액 합계
                 } else {
                     $("#pacakgeTable").hide();
                     $("#pacakgeLable").hide();
@@ -263,24 +263,24 @@
 
             var taxPrice =  alltotalPrice*0.033; //소득세,주민세
                 taxPrice = taxPrice * -1;
-            var result = Math.ceil(taxPrice).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+           // var result = Math.ceil(taxPrice).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 
             var duesPrice  = 0; //사우회비
             if(totalPrice > 100000) duesPrice = -10000;
             else  duesPrice = 0;
 
             var actualPay = alltotalPrice+taxPrice+duesPrice;//실지급액
-            var actualPayResult = Math.ceil(actualPay).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+           // var actualPayResult = Math.ceil(actualPay).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 
-            innerHTML("taxPrice", format(result));
-            innerHTML("actualPay", format(actualPayResult));
-            innerHTML("duesPrice", format(duesPrice));
+            innerHTML("taxPrice", format(roundingDownWon(taxPrice)));
+            innerHTML("actualPay", format(roundingDownWon(actualPay)));
+            innerHTML("duesPrice", format(roundingDownWon(duesPrice)));
             innerHTML("totalCnt", totalCnt);
-            innerHTML("totalPrice", format(totalPrice));
+            innerHTML("totalPrice", format(roundingDownWon(totalPrice)));
             innerHTML("cancelTotalCnt", cancelTotalCnt);
-            innerHTML("cancelTotalPrice", format(cancelTotalPrice));
+            innerHTML("cancelTotalPrice", format(roundingDownWon(cancelTotalPrice)));
             innerHTML("alltotalCnt", alltotalCnt);
-            innerHTML("alltotalPrice", format(alltotalPrice));
+            innerHTML("alltotalPrice", format(roundingDownWon(alltotalPrice)));
         });
         loadingOut(loading);
     }

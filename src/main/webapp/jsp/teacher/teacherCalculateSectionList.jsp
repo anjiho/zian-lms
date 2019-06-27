@@ -24,12 +24,12 @@
         var searchStartDate = getInputTextValue("searchStartDate");
         var searchEndDate   = getInputTextValue("searchEndDate");
 
-        if(teacherKey == "") {
-            alert("강사를 선택해주세요");
-            return false;
-        }
         if(searchStartDate == "" || searchEndDate == "") {
             alert("날짜를 입력해주세요.");
+            return false;
+        }
+        if(teacherKey == "") {
+            alert("강사를 선택해주세요");
             return false;
         }
 
@@ -123,9 +123,9 @@
                         }
                     }
                     innerHTML("onlineTotalCnt", onlineTotalCnt); //온라인강좌 - 인원 합계
-                    innerHTML("onlinePayPriceTotal", format(onlinePayPriceTotal)); //온라인강좌 - 금액 합계
+                    innerHTML("onlinePayPriceTotal", format(roundingDownWon(onlinePayPriceTotal))); //온라인강좌 - 금액 합계
                     innerHTML("onlineCancelCntTotal", onlineCancelCntTotal); //온라인강좌 - 환불인원 합계
-                    innerHTML("onlineCancelPriceTotal", format(onlineCancelPriceTotal)); //온라인강좌 - 환불금액 합계
+                    innerHTML("onlineCancelPriceTotal", format(roundingDownWon(onlineCancelPriceTotal))); //온라인강좌 - 환불금액 합계
                 } else {
                     $("#onlineTable").hide();
                     $("#onlineLable").hide();
@@ -173,9 +173,9 @@
                         }
                     }
                     innerHTML("acaTotalCnt", acaTotalCnt); //학원강의 - 인원 합계
-                    innerHTML("acaPayPriceTotal", format(acaPayPriceTotal)); //학원강의 - 금액 합계
+                    innerHTML("acaPayPriceTotal", format(roundingDownWon(acaPayPriceTotal))); //학원강의 - 금액 합계
                     innerHTML("acaCancelTotalCnt", acaCancelTotalCnt); //학원강의 - 환불인원 합계
-                    innerHTML("acaCancelPriceTotal", format(acaCancelPriceTotal)); //학원강의 - 환불금액 합계
+                    innerHTML("acaCancelPriceTotal", format(roundingDownWon(acaCancelPriceTotal))); //학원강의 - 환불금액 합계
                 } else {
                     $("#acaTable").hide();
                     $("#acaLable").hide();
@@ -228,9 +228,9 @@
                         }
                     }
                     innerHTML("packageTotalCnt", packageTotalCnt); //패키지 - 인원 합계
-                    innerHTML("packagePayPriceTotal", format(packagePayPriceTotal)); //패키지 - 금액 합계
+                    innerHTML("packagePayPriceTotal", format(roundingDownWon(packagePayPriceTotal))); //패키지 - 금액 합계
                     innerHTML("packageCancelCntTotal", packageCancelCntTotal); //패키지 - 환불인원 합계
-                    innerHTML("packageCancelPriceTotal", format(packageCancelPriceTotal)); //패키지 - 환불금액 합계
+                    innerHTML("packageCancelPriceTotal", format(roundingDownWon(packageCancelPriceTotal))); //패키지 - 환불금액 합계
                 } else {
                     $("#pacakgeTable").hide();
                     $("#pacakgeLable").hide();
@@ -246,11 +246,11 @@
             //var actualPayResult = Math.ceil(actualPay).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 
             innerHTML("totalCnt", totalCnt);
-            innerHTML("totalPrice", format(totalPrice));
+            innerHTML("totalPrice", format(roundingDownWon(totalPrice)));
             innerHTML("cancelTotalCnt", cancelTotalCnt);
-            innerHTML("cancelTotalPrice", format(cancelTotalPrice));
+            innerHTML("cancelTotalPrice", format(roundingDownWon(cancelTotalPrice)));
             innerHTML("alltotalCnt", alltotalCnt);
-            innerHTML("alltotalPrice", format(alltotalPrice));
+            innerHTML("alltotalPrice", format(roundingDownWon(alltotalPrice)));
         });
         loadingOut(loading);
     }
@@ -299,7 +299,7 @@
     <input type="hidden" id="param_key" name="param_key" value="">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">월별 정산내역</h4>
+            <h4 class="page-title">기간별 정산내역</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
