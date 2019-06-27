@@ -105,6 +105,9 @@
     <!--daum map api-->
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
+    <script src="common/js/jquery.table2excel.js"></script>
+
+
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">

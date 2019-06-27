@@ -28,6 +28,7 @@
     }
 
     function fn_search(val) {
+        innerValue("isSearch", 1);
         dwr.util.removeAllRows("onlineList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("acaList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("pacakgeList"); //테이블 리스트 초기화
@@ -344,6 +345,35 @@
            });
         }
     }
+
+    function ReportToExcelConverter() {
+        if (getSelectboxValue("searchYearMonth") == "") {
+            alert("년원일을 선택하세요.");
+            return;
+        }
+        if (getSelectboxValue("sel_1") == "") {
+            alert("강사를 선택하세요.");
+            return;
+        }
+        if (getInputTextValue("isSearch") == "") {
+            alert("검색버튼을 눌러주세요.");
+            return;
+        }
+        var month = getSelectboxValue("searchYearMonth");
+        var teacherName = $("#sel_1 option:selected").text();
+
+        $("#excelDownloadDiv").table2excel({
+            exclude: ".noExl",
+            name: month + "_" + teacherName,
+            filename: month + "_" + teacherName +'.xls',
+            //확장자를 여기서 붙여줘야한다.
+            fileext: ".xls",
+            exclude_img: true,
+            exclude_links: true,
+            exclude_inputs: true
+        });
+    }
+
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
@@ -351,6 +381,7 @@
     <input type="hidden" id="teacher_date_key" name="teacher_date_key" value="">
     <input type="hidden" id="teacher_name_key" name="teacher_name_key" value="">
     <div class="row">
+        <input type="hidden" id="isSearch" value="">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">월별 정산내역</h4>
             <div class="ml-auto text-right">
@@ -364,7 +395,7 @@
         </div>
     </div>
 </div>
-<div class="container-fluid">
+<div class="container-fluid" id="excelDownloadDiv">
     <div class="row">
         <div class="col-12">
             <div class="card">
@@ -378,6 +409,7 @@
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="ReportToExcelConverter()">엑셀다운로드</button>
                         </div>
                     </div>
                 </div>
