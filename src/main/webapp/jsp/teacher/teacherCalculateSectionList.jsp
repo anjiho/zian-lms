@@ -107,7 +107,7 @@
                                     return cmpList.name
                                 },
                                 function () {
-                                    return cmpList.payCnt
+                                    return cmpList.payCnt+"명"
                                 },
                                 function () {
                                     return format(cmpList.payPrice)
@@ -157,7 +157,7 @@
                                     return cmpList.name
                                 },
                                 function () {
-                                    return cmpList.payCnt
+                                    return cmpList.payCnt+"명"
                                 },
                                 function () {
                                     return format(cmpList.payPrice)
@@ -445,9 +445,9 @@
                     </tfoot>
                     </tbody>
                 </table>
-                <div style="text-align: center;margin-bottom: 10px;">
+                <!--<div style="text-align: center;margin-bottom: 10px;">
                     <button type="button" class="btn btn-info" onclick="optionAdd();">옵션추가</button>
-                </div>
+                </div>-->
             </div>
         </div>
     </div>

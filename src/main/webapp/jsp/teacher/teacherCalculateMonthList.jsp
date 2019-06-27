@@ -73,7 +73,6 @@
         else teacherSelKey = teacherNameSel;
 
         statisManageService.getTeacherCalculateByMonth(teacherSelKey, searchYearMonth, function (selList) {
-            if (selList.length == 0) return;
             var videoCalculateResult   = selList.videoCalculateResult; //온라인강좌
             var academyCalculateResult = selList.academyCalculateResult; //학원강의
             var packageCalculateResult = selList.packageCalculateResult; // 패키지
@@ -87,20 +86,11 @@
                         optionPirce += cmpList.price;
                         if (cmpList != undefined) {
                             var cloneTr = $("#sumList").find("tr:last").clone();
-                            //$("#sumList").append(cloneTr);
-                            $('#sumList > tr').eq(1).after(cloneTr);
+                            $('#sumList > tr').eq(3).after(cloneTr);
                             cloneTr.show();
-                            //$("#sumList").find("tr").eq(1). append(cloneTr);
                             cloneTr.attr('id', 'option');
                             cloneTr.find("td").eq(0).html(cmpList.title);
-                            //cloneTr.find("td").eq(1).attr('id', 'option');
                             cloneTr.find("td").eq(4).html(format(cmpList.price));
-                            /*var html = "";
-                            html += "<tr>";
-                                html += " <td>"+ cmpList.title +"</td>";
-                                html += " <td>" + cmpList.price + "</td>";
-                            html += "</tr>";
-                            $("#test").append(html);*/
                         }
                     }
                     innerValue("optionPriceSum", optionPirce);
@@ -132,7 +122,7 @@
                             var cellData = [
                                 function () {return kind;},
                                 function () {return cmpList.name},
-                                function () {return cmpList.payCnt},
+                                function () {return cmpList.payCnt+"명"},
                                 function () {return format(cmpList.payPrice)},
                                 function () {return cmpList.cancelCnt},
                                 function () {return format(cmpList.cancelPrice)},
@@ -174,7 +164,7 @@
                                     return cmpList.name
                                 },
                                 function () {
-                                    return cmpList.payCnt
+                                    return cmpList.payCnt+"명"
                                 },
                                 function () {
                                     return format(cmpList.payPrice)
@@ -229,7 +219,7 @@
                                     return cmpList.name
                                 },
                                 function () {
-                                    return cmpList.payCnt
+                                    return cmpList.payCnt+"명"
                                 },
                                 function () {
                                     return format(cmpList.payPrice)
@@ -253,34 +243,37 @@
                     $("#pacakgeLable").hide();
                 }
             }
-            var totalCnt         = onlineTotalCnt + acaTotalCnt + packageTotalCnt;
-            var totalPrice       = onlinePayPriceTotal + acaPayPriceTotal + packagePayPriceTotal; //판매합계
-            var cancelTotalCnt   = onlineCancelCntTotal + acaCancelTotalCnt + packageCancelCntTotal;
-            var cancelTotalPrice = onlineCancelPriceTotal + acaCancelPriceTotal + packageCancelPriceTotal;
-            var alltotalCnt      = (totalCnt-cancelTotalCnt);
-            var optionPriceSum   = getInputTextValue("optionPriceSum");
-            var alltotalPrice    = (totalPrice - cancelTotalPrice + Number(optionPriceSum)); // 총 합계 (판매합계 - 환불금액 + 옵션)
 
-            var taxPrice =  alltotalPrice*0.033; //소득세,주민세
-                taxPrice = taxPrice * -1;
-           // var result = Math.ceil(taxPrice).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                var totalCnt         = onlineTotalCnt + acaTotalCnt + packageTotalCnt;
+                var totalPrice       = onlinePayPriceTotal + acaPayPriceTotal + packagePayPriceTotal; //판매합계
+                var cancelTotalCnt   = onlineCancelCntTotal + acaCancelTotalCnt + packageCancelCntTotal;
+                var cancelTotalPrice = onlineCancelPriceTotal + acaCancelPriceTotal + packageCancelPriceTotal;
+                var alltotalCnt      = (totalCnt-cancelTotalCnt);
+                var optionPriceSum   = getInputTextValue("optionPriceSum");
+                //var alltotalPrice    = (totalPrice - cancelTotalPrice + Number(optionPriceSum)); // 총 합계 (판매합계 - 환불금액 + 옵션)
+                var alltotalPrice    = (totalPrice - cancelTotalPrice); // 총 합계 (판매합계 - 환불금액)
 
-            var duesPrice  = 0; //사우회비
-            if(totalPrice > 100000) duesPrice = -10000;
-            else  duesPrice = 0;
+                if(alltotalPrice > 0){
+                    var taxPrice =  alltotalPrice*0.033; //소득세,주민세
+                        taxPrice = taxPrice * -1;
+                   // var result = Math.ceil(taxPrice).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 
-            var actualPay = alltotalPrice+taxPrice+duesPrice;//실지급액
-           // var actualPayResult = Math.ceil(actualPay).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                    var duesPrice  = 0; //사우회비
+                    if(totalPrice > 100000) duesPrice = -10000;
+                    else  duesPrice = 0;
 
-            innerHTML("taxPrice", format(roundingDownWon(taxPrice)));
-            innerHTML("actualPay", format(roundingDownWon(actualPay)));
-            innerHTML("duesPrice", format(roundingDownWon(duesPrice)));
-            innerHTML("totalCnt", totalCnt);
-            innerHTML("totalPrice", format(roundingDownWon(totalPrice)));
-            innerHTML("cancelTotalCnt", cancelTotalCnt);
-            innerHTML("cancelTotalPrice", format(roundingDownWon(cancelTotalPrice)));
-            innerHTML("alltotalCnt", alltotalCnt);
-            innerHTML("alltotalPrice", format(roundingDownWon(alltotalPrice)));
+                    var actualPay = roundingDownWon(alltotalPrice) + roundingDownWon(taxPrice) + duesPrice + Number(roundingDownWon(optionPriceSum));//실지급액
+
+                    innerHTML("taxPrice", format(roundingDownWon(taxPrice)));
+                    innerHTML("actualPay", format(roundingDownWon(actualPay)));
+                    innerHTML("duesPrice", format(roundingDownWon(duesPrice)));
+                    innerHTML("totalCnt", totalCnt);
+                    innerHTML("totalPrice", format(roundingDownWon(totalPrice)));
+                    innerHTML("cancelTotalCnt", cancelTotalCnt);
+                    innerHTML("cancelTotalPrice", format(roundingDownWon(cancelTotalPrice)));
+                    innerHTML("alltotalCnt", alltotalCnt);
+                    innerHTML("alltotalPrice", format(roundingDownWon(alltotalPrice)));
+                }
         });
         loadingOut(loading);
     }
@@ -344,7 +337,28 @@
            });
         }
     }
+    $(document).ready(function () {
+
+        $("#export").click(function () {
+
+            var uri = $("#acaTable").battatech_excelexport({
+
+                containerid: "acaTable",
+                // 테이블 아이디
+
+                datatype: 'table',
+                // 데이터 타입 설정
+
+                returnUri: true
+                // URI return 여부
+            });
+
+            $(this).attr('download', 'sample.xls').attr('href', uri);
+            // 파일이름, URI 설정
+        });
+    });
 </script>
+
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="param_key" name="param_key" value="">
@@ -409,7 +423,7 @@
                 </table>
                 <!--//온라인강좌-->
                 <!--학원강의-->
-                <table class="table text-center"  id="acaTable" style="display: none;">
+                <table class="table"  id="acaTable" style="display: none;">
                     <div style="float: left;display: none;" id="acaLable">
                         <label  class="col-sm-3 control-label col-form-label card-title">학원강의</label>
                     </div>
