@@ -2634,7 +2634,6 @@ function goMemberDetail(val) {
 
 //금액 컴마표시
 function format(str) {
-    console.log(str);
     str = String(str);
     return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
 }
