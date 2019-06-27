@@ -39,10 +39,6 @@
             }
         });
 
-
-        //alert(tr[0].id);
-
-
         var teacherKey      = getSelectboxValue("sel_1");
         var searchYearMonth = getSelectboxValue("searchYearMonth");
 

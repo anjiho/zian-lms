@@ -2637,3 +2637,12 @@ function goMemberDetail(val) {
     innerValue('param_key', val);
     goPage('memberManage', 'memberManage');
 }
+
+//원단위 절사하기
+function roundingDownWon(val) {
+    var roundingDownWon = "";
+    if (val == '' || val != undefined) {
+        roundingDownWon = Math.floor(val / 10) * 10;
+    }
+    return Number(roundingDownWon);
+}
