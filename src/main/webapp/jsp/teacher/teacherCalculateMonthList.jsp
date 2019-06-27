@@ -38,11 +38,6 @@
                 tr.remove();
             }
         });
-
-
-        //alert(tr[0].id);
-
-
         var teacherKey      = getSelectboxValue("sel_1");
         var searchYearMonth = getSelectboxValue("searchYearMonth");
 
@@ -84,16 +79,17 @@
             var packageCalculateResult = selList.packageCalculateResult; // 패키지
             var calculateOptionList    = selList.calculateOptionList; // 옵션 리스트
 
-            var optionPirceSum =  0;
+            var optionPirce =  0;
             if(selList.calculateOptionList != null) {
                 if (calculateOptionList.length > 0) {
                     for (var i = 0; i < calculateOptionList.length; i++) {
                         var cmpList = calculateOptionList[i];
-                        optionPirceSum += cmpList.price;
+                        optionPirce += cmpList.price;
                         if (cmpList != undefined) {
                             var cloneTr = $("#sumList").find("tr:last").clone();
                             //$("#sumList").append(cloneTr);
                             $('#sumList > tr').eq(1).after(cloneTr);
+                            cloneTr.show();
                             //$("#sumList").find("tr").eq(1). append(cloneTr);
                             cloneTr.attr('id', 'option');
                             cloneTr.find("td").eq(0).html(cmpList.title);
@@ -107,6 +103,7 @@
                             $("#test").append(html);*/
                         }
                     }
+                    innerValue("optionPriceSum", optionPirce);
                 }
             }
 
@@ -257,12 +254,12 @@
                 }
             }
             var totalCnt         = onlineTotalCnt + acaTotalCnt + packageTotalCnt;
-            var totalPrice       = onlinePayPriceTotal + acaPayPriceTotal + packagePayPriceTotal;
+            var totalPrice       = onlinePayPriceTotal + acaPayPriceTotal + packagePayPriceTotal; //판매합계
             var cancelTotalCnt   = onlineCancelCntTotal + acaCancelTotalCnt + packageCancelCntTotal;
             var cancelTotalPrice = onlineCancelPriceTotal + acaCancelPriceTotal + packageCancelPriceTotal;
             var alltotalCnt      = (totalCnt-cancelTotalCnt);
-            var alltotalPrice    = (totalPrice-cancelTotalPrice);
-
+            var optionPriceSum   = getInputTextValue("optionPriceSum");
+            var alltotalPrice    = (totalPrice - cancelTotalPrice + Number(optionPriceSum)); // 총 합계 (판매합계 - 환불금액 + 옵션)
 
             var taxPrice =  alltotalPrice*0.033; //소득세,주민세
                 taxPrice = taxPrice * -1;
@@ -272,7 +269,7 @@
             if(totalPrice > 100000) duesPrice = -10000;
             else  duesPrice = 0;
 
-            var actualPay = alltotalPrice+taxPrice+duesPrice+optionPirceSum;//실지급액
+            var actualPay = alltotalPrice+taxPrice+duesPrice;//실지급액
             var actualPayResult = Math.ceil(actualPay).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
 
             innerHTML("taxPrice", format(result));
@@ -338,9 +335,7 @@
             return false;
         }
         if(confirm("옵션을 저장하시겠습니까?")){
-            alert(searchYearMonth);
            statisManageService.saveTeacherCalculateOptionInfo(teacherKey, optionTitle, optionPrice, searchYearMonth, function () {
-               //isReloadPage();
                var searchYearMonth =  getSelectboxValue('searchYearMonth');
                var teacherName =  getSelectboxValue('sel_1');
                innerValue("teacher_date_key", searchYearMonth);
@@ -468,6 +463,7 @@
                 </table>
                 <!--//패키지-->
                 <table class="table text-center SumTable">
+                    <input type="hidden" id="optionPriceSum" value="">
                     <tbody id="sumList">
                         <tr>
                             <td colspan="4">판매합계</td>
@@ -505,6 +501,13 @@
                             <td></td>
                             <td></td>
                             <td id="duesPrice"></td>
+                        </tr>
+                        <tr style="display:none;">
+                            <td colspan="4"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
                         </tr>
                         <tfoot>
                             <tr>
