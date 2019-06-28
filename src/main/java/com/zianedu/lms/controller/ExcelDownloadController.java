@@ -39,6 +39,6 @@ public class ExcelDownloadController {
                                         @RequestParam(value = "affiliationCtgKey") String affiliationCtgKey) {
         List<MemberListDTO>dataList = memberManageService.getMemeberList(1, 0, searchType, searchText, regStartDate, regEndDate, Integer.parseInt(grade), Integer.parseInt(affiliationCtgKey));
         excelContent = "userList";
-        topMenus
+        return null;
     }
 }
