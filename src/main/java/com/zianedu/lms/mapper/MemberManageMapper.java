@@ -68,6 +68,10 @@ public interface MemberManageMapper {
 
     Integer selectUserCountByUserId(@Param("userId") String userId);
 
+    List<MemberListDTO> selectExcelDownloadUserList(@Param("searchText") String searchText, @Param("searchType") String searchType,
+                                                    @Param("regStartDate") String regStartDate, @Param("regEndDate") String regEndDate,
+                                                    @Param("grade") int grade, @Param("affiliationCtgKey") int affiliationCtgKey);
+
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
 
