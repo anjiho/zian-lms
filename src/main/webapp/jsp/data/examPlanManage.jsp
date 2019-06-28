@@ -51,7 +51,7 @@
                     startDate: datetimepicker12,
                     link: link
                 };
-            dataManageService.modifyExamSchedule(data, function () {isReloadPage(true);});
+                dataManageService.modifyExamSchedule(data, function () {isReloadPage(true);});
             }
         }else{//저장
             if(confirm("일정 추가 하시겠습니까?")) {

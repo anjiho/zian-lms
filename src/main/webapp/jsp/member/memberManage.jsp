@@ -33,6 +33,12 @@
         });
     });
 
+    //sms보내기
+    function goMemberSms() {
+        innerValue("param_key", $("#userId").text());
+        goPage('memberManage', 'sendSms');
+    }
+
     function init() {
         getConsultDivisionSelectBox("consultDivisionSel", "");
         getConsultStatusSelectBox("consultStatusSel", "");
@@ -48,6 +54,7 @@
 
             innerHTML("birth", result.birth);
             innerHTML("telephone", result.telephone);
+
             innerHTML("telephoneMobile", result.telephoneMobile);
             innerHTML("email", result.email);
             innerHTML("zipcode", result.zipcode);
@@ -233,16 +240,16 @@
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group row">
-                                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">아이디</label>
-                                            <span id="userId"></span>
+                                            <label class="col-sm-2 control-label col-form-label">아이디</label>
+                                            <span id="userId" style="margin-top: 5px;"></span>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">이름</label>
-                                            <span id="name"></span>
+                                            <span id="name" style="margin-top: 5px;"></span>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                            <span id="indate1"></span>
+                                            <span id="indate1" style="margin-top: 5px;"></span>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">생년월일</label>
@@ -254,7 +261,9 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">휴대전화번호</label>
-                                            <span id="telephoneMobile"></span>
+                                            <span id="telephoneMobile" style="margin-top: 5px;"></span>
+                                            <button type="button" class="btn btn-info btn-sm" style="margin-left: 8px;" onclick="goMemberSms();">SMS 보내기</button>
+
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">E-mail</label>
@@ -266,11 +275,11 @@
                                             <input type="radio" name="recvEmail"  class="custom-radio" value="0">동의안함-->
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" value="1" id="customControlValidation3" name="recvEmail" required="">
-                                                <label class="custom-control-label" for="customControlValidation3">동의</label>
+                                                <label class="custom-control-label" for="customControlValidation3" style="margin-top: 5px;">동의</label>
                                             </div>&nbsp; &nbsp;
                                             <div class="custom-control custom-radio">
                                                 <input type="radio" class="custom-control-input" value="0" id="customControlValidation4" name="recvEmail" required="">
-                                                <label class="custom-control-label" for="customControlValidation4">동의안함</label>
+                                                <label class="custom-control-label" for="customControlValidation4" style="margin-top: 5px;">동의안함</label>
                                             </div>
                                         </div>
                                     </div>
@@ -289,7 +298,7 @@
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">주소</label>
-                                            우편번호 <span id="zipcode"></span>
+                                            <span>우편번호</span><span id="zipcode" style="margin-left: 8px;"></span>
                                         </div>
                                         <div class="form-group row">
                                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0"></label>
