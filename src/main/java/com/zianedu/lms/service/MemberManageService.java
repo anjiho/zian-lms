@@ -351,7 +351,7 @@ public class MemberManageService {
             list = memberManageMapper.selectSmsSendLogList(paramDTO);
             if (list.size() > 0) {
                 for (SmsSendListDTO smsSendListDTO : list) {
-                    smsSendListDTO.setReceiverName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
+                    smsSendListDTO.setSendResultName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
                 }
             }
         } catch (Exception e) {
