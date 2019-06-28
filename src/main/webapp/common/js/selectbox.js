@@ -177,12 +177,19 @@ function getNewCategoryList2(tableId, val, val2) {
 
 
 //급수,과목,유형
-function getSelectboxListForCtgKey(tag_id, val) {
+function getSelectboxListForCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        var selected = "";
+        var nonSelected = "";
+
+        if (val2 == '10000') selected = "selected";
+        if (val2 == '0') nonSelected = "selected";
+
         var html = "<select id='sel_1' class=\"col-sm-5 select2 form-control custom-select\">";
-        html += "<option value='' selected>선택</option>";
+        html += "<option value='10000' "+ selected +">선택</option>";
+        html += "<option value='0' "+ nonSelected +">없음</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].key == val) {
+            if (list[i].key == val2) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
@@ -1274,13 +1281,25 @@ function getlectureWatchOrderStatusSelectbox(tagId, val) {
     innerHTML(tagId, html);
 }
 
-function getMemberSearchSelectbox(tagId) {
+function getMemberSearchSelectbox(tagId, val) {
+    var nameSelected = "";
+    var idSelected = "";
+    var phoneSelected = "";
+    var mobileSelected = "";
+    var codeSelected = "";
     var html = "<select class='form-control' id='memberSel'>";
-    html +=  "<option value='name'>이름</option>";
-    html +=  "<option value='id'>ID</option>";
-    html +=  "<option value='phone'>전화번호</option>";
-    html +=  "<option value='mobile'>휴대전화번호</option>";
-    html +=  "<option value='code'>코드</option>";
+
+    if (val == 'name') nameSelected = "selected";
+    if (val == 'id') idSelected = "selected";
+    if (val == 'phone') phoneSelected = "selected";
+    if (val == 'mobile') mobileSelected = "selected";
+    if (val == 'code') codeSelected = "selected";
+
+    html +=  "<option value='name' "+ nameSelected +">이름</option>";
+    html +=  "<option value='id' "+ idSelected +">ID</option>";
+    html +=  "<option value='phone' "+ phoneSelected +">전화번호</option>";
+    html +=  "<option value='mobile' "+ mobileSelected +">휴대전화번호</option>";
+    html +=  "<option value='code' "+ codeSelected +">코드</option>";
     html +=  "</select>";
     innerHTML(tagId, html);
 }

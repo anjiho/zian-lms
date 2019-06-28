@@ -120,6 +120,13 @@
 <input type="hidden" name="teacher_date_key" id="teacher_date_key">
 <input type="hidden" name="teacher_name_key" id="teacher_name_key">
 <input type="hidden" id="type" name="type" value=""><!--주문관리 : 페이지 왼쪽메뉴 스타일 type-->
+<input type="hidden" name="param_key2" id="param_key2">
+<input type="hidden" name="param_key3" id="param_key3">
+<input type="hidden" name="param_key4" id="param_key4">
+<input type="hidden" name="param_key5" id="param_key5">
+<input type="hidden" name="param_key6" id="param_key6">
+<input type="hidden" name="param_key7" id="param_key7">
+<input type="hidden" name="param_key8" id="param_key8">
 </form>
 <%
     if (authority == 4) {

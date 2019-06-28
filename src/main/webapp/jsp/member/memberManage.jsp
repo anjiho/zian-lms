@@ -1,7 +1,15 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
     String userKey = request.getParameter("param_key");
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key2"), "");
+    String searchEndtDate = Util.isNullValue(request.getParameter("param_key3"), "");
+    String memberGradeSel = Util.isNullValue(request.getParameter("param_key4"), "");
+    String sel_1 = Util.isNullValue(request.getParameter("param_key5"), "");
+    String memberSel = Util.isNullValue(request.getParameter("param_key6"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key7"), "");
+    String isDetail = Util.isNullValue(request.getParameter("param_key8"), "");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
@@ -176,6 +184,19 @@
              }
         }
     }
+
+    function goMemberList() {
+        innerValue('param_key', '<%=userKey%>');
+        innerValue('param_key2', '<%=searchStartDate%>');
+        innerValue('param_key3', '<%=searchEndtDate%>');
+        innerValue('param_key4', '<%=memberGradeSel%>');
+        innerValue('param_key5', '<%=sel_1%>');
+        innerValue('param_key6', '<%=memberSel%>');
+        innerValue('param_key7', '<%=searchText%>');
+        innerValue('param_key8', '<%=isDetail%>');
+
+        goPage('memberManage', 'memberList');
+    }
 </script>
 <div class="page-breadcrumb">
     <div class="row">
@@ -335,6 +356,9 @@
                         </section>
                         <!-- //2.상담 목록 Tab -->
                     </div>
+                </div>
+                <div align="right">
+                    <button type="button" class="btn btn-outline-info mx-auto" onclick="goMemberList()">목록</button>
                 </div>
             </div>
         </div>

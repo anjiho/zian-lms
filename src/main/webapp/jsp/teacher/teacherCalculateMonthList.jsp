@@ -338,7 +338,6 @@
            });
         }
     }
-<<<<<<< HEAD
 
     function ReportToExcelConverter() {
         if (getSelectboxValue("searchYearMonth") == "") {

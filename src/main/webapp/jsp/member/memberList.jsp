@@ -1,5 +1,15 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key2"), "");
+    String searchEndDate = Util.isNullValue(request.getParameter("param_key3"), "");
+    String memberGradeSel = Util.isNullValue(request.getParameter("param_key4"), "1000");
+    String sel_1 = Util.isNullValue(request.getParameter("param_key5"), "");
+    String memberSel = Util.isNullValue(request.getParameter("param_key6"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key7"), "");
+    String isDetail = Util.isNullValue(request.getParameter("param_key8"), "");
+%>
 <style>
     ol,ul{list-style:none}
 
@@ -18,11 +28,25 @@
 <script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
 <script>
     function init() {
+        var isDetail = '<%=isDetail%>';
+        var memberSel = '<%=memberSel%>';
+        var sel_1 = '<%=sel_1%>';
+        var memberGradeSel = '<%=memberGradeSel%>';
+
         menuActive('menu-5', 1);
-        getMemberSearchSelectbox("l_searchSel");
-        getSelectboxListForCtgKey('affiliationCtgKey','133','');
-        memberGrageSelectBox("memberGrageSel", "");
-        fn_search('new');
+        innerValue("searchStartDate", '<%=searchStartDate%>');
+        innerValue("searchEndDate", '<%=searchEndDate%>');
+        getMemberSearchSelectbox("l_searchSel", memberSel);
+        getSelectboxListForCtgKey('affiliationCtgKey', '133', sel_1);
+        memberGrageSelectBox("memberGrageSel", memberGradeSel);
+        innerValue("searchText", '<%=searchText%>');
+
+        if (isDetail == 'detail') {
+            fn_search2('new');
+        } else {
+            fn_search('new');
+        }
+
     }
 
     function fn_search(val) {
@@ -43,7 +67,68 @@
 
         if(searchType == null || searchText == "") searchType = "";
         if(grade == null) grade = "";
-        if(affiliationCtgKey == null) affiliationCtgKey = "";
+        if(affiliationCtgKey == null) affiliationCtgKey = "10000";
+
+
+        var loading = new Loading({
+            direction: 'hor',
+            discription: '검색중',
+            animationIn: false,
+            animationOut: false,
+            defaultApply: 	true,
+        });
+
+        memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (cnt) {
+            paging.count(sPage, cnt, '10', '10', comment.blank_list);
+            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+            memberManageService.getMemeberList(sPage, 10, searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
+                if (selList.length == 0) return;
+                dwr.util.addRows("dataList", selList, [
+                    function(data) {return data.userKey == null ? "-" : data.userKey;},
+                    function(data) {return data.userId == null ? "-" : data.userId;},
+                    function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
+                    function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
+                    function(data) {return data.email == null ? "-" : data.email;},
+                    function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
+                    function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
+                    function(data) {return data.gradeName == null ? "-" : data.gradeName;},
+                    function(data) {return data.authorityName == null ? "-" : data.authorityName;},
+                    function(data) {return data.isMobileReg == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                ], {escapeHtml:false});
+            });
+            loadingOut(loading);
+        });
+    }
+
+    function fn_search2(val) {
+        var paging = new Paging();
+        var sPage = getInputTextValue("sPage");
+
+        if (val == "new") sPage = "1";
+
+        dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
+        gfn_emptyView("H", "");//페이징 예외사항처리
+
+        var isDetail = '<%=isDetail%>';
+        var searchType   = getSelectboxValue("memberSel");
+        var searchText   = getInputTextValue('searchText');
+        var regStartDate = getInputTextValue("searchStartDate");
+        var regEndDate   = getInputTextValue("searchEndDate");
+        var grade        = getSelectboxValue("memberGradeSel");
+        var affiliationCtgKey = getSelectboxValue("sel_1");
+
+        if (isDetail) {
+            searchType = '<%=memberSel%>';
+            searchText = '<%=searchText%>';
+            regStartDate = '<%=searchStartDate%>';
+            regEndDate = '<%=searchEndDate%>';
+            grade = '<%=memberGradeSel%>';
+            affiliationCtgKey = '<%=sel_1%>';
+        }
+
+        if(searchType == null || searchText == "") searchType = "";
+        if(grade == null) grade = "";
+        if(affiliationCtgKey == null) affiliationCtgKey = "10000";
 
 
         var loading = new Loading({
