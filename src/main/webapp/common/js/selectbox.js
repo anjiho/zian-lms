@@ -1274,10 +1274,12 @@ function getlectureWatchOrderStatusSelectbox(tagId, val) {
     innerHTML(tagId, html);
 }
 
-function getMemberSearchSelectbox(tagId) {
+function getMemberSearchSelectbox(tagId, val) {
     var html = "<select class='form-control' id='memberSel'>";
+    var selected = '';
+    if(val == 'id') selected = 'selected';
     html +=  "<option value='name'>이름</option>";
-    html +=  "<option value='id'>ID</option>";
+    html +=  "<option value='id' "+ selected +">ID</option>";
     html +=  "<option value='phone'>전화번호</option>";
     html +=  "<option value='mobile'>휴대전화번호</option>";
     html +=  "<option value='code'>코드</option>";

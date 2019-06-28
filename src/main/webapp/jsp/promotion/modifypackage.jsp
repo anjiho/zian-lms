@@ -586,7 +586,6 @@
                         onlineLecInfo.push(data);
                     });
 
-
                     if(confirm("수정 하시겠습니까?")) {
                         promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
                             isReloadPage(true);

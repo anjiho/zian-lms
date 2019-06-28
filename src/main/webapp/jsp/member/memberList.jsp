@@ -63,6 +63,7 @@
                     function(data) {return data.userKey == null ? "-" : data.userKey;},
                     function(data) {return data.userId == null ? "-" : data.userId;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
+                    //function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberSms(" +'+data.userId +' + ");'>" + data.telephoneMobile + "</a>";},
                     function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
                     function(data) {return data.email == null ? "-" : data.email;},
                     function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},

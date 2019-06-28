@@ -1,12 +1,12 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
-    String gKey = request.getParameter("param_key");
+    String userKey = request.getParameter("param_key");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
 <script>
-    var gKey = '<%=gKey%>';
+    var userKey = '<%=userKey%>';
     function init() {
         menuActive('menu-5', 6);
         //탭 메뉴 색상 변경
@@ -16,7 +16,11 @@
             ul.find("li").eq(0).removeClass("done").attr("aria-selected", "true");
         });
 
-        getMemberSearchSelectbox("l_searchSel");
+        var key = "";
+        if(userKey != "") key = "id";
+        else key = "";
+        getMemberSearchSelectbox("l_searchSel", key);
+        $("#searchText").val(userKey);
         fn_search('new');
     }
 
@@ -33,11 +37,14 @@
         if(searchType == null) searchType = "";
         memberManageService.getMemeberListCount(searchType, searchText, "", "", "", "", function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             memberManageService.getMemeberList(sPage, '10', searchType, searchText, "", "", "", "", function (selList) {
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];
+                        var checked = "";
+                        if(cmpList.userId == userKey){
+                            checked  = 'checked';
+                        }
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.userKey == null ? "-" : cmpList.userKey;},
@@ -45,11 +52,13 @@
                                 function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + cmpList.userKey + ");'>" + cmpList.name + "</a>";},
                                 function(data) {return cmpList.telephoneMobile == null ? "-" : cmpList.telephoneMobile;},
                                 function(data) {return cmpList.affiliationName == null ? "-" : cmpList.affiliationName;},
-                                function(data) {return "<input type='checkbox' name='rowChk' value='"+ cmpList.userKey +"'>"},
+                                function(data) {return "<input type='checkbox' name='rowChk'  value='"+ cmpList.userKey +"' "+ checked +">"},
                             ];
                             dwr.util.addRows("dataList", [0], cellData, {escapeHtml: false});
                         }
                     }
+                    //회원목록에서 넘어온경우, sms회원목록에 추가 함수호출
+                    if(userKey != "") addSmsMember();
                 }else{
                     gfn_emptyView("V", comment.blank_list2);
                 }
@@ -68,6 +77,13 @@
                 var userId  = td.eq(1).text();
                 var name    = td.eq(2).text();
                 var userMobile = td.eq(3).text();
+
+                //회원 중복체크
+                var resKeys = get_array_values_by_name("input", "userKey");
+                if ($.inArray(userKey, resKeys) != '-1') {
+                    return;
+                }
+
                 var delBtn = "<button type=\"button\" onclick=\"deleteTableRow('addMemberTabel', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
                 var cellData = [
                     function() {return "<input type='hidden' name='userKey' value='"+ userKey +"'>";},
@@ -83,11 +99,13 @@
                 });
             });
         }else{
-            alert("회원을 선택해 주세요.");
-            return false;
+            if(userKey == "") {
+                alert("회원을 선택해 주세요.");
+                return false;
+            }
         }
     }
-    
+
     function sendSms() {
         if($('#addMemberTabel tbody tr').length > 0){
             var SmsArr = new Array();    // 배열 선언
@@ -115,8 +133,8 @@
                 memberManageService.sendSms(SmsArr, function () {isReloadPage();});
             }
         }else{
-            alert("추가된 회원목록이 없습니다.");
-            return false;
+                alert("추가된 회원목록이 없습니다.");
+                return false;
         }
     }
 
