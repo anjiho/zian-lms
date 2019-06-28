@@ -32,16 +32,16 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND TELEPHONE = #{searchText}
+            AND TELEPHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'mobile'">
-            AND TELEPHONE_MOBILE = #{searchText}
+            AND TELEPHONE_MOBILE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'code'">
-            AND USER_KEY = #{searchText}
+            AND USER_KEY LIKE '%'||#{searchText}||'%'
         </if>
     </select>
 
@@ -59,16 +59,16 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND TELEPHONE = #{searchText}
+            AND TELEPHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'mobile'">
-            AND TELEPHONE_MOBILE = #{searchText}
+            AND TELEPHONE_MOBILE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'code'">
-            AND USER_KEY = #{searchText}
+            AND USER_KEY LIKE '%'||#{searchText}||'%'
         </if>
         <if test="regStartDate != '' and regEndDate != ''">
             <![CDATA[
@@ -79,10 +79,14 @@
             ]]>
         </if>
         <if test="grade != null">
-            AND GRADE = #{grade}
+            <if test="grade lt 1000">
+                AND GRADE = #{grade}
+            </if>
         </if>
-        <if test="affiliationCtgKey > 0">
-            AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey} OR INTEREST_CTG_KEY_1 = #{affiliationCtgKey}
+        <if test="affiliationCtgKey lt 10000">
+            <if test="affiliationCtgKey >= 0">
+                AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
+            </if>
         </if>
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
@@ -94,16 +98,16 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND TELEPHONE = #{searchText}
+            AND TELEPHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'mobile'">
-            AND TELEPHONE_MOBILE = #{searchText}
+            AND TELEPHONE_MOBILE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'code'">
-            AND USER_KEY = #{searchText}
+            AND USER_KEY LIKE '%'||#{searchText}||'%'
         </if>
         <if test="regStartDate != '' and regEndDate != ''">
             <![CDATA[
@@ -114,10 +118,14 @@
             ]]>
         </if>
         <if test="grade != null">
-            AND GRADE = #{grade}
+            <if test="grade lt 1000">
+                AND GRADE = #{grade}
+            </if>
         </if>
-        <if test="affiliationCtgKey > 0">
-            AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey} OR INTEREST_CTG_KEY_1 = #{affiliationCtgKey}
+        <if test="affiliationCtgKey lt 10000">
+            <if test="affiliationCtgKey >= 0">
+                AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
+            </if>
         </if>
     </select>
 

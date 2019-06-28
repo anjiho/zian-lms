@@ -2628,6 +2628,14 @@ function removeComma(n) {
 //회원 상세정보
 function goMemberDetail(val) {
     innerValue('param_key', val);
+    innerValue('param_key2', getInputTextValue('searchStartDate'));
+    innerValue('param_key3', getInputTextValue('searchEndDate'));
+    innerValue('param_key4', getSelectboxValue('memberGradeSel'));
+    innerValue('param_key5', getSelectboxValue('sel_1'));
+    innerValue('param_key6', getSelectboxValue('memberSel'));
+    innerValue('param_key7', getInputTextValue('searchText'));
+    innerValue('param_key8', 'detail');
+
     goPage('memberManage', 'memberManage');
 }
 
