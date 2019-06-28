@@ -98,16 +98,16 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND TELEPHONE = #{searchText}
+            AND TELEPHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'mobile'">
-            AND TELEPHONE_MOBILE = #{searchText}
+            AND TELEPHONE_MOBILE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'code'">
-            AND USER_KEY = #{searchText}
+            AND USER_KEY LIKE '%'||#{searchText}||'%'
         </if>
         <if test="regStartDate != '' and regEndDate != ''">
             <![CDATA[
