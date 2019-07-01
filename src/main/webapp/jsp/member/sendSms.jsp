@@ -35,9 +35,9 @@
         var searchType = getSelectboxValue("memberSel");
         var searchText = getInputTextValue("searchText");
         if(searchType == null) searchType = "";
-        memberManageService.getMemeberListCount(searchType, searchText, "", "", "", "", function(cnt) {
+        memberManageService.getMemeberListCount(searchType, searchText, "", "", 1000, 10000, function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            memberManageService.getMemeberList(sPage, '10', searchType, searchText, "", "", "", "", function (selList) {
+            memberManageService.getMemeberList(sPage, '10', searchType, searchText, "", "", 1000, 10000, function (selList) {
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
                         var cmpList = selList[i];

@@ -344,14 +344,14 @@ public class MemberManageService {
         String tableName = "SC_LOG_" + yyyyMM;
 
         SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
-                startNumber, listLimit, Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
-        );
+                startNumber, listLimit, Util.isNullValue(tableName, ""), Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+                );
         List<SmsSendListDTO>list = new ArrayList<>();
         try {
             list = memberManageMapper.selectSmsSendLogList(paramDTO);
             if (list.size() > 0) {
                 for (SmsSendListDTO smsSendListDTO : list) {
-                    smsSendListDTO.setReceiverName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
+                    smsSendListDTO.setSendResultName(SmsSendResultType.getSmsSendResultStr(smsSendListDTO.getSendResult()));
                 }
             }
         } catch (Exception e) {
@@ -374,7 +374,7 @@ public class MemberManageService {
         int cnt = 0;
         String tableName = "SC_LOG_" + yyyyMM;
         SmsSearchParamDTO paramDTO = new SmsSearchParamDTO(
-                Util.isNullValue(tableName, ""), Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+                Util.isNullValue(tableName, ""), Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
         );
         try {
             cnt = memberManageMapper.selectSmsSendLogListCount(paramDTO);
