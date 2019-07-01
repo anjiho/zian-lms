@@ -467,6 +467,7 @@
         <if test="grade != null">
             <if test="grade lt 1000">
                 AND GRADE = #{grade}
+
             </if>
         </if>
         <if test="affiliationCtgKey lt 10000">
@@ -474,7 +475,6 @@
                 AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
             </if>
         </if>
-        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">

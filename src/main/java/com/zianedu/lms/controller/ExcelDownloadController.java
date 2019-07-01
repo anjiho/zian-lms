@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
@@ -36,19 +37,21 @@ public class ExcelDownloadController {
 
     //sPage, 10, searchType, searchText, regStartDate, regEndDate, grade, affiliationCtgKey,
     @Transactional(readOnly = true)
+    @RequestMapping(value = "/userList", method = RequestMethod.POST)
     public String userListExcelDownload(Model model,
-                                        @RequestParam(value = "searchType") String searchType,
-                                        @RequestParam(value = "searchText") String searchText,
-                                        @RequestParam(value = "regStartDate") String regStartDate,
-                                        @RequestParam(value = "regEndDate") String regEndDate,
-                                        @RequestParam(value = "grade") String grade,
-                                        @RequestParam(value = "affiliationCtgKey") String affiliationCtgKey) {
+                                        @RequestParam(value = "memberSel", required = false, defaultValue = "") String searchType,
+                                        @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
+                                        @RequestParam(value = "searchStartDate", required = false, defaultValue = "") String regStartDate,
+                                        @RequestParam(value = "searchEndDate", required = false, defaultValue = "") String regEndDate,
+                                        @RequestParam(value = "memberGradeSel", required = false, defaultValue = "0") String grade,
+                                        @RequestParam(value = "sel_1", required = false, defaultValue = "0") String affiliationCtgKey) {
         List<MemberListDTO>dataList = memberManageMapper.selectExcelDownloadUserList(searchType, searchText, regStartDate, regEndDate, Integer.parseInt(grade), Integer.parseInt(affiliationCtgKey));
         excelContent = "userList";
         topMenus = StringUtils.getStringArray("사용자키", "아이디", "이름", "핸드폰번호", "이메일", "가입일", "직렬", "모바일 가입여부");
         fileName = "회원목록 리스트_" + Util.returnNowDateByYyyymmddhhmmss();
         sheetName = "회원목록";
 
+        excelModelSetting(model, excelContent, topMenus, fileName, sheetName, dataList);
         return excelService;
     }
 

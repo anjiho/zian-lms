@@ -49,9 +49,11 @@ public class ExcelDownloadService extends AbstractExcelView {
                 row.createCell(1).setCellValue(dto.getUserId());
                 row.createCell(2).setCellValue(dto.getName());
                 row.createCell(3).setCellValue(dto.getTelephoneMobile());
-                row.createCell(4).setCellValue(dto.getIndate());
-                row.createCell(5).setCellValue(dto.getAffiliationName());
-                row.createCell(6).setCellValue(dto.getIsMobileReg());
+                row.createCell(4).setCellValue(dto.getEmail());
+                row.createCell(5).setCellValue(dto.getIndate());
+                row.createCell(6).setCellValue(dto.getAffiliationName());
+                row.createCell(7).setCellValue(dto.getIsMobileReg());
+                i++;
             }
         }
     }

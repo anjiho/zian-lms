@@ -162,6 +162,30 @@
         });
     }
 
+    function excelDownload() {
+        if (confirm("다운로드 받으시겠습니까?")) {
+            var loading = new Loading({
+                direction: 'hor',
+                discription: '다운로드중...',
+                animationIn: false,
+                animationOut: false,
+                defaultApply: 	true,
+            });
+            var memberSel = getSelectboxValue("memberSel");
+            var searchText = getInputTextValue("searchText");
+            var searchStartDate = getInputTextValue("searchStartDate");
+            var searchEndDate = getInputTextValue("searchEndDate");
+            var memberGradeSel = getSelectboxValue("memberGradeSel");
+            var sel_1 = getSelectboxValue("sel_1");
+
+            var url = "memberSel=" + memberSel + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
+                "&memberGradeSel=" + memberGradeSel + "&sel_1=" + sel_1;
+
+            $.download('/excelDownload/userList',url,'post' );
+            loadingOut2(loading);
+
+        }
+    }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
@@ -294,7 +318,7 @@
         <div class="card">
             <div class="card-body">
                 <div class="mb-5">
-                    <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="ReportToExcelConverter()"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
+                    <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="excelDownload()"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
                 </div>
                 <table class="table table-hover">
                     <thead>

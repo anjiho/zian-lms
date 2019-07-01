@@ -437,3 +437,7 @@
 function loadingOut(loading) {
     setTimeout(() => loading.out(), 1500);
 }
+
+function loadingOut2(loading) {
+    setTimeout(() => loading.out(), 3000);
+}
