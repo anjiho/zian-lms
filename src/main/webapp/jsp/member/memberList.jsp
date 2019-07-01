@@ -293,6 +293,9 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
+                <div class="mb-5">
+                    <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="ReportToExcelConverter()"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
+                </div>
                 <table class="table table-hover">
                     <thead>
                     <tr>
