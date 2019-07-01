@@ -403,7 +403,7 @@
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
-                            <button type="button" class="btn btn-outline-info mx-auto" onclick="ReportToExcelConverter()">엑셀다운로드</button>
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="ReportToExcelConverter()"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
                         </div>
                     </div>
                 </div>
