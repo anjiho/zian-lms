@@ -72,6 +72,9 @@ public interface MemberManageMapper {
                                                     @Param("regStartDate") String regStartDate, @Param("regEndDate") String regEndDate,
                                                     @Param("grade") int grade, @Param("affiliationCtgKey") int affiliationCtgKey);
 
+    List<MemberListDTO> selectExcelDownloadTeacherList(@Param("searchText") String searchText, @Param("searchType") String searchType,
+                                                        @Param("regStartDate") String regStartDate, @Param("regEndDate") String regEndDate);
+
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
 

@@ -136,7 +136,7 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY SECESSION_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -149,7 +149,7 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
     </select>
 
@@ -178,7 +178,7 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY SECESSION_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -191,7 +191,7 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
     </select>
 
@@ -279,16 +279,16 @@
             AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND B.USER_ID = #{searchText}
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND B.TELEPHONE = #{searchText}
+            AND B.TELEPHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'mobile'">
-            AND B.TELEPHONE_MOBILE = #{searchText}
+            AND B.TELEPHONE_MOBILE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'code'">
-            AND B.USER_KEY = #{searchText}
+            AND B.USER_KEY LIKE '%'||#{searchText}||'%'
         </if>
         <if test="regStartDate != '' and regEndDate != ''">
             <![CDATA[
@@ -312,16 +312,16 @@
             AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND B.USER_ID = #{searchText}
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND B.TELEPHONE = #{searchText}
+            AND B.TELEPHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'mobile'">
-            AND B.TELEPHONE_MOBILE = #{searchText}
+            AND B.TELEPHONE_MOBILE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'code'">
-            AND B.USER_KEY = #{searchText}
+            AND B.USER_KEY LIKE '%'||#{searchText}||'%'
         </if>
         <if test="regStartDate != '' and regEndDate != ''">
             <![CDATA[
@@ -467,6 +467,7 @@
         <if test="grade != null">
             <if test="grade lt 1000">
                 AND GRADE = #{grade}
+
             </if>
         </if>
         <if test="affiliationCtgKey lt 10000">
@@ -474,7 +475,41 @@
                 AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
             </if>
         </if>
-        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectExcelDownloadTeacherList" resultType="MemberListDTO">
+        SELECT
+            B.USER_KEY, B.NAME, B.TELEPHONE_MOBILE, B.EMAIL, B.INDATE, B.USER_ID,
+            (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as affiliationName,
+            B.GRADE, TO_CHAR(B.GRADE_DATE, 'YYYY-MM-DD') as GRADE_DATE, B.AUTHORITY
+        FROM T_TEACHER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE B.AUTHORITY = 5
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID = #{searchText}
+        </if>
+        <if test="searchType == 'phone'">
+            AND B.TELEPHONE = #{searchText}
+        </if>
+        <if test="searchType == 'mobile'">
+            AND B.TELEPHONE_MOBILE = #{searchText}
+        </if>
+        <if test="searchType == 'code'">
+            AND B.USER_KEY = #{searchText}
+        </if>
+        <if test="regStartDate != '' and regEndDate != ''">
+            <![CDATA[
+                AND B.INDATE >= TO_DATE(#{regStartDate}, 'YYYY-MM-DD')
+            ]]>
+            <![CDATA[
+                AND B.INDATE < TO_DATE(#{regEndDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        </if>
+        ORDER BY B.INDATE DESC
     </select>
 
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">

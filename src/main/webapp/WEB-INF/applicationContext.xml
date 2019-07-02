@@ -117,6 +117,7 @@
 
 	<!-- ========================= SERVICE OBJECT DEFINITIONS ======================== -->
   	<bean id="scheduleService" class="com.zianedu.lms.service.ScheduleService"/>
+    <bean id="excelDownloadService" class="com.zianedu.lms.service.ExcelDownloadService"/>
 
 
   	<!-- ========================= BUSINESS OBJECT DEFINITIONS MANAGER ======================== -->

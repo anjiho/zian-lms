@@ -185,7 +185,7 @@ function getSelectboxListForCtgKey(tag_id, val, val2) {
         if (val2 == '10000') selected = "selected";
         if (val2 == '0') nonSelected = "selected";
 
-        var html = "<select id='sel_1' class=\"col-sm-5 select2 form-control custom-select\">";
+        var html = "<select id='sel_1' name='sel_1' class=\"col-sm-5 select2 form-control custom-select\">";
         html += "<option value='10000' "+ selected +">선택</option>";
         html += "<option value='0' "+ nonSelected +">없음</option>";
         for (var i=0; i<list.length; i++) {
@@ -1405,7 +1405,7 @@ function deviceSelectbox1(tagId, val) {
 
 function memberGrageSelectBox(tagId, val) {
     selectboxService.selectMemberGradeTypeSelectbox(function (list) {
-        var html = "<select id='memberGradeSel'  name='memberGradeSel' class='col-sm-5 select2 form-control custom-select'>";
+        var html = "<select id='memberGradeSel' name='memberGradeSel' class='col-sm-5 select2 form-control custom-select'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";

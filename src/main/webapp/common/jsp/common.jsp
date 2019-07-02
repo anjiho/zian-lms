@@ -19,11 +19,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <!-- 공통 함수 JS -->
-    <script src="common/js/common.js"></script>
-    <script src="common/js/comPage.js"></script>
-    <script src="common/js/selectbox.js"></script>
-    <script src="common/js/checkbox.js"></script>
 
     <script type='text/javascript' src='/dwr/engine.js'></script>
     <script type='text/javascript' src='/dwr/util.js'></script>
@@ -106,6 +101,12 @@
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
     <script src="common/js/jquery.table2excel.js"></script>
+
+    <!-- 공통 함수 JS -->
+    <script src="common/js/common.js"></script>
+    <script src="common/js/comPage.js"></script>
+    <script src="common/js/selectbox.js"></script>
+    <script src="common/js/checkbox.js"></script>
 
 
 </head>

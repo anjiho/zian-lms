@@ -741,6 +741,108 @@
          WHERE J_KEY = #{jKey}
     </select>
 
+    <select id="selectExcelDownloadOrderList" resultType="OrderExcelDownDTO">
+        SELECT /*+ PARALLEL(4) */ /*+index_desc (T_ORDER PK_T_ORDER) */
+        A.*,B.NAME, B.USER_ID,
+        B.TELEPHONE_MOBILE,
+        ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
+        (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as AFFILIATION_NAME,
+        ( SELECT G_NAME FROM
+            (
+            SELECT /*+ PARALLEL(4) */ G_NAME FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as orderGoodsName,
+
+        ( SELECT type FROM
+            (
+            SELECT /*+ PARALLEL(4) */ type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as goodsType,
+
+        ( SELECT site_name FROM
+            (
+            SELECT /*+ PARALLEL(4) */ site_name FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as siteName,
+
+        ( SELECT price FROM
+            (
+            SELECT /*+ PARALLEL(4) */ price FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as goodsPrice,
+
+        ( SELECT price FROM
+            (
+            SELECT /*+ PARALLEL(4) */ sell_price FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as sellPrice,
+
+        ( SELECT pm_type FROM
+            (
+            SELECT /*+ PARALLEL(4) */ pm_type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as pmType,
+        D.STATUS as DELIVER_STATUS
+        FROM T_ORDER A
+        LEFT JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY D
+        ON A.J_KEY = D.J_KEY
+        WHERE 1=1
+        <![CDATA[
+            AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+         ]]>
+        <![CDATA[
+            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+        ]]>
+        <if test="payStatus == -1">
+            AND A.PAY_STATUS IN (0, 1, 2)
+        </if>
+        <if test="payStatus > -1">
+            AND A.PAY_STATUS = #{payStatus}
+        </if>
+        <if test="goodsType != '' and goodsType != null">
+            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
+            <if test="goodsType != 5">
+                AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
+            </if>
+            <if test="goodsType == 5">
+                AND A.UNIQUE_TYPE_LIST LIKE '5,'||'%'
+            </if>
+        </if>
+        <if test="isOffline != null and isOffline >= 0">
+            AND A.IS_OFFLINE = #{isOffline}
+        </if>
+        <if test="payType != null and payType >= 0">
+            AND A.PAY_TYPE = #{payType}
+        </if>
+        <if test="isMobile != null and isMobile >= 0">
+            AND A.IS_MOBILE = #{isMobile}
+        </if>
+        <if test="searchType != ''">
+            <if test="searchType == 'orderUserId'">
+                AND B.USER_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND B.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderId'">
+                AND A.J_ID = #{searchText}
+            </if>
+            <if test="searchType == 'orderGoodsName'">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND Z.G_NAME LIKE '%'||#{searchText}||'%')
+            </if>
+        </if>
+        <!-- 동영상 재수강 여부 -->
+        <if test="isVideoReply == 0">
+            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY = -1)
+        </if>
+        <if test="isVideoReply == 1">
+            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY > -1)
+        </if>
+        ORDER BY A.J_KEY DESC
+    </select>
+
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
