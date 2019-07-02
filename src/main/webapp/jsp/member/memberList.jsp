@@ -164,13 +164,6 @@
 
     function excelDownload() {
         if (confirm("다운로드 받으시겠습니까?")) {
-            var loading = new Loading({
-                direction: 'hor',
-                discription: '다운로드중...',
-                animationIn: false,
-                animationOut: false,
-                defaultApply: 	true,
-            });
             var memberSel = getSelectboxValue("memberSel");
             var searchText = getInputTextValue("searchText");
             var searchStartDate = getInputTextValue("searchStartDate");
@@ -178,12 +171,21 @@
             var memberGradeSel = getSelectboxValue("memberGradeSel");
             var sel_1 = getSelectboxValue("sel_1");
 
+            if (searchStartDate == "") {
+                alert("검색 시작일을 입력하세요.");
+                $("#searchStartDate").focus();
+                return;
+            }
+            if (searchEndDate == "") {
+                alert("검색 종료일을 입력하세요.");
+                $("#searchEndDate").focus();
+                return;
+            }
+
             var url = "memberSel=" + memberSel + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
                 "&memberGradeSel=" + memberGradeSel + "&sel_1=" + sel_1;
 
             $.download('/excelDownload/userList',url,'post' );
-            loadingOut2(loading);
-
         }
     }
 </script>
