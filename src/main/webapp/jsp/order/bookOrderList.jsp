@@ -69,6 +69,7 @@
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                     payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
+                    console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
@@ -80,7 +81,7 @@
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                             function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                            //function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            function(data) {return data.deliveryStatusName;},
                             function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
                         ], {escapeHtml:false});
                     });
@@ -290,7 +291,7 @@
                             <th scope="col" width="5%">결제방법</th>
                             <th scope="col" width="8%">진행상태</th>
                             <th scope="col" width="8%">모바일</th>
-    <%--                        <th scope="col" width="8%">배송상태</th>--%>
+                            <th scope="col" width="8%">배송상태</th>
                             <th  width="3%">
                                 <label class="customcheckbox m-b-20">
                                     <input type="checkbox" id="mainCheckbox" id="allCheck" onclick="allChk(this, 'rowChk');">

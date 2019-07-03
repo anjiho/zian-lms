@@ -1,10 +1,7 @@
 package com.zianedu.lms.service;
 
 
-import com.zianedu.lms.define.datasource.GoodsKindType;
-import com.zianedu.lms.define.datasource.GoodsType;
-import com.zianedu.lms.define.datasource.OrderPayStatusType;
-import com.zianedu.lms.define.datasource.OrderPayType;
+import com.zianedu.lms.define.datasource.*;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.OrderManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
@@ -88,6 +85,7 @@ public class OrderManageService {
             for (OrderResultDTO orderResultDTO : list) {
                 orderResultDTO.setPayTypeName(OrderPayType.getOrderPayTypeStr(orderResultDTO.getPayType()));
                 orderResultDTO.setPayStatusName(OrderPayStatusType.getOrderPayStatusStr(orderResultDTO.getPayStatus()));
+                orderResultDTO.setDeliveryStatusName(DeliveryStatusType.getDeliveryStatusName(orderResultDTO.getDeliverStatus()));
             }
         }
         return list;
@@ -144,8 +142,8 @@ public class OrderManageService {
         List<OrderResultDTO>list = orderManageMapper.selectCancelOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""), payStatus,
-                isOffline, payType, isMobile, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
-        );
+                isOffline, payType, isMobile, Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+                );
 
         if (list != null && list.size() > 0) {
             for (OrderResultDTO orderResultDTO : list) {
@@ -187,7 +185,7 @@ public class OrderManageService {
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""),
                 payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
         );
     }
 
