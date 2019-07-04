@@ -32,7 +32,6 @@
         var memberSel = '<%=memberSel%>';
         var sel_1 = '<%=sel_1%>';
         var memberGradeSel = '<%=memberGradeSel%>';
-
         menuActive('menu-5', 1);
         innerValue("searchStartDate", '<%=searchStartDate%>');
         innerValue("searchEndDate", '<%=searchEndDate%>');

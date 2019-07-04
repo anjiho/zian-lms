@@ -1268,18 +1268,46 @@ function getlectureWatchPayStatusSelectbox(tagId, val) {
 function getlectureWatchOrderStatusSelectbox(tagId, val) {
     var html = "<select id='orderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
+    var selected4 = '';
 
-    if(val == '0') selected = 'selected';
-    else if(val == '1') selected = 'selected';
-    else if(val == '2') selected = 'selected';
-    else if(val == '3') selected = 'selected';
-    else if(val == '4') selected = 'selected';
+    if(val == 0) selected = 'selected';
+    else if(val == 1) selected1 = 'selected';
+    else if(val == 2) selected2 = 'selected';
+    else if(val == 3) selected3 = 'selected';
+    else if(val == 4) selected4 = 'selected';
 
     html += "<option value='0' "+ selected +">대기중</option>";
-    html += "<option value='1' "+ selected +">시작</option>";
-    html += "<option value='2' "+ selected +">일시정지</option>";
-    html += "<option value='3' "+ selected +">종강</option>";
-    html += "<option value='4' "+ selected +">재시작대기</option>";
+    html += "<option value='1' "+ selected1 +">시작</option>";
+    html += "<option value='2' "+ selected2 +">일시정지</option>";
+    html += "<option value='3' "+ selected3 +">종강</option>";
+    html += "<option value='4' "+ selected4 +">재시작대기</option>";
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+
+function getlectureWatchOrderStatusSelectbox1(tagId, val) {
+    var html = "<select id='stopOrderStatus' name='orderStatus' onchange='changePopup();' class='col-sm-5 select2 form-control custom-select'>";
+    var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
+    var selected4 = '';
+
+    if(val == 0) selected = 'selected';
+    else if(val == 1) selected1 = 'selected';
+    else if(val == 2) selected2 = 'selected';
+    else if(val == 3) selected3 = 'selected';
+    else if(val == 4) selected4 = 'selected';
+
+    html += "<option value='0' "+ selected +">대기중</option>";
+    html += "<option value='1' "+ selected1 +">시작</option>";
+    html += "<option value='2' "+ selected2 +">일시정지</option>";
+    html += "<option value='3' "+ selected3 +">종강</option>";
+    html += "<option value='4' "+ selected4 +">재시작대기</option>";
     html += "</select>";
 
     innerHTML(tagId, html);
@@ -1312,13 +1340,16 @@ function getMemberSearchSelectbox(tagId, val) {
 function getAcaLecturePayTypeSelectbox(tagId, val) {
     var html = "<select id='payType' class='col-sm-3 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+
     if(val == '21') selected = 'selected';
-    else if(val == '22') selected = 'selected';
-    else selected = 'selected';
+    else if(val == '22') selected1 = 'selected';
+    else selected2 = 'selected';
 
     html += "<option value='21' "+ selected +">현금</option>";
-    html += "<option value='22' "+ selected +">현금+신용카드</option>";
-    html += "<option value='23' "+ selected +">온라인</option>";
+    html += "<option value='22' "+ selected1 +">현금+신용카드</option>";
+    html += "<option value='23' "+ selected2 +">온라인</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1441,12 +1472,14 @@ function memberGrageSelectBox1(tagId, val) {
 function getwelfareDcPercentSelectBox(tagId, val) {
     var html = "<select id='twelfareDcPercentSel'  class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
+    var selected2 = '';
     if(val == '0') selected = 'selected';
-    else if(val == '30') selected = 'selected';
-    else if(val == '50') selected = 'selected';
+    else if(val == '30') selected1 = 'selected';
+    else if(val == '50') selected2 = 'selected';
     html += "<option value='0' "+ selected +">없음</option>";
-    html += "<option value='30' "+ selected +">30%</option>";
-    html += "<option value='50' "+ selected +">50%</option>";
+    html += "<option value='30' "+ selected1 +">30%</option>";
+    html += "<option value='50' "+ selected2 +">50%</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

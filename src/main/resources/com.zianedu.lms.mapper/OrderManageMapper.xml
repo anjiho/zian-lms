@@ -1336,7 +1336,7 @@
         )
     </update>
 
-    <update id="updateOrderLec">
+    <update id="updateOrderLecFromPause">
         UPDATE T_ORDER_LEC
         <set>
             <if test="status != null">STATUS = #{status},</if>
@@ -1346,6 +1346,16 @@
             <if test="pauseCnt != null">PAUSE_CNT = #{pauseCnt},</if>
             <if test="pauseDay != null">PAUSE_DAY = #{pauseDay},</if>
             <if test="pauseTotalDay != null">PAUSE_TOTAL_DAY = #{pauseTotalDay},</if>
+        </set>
+        WHERE J_LEC_KEY = #{jLecKey}
+    </update>
+
+    <update id="updateOrderLec">
+        UPDATE T_ORDER_LEC
+        <set>
+            <if test="status != null">STATUS = #{status},</if>
+            <if test="startDt != ''">START_DT = TO_DATE(#{startDt}, 'YYYY-MM-DD hh24:mi:ss'),</if>
+            <if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
         </set>
         WHERE J_LEC_KEY = #{jLecKey}
     </update>

@@ -60,4 +60,11 @@ public class TOrderLecVO {
         this.pauseDay = pauseDay;
         this.pauseTotalDay = pauseTotalDay;
     }
+
+    public TOrderLecVO(int jLecKey, int status, String startDt, int limitDay) {
+        this.jLecKey = jLecKey;
+        this.status = status;
+        this.startDt = startDt + " 00:00:00";
+        this.limitDay = limitDay;
+    }
 }

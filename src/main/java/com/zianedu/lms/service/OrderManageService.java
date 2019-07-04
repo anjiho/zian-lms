@@ -748,9 +748,15 @@ public class OrderManageService {
      * @param totalPauseCnt
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void updateOrderLec(int jLecKey, int status, String startDate, int limitDay, String pauseStartDate,
+    public void updateOrderLecFromPause(int jLecKey, int status, String startDate, int limitDay, String pauseStartDate,
                                int pauseDay, int pauseCnt, int totalPauseCnt) {
         TOrderLecVO tOrderLecVO = new TOrderLecVO(jLecKey, status, startDate, limitDay, pauseStartDate, pauseCnt, pauseDay, totalPauseCnt);
+        orderManageMapper.updateOrderLecFromPause(tOrderLecVO);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateOrderLec(int jLecKey, int status, String startDate, int limitDay) {
+        TOrderLecVO tOrderLecVO = new TOrderLecVO(jLecKey, status, startDate, limitDay);
         orderManageMapper.updateOrderLec(tOrderLecVO);
     }
 

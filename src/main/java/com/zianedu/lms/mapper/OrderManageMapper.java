@@ -143,6 +143,8 @@ public interface OrderManageMapper {
 
     void updateGoodsKindType(@Param("jId") String jId, @Param("kind") int kind);
 
+    void updateOrderLecFromPause(TOrderLecVO tOrderLecVO);
+
     void updateOrderLec(TOrderLecVO tOrderLecVO);
 
     /** DELETE **/
