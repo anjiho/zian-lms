@@ -1,5 +1,6 @@
 package com.zianedu.lms.controller;
 
+import com.zianedu.lms.define.datasource.GoodsType;
 import com.zianedu.lms.dto.MemberListDTO;
 import com.zianedu.lms.dto.OrderExcelDownDTO;
 import com.zianedu.lms.mapper.MemberManageMapper;
@@ -63,23 +64,39 @@ public class ExcelDownloadController {
                                         @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
                                         @RequestParam(value = "searchStartDate", required = false, defaultValue = "") String searchStartDate,
                                         @RequestParam(value = "searchEndDate", required = false, defaultValue = "") String searchEndDate,
-                                        @RequestParam(value = "goodsType", required = false, defaultValue = "0") String goodsType,
+                                        @RequestParam(value = "goodsType", required = false, defaultValue = "") String goodsType,
                                         @RequestParam(value = "payStatus", required = false, defaultValue = "0") String payStatus,
                                         @RequestParam(value = "isOffline", required = false, defaultValue = "0") String isOffline,
                                         @RequestParam(value = "payType", required = false, defaultValue = "0") String payType,
                                         @RequestParam(value = "isMobile", required = false, defaultValue = "0") String isMobile,
                                         @RequestParam(value = "isVideoReply", required = false, defaultValue = "0") String isVideoReply) {
         List<OrderExcelDownDTO>dataList = orderManageMapper.selectExcelDownloadOrderList(
-                searchStartDate, searchEndDate, Integer.parseInt(goodsType), Integer.parseInt(payStatus), Integer.parseInt(isOffline),
+                searchStartDate, searchEndDate, GoodsType.getGoodsTypeKey(goodsType), Integer.parseInt(payStatus), Integer.parseInt(isOffline),
                 Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, Integer.parseInt(isVideoReply));
-        excelContent = "orderList";
 
+        String title = "";
+        if ("".equals(goodsType)) {
+            title = "전체주문 리스트_";
+        } else if ("VIDEO".equals(goodsType)) {
+            if (Integer.parseInt(isVideoReply) == 0) {
+                title = "동영상주문 리스트_";
+            } else {
+                title = "동영상주문(재수강) 리스트_";
+            }
+        } else if ("ACADEMY".equals(goodsType)) {
+            title = "학원강의주문 리스트_";
+        } else if ("BOOK".equals(goodsType)) {
+            title = "도서주문 리스트_";
+        } else if ("PACKAGE".equals(goodsType)) {
+            title = "프로모션주문 리스트_";
+        }
+        excelContent = "orderList";
         topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호", "주문직렬", "주문구분", "카테고리",
                 "주문내역", "오프라인 구매", "상품가격", "상품판매가", "결제금액", "결제방법", "입금예정 은행", "입금예정 계좌번호", "입금예정자 이름", "입금예정일", "결제상태",
                 "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태", "수취인 이름", "수취인 전화번호", "수취인 휴대전화번호", "수취인 이메일", "배송지 우편번호",
                 "배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");
-        fileName = "전체주문 리스트_" + Util.returnNowDateByYyyymmddhhmmss();
-        sheetName = "주문목록";
+        fileName = title + Util.returnNowDateByYyyymmddhhmmss();
+        sheetName = "목록";
 
         excelModelSetting(model, excelContent, topMenus, fileName, sheetName, dataList);
         return excelService;
@@ -98,6 +115,35 @@ public class ExcelDownloadController {
         topMenus = StringUtils.getStringArray("사용자키", "아이디", "이름", "핸드폰번호", "이메일", "가입일", "직렬", "모바일 가입여부");
         fileName = "강사 회원목록 리스트_" + Util.returnNowDateByYyyymmddhhmmss();
         sheetName = "강사목록";
+
+        excelModelSetting(model, excelContent, topMenus, fileName, sheetName, dataList);
+        return excelService;
+    }
+
+    @Transactional(readOnly = true)
+    @RequestMapping(value = "/cancelOrderList", method = RequestMethod.POST)
+    public String cancelOrderListExcelDownload(Model model,
+                                         @RequestParam(value = "searchType", required = false, defaultValue = "") String searchType,
+                                         @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
+                                         @RequestParam(value = "searchStartDate", required = false, defaultValue = "") String searchStartDate,
+                                         @RequestParam(value = "searchEndDate", required = false, defaultValue = "") String searchEndDate,
+                                         @RequestParam(value = "goodsType", required = false, defaultValue = "") String goodsType,
+                                         @RequestParam(value = "payStatus", required = false, defaultValue = "0") String payStatus,
+                                         @RequestParam(value = "isOffline", required = false, defaultValue = "0") String isOffline,
+                                         @RequestParam(value = "payType", required = false, defaultValue = "0") String payType,
+                                         @RequestParam(value = "isMobile", required = false, defaultValue = "0") String isMobile,
+                                         @RequestParam(value = "isVideoReply", required = false, defaultValue = "0") String isVideoReply) {
+        List<OrderExcelDownDTO>dataList = orderManageMapper.selectExcelDownloadOrderList(
+                searchStartDate, searchEndDate, GoodsType.getGoodsTypeKey(goodsType), Integer.parseInt(payStatus), Integer.parseInt(isOffline),
+                Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, Integer.parseInt(isVideoReply));
+
+        excelContent = "orderList";
+        topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호", "주문직렬", "주문구분", "카테고리",
+                "주문내역", "오프라인 구매", "상품가격", "상품판매가", "결제금액", "결제방법", "입금예정 은행", "입금예정 계좌번호", "입금예정자 이름", "입금예정일", "결제상태",
+                "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태", "수취인 이름", "수취인 전화번호", "수취인 휴대전화번호", "수취인 이메일", "배송지 우편번호",
+                "배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");
+        fileName = "주문,결제취소목록_" + Util.returnNowDateByYyyymmddhhmmss();
+        sheetName = "목록";
 
         excelModelSetting(model, excelContent, topMenus, fileName, sheetName, dataList);
         return excelService;
