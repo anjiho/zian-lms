@@ -399,7 +399,7 @@
             A.J_LEC_KEY, C.J_KEY, C.USER_KEY, E.NAME, B.KIND, D.NAME as GOODS_NAME,
             A.STATUS, A.START_DT, (A.START_DT + A.LIMIT_DAY) as END_DT, A.LIMIT_DAY,
             A.PAUSE_CNT, A.PAUSE_START_DT, A.PAUSE_TOTAL_DAY, A.PAUSE_DAY, C.PAY_STATUS,
-            E.NAME as USER_NAME, C.J_ID, C.PAY_TYPE, E.USER_ID
+            E.NAME as USER_NAME, C.J_ID, C.PAY_TYPE, E.USER_ID, (A.PAUSE_START_DT + A.PAUSE_DAY) as pauseEndDt
         FROM T_ORDER_LEC A
         INNER JOIN T_ORDER_GOODS B
         ON A.J_G_KEY = B.J_G_KEY
@@ -478,11 +478,11 @@
             AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
         <!-- 결제상태 : 결제완료 -->
-        <if test="payStatus == 1">
+        <if test="payStatus == 2">
             AND C.PAY_STATUS IN (0, 1, 2)
         </if>
         <!-- 결제상태 : 결제취소 -->
-        <if test="payStatus == 2">
+        <if test="payStatus == 8">
             AND C.PAY_STATUS IN (8, 9, 10)
         </if>
         <!-- 진행상태 : 대기중 -->
@@ -967,7 +967,7 @@
         ORDER BY A.J_KEY DESC
     </select>
 
-    <select id="selectExcelDownloadCancelOrderList" resultType="OrderResultDTO">
+    <select id="selectExcelDownloadCancelOrderList" resultType="OrderExcelDownDTO">
         SELECT
             A.*,B.NAME, B.USER_ID,
             B.TELEPHONE_MOBILE,
@@ -1007,7 +1007,7 @@
             (
             SELECT /*+ PARALLEL(4) */ pm_type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
             ) WHERE ROWNUM = 1
-            ) as pmType,
+            ) as pmType
         FROM T_ORDER A
         INNER JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
@@ -1095,6 +1095,16 @@
             AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY A.J_KEY DESC
+    </select>
+
+    <select id="selectTOrderLec" resultType="com.zianedu.lms.vo.TOrderLecVO">
+        SELECT A.J_LEC_KEY, A.J_G_KEY, A.STATUS, TO_CHAR(A.START_DT, 'YYYY-MM-DD') as startDt, A.LIMIT_DAY,
+               TO_CHAR(A.PAUSE_START_DT, 'YYYY-MM-DD') as pauseStartDt,
+               A.PAUSE_CNT, A.PAUSE_DAY, A.PAUSE_TOTAL_DAY, A.MULTIPLE,
+               TO_CHAR((A.START_DT + A.LIMIT_DAY), 'YYYY-MM-DD') as startDtLimit,
+               TO_CHAR((A.PAUSE_START_DT + A.PAUSE_DAY), 'YYYY-MM-DD') as pauseStartDtLimit
+        FROM T_ORDER_LEC A
+        WHERE A.J_LEC_KEY = #{jLecKey}
     </select>
 
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
@@ -1317,6 +1327,13 @@
             <if test="deliveryEndDate != ''">DELIVERY_END_DATE = TO_DATE(#{deliveryEndDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
         </set>
         WHERE J_DELIVERY_KEY = #{jDeliveryKey}
+    </update>
+
+    <update id="updateGoodsKindType">
+        UPDATE T_ORDER_GOODS SET KIND = #{kind}
+        WHERE J_KEY = (
+            SELECT J_KEY FROM T_ORDER WHERE J_ID = #{jId}
+        )
     </update>
 
     <delete id="deleteTDeviceLimit">

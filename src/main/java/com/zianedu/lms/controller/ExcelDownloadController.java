@@ -127,15 +127,18 @@ public class ExcelDownloadController {
                                          @RequestParam(value = "searchText", required = false, defaultValue = "") String searchText,
                                          @RequestParam(value = "searchStartDate", required = false, defaultValue = "") String searchStartDate,
                                          @RequestParam(value = "searchEndDate", required = false, defaultValue = "") String searchEndDate,
+                                         @RequestParam(value = "cancelStartDate", required = false, defaultValue = "") String cancelStartDate,
+                                         @RequestParam(value = "cancelEndDate", required = false, defaultValue = "") String cancelEndDate,
                                          @RequestParam(value = "goodsType", required = false, defaultValue = "") String goodsType,
                                          @RequestParam(value = "payStatus", required = false, defaultValue = "0") String payStatus,
                                          @RequestParam(value = "isOffline", required = false, defaultValue = "0") String isOffline,
                                          @RequestParam(value = "payType", required = false, defaultValue = "0") String payType,
                                          @RequestParam(value = "isMobile", required = false, defaultValue = "0") String isMobile,
-                                         @RequestParam(value = "isVideoReply", required = false, defaultValue = "0") String isVideoReply) {
-        List<OrderExcelDownDTO>dataList = orderManageMapper.selectExcelDownloadOrderList(
-                searchStartDate, searchEndDate, GoodsType.getGoodsTypeKey(goodsType), Integer.parseInt(payStatus), Integer.parseInt(isOffline),
-                Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, Integer.parseInt(isVideoReply));
+                                         @RequestParam(value = "dateSearchType", required = false, defaultValue = "payDate") String dateSearchType) {
+        List<OrderExcelDownDTO>dataList = orderManageMapper.selectExcelDownloadCancelOrderList(
+                searchStartDate, searchEndDate, cancelStartDate, cancelEndDate,
+                Integer.parseInt(payStatus), Integer.parseInt(isOffline),
+                Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, dateSearchType);
 
         excelContent = "orderList";
         topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호", "주문직렬", "주문구분", "카테고리",

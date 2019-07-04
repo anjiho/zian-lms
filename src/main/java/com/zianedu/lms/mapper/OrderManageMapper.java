@@ -100,10 +100,12 @@ public interface OrderManageMapper {
                                                          @Param("payType") int payType, @Param("isMobile") int isMobile,
                                                          @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("isVideoReply") int isVideoReply);
 
-    List<OrderResultDTO> selectExcelDownloadCancelOrderList(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
+    List<OrderExcelDownDTO> selectExcelDownloadCancelOrderList(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                                @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,
                                                @Param("payStatus") int payStatus, @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
                                                @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("dateSearchType") String dateSearchType);
+
+    TOrderLecVO selectTOrderLec(@Param("jLecKey") int jLecKey);
 
     /** INSERT **/
     void insertTOrderLecCurri(TOrderLecCurriVO tOrderLecCurriVO);
@@ -138,6 +140,8 @@ public interface OrderManageMapper {
     void updateOrderDeliveryInfo(DeliveryAddressDTO deliveryAddressDTO);
 
     void updateTOrderDelivery(TOrderDeliveryVO tOrderDeliveryVO);
+
+    void updateGoodsKindType(@Param("jId") String jId, @Param("kind") int kind);
 
     /** DELETE **/
     void deleteTDeviceLimit(@Param("deviceLimitKey") int deviceLimitKey);
