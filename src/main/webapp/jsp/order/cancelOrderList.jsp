@@ -5,7 +5,7 @@
 
     button{margin:0;padding:0;font-family:inherit;border:0 none;background:transparent;cursor:pointer}
     button::-moz-focus-inner{border:0;padding:0}
-    .searchDate{overflow:hidden;margin-bottom:-3px;*zoom:1;margin-left: -7%;}
+    .searchDate{overflow:hidden;margin-bottom:-3px;*zoom:1;margin-left: -6%;}
     .searchDate:after{display:block;clear:both;content:''}
     .searchDate li{position:relative;float:left;margin:0 7px 0 0}
     .searchDate li .chkbox2{display:block;text-align:center}
@@ -29,7 +29,7 @@
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
         setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
-        //fn_search("new");
+        getOrderDateSearchSelectbox("dateSearchType");//검색 주문일자기준선택
     }
 
     function fn_search(val) {
@@ -40,7 +40,6 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        //var payStatus = getSelectboxValue("orderStatus");//처리상태
         var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
         var isOffline = getSelectboxValue("isOffline");//구매장소
         var isMobile = getSelectboxValue("deviceSel");//디바이스
@@ -53,7 +52,7 @@
         var cancelStartDate = getInputTextValue('cancelStartDate');
         var cancelEndDate = getInputTextValue('cancelEndDate');
         var searchText = getInputTextValue('searchText');
-
+        var dateSearchType  = getSelectboxValue('dateSearchType');
         var loading = new Loading({
             direction: 'hor',
             discription: '검색중',
@@ -61,14 +60,12 @@
             animationOut: false,
             defaultApply: 	true,
         });
-
         if(searchType == null) searchType = "";
         orderManageService.getCancelOrderListCount(startSearchDate, endSearchDate, cancelStartDate, cancelEndDate, orderPayStatus, isOffline,
-            payType, isMobile, searchType, searchText, function (cnt) {
+            payType, isMobile, searchType, searchText, dateSearchType, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
-                var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 orderManageService.getCancelOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, cancelStartDate, cancelEndDate,
-                    orderPayStatus, isOffline, payType, isMobile, searchType, searchText, function (selList) {
+                    orderPayStatus, isOffline, payType, isMobile, searchType, searchText, dateSearchType, function (selList) {
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
@@ -119,6 +116,29 @@
             });
         }
     }
+
+    function excelDownload() {
+        if (confirm("다운로드 받으시겠습니까?")) {
+            var searchType = getSelectboxValue("searchType");
+            var searchText = getInputTextValue("searchText");
+            var searchStartDate = getInputTextValue("searchStartDate");
+            var searchEndDate = getInputTextValue("searchEndDate");
+            var cancelStartDate = getInputTextValue("cancelStartDate");
+            var cancelEndDate = getInputTextValue("cancelEndDate");
+            var orderStatus = getSelectboxValue("orderPayStatus");
+            var isOffline = getSelectboxValue("isOffline");
+            var payType = getSelectboxValue("orderPayType");
+            var isMobile = getSelectboxValue("deviceSel");
+            var dateSearchType = getSelectboxValue("dateSearchType");
+
+            var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
+                "&cancelStartDate=" + cancelStartDate + "&cancelEndDate=" + cancelEndDate +
+                "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=1"
+                "&dateSearchType=" + dateSearchType;
+
+            $.download('/excelDownload/cancelOrderList', url, 'post');
+        }
+    }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
@@ -147,7 +167,7 @@
                     <div class="col">
                         <div class="form-group row">
                             <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
-                            <div class="col-sm-5 pl-0 pr-0">
+                            <div class="col-sm-4 pl-0 pr-0">
                                 <tr>
                                     <td>
                                         <ul class="searchDate">
@@ -191,7 +211,7 @@
                                     </td>
                                 </tr>
                             </div>
-                            <div class="col-sm-5 input-group pl-0 pr-0">
+                            <div class="col-sm-3 input-group pl-0 pr-0">
                                 <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -202,6 +222,9 @@
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
                             </div>
+                            <div class="col-sm-2 pl-5 pr-0">
+                                <span id="dateSearchType"></span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -209,7 +232,7 @@
                     <div class="col">
                         <div class="form-group row">
                             <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">취소기간별조회</label>
-                            <div class="col-sm-5 pl-0 pr-0">
+                            <div class="col-sm-4 pl-0 pr-0">
                                 <tr>
                                     <td>
                                         <ul class="searchDate">
@@ -253,12 +276,12 @@
                                     </td>
                                 </tr>
                             </div>
-                            <div class="col-sm-5 input-group pl-0 pr-0">
+                            <div class="col-sm-3 input-group pl-0 pr-0">
                                 <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="cancelStartDate" id="cancelStartDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
-                                <span> ~ </span>
+                                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
                                 <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="cancelEndDate" id="cancelEndDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
@@ -340,6 +363,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="mb-5">
+                        <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="excelDownload();"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
+                    </div>
                     <table class="table table-hover">
                         <thead>
                         <tr>

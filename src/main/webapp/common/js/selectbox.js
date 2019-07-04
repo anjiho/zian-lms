@@ -1170,6 +1170,8 @@ function orderSearchSelectbox(tagId, val) {
     else html += "<option value='orderUserName'>주문자 이름</option>";
     if(val == 'orderId') html += "<option value='orderId'>주문번호</option>";
     else html += "<option value='orderId'>주문번호</option>";
+    if(val == 'depositUserName') html += "<option value='orderId'>입금자명</option>";
+    else html += "<option value='depositUserName'>입금자명</option>";
     if(val == 'orderGoodsName') html += "<option value='orderGoodsName'>상품명</option>";
     else html += "<option value='orderGoodsName'>상품명</option>";
     html += "</select>";
@@ -1572,6 +1574,15 @@ function getSmsSearchSelectbox(tagId) {
     html += "<option value='id'>아이디</option>";
     html += "<option value='phone'>휴대전화번호</option>";
     html += "<option value='content'>내용</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+
+function getOrderDateSearchSelectbox(tagId) {
+    var html = "<select id='dateSearchType' class='form-control'>";
+    html += "<option value='payDate'>주문일자 기준</option>";
+    html += "<option value='depositDate'>입금 확인일자 기준</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

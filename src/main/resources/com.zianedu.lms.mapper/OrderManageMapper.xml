@@ -86,7 +86,7 @@
             </if>
             <if test="searchType == 'depositUserName'">
                 AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
-            </if>s
+            </if>
         </if>
         <!-- 동영상 재수강 여부 -->
         <if test="isVideoReply == 0">
@@ -173,10 +173,10 @@
                     AND A.IS_MOBILE = #{isMobile}
                 </if>
                 <if test="searchType == 'orderUserId'">
-                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
+                    AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderUserName'">
-                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+                    AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderId'">
                     AND A.J_ID LIKE '%'||#{searchText}||'%'
@@ -371,11 +371,17 @@
                 AND A.IS_MOBILE = #{isMobile}
             </if>
             <if test="searchType == 'orderUserId'">
-                AND B.USER_ID LIKE '%'||#{searchText}||'%'
+                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
             </if>
             <if test="searchType == 'orderUserName'">
-                AND B.NAME LIKE '%'||#{searchText}||'%'
+                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
             </if>
+<!--            <if test="searchType == 'orderUserId'">-->
+<!--                AND B.USER_ID LIKE '%'||#{searchText}||'%'-->
+<!--            </if>-->
+<!--            <if test="searchType == 'orderUserName'">-->
+<!--                AND B.NAME LIKE '%'||#{searchText}||'%'-->
+<!--            </if>-->
             <if test="searchType == 'orderId'">
                 AND A.J_ID LIKE '%'||#{searchText}||'%'
             </if>
@@ -472,11 +478,11 @@
             AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
         <!-- 결제상태 : 결제완료 -->
-        <if test="payStatus == 1">
+        <if test="payStatus == 2">
             AND C.PAY_STATUS IN (0, 1, 2)
         </if>
         <!-- 결제상태 : 결제취소 -->
-        <if test="payStatus == 2">
+        <if test="payStatus == 8">
             AND C.PAY_STATUS IN (8, 9, 10)
         </if>
         <!-- 진행상태 : 대기중 -->
@@ -1091,6 +1097,16 @@
         ORDER BY A.J_KEY DESC
     </select>
 
+    <select id="selectTOrderLec" resultType="com.zianedu.lms.vo.TOrderLecVO">
+        SELECT A.J_LEC_KEY, A.J_G_KEY, A.STATUS, TO_CHAR(A.START_DT, 'YYYY-MM-DD') as startDt, A.LIMIT_DAY,
+               TO_CHAR(A.PAUSE_START_DT, 'YYYY-MM-DD') as pauseStartDt,
+               A.PAUSE_CNT, A.PAUSE_DAY, A.PAUSE_TOTAL_DAY, A.MULTIPLE,
+               TO_CHAR((A.START_DT + A.LIMIT_DAY), 'YYYY-MM-DD') as startDtLimit,
+               TO_CHAR((A.PAUSE_START_DT + A.PAUSE_DAY), 'YYYY-MM-DD') as pauseStartDtLimit
+        FROM T_ORDER_LEC A
+        WHERE A.J_LEC_KEY = #{jLecKey}
+    </select>
+
     <insert id="insertTOrderLecCurri" parameterType="com.zianedu.lms.vo.TOrderLecCurriVO">
         <selectKey resultType="Long" keyProperty="jCurriKey" order="BEFORE">
             SELECT T_ORDER_LEC_CURRI_SEQ.nextval FROM DUAL
@@ -1311,6 +1327,13 @@
             <if test="deliveryEndDate != ''">DELIVERY_END_DATE = TO_DATE(#{deliveryEndDate}, 'YYYY-mm-dd hh24:mi:ss'),</if>
         </set>
         WHERE J_DELIVERY_KEY = #{jDeliveryKey}
+    </update>
+
+    <update id="updateGoodsKindType">
+        UPDATE T_ORDER_GOODS SET KIND = #{kind}
+        WHERE J_KEY = (
+            SELECT J_KEY FROM T_ORDER WHERE J_ID = #{jId}
+        )
     </update>
 
     <delete id="deleteTDeviceLimit">

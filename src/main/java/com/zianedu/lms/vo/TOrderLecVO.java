@@ -30,6 +30,10 @@ public class TOrderLecVO {
 
     private int maxReadCount;
 
+    private String startDtLimit;
+
+    private String pauseStartDtLimit;
+
     public TOrderLecVO() {}
 
     public TOrderLecVO(int jGKey, int status, String startDt, int limitDay, float multiple) {

@@ -436,6 +436,16 @@ public class OrderManageService {
     }
 
     /**
+     * 수강내역 진행상태 가져오기
+     * @param jLecKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TOrderLecVO getOrderLecInfo(int jLecKey) {
+       return orderManageMapper.selectTOrderLec(jLecKey);
+    }
+
+    /**
      * 수강관리 > 수강내역목록 > 수강시간 조정 > 시간 수정 (배열이아닌 건 바이 건)
      * @param jCurriKey
      * @param jLecKey
@@ -714,6 +724,16 @@ public class OrderManageService {
                 deliveryZipcode, deliveryAddress, deliveryAddressRoad, deliveryAddressAdd
         );
         orderManageMapper.updateOrderDeliveryInfo(deliveryAddressDTO);
+    }
+
+    /**
+     * 수강타입 변경
+     * @param jId
+     * @param goodsKind
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateGoodsKindType(String jId, int goodsKind) {
+        orderManageMapper.updateGoodsKindType(jId, goodsKind);
     }
 
 }
