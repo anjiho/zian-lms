@@ -1266,13 +1266,15 @@ function getlectureWatchPayStatusSelectbox(tagId, val) {
 function getlectureWatchOrderStatusSelectbox(tagId, val) {
     var html = "<select id='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
-    if(val == '1') selected = 'selected';
+
+    if(val == '0') selected = 'selected';
+    else if(val == '1') selected = 'selected';
     else if(val == '2') selected = 'selected';
     else if(val == '3') selected = 'selected';
     else if(val == '4') selected = 'selected';
 
-
-    html += "<option value='1' "+ selected +">대기중+시작</option>";
+    html += "<option value='0' "+ selected +">대기중</option>";
+    html += "<option value='1' "+ selected +">시작</option>";
     html += "<option value='2' "+ selected +">일시정지</option>";
     html += "<option value='3' "+ selected +">종강</option>";
     html += "<option value='4' "+ selected +">재시작대기</option>";

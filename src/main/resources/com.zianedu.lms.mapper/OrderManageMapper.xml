@@ -7,9 +7,9 @@
             A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
              A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
              A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,
-            ( SELECT G_NAME FROM
+            ( SELECT NAME FROM
                 (
-                    SELECT /*+ PARALLEL(4) */ G_NAME FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+                    SELECT /*+ PARALLEL(4) */ TT.NAME FROM T_ORDER_GOODS T  LEFT JOIN T_GOODS TT ON T.G_KEY = TT.G_KEY WHERE T.J_KEY = A.J_KEY
                 ) WHERE ROWNUM = 1
             ) as orderGoodsName,
             ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount
@@ -19,12 +19,18 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
+        <if test="startSearchDate == endSearchDate">
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+        </if>
+        <if test="startSearchDate != endSearchDate">
         <![CDATA[
             AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
          ]]>
-        <![CDATA[
+            <![CDATA[
             AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
         ]]>
+        </if>
+
         <if test="payStatus == -1">
             AND A.PAY_STATUS IN (0, 1, 2)
         </if>
@@ -96,12 +102,17 @@
                 LEFT JOIN T_ORDER_GOODS C
                 ON A.J_KEY = C.J_KEY
                 WHERE 1=1
+                <if test="startSearchDate == endSearchDate">
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                </if>
+                <if test="startSearchDate != endSearchDate">
                 <![CDATA[
                     AND A.INDATE  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                 <![CDATA[
                     AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
+                </if>
                 <if test="payStatus == -1">
                     AND A.PAY_STATUS IN (0, 1, 2)
                 </if>
@@ -160,18 +171,30 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
-        <![CDATA[
-            AND A.INDATE  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-         ]]>
-        <![CDATA[
-            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-        ]]>
-        <![CDATA[
-            AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
-         ]]>
-        <![CDATA[
-            AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
-        ]]>
+        <if test="startSearchDate == endSearchDate">
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+        </if>
+        <if test="startSearchDate != endSearchDate">
+            <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+            <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+        </if>
+
+        <if test="startCancelSearchDate == endCancelSearchDate">
+            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+        </if>
+        <if test="startCancelSearchDate != endCancelSearchDate">
+            <![CDATA[
+                AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+             ]]>
+            <![CDATA[
+                AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+        </if>
+
         <if test="payStatus == -1">
             AND A.PAY_STATUS IN (8, 9, 10)
         </if>
@@ -188,16 +211,16 @@
             AND A.IS_MOBILE = #{isMobile}
         </if>
         <if test="searchType == 'orderUserId'">
-            AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID = #{searchText})
+            AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
         </if>
         <if test="searchType == 'orderUserName'">
-            AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+            AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
         </if>
         <if test="searchType == 'orderId'">
-            AND A.J_ID = #{searchText}
+            AND A.J_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderUserName'">
-            AND C.G_NAME LIKE '%'||#{searchText}||'%'
+            AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY A.J_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -215,18 +238,30 @@
             LEFT OUTER JOIN T_ORDER_DELIVERY D
             ON A.J_KEY = D.J_KEY
             WHERE 1=1
-            <![CDATA[
-                AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-             ]]>
-            <![CDATA[
-                AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-            ]]>
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+            </if>
+
+            <if test="startCancelSearchDate == endCancelSearchDate">
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startCancelSearchDate != endCancelSearchDate">
             <![CDATA[
                 AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
              ]]>
             <![CDATA[
                 AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
+            </if>
+
             <if test="payStatus == -1">
                 AND A.PAY_STATUS IN (8, 9, 10)
             </if>
@@ -243,13 +278,13 @@
                 AND A.IS_MOBILE = #{isMobile}
             </if>
             <if test="searchType == 'orderUserId'">
-                AND B.USER_ID = #{searchText}
+                AND B.USER_ID LIKE '%'||#{searchText}||'%'
             </if>
             <if test="searchType == 'orderUserName'">
                 AND B.NAME LIKE '%'||#{searchText}||'%'
             </if>
             <if test="searchType == 'orderId'">
-                AND A.J_ID = #{searchText}
+                AND A.J_ID LIKE '%'||#{searchText}||'%'
             </if>
             <if test="searchType == 'orderUserName'">
                 AND C.G_NAME LIKE '%'||#{searchText}||'%'
@@ -279,42 +314,41 @@
         <![CDATA[
                 AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
-        <if test="payStatus != null and payStatus != ''">
-            <!-- 결제상태 : 결제완료 -->
-            <if test="payStatus == '1'">
-                AND C.PAY_STATUS IN (0, 1, 2)
-            </if>
-            <!-- 결제상태 : 결제취소 -->
-            <if test="payStatus == '2'">
-                AND C.PAY_STATUS IN (8, 9, 10)
-            </if>
+        <!-- 결제상태 : 결제완료 -->
+        <if test="payStatus == 2">
+            AND C.PAY_STATUS IN (0, 1, 2)
         </if>
-        <if test="orderLecStatus != null and orderLecStatus != ''">
-            <!-- 진행상태 : 대기중 + 시작 -->
-            <if test="orderLecStatus == '1'">
-                AND A.STATUS IN (0, 1)
-            </if>
-            <!-- 진행상태 : 일시정지 -->
-            <if test="orderLecStatus == '2'">
-                AND A.STATUS = 2
-            </if>
-            <!-- 진행상태 : 종강 -->
-            <if test="orderLecStatus == '3'">
-                AND A.STATUS = 3
-            </if>
-            <!-- 진행상태 : 재시작대기 -->
-            <if test="orderLecStatus == '4'">
-                AND A.STATUS = 4
-            </if>
+        <!-- 결제상태 : 결제취소 -->
+        <if test="payStatus == 8">
+            AND C.PAY_STATUS IN (8, 9, 10)
+        </if>
+        <if test="orderLecStatus == 0">
+            AND A.STATUS = 0
+        </if>
+        <!-- 진행상태 : 대기중 + 시작 -->
+        <if test="orderLecStatus == 1">
+            AND A.STATUS = 1
+        </if>
+        <!-- 진행상태 : 일시정지 -->
+        <if test="orderLecStatus == 2">
+            AND A.STATUS = 2
+        </if>
+        <!-- 진행상태 : 종강 -->
+        <if test="orderLecStatus == 3">
+            AND A.STATUS = 3
+        </if>
+        <!-- 진행상태 : 재시작대기 -->
+        <if test="orderLecStatus == 4">
+            AND A.STATUS = 4
         </if>
         <if test="searchType == 'orderUserId'">
-            AND E.USER_ID = #{searchText}
+            AND E.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderUserName'">
             AND E.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderId'">
-            AND C.J_ID = #{searchText}
+            AND C.J_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderGoodsName'">
             AND D.NAME LIKE '%'||#{searchText}||'%'
@@ -341,54 +375,42 @@
         <![CDATA[
             AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
-        <if test="payStatus != null and payStatus != ''">
-            <!-- 결제상태 : 결제완료 -->
-            <if test="payStatus == '1'">
-                AND C.PAY_STATUS IN (0, 1, 2)
-            </if>
-            <!-- 결제상태 : 결제취소 -->
-            <if test="payStatus == '2'">
-                AND C.PAY_STATUS IN (8, 9, 10)
-            </if>
+        <!-- 결제상태 : 결제완료 -->
+        <if test="payStatus == 1">
+            AND C.PAY_STATUS IN (0, 1, 2)
         </if>
-        <if test="orderLecStatus != null and orderLecStatus != ''">
-            <!-- 진행상태 : 대기중 + 시작 -->
-            <if test="orderLecStatus == '1'">
-                AND A.STATUS IN (0, 1)
-            </if>
-            <!-- 진행상태 : 일시정지 -->
-            <if test="orderLecStatus == '2'">
-                AND A.STATUS = 2
-            </if>
-            <!-- 진행상태 : 종강 -->
-            <if test="orderLecStatus == '3'">
-                AND A.STATUS = 3
-            </if>
-            <!-- 진행상태 : 재시작대기 -->
-            <if test="orderLecStatus == '4'">
-                AND A.STATUS = 4
-            </if>
+        <!-- 결제상태 : 결제취소 -->
+        <if test="payStatus == 2">
+            AND C.PAY_STATUS IN (8, 9, 10)
         </if>
-<!--        <if test="searchType == 'userId'">-->
-<!--            AND E.USER_ID = #{searchText}-->
-<!--        </if>-->
-<!--        <if test="searchType == 'userName'">-->
-<!--            AND E.NAME LIKE '%'||#{searchText}||'%'-->
-<!--        </if>-->
-<!--        <if test="searchType == 'orderNumber'">-->
-<!--            AND C.J_ID = #{searchText}-->
-<!--        </if>-->
-<!--        <if test="searchType == 'goodsName'">-->
-<!--            AND D.NAME LIKE '%'||#{searchText}||'%'-->
-<!--        </if>-->
+        <!-- 진행상태 : 대기중 -->
+        <if test="orderLecStatus == 0">
+            AND A.STATUS = 0
+        </if>
+        <!-- 진행상태 : 시작 -->
+        <if test="orderLecStatus == 1">
+            AND A.STATUS = 1
+        </if>
+        <!-- 진행상태 : 일시정지 -->
+        <if test="orderLecStatus == 2">
+            AND A.STATUS = 2
+        </if>
+        <!-- 진행상태 : 종강 -->
+        <if test="orderLecStatus == 3">
+            AND A.STATUS = 3
+        </if>
+        <!-- 진행상태 : 재시작대기 -->
+        <if test="orderLecStatus == 4">
+            AND A.STATUS = 4
+        </if>
         <if test="searchType == 'orderUserId'">
-            AND E.USER_ID = #{searchText}
+            AND E.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderUserName'">
             AND E.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderId'">
-            AND C.J_ID = #{searchText}
+            AND C.J_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'orderGoodsName'">
             AND D.NAME LIKE '%'||#{searchText}||'%'

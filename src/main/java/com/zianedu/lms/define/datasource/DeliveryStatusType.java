@@ -18,9 +18,9 @@ public enum DeliveryStatusType {
     }
 
     public static String getDeliveryStatusName(int deliveryStatusKey) {
-        for (DeliveryStatusType type : DeliveryStatusType.values()) {
-            if (deliveryStatusKey == type.deliveryStatusKey) {
-                return type.deliveryStatusStr;
+        for (DeliveryStatusType deliveryStatusType : DeliveryStatusType.values()) {
+            if (deliveryStatusKey == deliveryStatusType.deliveryStatusKey) {
+                return deliveryStatusType.deliveryStatusStr;
             }
         }
         return null;

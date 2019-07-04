@@ -40,4 +40,6 @@ public class OrderResultDTO {
     private int isOffline;
 
     private int userKey;
+
+    private String deliveryStatusName;
 }

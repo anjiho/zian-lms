@@ -70,7 +70,7 @@
                             function(data) {return data.endDt == null ? "-" : split_minute_getDay(data.endDt)},
                             function(data) {return data.limitDay == null ? "-" : data.limitDay;},
                             function(data) {return data.pauseTotalDay == null ? "-" : data.pauseTotalDay;},
-                            function(data) {return data.status == 1 ? "결제완료" : '결제취소';},
+                            function(data) {return data.payStatus == 2 ? "결제완료" : '결제취소';},
                         ], {escapeHtml:false});
                     });
             loadingOut(loading);

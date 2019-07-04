@@ -102,7 +102,7 @@ public class Test {
 
     public static void main(String[] args) {
 
-        System.out.println(SecurityUtil.encryptSHA256("wldks2019!"));
+        //System.out.println(DeliveryStatusType.getDeliveryStatusName());
 
 
     }
