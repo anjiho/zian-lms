@@ -961,7 +961,7 @@
         ORDER BY A.J_KEY DESC
     </select>
 
-    <select id="selectExcelDownloadCancelOrderList" resultType="OrderResultDTO">
+    <select id="selectExcelDownloadCancelOrderList" resultType="OrderExcelDownDTO">
         SELECT
             A.*,B.NAME, B.USER_ID,
             B.TELEPHONE_MOBILE,
@@ -1001,7 +1001,7 @@
             (
             SELECT /*+ PARALLEL(4) */ pm_type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
             ) WHERE ROWNUM = 1
-            ) as pmType,
+            ) as pmType
         FROM T_ORDER A
         INNER JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
