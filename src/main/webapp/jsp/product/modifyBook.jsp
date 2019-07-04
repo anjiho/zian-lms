@@ -35,7 +35,7 @@
 
             /*2. 옵션 가져오기 */
             var productOptionInfo = info.productOptionInfo;
-            console.log(productOptionInfo);
+
             if (productOptionInfo.length == 0) {
                 alert(1);
                 var cellData = [

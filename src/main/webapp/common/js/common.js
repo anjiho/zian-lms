@@ -2120,7 +2120,7 @@ function split_minute_getDay(day) {
         day = day.split(" ");
         Reday = day[0];
     }else{
-        Reday = "";
+        Reday = "-";
     }
     return Reday;
 }
