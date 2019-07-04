@@ -68,7 +68,7 @@ public class OrderManageService {
     @Transactional(readOnly = true)
     public List<OrderResultDTO> getOrderList(int sPage, int listLimit, String startSearchDate, String endSearchDate, String goodsType,
                                              int payStatus, int isOffline, int payType, int isMobile, String searchType, String searchText,
-                                             int isVideoReply) {
+                                             int isVideoReply, String dateSearchType) {
         if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
@@ -77,8 +77,7 @@ public class OrderManageService {
         List<OrderResultDTO>list = orderManageMapper.selectOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchText, ""), Util
-                        .isNullValue(searchType, ""), isVideoReply
+                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""), isVideoReply, Util.isNullValue(dateSearchType, "")
         );
 
         if (list != null && list.size() > 0) {
@@ -106,12 +105,12 @@ public class OrderManageService {
      */
     @Transactional(readOnly = true)
     public int getOrderListCount(String startSearchDate, String endSearchDate, String goodsType, int payStatus, int isOffline,
-                            int payType, int isMobile, String searchType, String searchText, int isVideoReply) {
+                            int payType, int isMobile, String searchType, String searchText, int isVideoReply, String dateSearchType) {
 
         return orderManageMapper.selectOrderListCount(
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply, Util.isNullValue(dateSearchType, "")
         );
     }
 
@@ -134,7 +133,7 @@ public class OrderManageService {
     @Transactional(readOnly = true)
     public List<OrderResultDTO> getCancelOrderList(int sPage, int listLimit, String startSearchDate, String endSearchDate,
                                                    String startCancelSearchDate, String endCancelSearchDate, int payStatus,
-                                                   int isOffline, int payType, int isMobile, String searchType, String searchText) {
+                                                   int isOffline, int payType, int isMobile, String searchType, String searchText, String dateSearchType) {
         if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
@@ -142,7 +141,8 @@ public class OrderManageService {
         List<OrderResultDTO>list = orderManageMapper.selectCancelOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""), payStatus,
-                isOffline, payType, isMobile, Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+                isOffline, payType, isMobile, Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""),
+                Util.isNullValue(dateSearchType, "")
                 );
 
         if (list != null && list.size() > 0) {
@@ -176,7 +176,7 @@ public class OrderManageService {
     @Transactional(readOnly = true)
     public int getCancelOrderListCount(String startSearchDate, String endSearchDate, String startCancelSearchDate,
                                        String endCancelSearchDate, int payStatus, int isOffline, int payType, int isMobile,
-                                       String searchType, String searchText) {
+                                       String searchType, String searchText, String dateSearchType) {
         if ("".equals(startSearchDate) && "".equals(endSearchDate)
                 && "".equals(startCancelSearchDate) && "".equals(endCancelSearchDate)) {
             return 0;
@@ -185,7 +185,7 @@ public class OrderManageService {
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""),
                 payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, "")
+                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""), Util.isNullValue(dateSearchType, "")
         );
     }
 
