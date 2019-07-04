@@ -29,7 +29,6 @@
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
         setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
-        //fn_search("new");
     }
 
     function fn_search(val) {
@@ -53,7 +52,6 @@
         var cancelStartDate = getInputTextValue('cancelStartDate');
         var cancelEndDate = getInputTextValue('cancelEndDate');
         var searchText = getInputTextValue('searchText');
-
         var loading = new Loading({
             direction: 'hor',
             discription: '검색중',
@@ -63,6 +61,8 @@
         });
 
         if(searchType == null) searchType = "";
+        alert(searchType);
+        alert(searchText);
         orderManageService.getCancelOrderListCount(startSearchDate, endSearchDate, cancelStartDate, cancelEndDate, orderPayStatus, isOffline,
             payType, isMobile, searchType, searchText, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
