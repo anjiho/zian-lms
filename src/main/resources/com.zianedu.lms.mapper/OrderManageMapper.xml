@@ -19,17 +19,33 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
-        <if test="startSearchDate == endSearchDate">
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+        <if test="dateSearchType == 'payDate'">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                        <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                ]]>
+            </if>
         </if>
-        <if test="startSearchDate != endSearchDate">
-        <![CDATA[
-            AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-         ]]>
-            <![CDATA[
-            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
-        ]]>
+        <if test="dateSearchType == 'depositDate'">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.DEPOSIT_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.DEPOSIT_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                ]]>
+            </if>
         </if>
+
 
         <if test="payStatus == -1">
             AND A.PAY_STATUS IN (0, 1, 2)
@@ -57,17 +73,20 @@
         </if>
         <if test="searchType != ''">
             <if test="searchType == 'orderUserId'">
-                AND B.USER_ID = #{searchText}
+                AND B.USER_ID LIKE '%'||#{searchText}||'%'
             </if>
             <if test="searchType == 'orderUserName'">
                 AND B.NAME LIKE '%'||#{searchText}||'%'
             </if>
             <if test="searchType == 'orderId'">
-                AND A.J_ID = #{searchText}
+                AND A.J_ID LIKE '%'||#{searchText}||'%'
             </if>
             <if test="searchType == 'orderGoodsName'">
                 AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND Z.G_NAME LIKE '%'||#{searchText}||'%')
             </if>
+            <if test="searchType == 'depositUserName'">
+                AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+            </if>s
         </if>
         <!-- 동영상 재수강 여부 -->
         <if test="isVideoReply == 0">
@@ -102,17 +121,33 @@
                 LEFT JOIN T_ORDER_GOODS C
                 ON A.J_KEY = C.J_KEY
                 WHERE 1=1
-                <if test="startSearchDate == endSearchDate">
-                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                <if test="dateSearchType == 'payDate'">
+                    <if test="startSearchDate == endSearchDate">
+                        AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                    </if>
+                    <if test="startSearchDate != endSearchDate">
+                        <![CDATA[
+                            AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                         ]]>
+                        <![CDATA[
+                            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                        ]]>
+                    </if>
                 </if>
-                <if test="startSearchDate != endSearchDate">
-                <![CDATA[
-                    AND A.INDATE  > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-                 ]]>
-                <![CDATA[
-                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-                ]]>
+                <if test="dateSearchType == 'depositDate'">
+                    <if test="startSearchDate == endSearchDate">
+                        AND TO_CHAR(A.DEPOSIT_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                    </if>
+                    <if test="startSearchDate != endSearchDate">
+                        <![CDATA[
+                            AND A.DEPOSIT_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                         ]]>
+                        <![CDATA[
+                            AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                        ]]>
+                    </if>
                 </if>
+
                 <if test="payStatus == -1">
                     AND A.PAY_STATUS IN (0, 1, 2)
                 </if>
@@ -138,16 +173,19 @@
                     AND A.IS_MOBILE = #{isMobile}
                 </if>
                 <if test="searchType == 'orderUserId'">
-                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID = #{searchText})
+                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderUserName'">
                     AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderId'">
-                    AND A.J_ID = #{searchText}
+                    AND A.J_ID LIKE '%'||#{searchText}||'%'
                 </if>
                 <if test="searchType == 'orderGoodsName'">
                     AND C.G_NAME LIKE '%'||#{searchText}||'%'
+                </if>
+                <if test="searchType == 'depositUserName'">
+                    AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
                 </if>
                 <!-- 동영상 재수강 여부 -->
                 <if test="isVideoReply == 0">
@@ -171,28 +209,54 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
-        <if test="startSearchDate == endSearchDate">
-            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-        </if>
-        <if test="startSearchDate != endSearchDate">
-            <![CDATA[
+        <if test="dateSearchType == 'payDate'">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
                     AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
-            <![CDATA[
+                <![CDATA[
                     AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
-        </if>
-
-        <if test="startCancelSearchDate == endCancelSearchDate">
-            AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
-        </if>
-        <if test="startCancelSearchDate != endCancelSearchDate">
-            <![CDATA[
+            </if>
+            <if test="startCancelSearchDate == endCancelSearchDate">
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startCancelSearchDate != endCancelSearchDate">
+                <![CDATA[
                 AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
              ]]>
-            <![CDATA[
+                <![CDATA[
                 AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
+            </if>
+        </if>
+        <if test="dateSearchType == 'depositDate'">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+            </if>
+
+            <if test="startCancelSearchDate == endCancelSearchDate">
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startCancelSearchDate != endCancelSearchDate">
+                <![CDATA[
+                AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+             ]]>
+                <![CDATA[
+                AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            </if>
         </if>
 
         <if test="payStatus == -1">
@@ -241,28 +305,54 @@
             LEFT OUTER JOIN T_ORDER_DELIVERY D
             ON A.J_KEY = D.J_KEY
             WHERE 1=1
-            <if test="startSearchDate == endSearchDate">
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-            </if>
-            <if test="startSearchDate != endSearchDate">
-                <![CDATA[
-                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            <if test="dateSearchType == 'payDate'">
+                <if test="startSearchDate == endSearchDate">
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                </if>
+                <if test="startSearchDate != endSearchDate">
+                    <![CDATA[
+                        AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                     ]]>
+                    <![CDATA[
+                        AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    ]]>
+                </if>
+                <if test="startCancelSearchDate == endCancelSearchDate">
+                    AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+                </if>
+                <if test="startCancelSearchDate != endCancelSearchDate">
+                    <![CDATA[
+                    AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
                  ]]>
-                <![CDATA[
-                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    <![CDATA[
+                    AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
+                </if>
             </if>
+            <if test="dateSearchType == 'depositDate'">
+                <if test="startSearchDate == endSearchDate">
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                </if>
+                <if test="startSearchDate != endSearchDate">
+                    <![CDATA[
+                        AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                     ]]>
+                    <![CDATA[
+                        AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    ]]>
+                </if>
 
-            <if test="startCancelSearchDate == endCancelSearchDate">
-                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
-            </if>
-            <if test="startCancelSearchDate != endCancelSearchDate">
-            <![CDATA[
-                AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
-             ]]>
-            <![CDATA[
-                AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
-            ]]>
+                <if test="startCancelSearchDate == endCancelSearchDate">
+                    AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+                </if>
+                <if test="startCancelSearchDate != endCancelSearchDate">
+                    <![CDATA[
+                    AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                    <![CDATA[
+                    AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+                </if>
             </if>
 
             <if test="payStatus == -1">
