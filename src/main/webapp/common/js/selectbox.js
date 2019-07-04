@@ -1577,3 +1577,12 @@ function getSmsSearchSelectbox(tagId) {
     html += "</select>";
     innerHTML(tagId, html);
 }
+
+
+function getOrderDateSearchSelectbox(tagId) {
+    var html = "<select id='dateSearchType' class='form-control'>";
+    html += "<option value='payDate'>주문일자 기준</option>";
+    html += "<option value='depositDate'>입금 확인일자 기준</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
