@@ -1170,6 +1170,8 @@ function orderSearchSelectbox(tagId, val) {
     else html += "<option value='orderUserName'>주문자 이름</option>";
     if(val == 'orderId') html += "<option value='orderId'>주문번호</option>";
     else html += "<option value='orderId'>주문번호</option>";
+    if(val == 'depositUserName') html += "<option value='orderId'>입금자명</option>";
+    else html += "<option value='depositUserName'>입금자명</option>";
     if(val == 'orderGoodsName') html += "<option value='orderGoodsName'>상품명</option>";
     else html += "<option value='orderGoodsName'>상품명</option>";
     html += "</select>";
