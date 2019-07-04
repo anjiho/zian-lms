@@ -47,6 +47,8 @@ public class OrderLectureListDTO implements GoodsKindNameContain,
 
     private String userId;
 
+    private String pauseEndDt;
+
     @Override
     public Integer goodsKind() {
         return kind;
