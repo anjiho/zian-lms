@@ -28,7 +28,7 @@
                     AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                         <![CDATA[
-                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
             </if>
         </if>
@@ -41,7 +41,7 @@
                     AND A.DEPOSIT_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                 <![CDATA[
-                    AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                    AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
             </if>
         </if>
@@ -130,7 +130,7 @@
                             AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                          ]]>
                         <![CDATA[
-                            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                         ]]>
                     </if>
                 </if>
@@ -143,7 +143,7 @@
                             AND A.DEPOSIT_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                          ]]>
                         <![CDATA[
-                            AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')
+                            AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                         ]]>
                     </if>
                 </if>
@@ -957,6 +957,136 @@
         </if>
         <if test="isVideoReply == 1">
             AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY > -1)
+        </if>
+        ORDER BY A.J_KEY DESC
+    </select>
+
+    <select id="selectExcelDownloadCancelOrderList" resultType="OrderResultDTO">
+        SELECT
+            A.*,B.NAME, B.USER_ID,
+            B.TELEPHONE_MOBILE,
+            ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
+            (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as AFFILIATION_NAME,
+            ( SELECT G_NAME FROM
+            (
+            SELECT /*+ PARALLEL(4) */ G_NAME FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+            ) as orderGoodsName,
+
+            ( SELECT type FROM
+            (
+            SELECT /*+ PARALLEL(4) */ type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+            ) as goodsType,
+
+            ( SELECT site_name FROM
+            (
+            SELECT /*+ PARALLEL(4) */ site_name FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+            ) as siteName,
+
+            ( SELECT price FROM
+            (
+            SELECT /*+ PARALLEL(4) */ price FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+            ) as goodsPrice,
+
+            ( SELECT price FROM
+            (
+            SELECT /*+ PARALLEL(4) */ sell_price FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+            ) as sellPrice,
+
+            ( SELECT pm_type FROM
+            (
+            SELECT /*+ PARALLEL(4) */ pm_type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+            ) as pmType,
+        FROM T_ORDER A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        LEFT OUTER JOIN T_ORDER_DELIVERY D
+        ON A.J_KEY = D.J_KEY
+        WHERE 1=1
+        <if test="dateSearchType == 'payDate'">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+            </if>
+            <if test="startCancelSearchDate == endCancelSearchDate">
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startCancelSearchDate != endCancelSearchDate">
+                <![CDATA[
+                AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+             ]]>
+                <![CDATA[
+                AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            </if>
+        </if>
+        <if test="dateSearchType == 'depositDate'">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+            </if>
+
+            <if test="startCancelSearchDate == endCancelSearchDate">
+                AND TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') = TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startCancelSearchDate != endCancelSearchDate">
+                <![CDATA[
+                AND A.CANCEL_DATE  > TO_DATE(#{startCancelSearchDate}, 'YYYY-MM-DD')
+             ]]>
+                <![CDATA[
+                AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
+            ]]>
+            </if>
+        </if>
+
+        <if test="payStatus == -1">
+            AND A.PAY_STATUS IN (8, 9, 10)
+        </if>
+        <if test="payStatus > -1">
+            AND A.PAY_STATUS = #{payStatus}
+        </if>
+        <if test="isOffline != null and isOffline >= 0">
+            AND A.IS_OFFLINE = #{isOffline}
+        </if>
+        <if test="payType != null and payType >= 0">
+            AND A.PAY_TYPE = #{payType}
+        </if>
+        <if test="isMobile != null and isMobile >= 0">
+            AND A.IS_MOBILE = #{isMobile}
+        </if>
+        <if test="searchType == 'orderUserId'">
+            AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+        </if>
+        <if test="searchType == 'orderId'">
+            AND A.J_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'orderUserName'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'depositUserName'">
+            AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY A.J_KEY DESC
     </select>
