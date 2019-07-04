@@ -1266,7 +1266,7 @@ function getlectureWatchPayStatusSelectbox(tagId, val) {
 }
 //수강내역목록 - 진행상태 셀렉박스
 function getlectureWatchOrderStatusSelectbox(tagId, val) {
-    var html = "<select id='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+    var html = "<select id='orderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
 
     if(val == '0') selected = 'selected';
