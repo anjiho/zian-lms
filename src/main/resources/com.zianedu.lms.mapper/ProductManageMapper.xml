@@ -386,7 +386,7 @@
 			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 102) as VOD_MOBILE_PRICE_KEY
 		FROM T_GOODS A
 		WHERE A.TYPE = 1
-		<if test="searchType == 'name'">
+		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		<if test="searchType == 'code'">
@@ -400,7 +400,7 @@
 		SELECT COUNT (A.G_KEY)
 		FROM T_GOODS A
 		WHERE A.TYPE = 1
-		<if test="searchType == 'name'">
+		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		<if test="searchType == 'code'">

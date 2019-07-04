@@ -65,6 +65,7 @@
 
         dwr.util.removeAllRows("dataList3");
         gfn_emptyView3("H", "");//페이징 예외사항처리
+
         productManageService.getVideoProductListCountByFreeLectureInject(searchType, searchText, function (cnt) {
             paging.count3(sPage, cnt, pagingListCount(), pagingListCount(), comment.blank_list);
             var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링

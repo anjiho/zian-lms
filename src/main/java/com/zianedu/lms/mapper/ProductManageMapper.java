@@ -88,7 +88,7 @@ public interface ProductManageMapper {
     List<String> selectTeacherNameListByVideoProduct(@Param("gKey") int gKey);
 
     List<FreeInjectDTO> selectVideoProductListByFreeLectureInject(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                                                  @Param("searchText") String searchText, @Param("searchType") String searchType);
+                                                                  @Param("searchType") String searchType, @Param("searchText") String searchText);
 
     List<TCpVO> selectTCpList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                               @Param("searchType") String searchType, @Param("searchText") String searchText);
@@ -96,7 +96,7 @@ public interface ProductManageMapper {
     int selectTCpListCount(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
 
-    int selectVideoProductListCountByFreeLectureInject(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectVideoProductListCountByFreeLectureInject(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);

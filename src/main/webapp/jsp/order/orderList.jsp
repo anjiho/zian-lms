@@ -65,7 +65,7 @@
             discription: '검색중',
             animationIn: false,
             animationOut: false,
-            defaultApply: 	true,
+            defaultApply: 	true
         });
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
@@ -75,8 +75,8 @@
                 payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {
                 if (selList.length == 0) return;
                dwr.util.addRows("dataList", selList, [
-                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
-                   function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
+                   function(data) {return "<a href='void(0);' color='blue' target='_blank' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
+                   function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                    function(data) {return data.name == null ? "-" : data.name;},
                    function(data) {return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
@@ -84,7 +84,6 @@
                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                    function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
-                   // function(data) {return  "<input type='checkbox' name='rowChk' value='"+ data.JKey +"'>"},
                 ], {escapeHtml:false});
             });
             loadingOut(loading);

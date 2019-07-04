@@ -138,7 +138,6 @@
 
         productManageService.getProductListCount(searchType, searchText, "VIDEO", function(cnt) {
             paging.count(sPage, cnt, '10', '10', comment.blank_list);
-            var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             productManageService.getProductList(sPage, '10',searchType, searchText, "VIDEO", function (selList) {
                 if (selList.length > 0) {
                     for (var i = 0; i < selList.length; i++) {
@@ -487,7 +486,7 @@
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
                         </div>
                     </div>
-                    <div class="table-responsive   scrollable" style="height:800px;">>
+                    <div class="table-responsive   scrollable" style="height:800px;">
                         <input type="hidden" id="sPage" >
                         <table id="zero_config" class="table table-hover">
                             <thead class="thead-light">
