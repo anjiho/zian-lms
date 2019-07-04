@@ -49,4 +49,15 @@ public class TOrderLecVO {
         this.multiple = multiple;
         this.maxReadCount = 0;
     }
+
+    public TOrderLecVO(int jLecKey, int status, String startDt, int limitDay, String pauseStartDt, int pauseCnt, int pauseDay, int pauseTotalDay) {
+        this.jLecKey = jLecKey;
+        this.status = status;
+        this.startDt = startDt + "00:00:00";
+        this.limitDay = limitDay;
+        this.pauseStartDt = pauseStartDt + "00:00:00";
+        this.pauseCnt = pauseCnt;
+        this.pauseDay = pauseDay;
+        this.pauseTotalDay = pauseTotalDay;
+    }
 }

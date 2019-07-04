@@ -736,4 +736,22 @@ public class OrderManageService {
         orderManageMapper.updateGoodsKindType(jId, goodsKind);
     }
 
+    /**
+     * 진행상태 변경
+     * @param jLecKey
+     * @param status
+     * @param startDate
+     * @param limitDay
+     * @param pauseStartDate
+     * @param pauseDay
+     * @param pauseCnt
+     * @param totalPauseCnt
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateOrderLec(int jLecKey, int status, String startDate, int limitDay, String pauseStartDate,
+                               int pauseDay, int pauseCnt, int totalPauseCnt) {
+        TOrderLecVO tOrderLecVO = new TOrderLecVO(jLecKey, status, startDate, limitDay, pauseStartDate, pauseCnt, pauseDay, totalPauseCnt);
+        orderManageMapper.updateOrderLec(tOrderLecVO);
+    }
+
 }
