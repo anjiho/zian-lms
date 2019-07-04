@@ -86,7 +86,7 @@
             </if>
             <if test="searchType == 'depositUserName'">
                 AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
-            </if>s
+            </if>
         </if>
         <!-- 동영상 재수강 여부 -->
         <if test="isVideoReply == 0">
@@ -173,10 +173,10 @@
                     AND A.IS_MOBILE = #{isMobile}
                 </if>
                 <if test="searchType == 'orderUserId'">
-                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
+                    AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderUserName'">
-                    AND A.USER_KEY = (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+                    AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
                 </if>
                 <if test="searchType == 'orderId'">
                     AND A.J_ID LIKE '%'||#{searchText}||'%'
@@ -371,11 +371,17 @@
                 AND A.IS_MOBILE = #{isMobile}
             </if>
             <if test="searchType == 'orderUserId'">
-                AND B.USER_ID LIKE '%'||#{searchText}||'%'
+                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
             </if>
             <if test="searchType == 'orderUserName'">
-                AND B.NAME LIKE '%'||#{searchText}||'%'
+                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
             </if>
+<!--            <if test="searchType == 'orderUserId'">-->
+<!--                AND B.USER_ID LIKE '%'||#{searchText}||'%'-->
+<!--            </if>-->
+<!--            <if test="searchType == 'orderUserName'">-->
+<!--                AND B.NAME LIKE '%'||#{searchText}||'%'-->
+<!--            </if>-->
             <if test="searchType == 'orderId'">
                 AND A.J_ID LIKE '%'||#{searchText}||'%'
             </if>
