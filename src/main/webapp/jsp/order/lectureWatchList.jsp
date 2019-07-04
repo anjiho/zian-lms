@@ -60,20 +60,21 @@
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 orderManageService.getVideoLectureWatchList(sPage, 10, startSearchDate, endSearchDate, payStatus,
                     orderLecStatus[0], searchType, searchText, function (selList) {
+                    console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return data.JId == null ? "-" : data.JId;},
                             function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.userName == null ? "-" : data.userName;},
-                            //function(data) {return data.kindName == null ? "-" : data.kindName;},
-                            function(data) {return data.kindName == null ? "-" : "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#optionModal\" onclick='goOptionModify("+ data.JLecKey +")' style='color: blue'>"+data.kindName+"</a>";},
+                            //function(data) {return data.kindName == null ? "-" : "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#optionModal\" onclick='goOptionModify(" + data.JId + ")' style='color: blue'>"+data.kindName+"</a>";},kind
+                            function(data) {return data.kindName == null ? "-" : '<a href="javascript:void(0);" data-toggle="modal" data-target="#optionModal" onclick="goOptionModify('+"'"+data.JId+"'"+','+data.kind+')" style="color: blue">'+data.kindName+'</a>';},
                             function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
                             function(data) {return data.status == 2 ? "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stopStateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>" : "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>";},
                             function(data) {return split_minute_getDay(data.startDt)+"<br>"+split_minute_getDay(data.endDt);},
                             function(data) {return data.limitDay == null ? "-" : data.limitDay;},
                             //function(data) {return data.pauseTotalDay == null ? "-" : data.pauseTotalDay;},
                             function(data) {return data.pauseTotalDay+"<br>"+data.pauseDay;},
-                            function(data) {return split_minute_getDay(data.pauseStartDt)+"<br>"+split_minute_getDay(data.endDt);},
+                            function(data) {return split_minute_getDay(data.pauseStartDt)+"<br>"+split_minute_getDay(data.pauseEndDt);},
                             function(data) {return data.payStatus == 2 ? "결제완료" : '결제취소';}
                         ], {escapeHtml:false});
                     });
@@ -91,8 +92,9 @@
     }
 
     //수강타입 (옵션) 변경
-    function goOptionModify() {
-
+    function goOptionModify(jId, kind) {
+        getVideoOptionTypeList("optionSel", kind); //팝업창 옵션
+        innerValue("jId", jId);
     }
 
     function goOrderDetail(val) {
@@ -107,7 +109,13 @@
 
     //수강타입 수정
     function optionSave() {
-        
+        var jId = getInputTextValue("jId");
+        if(jId != null){
+            if(confirm("수강타입을 수정하시겠습니까?")){
+                var goodsKind = getSelectboxValue("videoOptionSel");
+                orderManageService.updateGoodsKindType(jId, goodsKind);
+            }
+        }
     }
 </script>
 <div class="page-breadcrumb">
@@ -418,6 +426,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+            <input type="hidden" id="jId" value="">
             <!-- modal body -->
             <div class="modal-body">
                 <div class="form-group row">
