@@ -222,6 +222,9 @@
         <if test="searchType == 'orderUserName'">
             AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
+        <if test="searchType == 'depositUserName'">
+            AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+        </if>
         ORDER BY A.J_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
@@ -288,6 +291,9 @@
             </if>
             <if test="searchType == 'orderUserName'">
                 AND C.G_NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'depositUserName'">
+                AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
             </if>
         )
     </select>
