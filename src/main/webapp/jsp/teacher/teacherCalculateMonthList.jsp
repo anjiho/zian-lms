@@ -60,6 +60,7 @@
         $("#cancelTotalPrice").html(0);
         $("#alltotalCnt").html(0);
         $("#alltotalPrice").html(0);
+        innerValue("optionPriceSum", "0");
 
         var loading = new Loading({
             direction: 'hor',
@@ -110,9 +111,9 @@
                         var cmpList = videoCalculateResult[i];
 
                         onlineTotalCnt += cmpList.payCnt;
-                        onlinePayPriceTotal += cmpList.payPrice;
+                        onlinePayPriceTotal += roundingDownWon(cmpList.payPrice);
                         onlineCancelCntTotal += cmpList.cancelCnt;
-                        onlineCancelPriceTotal += cmpList.cancelPrice;
+                        onlineCancelPriceTotal += roundingDownWon(cmpList.cancelPrice);
 
                         var kind = "";
                         if (cmpList.kind == '100') kind = "VOD";
@@ -123,10 +124,10 @@
                             var cellData = [
                                 function () {return kind;},
                                 function () {return cmpList.name},
-                                function () {return cmpList.payCnt+"명"},
-                                function () {return format(cmpList.payPrice)},
+                                function () {return cmpList.payCnt},
+                                function () {return format(roundingDownWon(cmpList.payPrice))},
                                 function () {return cmpList.cancelCnt},
-                                function () {return format(cmpList.cancelPrice)},
+                                function () {return format(roundingDownWon(cmpList.cancelPrice))},
                             ];
                             dwr.util.addRows("onlineList", [0], cellData, {escapeHtml: false});
                         }
@@ -152,9 +153,9 @@
                     for (var i = 0; i < academyCalculateResult.length; i++) {
                         var cmpList = academyCalculateResult[i];
                         acaTotalCnt += cmpList.payCnt;
-                        acaPayPriceTotal += cmpList.payPrice;
+                        acaPayPriceTotal += roundingDownWon(cmpList.payPrice);
                         acaCancelTotalCnt += cmpList.cancelCnt;
-                        acaCancelPriceTotal += cmpList.cancelPrice;
+                        acaCancelPriceTotal += roundingDownWon(cmpList.cancelPrice);
 
                         if (cmpList != undefined) {
                             var cellData = [
@@ -165,16 +166,16 @@
                                     return cmpList.name
                                 },
                                 function () {
-                                    return cmpList.payCnt+"명"
+                                    return cmpList.payCnt
                                 },
                                 function () {
-                                    return format(cmpList.payPrice)
+                                    return format(roundingDownWon(cmpList.payPrice))
                                 },
                                 function () {
                                     return cmpList.cancelCnt
                                 },
                                 function () {
-                                    return format(cmpList.cancelPrice)
+                                    return format(roundingDownWon(cmpList.cancelPrice))
                                 },
                             ];
                             dwr.util.addRows("acaList", [0], cellData, {escapeHtml: false});
@@ -202,9 +203,9 @@
                         var cmpList = packageCalculateResult[i];
 
                         packageTotalCnt += cmpList.payCnt;
-                        packagePayPriceTotal += cmpList.payPrice;
+                        packagePayPriceTotal += roundingDownWon(cmpList.payPrice);
                         packageCancelCntTotal += cmpList.cancelCnt;
-                        packageCancelPriceTotal += cmpList.cancelPrice;
+                        packageCancelPriceTotal += roundingDownWon(cmpList.cancelPrice);
 
                         var kind = "";
                         if (cmpList.kind == '100') kind = "VOD";
@@ -220,16 +221,16 @@
                                     return cmpList.name
                                 },
                                 function () {
-                                    return cmpList.payCnt+"명"
+                                    return cmpList.payCnt
                                 },
                                 function () {
-                                    return format(cmpList.payPrice)
+                                    return format(roundingDownWon(cmpList.payPrice))
                                 },
                                 function () {
                                     return cmpList.cancelCnt
                                 },
                                 function () {
-                                    return format(cmpList.cancelPrice)
+                                    return format(roundingDownWon(cmpList.cancelPrice))
                                 },
                             ];
                             dwr.util.addRows("pacakgeList", [0], cellData, {escapeHtml: false});
@@ -251,13 +252,12 @@
                 var cancelTotalPrice = onlineCancelPriceTotal + acaCancelPriceTotal + packageCancelPriceTotal;
                 var alltotalCnt      = (totalCnt-cancelTotalCnt);
                 var optionPriceSum   = getInputTextValue("optionPriceSum");
-                //var alltotalPrice    = (totalPrice - cancelTotalPrice + Number(optionPriceSum)); // 총 합계 (판매합계 - 환불금액 + 옵션)
+
                 var alltotalPrice    = (totalPrice - cancelTotalPrice); // 총 합계 (판매합계 - 환불금액)
 
                 if(alltotalPrice > 0){
-                    var taxPrice =  alltotalPrice*0.033; //소득세,주민세
-                        taxPrice = taxPrice * -1;
-                   // var result = Math.ceil(taxPrice).toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, '$1,');
+                    var taxPrice =  (roundingDownWon(alltotalPrice) +  Number(roundingDownWon(optionPriceSum)))*0.033; //소득세,주민세
+                        taxPrice = roundingDownWon(taxPrice) * -1;
 
                     var duesPrice  = 0; //사우회비
                     if(totalPrice > 100000) duesPrice = -10000;
@@ -541,7 +541,7 @@
                                 <td></td>
                                 <td></td>
                                 <td></td>
-                                <td id="actualPay"></td>
+                                <td id="actualPay" style="color: yellow"></td>
                             </tr>
                         </tfoot>
                     </tbody>

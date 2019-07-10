@@ -158,9 +158,9 @@
                 </div>
             </div>
         </div>
-
         <!-- //과목관리 -->
     </div>
 </div>
+
 <!-- End Container fluid  -->
 <%@include file="/common/jsp/footer.jsp" %>
