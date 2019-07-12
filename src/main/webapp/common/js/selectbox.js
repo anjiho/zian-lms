@@ -539,9 +539,9 @@ function getCategoryNoTag2(tableId, val, tdNum) {
     });
 }
 
-//모의고사 등록 - 분류 셀렉트박스 //688
+//모의고사 등록 - 분류 셀렉트박스 //133
 function getMockCategoryList(tagId, val) {
-    selectboxService.getCategoryList(688, function (list) {
+    selectboxService.getCategoryList(133, function (list) {
         var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
