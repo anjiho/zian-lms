@@ -20,9 +20,7 @@
         promotionManageService.getPackageDetailInfo(gKey, function(info) {
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
-            innerValue("indate", split_minute_getDay(productInfo.indate));
-            //if(productInfo.sellstartdate == null) productInfo.sellstartdate = "";
-            //innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
+            $("#indate").datepicker("setDate", split_minute_getDay(productInfo.indate));
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             /**
              * 옵션정보 가져오기

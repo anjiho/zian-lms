@@ -47,11 +47,11 @@
             getNewSelectboxListForCtgKey2("l_subjectGroup", "70", mokExamInfo.subjectCtgKey);//과목
             getMockCategoryList("l_Classification", mokExamInfo.classCtgKey);//분류
             getMockYearSelectbox("l_examYearGroup", mokExamInfo.examYear);//출제년도
-            innerValue("indate", split_minute_getDay(mokExamInfo.indate));
-            innerValue("acceptStartDate", split_minute_getDay(mokExamInfo.acceptStartDate));
-            innerValue("acceptEndDate", split_minute_getDay(mokExamInfo.acceptEndDate));
-            innerValue("onlineStartDate", split_minute_getDay(mokExamInfo.onlineStartDate));
-            innerValue("onlineEndDate", split_minute_getDay(mokExamInfo.onlineEndDate));
+            $("#indate").datepicker("setDate", split_minute_getDay(mokExamInfo.indate));
+            $("#acceptStartDate").datepicker("setDate", split_minute_getDay(mokExamInfo.acceptStartDate));
+            $("#acceptEndDate").datepicker("setDate", split_minute_getDay(mokExamInfo.acceptEndDate));
+            $("#onlineStartDate").datepicker("setDate", split_minute_getDay(mokExamInfo.onlineStartDate));
+            $("#onlineEndDate").datepicker("setDate", split_minute_getDay(mokExamInfo.onlineEndDate));
             innerValue("onlineTime", mokExamInfo.onlineTime);//온라인 시험기간
             innerValue("offlineDate", split_minute_getDay(mokExamInfo.offlineDate));//오프라인 시험일
             innerValue("offlineTimePeriod", mokExamInfo.offlineTimePeriod);//오프라인 모의고사 시간 (표시용)
@@ -618,13 +618,25 @@
 
     $('#indate').datepicker({
         format: "yyyy-mm-dd",
-        language: "kr"
+        language: "kr",
+        numberOfMonths: [2,3]
     });
-    $('#sellstartdate').datepicker({
+
+    $('#acceptStartDate,#acceptEndDate').datepicker({
+        format: "yyyy-mm-dd",
+        language: "kr",
+        numberOfMonths: [2,3]
+    });
+    $('#onlineStartDate ').datepicker({
+        format: "yyyy-mm-dd",
+        language: "kr",
+        numberOfMonths: [2,2]
+    });
+    $('#onlineEndDate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });
-    $('#cpdate').datepicker({
+    $('#offlineDate').datepicker({
         format: "yyyy-mm-dd",
         language: "kr"
     });

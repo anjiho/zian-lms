@@ -21,7 +21,6 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     var Btn = "<button type=\"button\" class=\"btn btn-outline-success btn-sm\" onclick='getExam("+ cmpList.scheduleKey +");' data-toggle=\"modal\" data-target=\"#sModal\">수정</button><button type=\"button\" class=\"btn btn-outline-danger btn-sm\" onclick='examDelete("+ cmpList.scheduleKey +");'>삭제</button>";
-
                     if (cmpList != undefined) {
                         var cellData = [
                             function(data) {return cmpList.scheduleKey;},
@@ -41,6 +40,7 @@
         var datetimepicker12 = $("#datetimepicker12").val();
         var scheduleKey =  $("#scheduleKey").val();
         var link = $("#link").val();
+        alert(link);
         //modifyExamSchedule
         var key = $("#key").val();
         if(key == "modify"){//수정
@@ -74,7 +74,8 @@
             var startDate = split_minute_getDay(selList.startDate);
             $("#scheduleKey").val(selList.scheduleKey);
             $("#title").val(selList.title);
-            $("#datetimepicker12").val(startDate);
+            //$("#datetimepicker12").val(startDate);
+            $("#datetimepicker12").datepicker("setDate", startDate);
             $("#link").val(selList.link);
         });
     }

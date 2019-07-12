@@ -21,8 +21,8 @@
         productManageService.getExamProductDetailInfo(gKey, function(info) {
             var MokproductInfo = info.productInfo;
             innerValue("name", MokproductInfo.name);
-            innerValue("indate", split_minute_getDay(MokproductInfo.indate));
-            innerValue("sellstartdate", split_minute_getDay(MokproductInfo.sellstartdate));
+            $("#indate").datepicker("setDate", split_minute_getDay(MokproductInfo.indate));
+            $("#sellstartdate").datepicker("setDate", split_minute_getDay(MokproductInfo.sellstartdate));
             innerValue("calculateRate", MokproductInfo.calculateRate);
             isCheckboxByNumber("isShow", MokproductInfo.isShow);//노출
             isCheckboxByNumber("isSell", MokproductInfo.isSell);//판매
@@ -44,7 +44,6 @@
              * 모의고사 상품 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
-            console.log(productOptionInfo);
             if (productOptionInfo.length == 0) {
                 var cellData = [
                     function() {return getAllListOptionSelectbox("", true);},
@@ -254,7 +253,6 @@
                         dataArr.push(data);
                     }
                 });
-                console.log(dataArr);
                 productManageService.upsultTCategoryGoods(dataArr, gKey,function () {
                     isReloadPage(true);
                 });

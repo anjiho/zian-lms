@@ -87,6 +87,10 @@
                         <div class="form-group row" id="lecDiv" style="display:none;">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">검색강좌</label>
                             <span></span>
+
+
+
+
                         </div>
                         <div class="form-group row" id="connectDiv" style="display:none;">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">연계강좌</label>
