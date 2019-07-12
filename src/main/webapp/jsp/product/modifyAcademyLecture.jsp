@@ -58,8 +58,9 @@
              */
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);   //상품이름
-            innerValue("indate", split_minute_getDay(productInfo.indate));//등록일
-            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate)); //판매일
+            $("#indate").datepicker("setDate", split_minute_getDay(productInfo.indate));
+            $("#sellstartdate").datepicker("setDate", split_minute_getDay(productInfo.sellstartdate));
+
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             isCheckboxByNumber("isFree", productInfo.isFree);//무료
@@ -1120,4 +1121,4 @@
         };
 
 </script>
-<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>
+<%--<script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>--%>

@@ -2464,7 +2464,7 @@ function setSearchDate(start, startId, endId){
 
     var endDate = getFormatDate(today);
 
-    $('#'+endId).val(endDate);
+    $('#'+endId).datepicker("setDate", endDate);
 
     if(str == 'd'){
         today.setDate(today.getDate() - num);
@@ -2481,7 +2481,7 @@ function setSearchDate(start, startId, endId){
         $('#'+startId).val("");
         $('#'+endId).val("");
     }else{
-        $('#'+startId).val(startDate);
+        $('#'+startId).datepicker("setDate", startDate);
     }
 
 }

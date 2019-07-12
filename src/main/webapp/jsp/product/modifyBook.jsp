@@ -16,8 +16,10 @@
             /*1. 기본정보 가져오기 */
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
-            innerValue("indate", split_minute_getDay(productInfo.indate));
-            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
+
+            $("#indate").datepicker("setDate", split_minute_getDay(productInfo.indate));
+            $("#sellstartdate").datepicker("setDate", split_minute_getDay(productInfo.sellstartdate));
+
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             isCheckboxByNumber("isFree", productInfo.isFree);//무료
@@ -109,14 +111,13 @@
 
             /*4. 도서정보 가져오기*/
             var bookInfo = info.bookInfo;
-            console.log(bookInfo);
             innerValue("bookKey", bookInfo.bookKey);
             innerHTML("bookCode", bookInfo.bookKey);
             getLectureStatusSelectbox("status", bookInfo.status);//판매상태
             getNewSelectboxListForCtgKey("l_classGroup", "4309", bookInfo.classGroupCtgKey);//급수
             getNewSelectboxListForCtgKey2("l_subjectGroup", "70", bookInfo.subjectCtgKey);//과목
             innerValue("writer", bookInfo.writer);//저자
-            innerValue("cpdate", split_minute_getDay(bookInfo.publishDate));//최신발행일
+            $("#cpdate").datepicker("setDate", split_minute_getDay(bookInfo.publishDate));
             innerValue("isbn", bookInfo.isbn);//ISBN
             innerValue("pageCnt", bookInfo.pageCnt);//페이지수
             innerValue("cpKey", bookInfo.cpKey);//출판사 키
