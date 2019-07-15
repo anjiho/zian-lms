@@ -202,6 +202,22 @@
 		</where>
 	</update>
 
+	<update id="updateTCategoryOtherInfoFromTeacherBanner" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		UPDATE T_CATEGORY_OTHER_INFO
+		<set>
+			<if test="value4 != '' and value4 != null">VALUE_4 = #{value4},</if>
+			<if test="value5 != '' and value5 != null">VALUE_5 = #{value5},</if>
+			<if test="valueLong1 != '' and valueLong1 != null">VALUE_LONG_1 = #{valueLong1},</if>
+			<if test="valueLong2 != '' and valueLong2 != null">VALUE_LONG_2 = #{valueLong2},</if>
+			<if test="valueBit1 != null">VALUE_BIT_1 = #{valueBit1},</if>
+		</set>
+		<where>
+			<if test="ctgInfoKey > 0">
+				CTG_INFO_KEY = #{ctgInfoKey}
+			</if>
+		</where>
+	</update>
+
 	<update id="changeBannerPosition" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
 		UPDATE T_CATEGORY_OTHER_INFO
 		SET POS = #{pos}

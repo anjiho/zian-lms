@@ -62,6 +62,8 @@ public interface DataManageMapper {
     /** UPDATE **/
     void updateTCategoryOtherInfo(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 
+    void updateTCategoryOtherInfoFromTeacherBanner(TCategoryOtherInfoVO tCategoryOtherInfoVO);
+
     void changeBannerPosition(TCategoryOtherInfoVO tCategoryOtherInfoVO);
 
     void updateTSchedule(TScheduleVO tScheduleVO);
