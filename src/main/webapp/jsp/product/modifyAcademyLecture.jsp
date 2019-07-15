@@ -54,6 +54,7 @@
 
         productManageService.getProductDetailInfo(gKey, "ACADEMY", function(info) {
             /**
+             *
              * 학원강의 기본정보 가져오기
              */
             var productInfo = info.productInfo;
