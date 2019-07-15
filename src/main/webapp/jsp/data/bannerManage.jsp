@@ -48,7 +48,6 @@
                         addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
                     }
 
-
                     var posListBtn = "  <button type=\"button\" class=\"btn btn-outline-info btn-sm float-right mr-3 mb-3\" onclick=\"changeBannerList("+i+");\">순서변경저장</button>";
                     if(result.name){
                         var bannerNameHtml = "<div class='card'>";
@@ -69,8 +68,6 @@
                     bannerContentHtml += ' <tr>';
                     bannerContentHtml += '<th width="25%">타이틀</th>';
                     bannerContentHtml += '<th width="25%">이미지명</th>';
-                    //bannerContentHtml += '<th width="10%">배경이미지</th>';
-                    //bannerContentHtml += '<th width="10%">배경색상</th>';
                     bannerContentHtml += '<th width="10%">새창열기</th>';
                     bannerContentHtml += '<th width="20%">링크URL</th>';
                     bannerContentHtml += '<th width="10%"></th>';
@@ -131,7 +128,6 @@
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
             $("#bannerKey").val(val);
-            innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
             $("#pos").val(pos);
             innerValue("title",selList.value5);
@@ -149,10 +145,8 @@
     //지안교수진 팝업 수정
     function teacherPopup(val,ctgKey,pos) {
         dataManageService.getBannerDetailInfo(val, function (selList) {
-            console.log(selList);
-
-            getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
-            selectTeacherSelectbox("teacherSel", "");
+            getNewSelectboxListForCtgKey2("l_subjectGroup", "70", selList.valueLong1);//과목
+            selectTeacherSelectbox("teacherSel", selList.valueLong2);
             $("#teacherBannerKey").val(val);
             $("#teacherCtgKey").val(ctgKey);
             $("#teacherPos").val(pos);
@@ -162,8 +156,9 @@
     }
     
     function popup_teacher_save(val,ctgKey,pos) {
+        $("#teacherBannerKey").val(val);
         $("#teacherCtgKey").val(ctgKey);
-        $("#newPopYn").prop('checked', false);
+        $("#newPopYn1").prop('checked', false);
         $("#bannerTeacherLink").val("");
         getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
         selectTeacherSelectbox("teacherSel", "");
@@ -173,7 +168,6 @@
         $("#title").val("");
         $("#bannerColor").val("");
         $("#bannerLink").val("");
-        //$("#cma_image").css('display', 'none');
         $('.custom-file-control').html("");
         $("#bannerKey").val(val);
         $("#ctgKey").val(ctgKey);
@@ -239,15 +233,26 @@
         var teacherKey    = getSelectboxValue("sel_1");
         var url   = getInputTextValue("bannerTeacherLink");
         var isNew = "";
-        if($("input:checkbox[id='newPopYn']:checked").val()=='on') checkYn = '1';
+        if($("input:checkbox[id='newPopYn1']:checked").val()=='on') isNew = '1';
         else isNew = '0';
+        var ctgInfoKey =  getInputTextValue("teacherBannerKey");
 
-        if(confirm("추가하시겠습니까?")){
-            dataManageService.saveTeacherBannerInfo(ctgKey, subjectCtgKey, teacherKey, isNew, url, function () {
-                var sel_subDomain =  getSelectboxValue('sel_subDomain');
-                innerValue("param_key", sel_subDomain);
-                goPage('dataManage', 'bannerSave');
-            });
+        if(ctgInfoKey == '0'){
+            if(confirm("저장하시겠습니까?")){
+                dataManageService.saveTeacherBannerInfo(ctgKey, subjectCtgKey, teacherKey, isNew, url, function () {
+                    var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    innerValue("param_key", sel_subDomain);
+                    goPage('dataManage', 'bannerSave');
+                });
+            }
+        }else{
+            if(confirm("수정하시겠습니까?")){
+                dataManageService.modifyTeacherBannerInfo(ctgInfoKey, subjectCtgKey, teacherKey, isNew, url, function () {
+                    var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    innerValue("param_key", sel_subDomain);
+                    goPage('dataManage', 'bannerSave');
+                });
+            }
         }
     }
 
@@ -435,7 +440,7 @@
                             </div>
                         </div>
                         <div style="text-align: center;">
-                            <button type="button" class="btn btn-info" style="text-align: center" onclick="modify();">저장</button>
+                            <button type="button" class="btn btn-info" style="text-align: center" onkeypress="if(event.keyCode==13) {return false;}" onclick="modify();">저장</button>
                         </div>
                     </div>
                     <!-- //modal body -->
@@ -493,7 +498,7 @@
                             </div>
                         </div>
                         <div style="text-align: center;">
-                            <button type="button" class="btn btn-info" style="text-align: center" onclick="teacherModify();">저장</button>
+                            <button type="button" class="btn btn-info" style="text-align: center" onkeypress="if(event.keyCode==13) {return false;}" onclick="teacherModify();">저장</button>
                         </div>
                     </div>
                     <!-- //modal body -->
