@@ -375,10 +375,10 @@
             AND A.TR_ETC3 LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND B.USER_ID = #{searchText}
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND A.TR_PHONE = #{searchText}
+            AND A.TR_PHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'content'">
             AND A.TR_MSG LIKE '%'||#{searchText}||'%'
@@ -397,10 +397,10 @@
             AND A.TR_ETC3 LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND B.USER_ID = #{searchText}
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
-            AND A.TR_PHONE = #{searchText}
+            AND A.TR_PHONE LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'content'">
             AND A.TR_MSG LIKE '%'||#{searchText}||'%'
