@@ -427,4 +427,35 @@ public class DataManageService {
         dataManageMapper.updateTSearchKeyword(searchKeywordKey, keyword);
     }
 
+    /**
+     * 교수진 배너 수정하기
+     * @param ctgInfoKey
+     * @param subjectCtgKey
+     * @param teacherKey
+     * @param isNew
+     * @param url
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int modifyTeacherBannerInfo(int ctgInfoKey, int subjectCtgKey, int teacherKey, int isNew, String url) {
+        TCategoryOtherInfoVO otherInfoVO = new TCategoryOtherInfoVO();
+
+        TUserVO userVO = userMapper.selectTeacherInfo(teacherKey);
+        TCategoryVO subjectInfo = dataManageMapper.selectTCategoryInfoByCtgKey(subjectCtgKey);
+
+        String teacherName = userVO.getName();
+        String subjectName = subjectInfo.getName();
+        String teacherBannerTitle = "[" + subjectName + "]" + teacherName;
+
+        otherInfoVO.setCtgInfoKey(ctgInfoKey);
+        otherInfoVO.setValue4(Util.isNullValue(url, ""));
+        otherInfoVO.setValue5(teacherBannerTitle);
+        otherInfoVO.setValueLong1(subjectCtgKey);
+        otherInfoVO.setValueLong2(teacherKey);
+        otherInfoVO.setValueBit1(isNew);
+
+        dataManageMapper.updateTCategoryOtherInfoFromTeacherBanner(otherInfoVO);
+        return otherInfoVO.getCtgInfoKey();
+    }
+
 }
