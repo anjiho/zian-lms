@@ -33,4 +33,12 @@
 		SELECT USER_ID, USER_PWD FROM TB_MA_MEMBER
 	</select>
 
+	<select id="selectTeacherInfo" resultType="com.zianedu.lms.vo.TUserVO">
+		SELECT A.*, B.TEACHER_KEY
+		FROM T_USER A
+		INNER JOIN T_TEACHER B
+		ON A.USER_KEY = B.USER_KEY
+		WHERE B.TEACHER_KEY = #{teacherKey}
+	</select>
+
 </mapper>

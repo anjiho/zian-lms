@@ -19,4 +19,6 @@ public interface UserMapper {
 
     List<HashMap<String, Object>> selectAlgisaUser();
 
+    TUserVO selectTeacherInfo(@Param("teacherKey") int teacherKey);
+
 }

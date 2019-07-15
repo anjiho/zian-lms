@@ -131,13 +131,16 @@
 	</insert>
 
 	<insert id="insertTCategoryOtherInfo" parameterType="com.zianedu.lms.vo.TCategoryOtherInfoVO">
+		<selectKey resultType="Integer" keyProperty="ctgInfoKey" order="BEFORE">
+			SELECT T_CATEGORY_OTHER_INFO_SEQ.NEXTVAL FROM DUAL
+		</selectKey>
 		INSERT INTO T_CATEGORY_OTHER_INFO
 		(
 			CTG_INFO_KEY, CTG_KEY, TYPE, VALUE_1, VALUE_2, VALUE_3, VALUE_4, VALUE_5, VALUE_LONG_1, VALUE_LONG_2, VALUE_BIT_1, POS
 		)
 		VALUES
 		(
-			T_CATEGORY_OTHER_INFO_SEQ.nextval, #{ctgKey}, #{type}, #{value1}, #{value2}, #{value3}, #{value4}, #{value5}, #{valueLong1}, #{valueLong2}, #{valueBit1}, #{pos}
+			#{ctgInfoKey}, #{ctgKey}, #{type}, #{value1}, #{value2}, #{value3}, #{value4}, #{value5}, #{valueLong1}, #{valueLong2}, #{valueBit1}, #{pos}
 		)
 	</insert>
 
