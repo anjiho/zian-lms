@@ -237,6 +237,7 @@ function getNewSelectboxListForCtgKey(tag_id, val, val2) {
 //급수,과목,유형
 function getNewSelectboxListForCtgKey2(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        console.log(list);
         var html = "<select id='selSubjectCtgKey' name='subjectCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {

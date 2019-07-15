@@ -13,7 +13,7 @@
         menuActive('menu-0', 2);
         getSubDomainList("sel_subDomain", subDomainSel);//서브도메인 select 불러오기
         changeBox2(subDomainSel);
-        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", "");//과목
         selectTeacherSelectbox("teacherSel", "");
     }
     //파일 선택시 파일명 보이게 하기
@@ -145,7 +145,7 @@
     //지안교수진 팝업 수정
     function teacherPopup(val,ctgKey,pos) {
         dataManageService.getBannerDetailInfo(val, function (selList) {
-            getNewSelectboxListForCtgKey2("l_subjectGroup", "70", selList.valueLong1);//과목
+            getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", selList.valueLong1);//과목
             selectTeacherSelectbox("teacherSel", selList.valueLong2);
             $("#teacherBannerKey").val(val);
             $("#teacherCtgKey").val(ctgKey);
@@ -160,7 +160,7 @@
         $("#teacherCtgKey").val(ctgKey);
         $("#newPopYn1").prop('checked', false);
         $("#bannerTeacherLink").val("");
-        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", "");//과목
         selectTeacherSelectbox("teacherSel", "");
     }
     
