@@ -43,7 +43,7 @@
                     var result = cmpList.result;
                     var addBtn = "";
                     if(result.name == "지안교수진"){
-                        addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#teacherModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
+                        addBtn = "<button type='button' onclick='popup_teacher_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#teacherModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
                     }else{
                         addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
                     }
@@ -149,16 +149,24 @@
     //지안교수진 팝업 수정
     function teacherPopup(val,ctgKey,pos) {
         dataManageService.getBannerDetailInfo(val, function (selList) {
-           // getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
-            //selectTeacherSelectbox("teacherSel", "");
+            console.log(selList);
 
-            $("#bannerKey").val(val);
-            innerValue("bannerKey",val);
-            $("#ctgKey").val(ctgKey);
-            $("#pos").val(pos);
-            $("#bannerLink").val(selList.value4);
+            getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
+            selectTeacherSelectbox("teacherSel", "");
+            $("#teacherBannerKey").val(val);
+            $("#teacherCtgKey").val(ctgKey);
+            $("#teacherPos").val(pos);
+            $("#bannerTeacherLink").val(selList.value4);
             $("#newPopYn1").prop('checked', selList.valueBit1);
         });
+    }
+    
+    function popup_teacher_save(val,ctgKey,pos) {
+        $("#teacherCtgKey").val(ctgKey);
+        $("#newPopYn").prop('checked', false);
+        $("#bannerTeacherLink").val("");
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");//과목
+        selectTeacherSelectbox("teacherSel", "");
     }
     
     function popup_save(val,ctgKey,pos) { //추가팝업
@@ -226,7 +234,21 @@
 
     //지안교수진 팝업 수정
     function teacherModify() {
-        
+        var ctgKey        = getInputTextValue("teacherCtgKey");
+        var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
+        var teacherKey    = getSelectboxValue("sel_1");
+        var url   = getInputTextValue("bannerTeacherLink");
+        var isNew = "";
+        if($("input:checkbox[id='newPopYn']:checked").val()=='on') checkYn = '1';
+        else isNew = '0';
+
+        if(confirm("추가하시겠습니까?")){
+            dataManageService.saveTeacherBannerInfo(ctgKey, subjectCtgKey, teacherKey, isNew, url, function () {
+                var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                innerValue("param_key", sel_subDomain);
+                goPage('dataManage', 'bannerSave');
+            });
+        }
     }
 
     function bannerDelete(val, ctgKey, pos) {
@@ -426,9 +448,9 @@
     <div class="modal fade" id="teacherModal" tabindex="-1" role="dialog" aria-hidden="true">
         <div class="modal-dialog" role="document" style="max-width: 581px;">
             <div class="modal-content">
-                <!--<input type="hidden" id="bannerKey" value="">
-                <input type="hidden" id="pos" value="">
-                <input type="hidden" id="ctgKey" value="">-->
+                <input type="hidden" id="teacherBannerKey" value="">
+                <input type="hidden" id="teacherPos" value="">
+                <input type="hidden" id="teacherCtgKey" value="">
                 <div class="modal-header">
                     <h5 class="modal-title">배너추가</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -457,7 +479,7 @@
                                 <div style="margin-top: -23px;">
                                     OFF
                                     <label class="switch">
-                                        <input type="checkbox" id="newPopYn1" name="newPopYn" style="display:none;">
+                                        <input type="checkbox" id="newPopYn1" name="newPopYn1" style="display:none;">
                                         <span class="slider"></span>
                                     </label>
                                     ON
@@ -467,7 +489,7 @@
                         <div class="form-group row">
                             <label class="col-sm-3 text-center control-label col-form-label">링크url</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="bannerLink1">
+                                <input type="text" class="form-control" id="bannerTeacherLink">
                             </div>
                         </div>
                         <div style="text-align: center;">
