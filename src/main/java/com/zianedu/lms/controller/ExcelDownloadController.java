@@ -69,10 +69,11 @@ public class ExcelDownloadController {
                                         @RequestParam(value = "isOffline", required = false, defaultValue = "0") String isOffline,
                                         @RequestParam(value = "payType", required = false, defaultValue = "0") String payType,
                                         @RequestParam(value = "isMobile", required = false, defaultValue = "0") String isMobile,
-                                        @RequestParam(value = "isVideoReply", required = false, defaultValue = "0") String isVideoReply) {
+                                        @RequestParam(value = "isVideoReply", required = false, defaultValue = "0") String isVideoReply,
+                                         @RequestParam(value = "dateSearchType", required = false, defaultValue = "") String dateSearchType) {
         List<OrderExcelDownDTO>dataList = orderManageMapper.selectExcelDownloadOrderList(
                 searchStartDate, searchEndDate, GoodsType.getGoodsTypeKey(goodsType), Integer.parseInt(payStatus), Integer.parseInt(isOffline),
-                Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, Integer.parseInt(isVideoReply));
+                Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, Integer.parseInt(isVideoReply), Util.isNullValue(dateSearchType, ""));
 
         String title = "";
         if ("".equals(goodsType)) {

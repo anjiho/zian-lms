@@ -11,5 +11,27 @@
 		ORDER BY A.bbs_key DESC
 	</select>
 
+	<select id="selectWorkCurrentIdx" resultType="Integer">
+		SELECT T.*
+		FROM
+		(
+			SELECT IDX FROM BRD_WORK ORDER BY IDX DESC
+		) T
+		WHERE ROWNUM = 1
+	</select>
+
+	<select id="selectMyTable" resultType="HashMap">
+		SELECT * FROM Y_SERIAL_BAK
+	</select>
+
+	<insert id="insertBrdWork">
+		INSERT INTO BRD_WORK
+		(IDX, WEMPNO, WNAME, WEMAIL, WTITLE, LSTEP, RORDER, WCONTENT, CHKMYNAME, WNOTICE, READNO, RCMDNO, RIDX, WDATE)
+		VALUES
+		(
+			#{idx}, #{userId}, #{name}, #{email}, #{title}, 0, 0, #{contents}, 0, 0, 0, 0, 0, sysdate
+		)
+	</insert>
+
 
 </mapper>
