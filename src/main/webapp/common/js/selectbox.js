@@ -1312,11 +1312,13 @@ function getAcaLecturePayTypeSelectbox(tagId, val) {
     var selected = '';
     var selected1 = '';
     var selected2 = '';
-
+    var selected3 = '';
     if(val == '21') selected = 'selected';
     else if(val == '22') selected1 = 'selected';
+    else if(val == '0') selected3 = 'selected';
     else selected2 = 'selected';
 
+    html += "<option value='0' "+ selected3 +">신용카드</option>";
     html += "<option value='21' "+ selected +">현금</option>";
     html += "<option value='22' "+ selected1 +">현금+신용카드</option>";
     html += "<option value='23' "+ selected2 +">온라인</option>";
@@ -1326,7 +1328,7 @@ function getAcaLecturePayTypeSelectbox(tagId, val) {
 
 //카드선택
 function getCardKindSelectbox(tagId, val) {
-    var html = "<select id='cardCode' class='col-sm-3 select2 form-control custom-select'>";
+    var html = "<select id='cardCode' name='cardCode' class='col-sm-3 select2 form-control custom-select'>";
     var selected = '';
     var selected1 = '';
     var selected2 = '';

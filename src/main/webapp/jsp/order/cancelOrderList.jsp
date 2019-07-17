@@ -66,6 +66,7 @@
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 orderManageService.getCancelOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, cancelStartDate, cancelEndDate,
                     orderPayStatus, isOffline, payType, isMobile, searchType, searchText, dateSearchType, function (selList) {
+                    console.log(selList);
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},

@@ -32,10 +32,6 @@
                 $("#description").summernote("code", selList.productInfo.description);
             }
 
-
-
-            /**
-             * 옵션정보 가져오기
             var productOptionInfo = selList.productOptionInfo;
 
             if (productOptionInfo.length == 0) {

@@ -86,7 +86,7 @@
                     function(data) {return data.userKey == null ? "-" : data.userKey;},
                     function(data) {return data.userId == null ? "-" : data.userId;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
-                    function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
+                    function(data) {return '<a href="javascript:void(0);" color="blue" onclick="goMemberSms('+"'"+data.userId+"'"+');">' + data.telephoneMobile + "</a>";},
                     function(data) {return data.email == null ? "-" : data.email;},
                     function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
                     function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
@@ -147,8 +147,7 @@
                     function(data) {return data.userKey == null ? "-" : data.userKey;},
                     function(data) {return data.userId == null ? "-" : data.userId;},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.name + "</a>";},
-                    //function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberSms(" +'+data.userId +' + ");'>" + data.telephoneMobile + "</a>";},
-                    function(data) {return data.telephoneMobile == null ? "-" : data.telephoneMobile;},
+                    function(data) {return '<a href="javascript:void(0);" color="blue" onclick="goMemberSms('+"'"+data.userId+"'"+');">' + data.telephoneMobile + "</a>";},
                     function(data) {return data.email == null ? "-" : data.email;},
                     function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
                     function(data) {return data.affiliationName == null ? "-" : data.affiliationName;},
@@ -159,6 +158,13 @@
             });
             loadingOut(loading);
         });
+    }
+
+    function goMemberSms(userId) {
+        if(userId){
+            innerValue("param_key", userId);
+            goPage('memberManage', 'sendSms');
+        }
     }
 
     function excelDownload() {

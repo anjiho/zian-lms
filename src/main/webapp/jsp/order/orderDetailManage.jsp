@@ -29,7 +29,7 @@
         else if(type == 'cancelOrderList') num = 7;
         menuActive('menu-3', num);
         deliveryCompanySelectbox("deliveryMaster","");//택배사
-        orderDeliveryInfoSelectbox('deliveryStatusSel', '');//
+        orderDeliveryInfoSelectbox('deliveryStatusSel', '');
         getEmailSelectbox('deliveryUserEmail2', '');//이메일
 
         /*주문상세정보 가져오기*/
@@ -72,6 +72,8 @@
                 innerHTML("telephone", orderUserInfo.telephone);
                 innerHTML("telephoneMobile", orderUserInfo.telephoneMobile);
                 innerHTML("zipcode", orderUserInfo.zipcode);
+                innerValue("userId", orderUserInfo.userId);
+
             }
             /* 주문상품정보 */
             if(info.orderProductList != null){
@@ -137,6 +139,12 @@
     function emailSelChange(val) {
         if(val == '1') $('#InputEmail').val('');
         else $('#InputEmail').val(val);
+    }
+
+    //sms보내기
+    function goMemberSms() {
+        innerValue("param_key", $("#userId").val());
+        goPage('memberManage', 'sendSms');
     }
 
     function saveDeliveryAddressInfo() { //배송지정보 저장
@@ -418,6 +426,7 @@
                                 <div class="row mb-2 buyInfo" style="padding-left:10px;padding-top: 8px">
                                     <h4>주문자정보</h4><!--0-->
                                 </div>
+                                <input type="hidden" id="userId" value="">
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">이름</label>
                                     <div class="col-lg-3">
@@ -436,6 +445,7 @@
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">휴대전화</label>
                                     <div class="col-lg-3">
                                         <span id="telephoneMobile"></span>
+                                        <button type="button" class="btn btn-info btn-sm" style="margin-left: 8px;" onclick="goMemberSms();">SMS 보내기</button>
                                     </div>
                                 </div>
                                 <div class="row mb-3">

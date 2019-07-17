@@ -36,6 +36,9 @@
     //sms보내기
     function goMemberSms() {
         innerValue("param_key", $("#userId").text());
+
+
+        
         goPage('memberManage', 'sendSms');
     }
 
