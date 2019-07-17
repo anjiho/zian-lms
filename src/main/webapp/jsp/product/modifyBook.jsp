@@ -37,9 +37,8 @@
 
             /*2. 옵션 가져오기 */
             var productOptionInfo = info.productOptionInfo;
-
+                console.log(productOptionInfo);
             if (productOptionInfo.length == 0) {
-                alert(1);
                 var cellData = [
                     function() {return "기본옵션"},
                     function() {return "<input type=\"number\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
@@ -56,16 +55,14 @@
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
                     function(data) {return "기본옵션"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeyup='saleInputPrice($(this));'>"},
-                    //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeyup='saleInputPrice($(this));'>"},
                     function(data) {return "%"},
-                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
-                    //function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"}
                 ], {escapeHtml:false});
-                $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
+               $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
 
             /*3. 카테고리 가져오기*/

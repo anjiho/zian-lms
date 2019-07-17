@@ -40,7 +40,6 @@
         var datetimepicker12 = $("#datetimepicker12").val();
         var scheduleKey =  $("#scheduleKey").val();
         var link = $("#link").val();
-        alert(link);
         //modifyExamSchedule
         var key = $("#key").val();
         if(key == "modify"){//수정

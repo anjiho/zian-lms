@@ -255,103 +255,108 @@
     function promotionPacakgeSave() {
         var data = new FormData();
         var fileData = new FormData();
-        $.each($('#imageListFile')[0].files, function(i, file) {
-            fileData.append('imageListFile', file);
-        });
+        if("패키지상품을 등록 하시겠습니까?") {
+            $.each($('#imageListFile')[0].files, function(i, file) {
+                fileData.append('imageListFile', file);
+            });
 
-        $.each($('#imageViewFile')[0].files, function(i, file) {
-            fileData.append('imageViewFile', file);
-        });
+            $.each($('#imageViewFile')[0].files, function(i, file) {
+                fileData.append('imageViewFile', file);
+            });
 
-        fileData.append('uploadType', 'PACKAGE');
+            fileData.append('uploadType', 'PACKAGE');
+                $.ajax({
+                    url: "/file/imageFileUpload",
+                    method: "post",
+                    dataType: "JSON",
+                    data: fileData,
+                    cache: false,
+                    processData: false,
+                    contentType: false,
+                    success: function (data) {
+                        var basicObj = getJsonObjectFromDiv("section1");
+                        if (basicObj.isShow == 'on') basicObj.isShow = '1';//노출 checkbox
+                        else basicObj.isShow = '0';
+                        if (basicObj.isSell == 'on') basicObj.isSell = '1';//판매
+                        else basicObj.isSell = '0';
+                        if (basicObj.isFree == 'on') basicObj.isFree = '1';//무료
+                        else basicObj.isFree = '0';
+                        if (basicObj.isFreebieDeliveryFree == 'on') basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
+                        else basicObj.isFreebieDeliveryFree = '0';
+                        if (basicObj.isQuickDelivery == 'on') basicObj.isQuickDelivery = '1';//사은품배송비무료
+                        else basicObj.isQuickDelivery = '0';
+                        var result = JSON.stringify(data.result);
+                        if (result != "") {
+                            var parse = JSON.parse(result);
+                            basicObj.imageList = parse.imageListFilePath;
+                            basicObj.imageView = parse.imageViewFilePath;
+                        } else {
+                            basicObj.imageList = "";
+                            basicObj.imageView = "";
+                        }
 
-        $.ajax({
-            url: "/file/imageFileUpload",
-            method: "post",
-            dataType: "JSON",
-            data: fileData,
-            cache: false,
-            processData: false,
-            contentType: false,
-            success: function (data) {
-                var basicObj = getJsonObjectFromDiv("section1");
-                if(basicObj.isShow == 'on')  basicObj.isShow = '1';//노출 checkbox
-                else basicObj.isShow = '0';
-                if(basicObj.isSell == 'on')  basicObj.isSell = '1';//판매
-                else basicObj.isSell = '0';
-                if(basicObj.isFree == 'on')  basicObj.isFree = '1';//무료
-                else basicObj.isFree = '0';
-                if(basicObj.isFreebieDeliveryFree == 'on')  basicObj.isFreebieDeliveryFree = '1';//사은품배송비무료
-                else basicObj.isFreebieDeliveryFree = '0';
-                if(basicObj.isQuickDelivery == 'on')  basicObj.isQuickDelivery = '1';//사은품배송비무료
-                else basicObj.isQuickDelivery = '0';
-                var result = JSON.stringify(data.result);
-                if(result != "") {
-                    var parse = JSON.parse(result);
-                    basicObj.imageList = parse.imageListFilePath;
-                    basicObj.imageView = parse.imageViewFilePath;
-                }else{
-                    basicObj.imageList = "";
-                    basicObj.imageView = "";
-                }
+                        /*  2.옵션 obj */
+                        var optionArray = new Array();
+                        $('#optionTable tbody tr').each(function (index) {
+                            var i = 0;
+                            var optionName = $(this).find("td select").eq(0).val();
+                            var price = $(this).find("td input").eq(0).val();
+                            var sellPrice = $(this).find("td input").eq(1).val();
+                            var point = $(this).find("td input").eq(2).val();
+                            var extendPercent = $(this).find("td input").eq(3).val();
+                            var data = {
+                                priceKey: '0',
+                                gKey: '0',
+                                kind: optionName,
+                                ctgKey: '0',
+                                name: '',
+                                price: price,
+                                sellPrice: sellPrice,
+                                point: point,
+                                extendPercent: extendPercent
+                            };
+                            optionArray.push(data);
+                        });
 
-                /*  2.옵션 obj */
-                var optionArray = new Array();
-                $('#optionTable tbody tr').each(function(index){
-                    var i =0;
-                    var optionName = $(this).find("td select").eq(0).val();
-                    var price = $(this).find("td input").eq(0).val();
-                    var sellPrice = $(this).find("td input").eq(1).val();
-                    var point = $(this).find("td input").eq(2).val();
-                    var extendPercent = $(this).find("td input").eq(3).val();
-                    var data = {
-                        priceKey:'0',
-                        gKey:'0',
-                        kind:optionName,
-                        ctgKey:'0',
-                        name:'',
-                        price:price,
-                        sellPrice:sellPrice,
-                        point:point,
-                        extendPercent:extendPercent
-                    };
-                    optionArray.push(data);
-                });
-
-                /* 3. 카테고리 저장 */
-                var categoryArr = new Array();
-                var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
-                if(ctgKeys.length > 0){
-                    $.each(ctgKeys, function(index, key) {
-                        var data = {
-                            ctgGKey:0,
-                            ctgKey:key,
-                            gKey:0,
-                            pos:0
-                        };
-                        categoryArr.push(data);
-                    });
-                }
+                        /* 3. 카테고리 저장 */
+                        var categoryArr = new Array();
+                        var ctgKeys = get_array_values_by_name("input", "inputCtgKey[]");
+                        if (ctgKeys.length > 0) {
+                            $.each(ctgKeys, function (index, key) {
+                                var data = {
+                                    ctgGKey: 0,
+                                    ctgKey: key,
+                                    gKey: 0,
+                                    pos: 0
+                                };
+                                categoryArr.push(data);
+                            });
+                        }
 
 
-                /* 4. 프로모션정보 저장 */
-                var promotionInfo = getJsonObjectFromDiv("section4");
+                        /* 4. 프로모션정보 저장 */
+                        var promotionInfo = getJsonObjectFromDiv("section4");
 
-                /* 5. 포함된온라인강좌 저장 */
-                var onlineLecInfo = new Array();
-                $('#promotionOnlineTable tbody tr').each(function(index){
-                    var onlineKey = $(this).find("td input").eq(0).val();
-                    var data = {
-                        linkKey: 0,
-                        reqKey: 0,
-                        resKey:onlineKey,
-                        resType: 5,
-                        pos: 0,
-                    };
-                    onlineLecInfo.push(data);
+                        /* 5. 포함된온라인강좌 저장 */
+                        var onlineLecInfo = new Array();
+                        $('#promotionOnlineTable tbody tr').each(function (index) {
+                            var onlineKey = $(this).find("td input").eq(0).val();
+                            var data = {
+                                linkKey: 0,
+                                reqKey: 0,
+                                resKey: onlineKey,
+                                resType: 5,
+                                pos: 0,
+                            };
+                            onlineLecInfo.push(data);
+                        });
+                        promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {
+                            goPage('promotionManage', 'packageList');
+                        });
+
+                    }
                 });
             }
-        });
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">

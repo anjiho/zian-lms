@@ -195,15 +195,24 @@
             }
         }
 
-        if(confirm("수정하시겠습니까?")) {
+        if(confirm("진행상태를 수정하시겠습니까?")) {
             if (getstate == 2) {
                 if(status == 2){ //기존에 진행상태가 일시정지인 popup에서 다른 진행상태로 변경후 저장시 예외처리
-                    orderManageService.updateOrderLecFromPause(jLecKey, status, startDate, limitDay, pauseStartDate, pauseDay, pauseCnt, totalPauseCnt);
+                    orderManageService.updateOrderLecFromPause(jLecKey, status, startDate, limitDay, pauseStartDate, pauseDay, pauseCnt, totalPauseCnt, function () {
+                        alert("변경되었습니다.");
+                        isReloadPage();
+                    });
                 }else{
-                    orderManageService.updateOrderLec(jLecKey, status, startDate, limitDay);
+                    orderManageService.updateOrderLec(jLecKey, status, startDate, limitDay, function () {
+                        alert("변경되었습니다.");
+                        isReloadPage();
+                    });
                 }
             } else {
-                orderManageService.updateOrderLec(jLecKey, status, startDate, limitDay);
+                orderManageService.updateOrderLec(jLecKey, status, startDate, limitDay, function () {
+                    alert("변경되었습니다.");
+                    isReloadPage();
+                });
             }
         }
     }
@@ -227,7 +236,23 @@
         if(jId != null){
             if(confirm("수강타입을 수정하시겠습니까?")){
                 var goodsKind = getSelectboxValue("videoOptionSel");
-                orderManageService.updateGoodsKindType(jId, goodsKind);
+                orderManageService.updateGoodsKindType(jId, goodsKind, function () {
+                    /*var searchStartDate = getInputTextValue("searchStartDate");
+                    var searchEndDate = getInputTextValue("searchEndDate");
+                    var payType = getSelectboxValue("PayStatus");
+                    var state = getSelectboxValue("orderStatus");
+                    var searchType = getSelectboxValue("searchType");
+                    var searchText = getInputTextValue("searchText");
+
+                    innerValue('param_key2', searchStartDate);
+                    innerValue('param_key3', searchEndDate);
+                    innerValue('param_key3', payType);
+                    innerValue('param_key3', state);
+                    innerValue('param_key3', searchType);
+                    innerValue('param_key3', searchText);*/
+                    alert("변경되었습니다.");
+                    isReloadPage();
+                });
             }
         }
     }
