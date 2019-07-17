@@ -116,12 +116,14 @@
                 getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
                 getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
                 getExamPrepareSelectbox("examYear", productLectureInfo.examYear);//시험대비년도 셀렉트박스
-                getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
+                //getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
                 getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
-                getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
+                //getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
                 innerValue("multiple", gfn_zeroToZero(productLectureInfo.multiple));//배수
                 innerValue("curri_lecKey", productLectureInfo.lecKey);//leckey
                 innerValue("lecKey", productLectureInfo.lecKey);//leckey
+                innerHTML("l_lecCount", productLectureInfo.lecCount == 0 ? "0" : productLectureInfo.lecCount);
+                innerHTML("l_lecTotalTime", productLectureInfo.lecTotalTime == 0 ? "0" : productLectureInfo.lecTotalTime);
             }
 
             //동영상 - 강의목록 불러오기
@@ -1044,9 +1046,10 @@
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>
-                        <select  class="col-sm-3 select2 form-control custom-select"  id="limitCount" name="limitCount">
-                            <option value="">선택</option>
-                        </select>
+                        <span id="l_lecCount"></span>
+<%--                        <select  class="col-sm-3 select2 form-control custom-select"  id="limitCount" name="limitCount">--%>
+<%--                            <option value="">선택</option>--%>
+<%--                        </select>--%>
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
@@ -1056,9 +1059,10 @@
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>
-                        <select class="col-sm-3 select2 form-control custom-select"  id="lecTime" name="lecTime">
-                            <option value="">선택</option>
-                        </select>
+                        <span id="l_lecTotalTime"></span>
+<%--                        <select class="col-sm-3 select2 form-control custom-select"  id="lecTime" name="lecTime">--%>
+<%--                            <option value="">선택</option>--%>
+<%--                        </select>--%>
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>

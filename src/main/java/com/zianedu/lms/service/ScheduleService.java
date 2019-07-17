@@ -46,13 +46,28 @@ public class ScheduleService {
     @DataSource(DataSourceType.GW_ORACLE)
     public void insertBrdWork(List<HashMap<String, Object>>list) {
         for (HashMap<String, Object> listMap : list) {
+            String userId = String.valueOf(listMap.get("USER_ID"));
+
+            String userName = "";
+            String title = "";
+            String email = "";
+            if (userId.equals("10062")) {
+                userName = "안지호";
+                title = "업무일지_안지호";
+                email = "anjo0070@zianedu.com";
+            } else if (userId.equals("10063")) {
+                userName = "원은정";
+                title = "업무일지_원은정";
+                email = "ejwon@zianedu.com";
+            }
+
             int idx = testMapper.selectWorkCurrentIdx();
             HashMap<String, Object> paramMap = new HashMap<>();
             paramMap.put("idx", idx + 1);
             paramMap.put("userId", listMap.get("USER_ID"));
-            paramMap.put("name", "안지호");
-            paramMap.put("email", "anjo0070@zianedu.com");
-            paramMap.put("title", "업무일지_안지호");
+            paramMap.put("name", userName);
+            paramMap.put("email", email);
+            paramMap.put("title", title);
             paramMap.put("contents", listMap.get("CONTENT"));
 
             testMapper.insertBrdWork(paramMap);
