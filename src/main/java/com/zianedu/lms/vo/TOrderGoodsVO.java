@@ -79,7 +79,7 @@ public class TOrderGoodsVO {
 
     public TOrderGoodsVO(){}
 
-    public TOrderGoodsVO(int jKey, int userKey, int gKey, int priceKey, int price, int kind, int examYear,
+    public TOrderGoodsVO(int jKey, int userKey, int gKey, int priceKey, int price, int type, int kind, int examYear,
                          int classGroupCtgKey, int subjectCtgKey, String teacherName, String goodsName) throws Exception {
         this.jKey = jKey;
         this.cKey = ZianCoreManage.ZIAN_COMPANY_CODE;
@@ -91,7 +91,7 @@ public class TOrderGoodsVO {
         this.sellPrice = price;
         this.point = 0;
         this.cnt = 1;
-        this.type = 2;
+        this.type = type;
         this.pmType = 0;
         this.kind = kind;
         this.extendDay = -1;

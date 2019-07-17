@@ -134,9 +134,10 @@
             var isOffline = getSelectboxValue("isOffline");
             var payType = getSelectboxValue("orderPayType");
             var isMobile = getSelectboxValue("deviceSel");
+            var dateSearchType = getSelectboxValue("dateSearchType");
 
             var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
-                "&goodsType=" + "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=0";
+                "&goodsType=" + "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=0" + "&dateSearchType=" + dateSearchType;
 
             $.download('/excelDownload/orderList', url, 'post' );
         }

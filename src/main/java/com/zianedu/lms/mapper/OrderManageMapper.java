@@ -98,7 +98,8 @@ public interface OrderManageMapper {
     List<OrderExcelDownDTO> selectExcelDownloadOrderList(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                                          @Param("goodsType") int goodsType, @Param("payStatus") int payStatus, @Param("isOffline") int isOffline,
                                                          @Param("payType") int payType, @Param("isMobile") int isMobile,
-                                                         @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("isVideoReply") int isVideoReply);
+                                                         @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("isVideoReply") int isVideoReply,
+                                                         @Param("dateSearchType") String dateSearchType);
 
     List<OrderExcelDownDTO> selectExcelDownloadCancelOrderList(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                                @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,

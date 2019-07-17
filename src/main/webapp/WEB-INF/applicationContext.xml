@@ -43,16 +43,17 @@
           p:password="#{config['algisa.oracle.db.password']}"
           p:url="#{config['algisa.oracle.db.url']}"/>
 
-    <!--<bean id="logDataSource" parent="parentDataSource"-->
-          <!--p:username="#{config['log.db.username']}"-->
-          <!--p:password="#{config['log.db.password']}"-->
-          <!--p:url="#{config['log.db.url']}"/>-->
+    <bean id="gwDataSource" parent="parentDataSource"
+          p:username="ZIANGW"
+          p:password="wldks0815!"
+          p:url="jdbc:oracle:thin:@118.217.181.175:1521:ZIAN"/>
 
 	<bean id="routingDataSource" class="com.zianedu.lms.define.datasource.RoutingDataSource">
 		<property name="targetDataSources">
 			<map key-type="com.zianedu.lms.define.datasource.DataSourceType">
                 <entry key="ZIAN_ORACLE" value-ref="zianOracleDataSource"/>
                 <entry key="ALGISA_ORACLE" value-ref="algisaOracleDataSource"/>
+                <entry key="GW_ORACLE" value-ref="gwDataSource"/>
 			</map>
 		</property>
 		<property name="defaultTargetDataSource" ref="zianOracleDataSource"/>
@@ -154,11 +155,22 @@
         <property name="cronExpression" value="0 0 5 * * ?"/> <!-- 새벽 5시 예약 -->
 	</bean>
 
+    <bean id="dayQuartz" class="org.springframework.scheduling.quartz.JobDetailBean">
+        <property name="jobClass" value="com.zianedu.lms.schedule.DaySchedule" />
+        <property name="applicationContextJobDataKey" value="applicationContext"/>
+    </bean>
+    <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
+        <property name="jobDetail" ref="dayQuartz"/>
+        <property name="cronExpression" value="0 45 08 ? * MON-FRI"/>
+<!--        		<property name="cronExpression" value="0/1 * * * * ? "/>-->
+    </bean>
+
   	<!-- 3.Cron 실행 -->
   	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
 				<ref bean="cronTrigger1"/>
+<!--                <ref bean="cronTrigger2"/>-->
 			</list>
 		</property>
 		<property name="quartzProperties">

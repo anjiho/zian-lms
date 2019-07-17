@@ -63,7 +63,10 @@
 	</select>
 
 	<select id="selectTLecInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecVO">
-		SELECT * FROM T_LEC WHERE G_KEY = #{gKey}
+		SELECT A.*,
+			   (SELECT COUNT(T.CURRI_KEY) FROM T_LEC_CURRI T WHERE T.LEC_KEY = A.LEC_KEY) as lecCount,
+			   (SELECT SUM(T.VOD_TIME) FROM T_LEC_CURRI T WHERE T.LEC_KEY = A.LEC_KEY) as lecTotalTime
+		FROM T_LEC A WHERE A.G_KEY = #{gKey}
 	</select>
 
 	<select id="selectTeacherListByTeacherLink" parameterType="Integer" resultType="com.zianedu.lms.vo.TGoodTeacherLinkVO">

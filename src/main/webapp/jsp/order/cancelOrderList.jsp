@@ -68,6 +68,7 @@
                     orderPayStatus, isOffline, payType, isMobile, searchType, searchText, dateSearchType, function (selList) {
                     console.log(selList);
                         if (selList.length == 0) return;
+                        console.log(selList);
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                             function(data) {return "<a href='javascript:void(0);' color='blue' style=''onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
@@ -77,6 +78,7 @@
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
                             function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.indate)+"</a>";},
+                            function(data) {return data.deliveryStatusName == null ? "-" : data.deliveryStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                             function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
                         ], {escapeHtml:false});
@@ -377,6 +379,7 @@
                             <th scope="col" width="7%">결제금액</th>
                             <th scope="col" width="5%">결제방법</th>
                             <th scope="col" width="8%">진행상태</th>
+                            <th scope="col" width="8%">배송상태</th>
                             <th scope="col" width="8%">모바일</th>
                             <th  width="3%">
                                 <label class="customcheckbox m-b-20">

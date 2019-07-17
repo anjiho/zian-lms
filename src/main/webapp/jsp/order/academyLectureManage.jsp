@@ -53,8 +53,8 @@
         var searchText = getInputTextValue('SearchText');
         var regStartDate = "";
         var regEndDate = "";
-        var grade = "";
-        var affiliationCtgKey = 0;
+        var grade = 1000;
+        var affiliationCtgKey = 10000;
 
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate,
             grade, affiliationCtgKey, function (cnt) {
@@ -172,7 +172,7 @@
             tr.children().eq(0).attr("style", "display:none");
         });
     }
-    
+
     function sellPriceChk(selPrice) {
         var sellPrice1 =  getInputTextValue("sellPrice");
         var result = Number(sellPrice1) -  Number(selPrice);

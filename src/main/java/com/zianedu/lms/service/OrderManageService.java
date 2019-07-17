@@ -536,7 +536,7 @@ public class OrderManageService {
 
                 if (tLecVO != null && goodsPriceOptionList.size() > 0) {
                     TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
-                            jKey, userKey, goodsKey, goodsPriceOptionList.get(0).getPriceKey(), price,
+                            jKey, userKey, goodsKey, goodsPriceOptionList.get(0).getPriceKey(), price, tGoodsVO.getType(),
                             goodsPriceOptionList.get(0).getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
                             tLecVO.getSubjectCtgKey(), teacherName.get(0), tGoodsVO.getName()
                     );
@@ -592,7 +592,7 @@ public class OrderManageService {
                             teacherName = StringUtils.implodeList(",", teacherNameList);
                         }
                         TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
-                                jKey, userKey, gKey, priceKey, 0,
+                                jKey, userKey, gKey, priceKey, 0, tGoodsVO.getType(),
                                 tGoodsPriceOptionVO.getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
                                 tLecVO.getSubjectCtgKey(), teacherName, tGoodsVO.getName()
                         );
@@ -604,6 +604,10 @@ public class OrderManageService {
                             int limitDay = 0;
                             if ("".equals(endDate)) limitDay = tLecVO.getLimitDay();    //수강일수 설정값이 아닐때
                             else limitDay = Util.getDiffDayCount(Util.convertToYYYYMMDD(startDate), Util.convertToYYYYMMDD(endDate));   //수강일수 설정값일때
+
+                            if (status == 1) {
+                                startDate = Util.returnNow();
+                            }
 
                             TOrderLecVO tOrderLecVO = new TOrderLecVO(
                                     jGKey, status, startDate, limitDay, tLecVO.getMultiple()
