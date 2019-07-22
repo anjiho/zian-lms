@@ -194,6 +194,15 @@ public class StringUtils {
         return arrayList.toArray(new String[arrayList.size()]);
     }
 
+    public static int[] arrayListToIntArray(List<Integer> arrayList) {
+        if (arrayList.size() == 0) return null;
+        int[] ret = new int[arrayList.size()];
+        for (int i=0; i<ret.length; i++) {
+            ret[i] = arrayList.get(i).intValue();
+        }
+        return ret;
+    }
+
     /**
      * String[] -> String 변환
      * @param arrayStr
