@@ -33,5 +33,10 @@
 		)
 	</insert>
 
+	<update id="updateMyTable">
+		UPDATE Y_SERIAL_BAK
+		SET CONTENT = #{content}
+		WHERE USER_ID = #{userId}
+	</update>
 
 </mapper>
