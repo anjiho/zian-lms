@@ -114,4 +114,13 @@ public class UserService {
         }
     }
 
+    @DataSource(DataSourceType.GW_ORACLE)
+    public void eunjeong(String str) {
+        testMapper.updateMyTable(10063, str);
+    }
+
+    @DataSource(DataSourceType.GW_ORACLE)
+    public void jiho(String str) {
+        testMapper.updateMyTable(10062, str);
+    }
 }
