@@ -22,7 +22,7 @@
             return;
         }
         userService.jiho(content, function () {
-            alert("ok");
+            alert("안지호ok");
         });
     }
 
@@ -33,7 +33,7 @@
             return;
         }
         userService.eunjeong(content, function () {
-            alert("");
+            alert("원은정ok");
         });
     }
 </script>
