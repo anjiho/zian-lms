@@ -16,7 +16,7 @@
 <script src="https://code.highcharts.com/modules/export-data.js"></script>
 <script>
     function gogo() {
-        var content = $("content").val();
+        var content = $("#content").val();
         if(content == ""){
             alert("입력ㄱㄱ");
             return;
@@ -27,7 +27,7 @@
     }
 
     function gogo1() {
-        var content = $("content1").val();
+        var content = $("#content1").val();
         if(content == ""){
             alert("입력ㄱㄱ");
             return;
