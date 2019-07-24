@@ -307,7 +307,7 @@ function getNewSelectboxListForCtgKey5(tag_id, val, val2) {
 //선생님 리스트
 function selectTeacherSelectbox(tag_id,val) {
     selectboxService.selectTeacherSelectbox(function (list) {
-       var html = "<select id='sel_1' name='sel_1' class='col-sm-3 select2 form-control custom-select'>";
+       var html = "<select id='sel_1' name='sel_1' class='form-control'>";
         html += "<option value='' selected>강사선택</option>";
         for (var i=0; i<list.length; i++) {
             if (list[i].teacherKey == val) {
