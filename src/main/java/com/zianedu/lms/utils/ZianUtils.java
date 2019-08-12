@@ -1,6 +1,7 @@
 package com.zianedu.lms.utils;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class ZianUtils {
@@ -32,7 +33,17 @@ public class ZianUtils {
         jId = yyyyMM + "-" + hhmm + "-" + ranNumber;
         return jId;
     }
-    public static void main(String[] args) {
-        System.out.println(getJId());
+
+    public static boolean isHoliday() throws Exception {
+        String today = Util.plusDate(Util.returnNow(), 0);
+        String[] holiday = {"2019-08-15", "2019-09-12", "2019-09-13", "2019-10-03", "2019-10-09", "2019-12-25"};
+
+        if (Arrays.asList(holiday).contains(today)) {
+            return true;
+        }
+        return false;
+    }
+    public static void main(String[] args) throws Exception {
+        System.out.println(isHoliday());
     }
 }

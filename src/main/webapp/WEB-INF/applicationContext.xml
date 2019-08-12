@@ -170,7 +170,7 @@
 		<property name="triggers">
 			<list>
 				<ref bean="cronTrigger1"/>
-<!--                <ref bean="cronTrigger2"/>-->
+                <ref bean="cronTrigger2"/>
 			</list>
 		</property>
 		<property name="quartzProperties">

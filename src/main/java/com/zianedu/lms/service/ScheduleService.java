@@ -37,7 +37,7 @@ public class ScheduleService {
     }
 
     @DataSource(DataSourceType.GW_ORACLE)
-    public void daySchedule() {
+    public void daySchedule() throws Exception {
         List<HashMap<String, Object>>list = testMapper.selectMyTable();
         this.insertBrdWork(list);
 

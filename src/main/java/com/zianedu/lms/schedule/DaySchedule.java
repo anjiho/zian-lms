@@ -2,6 +2,7 @@ package com.zianedu.lms.schedule;
 
 import com.zianedu.lms.config.ConfigHolder;
 import com.zianedu.lms.service.ScheduleService;
+import com.zianedu.lms.utils.ZianUtils;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.springframework.context.ApplicationContext;
@@ -22,8 +23,9 @@ public class DaySchedule extends QuartzJobBean {
     }
 
     private void executeJob(JobExecutionContext ex) throws Exception {
-
-            ScheduleService scheduleService = (ScheduleService)context.getBean("scheduleService");
+        ScheduleService scheduleService = (ScheduleService)context.getBean("scheduleService");
+        if (!ZianUtils.isHoliday()) {
             scheduleService.daySchedule();
+        }
     }
 }
