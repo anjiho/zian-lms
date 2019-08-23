@@ -182,7 +182,7 @@ public class UserService {
         int today = DateUtils.getTodayDayOfWeek();
         String fileName = "";
         if (today == 6) {
-            fileName = "C:\\ftp\\jihoan\\금일일업무일지(안지호).docx";
+            fileName = "C:/ftp/jihoan/금/일일업무일지(안지호).docx";
         }
         javax.activation.DataSource source = new FileDataSource(fileName);
         messageBodyPart.setDataHandler(new DataHandler(source));
