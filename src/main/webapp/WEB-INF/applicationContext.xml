@@ -184,7 +184,8 @@
 		</property>
 	</bean>
 
-	<!-- SPRING JAVA MAIL -->
+    <!-- SPRING JAVA MAIL -->
+    <bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl" p:defaultEncoding="UTF-8"/>
 
 	<!--<bean id="mailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">-->
 		<!--<property name="host" value="smtp.gmail.com" />-->

@@ -4,6 +4,7 @@ import org.joda.time.DateTime;
 import org.joda.time.DateTimeZone;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 public class DateUtils {
@@ -53,8 +54,15 @@ public class DateUtils {
         return to;
     }
 
+    //현재 요일 구하기 (일 : 1 ~ 토 : 7 )
+    public static int getTodayDayOfWeek() {
+        Calendar cal = Calendar.getInstance();
+        int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+        return dayOfWeek;
+    }
+
     public static void main(String[] args) throws Exception {
-        System.out.println(now());
+        System.out.println(getTodayDayOfWeek());
         //System.out.println(dateToStr(d));
     }
 }
