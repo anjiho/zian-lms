@@ -627,6 +627,13 @@ public class Util {
         return sdf.format(today);
     }
 
+    public static String returnNowDateByYYMMDD2() {
+        Date today = new Date();
+        SimpleDateFormat sdf;
+        sdf = new SimpleDateFormat("yyyy.MM.dd");
+        return sdf.format(today);
+    }
+
     public static String returnHourMinuteTime() {
         Date today = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
@@ -1058,7 +1065,7 @@ public class Util {
     public static void main(String[] args) throws Exception {
         String date = convertDateFormat3(plusDate(Util.returnNow(), -10));
         String date2 = convertDateFormat3("2019-05-27");
-        System.out.println(getDiffDayCount(date, date2));
+        System.out.println(returnNowDateByYYMMDD2());
 
 
     }
