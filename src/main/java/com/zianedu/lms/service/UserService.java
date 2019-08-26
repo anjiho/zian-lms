@@ -181,8 +181,8 @@ public class UserService {
         int today = DateUtils.getTodayDayOfWeek();
         String fileName = "";
         if (today == 2) {
-            //fileName = "C:/ftp/jihoan/월/일일업무일지(안지호).docx";
-            fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
+            fileName = "C:/ftp/jihoan/월/일일업무일지(안지호).docx";
+            //fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
         } else if (today == 3) {
             fileName = "C:/ftp/jihoan/화/일일업무일지(안지호).docx";
         } else if (today == 4) {
@@ -206,7 +206,7 @@ public class UserService {
 
         Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
 
-        this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].toString());
+        this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
     public void pushEmail(String email, String fileName, String recipientTo, String recipientCC) throws Exception {
