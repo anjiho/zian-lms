@@ -144,7 +144,7 @@ public class UserService {
         String subject = "일일업무보고_" + Util.returnNowDateByYYMMDD2(); //메일 제목 입력해주세요.
         String body = "일일업무보고 파일 첨부하였습니다.\n" + "수고하세요"; //메일 내용 입력해주세요.
         InternetAddress[] toAddr = new InternetAddress[1];
-        toAddr[0] = new InternetAddress ("anjo0070@naver.com");
+        toAddr[0] = new InternetAddress ("anjo0070@naver.com", "피창근", "UTF-8");
 
         Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성
         // SMTP 서버 정보 설정
@@ -164,8 +164,8 @@ public class UserService {
 
         session.setDebug(false); //for debug
         Message mimeMessage = new MimeMessage(session); //MimeMessage 생성
-        mimeMessage.setFrom(new InternetAddress("anjo0070@zianedu.com")); //발신자 셋팅 , 보내는 사람의 이메일주소
-        mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //수신자셋팅
+        mimeMessage.setFrom(new InternetAddress("anjo0070@zianedu.com", "안지호", "UTF-8")); //발신자 셋팅 , 보내는 사람의 이메일주소
+        mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient, "박태순", "UTF-8")); //수신자셋팅
         mimeMessage.setRecipients(Message.RecipientType.CC, toAddr);
 
         mimeMessage.setSubject(subject); //제목셋팅
@@ -181,8 +181,8 @@ public class UserService {
         int today = DateUtils.getTodayDayOfWeek();
         String fileName = "";
         if (today == 2) {
-            fileName = "C:/ftp/jihoan/월/일일업무일지(안지호).docx";
-            //fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
+            //fileName = "C:/ftp/jihoan/월/일일업무일지(안지호).docx";
+            fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
         } else if (today == 3) {
             fileName = "C:/ftp/jihoan/화/일일업무일지(안지호).docx";
         } else if (today == 4) {
