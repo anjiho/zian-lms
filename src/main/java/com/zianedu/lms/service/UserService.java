@@ -209,6 +209,82 @@ public class UserService {
         this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
+    public void daumEmailSend2() throws Exception {
+        String host = "smtp.daum.net";
+        final String username = "huuc10"; //네이버 아이디를 입력해주세요. @nave.com은 입력하지 마시구요.
+        final String password = "qwer779488!"; //네이버 이메일 비밀번호를 입력해주세요.
+        int port=465; //포트번호
+
+        String recipient = "anjo0070@naver.com"; //받는 사람의 메일주소를 입력해주세요.
+        String subject = "일일업무보고_" + Util.returnNowDateByYYMMDD2(); //메일 제목 입력해주세요.
+        String body = "일일업무보고 파일 첨부하였습니다.\n" + "수고하세요"; //메일 내용 입력해주세요.
+        InternetAddress[] toAddr = new InternetAddress[1];
+        toAddr[0] = new InternetAddress ("anjo0070@zianedu.com", "피창근", "UTF-8");
+
+        Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성
+        // SMTP 서버 정보 설정
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.smtp.ssl.trust", host);
+        //Session 생성
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+            String un=username;
+            String pw=password;
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(un, pw);
+            }
+        });
+
+        session.setDebug(false); //for debug
+        Message mimeMessage = new MimeMessage(session); //MimeMessage 생성
+        mimeMessage.setFrom(new InternetAddress("ejwon@zianedu.com", "원은정", "UTF-8")); //발신자 셋팅 , 보내는 사람의 이메일주소
+        mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient, "박태순", "UTF-8")); //수신자셋팅
+        mimeMessage.setRecipients(Message.RecipientType.CC, toAddr);
+
+        mimeMessage.setSubject(subject); //제목셋팅
+        mimeMessage.setText(body); //내용셋팅
+
+        // Create the message part
+        BodyPart messageBodyPart = new MimeBodyPart();
+        BodyPart messageBodyPart2 = new MimeBodyPart();
+        messageBodyPart2.setText(body);
+
+        Multipart multipart = new MimeMultipart();
+
+        int today = DateUtils.getTodayDayOfWeek();
+        String fileName = "";
+        if (today == 2) {
+            fileName = "C:/ftp/jihoan/월/일일업무일지(안지호).docx";
+            //fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
+        } else if (today == 3) {
+            fileName = "C:/ftp/jihoan/화/일일업무일지(안지호).docx";
+        } else if (today == 4) {
+            fileName = "C:/ftp/jihoan/수/일일업무일지(원은정).hwp";
+            //fileName = "/Users/jihoan/Downloads/일일업무일지(원은정).hwp";
+        } else if (today == 5) {
+            fileName = "C:/ftp/jihoan/목/일일업무일지(안지호).docx";
+        } else if (today == 6) {
+            fileName = "C:/ftp/jihoan/금/일일업무일지(안지호).docx";
+        }
+//        else if (today == 7) {
+//            fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
+//        }
+        javax.activation.DataSource source = new FileDataSource(fileName);
+        messageBodyPart.setDataHandler(new DataHandler(source));
+        String name = "일일업무일지(원은정).hwp";
+        messageBodyPart.setFileName(MimeUtility.encodeText(name));
+        multipart.addBodyPart(messageBodyPart2);
+        multipart.addBodyPart(messageBodyPart);
+        // Send the complete message parts
+        mimeMessage.setContent(multipart);
+
+        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
+
+        //this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
+    }
+
     public void pushEmail(String email, String fileName, String recipientTo, String recipientCC) throws Exception {
         String host = "smtp.daum.net";
         final String username = "anjo0070"; //네이버 아이디를 입력해주세요. @nave.com은 입력하지 마시구요.
