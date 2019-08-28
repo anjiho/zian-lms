@@ -26,6 +26,7 @@ public class EmailSchedule extends QuartzJobBean {
         UserService userService = (UserService)context.getBean("userService");
         if (!ZianUtils.isHoliday()) {
             userService.daumEmailSend();
+            userService.daumEmailSend2();
         }
     }
 }
