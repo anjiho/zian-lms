@@ -215,11 +215,11 @@ public class UserService {
         final String password = "qwer779488!"; //네이버 이메일 비밀번호를 입력해주세요.
         int port=465; //포트번호
 
-        String recipient = "huuc@naver.com"; //받는 사람의 메일주소를 입력해주세요.
+        String recipient = "ejwon@zianedu.com"; //받는 사람의 메일주소를 입력해주세요.
         String subject = Util.returnNowDateByYYMMDD3() + "_일일업무보고"; //메일 제목 입력해주세요.
         String body = "안녕하세요.\n" + "개발팀 원은정입니다.\n" + Util.returnNowDateByYYMMDD3() + "_일일업무일지 보내드립니다.\n감사합니다."; //메일 내용 입력해주세요.
         InternetAddress[] toAddr = new InternetAddress[1];
-        toAddr[0] = new InternetAddress ("anjo0070@zianedu.com", "피창근", "UTF-8");
+        toAddr[0] = new InternetAddress ("huuc10@gmail.com", "피창근", "UTF-8");
 
         Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성
         // SMTP 서버 정보 설정
