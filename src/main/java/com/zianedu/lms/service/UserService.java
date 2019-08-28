@@ -215,7 +215,7 @@ public class UserService {
         final String password = "qwer779488!"; //네이버 이메일 비밀번호를 입력해주세요.
         int port=465; //포트번호
 
-        String recipient = "anjo0070@naver.com"; //받는 사람의 메일주소를 입력해주세요.
+        String recipient = "huuc@naver.com"; //받는 사람의 메일주소를 입력해주세요.
         String subject = Util.returnNowDateByYYMMDD3() + "_일일업무보고"; //메일 제목 입력해주세요.
         String body = "안녕하세요.\n" + "개발팀 원은정입니다.\n" + Util.returnNowDateByYYMMDD3() + "_일일업무일지 보내드립니다.\n감사합니다."; //메일 내용 입력해주세요.
         InternetAddress[] toAddr = new InternetAddress[1];
@@ -261,8 +261,8 @@ public class UserService {
         } else if (today == 3) {
             fileName = "C:/ftp/ej/화/일일업무일지(안지호).docx";
         } else if (today == 4) {
-            fileName = "C:/ftp/ej/수/일일업무일지(원은정).hwp";
-            //fileName = "/Users/jihoan/Downloads/일일업무일지(원은정).hwp";
+            //fileName = "C:/ftp/ej/수/일일업무일지(원은정).hwp";
+            fileName = "/Users/jihoan/Downloads/일일업무일지(원은정).hwp";
         } else if (today == 5) {
             fileName = "C:/ftp/ej/목/일일업무일지(안지호).docx";
         } else if (today == 6) {
@@ -282,7 +282,7 @@ public class UserService {
 
         Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
 
-        this.pushEmail("huuc10@gmail.com", fileName, recipient, toAddr[0].getAddress());
+        this.pushEmail2("huuc10@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
     public void pushEmail(String email, String fileName, String recipientTo, String recipientCC) throws Exception {
@@ -314,6 +314,43 @@ public class UserService {
         session.setDebug(false); //for debug
         Message mimeMessage = new MimeMessage(session); //MimeMessage 생성
         mimeMessage.setFrom(new InternetAddress("anjo0070@zianedu.com")); //발신자 셋팅 , 보내는 사람의 이메일주소
+        mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //수신자셋팅
+
+        mimeMessage.setSubject(subject); //제목셋팅
+        mimeMessage.setText(body); //내용셋팅
+
+        Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
+    }
+
+    public void pushEmail2(String email, String fileName, String recipientTo, String recipientCC) throws Exception {
+        String host = "smtp.daum.net";
+        final String username = "huuc10"; //네이버 아이디를 입력해주세요. @nave.com은 입력하지 마시구요.
+        final String password = "qwer779488!"; //네이버 이메일 비밀번호를 입력해주세요.
+        int port=465; //포트번호
+
+        String recipient = email; //받는 사람의 메일주소를 입력해주세요.
+        String subject = Util.returnNowDateByYYMMDD2() + "_일일업무보고발송결과"; //메일 제목 입력해주세요.
+        String body = "파일명 : " + fileName + "\n" + "수신자 : " + recipientTo + "\n" + "참조자 : " + recipientCC; //메일 내용 입력해주세요.
+
+        Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성
+        // SMTP 서버 정보 설정
+        props.put("mail.smtp.host", host);
+        props.put("mail.smtp.port", port);
+        props.put("mail.smtp.auth", "true");
+        props.put("mail.smtp.ssl.enable", "true");
+        props.put("mail.smtp.ssl.trust", host);
+        //Session 생성
+        Session session = Session.getDefaultInstance(props, new javax.mail.Authenticator() {
+            String un=username;
+            String pw=password;
+            protected javax.mail.PasswordAuthentication getPasswordAuthentication() {
+                return new javax.mail.PasswordAuthentication(un, pw);
+            }
+        });
+
+        session.setDebug(false); //for debug
+        Message mimeMessage = new MimeMessage(session); //MimeMessage 생성
+        mimeMessage.setFrom(new InternetAddress("ejwon@zianedu.com")); //발신자 셋팅 , 보내는 사람의 이메일주소
         mimeMessage.setRecipient(Message.RecipientType.TO, new InternetAddress(recipient)); //수신자셋팅
 
         mimeMessage.setSubject(subject); //제목셋팅
