@@ -216,8 +216,8 @@ public class UserService {
         int port=465; //포트번호
 
         String recipient = "anjo0070@naver.com"; //받는 사람의 메일주소를 입력해주세요.
-        String subject = "일일업무보고_" + Util.returnNowDateByYYMMDD2(); //메일 제목 입력해주세요.
-        String body = "일일업무보고 파일 첨부하였습니다.\n" + "수고하세요"; //메일 내용 입력해주세요.
+        String subject = Util.returnNowDateByYYMMDD3() + "_일일업무보고"; //메일 제목 입력해주세요.
+        String body = "안녕하세요.\n" + "개발팀 원은정입니다.\n" + Util.returnNowDateByYYMMDD3() + "_일일업무일지 보내드립니다.\n감사합니다."; //메일 내용 입력해주세요.
         InternetAddress[] toAddr = new InternetAddress[1];
         toAddr[0] = new InternetAddress ("anjo0070@zianedu.com", "피창근", "UTF-8");
 

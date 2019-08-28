@@ -634,6 +634,13 @@ public class Util {
         return sdf.format(today);
     }
 
+    public static String returnNowDateByYYMMDD3() {
+        Date today = new Date();
+        SimpleDateFormat sdf;
+        sdf = new SimpleDateFormat("yyyyMMdd");
+        return sdf.format(today);
+    }
+
     public static String returnHourMinuteTime() {
         Date today = new Date();
         SimpleDateFormat sdf = new SimpleDateFormat("hh:mm:ss");
