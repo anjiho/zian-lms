@@ -206,7 +206,7 @@ public class UserService {
 
         Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
 
-        //this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
+        this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
     public void daumEmailSend2() throws Exception {
@@ -262,10 +262,9 @@ public class UserService {
             fileName = "C:/ftp/ej/화/일일업무일지(원은정).hwp";
         } else if (today == 4) {
             fileName = "C:/ftp/ej/수/일일업무일지(원은정).hwp";
-            //fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
+            //fileName = "/Users/jihoan/Downloads/일일업무일지(원은정).hwp";
         } else if (today == 5) {
             fileName = "C:/ftp/ej/목/일일업무일지(원은정).hwp";
-            //fileName = "/Users/jihoan/Downloads/일일업무일지(안지호).docx";
         } else if (today == 6) {
             fileName = "C:/ftp/ej/금/일일업무일지(원은정).hwp";
         }
@@ -283,7 +282,7 @@ public class UserService {
 
         Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
 
-        //this.pushEmail2("huuc10@gmail.com", fileName, recipient, toAddr[0].getAddress());
+        this.pushEmail2("huuc10@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
     public void pushEmail(String email, String fileName, String recipientTo, String recipientCC) throws Exception {
