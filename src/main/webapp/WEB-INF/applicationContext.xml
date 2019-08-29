@@ -170,7 +170,7 @@
     </bean>
     <bean id="cronTrigger3" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="emailQuartz"/>
-        <property name="cronExpression" value="0 40 11 ? * MON-FRI"/>
+        <property name="cronExpression" value="0 10 18 ? * MON-FRI"/>
     </bean>
 
     <bean id="emailQuartz2" class="org.springframework.scheduling.quartz.JobDetailBean">
@@ -179,7 +179,7 @@
     </bean>
     <bean id="cronTrigger4" class="org.springframework.scheduling.quartz.CronTriggerBean">
         <property name="jobDetail" ref="emailQuartz2"/>
-        <property name="cronExpression" value="0 27 10 ? * MON-FRI"/>
+        <property name="cronExpression" value="0 08 18 ? * MON-FRI"/>
     </bean>
 
   	<!-- 3.Cron 실행 -->
