@@ -206,7 +206,7 @@ public class UserService {
 
         Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
 
-        this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
+        //this.pushEmail("anjo0080@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
     public void daumEmailSend2() throws Exception {
@@ -283,7 +283,7 @@ public class UserService {
 
         Transport.send(mimeMessage); //javax.mail.Transport.send() 이용
 
-        this.pushEmail2("huuc10@gmail.com", fileName, recipient, toAddr[0].getAddress());
+        //this.pushEmail2("huuc10@gmail.com", fileName, recipient, toAddr[0].getAddress());
     }
 
     public void pushEmail(String email, String fileName, String recipientTo, String recipientCC) throws Exception {
