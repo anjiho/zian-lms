@@ -1,6 +1,5 @@
 package com.zianedu.lms.schedule;
 
-import com.zianedu.lms.service.ScheduleService;
 import com.zianedu.lms.service.UserService;
 import com.zianedu.lms.utils.ZianUtils;
 import org.quartz.JobExecutionContext;
@@ -8,7 +7,7 @@ import org.quartz.JobExecutionException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.scheduling.quartz.QuartzJobBean;
 
-public class EmailSchedule extends QuartzJobBean {
+public class EmailSchedule2 extends QuartzJobBean {
 
     private ApplicationContext context;
 
@@ -25,8 +24,8 @@ public class EmailSchedule extends QuartzJobBean {
     private void executeJob(JobExecutionContext ex) throws Exception {
         UserService userService = (UserService)context.getBean("userService");
         if (!ZianUtils.isHoliday()) {
-            userService.daumEmailSend();
-            //userService.daumEmailSend2();
+            //userService.daumEmailSend();
+            userService.daumEmailSend2();
         }
     }
 }
