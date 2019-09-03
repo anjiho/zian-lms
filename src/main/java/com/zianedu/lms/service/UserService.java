@@ -144,7 +144,7 @@ public class UserService {
         String subject = "일일업무보고_" + Util.returnNowDateByYYMMDD2(); //메일 제목 입력해주세요.
         String body = "일일업무보고 파일 첨부하였습니다.\n" + "수고하세요"; //메일 내용 입력해주세요.
         InternetAddress[] toAddr = new InternetAddress[1];
-        toAddr[0] = new InternetAddress ("coo@naver.com", "피창근", "UTF-8");
+        toAddr[0] = new InternetAddress ("coo@zianedu.com", "피창근", "UTF-8");
 
         Properties props = System.getProperties(); // 정보를 담기 위한 객체 생성
         // SMTP 서버 정보 설정
