@@ -35,18 +35,18 @@ public class StatisManageService {
 
     /**
      * 전체 결제 월별 통계
+     *
      * @param searchYear(YYYY)
-     * @return
-     * 차트 :  https://www.highcharts.com/demo/line-labels
+     * @return 차트 :  https://www.highcharts.com/demo/line-labels
      */
     @Transactional(readOnly = true)
     public StatisResultDTO getTotalStatisAtMonth(String searchYear) {
         if ("".equals(searchYear)) return null;
 
-        List<Integer>totalResult = new ArrayList<>();
-        List<Integer>videoResult = new ArrayList<>();
-        List<Integer>academyResult = new ArrayList<>();
-        List<Integer>bookResult = new ArrayList<>();
+        List<Integer> totalResult = new ArrayList<>();
+        List<Integer> videoResult = new ArrayList<>();
+        List<Integer> academyResult = new ArrayList<>();
+        List<Integer> bookResult = new ArrayList<>();
 
         List<StatisResultDTO> list = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey("ALL"));
         List<StatisResultDTO> videoList = statisManageMapper.selectTotalStatisAtMonth(searchYear, GoodsType.getGoodsTypeKey("VIDEO"));
@@ -88,8 +88,8 @@ public class StatisManageService {
 
     /**
      * 전체 결제 년도별 통계
-     * @return
-     * 차트 : https://www.highcharts.com/demo/line-basic
+     *
+     * @return 차트 : https://www.highcharts.com/demo/line-basic
      */
     @Transactional(readOnly = true)
     public StatisResultDTO getTotalStatisAtYear() {
@@ -98,11 +98,11 @@ public class StatisManageService {
         List<StatisResultDTO> academyList = statisManageMapper.selectTotalStatisAtYear(GoodsType.getGoodsTypeKey(GoodsType.ACADEMY.toString()));
         List<StatisResultDTO> bookList = statisManageMapper.selectTotalStatisAtYear(GoodsType.getGoodsTypeKey(GoodsType.BOOK.toString()));
 
-        List<String>yearList = new ArrayList<>();
-        List<Long>totalPriceList = new ArrayList<>();
-        List<Long>videoPriceList = new ArrayList<>();
-        List<Long>academyPriceList = new ArrayList<>();
-        List<Long>bookPriceList = new ArrayList<>();
+        List<String> yearList = new ArrayList<>();
+        List<Long> totalPriceList = new ArrayList<>();
+        List<Long> videoPriceList = new ArrayList<>();
+        List<Long> academyPriceList = new ArrayList<>();
+        List<Long> bookPriceList = new ArrayList<>();
 
         if (list.size() > 0) {
             for (StatisResultDTO resultDTO : list) {
@@ -129,7 +129,7 @@ public class StatisManageService {
             }
         }
         String[] years = StringUtils.arrayListToStringArray(yearList);
-        long[] totalPrices  = Longs.toArray(totalPriceList);
+        long[] totalPrices = Longs.toArray(totalPriceList);
         long[] videoPrices = Longs.toArray(videoPriceList);
         long[] academyPrices = Longs.toArray(academyPriceList);
         long[] bookPrices = Longs.toArray(bookPriceList);
@@ -139,8 +139,8 @@ public class StatisManageService {
 
     /**
      * 전체 결제 일별 통계
-     * @param yyyyMM
-     * 차트 : https://www.highcharts.com/demo/line-basic
+     *
+     * @param yyyyMM 차트 : https://www.highcharts.com/demo/line-basic
      */
     @Transactional(readOnly = true)
     public StatisResultDTO getTotalStatisAtDay(String yyyyMM) {
@@ -151,10 +151,10 @@ public class StatisManageService {
         List<StatisResultDTO> academyList = statisManageMapper.selectTotalStatisAtYearDay(yyyyMM, GoodsType.getGoodsTypeKey(GoodsType.ACADEMY.toString()));
         List<StatisResultDTO> bookList = statisManageMapper.selectTotalStatisAtYearDay(yyyyMM, GoodsType.getGoodsTypeKey(GoodsType.BOOK.toString()));
 
-        List<Long>totalPriceList = new ArrayList<>();
-        List<Long>videoPriceList = new ArrayList<>();
-        List<Long>academyPriceList = new ArrayList<>();
-        List<Long>bookPriceList = new ArrayList<>();
+        List<Long> totalPriceList = new ArrayList<>();
+        List<Long> videoPriceList = new ArrayList<>();
+        List<Long> academyPriceList = new ArrayList<>();
+        List<Long> bookPriceList = new ArrayList<>();
 
         if (totalList.size() > 0) {
             for (StatisResultDTO resultDTO : totalList) {
@@ -190,6 +190,7 @@ public class StatisManageService {
 
     /**
      * 프로모션 월간 통계
+     *
      * @param searchYear
      * @return
      */
@@ -197,9 +198,9 @@ public class StatisManageService {
     public PromotionStatisDTO selectPromotionStatisByMonth(String searchYear) {
         if ("".equals(searchYear)) return null;
 
-        List<Integer>packageResult = new ArrayList<>();
-        List<Integer>yearMemberResult = new ArrayList<>();
-        List<Integer>zianPassResult = new ArrayList<>();
+        List<Integer> packageResult = new ArrayList<>();
+        List<Integer> yearMemberResult = new ArrayList<>();
+        List<Integer> zianPassResult = new ArrayList<>();
 
         List<StatisResultDTO> packageList = statisManageMapper.selectPackageStatisByMonth(searchYear, PromotionPmType.PACKAGE.getPromotionPmKey());
         List<StatisResultDTO> yearMemberList = statisManageMapper.selectPackageStatisByMonth(searchYear, PromotionPmType.YEAR_MEMBER.getPromotionPmKey());
@@ -207,7 +208,7 @@ public class StatisManageService {
 
         String[] monthList = Util.returnYYYY_MM(searchYear);
         if (packageList.size() > 0) {
-            for (int i=0; i<monthList.length; i++) {
+            for (int i = 0; i < monthList.length; i++) {
                 int packagePrice = 0;
                 for (StatisResultDTO resultDTO : packageList) {
                     if (resultDTO.getDay().equals(monthList[i])) {
@@ -219,7 +220,7 @@ public class StatisManageService {
             }
         }
         if (yearMemberList.size() > 0) {
-            for (int i=0; i<monthList.length; i++) {
+            for (int i = 0; i < monthList.length; i++) {
                 int yearMemberPrice = 0;
                 for (StatisResultDTO resultDTO : yearMemberList) {
                     if (resultDTO.getDay().equals(monthList[i])) {
@@ -231,7 +232,7 @@ public class StatisManageService {
             }
         }
         if (zianPassList.size() > 0) {
-            for (int i=0; i<monthList.length; i++) {
+            for (int i = 0; i < monthList.length; i++) {
                 int zianPassPrice = 0;
                 for (StatisResultDTO resultDTO : zianPassList) {
                     if (resultDTO.getDay().equals(monthList[i])) {
@@ -251,6 +252,7 @@ public class StatisManageService {
 
     /**
      * 프로모션 년간 통계
+     *
      * @return
      */
     @Transactional(readOnly = true)
@@ -259,10 +261,10 @@ public class StatisManageService {
         List<StatisResultDTO> yearMemberList = statisManageMapper.selectPackageStatisByYear(PromotionPmType.YEAR_MEMBER.getPromotionPmKey());
         List<StatisResultDTO> zianPassList = statisManageMapper.selectPackageStatisByYear(PromotionPmType.ZIAN_PASS.getPromotionPmKey());
 
-        List<String>yearList = new ArrayList<>();
-        List<Long>packagePriceList = new ArrayList<>();
-        List<Long>yearMemberPriceList = new ArrayList<>();
-        List<Long>zianPassPriceList = new ArrayList<>();
+        List<String> yearList = new ArrayList<>();
+        List<Long> packagePriceList = new ArrayList<>();
+        List<Long> yearMemberPriceList = new ArrayList<>();
+        List<Long> zianPassPriceList = new ArrayList<>();
 
         if (packageList.size() > 0) {
             for (StatisResultDTO resultDTO : packageList) {
@@ -293,6 +295,7 @@ public class StatisManageService {
 
     /**
      * 프로모션 일별 통계
+     *
      * @param yyyyMM
      * @return
      */
@@ -304,9 +307,9 @@ public class StatisManageService {
         List<StatisResultDTO> yearMemberList = statisManageMapper.selectPackageStatisByDay(yyyyMM, PromotionPmType.YEAR_MEMBER.getPromotionPmKey());
         List<StatisResultDTO> zianPassList = statisManageMapper.selectPackageStatisByDay(yyyyMM, PromotionPmType.ZIAN_PASS.getPromotionPmKey());
 
-        List<Long>packagePriceList = new ArrayList<>();
-        List<Long>yearMemberPriceList = new ArrayList<>();
-        List<Long>zianPassPriceList = new ArrayList<>();
+        List<Long> packagePriceList = new ArrayList<>();
+        List<Long> yearMemberPriceList = new ArrayList<>();
+        List<Long> zianPassPriceList = new ArrayList<>();
 
         if (packageList.size() > 0) {
             for (StatisResultDTO resultDTO : packageList) {
@@ -335,6 +338,7 @@ public class StatisManageService {
 
     /**
      * 월간 회원가입 통계
+     *
      * @param searchYear
      * @return
      */
@@ -342,7 +346,7 @@ public class StatisManageService {
     public MemberStatisDTO selectMemberRegStatisByMonth(String searchYear) {
         if ("".equals(searchYear)) return null;
 
-        List<Integer>memberRegResult = new ArrayList<>();
+        List<Integer> memberRegResult = new ArrayList<>();
 
         List<StatisResultDTO> list = statisManageMapper.selectMemberRegStatisByMonth(searchYear);
         if (list.size() > 0) {
@@ -358,12 +362,13 @@ public class StatisManageService {
 
     /**
      * 년간 회원가입 통계
+     *
      * @return
      */
     @Transactional(readOnly = true)
     public MemberStatisDTO selectMemberRegStatisByYear() {
-        List<String>yearList = new ArrayList<>();
-        List<Integer>memberRegResult = new ArrayList<>();
+        List<String> yearList = new ArrayList<>();
+        List<Integer> memberRegResult = new ArrayList<>();
 
         List<StatisResultDTO> list = statisManageMapper.selectMemberRegStatisByYear();
 
@@ -384,6 +389,7 @@ public class StatisManageService {
 
     /**
      * 일간 회원 통계
+     *
      * @param yyyyMM
      * @return
      */
@@ -391,7 +397,7 @@ public class StatisManageService {
     public MemberStatisDTO selectMemberRegStatisByDay(String yyyyMM) {
         if ("".equals(yyyyMM)) return null;
 
-        List<Integer>memberRegResult = new ArrayList<>();
+        List<Integer> memberRegResult = new ArrayList<>();
 
         List<StatisResultDTO> list = statisManageMapper.selectMemberRegStatisByDay(yyyyMM);
         if (list.size() > 0) {
@@ -407,6 +413,7 @@ public class StatisManageService {
 
     /**
      * 월별 정산내역(강사)
+     *
      * @param teacherKey
      * @param searchMonth
      * @return
@@ -445,13 +452,14 @@ public class StatisManageService {
             goodsKindNameRepository.injectGoodsKindNameAny(packageCalculateResult);
         }
         //옵션 정보 가져오기
-        List<TCalculateOptionVO>calculateOptionList = statisManageMapper.selectTCalculateOptionList(teacherKey, searchMonth);
+        List<TCalculateOptionVO> calculateOptionList = statisManageMapper.selectTCalculateOptionList(teacherKey, searchMonth);
 
         return new TeacherCalculateResultDTO(videoCalculateResult, academyCalculateResult, packageCalculateResult, calculateOptionList);
     }
 
     /**
      * 기간별 정산내역(강사)
+     *
      * @param teacherKey
      * @param searchStartDate
      * @param searchEndDate
@@ -498,6 +506,7 @@ public class StatisManageService {
 
     /**
      * 강사 매출 그래프 ( 월별 )
+     *
      * @param teacherKey
      * @param searchYear
      * @return
@@ -506,8 +515,8 @@ public class StatisManageService {
     public StatisResultDTO getTeacherStatisGraphByMonth(int teacherKey, String searchYear) {
         if (teacherKey == 0 && "".equals(searchYear)) return null;
 
-        List<Integer>priceResult = new ArrayList<>();
-        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByMonth(teacherKey, searchYear);
+        List<Integer> priceResult = new ArrayList<>();
+        List<StatisResultDTO> list = statisManageMapper.selectTeacherStatisGraphByMonth(teacherKey, searchYear);
 
         if (list.size() > 0) {
             for (StatisResultDTO resultDTO : list) {
@@ -522,6 +531,7 @@ public class StatisManageService {
 
     /**
      * 강사 매출 그래프 ( 년별 )
+     *
      * @param teacherKey
      * @return
      */
@@ -529,9 +539,9 @@ public class StatisManageService {
     public StatisResultDTO getTeacherStatisGraphByYear(int teacherKey) {
         if (teacherKey == 0) return null;
 
-        List<String>yearList = new ArrayList<>();
-        List<Integer>priceResult = new ArrayList<>();
-        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByYear(teacherKey);
+        List<String> yearList = new ArrayList<>();
+        List<Integer> priceResult = new ArrayList<>();
+        List<StatisResultDTO> list = statisManageMapper.selectTeacherStatisGraphByYear(teacherKey);
 
         if (list.size() > 0) {
             for (StatisResultDTO resultDTO : list) {
@@ -550,6 +560,7 @@ public class StatisManageService {
 
     /**
      * 강사 매출 그래프 ( 일별 )
+     *
      * @param teacherKey
      * @param yyyyMM
      * @return
@@ -558,8 +569,8 @@ public class StatisManageService {
     public StatisResultDTO getTeacherStatisGraphByDay(int teacherKey, String yyyyMM) {
         if (teacherKey == 0 && "".equals(yyyyMM)) return null;
 
-        List<Integer>priceResult = new ArrayList<>();
-        List<StatisResultDTO>list = statisManageMapper.selectTeacherStatisGraphByDay(teacherKey, yyyyMM);
+        List<Integer> priceResult = new ArrayList<>();
+        List<StatisResultDTO> list = statisManageMapper.selectTeacherStatisGraphByDay(teacherKey, yyyyMM);
 
         if (list.size() > 0) {
             for (StatisResultDTO resultDTO : list) {
@@ -574,6 +585,7 @@ public class StatisManageService {
 
     /**
      * 교수 > 정산내역 > 옵션추가
+     *
      * @param teacherKey
      * @param targetDate
      * @param title
