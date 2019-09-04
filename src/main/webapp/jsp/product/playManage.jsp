@@ -664,24 +664,24 @@
                                     <option value="">선택</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>
-                                <select  class="col-sm-3 select2 form-control custom-select"  id="lectureCnt" name="limitCount">
-                                    <option value="">선택</option>
-                                </select>
-                            </div>
+<%--                            <div class="form-group">--%>
+<%--                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>--%>
+<%--                                <select  class="col-sm-3 select2 form-control custom-select"  id="lectureCnt" name="limitCount">--%>
+<%--                                    <option value="">선택</option>--%>
+<%--                                </select>--%>
+<%--                            </div>--%>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
                                 <select class="col-sm-3 select2 form-control custom-select"  id="lectureDayCnt" name="limitDay">
                                     <option value="">선택</option>
                                 </select>
                             </div>
-                            <div class="form-group">
-                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>
-                                <select class="col-sm-3 select2 form-control custom-select"  id="lectureTimeCnt" name="lecTime">
-                                    <option value="">선택</option>
-                                </select>
-                            </div>
+<%--                            <div class="form-group">--%>
+<%--                                <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>--%>
+<%--                                <select class="col-sm-3 select2 form-control custom-select"  id="lectureTimeCnt" name="lecTime">--%>
+<%--                                    <option value="">선택</option>--%>
+<%--                                </select>--%>
+<%--                            </div>--%>
                             <div class="form-group">
                                 <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
                                 <input type="text" class="col-sm-3 form-control" style="display: inline-block;" id="multiple" name="multiple"><span style="font-size:11px;vertical-align:middle;color:#999;font-weight:500;margin-left:10px">*배수가 0이면 무제한</span>

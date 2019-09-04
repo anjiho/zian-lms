@@ -9,7 +9,7 @@ import java.util.List;
  * 회원등급 정의
  */
 public enum MemberGradeType {
-
+    ALL(1000, "전체"),
     BRONZE(0, "브론즈"),
     SILVER(1, "실버"),
     GOLD(2, "골드"),

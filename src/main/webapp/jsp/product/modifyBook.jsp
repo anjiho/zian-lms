@@ -16,8 +16,10 @@
             /*1. 기본정보 가져오기 */
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
-            innerValue("indate", split_minute_getDay(productInfo.indate));
-            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
+
+            $("#indate").datepicker("setDate", split_minute_getDay(productInfo.indate));
+            $("#sellstartdate").datepicker("setDate", split_minute_getDay(productInfo.sellstartdate));
+
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             isCheckboxByNumber("isFree", productInfo.isFree);//무료
@@ -35,9 +37,8 @@
 
             /*2. 옵션 가져오기 */
             var productOptionInfo = info.productOptionInfo;
-            console.log(productOptionInfo);
+                console.log(productOptionInfo);
             if (productOptionInfo.length == 0) {
-                alert(1);
                 var cellData = [
                     function() {return "기본옵션"},
                     function() {return "<input type=\"number\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
@@ -54,16 +55,14 @@
             } else {
                 dwr.util.addRows("optionList", productOptionInfo, [
                     function(data) {return "기본옵션"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
-                    function(data) {return "<input type=\"number\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeyup='saleInputPrice($(this));'>"},
-                    //function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice(this.value"+ ","+ '"' + data.sellPrice + '"' + ","+ '"' + data.priceKey + '"' + ");'>"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeyup='saleInputPrice($(this));'>"},
                     function(data) {return "%"},
-                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
-                    //function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"}
                 ], {escapeHtml:false});
-                $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
+               $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
 
             /*3. 카테고리 가져오기*/
@@ -109,14 +108,13 @@
 
             /*4. 도서정보 가져오기*/
             var bookInfo = info.bookInfo;
-            console.log(bookInfo);
             innerValue("bookKey", bookInfo.bookKey);
             innerHTML("bookCode", bookInfo.bookKey);
             getLectureStatusSelectbox("status", bookInfo.status);//판매상태
             getNewSelectboxListForCtgKey("l_classGroup", "4309", bookInfo.classGroupCtgKey);//급수
             getNewSelectboxListForCtgKey2("l_subjectGroup", "70", bookInfo.subjectCtgKey);//과목
             innerValue("writer", bookInfo.writer);//저자
-            innerValue("cpdate", split_minute_getDay(bookInfo.publishDate));//최신발행일
+            $("#cpdate").datepicker("setDate", split_minute_getDay(bookInfo.publishDate));
             innerValue("isbn", bookInfo.isbn);//ISBN
             innerValue("pageCnt", bookInfo.pageCnt);//페이지수
             innerValue("cpKey", bookInfo.cpKey);//출판사 키

@@ -3,6 +3,8 @@ package com.zianedu.lms.utils;
 import java.io.UnsupportedEncodingException;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.security.SecureRandom;
 import java.text.DecimalFormat;
 import java.util.*;
@@ -194,6 +196,15 @@ public class StringUtils {
         return arrayList.toArray(new String[arrayList.size()]);
     }
 
+    public static int[] arrayListToIntArray(List<Integer> arrayList) {
+        if (arrayList.size() == 0) return null;
+        int[] ret = new int[arrayList.size()];
+        for (int i=0; i<ret.length; i++) {
+            ret[i] = arrayList.get(i).intValue();
+        }
+        return ret;
+    }
+
     /**
      * String[] -> String 변환
      * @param arrayStr
@@ -293,13 +304,6 @@ public class StringUtils {
             return 0;
         }
         return str.length();
-    }
-
-    public static void main(String[] args) {
-        List<String>list = new ArrayList<>();
-        list.add("1");
-        list.add("2");
-        System.out.println(implodeList(",", list));
     }
 
     String lottoNumbers() {

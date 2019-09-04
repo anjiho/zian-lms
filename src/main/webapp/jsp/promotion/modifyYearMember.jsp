@@ -25,13 +25,12 @@
         promotionManageService.getPackageDetailInfo(gKey, function (info) {
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
-            innerValue("indate", split_minute_getDay(productInfo.indate));
+            $("#indate").datepicker("setDate", split_minute_getDay(productInfo.indate));
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             /**
              * 옵션정보 가져오기
              */
             var productOptionInfo = info.productOptionInfo;
-            console.log(productOptionInfo);
             if (productOptionInfo.length == 0) {
                 var cellData = [
                     function () {
@@ -258,8 +257,8 @@
                                     </div>
                                     <div class="form-group row">
                                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
-                                        <div class="col-sm-6 input-group pl-0 pr-0" id="dateRangePicker">
-                                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
+                                        <div class="col-sm-6 input-group pl-0 pr-0">
+                                            <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="indate" id="indate">
                                             <div class="input-group-append">
                                                 <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                             </div>

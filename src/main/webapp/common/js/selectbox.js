@@ -177,12 +177,19 @@ function getNewCategoryList2(tableId, val, val2) {
 
 
 //급수,과목,유형
-function getSelectboxListForCtgKey(tag_id, val) {
+function getSelectboxListForCtgKey(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
-        var html = "<select id='sel_1' class=\"col-sm-5 select2 form-control custom-select\">";
-        html += "<option value='' selected>선택</option>";
+        var selected = "";
+        var nonSelected = "";
+
+        if (val2 == '10000') selected = "selected";
+        if (val2 == '0') nonSelected = "selected";
+
+        var html = "<select id='sel_1' name='sel_1' class=\"col-sm-5 select2 form-control custom-select\">";
+        html += "<option value='10000' "+ selected +">선택</option>";
+        html += "<option value='0' "+ nonSelected +">없음</option>";
         for (var i=0; i<list.length; i++) {
-            if (list[i].key == val) {
+            if (list[i].key == val2) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
             } else {
                 html += "<option value="+list[i].key+">"+ list[i].value +"</option>";
@@ -230,6 +237,7 @@ function getNewSelectboxListForCtgKey(tag_id, val, val2) {
 //급수,과목,유형
 function getNewSelectboxListForCtgKey2(tag_id, val, val2) {
     selectboxService.getSelectboxListForCtgKey(val, function (list) {
+        console.log(list);
         var html = "<select id='selSubjectCtgKey' name='subjectCtgKey' class=\"col-sm-3 select2 form-control custom-select\">";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
@@ -532,9 +540,9 @@ function getCategoryNoTag2(tableId, val, tdNum) {
     });
 }
 
-//모의고사 등록 - 분류 셀렉트박스 //688
+//모의고사 등록 - 분류 셀렉트박스 //133
 function getMockCategoryList(tagId, val) {
-    selectboxService.getCategoryList(688, function (list) {
+    selectboxService.getCategoryList(133, function (list) {
         var html = "<select id='classCtgKey' name='classCtgKey' class='col-sm-3 select2 form-control custom-select'>";
         html += "<option value='' selected>선택</option>";
         for (var i=0; i<list.length; i++) {
@@ -613,8 +621,6 @@ function getTeacherSubjectCategoryList4(val) {
             }
         }
         html += "</select>";
-        //innerHTML(tagId, html);
-        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
         $(".testContent").find("span").eq(0).html(html);
     });
 }
@@ -632,8 +638,6 @@ function getTeacherSubjectCategoryList9(val) {
             }
         }
         html += "</select>";
-        //innerHTML(tagId, html);
-        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
         $(".testContent1").find("span").eq(0).html(html);
     });
 }
@@ -650,8 +654,6 @@ function getTeacherSubjectCategoryList5(val) {
             }
         }
         html += "</select>";
-        //innerHTML(tagId, html);
-        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
         $(".mobiletestContent1").find("span").eq(0).html(html);
     });
 }
@@ -668,8 +670,6 @@ function getTeacherSubjectCategoryList10(val) {
             }
         }
         html += "</select>";
-        //innerHTML(tagId, html);
-        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
         $(".mobiletestContent2").find("span").eq(0).html(html);
     });
 }
@@ -724,32 +724,9 @@ function getTeacherSubjectCategoryList7(val) {
             }
         }
         html += "</select>";
-        //innerHTML(tagId, html);
-        //$("#prod_list").find("tbody").find("tr").eq(index).find("td").eq(0).html(html);
         $(".mobiletestContent").find("span").eq(0).html(html);
     });
 }
-
-
-//강사관리 - 과목 셀렉트박스 123
-function getMemberTeacerCategoryList(val) {
-    selectboxService.getCategoryList(3710, function (list) {
-        var html = "<select name='subjectCtgKey' class='col-sm-3 select2 form-control custom-select'>";
-        html += "<option value='' selected>선택</option>";
-        for (var i=0; i<list.length; i++) {
-            if(list[i].ctgKey == val){
-                html += "<option value="+list[i].ctgKey+" selected>"+ list[i].name +"</option>";
-            }else{
-                html += "<option value="+list[i].ctgKey+">"+ list[i].name +"</option>";
-            }
-        }
-        html += "</select>";
-        innerHTML(tagId, html);
-    });
-}
-
-
-
 
 function getTeacherSubjectCategoryList1(tagId, val) {
     selectboxService.getCategoryList(3710, function (list) {
@@ -766,7 +743,6 @@ function getTeacherSubjectCategoryList1(tagId, val) {
         innerHTML(tagId, html);
     });
 }
-
 
 function defaultCategorySelectbox() {
     var html = "<select id='sel_category' name='selCategory[]' onchange='' class='form-control'>";
@@ -1163,6 +1139,8 @@ function orderSearchSelectbox(tagId, val) {
     else html += "<option value='orderUserName'>주문자 이름</option>";
     if(val == 'orderId') html += "<option value='orderId'>주문번호</option>";
     else html += "<option value='orderId'>주문번호</option>";
+    if(val == 'depositUserName') html += "<option value='orderId'>입금자명</option>";
+    else html += "<option value='depositUserName'>입금자명</option>";
     if(val == 'orderGoodsName') html += "<option value='orderGoodsName'>상품명</option>";
     else html += "<option value='orderGoodsName'>상품명</option>";
     html += "</select>";
@@ -1246,41 +1224,84 @@ function getEmailSelectbox(tagId, val) {
 function getlectureWatchPayStatusSelectbox(tagId, val) {
     var html = "<select id='PayStatus' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
     if(val == '2') selected = 'selected';
-    else if(val == '8') selected = 'selected';
+    else if(val == '8') selected1 = 'selected';
 
     html += "<option value='2' "+ selected +">결제완료</option>";
-    html += "<option value='8' "+ selected +">결제취소</option>";
+    html += "<option value='8' "+ selected1 +">결제취소</option>";
     html += "</select>";
 
     innerHTML(tagId, html);
 }
 //수강내역목록 - 진행상태 셀렉박스
 function getlectureWatchOrderStatusSelectbox(tagId, val) {
-    var html = "<select id='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+    var html = "<select id='orderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
-    if(val == '1') selected = 'selected';
-    else if(val == '2') selected = 'selected';
-    else if(val == '3') selected = 'selected';
-    else if(val == '4') selected = 'selected';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
+    var selected4 = '';
 
+    if(val == 0) selected = 'selected';
+    else if(val == 1) selected1 = 'selected';
+    else if(val == 2) selected2 = 'selected';
+    else if(val == 3) selected3 = 'selected';
+    else if(val == 4) selected4 = 'selected';
 
-    html += "<option value='1' "+ selected +">대기중+시작</option>";
-    html += "<option value='2' "+ selected +">일시정지</option>";
-    html += "<option value='3' "+ selected +">종강</option>";
-    html += "<option value='4' "+ selected +">재시작대기</option>";
+    html += "<option value='0' "+ selected +">대기중</option>";
+    html += "<option value='1' "+ selected1 +">시작</option>";
+    html += "<option value='2' "+ selected2 +">일시정지</option>";
+    html += "<option value='3' "+ selected3 +">종강</option>";
+    html += "<option value='4' "+ selected4 +">재시작대기</option>";
     html += "</select>";
 
     innerHTML(tagId, html);
 }
 
-function getMemberSearchSelectbox(tagId) {
+function getlectureWatchOrderStatusSelectbox1(tagId, val) {
+    var html = "<select id='stopOrderStatus' name='orderStatus' onchange='changePopup();' class='col-sm-5 select2 form-control custom-select'>";
+    var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
+    var selected4 = '';
+
+    if(val == 0) selected = 'selected';
+    else if(val == 1) selected1 = 'selected';
+    else if(val == 2) selected2 = 'selected';
+    else if(val == 3) selected3 = 'selected';
+    else if(val == 4) selected4 = 'selected';
+
+    html += "<option value='0' "+ selected +">대기중</option>";
+    html += "<option value='1' "+ selected1 +">시작</option>";
+    html += "<option value='2' "+ selected2 +">일시정지</option>";
+    html += "<option value='3' "+ selected3 +">종강</option>";
+    html += "<option value='4' "+ selected4 +">재시작대기</option>";
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+
+function getMemberSearchSelectbox(tagId, val) {
+    var nameSelected = "";
+    var idSelected = "";
+    var phoneSelected = "";
+    var mobileSelected = "";
+    var codeSelected = "";
     var html = "<select class='form-control' id='memberSel'>";
-    html +=  "<option value='name'>이름</option>";
-    html +=  "<option value='id'>ID</option>";
-    html +=  "<option value='phone'>전화번호</option>";
-    html +=  "<option value='mobile'>휴대전화번호</option>";
-    html +=  "<option value='code'>코드</option>";
+
+    if (val == 'name') nameSelected = "selected";
+    if (val == 'id') idSelected = "selected";
+    if (val == 'phone') phoneSelected = "selected";
+    if (val == 'mobile') mobileSelected = "selected";
+    if (val == 'code') codeSelected = "selected";
+
+    html +=  "<option value='name' "+ nameSelected +">이름</option>";
+    html +=  "<option value='id' "+ idSelected +">ID</option>";
+    html +=  "<option value='phone' "+ phoneSelected +">전화번호</option>";
+    html +=  "<option value='mobile' "+ mobileSelected +">휴대전화번호</option>";
+    html +=  "<option value='code' "+ codeSelected +">코드</option>";
     html +=  "</select>";
     innerHTML(tagId, html);
 }
@@ -1289,49 +1310,65 @@ function getMemberSearchSelectbox(tagId) {
 function getAcaLecturePayTypeSelectbox(tagId, val) {
     var html = "<select id='payType' class='col-sm-3 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
     if(val == '21') selected = 'selected';
-    else if(val == '22') selected = 'selected';
-    else selected = 'selected';
+    else if(val == '22') selected1 = 'selected';
+    else if(val == '0') selected3 = 'selected';
+    else selected2 = 'selected';
 
+    html += "<option value='0' "+ selected3 +">신용카드</option>";
     html += "<option value='21' "+ selected +">현금</option>";
-    html += "<option value='22' "+ selected +">현금+신용카드</option>";
-    html += "<option value='23' "+ selected +">온라인</option>";
+    html += "<option value='22' "+ selected1 +">현금+신용카드</option>";
+    html += "<option value='23' "+ selected2 +">온라인</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
 
 //카드선택
 function getCardKindSelectbox(tagId, val) {
-    var html = "<select id='cardCode' class='col-sm-3 select2 form-control custom-select'>";
+    var html = "<select id='cardCode' name='cardCode' class='col-sm-3 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
+    var selected4 = '';
+    var selected5 = '';
+    var selected6 = '';
+    var selected7 = '';
+    var selected8 = '';
+    var selected9 = '';
+    var selected10 = '';
+    var selected11 = '';
+    var selected12 = '';
     if(val == '0') selected = 'selected';
-    else if(val == '01') selected = 'selected';
-    else if(val == '03') selected = 'selected';
-    else if(val == '06') selected = 'selected';
-    else if(val == '04') selected = 'selected';
-    else if(val == '12') selected = 'selected';
-    else if(val == '11') selected = 'selected';
-    else if(val == '14') selected = 'selected';
-    else if(val == '16') selected = 'selected';
-    else if(val == '17') selected = 'selected';
-    else if(val == '900') selected = 'selected';
-    else if(val == '901') selected = 'selected';
-    else selected = 'selected';
+    else if(val == '01') selected1 = 'selected';
+    else if(val == '03') selected2 = 'selected';
+    else if(val == '06') selected3 = 'selected';
+    else if(val == '04') selected4 = 'selected';
+    else if(val == '12') selected5 = 'selected';
+    else if(val == '11') selected6 = 'selected';
+    else if(val == '14') selected7 = 'selected';
+    else if(val == '16') selected8 = 'selected';
+    else if(val == '17') selected9 = 'selected';
+    else if(val == '900') selected10 = 'selected';
+    else if(val == '901') selected11 = 'selected';
+    else selected12 = 'selected';
 
     html += "<option value='0' "+ selected +">카드선택</option>";
-    html += "<option value='01' "+ selected +">외환</option>";
-    html += "<option value='03' "+ selected +">롯데</option>";
-    html += "<option value='06' "+ selected +">국민</option>";
-    html += "<option value='04' "+ selected +">현대</option>";
-    html += "<option value='12' "+ selected +">삼성</option>";
-    html += "<option value='11' "+ selected +">BC</option>";
-    html += "<option value='14' "+ selected +">신한</option>";
-    html += "<option value='16' "+ selected +">NH</option>";
-    html += "<option value='17' "+ selected +">하나 SK</option>";
-    html += "<option value='900' "+ selected +">기업</option>";
-    html += "<option value='901' "+ selected +">우리</option>";
-    html += "<option value='999' "+ selected +">기타</option>";
-
+    html += "<option value='01' "+ selected1 +">외환</option>";
+    html += "<option value='03' "+ selected2 +">롯데</option>";
+    html += "<option value='06' "+ selected3 +">국민</option>";
+    html += "<option value='04' "+ selected4 +">현대</option>";
+    html += "<option value='12' "+ selected5 +">삼성</option>";
+    html += "<option value='11' "+ selected6 +">BC</option>";
+    html += "<option value='14' "+ selected7 +">신한</option>";
+    html += "<option value='16' "+ selected8 +">NH</option>";
+    html += "<option value='17' "+ selected9 +">하나 SK</option>";
+    html += "<option value='900' "+ selected10 +">기업</option>";
+    html += "<option value='901' "+ selected11 +">우리</option>";
+    html += "<option value='999' "+ selected12 +">기타</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1339,10 +1376,11 @@ function getCardKindSelectbox(tagId, val) {
 function deviceManageSelectbox(tagId, val) {
     var html = "<select id='deivceSel' class='form-control' onchange='changeDeviceList(this.value);'>";
     var selected = '';
+    var selected1 = '';
     if(val == '0') selected = 'selected';
-    else if(val == '1') selected = 'selected';
+    else if(val == '1') selected1 = 'selected';
     html += "<option value='0' "+ selected +">상품별 디바이스 관리</option>";
-    html += "<option value='1' "+ selected +">모바일 디바이스 관리</option>";
+    html += "<option value='1' "+ selected1 +">모바일 디바이스 관리</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1386,7 +1424,7 @@ function deviceSelectbox1(tagId, val) {
 
 function memberGrageSelectBox(tagId, val) {
     selectboxService.selectMemberGradeTypeSelectbox(function (list) {
-        var html = "<select id='memberGradeSel'  name='memberGradeSel' class='col-sm-5 select2 form-control custom-select'>";
+        var html = "<select id='memberGradeSel' name='memberGradeSel' class='col-sm-5 select2 form-control custom-select'>";
         for (var i=0; i<list.length; i++) {
             if (list[i].key == val) {
                 html += "<option value="+list[i].key+" selected>"+ list[i].value +"</option>";
@@ -1418,12 +1456,14 @@ function memberGrageSelectBox1(tagId, val) {
 function getwelfareDcPercentSelectBox(tagId, val) {
     var html = "<select id='twelfareDcPercentSel'  class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
+    var selected1 = '';
+    var selected2 = '';
     if(val == '0') selected = 'selected';
-    else if(val == '30') selected = 'selected';
-    else if(val == '50') selected = 'selected';
+    else if(val == '30') selected1 = 'selected';
+    else if(val == '50') selected2 = 'selected';
     html += "<option value='0' "+ selected +">없음</option>";
-    html += "<option value='30' "+ selected +">30%</option>";
-    html += "<option value='50' "+ selected +">50%</option>";
+    html += "<option value='30' "+ selected1 +">30%</option>";
+    html += "<option value='50' "+ selected2 +">50%</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1493,12 +1533,12 @@ function searchCounselSelectBox(tagId) {
 function getAuthoritySelectbox(tagId, val) {
     var html = "<select id='authoritSel' class='form-control'>";
     var selected = "";
-
+    var selected2 = "";
     if(val == '0') selected = 'selected';
-    else if(val == '5') selected = 'selected';
+    else if(val == '5') selected2 = 'selected';
 
     html += "<option value=0 "+ selected +">관리자</option>";
-    html += "<option value=5 "+ selected +">강사</option>";
+    html += "<option value=5 "+ selected2 +">강사</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1507,11 +1547,11 @@ function getAuthoritySelectbox(tagId, val) {
 function getAuthorityGradeSelectbox(tagId, val) {
     var html = "<select id='authoritGradeSel' class='form-control'>";
     var selected = "";
-
+    var selected1 = "";
     if(val == '0') selected = 'selected';
-    else if(val == '5') selected = 'selected';
+    else if(val == '5') selected1 = 'selected';
     html += "<option value=0 "+ selected +">관리자</option>";
-    html += "<option value=5 "+ selected +">강사</option>";
+    html += "<option value=5 "+ selected1 +">강사</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1528,13 +1568,15 @@ function getSmsYearSelectbox(tagId, val) {
         if(i == yyyy || i == yearAgo){
             for(var j=mm; j>0; j--) {
                 if(j < 10) j = "0"+j;
-                if (i == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
+                //var date = i+j;
+                if (i+j == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
                 else html += "<option value=" + i + j + ">" + i + "년" + j + "월" + "</option>";
             }
         }else{
             for(var j=12; j>0; j--) {
                 if(j < 10) j = "0"+j;
-                if (i == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
+                //var date = i+j;
+                if (i+j == val) html += "<option value=" + i + j + " selected>" + i + "년" + j + "월" + "</option>";
                 else html += "<option value=" + i + j + ">" + i + "년" + j + "월" + "</option>";
             }
         }
@@ -1549,6 +1591,15 @@ function getSmsSearchSelectbox(tagId) {
     html += "<option value='id'>아이디</option>";
     html += "<option value='phone'>휴대전화번호</option>";
     html += "<option value='content'>내용</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+
+function getOrderDateSearchSelectbox(tagId) {
+    var html = "<select id='dateSearchType' class='form-control'>";
+    html += "<option value='payDate'>주문일자 기준</option>";
+    html += "<option value='depositDate'>입금 확인일자 기준</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

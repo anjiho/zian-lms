@@ -45,8 +45,9 @@
                     function(data) {return InputPhoneNumCheck(data.receiveNumber);},
                     function(data) {return InputPhoneNumCheck(data.sendNumber);},
                     function(data) {return "<a href='javascript:void(0);' color='blue' style='float:left' onclick='MemberDetail(" + data.userKey + ");'>" + data.receiverId + "</a>";},
-                    function(data) {return data.sendMessage;},
                     function(data) {return data.receiverName;},
+                    function(data) {return data.sendMessage;},
+                    function(data) {return data.sendResultName;},
                 ], {escapeHtml:false});
             });
             loadingOut(loading);
@@ -101,6 +102,7 @@
                         <th scope="col" style="width: 15%;">발송일</th>
                         <th scope="col" style="width: 10%;">수신번호</th>
                         <th scope="col" style="width: 10%;">발신번호</th>
+                        <th scope="col" style="width: 4%;">ID</th>
                         <th scope="col" style="width: 4%;">수신자</th>
                         <th scope="col" style="width: 35%;">내용</th>
                         <th scope="col" style="width: 10%;">결과</th>

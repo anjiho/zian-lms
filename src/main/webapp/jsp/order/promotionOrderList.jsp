@@ -5,7 +5,7 @@
 
     button{margin:0;padding:0;font-family:inherit;border:0 none;background:transparent;cursor:pointer}
     button::-moz-focus-inner{border:0;padding:0}
-    .searchDate{overflow:hidden;margin-bottom:-3px;*zoom:1;margin-left: -7%;}
+    .searchDate{overflow:hidden;margin-bottom:-3px;*zoom:1;margin-left: -6%;}
     .searchDate:after{display:block;clear:both;content:''}
     .searchDate li{position:relative;float:left;margin:0 7px 0 0}
     .searchDate li .chkbox2{display:block;text-align:center}
@@ -28,6 +28,7 @@
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
         setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        getOrderDateSearchSelectbox("dateSearchType");//검색 주문일자기준선택
         //fn_search("new");
     }
 
@@ -51,6 +52,7 @@
         var startSearchDate = getInputTextValue('searchStartDate');
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
+        var dateSearchType  = getSelectboxValue('dateSearchType');
 
         var goodsType = 'PACKAGE'; //프로모션
         var isVideoReply = 0;
@@ -60,15 +62,15 @@
             discription: '검색중',
             animationIn: false,
             animationOut: false,
-            defaultApply: 	true,
+            defaultApply: 	true
         });
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
-            payType, isMobile, searchType, searchText, isVideoReply, function (cnt) {
+            payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
-                var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
-                    payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, function (selList) {
+                    payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
@@ -119,6 +121,24 @@
             });
         }
     }
+
+    function excelDownload() {
+        if (confirm("다운로드 받으시겠습니까?")) {
+            var searchType = getSelectboxValue("searchType");
+            var searchText = getInputTextValue("searchText");
+            var searchStartDate = getInputTextValue("searchStartDate");
+            var searchEndDate = getInputTextValue("searchEndDate");
+            var orderStatus = getSelectboxValue("orderStatus");
+            var isOffline = getSelectboxValue("isOffline");
+            var payType = getSelectboxValue("orderPayType");
+            var isMobile = getSelectboxValue("deviceSel");
+
+            var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
+                "&goodsType=PACKAGE" + "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=0"
+
+            $.download('/excelDownload/orderList', url, 'post' );
+        }
+    }
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
@@ -146,7 +166,7 @@
                     <div class="col">
                         <div class="form-group row">
                             <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
-                            <div class="col-sm-5 pl-0 pr-0">
+                            <div class="col-sm-4 pl-0 pr-0">
                                 <tr>
                                     <td>
                                         <ul class="searchDate">
@@ -196,16 +216,19 @@
                                     </td>
                                 </tr>
                             </div>
-                            <div class="col-sm-5 input-group pl-0 pr-0">
+                            <div class="col-sm-3 input-group pl-0 pr-0">
                                 <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
-                                <span> ~ </span>
+                                <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
                                 <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
+                            </div>
+                            <div class="col-sm-2 pl-5 pr-0">
+                                <span id="dateSearchType"></span>
                             </div>
                         </div>
                     </div>
@@ -283,6 +306,9 @@
         <div class="col-md-12">
             <div class="card">
                 <div class="card-body">
+                    <div class="mb-5">
+                        <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="excelDownload();"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
+                    </div>
                     <table class="table table-hover">
                         <thead>
                         <tr>

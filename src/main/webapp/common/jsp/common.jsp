@@ -19,11 +19,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="">
     <meta name="author" content="">
-    <!-- 공통 함수 JS -->
-    <script src="common/js/common.js"></script>
-    <script src="common/js/comPage.js"></script>
-    <script src="common/js/selectbox.js"></script>
-    <script src="common/js/checkbox.js"></script>
 
     <script type='text/javascript' src='/dwr/engine.js'></script>
     <script type='text/javascript' src='/dwr/util.js'></script>
@@ -105,6 +100,15 @@
     <!--daum map api-->
     <script src="http://dmaps.daum.net/map_js_init/postcode.v2.js"></script>
 
+    <script src="common/js/jquery.table2excel.js"></script>
+
+    <!-- 공통 함수 JS -->
+    <script src="common/js/common.js"></script>
+    <script src="common/js/comPage.js"></script>
+    <script src="common/js/selectbox.js"></script>
+    <script src="common/js/checkbox.js"></script>
+
+
 </head>
 <title>지안에듀관리자</title>
 <body onload="init();">
@@ -114,7 +118,16 @@
 <form name="frm" method="get" id="frm">
 <input type="hidden" name="page_gbn" id="page_gbn">
 <input type="hidden" name="param_key" id="param_key">
+<input type="hidden" name="teacher_date_key" id="teacher_date_key">
+<input type="hidden" name="teacher_name_key" id="teacher_name_key">
 <input type="hidden" id="type" name="type" value=""><!--주문관리 : 페이지 왼쪽메뉴 스타일 type-->
+<input type="hidden" name="param_key2" id="param_key2">
+<input type="hidden" name="param_key3" id="param_key3">
+<input type="hidden" name="param_key4" id="param_key4">
+<input type="hidden" name="param_key5" id="param_key5">
+<input type="hidden" name="param_key6" id="param_key6">
+<input type="hidden" name="param_key7" id="param_key7">
+<input type="hidden" name="param_key8" id="param_key8">
 </form>
 <%
     if (authority == 4) {

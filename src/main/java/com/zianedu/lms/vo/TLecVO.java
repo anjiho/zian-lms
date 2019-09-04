@@ -42,4 +42,8 @@ public class TLecVO {
 
     private int goodsId;
 
+    private int lecCount;
+
+    private int lecTotalTime;
+
 }

@@ -63,7 +63,10 @@
 	</select>
 
 	<select id="selectTLecInfo" parameterType="Integer" resultType="com.zianedu.lms.vo.TLecVO">
-		SELECT * FROM T_LEC WHERE G_KEY = #{gKey}
+		SELECT A.*,
+			   (SELECT COUNT(T.CURRI_KEY) FROM T_LEC_CURRI T WHERE T.LEC_KEY = A.LEC_KEY) as lecCount,
+			   (SELECT SUM(T.VOD_TIME) FROM T_LEC_CURRI T WHERE T.LEC_KEY = A.LEC_KEY) as lecTotalTime
+		FROM T_LEC A WHERE A.G_KEY = #{gKey}
 	</select>
 
 	<select id="selectTeacherListByTeacherLink" parameterType="Integer" resultType="com.zianedu.lms.vo.TGoodTeacherLinkVO">
@@ -144,7 +147,7 @@
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>
-		<if test="searchType == 'name'">
+		<if test="searchType == 'title'">
 			AND NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		ORDER BY EXAM_KEY DESC
@@ -157,7 +160,7 @@
 		<if test="searchType == 'code'">
 			AND EXAM_KEY = #{searchText}
 		</if>
-		<if test="searchType == 'name'">
+		<if test="searchType == 'title'">
 			AND NAME LIKE '%'||#{searchText}||'%'
 		</if>
 	</select>
@@ -386,7 +389,7 @@
 			   (SELECT Z.PRICE_KEY FROM t_goods_price_option Z WHERE 1=1 AND Z.g_key = A.g_key AND Z.kind = 102) as VOD_MOBILE_PRICE_KEY
 		FROM T_GOODS A
 		WHERE A.TYPE = 1
-		<if test="searchType == 'name'">
+		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		<if test="searchType == 'code'">
@@ -400,7 +403,7 @@
 		SELECT COUNT (A.G_KEY)
 		FROM T_GOODS A
 		WHERE A.TYPE = 1
-		<if test="searchType == 'name'">
+		<if test="searchType == 'title'">
 			AND A.NAME LIKE '%'||#{searchText}||'%'
 		</if>
 		<if test="searchType == 'code'">

@@ -62,7 +62,7 @@
     function SecessionCancel(secessionKey) {
         if(confirm("취소 하시겠습니까?")) {memberManageService.cancelSecession(secessionKey, function () {isReloadPage();});}
     }
-    
+
     //탈퇴리스트 불러오기
     function fn_search3(val) {
         var paging = new Paging();
@@ -173,7 +173,7 @@
                             <span id="l_searchSel1"></span>
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px">
-                            <input type="text" class="form-control" id="searchText1" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                            <input type="text" class="form-control" id="searchText1" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 10px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>

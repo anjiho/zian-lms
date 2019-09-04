@@ -8,7 +8,7 @@
 	</select>
 
 	<select id="selectTCategoryByParentKey" resultType="com.zianedu.lms.vo.TCategoryVO">
-		SELECT * FROM T_CATEGORY WHERE PARENT_KEY = #{parentKey}
+		SELECT * FROM T_CATEGORY WHERE PARENT_KEY = #{parentKey} ORDER BY POS ASC
 	</select>
 
 	<select id="selectDeliveryCompanyList" resultType="com.zianedu.lms.vo.DeliveryVO">

@@ -1,10 +1,7 @@
 package com.zianedu.lms.service;
 
 
-import com.zianedu.lms.define.datasource.GoodsKindType;
-import com.zianedu.lms.define.datasource.GoodsType;
-import com.zianedu.lms.define.datasource.OrderPayStatusType;
-import com.zianedu.lms.define.datasource.OrderPayType;
+import com.zianedu.lms.define.datasource.*;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.OrderManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
@@ -71,7 +68,7 @@ public class OrderManageService {
     @Transactional(readOnly = true)
     public List<OrderResultDTO> getOrderList(int sPage, int listLimit, String startSearchDate, String endSearchDate, String goodsType,
                                              int payStatus, int isOffline, int payType, int isMobile, String searchType, String searchText,
-                                             int isVideoReply) {
+                                             int isVideoReply, String dateSearchType) {
         if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
@@ -80,14 +77,14 @@ public class OrderManageService {
         List<OrderResultDTO>list = orderManageMapper.selectOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchText, ""), Util
-                        .isNullValue(searchType, ""), isVideoReply
+                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""), isVideoReply, Util.isNullValue(dateSearchType, "")
         );
 
         if (list != null && list.size() > 0) {
             for (OrderResultDTO orderResultDTO : list) {
                 orderResultDTO.setPayTypeName(OrderPayType.getOrderPayTypeStr(orderResultDTO.getPayType()));
                 orderResultDTO.setPayStatusName(OrderPayStatusType.getOrderPayStatusStr(orderResultDTO.getPayStatus()));
+                orderResultDTO.setDeliveryStatusName(DeliveryStatusType.getDeliveryStatusName(orderResultDTO.getDeliverStatus()));
             }
         }
         return list;
@@ -108,12 +105,12 @@ public class OrderManageService {
      */
     @Transactional(readOnly = true)
     public int getOrderListCount(String startSearchDate, String endSearchDate, String goodsType, int payStatus, int isOffline,
-                            int payType, int isMobile, String searchType, String searchText, int isVideoReply) {
+                            int payType, int isMobile, String searchType, String searchText, int isVideoReply, String dateSearchType) {
 
         return orderManageMapper.selectOrderListCount(
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 GoodsType.getGoodsTypeKey(goodsType), payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply
+                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, ""), isVideoReply, Util.isNullValue(dateSearchType, "")
         );
     }
 
@@ -136,7 +133,7 @@ public class OrderManageService {
     @Transactional(readOnly = true)
     public List<OrderResultDTO> getCancelOrderList(int sPage, int listLimit, String startSearchDate, String endSearchDate,
                                                    String startCancelSearchDate, String endCancelSearchDate, int payStatus,
-                                                   int isOffline, int payType, int isMobile, String searchType, String searchText) {
+                                                   int isOffline, int payType, int isMobile, String searchType, String searchText, String dateSearchType) {
         if (sPage == 0 && "".equals(startSearchDate) && "".equals(endSearchDate)) return null;
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
@@ -144,8 +141,9 @@ public class OrderManageService {
         List<OrderResultDTO>list = orderManageMapper.selectCancelOrderList(
                 startNumber, listLimit, Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""), payStatus,
-                isOffline, payType, isMobile, Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
-        );
+                isOffline, payType, isMobile, Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""),
+                Util.isNullValue(dateSearchType, "")
+                );
 
         if (list != null && list.size() > 0) {
             for (OrderResultDTO orderResultDTO : list) {
@@ -178,7 +176,7 @@ public class OrderManageService {
     @Transactional(readOnly = true)
     public int getCancelOrderListCount(String startSearchDate, String endSearchDate, String startCancelSearchDate,
                                        String endCancelSearchDate, int payStatus, int isOffline, int payType, int isMobile,
-                                       String searchType, String searchText) {
+                                       String searchType, String searchText, String dateSearchType) {
         if ("".equals(startSearchDate) && "".equals(endSearchDate)
                 && "".equals(startCancelSearchDate) && "".equals(endCancelSearchDate)) {
             return 0;
@@ -187,7 +185,7 @@ public class OrderManageService {
                 Util.isNullValue(startSearchDate, ""), Util.isNullValue(endSearchDate, ""),
                 Util.isNullValue(startCancelSearchDate, ""), Util.isNullValue(endCancelSearchDate, ""),
                 payStatus, isOffline, payType, isMobile,
-                Util.isNullValue(searchType, ""), Util.isNullValue(searchText, "")
+                Util.isNullValue(searchText, ""), Util.isNullValue(searchType, ""), Util.isNullValue(dateSearchType, "")
         );
     }
 
@@ -438,6 +436,16 @@ public class OrderManageService {
     }
 
     /**
+     * 수강내역 진행상태 가져오기
+     * @param jLecKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public TOrderLecVO getOrderLecInfo(int jLecKey) {
+       return orderManageMapper.selectTOrderLec(jLecKey);
+    }
+
+    /**
      * 수강관리 > 수강내역목록 > 수강시간 조정 > 시간 수정 (배열이아닌 건 바이 건)
      * @param jCurriKey
      * @param jLecKey
@@ -528,7 +536,7 @@ public class OrderManageService {
 
                 if (tLecVO != null && goodsPriceOptionList.size() > 0) {
                     TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
-                            jKey, userKey, goodsKey, goodsPriceOptionList.get(0).getPriceKey(), price,
+                            jKey, userKey, goodsKey, goodsPriceOptionList.get(0).getPriceKey(), price, tGoodsVO.getType(),
                             goodsPriceOptionList.get(0).getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
                             tLecVO.getSubjectCtgKey(), teacherName.get(0), tGoodsVO.getName()
                     );
@@ -584,7 +592,7 @@ public class OrderManageService {
                             teacherName = StringUtils.implodeList(",", teacherNameList);
                         }
                         TOrderGoodsVO tOrderGoodsVO = new TOrderGoodsVO(
-                                jKey, userKey, gKey, priceKey, 0,
+                                jKey, userKey, gKey, priceKey, 0, tGoodsVO.getType(),
                                 tGoodsPriceOptionVO.getKind(), tLecVO.getExamYear(), tLecVO.getClassGroupCtgKey(),
                                 tLecVO.getSubjectCtgKey(), teacherName, tGoodsVO.getName()
                         );
@@ -596,6 +604,10 @@ public class OrderManageService {
                             int limitDay = 0;
                             if ("".equals(endDate)) limitDay = tLecVO.getLimitDay();    //수강일수 설정값이 아닐때
                             else limitDay = Util.getDiffDayCount(Util.convertToYYYYMMDD(startDate), Util.convertToYYYYMMDD(endDate));   //수강일수 설정값일때
+
+                            if (status == 1) {
+                                startDate = Util.returnNow();
+                            }
 
                             TOrderLecVO tOrderLecVO = new TOrderLecVO(
                                     jGKey, status, startDate, limitDay, tLecVO.getMultiple()
@@ -716,6 +728,40 @@ public class OrderManageService {
                 deliveryZipcode, deliveryAddress, deliveryAddressRoad, deliveryAddressAdd
         );
         orderManageMapper.updateOrderDeliveryInfo(deliveryAddressDTO);
+    }
+
+    /**
+     * 수강타입 변경
+     * @param jId
+     * @param goodsKind
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateGoodsKindType(String jId, int goodsKind) {
+        orderManageMapper.updateGoodsKindType(jId, goodsKind);
+    }
+
+    /**
+     * 진행상태 변경
+     * @param jLecKey
+     * @param status
+     * @param startDate
+     * @param limitDay
+     * @param pauseStartDate
+     * @param pauseDay
+     * @param pauseCnt
+     * @param totalPauseCnt
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateOrderLecFromPause(int jLecKey, int status, String startDate, int limitDay, String pauseStartDate,
+                               int pauseDay, int pauseCnt, int totalPauseCnt) {
+        TOrderLecVO tOrderLecVO = new TOrderLecVO(jLecKey, status, startDate, limitDay, pauseStartDate, pauseCnt, pauseDay, totalPauseCnt);
+        orderManageMapper.updateOrderLecFromPause(tOrderLecVO);
+    }
+
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateOrderLec(int jLecKey, int status, String startDate, int limitDay) {
+        TOrderLecVO tOrderLecVO = new TOrderLecVO(jLecKey, status, startDate, limitDay);
+        orderManageMapper.updateOrderLec(tOrderLecVO);
     }
 
 }

@@ -43,7 +43,7 @@
             innerValue("userId", result.userId);
             innerValue("name", result.name);
             innerValue("pwd", result.pwd);
-            innerValue("birth", result.birth);
+            $("#birth").datepicker("setDate", result.birth);
 
             var phoneNum = result.telephoneMobile;
             var phoneNumSplit = phoneNum.split("-");
@@ -321,8 +321,8 @@
         var userId = getInputTextValue("userId");
         var pwd = getInputTextValue("pwd");
         var name = getInputTextValue("name");
-        //var indate = getInputTextValue("indate");
         var birth = getInputTextValue("birth");
+
         var teacherKey = getInputTextValue("teacherKey");
         var userKey =  getInputTextValue("userKey");
         var teacherObj = {

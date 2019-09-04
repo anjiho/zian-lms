@@ -18,11 +18,22 @@
 <script type='text/javascript' src='/dwr/interface/memberManageService.js'></script>
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
+    $( document ).ready(function() {
+        $("#payType").change(function () {
+            var type = getSelectboxValue("payType");
+            if(type == '0'){
+                $("#cardCode").hide();
+            }else{
+                $("#cardCode").show();
+            }
+        });
+    });
+
     function init() {
         getMemberSearchSelectbox("l_memberSearch");
         getProductSearchTypeSelectbox("l_productSearch");
         getAcaLecturePayTypeSelectbox("payType", "");//결제방법
-        getCardKindSelectbox('cardCode', '');//카드선택
+        getCardKindSelectbox('cardCode1', '');//카드선택
         getSelectboxListForCtgKey('affiliationCtgKey','133','');
         menuActive('menu-3', 9);
         fn_search('new');
@@ -42,8 +53,8 @@
         var searchText = getInputTextValue('SearchText');
         var regStartDate = "";
         var regEndDate = "";
-        var grade = "";
-        var affiliationCtgKey = 0;
+        var grade = 1000;
+        var affiliationCtgKey = 10000;
 
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate,
             grade, affiliationCtgKey, function (cnt) {
@@ -161,7 +172,7 @@
             tr.children().eq(0).attr("style", "display:none");
         });
     }
-    
+
     function sellPriceChk(selPrice) {
         var sellPrice1 =  getInputTextValue("sellPrice");
         var result = Number(sellPrice1) -  Number(selPrice);
@@ -253,7 +264,7 @@
                             <span id="l_productSearch"></span>
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 5px">
-                            <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                            <input type="text" class="form-control" id="optionSearchType" onkeypress="if(event.keyCode==13) {fn_search3('new'); return false;}">
                         </div>
                         <div style=" float: left; width: 33%; margin-left: 5px;">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search3('new')">검색</button>
@@ -309,7 +320,7 @@
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
                         <div class="col-sm-8 pl-0 pr-0">
                             <span id="payType"></span>
-                            <span id="cardCode"></span>
+                            <span id="cardCode1"></span>
                         </div>
                     </div>
                     <div class="form-group">

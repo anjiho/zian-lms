@@ -27,11 +27,10 @@
 
         /* 패키시상품 정보 가져오기 */
         promotionManageService.getPackageDetailInfo(gKey, function(info) {
-            console.log(info);
             var productInfo = info.productInfo;
             innerValue("name", productInfo.name);
-            innerValue("indate", split_minute_getDay(productInfo.indate));
-            innerValue("sellstartdate", split_minute_getDay(productInfo.sellstartdate));
+            $("#indate").datepicker("setDate", split_minute_getDay(productInfo.indate));
+            $("#sellstartdate").datepicker("setDate", split_minute_getDay(productInfo.sellstartdate));
             isCheckboxByNumber("isShow", productInfo.isShow);//노출
             isCheckboxByNumber("isSell", productInfo.isSell);//판매
             isCheckboxByNumber("isFree", productInfo.isFree);//무료
@@ -585,7 +584,6 @@
                         };
                         onlineLecInfo.push(data);
                     });
-
 
                     if(confirm("수정 하시겠습니까?")) {
                         promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {

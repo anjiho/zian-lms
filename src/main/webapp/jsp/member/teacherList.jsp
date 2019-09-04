@@ -77,6 +77,19 @@
         goPage('memberManage', 'modifyTeacher');
     }
 
+    function excelDownload() {
+        if (confirm("다운로드 받으시겠습니까?")) {
+            var searchType = getSelectboxValue("memberSel");
+            var searchText = getInputTextValue("searchText");
+            var searchStartDate = getInputTextValue("searchStartDate");
+            var searchEndDate = getInputTextValue("searchEndDate");
+
+            var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate;
+
+            $.download('/excelDownload/teacherList', url, 'post' );
+        }
+    }
+
 </script>
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
@@ -193,7 +206,10 @@
     <div class="col-md-12">
         <div class="card">
             <div class="card-body">
-                <table class="table table-hover">
+                <div class="mb-5">
+                    <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="excelDownload();"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
+                </div>
+                    <table class="table table-hover">
                     <thead>
                     <tr>
                         <th scope="col" width="5%">No.</th>

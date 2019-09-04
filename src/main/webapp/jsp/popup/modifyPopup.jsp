@@ -66,8 +66,8 @@
 
             innerHTML("code", result.popupKey);
             innerValue("name", result.name);
-            innerValue("startDate", split_minute_getDay(result.startDate));
-            innerValue("endDate", split_minute_getDay(result.endDate));
+            $("#startDate").datepicker("setDate", split_minute_getDay(result.startDate));
+            $("#endDate").datepicker("setDate", split_minute_getDay(result.endDate));
             innerValue("height", result.height);
             innerValue("width", result.width);
             innerValue("x", result.x);

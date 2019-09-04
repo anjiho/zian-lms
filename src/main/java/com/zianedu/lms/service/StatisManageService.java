@@ -592,10 +592,11 @@ public class StatisManageService {
      * @param price
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void saveTeacherCalculateOptionInfo(int teacherKey, String title, int price) {
+    public void saveTeacherCalculateOptionInfo(int teacherKey, String title, int price, String yyyymm) throws Exception {
         if (teacherKey == 0 && "".equals(title)) return;
+        String yyyy_mm = Util.convertDateFormat(yyyymm);
         TCalculateOptionVO tCalculateOptionVO = new TCalculateOptionVO(
-                teacherKey, title, price
+                teacherKey, title, price, yyyy_mm
         );
         statisManageMapper.insertTCalculateOption(tCalculateOptionVO);
     }

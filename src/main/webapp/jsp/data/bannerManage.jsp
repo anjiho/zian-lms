@@ -13,6 +13,8 @@
         menuActive('menu-0', 2);
         getSubDomainList("sel_subDomain", subDomainSel);//서브도메인 select 불러오기
         changeBox2(subDomainSel);
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", "");//과목
+        selectTeacherSelectbox("teacherSel", "");
     }
     //파일 선택시 파일명 보이게 하기
     $(document).on('change', '.custom-file-input', function() {
@@ -39,7 +41,13 @@
                 for (var i = 0; i < selList.length; i++) {
                     var cmpList = selList[i];
                     var result = cmpList.result;
-                    var addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
+                    var addBtn = "";
+                    if(result.name == "지안교수진"){
+                        addBtn = "<button type='button' onclick='popup_teacher_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#teacherModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
+                    }else{
+                        addBtn = "<button type='button' onclick='popup_save(0,"+result.ctgKey+",0,)' data-toggle=\"modal\" data-target=\"#myModal\" class=\"row btn btn-info btn-sm\" style=\"float: right;margin-right: 1.25rem\">추가</button>";
+                    }
+
                     var posListBtn = "  <button type=\"button\" class=\"btn btn-outline-info btn-sm float-right mr-3 mb-3\" onclick=\"changeBannerList("+i+");\">순서변경저장</button>";
                     if(result.name){
                         var bannerNameHtml = "<div class='card'>";
@@ -60,8 +68,6 @@
                     bannerContentHtml += ' <tr>';
                     bannerContentHtml += '<th width="25%">타이틀</th>';
                     bannerContentHtml += '<th width="25%">이미지명</th>';
-                    //bannerContentHtml += '<th width="10%">배경이미지</th>';
-                    //bannerContentHtml += '<th width="10%">배경색상</th>';
                     bannerContentHtml += '<th width="10%">새창열기</th>';
                     bannerContentHtml += '<th width="20%">링크URL</th>';
                     bannerContentHtml += '<th width="10%"></th>';
@@ -83,7 +89,12 @@
                     var dataList =  "dataList"+i;
                     for (var j = 0; j < selList2.length; j++) {
                         var cmpList1 = selList2[j];
-                        var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm delBtn">삭제</button>';
+                        if(result.name == "지안교수진"){
+                            var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#teacherModal\" onclick="teacherPopup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm delBtn">삭제</button>';
+                        }else{
+                            var btn = '<button type="button" data-toggle=\"modal\" data-target=\"#myModal\" onclick="popup('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-success btn-sm">수정</button><button type="button" onclick="bannerDelete('+cmpList1.ctgInfoKey+","+cmpList1.ctgKey+","+cmpList1.pos+')"  class="btn btn-outline-danger btn-sm delBtn">삭제</button>';
+                        }
+
                         var bitText = "";
 
                         if(cmpList1.valueBit1 == "1") bitText = "<i class=\"mdi mdi-check\" style=\"color:green;\"></i>";
@@ -117,7 +128,6 @@
         $('#myModal').show();
         dataManageService.getBannerDetailInfo(val, function (selList) {
             $("#bannerKey").val(val);
-            innerValue("bannerKey",val);
             $("#ctgKey").val(ctgKey);
             $("#pos").val(pos);
             innerValue("title",selList.value5);
@@ -131,11 +141,33 @@
             }
         });
     }
+
+    //지안교수진 팝업 수정
+    function teacherPopup(val,ctgKey,pos) {
+        dataManageService.getBannerDetailInfo(val, function (selList) {
+            getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", selList.valueLong1);//과목
+            selectTeacherSelectbox("teacherSel", selList.valueLong2);
+            $("#teacherBannerKey").val(val);
+            $("#teacherCtgKey").val(ctgKey);
+            $("#teacherPos").val(pos);
+            $("#bannerTeacherLink").val(selList.value4);
+            $("#newPopYn1").prop('checked', selList.valueBit1);
+        });
+    }
+    
+    function popup_teacher_save(val,ctgKey,pos) {
+        $("#teacherBannerKey").val(val);
+        $("#teacherCtgKey").val(ctgKey);
+        $("#newPopYn1").prop('checked', false);
+        $("#bannerTeacherLink").val("");
+        getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", "");//과목
+        selectTeacherSelectbox("teacherSel", "");
+    }
+    
     function popup_save(val,ctgKey,pos) { //추가팝업
         $("#title").val("");
         $("#bannerColor").val("");
         $("#bannerLink").val("");
-        //$("#cma_image").css('display', 'none');
         $('.custom-file-control').html("");
         $("#bannerKey").val(val);
         $("#ctgKey").val(ctgKey);
@@ -191,6 +223,36 @@
                     goPage('dataManage', 'bannerSave');
                 }
             });
+        }
+    }
+
+    //지안교수진 팝업 수정
+    function teacherModify() {
+        var ctgKey        = getInputTextValue("teacherCtgKey");
+        var subjectCtgKey = getSelectboxValue("selSubjectCtgKey");
+        var teacherKey    = getSelectboxValue("sel_1");
+        var url   = getInputTextValue("bannerTeacherLink");
+        var isNew = "";
+        if($("input:checkbox[id='newPopYn1']:checked").val()=='on') isNew = '1';
+        else isNew = '0';
+        var ctgInfoKey =  getInputTextValue("teacherBannerKey");
+
+        if(ctgInfoKey == '0'){
+            if(confirm("저장하시겠습니까?")){
+                dataManageService.saveTeacherBannerInfo(ctgKey, subjectCtgKey, teacherKey, isNew, url, function () {
+                    var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    innerValue("param_key", sel_subDomain);
+                    goPage('dataManage', 'bannerSave');
+                });
+            }
+        }else{
+            if(confirm("수정하시겠습니까?")){
+                dataManageService.modifyTeacherBannerInfo(ctgInfoKey, subjectCtgKey, teacherKey, isNew, url, function () {
+                    var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    innerValue("param_key", sel_subDomain);
+                    goPage('dataManage', 'bannerSave');
+                });
+            }
         }
     }
 
@@ -378,7 +440,65 @@
                             </div>
                         </div>
                         <div style="text-align: center;">
-                            <button type="button" class="btn btn-info" style="text-align: center" onclick="modify();">저장</button>
+                            <button type="button" class="btn btn-info" style="text-align: center" onkeypress="if(event.keyCode==13) {return false;}" onclick="modify();">저장</button>
+                        </div>
+                    </div>
+                    <!-- //modal body -->
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="modal fade" id="teacherModal" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog" role="document" style="max-width: 581px;">
+            <div class="modal-content">
+                <input type="hidden" id="teacherBannerKey" value="">
+                <input type="hidden" id="teacherPos" value="">
+                <input type="hidden" id="teacherCtgKey" value="">
+                <div class="modal-header">
+                    <h5 class="modal-title">배너추가</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <form>
+                    <!--<input type="hidden" id="key" value="">-->
+                    <!-- modal body -->
+                    <div class="modal-body">
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">과목</label>
+                            <div class="col-sm-9">
+                                <span id="l_subjectGroup"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">강사</label>
+                            <div class="col-sm-9">
+                                <span id="teacherSel"></span>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">새창열기</label>
+                            <div class="col-sm-9">
+                                <div style="margin-top: -23px;">
+                                    OFF
+                                    <label class="switch">
+                                        <input type="checkbox" id="newPopYn1" name="newPopYn1" style="display:none;">
+                                        <span class="slider"></span>
+                                    </label>
+                                    ON
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-3 text-center control-label col-form-label">링크url</label>
+                            <div class="col-sm-9">
+                                <input type="text" class="form-control" id="bannerTeacherLink">
+                            </div>
+                        </div>
+                        <div style="text-align: center;">
+                            <button type="button" class="btn btn-info" style="text-align: center" onkeypress="if(event.keyCode==13) {return false;}" onclick="teacherModify();">저장</button>
                         </div>
                     </div>
                     <!-- //modal body -->

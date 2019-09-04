@@ -3,10 +3,9 @@ package com.zianedu.lms.service;
 import com.zianedu.lms.define.datasource.TCategoryParentKeyType;
 import com.zianedu.lms.dto.ResultDTO;
 import com.zianedu.lms.mapper.DataManageMapper;
-import com.zianedu.lms.vo.TCategoryOtherInfoVO;
-import com.zianedu.lms.vo.TCategoryVO;
-import com.zianedu.lms.vo.TScheduleVO;
-import com.zianedu.lms.vo.TSearchKeywordVO;
+import com.zianedu.lms.mapper.UserMapper;
+import com.zianedu.lms.utils.Util;
+import com.zianedu.lms.vo.*;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +25,9 @@ public class DataManageService {
 
     @Autowired
     private DataManageMapper dataManageMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     /**
      * 카테고리 리스트 가져오기(key : parentKey)
@@ -274,6 +276,46 @@ public class DataManageService {
     }
 
     /**
+     *
+     * @param ctgKey 배너 카테고리 키
+     * @param subjectCtgKey 과목 카테고리 카
+     * @param teacherKey 강사 키
+     * @param isNew 새창여부 (0 : OFF, 1: ON)
+     * @param url (새창 URL)
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int saveTeacherBannerInfo(int ctgKey, int subjectCtgKey, int teacherKey, int isNew, String url) {
+        TCategoryOtherInfoVO otherInfoVO = new TCategoryOtherInfoVO();
+        Integer lastPosNum= dataManageMapper.selectTCategoryOtherInfoLastPosNumber(ctgKey);
+
+        TUserVO userVO = userMapper.selectTeacherInfo(teacherKey);
+        TCategoryVO subjectInfo = dataManageMapper.selectTCategoryInfoByCtgKey(subjectCtgKey);
+
+        String teacherName = userVO.getName();
+        String subjectName = subjectInfo.getName();
+        String teacherBannerTitle = "[" + subjectName + "]" + teacherName;
+
+        otherInfoVO.setCtgKey(ctgKey);
+        otherInfoVO.setType(1);
+        otherInfoVO.setValue1("");
+        otherInfoVO.setValue2("");
+        otherInfoVO.setValue3("");
+        otherInfoVO.setValue4(Util.isNullValue(url, ""));
+        otherInfoVO.setValue5(teacherBannerTitle);
+        otherInfoVO.setValueLong1(subjectCtgKey);
+        otherInfoVO.setValueLong2(teacherKey);
+        otherInfoVO.setValueBit1(isNew);
+
+        if (lastPosNum == null) {
+            otherInfoVO.setPos(0);
+        } else {
+            otherInfoVO.setPos(lastPosNum + 1);
+        }
+        dataManageMapper.insertTCategoryOtherInfo(otherInfoVO);
+        return otherInfoVO.getCtgInfoKey();
+    }
+
+    /**
      * 시험일정 등록하기
      * @param title
      * @param startDate
@@ -383,6 +425,37 @@ public class DataManageService {
     public void modifySearchKeyword(int searchKeywordKey, String keyword) {
         if (searchKeywordKey == 0) return;
         dataManageMapper.updateTSearchKeyword(searchKeywordKey, keyword);
+    }
+
+    /**
+     * 교수진 배너 수정하기
+     * @param ctgInfoKey
+     * @param subjectCtgKey
+     * @param teacherKey
+     * @param isNew
+     * @param url
+     * @return
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public int modifyTeacherBannerInfo(int ctgInfoKey, int subjectCtgKey, int teacherKey, int isNew, String url) {
+        TCategoryOtherInfoVO otherInfoVO = new TCategoryOtherInfoVO();
+
+        TUserVO userVO = userMapper.selectTeacherInfo(teacherKey);
+        TCategoryVO subjectInfo = dataManageMapper.selectTCategoryInfoByCtgKey(subjectCtgKey);
+
+        String teacherName = userVO.getName();
+        String subjectName = subjectInfo.getName();
+        String teacherBannerTitle = "[" + subjectName + "]" + teacherName;
+
+        otherInfoVO.setCtgInfoKey(ctgInfoKey);
+        otherInfoVO.setValue4(Util.isNullValue(url, ""));
+        otherInfoVO.setValue5(teacherBannerTitle);
+        otherInfoVO.setValueLong1(subjectCtgKey);
+        otherInfoVO.setValueLong2(teacherKey);
+        otherInfoVO.setValueBit1(isNew);
+
+        dataManageMapper.updateTCategoryOtherInfoFromTeacherBanner(otherInfoVO);
+        return otherInfoVO.getCtgInfoKey();
     }
 
 }

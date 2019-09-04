@@ -12,10 +12,236 @@
     function init() {
         menuActive('menu-1', 1);
         getProductSearchTypeSelectbox("l_productSearch");
+        productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
+            if (selList.productInfo) {/*---기본정보---*/
+                innerValue("name", selList.productInfo.name);//이름
+                innerValue("indate", split_minute_getDay(selList.productInfo.indate));
+                innerValue("sellstartdate", split_minute_getDay(selList.productInfo.sellstartdate));
+                isCheckboxByNumber("isShow", selList.productInfo.isShow);//노출
+                isCheckboxByNumber("isSell", selList.productInfo.isSell);//판매
+                isCheckboxByNumber("isFree", selList.productInfo.isFree);//무료
+                isCheckboxByNumber("isFreebieDeliveryFree", selList.productInfo.isFreebieDeliveryFree);//무료
+                if (selList.productInfo.imageList != null) {
+                    $('.custom-file-control').html(fn_clearFilePath(selList.productInfo.imageList));//리스트이미지
+                }
+                if (selList.productInfo.imageView != null) {
+                    $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
+                }
+                innerValue("calculateRate", selList.productInfo.calculateRate);
+                $("#emphasis").val(selList.productInfo.emphasis);//강조표시
+                $("#description").summernote("code", selList.productInfo.description);
+            }
+
+            var productOptionInfo = selList.productOptionInfo;
+
+            if (productOptionInfo.length == 0) {
+                var cellData = [
+                    function() {return getVideoOptionTypeSelectbox("");},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
+                    function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
+                    function() {return "<span style='vertical-align: middle'>%</span>"},
+                    function() {return "<span id='sum_0' style='vertical-align: middle;'></span>"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                ];
+                dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
+                $('#optionList tr').eq(0).attr("style", "display:none");
+            } else {
+                dwr.util.addRows("optionList", productOptionInfo, [
+                    function(data) {return getVideoOptionTypeSelectbox(data.kind);},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
+                    function(data) {return "<input type=\"text\" class=\"form-control\" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
+                    function(data) {return "%"},
+                    function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
+                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
+                ], {escapeHtml:false});
+                $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
+            }
+            /**
+             * 학원 카테고리 정보 가져오기
+             */
+            var productCategoryInfo = selList.productCategoryInfo;
+            var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+
+            dwr.util.addRows("categoryList", productCategoryInfo, [
+                function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
+                function()     {return "지안에듀";},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
+                function()     {return nextIcon},
+                function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
+                function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
+                function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
+                function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
+                // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
+            ], {escapeHtml:false});
+
+            $('#categoryList tr').each(function(){
+                var tr = $(this);
+                tr.children().eq(0).attr("style", "display:none");
+                tr.children().eq(11).attr("style", "display:none");
+            });
+            /**
+             * 학원 강좌정보 가져오기
+             */
+            if (selList.productLectureInfo == null) {
+                getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
+                getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
+                getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
+                getLectureStatusSelectbox("status", "");//강좌정보- 진행상태
+                getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", "");//수강일수
+                getLectureCountSelectbox("lecTime", "");//강좌시간
+                getExamPrepareSelectbox("examYear", "");//시험대비년도 셀렉트박스
+                getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", "");//수강일수
+                getLectureCountSelectbox("lecTime", "");//강좌시간
+                innerValue("multiple", gfn_zeroToZero("0"));//배수
+            } else {
+                var productLectureInfo = selList.productLectureInfo;
+                getNewSelectboxListForCtgKey("l_classGroup", "4309", productLectureInfo.classGroupCtgKey);
+                getNewSelectboxListForCtgKey2("l_subjectGroup", "70", productLectureInfo.subjectCtgKey);
+                getNewSelectboxListForCtgKey3("l_stepGroup", "202", productLectureInfo.stepCtgKey);
+                getLectureStatusSelectbox("status", productLectureInfo.status);//강좌정보- 진행상태
+                getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
+                getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
+                getExamPrepareSelectbox("examYear", productLectureInfo.examYear);//시험대비년도 셀렉트박스
+                //getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
+                getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
+                //getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
+                innerValue("multiple", gfn_zeroToZero(productLectureInfo.multiple));//배수
+                innerValue("curri_lecKey", productLectureInfo.lecKey);//leckey
+                innerValue("lecKey", productLectureInfo.lecKey);//leckey
+                innerHTML("l_lecCount", productLectureInfo.lecCount == 0 ? "0" : productLectureInfo.lecCount);
+                innerHTML("l_lecTotalTime", productLectureInfo.lecTotalTime == 0 ? "0" : productLectureInfo.lecTotalTime);
+            }
+
+            //동영상 - 강의목록 불러오기
+            productManageService.getLectureCurriList(selList.productLectureInfo.lecKey, function (selList) {
+                $( "#lectureCurriTabel tbody" ).sortable({
+                    update: function( event, ui ) {
+                        $(this).children().each(function(index) {
+                            $(this).find('tr').last().html(index + 1);
+                        });
+                    }
+                });
+                if (selList.length > 0) {
+                    for (var i = 0; i < selList.length; i++) {
+                        var cmpList = selList[i];
+                        if (cmpList != undefined) {
+                            var text = "'CURRI'";
+                            var deleteBtn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
+                            var modifyBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+')"  class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#lectureListPopup">수정</button>';
+                            var textYn = "";
+                            var textShow = "";
+                            if(cmpList.isShow == '1') textYn = '<i class="mdi mdi-check" style="color:green;"></i>';
+                            else textYn = '<i class="mdi mdi-close" style="color: red"></i>';
+
+                            if(cmpList.isSample =='1') textShow = '<i class="mdi mdi-check" style="color:green;"></i>';
+                            else textShow = '<i class="mdi mdi-close" style="color: red"></i>';
+
+                            var cellData = [
+                                function (data) {return cmpList.name;},
+                                function (data) {return cmpList.vodTime;},
+                                function (data) {return textYn;},
+                                function (data) {return textShow;},
+                                function (data) {return modifyBtn+deleteBtn;}
+                            ];
+                            dwr.util.addRows(lectureCurriList, [0], cellData, {
+                                rowCreator:function(options) {
+                                    var row = document.createElement("tr");
+                                    var index = options.rowIndex * 50;
+                                    row.id = cmpList.curriKey;
+                                    row.className = "ui-state-default even ui-sortable-handle";
+                                    return row;
+                                },
+                                escapeHtml:false});
+                        }
+                    }
+                }
+            });
+
+            /**
+             * 강사 목록 가져오기
+             */
+            var productTeacherInfo = selList.productTeacherInfo;
+            var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+
+            if (productTeacherInfo.length == 0) {
+                var cellData = [
+                    function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
+                    function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
+                    function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
+                    function() {return nextIcon},
+                    function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
+                    function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' style=\"display: inline-block;width:60%\">%"},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                ];
+                dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                $('#teacherList tr').eq(0).attr("style", "display:none");
+                $('#teacherList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
+                });
+            } else {
+                for (var i = 0; i < productTeacherInfo.length; i++) {
+                    var cmpList = productTeacherInfo[i];
+                    var cellData = [
+                        function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
+                        function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
+                        function() {return cmpList.subjectName},
+                        function() {return nextIcon},
+                        function() {return cmpList.teacherName},
+                        function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' value='"+ cmpList.calculateRate +"' style=\"display: inline-block;width:60%\">%"},
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    ];
+                    dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                }
+                $('#teacherList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
+                });
+            }
+            /**
+             * 강의교재 항목 가져오기
+             */
+            if(selList.productOtherInfo.length > 0){
+                var productOtherInfo = selList.productOtherInfo;
+                dwr.util.addRows("bookList", productOtherInfo[0], [
+                    function(data) {return data.goodsName;},
+                    function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
+                    function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
+                ], {escapeHtml:false});
+
+                for (var i=0; i<productOtherInfo[0].length; i++) {
+                    var cmpList = productOtherInfo[0][i];
+                    var valueBit = cmpList.valueBit;
+                    var resKey = cmpList.resKey;
+                    var checkboxId = "isBookMain_" + resKey;
+
+                    var isCheck = true;
+                    if (valueBit == "0") isCheck = false;
+                    isCheckbox(checkboxId, isCheck);
+
+                }
+                $('#bookList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
+                });
+            }
+        });
     }
     var gKey = '<%=gKey%>';
     $( document ).ready(function() {
-        playDetailList();//정보불러오기
         $('#description').summernote({ //기본정보-에디터
             height: 430,
             minHeight: null,
@@ -43,6 +269,7 @@
                 }
             }
         });
+
         //탭 메뉴 색상 변경
         $("#playForm ul").each(function(idx) {
             var ul = $(this);
@@ -165,239 +392,12 @@
     function injectTeacherKey(val) {
         $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
     }
-        function setCategoryCtgKey(val, tagId) {
-            innerValue("categoryCtgKey_" + tagId, val);
-        }
+    function setCategoryCtgKey(val, tagId) {
+        innerValue("categoryCtgKey_" + tagId, val);
+    }
 
-        function playDetailList() { //동영상정보
-            productManageService.getProductDetailInfo(gKey, 'VIDEO', function (selList) {
-                console.log(selList);
-                if (selList.productInfo) {/*---기본정보---*/
-                    innerValue("name", selList.productInfo.name);//이름
-                    innerValue("indate", split_minute_getDay(selList.productInfo.indate));//등록일
-                    innerValue("sellstartdate", split_minute_getDay(selList.productInfo.sellstartdate));//판매시작일
-                    isCheckboxByNumber("isShow", selList.productInfo.isShow);//노출
-                    isCheckboxByNumber("isSell", selList.productInfo.isSell);//판매
-                    isCheckboxByNumber("isFree", selList.productInfo.isFree);//무료
-                    isCheckboxByNumber("isFreebieDeliveryFree", selList.productInfo.isFreebieDeliveryFree);//무료
-                    if (selList.productInfo.imageList != null) {
-                        $('.custom-file-control').html(fn_clearFilePath(selList.productInfo.imageList));//리스트이미지
-                    }
-                    if (selList.productInfo.imageView != null) {
-                        $('.custom-file-control1').html(fn_clearFilePath(selList.productInfo.imageView));//상세이미지
-                    }
-                    innerValue("calculateRate", selList.productInfo.calculateRate);
-                    $("#emphasis").val(selList.productInfo.emphasis);//강조표시
-                    $("#description").summernote("code", selList.productInfo.description);
-                }
-            /**
-             * 옵션정보 가져오기
-             */
-                var productOptionInfo = selList.productOptionInfo;
+    function playDetailList() { //동영상정보
 
-                if (productOptionInfo.length == 0) {
-                    var cellData = [
-                        function() {return getVideoOptionTypeSelectbox("");},
-                        function() {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_0'>"},
-                        function() {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_0'>"},
-                        function() {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_0'>"},
-                        function() {return "<input type=\"text\" class=\"form-control \" name=\"expendPercent[]\" id='point_0' onkeypress='saleInputPrice($(this));'>"},
-                        function() {return "<span style='vertical-align: middle'>%</span>"},
-                        function() {return "<span id='sum_0' style='vertical-align: middle;'></span>"},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
-                    ];
-                    dwr.util.addRows("optionList", [0], cellData, {escapeHtml: false});
-                    $('#optionList tr').eq(0).attr("style", "display:none");
-                } else {
-                    dwr.util.addRows("optionList", productOptionInfo, [
-                        function(data) {return getVideoOptionTypeSelectbox(data.kind);},
-                        function(data) {return "<input type=\"text\" class=\"form-control \" name=\"price[]\" id='price_" + data.priceKey + "'  value='"+ format(data.price) +"' >"},
-                        function(data) {return "<input type=\"text\" class=\"form-control \" name=\"sellPrice[]\" id='sellPrice_" + data.priceKey + "'  value='"+ format(data.sellPrice) +"' >"},
-                        function(data) {return "<input type=\"text\" class=\"form-control \" name=\"point[]\" id='point_" + data.priceKey + "'  value='"+ format(data.point) +"' >"},
-                        function(data) {return "<input type=\"text\" class=\"form-control\" name=\"expendPercent[]\" id='point_" + data.priceKey + "'  value='"+ data.extendPercent +"' onkeypress='saleInputPrice($(this));'>"},
-                        function(data) {return "%"},
-                        function(data) {return "<span id='sum_" + data.priceKey + "'>" + format(Math.round(data.sellPrice -((data.sellPrice * data.extendPercent) / 100))) + "</span>"},
-                        function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('optionTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"}
-                    ], {escapeHtml:false});
-                    $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
-                }
-                /**
-                 * 학원 카테고리 정보 가져오기
-                 */
-                var productCategoryInfo = selList.productCategoryInfo;
-                var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-
-               dwr.util.addRows("categoryList", productCategoryInfo, [
-                    function(data) {return "<input type='hidden' name='inputCtgKey[]' value='"+data[0].ctgKey+"'>";},
-                    function()     {return "지안에듀";},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[2].name : data[3].name;},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[1].name : data[2].name;},
-                    function()     {return nextIcon},
-                    function(data) {return data[3].name == "지안에듀"? data[0].name : data[1].name;},
-                    function(data) {return data[3].name == "지안에듀"? "" : nextIcon;},
-                    function(data) {return data[3].name == "지안에듀"? "" : data[0].name;},
-                    function(data) {return "<button type=\"button\" onclick=\"deleteTableRow('categoryTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>"},
-                    // function(data) {return "<input type='hidden' name='selOption[]' value='" + data[0].ctgKey + "'>";}
-                ], {escapeHtml:false});
-
-                $('#categoryList tr').each(function(){
-                    var tr = $(this);
-                    tr.children().eq(0).attr("style", "display:none");
-                    tr.children().eq(11).attr("style", "display:none");
-                });
-                /**
-                 * 학원 강좌정보 가져오기
-                 */
-                if (selList.productLectureInfo == null) {
-                    getNewSelectboxListForCtgKey("l_classGroup", "4309", "");
-                    getNewSelectboxListForCtgKey2("l_subjectGroup", "70", "");
-                    getNewSelectboxListForCtgKey3("l_stepGroup", "202", "");
-                    getLectureStatusSelectbox("status", "");//강좌정보- 진행상태
-                    getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
-                    getClassRegistraionDaySelectbox("limitDay", "");//수강일수
-                    getLectureCountSelectbox("lecTime", "");//강좌시간
-                    getExamPrepareSelectbox("examYear", "");//시험대비년도 셀렉트박스
-                    getLectureCountSelectbox("limitCount", "");//강좌정보 강좌수
-                    getClassRegistraionDaySelectbox("limitDay", "");//수강일수
-                    getLectureCountSelectbox("lecTime", "");//강좌시간
-                    innerValue("multiple", gfn_zeroToZero("0"));//배수
-                } else {
-                    var productLectureInfo = selList.productLectureInfo;
-                    getNewSelectboxListForCtgKey("l_classGroup", "4309", productLectureInfo.classGroupCtgKey);
-                    getNewSelectboxListForCtgKey2("l_subjectGroup", "70", productLectureInfo.subjectCtgKey);
-                    getNewSelectboxListForCtgKey3("l_stepGroup", "202", productLectureInfo.stepCtgKey);
-                    getLectureStatusSelectbox("status", productLectureInfo.status);//강좌정보- 진행상태
-                    getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
-                    getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
-                    getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
-                    getExamPrepareSelectbox("examYear", productLectureInfo.examYear);//시험대비년도 셀렉트박스
-                    getLectureCountSelectbox("limitCount", productLectureInfo.limitCount);//강좌정보 강좌수
-                    getClassRegistraionDaySelectbox("limitDay", productLectureInfo.limitDay);//수강일수
-                    getLectureCountSelectbox("lecTime", productLectureInfo.lecTime);//강좌시간
-                    innerValue("multiple", gfn_zeroToZero(productLectureInfo.multiple));//배수
-                    innerValue("curri_lecKey", productLectureInfo.lecKey);//leckey
-                    innerValue("lecKey", productLectureInfo.lecKey);//leckey
-                }
-
-                //동영상 - 강의목록 불러오기
-                productManageService.getLectureCurriList(selList.productLectureInfo.lecKey, function (selList) {
-                    $( "#lectureCurriTabel tbody" ).sortable({
-                        update: function( event, ui ) {
-                            $(this).children().each(function(index) {
-                                $(this).find('tr').last().html(index + 1);
-                            });
-                        }
-                    });
-                    if (selList.length > 0) {
-                        for (var i = 0; i < selList.length; i++) {
-                            var cmpList = selList[i];
-                            if (cmpList != undefined) {
-                                var text = "'CURRI'";
-                                var deleteBtn = '<button type="button" onclick="deleteOtherInfo(' + cmpList.curriKey + "," + text + ')"  class="btn btn-outline-danger btn-sm">삭제</button>';
-                                var modifyBtn =  '<button type="button" onclick="LectureCurriPopup('+cmpList.curriKey+')"  class="btn btn-outline-success btn-sm" data-toggle="modal" data-target="#lectureListPopup">수정</button>';
-                                var textYn = "";
-                                var textShow = "";
-                                if(cmpList.isShow == '1') textYn = '<i class="mdi mdi-check" style="color:green;"></i>';
-                                else textYn = '<i class="mdi mdi-close" style="color: red"></i>';
-
-                                if(cmpList.isSample =='1') textShow = '<i class="mdi mdi-check" style="color:green;"></i>';
-                                else textShow = '<i class="mdi mdi-close" style="color: red"></i>';
-
-                                var cellData = [
-                                    function (data) {return cmpList.name;},
-                                    function (data) {return cmpList.vodTime;},
-                                    function (data) {return textYn;},
-                                    function (data) {return textShow;},
-                                    function (data) {return modifyBtn+deleteBtn;}
-                                ];
-                                dwr.util.addRows(lectureCurriList, [0], cellData, {
-                                    rowCreator:function(options) {
-                                        var row = document.createElement("tr");
-                                        var index = options.rowIndex * 50;
-                                        row.id = cmpList.curriKey;
-                                        row.className = "ui-state-default even ui-sortable-handle";
-                                        return row;
-                                    },
-                                    escapeHtml:false});
-                            }
-                        }
-                    }
-                });
-
-                /**
-                 * 강사 목록 가져오기
-                 */
-                var productTeacherInfo = selList.productTeacherInfo;
-                var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
-
-                if (productTeacherInfo.length == 0) {
-                    var cellData = [
-                        function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
-                        function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
-                        function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
-                        function() {return nextIcon},
-                        function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
-                        function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' style=\"display: inline-block;width:60%\">%"},
-                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                    ];
-                    dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
-                    $('#teacherList tr').eq(0).attr("style", "display:none");
-                    $('#teacherList tr').each(function(){
-                        var tr = $(this);
-                        tr.children().eq(0).attr("style", "display:none");
-                        tr.children().eq(1).attr("style", "display:none");
-                    });
-                } else {
-                    for (var i = 0; i < productTeacherInfo.length; i++) {
-                        var cmpList = productTeacherInfo[i];
-                        var cellData = [
-                            function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
-                            function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
-                            function() {return cmpList.subjectName},
-                            function() {return nextIcon},
-                            function() {return cmpList.teacherName},
-                            function() {return "<input type='text' name='calcRate[]' class='form-control  text-right' value='"+ cmpList.calculateRate +"' style=\"display: inline-block;width:60%\">%"},
-                            function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
-                        ];
-                        dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
-                    }
-                    $('#teacherList tr').each(function(){
-                        var tr = $(this);
-                        tr.children().eq(0).attr("style", "display:none");
-                        tr.children().eq(1).attr("style", "display:none");
-                    });
-                }
-                /**
-                 * 강의교재 항목 가져오기
-                 */
-                if(selList.productOtherInfo.length > 0){
-                    var productOtherInfo = selList.productOtherInfo;
-                        dwr.util.addRows("bookList", productOtherInfo[0], [
-                            function(data) {return data.goodsName;},
-                            function(data) {return "<input type='hidden' name='res_key[]' value='" + data.resKey + "'>";},
-                            function(data) {return getBookMainCheckbox(data.resKey, data.valueBit);},
-                            function() {return "<button type=\"button\" onclick=\"deleteTableRow('bookTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"}
-                        ], {escapeHtml:false});
-
-                        for (var i=0; i<productOtherInfo[0].length; i++) {
-                            var cmpList = productOtherInfo[0][i];
-                            var valueBit = cmpList.valueBit;
-                            var resKey = cmpList.resKey;
-                            var checkboxId = "isBookMain_" + resKey;
-
-                            var isCheck = true;
-                            if (valueBit == "0") isCheck = false;
-                            isCheckbox(checkboxId, isCheck);
-
-                        }
-                        $('#bookList tr').each(function(){
-                            var tr = $(this);
-                            tr.children().eq(2).addClass("text-left").attr("style", "padding: 0.3rem; vertical-align: middle;width: 30%");
-                        });
-                }
-            });
     }
 
     //강의목록 순서변경저장
@@ -836,7 +836,7 @@
                             <div class="form-group row">
                                 <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">등록일</label>
                                 <div class="col-sm-6 input-group pl-0 pr-0">
-                                    <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" name="indate" id="indate">
+                                    <input type="text" class="form-control" placeholder="yyyy-mm-dd" name="indate" id="indate">
                                     <div class="input-group-append">
                                         <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                     </div>
@@ -1042,9 +1042,10 @@
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌수</label>
-                        <select  class="col-sm-3 select2 form-control custom-select"  id="limitCount" name="limitCount">
-                            <option value="">선택</option>
-                        </select>
+                        <span id="l_lecCount"></span>
+<%--                        <select  class="col-sm-3 select2 form-control custom-select"  id="limitCount" name="limitCount">--%>
+<%--                            <option value="">선택</option>--%>
+<%--                        </select>--%>
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">수강일수</label>
@@ -1054,9 +1055,10 @@
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">강좌시간</label>
-                        <select class="col-sm-3 select2 form-control custom-select"  id="lecTime" name="lecTime">
-                            <option value="">선택</option>
-                        </select>
+                        <span id="l_lecTotalTime"></span>
+<%--                        <select class="col-sm-3 select2 form-control custom-select"  id="lecTime" name="lecTime">--%>
+<%--                            <option value="">선택</option>--%>
+<%--                        </select>--%>
                     </div>
                     <div class="form-group">
                         <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">배수</label>
@@ -1323,17 +1325,13 @@ onFinished: function(event, currentIndex) {
 }*/
 // aria-selected:"false"
 });
-
 $('#indate').datepicker({
-format: "yyyy-mm-dd",
-language: "kr"
+    format: "yyyy-mm-dd",
+    language: "kr"
 });
 $('#sellstartdate').datepicker({
-format: "yyyy-mm-dd",
-language: "kr"
+    format: "yyyy-mm-dd",
+    language: "kr"
 });
-
-
-
 </script>
 <script src='https://code.jquery.com/ui/1.11.4/jquery-ui.min.js'></script>

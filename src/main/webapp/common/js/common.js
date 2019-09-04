@@ -2120,7 +2120,7 @@ function split_minute_getDay(day) {
         day = day.split(" ");
         Reday = day[0];
     }else{
-        Reday = "";
+        Reday = "-";
     }
     return Reday;
 }
@@ -2464,7 +2464,7 @@ function setSearchDate(start, startId, endId){
 
     var endDate = getFormatDate(today);
 
-    $('#'+endId).val(endDate);
+    $('#'+endId).datepicker("setDate", endDate);
 
     if(str == 'd'){
         today.setDate(today.getDate() - num);
@@ -2481,17 +2481,10 @@ function setSearchDate(start, startId, endId){
         $('#'+startId).val("");
         $('#'+endId).val("");
     }else{
-        $('#'+startId).val(startDate);
+        $('#'+startId).datepicker("setDate", startDate);
     }
 
 }
-
-//금액 컴마표시
-function format(str) {
-    str = String(str);
-    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
-}
-
 function allChk(obj, chkId){
     var chkObj = document.getElementsByName(chkId);
     var rowCnt = chkObj.length - 1;
@@ -2635,5 +2628,52 @@ function removeComma(n) {
 //회원 상세정보
 function goMemberDetail(val) {
     innerValue('param_key', val);
+    innerValue('param_key2', getInputTextValue('searchStartDate'));
+    innerValue('param_key3', getInputTextValue('searchEndDate'));
+    innerValue('param_key4', getSelectboxValue('memberGradeSel'));
+    innerValue('param_key5', getSelectboxValue('sel_1'));
+    innerValue('param_key6', getSelectboxValue('memberSel'));
+    innerValue('param_key7', getInputTextValue('searchText'));
+    innerValue('param_key8', 'detail');
+
     goPage('memberManage', 'memberManage');
 }
+
+
+//금액 컴마표시
+function format(str) {
+    str = String(str);
+    return str.replace(/(\d)(?=(?:\d{3})+(?!\d))/g, '$1,');
+}
+
+//원단위 절사하기
+function roundingDownWon(val) {
+    var roundingDownWon = "";
+    if (val == '' || val != undefined) {
+        roundingDownWon = Math.floor(val / 10) * 10;
+    }
+    return Number(roundingDownWon);
+}
+
+function getContextPath() {
+    var offset=location.href.indexOf(location.host)+location.host.length;
+    var ctxPath=location.href.substring(offset,location.href.indexOf('/',offset+1));
+    return ctxPath;
+}
+
+jQuery.download = function(url, data, method){
+    // url과 data를 입력받음
+    if( url && data ){
+        // data 는  string 또는 array/object 를 파라미터로 받는다.
+        data = typeof data == 'string' ? data : jQuery.param(data);
+        // 파라미터를 form의  input으로 만든다.
+        var inputs = '';
+        jQuery.each(data.split('&'), function(){
+            var pair = this.split('=');
+            inputs+='<input type="hidden" name="'+ pair[0] +'" value="'+ pair[1] +'" />';
+        });
+        // request를 보낸다.
+        jQuery('<form action="'+ url +'" method="'+ (method||'post') +'">'+inputs+'</form>')
+            .appendTo('body').submit().remove();
+    };
+};

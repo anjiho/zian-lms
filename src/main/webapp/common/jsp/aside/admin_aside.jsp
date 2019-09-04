@@ -112,7 +112,7 @@
                         <!--<li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'academyLectureDetailList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학원수강관리</span></a></li>-->
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'freeLectureManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">무료수강관리</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'deviceListManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">상품/모바일 디바이스관리</span></a></li>
+                        <li class="sidebarid="teacherList"-item"><a href="void(0)" onclick="goPage('orderManage', 'deviceListManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">상품/모바일 디바이스관리</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'deviceChangeList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">기기변경 이력조회</span></a></li>
                         <!--<li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'yearMemberList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">오프라인 응시자 목록</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('orderManage', 'yearMemberManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">성적내역</span></a></li>

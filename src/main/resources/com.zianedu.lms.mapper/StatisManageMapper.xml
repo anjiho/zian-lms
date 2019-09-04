@@ -5,21 +5,21 @@
 
     <select id="selectTotalStatisAtMonth" resultType="StatisResultDTO">
         SELECT
-        TO_CHAR(INDATE, 'YYYY-MM') as DAY,
-        SUM(PRICE_PAY) as PRICE
+            TO_CHAR(INDATE, 'YYYY-MM') as DAY,
+            SUM(PRICE_PAY) as PRICE
         FROM
         (
-        SELECT
-        distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
-        FROM T_ORDER A
-        INNER JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
-        WHERE 1=1
-        AND A.PAY_STATUS = 2
-        AND A.PAY_TYPE != 20
-        <if test="goodsType > 0">
-            AND B.TYPE = #{goodsType}
-        </if>
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+            <if test="goodsType > 0">
+                AND B.TYPE = #{goodsType}
+            </if>
         )
         WHERE TO_CHAR(INDATE, 'YYYY') = #{year}
         GROUP BY TO_CHAR(INDATE, 'YYYY-MM')
@@ -27,22 +27,22 @@
     </select>
 
     <select id="selectTotalStatisAtYear" resultType="StatisResultDTO">
-        SELECT
-        TO_CHAR(INDATE, 'YYYY') as DAY,
-        SUM(PRICE_PAY) as PRICE
+       SELECT
+            TO_CHAR(INDATE, 'YYYY') as DAY,
+            SUM(PRICE_PAY) as PRICE
         FROM
         (
-        SELECT
-        distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
-        FROM T_ORDER A
-        INNER JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
-        WHERE 1=1
-        AND A.PAY_STATUS = 2
-        AND A.PAY_TYPE != 20
-        <if test="goodsType > 0">
-            AND B.TYPE = #{goodsType}
-        </if>
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+            <if test="goodsType > 0">
+                AND B.TYPE = #{goodsType}
+            </if>
 
         )
         GROUP BY TO_CHAR(INDATE, 'YYYY')
@@ -51,21 +51,21 @@
 
     <select id="selectTotalStatisAtYearDay" resultType="StatisResultDTO">
         SELECT
-        TO_CHAR(INDATE, 'YYYY-MM-DD') as DAY,
-        SUM(PRICE_PAY) as PRICE
+            TO_CHAR(INDATE, 'YYYY-MM-DD') as DAY,
+            SUM(PRICE_PAY) as PRICE
         FROM
         (
-        SELECT
-        distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
-        FROM T_ORDER A
-        INNER JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
-        WHERE 1=1
-        AND A.PAY_STATUS = 2
-        AND A.PAY_TYPE != 20
-        <if test="goodsType > 0">
-            AND B.TYPE = #{goodsType}
-        </if>
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
+            <if test="goodsType > 0">
+                AND B.TYPE = #{goodsType}
+            </if>
         )
         WHERE TO_CHAR(INDATE, 'YYYY-MM') = #{month}
         GROUP BY TO_CHAR(INDATE, 'YYYY-MM-DD')
@@ -74,22 +74,22 @@
 
     <select id="selectPackageStatisByMonth" resultType="StatisResultDTO">
         SELECT
-        TO_CHAR(INDATE, 'YYYY-MM') as DAY,
-        SUM(PRICE_PAY) as PRICE
+            TO_CHAR(INDATE, 'YYYY-MM') as DAY,
+            SUM(PRICE_PAY) as PRICE
         FROM
         (
-        SELECT
-        distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
-        FROM T_ORDER A
-        INNER JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
-        WHERE 1=1
-        AND B.TYPE = 5
-        <if test="pmType > 0">
-            AND B.PM_TYPE = #{pmType}
-        </if>
-        AND A.PAY_STATUS = 2
-        AND A.PAY_TYPE != 20
+            SELECT
+               distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND B.TYPE = 5
+            <if test="pmType > 0">
+                AND B.PM_TYPE = #{pmType}
+            </if>
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
         )
         WHERE TO_CHAR(INDATE, 'YYYY') = #{year}
         GROUP BY TO_CHAR(INDATE, 'YYYY-MM')
@@ -102,18 +102,18 @@
         SUM(PRICE_PAY) as PRICE
         FROM
         (
-        SELECT
-        distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
-        FROM T_ORDER A
-        INNER JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
-        WHERE 1=1
-        AND B.TYPE = 5
-        <if test="pmType > 0">
-            AND B.PM_TYPE = #{pmType}
-        </if>
-        AND A.PAY_STATUS = 2
-        AND A.PAY_TYPE != 20
+            SELECT
+            distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND B.TYPE = 5
+            <if test="pmType > 0">
+                AND B.PM_TYPE = #{pmType}
+            </if>
+            AND A.PAY_STATUS = 2
+            AND A.PAY_TYPE != 20
         )
         GROUP BY TO_CHAR(INDATE, 'YYYY')
         ORDER BY DAY ASC
@@ -125,16 +125,16 @@
         SUM(PRICE_PAY) as PRICE
         FROM
         (
-        SELECT
-        distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
-        FROM T_ORDER A
-        INNER JOIN T_ORDER_GOODS B
-        ON A.J_KEY = B.J_KEY
-        WHERE 1=1
-        AND B.TYPE = 5
-        <if test="pmType > 0">
-            AND B.PM_TYPE = #{pmType}
-        </if>
+            SELECT
+            distinct A.J_KEY, A.PRICE_PAY, A.INDATE, B.TYPE, A.PAY_STATUS, A.PAY_TYPE, B.PM_TYPE
+            FROM T_ORDER A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_KEY = B.J_KEY
+            WHERE 1=1
+            AND B.TYPE = 5
+            <if test="pmType > 0">
+                AND B.PM_TYPE = #{pmType}
+            </if>
         AND A.PAY_STATUS = 2
         AND A.PAY_TYPE != 20
         )
@@ -271,11 +271,11 @@
         </selectKey>
         INSERT INTO T_CALCULATE_OPTION
         (
-        CALCULATE_OPTION_KEY, TEACHER_KEY, TARGET_DATE, TITLE, PRICE
+          CALCULATE_OPTION_KEY, TEACHER_KEY, TARGET_DATE, TITLE, PRICE
         )
         VALUES
         (
-        #{calculateOptionKey}, #{teacherKey}, sysdate, #{title}, #{price}
+          #{calculateOptionKey}, #{teacherKey}, TO_DATE(#{targetDate}, 'YYYY-MM-DD hh24:mi:ss'), #{title}, #{price}
         )
     </insert>
 
