@@ -1,17 +1,70 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <style>
-    ol,ul{list-style:none}
+    ol, ul {
+        list-style: none
+    }
 
-    button{margin:0;padding:0;font-family:inherit;border:0 none;background:transparent;cursor:pointer}
-    button::-moz-focus-inner{border:0;padding:0}
-    .searchDate{overflow:hidden;margin-bottom:-3px;*zoom:1;margin-left: -6%;}
-    .searchDate:after{display:block;clear:both;content:''}
-    .searchDate li{position:relative;float:left;margin:0 7px 0 0}
-    .searchDate li .chkbox2{display:block;text-align:center}
-    .searchDate li .chkbox2 input{position:absolute;z-index:-1}
-    .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
-    .searchDate li .chkbox2.on label{background:#ec6a6a}
+    button {
+        margin: 0;
+        padding: 0;
+        font-family: inherit;
+        border: 0 none;
+        background: transparent;
+        cursor: pointer
+    }
+
+    button::-moz-focus-inner {
+        border: 0;
+        padding: 0
+    }
+
+    .searchDate {
+        overflow: hidden;
+        margin-bottom: -3px;
+        *zoom: 1;
+        margin-left: -6%;
+    }
+
+    .searchDate:after {
+        display: block;
+        clear: both;
+        content: ''
+    }
+
+    .searchDate li {
+        position: relative;
+        float: left;
+        margin: 0 7px 0 0
+    }
+
+    .searchDate li .chkbox2 {
+        display: block;
+        text-align: center
+    }
+
+    .searchDate li .chkbox2 input {
+        position: absolute;
+        z-index: -1
+    }
+
+    .searchDate li .chkbox2 label {
+        display: block;
+        width: 77px;
+        height: 26px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #fff;
+        text-align: center;
+        line-height: 25px;
+        text-decoration: none;
+        cursor: pointer;
+        background: #02486f
+    }
+
+    .searchDate li .chkbox2.on label {
+        background: #ec6a6a
+    }
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -35,7 +88,7 @@
     function fn_search(val) {
         var paging = new Paging();
         var sPage = getInputTextValue("sPage");
-        if(searchType == null) searchType = "";
+        if (searchType == null) searchType = "";
         if (val == "new") sPage = "1";
 
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
@@ -51,7 +104,7 @@
         var startSearchDate = getInputTextValue('searchStartDate');
         var endSearchDate = getInputTextValue('searchEndDate');
         var searchText = getInputTextValue('searchText');
-        var dateSearchType  = getSelectboxValue('dateSearchType');
+        var dateSearchType = getSelectboxValue('dateSearchType');
 
         var goodsType = 'VIDEO';
         var isVideoReply = 0;
@@ -61,32 +114,51 @@
             discription: '검색중',
             animationIn: false,
             animationOut: false,
-            defaultApply: 	true
+            defaultApply: true
         });
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
             payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
-                var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
+                var listNum = ((cnt - 1) + 1) - ((sPage - 1) * 10); //리스트 넘버링
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                     payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {
 
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
-                            function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
-                            function(data) {return data.depositUser == null ? "-" : data.depositUser;},
+                            function (data) {
+                                return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";
+                            },
+                            function (data) {
+                                return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";
+                            },
+                            function (data) {
+                                return data.name == null ? "-" : data.name;
+                            },
                             //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
-                            function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
-                            function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
-                            function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
-                            function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
+                            function (data) {
+                                return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName + "<a style='color: red'>외" + data.orderGoodsCount + "</a>";
+                            },
+                            function (data) {
+                                return data.pricePay == null ? "-" : format(data.pricePay);
+                            },
+                            function (data) {
+                                return data.payTypeName == null ? "-" : data.payTypeName + "<br/><a style='color: green'>" + gfn_isnull(data.depositUser)+"</a>";
+                            },
+                            function (data) {
+                                return data.payStatusName == null ? "-" : data.payStatusName;
+                            },
                             //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
-                            function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
-                            function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
-                        ], {escapeHtml:false});
+                            function (data) {
+                                return data.isMobile == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";
+                            },
+                            function (data) {
+                                return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='" + data.JKey + "'><span class='checkmark'></span>";
+                            }
+                        ], {escapeHtml: false});
                     });
-                loadingOut(loading);bookOrderList
+                loadingOut(loading);
+                bookOrderList
             });
     }
 
@@ -102,22 +174,22 @@
 
     //결제상태변경
     function changePayStatus() {
-        if($("input[name=rowChk]:checked").length == 0){
+        if ($("input[name=rowChk]:checked").length == 0) {
             alert("회원을 선택해 주세요.");
             return false;
         }
         var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
-        var arr =  new Array();
-        $("input[name=rowChk]:checked").each(function() {
+        var arr = new Array();
+        $("input[name=rowChk]:checked").each(function () {
             var jKey = $(this).val();
             var data = {
-                jKey : jKey,
-                payStatus : orderStatusChangeSel
+                jKey: jKey,
+                payStatus: orderStatusChangeSel
             };
             arr.push(data);
         });
-        if(confirm('변경하시겠습니까?')){
-            orderManageService.changePayStatus(arr , function() {
+        if (confirm('변경하시겠습니까?')) {
+            orderManageService.changePayStatus(arr, function () {
                 isReloadPage();
             });
         }
@@ -137,7 +209,7 @@
             var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
                 "&goodsType=VIDEO" + "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=0"
 
-            $.download('/excelDownload/orderList', url, 'post' );
+            $.download('/excelDownload/orderList', url, 'post');
         }
     }
 </script>
@@ -166,44 +238,50 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group row">
-                            <label  class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
+                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">기간별조회</label>
                             <div class="col-sm-4 pl-0 pr-0">
                                 <tr>
                                     <td>
                                         <ul class="searchDate">
                                             <li>
                                                 <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType1" onclick="setSearchDate('0d', 'searchStartDate', 'searchEndDate')"/>
+                                                    <input type="radio" name="dateType" id="dateType1"
+                                                           onclick="setSearchDate('0d', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType1">당일</label>
                                                 </span>
                                             </li>
                                             <li>
                                                 <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType3" onclick="setSearchDate('1w', 'searchStartDate', 'searchEndDate')"/>
+                                                    <input type="radio" name="dateType" id="dateType3"
+                                                           onclick="setSearchDate('1w', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType3">1주</label>
                                                 </span>
                                             </li>
                                             <li>
                                                 <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType4" onclick="setSearchDate('2w', 'searchStartDate', 'searchEndDate')"/>
+                                                    <input type="radio" name="dateType" id="dateType4"
+                                                           onclick="setSearchDate('2w', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType4">2주</label>
                                                 </span>
                                             </li>
                                             <li>
                                                 <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType5" onclick="setSearchDate('1m', 'searchStartDate', 'searchEndDate')"/>
+                                                    <input type="radio" name="dateType" id="dateType5"
+                                                           onclick="setSearchDate('1m', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType5">1개월</label>
                                                 </span>
                                             </li>
                                             <li>
                                                 <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType6" onclick="setSearchDate('3m', 'searchStartDate', 'searchEndDate')"/>
+                                                    <input type="radio" name="dateType" id="dateType6"
+                                                           onclick="setSearchDate('3m', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType6">3개월</label>
                                                 </span>
                                             </li>
                                             <li>
                                                 <span class="chkbox2">
-                                                    <input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m', 'searchStartDate', 'searchEndDate')"/>
+                                                    <input type="radio" name="dateType" id="dateType7"
+                                                           onclick="setSearchDate('6m', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType7">6개월</label>
                                                 </span>
                                             </li>
@@ -212,12 +290,14 @@
                                 </tr>
                             </div>
                             <div class="col-sm-3 input-group pl-0 pr-0">
-                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchStartDate" id="searchStartDate">
+                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd"
+                                       name="searchStartDate" id="searchStartDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
                                 <span>&nbsp;&nbsp;~&nbsp;&nbsp;</span>
-                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd" name="searchEndDate" id="searchEndDate">
+                                <input type="text" class="form-control datepicker" placeholder="yyyy-mm-dd"
+                                       name="searchEndDate" id="searchEndDate">
                                 <div class="input-group-append">
                                     <span class="input-group-text"><i class="fa fa-calendar"></i></span>
                                 </div>
@@ -238,7 +318,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
                             <div class="col-sm-8 pl-0 pr-0">
                                 <span id="orderPayTypeSel"></span>
                             </div>
@@ -252,7 +332,7 @@
                             </div>
                         </div>
                         <div class="form-group row">
-                            <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">디바이스</label>
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">디바이스</label>
                             <div class="col-sm-8 pl-0 pr-0">
                                 <span id="deviceSel"></span>
                             </div>
@@ -262,15 +342,19 @@
                 <div class="row">
                     <div class="col">
                         <div class="form-group row">
-                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label><!--0-->
+                            <label class="col-sm-1 control-label col-form-label" style="margin-bottom: 0">검색어</label>
+                            <!--0-->
                             <div class="col-sm-2 pl-0 pr-0 mr-3"><!--0-->
                                 <span id="orderSearch"></span>
                             </div>
                             <div class="col-sm-2 pl-0 pr-0 mr-3"><!--0-->
-                                <input type="text" class="form-control" id="searchText" onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
+                                <input type="text" class="form-control" id="searchText"
+                                       onkeypress="if(event.keyCode==13) {fn_search('new'); return false;}">
                             </div>
                             <div class="col-sm-2 pl-0 pr-0 mr-3"><!--0-->
-                                <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">검색</button>
+                                <button type="button" class="btn btn-outline-info mx-auto" onclick="fn_search('new')">
+                                    검색
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -284,13 +368,14 @@
                     <label class="col-sm-2 control-label col-form-label" style="margin-bottom:0;padding-left:30px">결제상태변경</label>
                     <div class="col-sm-8 pl-0 pr-0">
                         <span id="orderStatusChangeSel"></span>
-                        <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경</button>
+                        <button type="button" class="btn btn-outline-info mx-auto" onclick="changePayStatus()">변경
+                        </button>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="form-group row">
-                    <label  class="col-sm-2 control-label col-form-label" style="mmargin-bottom: 0;padding-left:12px">리스트개수</label>
+                    <label class="col-sm-2 control-label col-form-label" style="mmargin-bottom: 0;padding-left:12px">리스트개수</label>
                     <div class="col-sm-8 pl-0 pr-0">
                         <span id="listNumberSel"></span>
                     </div>
@@ -303,7 +388,9 @@
             <div class="card">
                 <div class="card-body">
                     <div class="mb-5">
-                        <button type="button" class="btn btn-outline-info mx-auto float-right" onclick="excelDownload();"><i class="mdi mdi-file-excel"></i>엑셀다운로드</button>
+                        <button type="button" class="btn btn-outline-info mx-auto float-right"
+                                onclick="excelDownload();"><i class="mdi mdi-file-excel"></i>엑셀다운로드
+                        </button>
                     </div>
                     <table class="table table-hover">
                         <thead>
@@ -317,9 +404,10 @@
                             <th scope="col" width="8%">진행상태</th>
                             <th scope="col" width="8%">모바일</th>
                             <!--<th scope="col" width="8%">배송상태</th>-->
-                            <th  width="3%">
+                            <th width="3%">
                                 <label class="customcheckbox m-b-20">
-                                    <input type="checkbox" id="mainCheckbox" id="allCheck" onclick="allChk(this, 'rowChk');">
+                                    <input type="checkbox" id="mainCheckbox" id="allCheck"
+                                           onclick="allChk(this, 'rowChk');">
                                     <span class="checkmark"></span>
                                 </label>
                             </th>
@@ -327,7 +415,8 @@
                         </thead>
                         <tbody id="dataList"></tbody>
                         <tr>
-                            <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
+                            <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle'
+                                style="visibility:hidden"></td>
                         </tr>
                     </table>
                     <%@ include file="/common/inc/com_pageNavi.inc" %>

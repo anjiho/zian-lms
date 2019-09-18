@@ -814,7 +814,7 @@
     </select>
 
     <select id="selectOrderDetailProductList" resultType="OrderDetailProductListDTO">
-        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, D.SELL_PRICE
+        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, D.SELL_PRICE,A.EXTEND_DAY
         FROM T_ORDER_GOODS A
         INNER JOIN T_GOODS B
         ON A.G_KEY = B.G_KEY
@@ -822,7 +822,7 @@
         ON A.g_key = C.g_key
         INNER JOIN T_GOODS_PRICE_OPTION D
         ON A.G_KEY = D.G_KEY
-        WHERE A.J_KEY = #{jKey}
+        WHERE A.J_KEY = #{jKey} AND C.TYPE != 5
     </select>
 
     <select id="selectOrderUserInfo" resultType="com.zianedu.lms.vo.TUserVO">

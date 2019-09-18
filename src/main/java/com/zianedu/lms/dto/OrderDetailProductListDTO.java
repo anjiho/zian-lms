@@ -17,6 +17,8 @@ public class OrderDetailProductListDTO {
 
     private int sellPrice;
 
+    private int extendDay;
+
     private String productTypeName;
 
     private String productOptionName;

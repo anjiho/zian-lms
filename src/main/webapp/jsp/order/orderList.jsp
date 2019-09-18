@@ -75,7 +75,7 @@
                 payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {
                 if (selList.length == 0) return;
                dwr.util.addRows("dataList", selList, [
-                   function(data) {return "<a href='void(0);' color='blue' target='_blank' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
+                   function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                    function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                    function(data) {return data.name == null ? "-" : data.name;},
                    function(data) {return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},

@@ -149,6 +149,7 @@
         if(sellPrice > 0){
             var sellPrice1 =  Number($("#sellPrice").val());
             sellPrice1 += Number(sellPrice);
+            sellPrice1=format(sellPrice1);
             $("#sellPrice").val(sellPrice1);
         }
 
