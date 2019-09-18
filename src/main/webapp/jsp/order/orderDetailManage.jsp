@@ -82,7 +82,7 @@
                     dwr.util.addRows("dataList", orderProductList, [
                         function(data) {return "<input type='hidden' name='JGKey[]' value='"+ data.JGKey +"'>"},//코드
                         function(data) {return data.productTypeName},//코드
-                        function(data) {return data.name},//출제구분
+                        function(data) {return num==3?"<a style='color: blue'>[" + data.extendDay + "일]</a>" +data.name:data.name},//출제구분
                         function(data) {return data.productOptionName},//출제구분
                         function(data) {return data.cnt},//출제구분
                         function(data) {return format(data.sellPrice)},//출제구분

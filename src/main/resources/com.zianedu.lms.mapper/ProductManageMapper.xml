@@ -439,13 +439,13 @@
 		</selectKey>
 		INSERT INTO T_GOODS
 		(
-			G_KEY, C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, TYPE, IS_SHOW, IS_SELL, IS_FREE, IS_NODC, IMAGE_LIST, IMAGE_VIEW,
-			EMPHASIS, TAGS, SUMMARY, DESCRIPTION, CALCULATE_RATE, IS_FREEBIE_DELIVERY_FREE, IS_QUICK_DELIVERY, GOODS_ID
+		G_KEY, C_KEY, CP_KEY, NAME, INDATE, SELLSTARTDATE, TYPE, IS_SHOW, IS_SELL, IS_FREE, IS_NODC, IMAGE_LIST, IMAGE_VIEW,
+		EMPHASIS, TAGS, SUMMARY, DESCRIPTION, CALCULATE_RATE, IS_FREEBIE_DELIVERY_FREE, IS_QUICK_DELIVERY, GOODS_ID
 		)
 		VALUES
 		(
-			#{gKey}, #{cKey}, #{cpKey}, #{name}, TO_DATE(#{indate}, 'YYYY-mm-dd'), TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'), #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
-			#{emphasis}, #{tags}, #{summary}, #{description}, #{calculateRate}, #{isFreebieDeliveryFree}, #{isQuickDelivery}, #{goodsId}
+		#{gKey}, #{cKey}, #{cpKey}, #{name}, TO_DATE(#{indate}, 'YYYY-mm-dd'), TO_DATE(#{sellstartdate}, 'YYYY-mm-dd'), #{type}, #{isShow}, #{isSell}, #{isFree}, #{isNodc}, #{imageList}, #{imageView},
+		#{emphasis}, #{tags}, #{summary}, #{description}, #{calculateRate}, #{isFreebieDeliveryFree}, #{isQuickDelivery}, #{goodsId}
 		)
 	</insert>
 
