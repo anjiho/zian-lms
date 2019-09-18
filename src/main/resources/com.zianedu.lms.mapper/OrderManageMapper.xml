@@ -915,6 +915,19 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
+        <if test="dateSearchType == ''">
+            <if test="startSearchDate == endSearchDate">
+                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+            </if>
+            <if test="startSearchDate != endSearchDate">
+                <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+                <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
+            </if>
+        </if>
         <if test="dateSearchType == 'payDate'">
             <if test="startSearchDate == endSearchDate">
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
