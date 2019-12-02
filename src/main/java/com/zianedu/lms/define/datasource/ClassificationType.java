@@ -5,7 +5,7 @@ public enum ClassificationType {
     THEORY(203, "이론"),
     //단과
     SHORT_SUBJECT(204, "단과"),
-    //문제풀이a
+    //문제풀이
     COMMENTARY(205, "문제풀이"),
     //패키지
     PACKAGE(206, "패키지"),
@@ -20,7 +20,7 @@ public enum ClassificationType {
     //실기대비
     PRACTICAL_CONTRAST(4173, "실기대비"),
     //모의고사
-    MOK_TEST(4266, "모의고사"),;
+    MOK_TEST(4266, "모의고사");
 
     int classificationTypeKey;
 
