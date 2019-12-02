@@ -13,4 +13,6 @@ public class ResultDTO {
     private Object result;
 
     private List<?> resultList;
+
+    private Object resultTotalTime;
 }

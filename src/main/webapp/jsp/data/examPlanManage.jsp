@@ -50,11 +50,17 @@
                     startDate: datetimepicker12,
                     link: link
                 };
-                dataManageService.modifyExamSchedule(data, function () {isReloadPage(true);});
+                dataManageService.modifyExamSchedule(data, function () {
+                    alert("수정이 완료되었습니다.")
+                    isReloadPage(true);
+                });
             }
         }else{//저장
             if(confirm("일정 추가 하시겠습니까?")) {
-                dataManageService.saveExamSchedule(title, '2019-04-08', function () {isReloadPage(true);});
+                dataManageService.saveExamSchedule(title, datetimepicker12, function () {
+                    alert("일정 추가가 완료되었습니다.");
+                    isReloadPage(true);
+                });
             }
         }
     }
@@ -62,6 +68,7 @@
     function examDelete(val) {
         if(confirm("삭제 하시겠습니까?")) {
             dataManageService.deleteExamSchedule(val, function () {
+                alert("삭제되었습니다.");
                 isReloadPage(true);
             });
         }

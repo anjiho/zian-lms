@@ -42,4 +42,16 @@ public class OrderResultDTO {
     private int userKey;
 
     private String deliveryStatusName;
+
+    private String cancelPayType;
+
+    private String cancelIsMobile;
+
+    private String cancelPayStatus;
+
+    private String cancelIsOffline;
+
+    private int typeChk;
+
+    private String cancelDate;
 }

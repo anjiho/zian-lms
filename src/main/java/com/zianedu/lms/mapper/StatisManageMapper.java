@@ -45,4 +45,10 @@ public interface StatisManageMapper {
 
     /** INSERT **/
     void insertTCalculateOption(TCalculateOptionVO tCalculateOptionVO);
+
+    /** UPDATE **/
+    void updateTCalculateOption(TCalculateOptionVO tCalculateOptionVO);
+
+    /** DELETE **/
+    void deleteTCalculateOption(@Param("calculateKey") int calculateKey);
 }

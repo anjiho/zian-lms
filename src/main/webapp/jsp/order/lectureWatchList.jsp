@@ -12,6 +12,8 @@
     .searchDate li .chkbox2 input{position:absolute;z-index:-1}
     .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
     .searchDate li .chkbox2.on label{background:#ec6a6a}
+    .pt-06 {padding-top:6px;}
+    #orderStatus input{margin-right: 10px; position: relative; top:1.5px; left: 2px;}
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -37,7 +39,7 @@
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 8);
         getlectureWatchPayStatusSelectbox('PayStatus', ''); //결제상태
-        getlectureWatchOrderStatusSelectbox('orderStatus', ''); //진행상태
+        getlectureWatchOrderStatusCheckbox('orderStatus', ''); //진행상태
         getlectureWatchOrderStatusSelectbox1('stopModalStatus', ''); //일시정지 팝업 진행상태
         getlectureWatchOrderStatusSelectbox('ModalStatus', ''); //팝업 진행상태
         orderSearchSelectbox('orderSearch', 'orderUserName');
@@ -57,7 +59,7 @@
         gfn_emptyView("H", "");//페이징 예외사항처리
         innerValue("jId", ""); //초기화
         innerValue("JLecKey", ""); //초기화
-        var orderLecStatus  = get_array_values_by_name("select", "orderStatus");
+        var orderLecStatus  = getCheckboxValue("orderStatus");
         var payStatus       = getSelectboxValue('PayStatus');
         var searchType      = getSelectboxValue("orderSearch");//검색타입
         var startSearchDate = getInputTextValue('searchStartDate');
@@ -72,10 +74,10 @@
             defaultApply: 	true
         });
 
-        orderManageService.getVideoLectureWatchListCount(startSearchDate, endSearchDate, payStatus, orderLecStatus[0], searchType, searchText, function (cnt) {
+        orderManageService.getVideoLectureWatchListCount(startSearchDate, endSearchDate, payStatus, orderLecStatus, searchType, searchText, function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 orderManageService.getVideoLectureWatchList(sPage, 10, startSearchDate, endSearchDate, payStatus,
-                    orderLecStatus[0], searchType, searchText, function (selList) {
+                    orderLecStatus, searchType, searchText, function (selList) {
                         if (selList.length == 0) return;
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return data.JId == null ? "-" : data.JId;},
@@ -84,7 +86,7 @@
                             function(data) {return data.kindName == null ? "-" : '<a href="javascript:void(0);" data-toggle="modal" data-target="#optionModal" onclick="goOptionModify('+"'"+data.JId+"'"+','+data.kind+')" style="color: blue">'+data.kindName+'</a>';},
                             function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
                             function(data) {return data.status == 2 ? "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stopStateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>" : "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>";},
-                            function(data) {return split_minute_getDay(data.startDt)+"<br>"+split_minute_getDay(data.endDt);},
+                            function(data) {return data.status == 0 ? "-": split_minute_getDay(data.startDt)+"<br>"+split_minute_getDay(data.endDt);},
                             function(data) {return data.limitDay == null ? "-" : data.limitDay;},
                             function(data) {return data.pauseTotalDay+"<br>"+data.pauseDay;},
                             function(data) {return split_minute_getDay(data.pauseStartDt)+"<br>"+split_minute_getDay(data.pauseEndDt);},
@@ -143,7 +145,15 @@
     }
 
     //진행상태 수정
-    function stateSave(state) {
+    function stateSave() {
+        var getstate = getInputTextValue("status"); //기존 진행상태 값
+
+        if(getstate==2){
+            var state=getSelectboxValue("stopOrderStatus");
+        }else{
+            var state=getSelectboxValue("changeOrderStatus");
+        }
+
         var jLecKey = getInputTextValue("JLecKey");
 
         var startDate = "";
@@ -166,10 +176,10 @@
         var totalPauseCnt = "";
         if(state == 2) totalPauseCnt = getInputTextValue("pauseTotalDay");
 
-        var status = "";
+        var status = state;/*
         var orderLecStatus = get_array_values_by_name("select", "orderStatus"); //진행상태
         if(state == 2) status = orderLecStatus[1];
-        else status = orderLecStatus[2];
+        else status = orderLecStatus[2];*/
 
         if(startDate == ""){
             alert("강의시작일을 입력해 주세요.");
@@ -179,8 +189,6 @@
             alert("수강일을 입력해 주세요.");
             return false;
         }
-
-        var getstate = getInputTextValue("status"); //기존 진행상태 값
 
         if (getstate == 2) { //기존 진행상태가 일시정지일 경우
             if(status == 2){ // 팝업에서 선택된 진행상태가 일시정지일 경우
@@ -355,7 +363,7 @@
                     <div class="col">
                         <div class="form-group row" style="">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">진행상태</label>
-                            <div class="col-sm-8 pl-0 pr-0">
+                            <div class="col-sm-8 pl-0 pr-0 pt-06">
                                 <span id="orderStatus"></span>
                             </div>
                         </div>
@@ -496,7 +504,7 @@
                     <input type="text" class="form-control" id="pauseTotalDay">
                 </div>
             </div>
-                <button type="button" class="btn btn-info float-right" onclick="stateSave(2);">저장</button>
+                <button type="button" class="btn btn-info float-right" onclick="stateSave();">저장</button>
             </div>
             <!-- //modal body -->
         </div>
@@ -549,7 +557,7 @@
                         <input type="text" class="form-control" id="limitDay1">
                     </div>
                 </div>
-                <button type="button" class="btn btn-info float-right" onclick="stateSave(1);">저장</button>
+                <button type="button" class="btn btn-info float-right" onclick="stateSave();">저장</button>
             </div>
             <!-- //modal body -->
         </div>

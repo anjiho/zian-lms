@@ -49,7 +49,8 @@ public class ExcelDownloadController {
                                         @RequestParam(value = "sel_1", required = false, defaultValue = "0") String affiliationCtgKey) {
         List<MemberListDTO>dataList = memberManageMapper.selectExcelDownloadUserList(searchType, searchText, regStartDate, regEndDate, Integer.parseInt(grade), Integer.parseInt(affiliationCtgKey));
         excelContent = "userList";
-        topMenus = StringUtils.getStringArray("사용자키", "아이디", "이름", "핸드폰번호", "이메일", "가입일", "직렬", "모바일 가입여부");
+        topMenus = StringUtils.getStringArray("코드", "ID", "이름","권한","가입일","생년월일", "핸드폰번호","전화번호", "이메일","E-Mail 수신여부","SMS 수신여부","우편번호","주소(도로명)","주소(지번)",
+                "복지할인율(%)","등급","등급변경일", "준비직렬","가입경로","등급세부목록","등급가격","비고","모바일 가입여부");
         fileName = "회원목록 리스트_" + Util.returnNowDateByYyyymmddhhmmss();
         sheetName = "회원목록";
 
@@ -92,10 +93,9 @@ public class ExcelDownloadController {
             title = "프로모션주문 리스트_";
         }
         excelContent = "orderList";
-        topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호", "주문직렬", "주문구분", "카테고리",
-                "주문내역", "오프라인 구매", "상품가격", "상품판매가", "결제금액", "결제방법", "입금예정 은행", "입금예정 계좌번호", "입금예정자 이름", "입금예정일", "결제상태",
-                "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태", "수취인 이름", "수취인 전화번호", "수취인 휴대전화번호", "수취인 이메일", "배송지 우편번호",
-                "배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");
+        topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호","주문자 이메일", "준비직렬","개강일", "주문구분","대비년도" ,"카테고리",
+                "과목","유형","교수명","주문내역", "오프라인 구매", "상품가격", "상품판매가", "결제금액", "결제방법", "입금예정 은행", "입금예정 계좌번호", "입금예정자 이름", "입금예정일", "결제상태",
+                "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태",  "배송지 우편번호","배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");
         fileName = title + Util.returnNowDateByYyyymmddhhmmss();
         sheetName = "목록";
 
@@ -113,7 +113,8 @@ public class ExcelDownloadController {
         List<MemberListDTO>dataList = memberManageMapper.selectExcelDownloadTeacherList(searchType, searchText, searchStartDate, searchEndDate);
         excelContent = "userList";
 
-        topMenus = StringUtils.getStringArray("사용자키", "아이디", "이름", "핸드폰번호", "이메일", "가입일", "직렬", "모바일 가입여부");
+        topMenus = StringUtils.getStringArray("코드", "ID", "이름","권한","가입일","생년월일", "핸드폰번호","전화번호", "이메일","E-Mail 수신여부","SMS 수신여부","우편번호","주소(도로명)","주소(지번)",
+                "복지할인율(%)","등급","등급변경일", "준비직렬","가입경로","등급세부목록","등급가격","비고","모바일 가입여부");
         fileName = "강사 회원목록 리스트_" + Util.returnNowDateByYyyymmddhhmmss();
         sheetName = "강사목록";
 
@@ -138,14 +139,12 @@ public class ExcelDownloadController {
                                          @RequestParam(value = "dateSearchType", required = false, defaultValue = "payDate") String dateSearchType) {
         List<OrderExcelDownDTO>dataList = orderManageMapper.selectExcelDownloadCancelOrderList(
                 searchStartDate, searchEndDate, cancelStartDate, cancelEndDate,
-                Integer.parseInt(payStatus), Integer.parseInt(isOffline),
-                Integer.parseInt(payType), Integer.parseInt(isMobile), searchText, searchType, dateSearchType);
+                payStatus, isOffline,payType, isMobile, searchText, searchType, dateSearchType);
 
         excelContent = "orderList";
-        topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호", "주문직렬", "주문구분", "카테고리",
+        topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호","주문자 이메일", "준비직렬", "주문구분","카테고리",
                 "주문내역", "오프라인 구매", "상품가격", "상품판매가", "결제금액", "결제방법", "입금예정 은행", "입금예정 계좌번호", "입금예정자 이름", "입금예정일", "결제상태",
-                "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태", "수취인 이름", "수취인 전화번호", "수취인 휴대전화번호", "수취인 이메일", "배송지 우편번호",
-                "배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");
+                "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태", "배송지 우편번호","배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");
         fileName = "주문,결제취소목록_" + Util.returnNowDateByYyyymmddhhmmss();
         sheetName = "목록";
 

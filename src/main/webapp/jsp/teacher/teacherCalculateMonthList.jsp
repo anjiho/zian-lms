@@ -90,9 +90,10 @@
                             var cloneTr = $("#sumList").find("tr:last").clone();
                             $('#sumList > tr').eq(3).after(cloneTr);
                             cloneTr.show();
-                            cloneTr.attr('id', 'option');
+                            cloneTr.attr('id', 'option'+i);
                             cloneTr.find("td").eq(0).html(cmpList.title);
                             cloneTr.find("td").eq(4).html(format(cmpList.price));
+                            cloneTr.find("td").eq(5).attr('id',cmpList.calculateOptionKey);
                         }
                     }
                     innerValue("optionPriceSum", optionPirce);
@@ -307,7 +308,7 @@
                 html += " <td></td>";
                 html += " <td></td>";
                 html += " <td><input type='number' placeholder='가격을 입력해 주세요.' style='width:200px;' id='optionPrice'></td>";
-                html += " <td><button type='button' class='btn btn-sm' onclick='optionSave();'>옵션저장</button></td>";
+                html += " <td><button type='button' class='btn btn-sm' onclick='optionSave();'>옵션저장</button></td><td></td>";
              html += "</tr>";
 
              $("#sumList").append(html);
@@ -336,6 +337,52 @@
                innerValue("teacher_name_key", teacherName);
                goPage('teacherManage', 'teacherCalculateMonthList');
            });
+        }
+    }
+
+    function optionUpdate(td,tr){
+        var html = "";
+        html += "<tr>";
+        html += " <td colspan=\"4\"><input type='text' placeholder='제목을 입력해주세요.' style='width:300px;' id='optionTitle' name='optionTitle'></td>";
+        html += " <td></td>";
+        html += " <td></td>";
+        html += " <td><input type='number' placeholder='가격을 입력해 주세요.' style='width:200px;' id='optionPrice'></td>";
+        html += " <td><button type='button' class='btn btn-sm' onclick='optionUpdateGo(" + td + ");'>옵션수정</button></td><td></td>";
+        html += "</tr>";
+
+        $("#"+tr).after(html);
+    }
+
+    function optionUpdateGo(val){
+        var optionTitle     = $("#optionTitle").val();
+        var optionPrice     = $("#optionPrice").val();
+        var searchYearMonth  = getSelectboxValue("searchYearMonth");
+
+        if(optionTitle == ""){
+            alert("옵션명을 입력해 주세요.");
+            $("#optionTitle").focus();
+            return false;
+        }
+        if(optionPrice == ""){
+            alert("옵션 가격을 입력해 주세요.");
+            $("#optionPrice").focus();
+            return false;
+        }
+
+        if(confirm("옵션을 수정하시겠습니까?")){
+            statisManageService.updateTeacherCalculateOptionInfo(val, optionTitle, optionPrice, searchYearMonth, function () {
+                var searchYearMonth =  getSelectboxValue('searchYearMonth');
+                innerValue("teacher_date_key", searchYearMonth);
+                goPage('teacherManage', 'teacherCalculateMonthList');
+            });
+        }
+    }
+
+    function optionDelete(val){
+        if(confirm("옵션을 삭제하시겠습니까?")){
+            statisManageService.deleteTeacherCalculateOptionInfo(val, function () {
+                goPage('teacherManage', 'teacherCalculateMonthList');
+            });
         }
     }
 
@@ -497,6 +544,7 @@
                             <td></td>
                             <td id="totalCnt"></td>
                             <td id="totalPrice"></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td colspan="4">환불합계</td>
@@ -504,6 +552,7 @@
                             <td></td>
                             <td id="cancelTotalCnt"></td>
                             <td id="cancelTotalPrice"></td>
+                            <td></td>
                         </tr>
                         <tr id="test">
                         </tr>
@@ -513,6 +562,7 @@
                             <td></td>
                             <td id="alltotalCnt"></td>
                             <td id="alltotalPrice"></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td colspan="4">소득세(0.3%) +  주민세(0.03%)</td>
@@ -520,6 +570,7 @@
                             <td></td>
                             <td></td>
                             <td id="taxPrice"></td>
+                            <td></td>
                         </tr>
                         <tr>
                             <td colspan="4">사우회비</td>
@@ -527,13 +578,18 @@
                             <td></td>
                             <td></td>
                             <td id="duesPrice"></td>
+                            <td></td>
                         </tr>
                         <tr style="display:none;">
                             <td colspan="4"></td>
+                            <td style="width:200px"></td>
                             <td></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
+                            <td style="width:340px"></td>
+                            <td style="width:1px"></td>
+                            <td style="width:200px">
+                                <button type="button" class="btn btn-primary btn-sm" onclick="optionUpdate($(this).closest('td').attr('id'),$(this).closest('tr').attr('id'));">수정</button>
+                                <button type="button" class="btn btn-secondary btn-sm" onclick="optionDelete($(this).closest('td').attr('id'));">삭제</button>
+                            </td>
                         </tr>
                         <tfoot>
                             <tr>
@@ -542,12 +598,13 @@
                                 <td></td>
                                 <td></td>
                                 <td id="actualPay" style="color: yellow"></td>
+                                <td></td>
                             </tr>
                         </tfoot>
                     </tbody>
                 </table>
                 <div style="text-align: center;margin-bottom: 10px;">
-                    <button type="button" class="btn btn-info" onclick="optionAdd();">옵션추가</button>
+                    <button type="button" class="btn btn-info" onclick="optionAdd('save');">옵션추가</button>
                 </div>
             </div>
         </div>

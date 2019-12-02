@@ -9,6 +9,7 @@
     String sel_1 = Util.isNullValue(request.getParameter("param_key5"), "");
     String memberSel = Util.isNullValue(request.getParameter("param_key6"), "");
     String searchText = Util.isNullValue(request.getParameter("param_key7"), "");
+    String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
     String isDetail = Util.isNullValue(request.getParameter("param_key8"), "");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
@@ -202,7 +203,7 @@
         innerValue('param_key4', '<%=memberGradeSel%>');
         innerValue('param_key5', '<%=sel_1%>');
         innerValue('param_key6', '<%=memberSel%>');
-        innerValue('param_key7', '<%=searchText%>');
+        innerValue('param_key7', '<%=searchText2%>');
         innerValue('param_key8', '<%=isDetail%>');
 
         goPage('memberManage', 'memberList');

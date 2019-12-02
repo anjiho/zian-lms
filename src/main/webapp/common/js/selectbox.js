@@ -1133,15 +1133,15 @@ function orderPayTypeSelectbox(tagId, val) {
 function orderSearchSelectbox(tagId, val) {
     var html = "<select id='searchType' class='form-control'>";
     html +=     '<option value="" selected>선택</option>';
-    if(val == 'orderUserId') html += "<option value='orderUserId'>주문자 ID</option>";
+    if(val == 'orderUserId'||val=='') html += "<option value='orderUserId' selected>주문자 ID</option>";
     else html += "<option value='orderUserId'>주문자 ID</option>";
-    if(val == 'orderUserName') html += "<option value='orderUserName' >주문자 이름</option>";
+    if(val == 'orderUserName') html += "<option value='orderUserName' selected>주문자 이름</option>";
     else html += "<option value='orderUserName'>주문자 이름</option>";
-    if(val == 'orderId') html += "<option value='orderId'>주문번호</option>";
+    if(val == 'orderId') html += "<option value='orderId' selected>주문번호</option>";
     else html += "<option value='orderId'>주문번호</option>";
-    if(val == 'depositUserName') html += "<option value='orderId'>입금자명</option>";
+    if(val == 'depositUserName') html += "<option value='orderId' selected>입금자명</option>";
     else html += "<option value='depositUserName'>입금자명</option>";
-    if(val == 'orderGoodsName') html += "<option value='orderGoodsName'>상품명</option>";
+    if(val == 'orderGoodsName') html += "<option value='orderGoodsName' selected>상품명</option>";
     else html += "<option value='orderGoodsName'>상품명</option>";
     html += "</select>";
     innerHTML(tagId, html);
@@ -1236,7 +1236,7 @@ function getlectureWatchPayStatusSelectbox(tagId, val) {
 }
 //수강내역목록 - 진행상태 셀렉박스
 function getlectureWatchOrderStatusSelectbox(tagId, val) {
-    var html = "<select id='orderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+    var html = "<select id='changeOrderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
     var selected1 = '';
     var selected2 = '';
@@ -1315,13 +1315,15 @@ function getAcaLecturePayTypeSelectbox(tagId, val) {
     var selected3 = '';
     if(val == '21') selected = 'selected';
     else if(val == '22') selected1 = 'selected';
+    else if(val == '23') selected2 = 'selected';
     else if(val == '0') selected3 = 'selected';
-    else selected2 = 'selected';
+    else selected3 = 'selected';
 
     html += "<option value='0' "+ selected3 +">신용카드</option>";
     html += "<option value='21' "+ selected +">현금</option>";
     html += "<option value='22' "+ selected1 +">현금+신용카드</option>";
     html += "<option value='23' "+ selected2 +">온라인</option>";
+    html += "<option value='19' "+ selected2 +">무통장입금</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1372,6 +1374,28 @@ function getCardKindSelectbox(tagId, val) {
     html += "</select>";
     innerHTML(tagId, html);
 }
+
+//학원수강 입력 > 현금영수증 발행 여부
+function getCashReceiptTypeSelectbox(tagId, val) {
+    var html = "<select id='payType' class='col-sm-3 select2 form-control custom-select'>";
+    var selected = '';
+    var selected1 = '';
+    var selected2 = '';
+    var selected3 = '';
+    if(val == '0') selected = 'selected';
+    else if(val == '1') selected1 = 'selected';
+    else if(val == '2') selected2 = 'selected';
+    else if(val == '3') selected3 = 'selected';
+    else selected = 'selected';
+
+    html += "<option value='0' "+ selected +">없음</option>";
+    html += "<option value='1' "+ selected1 +">주민번호</option>";
+    html += "<option value='2' "+ selected2 +">휴대전화번호</option>";
+    html += "<option value='3' "+ selected3 +">사업자등록번호</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
 
 function deviceManageSelectbox(tagId, val) {
     var html = "<select id='deivceSel' class='form-control' onchange='changeDeviceList(this.value);'>";
@@ -1596,10 +1620,12 @@ function getSmsSearchSelectbox(tagId) {
 }
 
 
-function getOrderDateSearchSelectbox(tagId) {
+function getOrderDateSearchSelectbox(tagId,val) {
     var html = "<select id='dateSearchType' class='form-control'>";
-    html += "<option value='payDate'>주문일자 기준</option>";
-    html += "<option value='depositDate'>입금 확인일자 기준</option>";
+    if(val=='payDate'||val=='') html += "<option value='payDate' selected>주문일자 기준</option>";
+    else html += "<option value='payDate'>주문일자 기준</option>";
+    if(val=='depositDate') html += "<option value='depositDate' selected>입금 확인일자 기준</option>";
+    else html += "<option value='depositDate'>입금 확인일자 기준</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

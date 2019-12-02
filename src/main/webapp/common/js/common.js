@@ -238,6 +238,22 @@ function gfn_csplit(str, delim) {
 }
 
 //--------------------------------------------------
+// 특정 문자기준으로 문자자르기 && 특정문자 제거
+//--------------------------------------------------
+function splitReplace(str,split){
+    var arr=str.split(split);
+    var arrLength=arr.length-1;
+
+    arr.splice(arrLength,1);
+
+    for(var i=0;i<arrLength;i++){
+        arr[i]=arr[i].replace(split,"");
+    }
+
+    return arr;
+}
+
+//--------------------------------------------------
 // 파라미터 자르기
 //--------------------------------------------------
 function gfn_strcut(str, len) {
@@ -1268,6 +1284,7 @@ function addTime(dateTime, time) {
 
 }
 
+
 function dateSub(day) {
     var d = new Date();
     var dt = d - day * 24 * 60 * 60 * 1000;
@@ -1512,6 +1529,24 @@ function isReloadParentPage() {
  * @param checkboxId
  * @returns {Boolean}
  */
+function allBoxChecked(tagId){
+    var chk = $("#" + tagId ).find('#check1').is(":checked");
+
+    if(chk){
+        for(var i=2;i<8;i++){
+            $("#" + tagId ).find('#check' + i).prop('checked',false);
+        }
+    }
+}
+
+function boxChecked(tagId){
+    for(var i=2;i<8;i++){
+        if($("#" + tagId ).find('#check'+i).is(":checked")){
+            $("#" + tagId ).find('#check1').prop('checked',false);
+        }
+    }
+}
+
 function isCheckedCheckbox(checkboxId, type) {
     var boolean = false;
     if (checkboxId != "") {
@@ -1533,14 +1568,67 @@ function getSelectboxValue(tagId) {
     if (tagId != "") {
         selectedvalue = $("#" + tagId + " option:selected").val();
     }
+
     return selectedvalue;
 }
+
+function getCheckboxValue(tagId) {
+    var selectedvalue = "";
+    var checked=$("#" + tagId ).find('#check1').is(":checked");
+
+    if (tagId != "") {
+        if(checked){
+            for (var i = 2; i < 8; i++) {
+                var checked2=$("#" + tagId).find('#check'+i).val();
+                if(checked2!=null) {
+                    selectedvalue += $("#" + tagId).find('#check' + i).val() + ",";
+                }
+            }
+        }else {
+            for (var i = 2; i < 8; i++) {
+                if ($("#" + tagId ).find('#check'+i).is(":checked")) {
+                    selectedvalue +=$("#" + tagId ).find('#check'+i).val()+",";
+                }
+            }
+        }
+    }
+
+    return selectedvalue;
+}
+
+
+//체크박스 다중 체크
+function overlapCheckbox(str,val) {
+    for(var i=0;i<val.length;i++){
+        var arrVal=val[i];
+        for(var j=2;j<8;j++){
+            var checkboxVal=$('#'+str).children('input#check'+j).val();
+            if(arrVal==checkboxVal){
+                $('#'+str).children('input#check'+j).prop('checked',true);
+            }
+        }
+    }
+
+    var checkAllCnt=$('#'+str).children('input:checkbox[name=checkbox]').length;
+    checkAllCnt=checkAllCnt-1;
+
+    if(checkAllCnt==val.length) {
+        $('#'+str).children('input#check1').prop('checked',true);
+        for(var j=2;j<8;j++){
+            $('#'+str).children('input#check'+j).prop('checked',false);
+        }
+        /*$('#' + str).children('input#check' + j).is(':checked');*/
+    }
+
+}
+
 
 function getInputTextValue(tagId) {
     var inputValue = "";
     if (tagId != "") {
         inputValue = $("#" + tagId).val();
     }
+
     return inputValue;
 }
 
@@ -2009,6 +2097,7 @@ function get_array_values_by_name(type, name) {
             array.push($(this).val());
         });
     }
+
     return array;
 }
 
@@ -2489,7 +2578,7 @@ function allChk(obj, chkId){
     var chkObj = document.getElementsByName(chkId);
     var rowCnt = chkObj.length - 1;
     var check = obj.checked;
-    if (check) {﻿
+    if (check) {
           for (var i=0; i<=rowCnt; i++){
               if(chkObj[i].type == "checkbox")
                   chkObj[i].checked = true;
@@ -2639,6 +2728,23 @@ function goMemberDetail(val) {
     goPage('memberManage', 'memberManage');
 }
 
+//주문 상세정보
+function  goOrderDetailType() {
+    alert("AAAA");
+    alert($('#isOffline').val());
+    innerValue('param_key2', getInputTextValue('searchStartDate'));
+    innerValue('param_key3', getInputTextValue('searchEndDate'));
+    innerValue('param_key4', getSelectboxValue('dateSearchType'));
+    innerValue('param_key5', getSelectboxValue('orderStatus'));
+    innerValue('param_key6', getSelectboxValue('isOffline'));
+    innerValue('param_key7', getSelectboxValue('orderPayTypeSel'));
+    innerValue('param_key8', getSelectboxValue('deviceSel'));
+    innerValue('param_key9', getSelectboxValue('orderSearch'));
+    innerValue('param_key10', getInputTextValue('searchText'));
+    innerValue('param_key11', 'detail');
+
+    goPage('orderManage', 'orderDetailManage');
+}
 
 //금액 컴마표시
 function format(str) {

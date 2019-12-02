@@ -83,15 +83,15 @@
                         var vodMobiletext = '"VOD + MOBILE"';
                         var vodtext = '"VOD"';
 
+                        if(cmpList.vodPriceKey > 0)        vodChkBtn        = "<input type='checkbox' name='vodChk' onclick='sendChildValue2($(this),"+ cmpList.vodPriceKey +","+ vodtext +");'>" + "VOD"+"<br>";
                         if(cmpList.mobilePriceKey > 0 )    mobileChkBtn     = "<input type='checkbox' name='mobileChk' onclick='sendChildValue2($(this),"+ cmpList.mobilePriceKey +","+ mobiletext +");'>"+"MOBILE"+"<br>";
                         if(cmpList.vodMobilePriceKey > 0 ) vodMobileChkBtn  = "<input type='checkbox' name='vodMobileChk' onclick='sendChildValue2($(this),"+ cmpList.vodMobilePriceKey +","+ vodMobiletext +");'>" + "VOD + MOBILE"+"<br>";
-                        if(cmpList.vodPriceKey > 0)        vodChkBtn        = "<input type='checkbox' name='vodChk' onclick='sendChildValue2($(this),"+ cmpList.vodPriceKey +","+ vodtext +");'>" + "VOD"+"<br>";
 
                         if (cmpList != undefined) {
                             var cellData = [
                                 function(data) {return cmpList.GKey == null ? "-" : cmpList.GKey;},
                                 function(data) {return cmpList.goodsName == null ? "-" : cmpList.goodsName;},
-                                function(data) {return mobileChkBtn+vodMobileChkBtn+vodChkBtn},
+                                function(data) {return vodChkBtn+mobileChkBtn+vodMobileChkBtn},
                             ];
                             dwr.util.addRows(dataList3, [0], cellData, {escapeHtml:false});
                         }

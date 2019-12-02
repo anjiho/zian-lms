@@ -19,12 +19,23 @@
 <script type='text/javascript' src='/dwr/interface/productManageService.js'></script>
 <script>
     $( document ).ready(function() {
+        $("#cashReceiptNumber").hide();
+
         $("#payType").change(function () {
             var type = getSelectboxValue("payType");
-            if(type == '0'){
-                $("#cardCode").hide();
-            }else{
+            if(type == '0'||type == '22'){
                 $("#cardCode").show();
+            }else{
+                $("#cardCode").hide();
+            }
+        });
+
+        $("#cashReceiptType").change(function () {
+            var type = getSelectboxValue("cashReceiptType");
+            if(type == '0'){
+                $("#cashReceiptNumber").hide();
+            }else{
+                $("#cashReceiptNumber").show();
             }
         });
     });
@@ -35,6 +46,7 @@
         getAcaLecturePayTypeSelectbox("payType", "");//결제방법
         getCardKindSelectbox('cardCode1', '');//카드선택
         getSelectboxListForCtgKey('affiliationCtgKey','133','');
+        getCashReceiptTypeSelectbox('cashReceiptType','');
         menuActive('menu-3', 9);
         fn_search('new');
         fn_search3('new');
@@ -147,7 +159,7 @@
         }
 
         if(sellPrice > 0){
-            var sellPrice1 =  Number($("#sellPrice").val());
+            var sellPrice1 =  Number(uncomma($("#sellPrice").val()));
             sellPrice1 += Number(sellPrice);
             sellPrice1=format(sellPrice1);
             $("#sellPrice").val(sellPrice1);
@@ -176,7 +188,8 @@
 
     function sellPriceChk(selPrice) {
         var sellPrice1 =  getInputTextValue("sellPrice");
-        var result = Number(sellPrice1) -  Number(selPrice);
+        var result = Number(uncomma(sellPrice1)) -  Number(uncomma(selPrice));
+        var result=format(result);
         $("#sellPrice").val(result);
     }
 
@@ -187,15 +200,23 @@
         var price = getInputTextValue('price');
         var payType =  getSelectboxValue('payType');
         var cardCode = getSelectboxValue('cardCode');
+        var cashReceiptType = getSelectboxValue('cashReceiptType');
+        var cashReceiptNumber = getInputTextValue('cashReceiptNumber');
+        var sellPrice=$('#sellPrice').val();
         var optionArray = new Array();
         $('#optionTable tbody tr').each(function(index){
             var gKey = $(this).find("td input").eq(0).val();
             optionArray.push(gKey);
         });
 
+        if(price>sellPrice){
+            alert("결제금액이 판매금액보다 많을 수 없습니다.");
+            return;
+        }
+
         if(userKey != "") {
             if(confirm("저장 하시겠습니까?")){
-                orderManageService.saveAcademyLecture(userKey, optionArray, price, payType, cardCode, memoTitle, memoContent,function (cnt) {isReloadPage();});
+                orderManageService.saveAcademyLecture(userKey, optionArray, price, payType, cardCode, memoTitle, memoContent,cashReceiptType,cashReceiptNumber,function (cnt) {isReloadPage();});
             }
         }else{
             alert("회원을 선택해 주세요.");
@@ -259,7 +280,7 @@
         <div class="col-md-6">
             <div class="card">
                 <div class="card-body">
-                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:15px;">옵션추가</h5>
+                    <h5 class="card-title" style="display:inline-block;vertical-align:middle;margin-bottom:15px;">상품명</h5>
                     <div>
                         <div style=" float: left;">
                             <span id="l_productSearch"></span>
@@ -324,7 +345,18 @@
                             <span id="cardCode1"></span>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">현금영수증</label>
+                            <div class="col-sm-8 pl-0 pr-0">
+                            <span id="cashReceiptType"></span>
+                            <input type="text" id="cashReceiptNumber" size="30px">
+                        </div>
+                    </div>
                     <div class="form-group">
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0;border-top:3px solid #dedede;font-size:20px">메모</label>
+                            <span class="col-sm-10" style="border-top:3px solid #dedede"></span>
+                        </div>
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">제목</label>
                             <input type="text" class="col-sm-10 form-control" id="memoTitle">

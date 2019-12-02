@@ -26,26 +26,30 @@ public interface OrderManageMapper {
     List<OrderResultDTO> selectCancelOrderList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                          @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                          @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,
-                                         @Param("payStatus") int payStatus, @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
-                                         @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("dateSearchType") String dateSearchType);
+                                         @Param("cancelPayStatus") String cancelPayStatus, @Param("cancelIsOffline") String cancelIsOffline,
+                                         @Param("cancelPayType") String cancelPayType,@Param("cancelIsMobile") String cancelIsMobile,@Param("searchText") String searchText,
+                                         @Param("searchType") String searchType,@Param("dateSearchType") String dateSearchType);
 
     int selectCancelOrderListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                    @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,
-                                   @Param("payStatus") int payStatus, @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
-                                   @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("dateSearchType") String dateSearchType);
+                                   @Param("cancelPayStatus") String cancelPayStatus, @Param("cancelIsOffline") String cancelIsOffline, @Param("cancelPayType") String cancelPayType,
+                                   @Param("cancelIsMobile") String cancelIsMobile,@Param("searchText") String searchText, @Param("searchType") String searchType,
+                                   @Param("dateSearchType") String dateSearchType);
 
     List<OrderLectureListDTO> selectOrderLectureVideoList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                                           @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
-                                                          @Param("payStatus") int payStatus, @Param("orderLecStatus") int orderLecStatus,
+                                                          @Param("payStatus") int payStatus, @Param("orderLecStatus") String orderLecStatus,
                                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     int selectOrderLectureVideoListCount(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
-                                                          @Param("payStatus") int payStatus, @Param("orderLecStatus") int orderLecStatus,
+                                                          @Param("payStatus") int payStatus, @Param("orderLecStatus") String orderLecStatus,
                                                           @Param("searchText") String searchText, @Param("searchType") String searchType);
 
     LectureTimeInfoDTO selectTOrderInfoAtLectureTime(@Param("jLecKey") int jLecKey);
 
     List<LectureTimeDTO> selectLectureTimeList(@Param("jLecKey") int jLecKey);
+
+    LectureTimeDTO selectLectureTotalTime(@Param("jLecKey") int jLecKey);
 
     TOrderLecCurriVO selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") Long curriKey);
 
@@ -103,7 +107,7 @@ public interface OrderManageMapper {
 
     List<OrderExcelDownDTO> selectExcelDownloadCancelOrderList(@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate,
                                                @Param("startCancelSearchDate") String startCancelSearchDate, @Param("endCancelSearchDate") String endCancelSearchDate,
-                                               @Param("payStatus") int payStatus, @Param("isOffline") int isOffline, @Param("payType") int payType, @Param("isMobile") int isMobile,
+                                               @Param("payStatus") String payStatus, @Param("isOffline") String isOffline, @Param("payType") String payType, @Param("isMobile") String isMobile,
                                                @Param("searchText") String searchText, @Param("searchType") String searchType, @Param("dateSearchType") String dateSearchType);
 
     TOrderLecVO selectTOrderLec(@Param("jLecKey") int jLecKey);

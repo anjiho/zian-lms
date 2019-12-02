@@ -197,8 +197,15 @@
         else checkYn = '0';
 
         var saveModifttext = '';
-        if(bannerKey == '0') saveModifttext = '저장 하시겠습니까?';
-        else saveModifttext = '수정 하시겠습니까?';
+        var saveCompleteText = '';
+        if(bannerKey == '0') {
+            saveModifttext = '저장 하시겠습니까?';
+            saveCompleteText="저장이 완료되었습니다.";
+        }
+        else{
+            saveModifttext = '수정 하시겠습니까?';
+            saveCompleteText="수정이 완료되었습니다.";
+        }
 
         data.append("pos", pos);
         data.append("ctgInfoKey", bannerKey);
@@ -219,6 +226,7 @@
                 success: function (data) {
                     //location.reload();
                     var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    alert(saveCompleteText);
                     innerValue("param_key", sel_subDomain);
                     goPage('dataManage', 'bannerSave');
                 }
@@ -241,6 +249,7 @@
             if(confirm("저장하시겠습니까?")){
                 dataManageService.saveTeacherBannerInfo(ctgKey, subjectCtgKey, teacherKey, isNew, url, function () {
                     var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    alert("저장이 완료되었습니다.");
                     innerValue("param_key", sel_subDomain);
                     goPage('dataManage', 'bannerSave');
                 });
@@ -249,6 +258,7 @@
             if(confirm("수정하시겠습니까?")){
                 dataManageService.modifyTeacherBannerInfo(ctgInfoKey, subjectCtgKey, teacherKey, isNew, url, function () {
                     var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    alert("수정이 완료되었습니다.");
                     innerValue("param_key", sel_subDomain);
                     goPage('dataManage', 'bannerSave');
                 });
@@ -261,6 +271,7 @@
             dataManageService.deleteBannerInfo(val, ctgKey, function () {
                 var sel_subDomain =  getSelectboxValue('sel_subDomain');
                 innerValue("param_key", sel_subDomain);
+                alert("삭제가 완료되었습니다.");
                 goPage('dataManage', 'bannerSave');
             });
         }
@@ -282,7 +293,10 @@
                     arr.push(data);
 
                 });
-                dataManageService.changeBannerPosition(arr, function () {});
+                dataManageService.changeBannerPosition(arr, function () {
+                    alert("순서변경이 완료되었습니다.");
+                    location.reload();
+                });
             }
         }else if(val == "1"){
             if(confirm("순서변경 하시겠습니까?")) {
@@ -297,6 +311,7 @@
                     arr.push(data);
                 });
                 dataManageService.changeBannerPosition(arr, function () {
+                    alert("순서변경이 완료되었습니다.");
                     location.reload();
                 });
             }
@@ -313,6 +328,7 @@
                     arr.push(data);
                 });
                 dataManageService.changeBannerPosition(arr, function () {
+                    alert("순서변경이 완료되었습니다.");
                     location.reload();
                 });
             }
@@ -329,6 +345,7 @@
                     arr.push(data);
                 });
                 dataManageService.changeBannerPosition(arr, function () {
+                    alert("순서변경이 완료되었습니다.");
                     location.reload();
                 });
             }
@@ -346,6 +363,7 @@
                     arr.push(data);
                 });
                 dataManageService.changeBannerPosition(arr, function () {
+                    alert("순서변경이 완료되었습니다.");
                     location.reload();
                 });
             }

@@ -14,4 +14,8 @@ public class LectureTimeDTO {
     private int remainTime;
 
     private Long jCurriKey;
+
+    private int vodTotalTime;
+
+    private int remainTotalTime;
 }

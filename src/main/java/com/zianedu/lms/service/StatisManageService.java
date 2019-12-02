@@ -37,7 +37,7 @@ public class StatisManageService {
      * 전체 결제 월별 통계
      *
      * @param searchYear(YYYY)
-     * @return 차트 :  https://www.highcharts.com/demo/line-labels
+     * @return 차트 :  https://www.highcharts.com/demo/line-labelsgetTeacherCalculateByMonth
      */
     @Transactional(readOnly = true)
     public StatisResultDTO getTotalStatisAtMonth(String searchYear) {
@@ -595,10 +595,40 @@ public class StatisManageService {
     public void saveTeacherCalculateOptionInfo(int teacherKey, String title, int price, String yyyymm) throws Exception {
         if (teacherKey == 0 && "".equals(title)) return;
         String yyyy_mm = Util.convertDateFormat(yyyymm);
+        int calculateKey=0;
         TCalculateOptionVO tCalculateOptionVO = new TCalculateOptionVO(
-                teacherKey, title, price, yyyy_mm
+                teacherKey, title, price, yyyy_mm,calculateKey
         );
         statisManageMapper.insertTCalculateOption(tCalculateOptionVO);
+    }
+
+    /**
+     * 교수 > 정산내역 > 옵션 Update
+     *
+     * @param calculateKey
+     * @param yyyymm
+     * @param title
+     * @param price
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void updateTeacherCalculateOptionInfo(int calculateKey, String title, int price, String yyyymm) throws Exception {
+        if (calculateKey == 0 && "".equals(title)) return;
+        String yyyy_mm = Util.convertDateFormat(yyyymm);
+        TCalculateOptionVO tCalculateOptionVO = new TCalculateOptionVO(
+                calculateKey, title, price, yyyy_mm,calculateKey
+        );
+        statisManageMapper.updateTCalculateOption(tCalculateOptionVO);
+    }
+
+    /**
+     * 교수 > 정산내역 > 옵션 Delete
+     *
+     * @param calculateKey
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteTeacherCalculateOptionInfo(int calculateKey) throws Exception {
+
+        statisManageMapper.deleteTCalculateOption(calculateKey);
     }
 
 }

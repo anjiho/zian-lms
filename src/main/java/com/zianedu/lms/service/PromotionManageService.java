@@ -37,6 +37,7 @@ public class PromotionManageService {
 
         TGoodsVO productInfo = productManageService.getVideoBasicInfo(gKey);
         List<TGoodsPriceOptionVO> productOptionInfo = productManageService.getVideoOptionList(gKey);
+        List<TGoodTeacherLinkVO> productTeacherInfo=productManageMapper.selectTeacherListByTeacherLink(gKey);
         List<List<TCategoryVO>>productCategoryInfo = productManageService.getVideoCategoryList(gKey);
         TPromotionVO productPromotionInfo = promotionManageMapper.selectTPromotion(gKey);
 
@@ -53,7 +54,8 @@ public class PromotionManageService {
                 productOptionInfo,
                 productCategoryInfo,
                 productPromotionInfo,
-                productOnlineLectureInfo
+                productOnlineLectureInfo,
+                productTeacherInfo
         );
         return promotionDetailDTO;
     }
@@ -67,7 +69,7 @@ public class PromotionManageService {
      * @param productOnlineLectureInfo
      */
     public void savePackage(TGoodsVO productInfo, List<TGoodsPriceOptionVO>productOptionInfo, List<TCategoryGoods>productCategoryInfo,
-                            TPromotionVO productPromotionInfo, List<TLinkKeyVO>productOnlineLectureInfo) {
+                            TPromotionVO productPromotionInfo, List<TLinkKeyVO>productOnlineLectureInfo,List<TGoodTeacherLinkVO>productTeacherListByVideoInfo) {
         //상품 기본정보 입력
         Integer gKey = productManageService.upsultGoodsInfo(productInfo, productInfo.getImageList(), productInfo.getImageView());
         if (gKey != null || gKey > 0) {
@@ -93,6 +95,8 @@ public class PromotionManageService {
                         productPromotionInfo.getDeviceLimitCount()
                 );
             }
+            //프리패스 연동 강사 저장
+            productManageService.upsultTGoodTeacherLink(productTeacherListByVideoInfo,gKey);
             //온라인강좌, 프리패스 입력
             productManageService.upsultTLinkKink(productOnlineLectureInfo, gKey);
         }

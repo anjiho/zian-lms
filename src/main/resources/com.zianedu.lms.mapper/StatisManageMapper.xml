@@ -225,6 +225,7 @@
         SELECT * FROM T_CALCULATE_OPTION
         WHERE TEACHER_KEY = #{teacherKey}
         AND TO_CHAR(TARGET_DATE, 'YYYYMM') = #{targetDate}
+        ORDER BY CALCULATE_OPTION_KEY ASC
     </select>
 
     <select id="selectTeacherStatisGraphByMonth" resultType="StatisResultDTO">
@@ -278,5 +279,19 @@
           #{calculateOptionKey}, #{teacherKey}, TO_DATE(#{targetDate}, 'YYYY-MM-DD hh24:mi:ss'), #{title}, #{price}
         )
     </insert>
+
+    <update id="updateTCalculateOption" parameterType="com.zianedu.lms.vo.TCalculateOptionVO">
+        UPDATE T_CALCULATE_OPTION
+        <set>
+            <if test="title != ''">TITLE = #{title},</if>
+            <if test="targetDate != ''">TARGET_DATE = TO_DATE(#{targetDate}, 'YYYY-MM-DD hh24:mi:ss'),</if>
+            <if test="price != 0">PRICE = #{price},</if>
+        </set>
+        WHERE CALCULATE_OPTION_KEY=#{calculateKey}
+    </update>
+
+    <delete id="deleteTCalculateOption">
+        DELETE FROM T_CALCULATE_OPTION WHERE CALCULATE_OPTION_KEY=#{calculateKey}
+    </delete>
 
 </mapper>

@@ -248,14 +248,20 @@
 
     function editDelete(resKey) {
         if(confirm("삭제 하시겠습니까?")){
-            productManageService.deletePreviewInfo(resKey, function () {isReloadPage();});
+            productManageService.deletePreviewInfo(resKey, function () {
+                alert("삭제되었습니다.");
+                isReloadPage();
+            });
         }
     }
     
     //카테고리 삭제 linkKey
     function deleteCategory(linkKey) {
         if(confirm("삭제하시겠습니까?")) {
-            memberManageService.deleteTeacherCategory(linkKey, function () {isReloadPage();});
+            memberManageService.deleteTeacherCategory(linkKey, function () {
+                alert("삭제되었습니다.");
+                isReloadPage();
+            });
         }
     }
 
@@ -351,7 +357,10 @@
             note: "",
             interestCtgKey0: Number(interestCtgKey0)
         };
-        memberManageService.updateUserInfo(teacherObj, function () {isReloadPage();});
+        memberManageService.updateUserInfo(teacherObj, function () {
+            alert("수정이 완료되었습니다.");
+            isReloadPage();
+        });
     }
 
     //강사정보 수정
@@ -402,7 +411,10 @@
                             teacherInfoObj2.teacherKey = teacherKey;
                             teacherInfoObj2.userKey = userKey;
 
-                            memberManageService.updateTeacherInfo(teacherInfoObj2, function(info) {isReloadPage();});
+                            memberManageService.updateTeacherInfo(teacherInfoObj2, function(info) {
+                                alert("저장되었습니다.");
+                                isReloadPage();
+                            });
                         }
                     }
                 });
@@ -413,23 +425,26 @@
     //카테고리 저장
     function teacherCategorySave() {
         var teacherKey = getInputTextValue("teacherKey");
-        $('#categoryTable tbody tr').each(function (index) {
-            var ctgKey = $(this).find("td").eq(0).find("input").val();
-            if($(this).find("td").eq(3).find("select").val() != undefined){
-                var data = {
-                    linkKey: 0,
-                    reqKey : Number(ctgKey),
-                    resKey : Number(teacherKey),
-                    reqType : 100,
-                    resType : 200,
-                    pos : 0,
-                    valueBit : 0
-                };
-                memberManageService.insertTeacherCategory(data, function () {
-                    isReloadPage(true);
-                });
-            }
-        });
+        if (confirm("수정 하시겠습니까?")) {
+            $('#categoryTable tbody tr').each(function (index) {
+                var ctgKey = $(this).find("td").eq(0).find("input").val();
+                if ($(this).find("td").eq(3).find("select").val() != undefined) {
+                    var data = {
+                        linkKey: 0,
+                        reqKey: Number(ctgKey),
+                        resKey: Number(teacherKey),
+                        reqType: 100,
+                        resType: 200,
+                        pos: 0,
+                        valueBit: 0
+                    };
+                    memberManageService.insertTeacherCategory(data, function () {
+                        alert("수정이 완료되었습니다.");
+                        isReloadPage(true);
+                    });
+                }
+            });
+        }
     }
 
     //과목그룹별 pc 저장
@@ -440,21 +455,27 @@
        var hiddenKey = get_array_values_by_name("input", "hiddenKey");
 
        if(subjectCtgKey4.length > 0){ //추가된 카테고리
-           $.each(subjectCtgKey4, function(index, key) {
-               var data = {};
-               data.resKey = 0;
-               data.type = 0;
-               data.device = 1;
-               data.key00 = teacherKey;
-               data.key02 = key;
-               data.key01 = 0;
-               data.key00Type = 0;
-               data.key01Type = 0;
-               data.key02Type = 0;
-               data.value = "";
-               data.valueText = $("#section4 .pcContent").val();
-              memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
-           });
+           if (confirm("수정 하시겠습니까?")) {
+               $.each(subjectCtgKey4, function (index, key) {
+                   var data = {};
+                   data.resKey = 0;
+                   data.type = 0;
+                   data.device = 1;
+                   data.key00 = teacherKey;
+                   data.key02 = key;
+                   data.key01 = 0;
+                   data.key00Type = 0;
+                   data.key01Type = 0;
+                   data.key02Type = 0;
+                   data.value = "";
+                   data.valueText = $("#section4 .pcContent").val();
+                   memberManageService.insertTResAtTeacherSubject(data, function () {
+                       alert("수정이 완료되었습니다.");
+                       isReloadPage();
+                   });
+               });
+           }
+           else return false;
        }else{
            alert("추가된 내용이 없습니다.");
            return false;
@@ -466,21 +487,26 @@
         var teacherKey = getInputTextValue("teacherKey");
         var mobileSubjectCtgKey = get_array_values_by_name("select", "mobilesubjectCtgKey"); //카테고리 키값
 
-        $.each(mobileSubjectCtgKey, function(index, key) {
-            var data = {};
-            data.resKey = 0;
-            data.type = 0;
-            data.device = 3;
-            data.key00 = teacherKey;
-            data.key02 = key;
-            data.key01 = 0;
-            data.key00Type = 0;
-            data.key01Type = 0;
-            data.key02Type = 0;
-            data.value = "";
-            data.valueText = $('.mobileContent').eq(index).val();
-            memberManageService.insertTResAtTeacherSubject(data, function () {isReloadPage();});
-        });
+        if (confirm("수정 하시겠습니까?")) {
+            $.each(mobileSubjectCtgKey, function (index, key) {
+                var data = {};
+                data.resKey = 0;
+                data.type = 0;
+                data.device = 3;
+                data.key00 = teacherKey;
+                data.key02 = key;
+                data.key01 = 0;
+                data.key00Type = 0;
+                data.key01Type = 0;
+                data.key02Type = 0;
+                data.value = "";
+                data.valueText = $('.mobileContent').eq(index).val();
+                memberManageService.insertTResAtTeacherSubject(data, function () {
+                    alert("수정이 완료되었습니다.");
+                    isReloadPage();
+                });
+            });
+        }
     }
 
 

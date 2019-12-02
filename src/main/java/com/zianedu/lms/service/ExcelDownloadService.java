@@ -14,8 +14,11 @@ import org.springframework.web.servlet.view.document.AbstractExcelView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.text.NumberFormat;
 import java.util.List;
 import java.util.Map;
+
+import static com.zianedu.lms.define.datasource.MemberGradeType.getMemberGradeStr;
 
 @Service
 public class ExcelDownloadService extends AbstractExcelView {
@@ -49,15 +52,42 @@ public class ExcelDownloadService extends AbstractExcelView {
         if (dataList.size() > 0) {
             int i=0;
             for (MemberListDTO dto : dataList) {
+                int authority= dto.getAuthority();
+                String authorityS="";
+                if(authority==0) authorityS="관리자";
+                if(authority==5) authorityS="강사";
+                if(authority==10) authorityS="회원";
+                if(authority==19) authorityS="방문객";
+
+                String addressRoad=Util.isNullValue(dto.getAddressRoad(),"");
+                String addressNumber=Util.isNullValue(dto.getAddressRoad(),"");
+                if(addressRoad!="") addressRoad=addressRoad + " " + dto.getAddress();
+                if(addressNumber!="") addressNumber=addressNumber + " " + dto.getAddress();
+
                 HSSFRow row = sheet.createRow(i + 1);
                 row.createCell(0).setCellValue(dto.getUserKey());
                 row.createCell(1).setCellValue(dto.getUserId());
                 row.createCell(2).setCellValue(dto.getName());
-                row.createCell(3).setCellValue(dto.getTelephoneMobile());
-                row.createCell(4).setCellValue(dto.getEmail());
-                row.createCell(5).setCellValue(dto.getIndate());
-                row.createCell(6).setCellValue(dto.getAffiliationName());
-                row.createCell(7).setCellValue(dto.getIsMobileReg());
+                row.createCell(3).setCellValue(authorityS);
+                row.createCell(4).setCellValue(dto.getIndate());
+                row.createCell(5).setCellValue(dto.getBirth());
+                row.createCell(6).setCellValue(dto.getTelephoneMobile());
+                row.createCell(7).setCellValue(dto.getTelephone());
+                row.createCell(8).setCellValue(dto.getEmail());
+                row.createCell(9).setCellValue(dto.getRecvEmail()==0?"X":"O");
+                row.createCell(10).setCellValue(dto.getRecvSms()==0?"X":"O");
+                row.createCell(11).setCellValue(dto.getZipCode());
+                row.createCell(12).setCellValue(addressRoad);
+                row.createCell(13).setCellValue(addressNumber);
+                row.createCell(14).setCellValue(dto.getWelfareDcPercent());
+                row.createCell(15).setCellValue(getMemberGradeStr(dto.getGrade()));
+                row.createCell(16).setCellValue(dto.getGradeDate());
+                row.createCell(17).setCellValue(dto.getAffiliationName());
+                row.createCell(18).setCellValue(dto.getAffiliationName2());
+                row.createCell(19).setCellValue(dto.getGradeGKey());
+                row.createCell(20).setCellValue(dto.getGradePrice());
+                row.createCell(21).setCellValue(dto.getNote());
+                row.createCell(22).setCellValue(dto.getIsMobileReg()==1?"O":"X");
                 i++;
             }
         }
@@ -87,6 +117,7 @@ public class ExcelDownloadService extends AbstractExcelView {
                 String deliveryPrice = "0";
                 if (!"".equals(Util.isNullValue(dto.getDeliverStatus(), ""))) deliveryPrice = "2500";
 
+
                 HSSFRow row = sheet.createRow(i + 1);
                 row.createCell(0).setCellValue(dto.getJKey());
                 row.createCell(1).setCellValue(dto.getJId());
@@ -94,35 +125,37 @@ public class ExcelDownloadService extends AbstractExcelView {
                 row.createCell(3).setCellValue(dto.getUserId());
                 row.createCell(4).setCellValue(dto.getName());
                 row.createCell(5).setCellValue(dto.getTelephoneMobile());
-                row.createCell(6).setCellValue(dto.getAffiliationName());
-                row.createCell(7).setCellValue(goodsTypeName);
-                row.createCell(8).setCellValue(dto.getSiteName());
-                row.createCell(9).setCellValue(orderName);
-                row.createCell(10).setCellValue(dto.getIsOffline() == 0 ? "X": "O");
-                row.createCell(11).setCellValue(dto.getGoodsPrice());
-                row.createCell(12).setCellValue(dto.getSellPrice());
-                row.createCell(13).setCellValue(dto.getPricePay());
-                row.createCell(14).setCellValue(OrderPayType.getOrderPayTypeStr(dto.getPayType()));
-                row.createCell(15).setCellValue(dto.getBank());
-                row.createCell(16).setCellValue(dto.getBankAccount());
-                row.createCell(17).setCellValue(dto.getDepositUser());
-                row.createCell(18).setCellValue(dto.getDepositDate());
-                row.createCell(19).setCellValue(OrderPayStatusType.getOrderPayStatusStr(dto.getPayStatus()));
-                row.createCell(20).setCellValue(dto.getIsCancelRequest() == 0 ? "X" : "O");
-                row.createCell(21).setCellValue(dto.getPayDate());
-                row.createCell(22).setCellValue(dto.getCancelDate());
-                row.createCell(23).setCellValue(dto.getIsMobile() == 0 ? "X" : "O");
-                row.createCell(24).setCellValue(deliveryPrice);
-                row.createCell(25).setCellValue(DeliveryStatusType.getDeliveryStatusName(Integer.parseInt(Util.isNullValue(dto.getDeliverStatus(), "0"))));
-                row.createCell(26).setCellValue(dto.getDeliveryName());
-                row.createCell(27).setCellValue(dto.getDeliveryTelephone());
-                row.createCell(28).setCellValue(dto.getDeliveryTelephoneMobile());
-                row.createCell(29).setCellValue(dto.getDeliveryEmail());
-                row.createCell(30).setCellValue(dto.getDeliveryZipcode());
-                row.createCell(31).setCellValue(dto.getDeliveryAddressRoad());
-                row.createCell(32).setCellValue(dto.getDeliveryAddress());
-                row.createCell(33).setCellValue(CashReceiptType.getCashReceiptTypeStr(dto.getCashReceiptType()));
-                row.createCell(34).setCellValue(dto.getCashReceiptNumber());
+                row.createCell(6).setCellValue(dto.getEmail());
+                row.createCell(7).setCellValue(dto.getAffiliationName());
+                row.createCell(8).setCellValue(dto.getStartDate());
+                row.createCell(9).setCellValue(goodsTypeName);
+                row.createCell(10).setCellValue(dto.getExamYear());
+                row.createCell(11).setCellValue(dto.getSiteName());
+                row.createCell(12).setCellValue(dto.getSubjectName());
+                row.createCell(13).setCellValue(ClassificationType.getClassificationTypeStr(dto.getGoodsCtg()));
+                row.createCell(14).setCellValue(dto.getTeacherNameList());
+                row.createCell(15).setCellValue(orderName);
+                row.createCell(16).setCellValue(dto.getIsOffline() == 0 ? "X": "O");
+                row.createCell(17).setCellValue(NumberFormat.getInstance().format(dto.getGoodsPrice()));
+                row.createCell(18).setCellValue(NumberFormat.getInstance().format(dto.getSellPrice()));
+                row.createCell(19).setCellValue(NumberFormat.getInstance().format(dto.getPricePay()));
+                row.createCell(20).setCellValue(OrderPayType.getOrderPayTypeStr(dto.getPayType()));
+                row.createCell(21).setCellValue(dto.getBank());
+                row.createCell(22).setCellValue(dto.getBankAccount());
+                row.createCell(23).setCellValue(dto.getDepositUser());
+                row.createCell(24).setCellValue(dto.getDepositDate());
+                row.createCell(25).setCellValue(OrderPayStatusType.getOrderPayStatusStr(dto.getPayStatus()));
+                row.createCell(26).setCellValue(dto.getIsCancelRequest() == 0 ? "X" : "O");
+                row.createCell(27).setCellValue(dto.getPayDate());
+                row.createCell(28).setCellValue(dto.getCancelDate());
+                row.createCell(29).setCellValue(dto.getIsMobile() == 0 ? "X" : "O");
+                row.createCell(30).setCellValue(deliveryPrice);
+                row.createCell(31).setCellValue(DeliveryStatusType.getDeliveryStatusName(Integer.parseInt(Util.isNullValue(dto.getDeliverStatus(), "0"))));
+                row.createCell(32).setCellValue(dto.getDeliveryZipcode());
+                row.createCell(33).setCellValue(dto.getDeliveryAddressRoad());
+                row.createCell(34).setCellValue(dto.getDeliveryAddress());
+                row.createCell(35).setCellValue(CashReceiptType.getCashReceiptTypeStr(dto.getCashReceiptType()));
+                row.createCell(36).setCellValue(dto.getCashReceiptNumber());
 
                 i++;
             }

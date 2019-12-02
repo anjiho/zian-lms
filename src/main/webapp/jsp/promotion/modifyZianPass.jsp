@@ -55,6 +55,51 @@
                 $('#optionList tr').eq(0).children().eq(7).attr("style", "display:none");
             }
 
+
+            /**
+             * 강사 목록 가져오기
+             */
+            var productTeacherInfo = info.productTeacherInfo;
+            var nextIcon = "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+
+            if (productTeacherInfo.length == 0) {
+                var cellData = [
+                    function() {return "<input type='hidden'  name='teacherKeys[]' value=''>";},
+                    function() {return "<input type='hidden'  name='subjectKeys[]' value=''>";},
+                    function() {return getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);},
+                    function() {return nextIcon},
+                    function() {return selectTeacherSelectboxNoTag('teacherTable', 4);},
+                    function() {return ""},
+                    function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                ];
+                dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                $('#teacherList tr').eq(0).attr("style", "display:none");
+                $('#teacherList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
+                });
+            } else {
+                for (var i = 0; i < productTeacherInfo.length; i++) {
+                    var cmpList = productTeacherInfo[i];
+                    var cellData = [
+                        function() {return "<input type='hidden' name='teacherKeys[]' value='" + cmpList.teacherKey + "'>";},
+                        function() {return "<input type='hidden' name='subjectKeys[]' value='" + cmpList.subjectCtgKey + "'>";},
+                        function() {return cmpList.subjectName},
+                        function() {return nextIcon},
+                        function() {return cmpList.teacherName},
+                        function() {return ""},
+                        function() {return "<button type=\"button\" onclick=\"deleteTableRow('teacherTable', 'delBtn');\" class=\"btn btn-outline-danger btn-sm delBtn\" style=\"margin-top:8%;\" >삭제</button>"},
+                    ];
+                    dwr.util.addRows("teacherList", [0], cellData, {escapeHtml: false});
+                }
+                $('#teacherList tr').each(function(){
+                    var tr = $(this);
+                    tr.children().eq(0).attr("style", "display:none");
+                    tr.children().eq(1).attr("style", "display:none");
+                });
+            }
+
             //프로모션정보 가져오기
             var productPromotionInfo = info.productPromotionInfo;
             deviceLimitSelectbox('deviceLimitCount', productPromotionInfo.deviceLimitCount);
@@ -114,6 +159,72 @@
             $trNew.find("td").eq(7).attr('style', "display:''");
         }
     }
+
+    //교사 추가 버튼
+    function addTeacherInfo() {
+        var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
+
+        if (fistTrStyle == "display:none") {
+            $('#teacherList tr').eq(0).removeAttr("style", null);
+        } else {
+            var $tableBody = $("#teacherTable").find("tbody"),
+                $trLast = $tableBody.find("tr:last"),
+                $trNew = $trLast.clone();
+            $trLast.after($trNew);
+
+            $trNew.find("td input").eq(0).val("");
+            $trNew.find("td input").eq(1).val("");
+            $trNew.find("td input").eq(2).val("");
+
+            getSelectboxListForCtgKeyNoTag('teacherTable', '70', 2);
+            selectTeacherSelectboxNoTag('teacherTable', 4);
+        }
+    }
+
+    //강사목록 새로 등록하는 값 주입하기(강사키)
+    function injectSubjectKey(val) {
+        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(1).val(val);
+    }
+    //강사목록 새로 등록하는 값 주입하기(과목키)
+    function injectTeacherKey(val) {
+        $("#teacherTable").find("tbody").find("tr:last").find("td input").eq(0).val(val);
+    }
+
+
+    //강사목록 수정 버튼
+    function updateTeacherList() {
+        var teacherKeys = get_array_values_by_name("input", "teacherKeys[]");
+        var subjectKeys = get_array_values_by_name("input", "subjectKeys[]");
+
+        if(confirm("강좌정보를 수정 하시겠습니까?")) {
+
+            var fistTrStyle = $("#teacherList tr").eq(0).attr("style");
+
+            if (fistTrStyle == "display:none") {
+                productManageService.deleteTGoodsTeacherLinkByGkey(gKey, function(){
+                    location.reload();
+                });
+            } else {
+                var dataArr = new Array();
+                for (var i=0; i<teacherKeys.length; i++) {
+                    var data = {
+                        gTeacherKey:0,
+                        isPublicSubject:0,
+                        subjectCtgKey : subjectKeys[i],
+                        teacherKey : teacherKeys[i],
+                        calculateRate : '0',
+                        subjectName: "",
+                        teacherName: ""
+                    };
+                    dataArr.push(data);
+                }
+                productManageService.upsultTGoodTeacherLink(dataArr, gKey,function () {
+                    isReloadPage(true);
+                });
+            }
+        }
+    }
+
 
     //옵션 - 할인률 계산
     function saleInputPrice(val) {
@@ -386,7 +497,36 @@
                             </div>
                         </section>
                         <!-- //2.옵션 Tab -->
-                        <!-- 프로모션 정보 -->
+
+                        <!-- 3.강사 목록 Tab -->
+                        <h3>강사목록</h3>
+                        <section>
+                            <div class="float-right mb-3">
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateTeacherList();">수정</button>
+                                <button type="button" class="btn btn-info btn-sm" onclick="addTeacherInfo('new');">추가</button>
+                            </div>
+                            <div id="section5">
+                                <table class="table" id="teacherTable">
+                                    <input type="hidden" id="gTeacherKey_0" >
+                                    <input type="hidden" id="subjectHidden_0" >
+                                    <input type="hidden" id="teacherHidden_0" >
+                                    <input type="hidden" name="gKey" value="0">
+                                    <colgroup>
+                                        <col width="30%" />
+                                        <col width="10%" />
+                                        <col width="30%" />
+                                        <col width="30%" />
+                                    </colgroup>
+                                    <thead>
+                                    <tr style="">
+                                        <th scope="col" colspan="5" style="text-align:center;width:30%">강사목록</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody id="teacherList"></tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <!-- 4.프로모션 정보 -->
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">
                             <div id="section4">
@@ -429,7 +569,7 @@
                             </div>
                         </section>
                         <!-- 프로모션정보 -->
-                        <!-- 4.포함된 온라인강좌-->
+                        <!-- 5.포함된 온라인강좌-->
                         <h3>포함된 온라인강좌</h3>
                         <section>
                             <div class="float-right mb-3">
@@ -446,7 +586,7 @@
                                 </table>
                             </div>
                         </section>
-                        <!-- //4.포함된 온라인강좌 -->
+                        <!-- //5.포함된 온라인강좌 -->
                     </div>
                 </div>
             </div>

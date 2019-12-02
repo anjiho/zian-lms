@@ -2,6 +2,8 @@ package com.zianedu.lms.dto;
 
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 public class OrderExcelDownDTO {
 
@@ -115,4 +117,17 @@ public class OrderExcelDownDTO {
 
     private String isQuickDelivery;
 
+    private String startDate;
+
+    private String examYear;
+
+    private String subjectName;
+
+    private int Number;
+
+    private String teacherNameList;
+
+    private int goodsCtg;
+
+    private String email;
 }

@@ -1,5 +1,23 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String JKey = request.getParameter("param_key");
+    String type = request.getParameter("type");
+
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key2"), "");
+    String searchEndDate = Util.isNullValue(request.getParameter("param_key3"), "");
+    String dateSearchType = Util.isNullValue(request.getParameter("param_key4"), "1000");
+    String orderStatus = Util.isNullValue(request.getParameter("param_key5"), "");
+    String isOffline = Util.isNullValue(request.getParameter("param_key6"), "");
+    String orderPayTypeSel = Util.isNullValue(request.getParameter("param_key7"), "");
+    String deviceSel = Util.isNullValue(request.getParameter("param_key8"), "");
+    String orderSearch = Util.isNullValue(request.getParameter("param_key9"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key10"), "");
+    String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
+    String cancelStartDate = Util.isNullValue(request.getParameter("param_key11"), "");
+    String cancelEndDate = Util.isNullValue(request.getParameter("param_key12"), "");
+%>
 <style>
     ol,ul{list-style:none}
 
@@ -12,24 +30,83 @@
     .searchDate li .chkbox2 input{position:absolute;z-index:-1}
     .searchDate li .chkbox2 label{display:block;width:77px;height:26px;font-size:14px;font-weight:bold;color:#fff;text-align:center;line-height:25px;text-decoration:none;cursor:pointer;background:#02486f}
     .searchDate li .chkbox2.on label{background:#ec6a6a}
+    .pt-06 {padding-top:6px;}
+    #isOffline input{margin-right: 10px; position: relative; top:1.5px; left: 2px;}
+    #deviceSel input{margin-right: 10px; position: relative; top:1.5px; left: 2px;}
+    #orderPayStatus input{margin-right: 10px; position: relative; top:1.5px; left: 2px;}
+    #orderPayTypeSel input{margin-right: 10px; position: relative; top:1.5px; left: 2px;}
 </style>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
 <script>
     function init() {
+        var searchStartDate = '<%=searchStartDate%>';
+        var searchEndDate = '<%=searchEndDate%>';
+        var cancelStartDate = '<%=cancelStartDate%>';
+        var cancelEndDate = '<%=cancelEndDate%>';
+        var dateSearchType = '<%=dateSearchType%>';
+        var orderStatus = '<%=orderStatus%>'; //*
+        var isOffline = '<%=isOffline%>'; //*
+        var orderPayTypeSel = '<%=orderPayTypeSel%>'; //*
+        var deviceSel = '<%=deviceSel%>'; //*
+        var orderSearch = '<%=orderSearch%>';
+        var searchText = '<%=searchText2%>';
+
+        if(searchStartDate==''){
+            if(searchEndDate==''){
+                setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+            }else{
+                innerValue("searchStartDate", searchStartDate);
+                innerValue("searchEndDate", searchEndDate);
+            }
+        }else{
+            innerValue("searchStartDate", searchStartDate);
+            innerValue("searchEndDate", searchEndDate);
+        }
+
+        if(cancelStartDate==''){
+            if(cancelEndDate==''){
+                setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
+            }else{
+                innerValue("cancelStartDate", cancelStartDate);
+                innerValue("cancelEndDate", cancelEndDate);
+            }
+        }else{
+            innerValue("cancelStartDate", cancelStartDate);
+            innerValue("cancelEndDate", cancelEndDate);
+        }
+
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 7);
         orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
-        orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
-        isOfflineSelectbox('isOffline', '');
-        deviceSelectbox('deviceSel', '');
-        orderPayTypeSelectbox('orderPayTypeSel', '');
-        orderSearchSelectbox('orderSearch', 'orderUserName');
+        orderPayStatusTypeCheckbox('orderPayStatus', orderStatus);//처리상태 - 결제취소,주문취소,결제실패
+        isOfflineCheckbox('isOffline', isOffline);
+        deviceCheckbox('deviceSel', deviceSel);
+        orderPayTypeCheckbox('orderPayTypeSel', orderPayTypeSel);
+        orderSearchSelectbox('orderSearch', orderSearch);
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
-        setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        setSearchDate('6m', 'cancelStartDate', 'cancelEndDate');
-        getOrderDateSearchSelectbox("dateSearchType");//검색 주문일자기준선택
+        innerValue("searchText", searchText);
+        getOrderDateSearchSelectbox('dateSearchType',dateSearchType);//검색 주문일자기준선택
+
+        if(isOffline.indexOf(',')!=-1){
+            var isOfflineArr=splitReplace(isOffline,',');
+            overlapCheckbox('isOffline',isOfflineArr);
+        }
+        if(deviceSel.indexOf(',')!=-1){
+            var deviceSelArr=splitReplace(deviceSel,',');
+            overlapCheckbox('deviceSel',deviceSelArr);
+        }
+        if(orderStatus.indexOf(',')!=-1){
+            var orderStatusArr=splitReplace(orderStatus,',');
+            overlapCheckbox('orderPayStatus',orderStatusArr);
+        }
+        if(orderPayTypeSel.indexOf(',')!=-1){
+            var orderPayTypeSelArr=splitReplace(orderPayTypeSel,',');
+            overlapCheckbox('orderPayTypeSel',orderPayTypeSelArr);
+        }
+
+        fn_search("new");
     }
 
     function fn_search(val) {
@@ -40,10 +117,10 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        var orderPayStatus = getSelectboxValue("orderPayStatus");//처리상태
-        var isOffline = getSelectboxValue("isOffline");//구매장소
-        var isMobile = getSelectboxValue("deviceSel");//디바이스
-        var payType = getSelectboxValue("orderPayTypeSel");//결제방법
+        var orderPayStatus = getCheckboxValue("orderPayStatus");//처리상태
+        var isOffline = getCheckboxValue("isOffline");//구매장소
+        var isMobile = getCheckboxValue("deviceSel");//디바이스
+        var payType = getCheckboxValue("orderPayTypeSel");//결제방법
         var searchType = getSelectboxValue("orderSearch");//검색타입
         var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
         var listNumberSel = getSelectboxValue("listNumberSel");//리스트개수
@@ -60,6 +137,8 @@
             animationOut: false,
             defaultApply: 	true,
         });
+
+
         if(searchType == null) searchType = "";
         orderManageService.getCancelOrderListCount(startSearchDate, endSearchDate, cancelStartDate, cancelEndDate, orderPayStatus, isOffline,
             payType, isMobile, searchType, searchText, dateSearchType, function (cnt) {
@@ -77,7 +156,7 @@
                             function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
-                            function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.indate)+"</a>";},
+                            function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.cancelDate)+"</a>";},
                             function(data) {return data.deliveryStatusName == null ? "-" : data.deliveryStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                             function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
@@ -92,8 +171,20 @@
     }
 
     function goOrderDetail(val) {
-        innerValue("param_key", val);
-        innerValue("type", 'cancelOrderList');
+        innerValue('param_key', val);
+        innerValue('type', 'cancelOrderList');
+        innerValue('param_key2', getInputTextValue('searchStartDate'));
+        innerValue('param_key3', getInputTextValue('searchEndDate'));
+        innerValue('param_key4', getSelectboxValue('dateSearchType'));
+        innerValue('param_key5', getCheckboxValue('orderPayStatus'));
+        innerValue('param_key6', getCheckboxValue('isOffline'));
+        innerValue('param_key7', getCheckboxValue('orderPayTypeSel'));
+        innerValue('param_key8', getCheckboxValue('deviceSel'));
+        innerValue('param_key9', getSelectboxValue('orderSearch'));
+        innerValue('param_key10', getInputTextValue('searchText'));
+        innerValue('param_key11', getInputTextValue('cancelStartDate'));
+        innerValue('param_key12', getInputTextValue('cancelEndDate'));
+
         goPage('orderManage', 'orderDetailManage');
     }
 
@@ -128,10 +219,10 @@
             var searchEndDate = getInputTextValue("searchEndDate");
             var cancelStartDate = getInputTextValue("cancelStartDate");
             var cancelEndDate = getInputTextValue("cancelEndDate");
-            var orderStatus = getSelectboxValue("orderPayStatus");
-            var isOffline = getSelectboxValue("isOffline");
-            var payType = getSelectboxValue("orderPayType");
-            var isMobile = getSelectboxValue("deviceSel");
+            var orderStatus = getCheckboxValue("orderPayStatus");
+            var isOffline = getCheckboxValue("isOffline");
+            var payType = getCheckboxValue("orderPayTypeSel");
+            var isMobile = getCheckboxValue("deviceSel");
             var dateSearchType = getSelectboxValue("dateSearchType");
 
             var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
@@ -297,14 +388,14 @@
                     <div class="col">
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">처리상태</label>
-                            <div class="col-sm-8 pl-0 pr-0">
+                            <div class="col-sm-8 pl-0 pr-0 pt-06">
                                 <!--<span id="orderStatus"></span>-->
                                 <span id="orderPayStatus"></span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">결제방법</label>
-                            <div class="col-sm-8 pl-0 pr-0">
+                            <div class="col-sm-8 pl-0 pr-0 pt-06">
                                 <span id="orderPayTypeSel"></span>
                             </div>
                         </div>
@@ -312,13 +403,13 @@
                     <div class="col">
                         <div class="form-group row" style="">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">구매장소</label>
-                            <div class="col-sm-8 pl-0 pr-0">
+                            <div class="col-sm-8 pl-0 pr-0 pt-06">
                                 <span id="isOffline"></span>
                             </div>
                         </div>
                         <div class="form-group row">
                             <label  class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">디바이스</label>
-                            <div class="col-sm-8 pl-0 pr-0">
+                            <div class="col-sm-8 pl-0 pr-0 pt-06">
                                 <span id="deviceSel"></span>
                             </div>
                         </div>

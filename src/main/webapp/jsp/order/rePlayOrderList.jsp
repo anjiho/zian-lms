@@ -1,5 +1,19 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key2"), "");
+    String searchEndDate = Util.isNullValue(request.getParameter("param_key3"), "");
+    String dateSearchType = Util.isNullValue(request.getParameter("param_key4"), "1000");
+    String orderStatus = Util.isNullValue(request.getParameter("param_key5"), "");
+    String isOffline = Util.isNullValue(request.getParameter("param_key6"), "");
+    String orderPayTypeSel = Util.isNullValue(request.getParameter("param_key7"), "");
+    String deviceSel = Util.isNullValue(request.getParameter("param_key8"), "");
+    String orderSearch = Util.isNullValue(request.getParameter("param_key9"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key10"), "");
+    String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
+    String isDetail = Util.isNullValue(request.getParameter("param_key11"), "");
+%>
 <style>
     ol,ul{list-style:none}
 
@@ -17,19 +31,44 @@
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
 <script>
     function init() {
+        var isDetail = '<%=isDetail%>';
+
+        var searchStartDate = '<%=searchStartDate%>';
+        var searchEndDate = '<%=searchEndDate%>';
+        var dateSearchType = '<%=dateSearchType%>';
+        var orderStatus = '<%=orderStatus%>';
+        var isOffline = '<%=isOffline%>';
+        var orderPayTypeSel = '<%=orderPayTypeSel%>';
+        var deviceSel = '<%=deviceSel%>';
+        var orderSearch = '<%=orderSearch%>';
+        var searchText = '<%=searchText2%>';
+
+        if(searchStartDate==''){
+            if(searchEndDate==''){
+                setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+            }else{
+                innerValue("searchStartDate", searchStartDate);
+                innerValue("searchEndDate", searchEndDate);
+            }
+        }else{
+            innerValue("searchStartDate", searchStartDate);
+            innerValue("searchEndDate", searchEndDate);
+        }
+
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 3);
-        orderStatusTypeSelecbox('orderStatus', '');//처리상태 - 입금예정,결제대기,결제완료
+        orderStatusTypeSelecbox('orderStatus', orderStatus);//처리상태 - 입금예정,결제대기,결제완료
         orderPayStatusTypeSelecbox('orderPayStatus', '');//처리상태 - 결제취소,주문취소,결제실패
-        isOfflineSelectbox('isOffline', '');
-        deviceSelectbox('deviceSel', '');
-        orderPayTypeSelectbox('orderPayTypeSel', '');
-        orderSearchSelectbox('orderSearch', 'orderUserName');
+        isOfflineSelectbox('isOffline', isOffline);
+        deviceSelectbox('deviceSel', deviceSel);
+        orderPayTypeSelectbox('orderPayTypeSel', orderPayTypeSel);
+        orderSearchSelectbox('orderSearch', orderSearch);
         orderStatusTypeChangeSelecbox('orderStatusChangeSel', '');
         listNumberSelectbox('listNumberSel', '');
-        setSearchDate('6m', 'searchStartDate', 'searchEndDate');
-        getOrderDateSearchSelectbox("dateSearchType");//검색 주문일자기준선택
-        //fn_search('new');
+        innerValue("searchText", searchText);
+        getOrderDateSearchSelectbox('dateSearchType',dateSearchType);//검색 주문일자기준선택
+
+        fn_search("new");
     }
 
     function fn_search(val) {
@@ -94,8 +133,18 @@
     }
 
     function goOrderDetail(val) {
-        innerValue('type', 'rePlayOrderList');
         innerValue('param_key', val);
+        innerValue('type', 'rePlayOrderList');
+        innerValue('param_key2', getInputTextValue('searchStartDate'));
+        innerValue('param_key3', getInputTextValue('searchEndDate'));
+        innerValue('param_key4', getSelectboxValue('dateSearchType'));
+        innerValue('param_key5', getSelectboxValue('orderStatus'));
+        innerValue('param_key6', getSelectboxValue('isOffline'));
+        innerValue('param_key7', getSelectboxValue('orderPayTypeSel'));
+        innerValue('param_key8', getSelectboxValue('deviceSel'));
+        innerValue('param_key9', getSelectboxValue('orderSearch'));
+        innerValue('param_key10', getInputTextValue('searchText'));
+
         goPage('orderManage', 'orderDetailManage');
     }
 

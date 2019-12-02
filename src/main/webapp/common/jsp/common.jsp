@@ -128,6 +128,11 @@
 <input type="hidden" name="param_key6" id="param_key6">
 <input type="hidden" name="param_key7" id="param_key7">
 <input type="hidden" name="param_key8" id="param_key8">
+<input type="hidden" name="param_key9" id="param_key9">
+<input type="hidden" name="param_key10" id="param_key10">
+<input type="hidden" name="param_key11" id="param_key11">
+<input type="hidden" name="param_key12" id="param_key12">
+<input type="hidden" name="param_key13" id="param_key13">
 </form>
 <%
     if (authority == 4) {

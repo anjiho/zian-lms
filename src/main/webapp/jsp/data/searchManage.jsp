@@ -46,6 +46,7 @@
         if(confirm("수정 하시겠습니까?")) {
             dataManageService.modifySearchKeyword(searchKeywordKey, searchText, function () {
                 var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                alert("수정이 완료되었습니다.");
                 innerValue("param_key", sel_subDomain);
                 goPage('dataManage', 'searchSave');
 
@@ -68,6 +69,7 @@
             if(confirm("저장 하시겠습니까?")) {
                 dataManageService.saveSearchKeyword(kewordDomain, searchText, function (selList) {
                     var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                    alert("저장이 완료되었습니다.");
                     innerValue("param_key", sel_subDomain);
                     goPage('dataManage', 'searchSave');
                 });
@@ -79,6 +81,7 @@
         if(confirm("삭제 하시겠습니까?")) {
             dataManageService.deleteSearchkeyword(val, function () {
                 var sel_subDomain =  getSelectboxValue('sel_subDomain');
+                alert("삭제가 완료되었습니다.");
                 innerValue("param_key", sel_subDomain);
                 goPage('dataManage', 'searchSave');
             });

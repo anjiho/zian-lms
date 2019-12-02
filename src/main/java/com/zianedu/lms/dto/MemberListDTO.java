@@ -19,6 +19,8 @@ public class MemberListDTO {
 
     private String affiliationName;
 
+    private String affiliationName2;
+
     private int grade;
 
     private int authority;
@@ -32,4 +34,28 @@ public class MemberListDTO {
     private String authorityName;
 
     private int teacherKey;
+
+    private String birth;
+
+    private String telephone;
+
+    private int recvEmail;
+
+    private int recvSms;
+
+    private int zipCode;
+
+    private String addressRoad;
+
+    private String addressNumber;
+
+    private String address;
+
+    private int welfareDcPercent;
+
+    private String gradeGKey;
+
+    private int gradePrice;
+
+    private String note;
 }

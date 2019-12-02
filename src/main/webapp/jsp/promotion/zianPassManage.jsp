@@ -12,6 +12,8 @@
         getAllOptionSelectboxAddTag("sel_option", "");
         getSelectboxListForCtgKey('affiliationCtgKey','133','');
         deviceLimitSelectbox('deviceLimitCount','');
+        getSelectboxListForCtgKey("SubjectList_0","70");//과목 셀렉트박스
+        selectTeacherSelectbox("teacherList_0","");//선생님 셀렉트박스
     }
 
     $( document ).ready(function() {
@@ -242,6 +244,26 @@
         };
         categoryArr.push(data);
 
+        /*  3.강사정보 obj  */
+        var array2 = new Array();
+        $('#teacherTabel tbody tr').each(function(index){
+            var teacher = $(this).find("td select").eq(0).val();
+            var teacher1 = $(this).find("td select").eq(1).val();
+
+            var data = {
+                gTeacherKey:'0',
+                gKey:'0',
+                isPublicSubject:'0',
+                subjectCtgKey:teacher,
+                teacherKey:teacher1,
+                calculateRate:'0',
+                subjectName: "",
+                teacherName: ""
+            };
+            array2.push(data);
+        });
+        /*  //강사정보 obj  */
+
 
         /* 4. 프로모션정보 저장 */
         var promotionInfo = getJsonObjectFromDiv("section4");
@@ -260,8 +282,38 @@
             onlineLecInfo.push(data);
         });
         if(confirm("저장하시겠습니까?")) {
-            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo, function () {isReloadPage(true);});
+            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo,array2, function () {isReloadPage(true);});
         }
+    }
+
+    function addTeacher(){
+        var optionCnt = $("#teacherTabel tr").length-1;
+        var SubjectCnt = "SubjectList_"+optionCnt;
+        var teacherCnt = "teacherList_"+optionCnt;
+        getSelectboxListForCtgKey(SubjectCnt,"70");//과목 셀렉트박스
+        selectTeacherSelectbox(teacherCnt,"");//선생님 셀렉트박스
+
+        var optionHtml  = "<tr>";
+        optionHtml  += "<td style=\"padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle\">";
+        optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='SubjectList_"+optionCnt+"'>";
+        optionHtml  += "<option>선택</option>";
+        optionHtml  += "</select>";
+        optionHtml  += "</td>";
+        optionHtml  += "<td style=\"padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;\">";
+        optionHtml  += "<i class=\"m-r-10 mdi mdi-play\" style=\"font-size:18px;color:darkblue\"></i>";
+        optionHtml  += "</td>";
+        optionHtml  += "<td style=\"padding: 0.3rem;width: 20%;vertical-align: middle\">";
+        optionHtml  += "<select class=\"select2 form-control custom-select\" style=\"height:36px;\" id='teacherList_"+optionCnt+"'>";
+        optionHtml  += " <option>선택</option>";
+        optionHtml  += "</select>";
+        optionHtml  += "</td>";
+        optionHtml  += "<td style=\"padding: 0.3rem;width:60%;text-align:right;vertical-align: middle\">";
+        optionHtml  += "</td>";
+        optionHtml  += "<td style=\"width:3%;vertical-align: middle\">";
+        optionHtml += "<button type=\"button\" onclick=\"deleteTableRow('teacherTabel', 'delBtn')\" class=\"btn btn-outline-danger btn-sm delBtn\">삭제</button>";
+        optionHtml  += "</td>";
+        optionHtml  += "</tr>";
+        $('#teacherTabel > tbody:first').append(optionHtml);
     }
 </script>
 <input type="hidden" name="sPage3" id="sPage3">
@@ -391,7 +443,50 @@
                         </section>
                         <!-- //2.옵션 Tab -->
 
-                        <!-- 프로모션 정보 -->
+                        <!-- 3.강사 목록 Tab -->
+                        <h3>강사목록</h3>
+                        <section>
+                            <div class="float-right mb-3">
+                                <button type="button" class="btn btn-info btn-sm" onclick="addTeacher();">추가</button>
+                            </div>
+                            <div id="section5">
+                                <table class="table" id="teacherTabel">
+                                    <input type="hidden" name="gTeacherKey" value="0">
+                                    <input type="hidden" name="gKey" value="0">
+                                    <thead>
+                                    <tr>
+                                        <th scope="col" colspan="5" style="text-align:center;width:30%">강사목록</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td style="padding: 0.3rem;text-align: center;width: 20%;vertical-align: middle">
+                                            <select class="select2 form-control custom-select" style="height:36px;" id="SubjectList_0" >
+                                                <option>선택</option>
+                                            </select>
+                                        </td>
+                                        <td style="padding: 0.3rem; vertical-align: middle;width:2%;text-align: center;">
+                                            <i class="m-r-10 mdi mdi-play" style="font-size:18px;color:darkblue"></i>
+                                        </td>
+                                        <td style="padding: 0.3rem;width: 20%;vertical-align: middle">
+                                            <select class="select2 form-control custom-select" style="height:36px;" id="teacherList_0">
+                                                <option>선택</option>
+                                            </select>
+                                        </td>
+                                        <td style="padding: 0.3rem;width:60%;text-align:right;vertical-align: middle">
+
+                                        </td>
+                                        <td style="width:3%;vertical-align: middle">
+                                            <button type="button" onclick="deleteTableRow('teacherTabel', 'delBtn')" class='btn btn-outline-danger btn-sm delBtn' style="margin-top:8%;">삭제</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </section>
+                        <!-- //3.강사 목록 Tab -->
+
+                        <!-- 4.프로모션 정보 -->
                         <h3>프로모션정보</h3>
                         <section class="col-md-auto">
                             <div id="section4">
@@ -434,8 +529,8 @@
                                 </div>
                             </div>
                         </section>
-                        <!-- 프로모션정보 -->
-                        <!-- 4.포함된 온라인강좌-->
+                        <!-- //4.프로모션정보 -->
+                        <!-- 5.포함된 온라인강좌-->
                         <h3>포함된 온라인강좌</h3>
                         <section>
                             <div class="float-right mb-3">
@@ -452,7 +547,7 @@
                                 </table>
                             </div>
                         </section>
-                        <!-- //4.포함된 온라인강좌 -->
+                        <!-- //5.포함된 온라인강좌 -->
                     </div>
                 </div>
             </div>

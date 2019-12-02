@@ -183,7 +183,7 @@ public class FileUploadController {
         HashMap<String, String> uploadInfoMap = FileUploadUtil.fileUpload(request, ConfigHolder.getFileUploadPath(), "PREVIEW");
         return new JsonBuilder().add("result", uploadInfoMap.get("previewFilePath")).build();
     }
-
+/*
     @RequestMapping(value = "/test", method = RequestMethod.POST)
     public @ResponseBody String test(MultipartHttpServletRequest request, @RequestParam(value = "productInfo") String videoInfo,
                                                @RequestParam(value = "productOptionInfo") String videoOptionInfo,
@@ -231,5 +231,5 @@ public class FileUploadController {
 
 
         return new JsonBuilder().add("result", "OK").build();
-    }
+    }*/
 }

@@ -94,7 +94,7 @@ public class TOrderVO {
 
     public TOrderVO() {}
 
-    public TOrderVO(int userKey, int price, int payType, String cardCode) {
+    public TOrderVO(int userKey, int price, int payType, String cardCode,String cashReceiptNumber,int cashReceiptType) {
         this.cKey = ZianCoreManage.ZIAN_COMPANY_CODE;
         this.userKey = userKey;
         this.jId = ZianUtils.getJId();
@@ -133,8 +133,8 @@ public class TOrderVO {
         this.tmp = 0;
         this.gNameList = "";
         this.isCancelRequest = 0;
-        this.cashReceiptType = 0;
-        this.cashReceiptNumber = "";
+        this.cashReceiptType = cashReceiptType;
+        this.cashReceiptNumber = cashReceiptNumber;
         this.cancelRequestDate = "";
     }
 }

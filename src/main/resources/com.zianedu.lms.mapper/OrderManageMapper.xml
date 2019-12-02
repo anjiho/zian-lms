@@ -12,7 +12,8 @@
                     SELECT /*+ PARALLEL(4) */ TT.NAME FROM T_ORDER_GOODS T  LEFT JOIN T_GOODS TT ON T.G_KEY = TT.G_KEY WHERE T.J_KEY = A.J_KEY
                 ) WHERE ROWNUM = 1
             ) as orderGoodsName,
-            ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount
+            ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
+            (SELECT /*+FIRST_ROWS*/ TYPE FROM T_ORDER_GOODS T WHERE T.J_KEY=A.J_KEY AND ROWNUM = 1) as typeChk
         FROM T_ORDER A
         LEFT JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
@@ -209,6 +210,31 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
+        AND A.PAY_STATUS IN (
+            SELECT REGEXP_SUBSTR(#{cancelPayStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
+        <![CDATA[
+            CONNECT BY LEVEL <= 3
+        ]]>
+        )
+        AND A.IS_OFFLINE IN (
+            SELECT REGEXP_SUBSTR(#{cancelIsOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
+        <![CDATA[
+            CONNECT BY LEVEL <= 3
+        ]]>
+        )
+        AND A.PAY_TYPE IN (
+            SELECT REGEXP_SUBSTR(#{cancelPayType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
+        <![CDATA[
+            CONNECT BY LEVEL <= 8
+        ]]>
+        )
+        AND A.IS_MOBILE IN (
+            SELECT REGEXP_SUBSTR(#{cancelIsMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
+        <![CDATA[
+            CONNECT BY LEVEL <= 3
+        ]]>
+        )
+
         <if test="dateSearchType == 'payDate'">
             <if test="startSearchDate == endSearchDate">
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -258,22 +284,6 @@
             ]]>
             </if>
         </if>
-
-        <if test="payStatus == -1">
-            AND A.PAY_STATUS IN (8, 9, 10)
-        </if>
-        <if test="payStatus > -1">
-            AND A.PAY_STATUS = #{payStatus}
-        </if>
-        <if test="isOffline != null and isOffline >= 0">
-            AND A.IS_OFFLINE = #{isOffline}
-        </if>
-        <if test="payType != null and payType >= 0">
-            AND A.PAY_TYPE = #{payType}
-        </if>
-        <if test="isMobile != null and isMobile >= 0">
-            AND A.IS_MOBILE = #{isMobile}
-        </if>
         <if test="searchType == 'orderUserId'">
             AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
         </if>
@@ -305,6 +315,30 @@
             LEFT OUTER JOIN T_ORDER_DELIVERY D
             ON A.J_KEY = D.J_KEY
             WHERE 1=1
+            AND A.PAY_STATUS IN (
+                SELECT REGEXP_SUBSTR(#{cancelPayStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+            )
+            AND A.IS_OFFLINE IN (
+                SELECT REGEXP_SUBSTR(#{cancelIsOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+            )
+            AND A.PAY_TYPE IN (
+                SELECT REGEXP_SUBSTR(#{cancelPayType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 8
+            ]]>
+            )
+            AND A.IS_MOBILE IN (
+                SELECT REGEXP_SUBSTR(#{cancelIsMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+            )
             <if test="dateSearchType == 'payDate'">
                 <if test="startSearchDate == endSearchDate">
                     AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -354,22 +388,6 @@
                 ]]>
                 </if>
             </if>
-
-            <if test="payStatus == -1">
-                AND A.PAY_STATUS IN (8, 9, 10)
-            </if>
-            <if test="payStatus > -1">
-                AND A.PAY_STATUS = #{payStatus}
-            </if>
-            <if test="isOffline != null and isOffline >= 0">
-                AND A.IS_OFFLINE = #{isOffline}
-            </if>
-            <if test="payType != null and payType >= 0">
-                AND A.PAY_TYPE = #{payType}
-            </if>
-            <if test="isMobile != null and isMobile >= 0">
-                AND A.IS_MOBILE = #{isMobile}
-            </if>
             <if test="searchType == 'orderUserId'">
                 AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
             </if>
@@ -416,6 +434,12 @@
         <![CDATA[
                 AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
+        AND A.STATUS IN (
+        SELECT REGEXP_SUBSTR(#{orderLecStatus},'[^,]+',1,LEVEL) AS STATUS FROM T_ORDER_LEC
+        <![CDATA[
+                CONNECT BY LEVEL <= 7
+            ]]>
+        )
         <!-- 결제상태 : 결제완료 -->
         <if test="payStatus == 2">
             AND C.PAY_STATUS IN (0, 1, 2)
@@ -423,25 +447,6 @@
         <!-- 결제상태 : 결제취소 -->
         <if test="payStatus == 8">
             AND C.PAY_STATUS IN (8, 9, 10)
-        </if>
-        <if test="orderLecStatus == 0">
-            AND A.STATUS = 0
-        </if>
-        <!-- 진행상태 : 대기중 + 시작 -->
-        <if test="orderLecStatus == 1">
-            AND A.STATUS = 1
-        </if>
-        <!-- 진행상태 : 일시정지 -->
-        <if test="orderLecStatus == 2">
-            AND A.STATUS = 2
-        </if>
-        <!-- 진행상태 : 종강 -->
-        <if test="orderLecStatus == 3">
-            AND A.STATUS = 3
-        </if>
-        <!-- 진행상태 : 재시작대기 -->
-        <if test="orderLecStatus == 4">
-            AND A.STATUS = 4
         </if>
         <if test="searchType == 'orderUserId'">
             AND E.USER_ID LIKE '%'||#{searchText}||'%'
@@ -477,6 +482,12 @@
         <![CDATA[
             AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
+        AND A.STATUS IN (
+        SELECT REGEXP_SUBSTR(#{orderLecStatus},'[^,]+',1,LEVEL) AS STATUS FROM T_ORDER_LEC
+        <![CDATA[
+                CONNECT BY LEVEL <= 7
+            ]]>
+        )
         <!-- 결제상태 : 결제완료 -->
         <if test="payStatus == 2">
             AND C.PAY_STATUS IN (0, 1, 2)
@@ -484,26 +495,6 @@
         <!-- 결제상태 : 결제취소 -->
         <if test="payStatus == 8">
             AND C.PAY_STATUS IN (8, 9, 10)
-        </if>
-        <!-- 진행상태 : 대기중 -->
-        <if test="orderLecStatus == 0">
-            AND A.STATUS = 0
-        </if>
-        <!-- 진행상태 : 시작 -->
-        <if test="orderLecStatus == 1">
-            AND A.STATUS = 1
-        </if>
-        <!-- 진행상태 : 일시정지 -->
-        <if test="orderLecStatus == 2">
-            AND A.STATUS = 2
-        </if>
-        <!-- 진행상태 : 종강 -->
-        <if test="orderLecStatus == 3">
-            AND A.STATUS = 3
-        </if>
-        <!-- 진행상태 : 재시작대기 -->
-        <if test="orderLecStatus == 4">
-            AND A.STATUS = 4
         </if>
         <if test="searchType == 'orderUserId'">
             AND E.USER_ID LIKE '%'||#{searchText}||'%'
@@ -536,7 +527,7 @@
         LEFT JOIN T_USER E
         ON C.USER_KEY = E.USER_KEY
         WHERE A.J_LEC_KEY = #{jLecKey}
-    </select>
+</select>
 
     <!-- 수강내역목록 > 수강시간 조정 > 강의제목 리스트 -->
     <select id="selectLectureTimeList" resultType="LectureTimeDTO">
@@ -544,6 +535,25 @@
             Z.CURRI_KEY, Z.NAME, Z.VOD_TIME,
             NVL((SELECT J_CURRI_KEY FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY = #{jLecKey}), 0) as J_CURRI_KEY,
             NVL((SELECT TIME FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY = #{jLecKey}), 0) as REMAIN_TIME
+        FROM T_LEC_CURRI Z
+        WHERE Z.LEC_KEY = (
+            SELECT C.LEC_KEY
+            FROM T_ORDER_LEC A
+            INNER JOIN T_ORDER_GOODS B
+            ON A.J_G_KEY = B.J_G_KEY
+            INNER JOIN T_LEC C
+            ON B.G_KEY = C.G_KEY
+            WHERE A.J_LEC_KEY = #{jLecKey}
+        )
+        AND Z.IS_SHOW = 1
+        ORDER BY Z.CURRI_KEY ASC
+    </select>
+
+    <!-- 수강내역목록 > 수강시간 조정 > 강의 총 시간, 수강한 총 시간 -->
+    <select id="selectLectureTotalTime" resultType="LectureTimeDTO">
+        SELECT
+            SUM(Z.VOD_TIME) AS vodTotalTime,
+            SUM(NVL((SELECT TIME FROM T_ORDER_LEC_CURRI WHERE CURRI_KEY = Z.CURRI_KEY AND J_LEC_KEY =#{jLecKey}), 0)) AS remainTotalTime
         FROM T_LEC_CURRI Z
         WHERE Z.LEC_KEY = (
             SELECT C.LEC_KEY
@@ -819,10 +829,11 @@
         INNER JOIN T_GOODS B
         ON A.G_KEY = B.G_KEY
         INNER JOIN T_GOODS C
-        ON A.g_key = C.g_key
+        ON A.G_KEY = C.G_KEY
         INNER JOIN T_GOODS_PRICE_OPTION D
-        ON A.G_KEY = D.G_KEY
-        WHERE A.J_KEY = #{jKey} AND C.TYPE != 5
+        ON A.PRICE_KEY = D.PRICE_KEY
+        WHERE A.J_KEY = #{jKey} AND (A.J_PM_KEY=0 OR A.J_PM_KEY=(SELECT J_PM_KEY FROM T_ORDER_PROMOTION E WHERE E.PM_TYPE=2 AND A.J_PM_KEY=E.J_PM_KEY))
+        ORDER BY A.J_G_KEY ASC
     </select>
 
     <select id="selectOrderUserInfo" resultType="com.zianedu.lms.vo.TUserVO">
@@ -869,8 +880,7 @@
 
     <select id="selectExcelDownloadOrderList" resultType="OrderExcelDownDTO">
         SELECT /*+ PARALLEL(4) */ /*+index_desc (T_ORDER PK_T_ORDER) */
-        A.*,B.NAME, B.USER_ID,
-        B.TELEPHONE_MOBILE,
+        A.*,B.NAME, B.USER_ID,B.TELEPHONE_MOBILE,B.EMAIL,
         ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
         (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as AFFILIATION_NAME,
         ( SELECT G_NAME FROM
@@ -908,6 +918,37 @@
             SELECT /*+ PARALLEL(4) */ pm_type FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
             ) WHERE ROWNUM = 1
         ) as pmType,
+
+        ( SELECT EXAM_YEAR FROM
+            (
+            SELECT /*+ PARALLEL(4) */ exam_year FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as examYear,
+
+        ( SELECT TEACHER_NAME_LIST FROM
+            (
+            SELECT /*+ PARALLEL(4) */ TEACHER_NAME_LIST FROM T_ORDER_GOODS T WHERE T.J_KEY=A.J_KEY and ROWNUM=1
+             )
+        ) as teacherNameList,
+
+        ( SELECT NAME FROM
+            (
+            SELECT /*+ PARALLEL(4) */ NAME FROM T_CATEGORY E LEFT JOIN T_ORDER_GOODS T ON E.CTG_KEY=T.SUBJECT_CTG_KEY WHERE T.J_KEY=A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as subjectName,
+
+        ( SELECT STARTDATE FROM
+            (
+            SELECT /*+ PARALLEL(4) */ STARTDATE FROM T_LEC E LEFT JOIN T_ORDER_GOODS T ON E.G_KEY=T.G_KEY  WHERE T.J_KEY=A.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as startDate,
+
+        ( SELECT STEP_CTG_KEY FROM
+            (
+            SELECT /*+ PARALLEL(4) */ E.STEP_CTG_KEY FROM T_LEC E LEFT JOIN T_ORDER_GOODS T ON E.G_KEY=T.G_KEY WHERE T.J_KEY=a.J_KEY
+            ) WHERE ROWNUM = 1
+        ) as goodsCtg,
+
         D.STATUS as DELIVER_STATUS
         FROM T_ORDER A
         LEFT JOIN T_USER B
@@ -921,10 +962,10 @@
             </if>
             <if test="startSearchDate != endSearchDate">
                 <![CDATA[
-                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                    AND A.PAY_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                 <![CDATA[
-                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    AND A.PAY_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
             </if>
         </if>
@@ -943,14 +984,14 @@
         </if>
         <if test="dateSearchType == 'depositDate'">
             <if test="startSearchDate == endSearchDate">
-                AND TO_CHAR(A.DEPOSIT_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                AND TO_CHAR(A.PAY_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
             </if>
             <if test="startSearchDate != endSearchDate">
                 <![CDATA[
-                    AND A.DEPOSIT_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                    AND A.PAY_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                 <![CDATA[
-                    AND A.DEPOSIT_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    AND A.PAY_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
             </if>
         </if>
@@ -1056,6 +1097,30 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
+        AND A.PAY_STATUS IN (
+        SELECT REGEXP_SUBSTR(#{payStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
+        <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+        )
+        AND A.IS_OFFLINE IN (
+        SELECT REGEXP_SUBSTR(#{isOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
+        <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+        )
+        AND A.PAY_TYPE IN (
+        SELECT REGEXP_SUBSTR(#{payType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
+        <![CDATA[
+                CONNECT BY LEVEL <= 8
+            ]]>
+        )
+        AND A.IS_MOBILE IN (
+        SELECT REGEXP_SUBSTR(#{isMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
+        <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+        )
         <if test="dateSearchType == 'payDate'">
             <if test="startSearchDate == endSearchDate">
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -1104,22 +1169,6 @@
                 AND A.CANCEL_DATE <= TO_DATE(#{endCancelSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
             </if>
-        </if>
-
-        <if test="payStatus == -1">
-            AND A.PAY_STATUS IN (8, 9, 10)
-        </if>
-        <if test="payStatus > -1">
-            AND A.PAY_STATUS = #{payStatus}
-        </if>
-        <if test="isOffline != null and isOffline >= 0">
-            AND A.IS_OFFLINE = #{isOffline}
-        </if>
-        <if test="payType != null and payType >= 0">
-            AND A.PAY_TYPE = #{payType}
-        </if>
-        <if test="isMobile != null and isMobile >= 0">
-            AND A.IS_MOBILE = #{isMobile}
         </if>
         <if test="searchType == 'orderUserId'">
             AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
@@ -1342,6 +1391,9 @@
     <update id="updateOrderStatus">
         UPDATE T_ORDER
         SET PAY_STATUS = #{payStatus}
+            <if test="payStatus == 2">,PAY_DATE=SYSDATE</if>
+            <if test="payStatus == 8">,CANCEL_DATE=SYSDATE</if>
+            <if test="payStatus == 9">,CANCEL_DATE=SYSDATE</if>
         WHERE J_KEY = #{jKey}
     </update>
 

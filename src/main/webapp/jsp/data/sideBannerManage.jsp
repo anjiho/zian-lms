@@ -172,6 +172,7 @@
                 processData: false,
                 contentType: false,
                 success: function (data) {
+                    alert("저장이 완료되었습니다.");
                     location.reload();
                 }
             });
@@ -181,6 +182,7 @@
     function bannerDelete(val,ctgKey,pos) {
         if(confirm("삭제하시겠습니까?")) {
             dataManageService.deleteBannerInfo(val, ctgKey, function () {
+                alert("삭제가 완료되었습니다.");
                 location.reload();
             });
         }
@@ -202,6 +204,7 @@
                     arr.push(data);
                 });
                 dataManageService.changeBannerPosition(arr, function () {
+                    alert("순서 변경이 완료되었습니다.");
                     location.reload();
                 });
             }else if(val == "1"){

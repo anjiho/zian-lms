@@ -8,6 +8,7 @@
     String sel_1 = Util.isNullValue(request.getParameter("param_key5"), "");
     String memberSel = Util.isNullValue(request.getParameter("param_key6"), "");
     String searchText = Util.isNullValue(request.getParameter("param_key7"), "");
+    String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
     String isDetail = Util.isNullValue(request.getParameter("param_key8"), "");
 %>
 <style>
@@ -38,7 +39,7 @@
         getMemberSearchSelectbox("l_searchSel", memberSel);
         getSelectboxListForCtgKey('affiliationCtgKey', '133', sel_1);
         memberGrageSelectBox("memberGrageSel", memberGradeSel);
-        innerValue("searchText", '<%=searchText%>');
+        innerValue("searchText", '<%=searchText2%>');
 
         if (isDetail == 'detail') {
             fn_search2('new');
@@ -118,7 +119,7 @@
 
         if (isDetail) {
             searchType = '<%=memberSel%>';
-            searchText = '<%=searchText%>';
+            searchText = '<%=searchText2%>';
             regStartDate = '<%=searchStartDate%>';
             regEndDate = '<%=searchEndDate%>';
             grade = '<%=memberGradeSel%>';
@@ -258,6 +259,12 @@
                                                 <span class="chkbox2">
                                                     <input type="radio" name="dateType" id="dateType7" onclick="setSearchDate('6m', 'searchStartDate', 'searchEndDate')"/>
                                                     <label for="dateType7">6개월</label>
+                                                </span>
+                                            </li>
+                                            <li>
+                                                <span class="chkbox2">
+                                                    <input type="radio" name="dateType" id="dateType8" onclick="setSearchDate('all', 'searchStartDate', 'searchEndDate')"/>
+                                                    <label for="dateType8">전체</label>
                                                 </span>
                                             </li>
                                         </ul>

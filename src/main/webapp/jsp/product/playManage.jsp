@@ -6,6 +6,10 @@
 <script src="common/js/bookGiftListPopup.js"></script>
 <script>
     function init() {
+        var currentDay=today();
+        innerValue('indate',currentDay);
+        innerValue('sellstartdate',currentDay);
+
         menuActive('menu-1', 2);
         getProductSearchTypeSelectbox("l_productSearch");
         //탭 메뉴 색상 변경
@@ -335,7 +339,8 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                      goPage('productManage', 'playList');
+                        alert("동영상 등록이 완료되었습니다.");
+                        goPage('productManage', 'playList');
                     }
                 }
             });

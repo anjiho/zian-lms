@@ -1,8 +1,23 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
+<%@ page import="java.net.URLDecoder" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
     String JKey = request.getParameter("param_key");
     String type = request.getParameter("type");
+
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key2"), "");
+    String searchEndDate = Util.isNullValue(request.getParameter("param_key3"), "");
+    String dateSearchType = Util.isNullValue(request.getParameter("param_key4"), "1000");
+    String orderStatus = Util.isNullValue(request.getParameter("param_key5"), "");
+    String isOffline = Util.isNullValue(request.getParameter("param_key6"), "");
+    String orderPayTypeSel = Util.isNullValue(request.getParameter("param_key7"), "");
+    String deviceSel = Util.isNullValue(request.getParameter("param_key8"), "");
+    String orderSearch = Util.isNullValue(request.getParameter("param_key9"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key10"), "");
+    String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
+    String cancelStartDate = Util.isNullValue(request.getParameter("param_key11"), "");
+    String cancelEndDate = Util.isNullValue(request.getParameter("param_key12"), "");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -237,9 +252,39 @@
 
     //배송조회 팝업
     function trackingDelivery() {
-        var deliveryNumber = getInputTextValue("deliveryNo");
-        var targetUrl = "https://www.doortodoor.co.kr/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=" + deliveryNumber;
+        var deliveryNumber = getInputTextValue("deliveryNo")
+        var deliveryMasterKey = getSelectboxValue('deliverycompany');  // 1: CJ    6: 대한통운   21:현대택배    ( CJ랑 대한이랑 같은 곳임 )
+        var targetUrl ="";
+
+        if(deliveryMasterKey==1)
+            targetUrl = "https://www.doortodoor.co.kr/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=" + deliveryNumber;
+        else if(deliveryMasterKey==6)
+            targetUrl = "https://www.doortodoor.co.kr/doortodoor.do?fsp_action=PARC_ACT_002&fsp_cmd=retrieveInvNoACT&invc_no=" + deliveryNumber;
+
+        else {
+            deliveryNumber=deliveryNumber.replace(/-/g,"") ;
+            targetUrl = "https://www.lotteglogis.com/open/tracking?invno=" + deliveryNumber;
+        }
+
         gfn_winPop(1000, 2000, targetUrl, '');
+    }
+
+    //주문 리스트로 이동
+    function goOrderList() {
+        innerValue('param_key', '<%=JKey%>');
+        innerValue('param_key2', '<%=searchStartDate%>');
+        innerValue('param_key3', '<%=searchEndDate%>');
+        innerValue('param_key4', '<%=dateSearchType%>');
+        innerValue('param_key5', '<%=orderStatus%>');
+        innerValue('param_key6', '<%=isOffline%>');
+        innerValue('param_key7', '<%=orderPayTypeSel%>');
+        innerValue('param_key8', '<%=deviceSel%>');
+        innerValue('param_key9', '<%=orderSearch%>');
+        innerValue('param_key10', '<%=searchText2%>');
+        innerValue('param_key11', '<%=cancelStartDate%>');
+        innerValue('param_key12', '<%=cancelEndDate%>');
+
+        goPage('orderManage', '<%=type%>');
     }
 </script>
 <div class="page-breadcrumb">
@@ -524,7 +569,7 @@
                       <!--3.배송지정보 Tab -->
                         <h3>배송정보</h3>
                         <section>
-                            <div class="mb-3 float-right">
+                            <div class="mb-3 float-right" style="position:relative;z-index:10;">
                                 <button type="button" class="btn btn-outline-primary btn-sm" onclick="saveDeliveryInfo();">저장</button>
                             </div>
                             <div id="section3">
@@ -560,6 +605,9 @@
                         </section>
                         <!--2.옵션 Tab -->
                     </div>
+                </div>
+                <div align="right">
+                    <button type="button" class="btn btn-outline-info mx-auto" onclick="goOrderList()">목록</button>
                 </div>
             </div>
         </div>

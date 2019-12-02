@@ -16,10 +16,13 @@ public class TCalculateOptionVO {
 
     private int price;
 
+    private int calculateKey;
+
     public TCalculateOptionVO(){}
 
-    public TCalculateOptionVO(int teacherKey, String title, int price, String yyyymm) {
+    public TCalculateOptionVO(int teacherKey, String title, int price, String yyyymm,int calculateKey) {
         this.teacherKey = teacherKey;
+        this.calculateKey = calculateKey;
         this.title = Util.isNullValue(title, "");
         this.price = price;
         this.targetDate = yyyymm + "-01 00:00:00";

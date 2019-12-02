@@ -37,6 +37,13 @@
                     });
                 }
             }
+
+            if(info.resultTotalTime != null){
+                var result =  info.resultTotalTime;
+                var remainT=result.remainTotalTime.toString();
+                innerHTML("vodTotalTime", result.vodTotalTime);
+                innerHTML("remainTotalTime", remainT);
+            }
         });
     }
 
@@ -90,6 +97,10 @@
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">상품명</label>
                             <span id="goodsName"></span>
+                        </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">총수강시간</label>
+                            <span id="remainTotalTime"></span>분&nbsp;/&nbsp;<span id="vodTotalTime"></span>분
                         </div>
                     </div>
                 </div>
