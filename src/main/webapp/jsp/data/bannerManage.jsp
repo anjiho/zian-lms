@@ -1,4 +1,4 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
+\<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
     String subDomainSel = request.getParameter("param_key");
@@ -154,7 +154,7 @@
             $("#newPopYn1").prop('checked', selList.valueBit1);
         });
     }
-    
+
     function popup_teacher_save(val,ctgKey,pos) {
         $("#teacherBannerKey").val(val);
         $("#teacherCtgKey").val(ctgKey);
@@ -163,7 +163,7 @@
         getNewSelectboxListForCtgKey2("l_subjectGroup", "3710", "");//과목
         selectTeacherSelectbox("teacherSel", "");
     }
-    
+
     function popup_save(val,ctgKey,pos) { //추가팝업
         $("#title").val("");
         $("#bannerColor").val("");

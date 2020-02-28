@@ -6,7 +6,7 @@
         SELECT * FROM T_PROMOTION WHERE G_KEY = #{gKey}
     </select>
 
-    <select id="selectPromotionProductList" resultType="VideoListDTO">
+     <select id="selectPromotionProductList" resultType="VideoListDTO">
         SELECT A.G_KEY, A.NAME as GOODS_NAME, A.INDATE, A.IS_SHOW, A.IS_SELL, A.IS_FREE
         FROM T_GOODS A LEFT JOIN T_PROMOTION B
         ON A.G_KEY = B.G_KEY
