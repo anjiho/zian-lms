@@ -155,41 +155,11 @@
         <property name="cronExpression" value="0 0 5 * * ?"/> <!-- 새벽 5시 예약 -->
 	</bean>
 
-    <bean id="dayQuartz" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass" value="com.zianedu.lms.schedule.DaySchedule" />
-        <property name="applicationContextJobDataKey" value="applicationContext"/>
-    </bean>
-    <bean id="cronTrigger2" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="dayQuartz"/>
-        <property name="cronExpression" value="0 45 08 ? * MON-FRI"/>
-    </bean>
-
-    <bean id="emailQuartz" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass" value="com.zianedu.lms.schedule.EmailSchedule" />
-        <property name="applicationContextJobDataKey" value="applicationContext"/>
-    </bean>
-    <bean id="cronTrigger3" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="emailQuartz"/>
-        <property name="cronExpression" value="0 10 18 ? * MON-FRI"/>
-    </bean>
-
-    <bean id="emailQuartz2" class="org.springframework.scheduling.quartz.JobDetailBean">
-        <property name="jobClass" value="com.zianedu.lms.schedule.EmailSchedule2" />
-        <property name="applicationContextJobDataKey" value="applicationContext"/>
-    </bean>
-    <bean id="cronTrigger4" class="org.springframework.scheduling.quartz.CronTriggerBean">
-        <property name="jobDetail" ref="emailQuartz2"/>
-        <property name="cronExpression" value="0 08 18 ? * MON-FRI"/>
-    </bean>
-
   	<!-- 3.Cron 실행 -->
   	<bean class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
 		<property name="triggers">
 			<list>
-<!--				<ref bean="cronTrigger1"/>-->
-<!--                <ref bean="cronTrigger2"/>-->
-<!--                <ref bean="cronTrigger3"/>-->
-<!--                <ref bean="cronTrigger4"/>-->
+				<ref bean="cronTrigger1"/>
 			</list>
 		</property>
 		<property name="quartzProperties">
