@@ -1001,36 +1001,4 @@ public class ProductManageService extends PagingSupport {
         productManageMapper.deleteTRes(resKey);
     }
 
-
-    /**
-     * 모의고사 리스트
-     * @param sPage
-     * @param listLimit
-     * @param searchType
-     * @param searchText
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public List<TExamMasterVO>getMockExamOfflineUserList(int sPage, int listLimit, int examKey) {
-        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
-        return productManageMapper.selectOfflineUserList(
-                startNumber,
-                listLimit,
-                examKey
-        );
-    }
-
-    /**
-     * 모의고사 리스트 개수
-     * @param searchType
-     * @param searchText
-     * @return
-     */
-    @Transactional(readOnly = true)
-    public int getMockExamOfflineUserListCount(int examKey) {
-        return productManageMapper.selectOfflineUserListCount(
-                examKey
-        );
-    }
-
 }
