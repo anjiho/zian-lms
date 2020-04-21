@@ -1422,7 +1422,21 @@ function deviceSelectbox(tagId, val) {
     html += "</select>";
     innerHTML(tagId, html);
 }
-//
+
+/* 쿠폰관리 - 디바이스  */
+function deviceSelectbox2(tagId, val) {
+    var html = "<select id='device' name='device' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '0') html += "<option value='0' selected>전체</option>";
+    else html += "<option value='0'>전체</option>";
+    if(val == '1') html += "<option value='1' selected>PC</option>";
+    else html += "<option value='1'>PC</option>";
+    if(val == '3') html += "<option value='3' selected>Mobile</option>";
+    else html += "<option value='3'>Mobile</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
 
 //디바이스관리 - 검색 셀렉트박스
 function getSearchDeviceSelectbox(tagId) {
@@ -1588,6 +1602,7 @@ function getSmsYearSelectbox(tagId, val) {
     var yyyy = today.getFullYear();
     var html = "<select id='searchYearMonth' name='searchYearMonth' class='form-control'>";
     html += "<option value=''>년월선택</option>";
+    $('#searchYearMonth').val(val);
     for (var i=yyyy; i>=yearAgo; i--) {
         if(i == yyyy || i == yearAgo){
             for(var j=mm; j>0; j--) {
@@ -1626,6 +1641,37 @@ function getOrderDateSearchSelectbox(tagId,val) {
     else html += "<option value='payDate'>주문일자 기준</option>";
     if(val=='depositDate') html += "<option value='depositDate' selected>입금 확인일자 기준</option>";
     else html += "<option value='depositDate'>입금 확인일자 기준</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
+
+/* 팝업/쿠폰관리 - 쿠폰검색  */
+function couponTypeSelecbox(tagId,val) {
+    var html = "<select id='searchType' name='searchType' class='col-sm-5 select2 form-control custom-select'>";
+
+    if(val == '') html += "<option value='0' selected>선택</option>";
+    else html += "<option value='0'>선택</option>";
+    if(val == 'name') html += "<option value='name' selected>쿠폰명</option>";
+    else html += "<option value='name'>쿠폰명</option>";
+    /*if(val == 'contents') html += "<option value='contents' selected>쿠폰내용</option>";
+    else html += "<option value='contents'>쿠폰내용</option>";*/
+    html += "</select>";
+
+    innerHTML(tagId, html);
+}
+
+/* 팝업/쿠폰관리 - 쿠폰상세 - 쿠폰 소지자 조회  */
+function getCouponConditionSelectbox(tagId,val) {
+    var html = "<select id='searchType' class='form-control'>";
+    if(val=='') html += "<option value='' selected>선택</option>";
+    else html += "<option value=''>선택</option>";
+    if(val=='name') html += "<option value='name' selected>이름</option>";
+    else html += "<option value='name'>이름</option>";
+    if(val=='id') html += "<option value='id' selected>아이디</option>";
+    else html += "<option value='id'>아이디</option>";
+    if(val=='coupon') html += "<option value='coupon' selected>쿠폰번호</option>";
+    else html += "<option value='coupon'>쿠폰번호</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

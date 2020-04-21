@@ -1,5 +1,7 @@
 package com.zianedu.lms.utils;
 
+import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 
@@ -131,8 +133,36 @@ public class RandomUtil {
         return sb.toString();
     }
 
-    public static void main(String[] args) {
-            System.out.println(getRandomNumber(6));
+    public static String getIndexOfChar(int index) {
+        String no=Integer.toHexString(index);
+        return no;
+    }
 
+    public static HashMap getDateChar() {
+        HashMap<String, Object> paramMap = new HashMap<>();
+        Calendar cal = Calendar.getInstance(); //현재 년도, 월, 일
+
+        int year = (cal.get ( cal.YEAR ))%100;
+        int month = cal.get ( cal.MONTH ) + 1;
+        int date = cal.get ( cal.DATE );
+
+        if(year < 27) year=64+year;
+        else year=38+year;
+
+        if(month < 27) month=64+month;
+        else month=38+month;
+
+        if(date < 27) date=64+date;
+        else date=38+date;
+
+        paramMap.put("yearChar", Character.toString((char)year));
+        paramMap.put("monthChar",Character.toString((char)month));
+        paramMap.put("dateChar", Character.toString((char)date));
+
+        return paramMap;
+    }
+
+    public static void main(String[] args) {
+        System.out.println(getRandomNumber(6));
     }
 }

@@ -22,4 +22,16 @@ public class CouponListDTO {
     private String issueTypeName;
 
     private String dcTypeName;
+
+    private String description;
+
+    private int limitDay;
+
+    private int periodType;
+
+    private String periodTypeName;
+
+    private String searchType;
+
+    private String searchText;
 }

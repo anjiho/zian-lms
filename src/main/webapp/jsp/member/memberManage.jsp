@@ -455,11 +455,11 @@
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">메모</label>
-                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="memo" name="memo">
+                        <textarea class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="memo" name="memo"></textarea>
                     </div>
                     <div class="form-group row">
                         <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">내용</label>
-                        <input type="text" class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="contents" name="contents">
+                        <textarea class="col-sm-6 form-control" style="display: inline-block;height: 100px;" id="contents" name="contents"></textarea>
                     </div>
                         <button type="button" class="btn btn-info float-right m-l-2" style="margin-bottom: 10px;" id="saveBtn" onclick="counseltSave();">저장</button>
                 </div>

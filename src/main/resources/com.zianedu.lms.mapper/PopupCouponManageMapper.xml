@@ -30,16 +30,26 @@
 
     <select id="selectTCouponMaterList" resultType="CouponListDTO">
         SELECT
-            COUPON_MASTER_KEY, TYPE, NAME, DC_TYPE, DC_VALUE,
-            TO_CHAR(START_DATE, 'YYYY-MM-DD') as ISSUE_DATE,
-            TO_CHAR(START_DATE, 'YYYY-MM-DD')|| ' ~ ' || TO_CHAR(END_DATE, 'YYYY-MM-DD') DATE_USE
-        FROM T_COUPON_MASTER
+            A.COUPON_MASTER_KEY, A.TYPE, A.NAME, A.DC_TYPE, A.DC_VALUE,
+            TO_CHAR(A.START_DATE, 'YYYY-MM-DD') as ISSUE_DATE,
+            TO_CHAR(A.START_DATE, 'YYYY-MM-DD')|| ' ~ ' || TO_CHAR(A.END_DATE, 'YYYY-MM-DD') DATE_USE,
+            A.LIMIT_DAY,
+            A.PERIOD_TYPE
+        FROM T_COUPON_MASTER A
         WHERE 1=1
         <if test="searchType == 'name'">
-            AND NAME LIKE '%'||#{searchText}||'%'
+            AND A.NAME LIKE '%'||#{searchText}||'%'
         </if>
-        <if test="searchType == 'code'">
-            AND COUPON_MASTER_KEY = #{searchText}
+        <if test="startSearchDate == endSearchDate">
+            AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+        </if>
+        <if test="startSearchDate != endSearchDate">
+            <![CDATA[
+                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+            <![CDATA[
+                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
         </if>
         ORDER BY COUPON_MASTER_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -47,6 +57,7 @@
 
     <select id="selectTCouponMaterListCount" resultType="Integer">
         SELECT COUNT (COUPON_MASTER_KEY)
+        FROM T_COUPON_MASTER
         WHERE 1=1
         <if test="searchType == 'name'">
             AND NAME LIKE '%'||#{searchText}||'%'
@@ -70,7 +81,6 @@
             NAME,
             TO_CHAR(INDATE, 'YYYY-MM-DD') as INDATE,
             TYPE,
-            NAME,
             DC_TYPE,
             DC_VALUE,
             CONTENTS,
@@ -88,7 +98,7 @@
     <select id="selectOfflineCouponList" resultType="com.zianedu.lms.dto.OfflineCouponListDTO">
         SELECT
             A.CODE,
-            A.INDATE as PRODUCE_DATE,
+            TO_CHAR(A.INDATE,'YYYY-MM-DD') as PRODUCE_DATE,
             B.INDATE as ISSUE_DATE,
             C.USER_ID,
             E.J_ID
@@ -102,6 +112,7 @@
         LEFT OUTER JOIN T_ORDER E
         ON D.j_key = E.j_key
         WHERE A.COUPON_MASTER_KEY = #{couponMasterKey}
+            AND A.IS_ISSUE=0
         ORDER BY A.COUPON_OFFLINE_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
@@ -168,19 +179,30 @@
     <select id="selectIssuedAdminCouponUserList" resultType="AdminCouponListDTO">
         SELECT C.USER_ID, C.USER_KEY, C.NAME, B.LIMIT_DAY,
                TO_CHAR(B.INDATE, 'YYYY-MM-DD') as INDATE,
+               TO_CHAR(A.INDATE, 'YYYY-MM-DD') as INDATE2,
                TO_CHAR(B.START_DATE, 'YYYY-MM-DD') as START_DATE,
-               A.DESCRIPTION
+               TO_CHAR(B.END_DATE, 'YYYY-MM-DD') as END_DATE,
+               A.DESCRIPTION,D.CODE,
+               A.USE_DATE
         FROM T_COUPON_ISSUE A
         INNER JOIN T_COUPON_MASTER B
         ON A.COUPON_MASTER_KEY = B.COUPON_MASTER_KEY
         INNER JOIN T_USER C
         ON A.USER_KEY = C.USER_KEY
+        LEFT JOIN T_COUPON_OFFLINE D
+        ON A.COUPON_OFFLINE_KEY=D.COUPON_OFFLINE_KEY
         WHERE A.COUPON_MASTER_KEY = #{couponMasterKey}
         <if test="searchType == 'name'">
             AND C.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
             AND C.USER_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="type == 1">
+            AND A.COUPON_OFFLINE_KEY != 0
+        </if>
+        <if test="type == 0">
+            AND A.COUPON_OFFLINE_KEY = 0
         </if>
         ORDER BY A.INDATE DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -200,6 +222,13 @@
         <if test="searchType == 'id'">
             AND C.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
+        <if test="type == 1">
+            AND A.COUPON_OFFLINE_KEY != 0
+        </if>
+        <if test="type == 0">
+            AND A.COUPON_OFFLINE_KEY = 0
+        </if>
+
     </select>
 
     <insert id="insertTPopupInfo" parameterType="com.zianedu.lms.vo.TPopupVO">
@@ -240,7 +269,7 @@
         )
         VALUES
         (
-            T_COUPON_ISSUE_SEQ.nextval, #{couponMasterKey}, #{userKey}, #{indate}, #{couponOfflineKey}, #{jGKey}, #{useDate}, #{description}
+            T_COUPON_ISSUE_SEQ.nextval, #{couponMasterKey}, #{userKey}, sysdate, #{couponOfflineKey}, #{jGKey}, #{useDate}, #{description}
         )
     </insert>
 

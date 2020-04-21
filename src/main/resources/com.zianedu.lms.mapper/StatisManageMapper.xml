@@ -225,7 +225,7 @@
         SELECT * FROM T_CALCULATE_OPTION
         WHERE TEACHER_KEY = #{teacherKey}
         AND TO_CHAR(TARGET_DATE, 'YYYYMM') = #{targetDate}
-        ORDER BY CALCULATE_OPTION_KEY ASC
+        ORDER BY CALCULATE_OPTION_KEY DESC
     </select>
 
     <select id="selectTeacherStatisGraphByMonth" resultType="StatisResultDTO">

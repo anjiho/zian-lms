@@ -1,9 +1,9 @@
 <%--
   Created by IntelliJ IDEA.
   User: won
-  Date: 2019-04-03
-  Time: 오전 10:58
-  왼쪽메뉴 - 관리자권한 메뉴페이지
+  Date: 2020-04-20
+  Time: 오전 09:06
+  왼쪽메뉴 - 학원 상담 권한 메뉴페이지
 --%>
 <!-- Left Sidebar-->
 
@@ -47,13 +47,13 @@
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'classficationSave'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 분류/과목관리 </span></a></li>
                         <!--<li class="sidebar-item" id="menu-0-1"><a href="#" onclick="goPage('dataManage', 'subjectSave');" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 과목관리 </span></a></li>-->
-                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <%--<hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'bannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">배너관리</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'sideBannerSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">사이드바배너관리</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'examplanSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 시험일정관리 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('dataManage', 'searchSave'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 검색어관리 </span></a></li>
-                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <hr style="width: 100%;color:#6c757d" noshade >--%>
                     </ul>
                 </li>
                 <li class="sidebar-item"  id="menu-1"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bubble"></i><span class="hide-menu">상품관리</span></a>
@@ -79,9 +79,6 @@
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemBankManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사 문제은행 문제등록 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemSubjectBankList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu"> 모의고사 문제은행 과목목록 </span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokProblemSubjectBankManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">모의고사 문제은행 과목등록</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokOfflineMemberList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">오프라인 응시자 목록</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokScoreManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">성적내역</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('productManage', 'mokOfflineOmr'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">OMR</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
@@ -148,15 +145,15 @@
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
-                <li class="sidebar-item" id="menu-6"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">통계</span></a>
+                <%--<li class="sidebar-item" id="menu-6"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-chart-bar"></i><span class="hide-menu">통계</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'productStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">상품통계</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">프로모션 통계</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">회원가입 통계</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
-                </li>
-                <li class="sidebar-item" id="menu-7"> <a class="sidebar-link
+                </li>--%>
+                <%--<li class="sidebar-item" id="menu-7"> <a class="sidebar-link
                 has-arrow waves-effect waves-dark" href="javascript:void(0)" aria-expanded="false"><i class="mdi mdi-account-key"></i><span class="hide-menu">교수</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalculateMonthList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">월별 정산내역</span></a></li>
@@ -169,7 +166,7 @@
                          <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">리뷰</span></a></li>-->
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
-                </li>
+                </li>--%>
             </ul>
         </nav>
         <!-- End Sidebar navigation -->

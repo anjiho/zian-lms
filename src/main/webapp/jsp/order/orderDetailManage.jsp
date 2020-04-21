@@ -18,6 +18,7 @@
     String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
     String cancelStartDate = Util.isNullValue(request.getParameter("param_key11"), "");
     String cancelEndDate = Util.isNullValue(request.getParameter("param_key12"), "");
+    String sPage = Util.isNullValue(request.getParameter("param_key13"), "");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -25,6 +26,7 @@
 <script>
     var JKey = '<%=JKey%>';
     var type = '<%=type%>';
+    var sPage = '<%=sPage%>';
 
     function init() {
         //탭 메뉴 색상 변경
@@ -46,6 +48,7 @@
         deliveryCompanySelectbox("deliveryMaster","");//택배사
         orderDeliveryInfoSelectbox('deliveryStatusSel', '');
         getEmailSelectbox('deliveryUserEmail2', '');//이메일
+        innerValue("sPage", sPage);
 
         /*주문상세정보 가져오기*/
         orderManageService.getOrderDetail(JKey, function(info) {
@@ -97,10 +100,10 @@
                     dwr.util.addRows("dataList", orderProductList, [
                         function(data) {return "<input type='hidden' name='JGKey[]' value='"+ data.JGKey +"'>"},//코드
                         function(data) {return data.productTypeName},//코드
-                        function(data) {return num==3?"<a style='color: blue'>[" + data.extendDay + "일]</a>" +data.name:data.name},//출제구분
+                        function(data) {return num==3?data.extendDay==0?"<a style='color: blue'>[재수강]</a>"+data.name:"<a style='color: blue'>[" + data.extendDay + "일]</a>" +data.name:data.name},//출제구분
                         function(data) {return data.productOptionName},//출제구분
                         function(data) {return data.cnt},//출제구분
-                        function(data) {return format(data.sellPrice)},//출제구분
+                        function(data) {return data.extendDay!=-1?format(data.sellPrice*(1-data.extendPercent/100)):format(data.sellPrice)},//출제구분
                     ], {escapeHtml:false});
                     $('#dataList tr').each(function(){
                         var tr = $(this);
@@ -283,11 +286,13 @@
         innerValue('param_key10', '<%=searchText2%>');
         innerValue('param_key11', '<%=cancelStartDate%>');
         innerValue('param_key12', '<%=cancelEndDate%>');
+        innerValue('param_key13', '<%=sPage%>');
 
         goPage('orderManage', '<%=type%>');
     }
 </script>
 <div class="page-breadcrumb">
+    <input type="hidden" id="sPage">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
             <h4 class="page-title">주문상세</h4>

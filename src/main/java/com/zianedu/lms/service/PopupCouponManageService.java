@@ -2,6 +2,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.CouponDcType;
 import com.zianedu.lms.define.datasource.CouponIssueType;
+import com.zianedu.lms.define.datasource.CouponPeriodType;
 import com.zianedu.lms.dto.*;
 import com.zianedu.lms.mapper.PopupCouponManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
@@ -14,10 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class PopupCouponManageService {
@@ -89,7 +87,7 @@ public class PopupCouponManageService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<CouponListDTO> getCouponList(int sPage, int listLimit, String searchType, String searchText) {
+    public List<CouponListDTO> getCouponList(int sPage, int listLimit, String searchType, String searchText,String startSearchDate, String endSearchDate) {
         if (sPage == 0) return null;
 
         int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
@@ -97,12 +95,15 @@ public class PopupCouponManageService {
                 startNumber,
                 listLimit,
                 Util.isNullValue(searchText, ""),
-                Util.isNullValue(searchType, "")
+                Util.isNullValue(searchType, ""),
+                Util.isNullValue(startSearchDate, ""),
+                Util.isNullValue(endSearchDate, "")
         );
         if (list.size() > 0) {
             for (CouponListDTO couponListDTO : list) {
                 couponListDTO.setDcTypeName(CouponDcType.getCouponDcTypeStr(couponListDTO.getDcType()));
                 couponListDTO.setIssueTypeName(CouponIssueType.getCouponIssueTypeStr(couponListDTO.getType()));
+                couponListDTO.setPeriodTypeName(CouponPeriodType.getCouponPeriodStr(couponListDTO.getPeriodType()));
             }
         }
         return list;
@@ -161,10 +162,11 @@ public class PopupCouponManageService {
             tCouponMasterVO, categoryList, issuedOfflineCouponCount
         );
         return couponDetailDTO;
+
     }
 
     /**
-     * 쿠폰 상세 > 오프라인 쿠폰 목록 조회 리스트
+     * 쿠폰 상세 > 오프라인 쿠폰 목록(미사용) 조회 리스트
      * @param couponMasterKey
      * @return
      */
@@ -177,7 +179,7 @@ public class PopupCouponManageService {
     }
 
     /**
-     * 쿠폰 상세 > 오프라인 쿠폰 목록 조회 리스트 개수
+     * 쿠폰 상세 > 오프라인 쿠폰 목록(미사용) 조회 리스트 개수
      * @param couponMasterKey
      * @return
      */
@@ -238,7 +240,7 @@ public class PopupCouponManageService {
      * @return
      */
     @Transactional(readOnly = true)
-    public List<AdminCouponListDTO> getAdminCouponIssueUserList(int sPage, int listLimit, int couponMasterKey,
+    public List<AdminCouponListDTO> getAdminCouponIssueUserList(int sPage, int listLimit, int couponMasterKey,int type,int periodType,
                                                                 String searchType, String searchText) throws Exception {
         if (couponMasterKey == 0 && sPage == 0) return null;
 
@@ -248,14 +250,21 @@ public class PopupCouponManageService {
                 startNumber,
                 listLimit,
                 couponMasterKey,
+                type,
                 Util.isNullValue(searchText, ""),
                 Util.isNullValue(searchType, "")
         );
         if (list.size() > 0) {
             for (AdminCouponListDTO adminCouponListDTO : list) {
-                adminCouponListDTO.setValIdDate(
-                        adminCouponListDTO.getStartDate() + " ~ " + Util.plusDate(adminCouponListDTO.getStartDate(), adminCouponListDTO.getLimitDay())
-                );
+                if(periodType==1) {
+                    adminCouponListDTO.setValIdDate(
+                            adminCouponListDTO.getStartDate() + " ~ " + adminCouponListDTO.getEndDate()
+                    );
+                }else if (periodType==0) {
+                    adminCouponListDTO.setValIdDate(
+                            adminCouponListDTO.getIndate2() + " ~ " + Util.plusDate(adminCouponListDTO.getIndate2(), adminCouponListDTO.getLimitDay())
+                    );
+                }
             }
         }
         return list;
@@ -269,10 +278,11 @@ public class PopupCouponManageService {
      * @return
      */
     @Transactional(readOnly = true)
-    public int getAdminCouponIssueUserListCount(int couponMasterKey, String searchType, String searchText) {
+    public int getAdminCouponIssueUserListCount(int couponMasterKey,int type, String searchType, String searchText) {
         if (couponMasterKey == 0) return 0;
         return popupCouponManageMapper.selectIssuedAdminCouponUserListCount(
                 couponMasterKey,
+                type,
                 Util.isNullValue(searchText, ""),
                 Util.isNullValue(searchType, "")
         );
@@ -400,14 +410,19 @@ public class PopupCouponManageService {
 
     /**
      * 쿠폰 발급하기
-     * @param couponMasterKey
-     * @param userKey
+     * @param userSelectDTOList
      */
     @Transactional(propagation = Propagation.REQUIRED)
-    public void issueCouponToUser(int couponMasterKey, int userKey) {
-        if (couponMasterKey == 0 && userKey == 0) return;
-        TCouponIssueVO couponIssueVO = new TCouponIssueVO(couponMasterKey, userKey);
-        popupCouponManageMapper.insertTCouponIssue(couponIssueVO);
+    public void issueCouponToUser(List<AdminCouponListDTO>userSelectDTOList) {
+        if (userSelectDTOList.size() > 0) {
+            for (AdminCouponListDTO userSelectDTO : userSelectDTOList) {
+                int userKey=Integer.parseInt(userSelectDTO.getUserKey());
+                int couponMasterKey=userSelectDTO.getCouponMasterKey();
+
+                TCouponIssueVO couponIssueVO = new TCouponIssueVO(couponMasterKey, userKey);
+                popupCouponManageMapper.insertTCouponIssue(couponIssueVO);
+            }
+        }
     }
 
     /**
@@ -418,11 +433,28 @@ public class PopupCouponManageService {
     @Transactional(propagation = Propagation.REQUIRED)
     public void produceOfflineCoupon(int couponMasterKey, int produceCount) {
         if (couponMasterKey == 0 && produceCount == 0) return;
+
+        HashMap<String, Object> paramMap = new HashMap<>();
+        paramMap.putAll(RandomUtil.getDateChar());
+        String index=RandomUtil.getIndexOfChar(couponMasterKey);
+
         for (int i=0; i<produceCount; i++) {
-            String offlineCouponCode = RandomUtil.getRandomAlphaNumber(16);
+            String offlineCouponCode="";
+            String randomCode = RandomUtil.getRandomAlphaNumber(9);
+            String randomCode1=randomCode.substring(0,2);
+            String randomCode2=randomCode.substring(2);
+
+            offlineCouponCode=index+paramMap.get("yearChar")+randomCode1+paramMap.get("monthChar")+randomCode2+paramMap.get("dateChar");
+
+            int codeLength=16-offlineCouponCode.length();
+            if(codeLength>=0){
+                for (int f=0;f<codeLength;f++){
+                    offlineCouponCode= offlineCouponCode+"A";
+                }
+            }
+
             TCouponOfflineVO couponOfflineVO = new TCouponOfflineVO(couponMasterKey, offlineCouponCode);
             popupCouponManageMapper.insertTCouponOffline(couponOfflineVO);
         }
     }
-
 }

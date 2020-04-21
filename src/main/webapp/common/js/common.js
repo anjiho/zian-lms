@@ -1568,8 +1568,25 @@ function getSelectboxValue(tagId) {
     if (tagId != "") {
         selectedvalue = $("#" + tagId + " option:selected").val();
     }
-
     return selectedvalue;
+}
+
+function getSwitchValue(tagId) {
+    var selectedvalue = "";
+    var value=0;
+    if (tagId != "") {
+        selectedvalue=$('input:checkbox[id='+tagId+']').is(":checked");
+    }
+
+    if(selectedvalue) value=1;
+    else value=0;
+
+    return value;
+}
+
+function isSwitchByNumber(tagId,value) {
+    if(value==1) $("input:checkbox[id='"+tagId+"']").prop("checked", true);
+    else $("input:checkbox[id='"+tagId+"']").prop("checked", false);
 }
 
 function getCheckboxValue(tagId) {
@@ -2730,8 +2747,6 @@ function goMemberDetail(val) {
 
 //주문 상세정보
 function  goOrderDetailType() {
-    alert("AAAA");
-    alert($('#isOffline').val());
     innerValue('param_key2', getInputTextValue('searchStartDate'));
     innerValue('param_key3', getInputTextValue('searchEndDate'));
     innerValue('param_key4', getSelectboxValue('dateSearchType'));

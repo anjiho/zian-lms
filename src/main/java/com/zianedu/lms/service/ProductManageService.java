@@ -756,6 +756,13 @@ public class ProductManageService extends PagingSupport {
     }
 
     @Transactional(propagation = Propagation.REQUIRED)
+    public void deleteCouponCategory(int key, int couponkey, String menuType) {
+        if ("COUPON".equals(menuType)) {  //팝업 카테코리 정보 삭제
+            productManageMapper.deleteCouponCategoryInfo(key,couponkey);
+        }
+    }
+
+        @Transactional(propagation = Propagation.REQUIRED)
     public void deleteTLinkKeyByResType(int reqKey, int resType) {
         if (reqKey == 0 && resType == 0) return;
         productManageMapper.deleteTLinkKeyByResType(reqKey, resType);
@@ -992,6 +999,38 @@ public class ProductManageService extends PagingSupport {
     public void deletePreviewInfo(int resKey) {
         if (resKey == 0) return;
         productManageMapper.deleteTRes(resKey);
+    }
+
+
+    /**
+     * 모의고사 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<TExamMasterVO>getMockExamOfflineUserList(int sPage, int listLimit, int examKey) {
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+        return productManageMapper.selectOfflineUserList(
+                startNumber,
+                listLimit,
+                examKey
+        );
+    }
+
+    /**
+     * 모의고사 리스트 개수
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMockExamOfflineUserListCount(int examKey) {
+        return productManageMapper.selectOfflineUserListCount(
+                examKey
+        );
     }
 
 }

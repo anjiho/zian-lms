@@ -923,6 +923,14 @@
         AND RES_TYPE = 300
 	</delete>
 
+	<delete id="deleteCouponCategoryInfo" parameterType="Integer">
+		DELETE FROM T_LINK_KEY
+		WHERE REQ_KEY = #{linkKey}
+		AND RES_KEY=#{couponKey}
+		AND REQ_TYPE = 100
+        AND RES_TYPE = 400
+	</delete>
+
 	<delete id="deleteTLinkKeyByResKey" parameterType="Integer">
 		DELETE FROM T_LINK_KEY WHERE RES_KEY = #{resKey}
 	</delete>

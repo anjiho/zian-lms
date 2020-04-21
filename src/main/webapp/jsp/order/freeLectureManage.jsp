@@ -27,8 +27,8 @@
         var searchText = getInputTextValue('SearchText');
         var regStartDate = "";
         var regEndDate = "";
-        var grade = "";
-        var affiliationCtgKey = 0;
+        var grade = 104;
+        var affiliationCtgKey = 2;
 
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate,
             grade, affiliationCtgKey, function (cnt) {

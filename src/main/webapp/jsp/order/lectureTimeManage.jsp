@@ -1,7 +1,14 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
 <%
     String JLecKey = request.getParameter("param_key");
+    String payStatus = Util.isNullValue(request.getParameter("param_key2"), "");
+    String orderStatus = Util.isNullValue(request.getParameter("param_key3"), "");
+    String orderSearch = Util.isNullValue(request.getParameter("param_key4"), "");
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key5"), "");
+    String searchEndDate = Util.isNullValue(request.getParameter("param_key6"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key7"), "");
 %>
 <script type='text/javascript' src='/dwr/engine.js'></script>
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
@@ -39,10 +46,14 @@
             }
 
             if(info.resultTotalTime != null){
-                var result =  info.resultTotalTime;
+                var result = info.resultTotalTime;
                 var remainT=result.remainTotalTime.toString();
+                var resultPer=Math.floor(remainT/result.vodTotalTime*100);
+
                 innerHTML("vodTotalTime", result.vodTotalTime);
                 innerHTML("remainTotalTime", remainT);
+                innerHTML("remainPer", resultPer);
+
             }
         });
     }
@@ -59,6 +70,17 @@
             }
         });
         }
+    }
+
+    function goOrderList() {
+        innerValue("param_key2", '<%=payStatus%>');
+        innerValue("param_key3", '<%=orderStatus%>');
+        innerValue("param_key4", '<%=orderSearch%>');
+        innerValue("param_key5", '<%=searchStartDate%>');
+        innerValue("param_key6", '<%=searchEndDate%>');
+        innerValue("param_key7", '<%=searchText%>');
+
+        goPage('orderManage', 'lectureWatchList');
     }
 
 </script>
@@ -100,7 +122,10 @@
                         </div>
                         <div class="form-group row">
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">총수강시간</label>
-                            <span id="remainTotalTime"></span>분&nbsp;/&nbsp;<span id="vodTotalTime"></span>분
+                            <span id="remainTotalTime"></span>분&nbsp;/&nbsp;<span id="vodTotalTime"></span>분 (<span id="remainPer"></span>%)
+                        </div>
+                        <div align="right">
+                            <button type="button" class="btn btn-outline-info mx-auto" onclick="goOrderList()">목록</button>
                         </div>
                     </div>
                 </div>

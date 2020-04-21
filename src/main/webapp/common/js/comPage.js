@@ -80,7 +80,6 @@ function gfn_fnList4(page) {
 //  전체건수/페이지를 출력
 //--------------------------------------------------
 function gfn_printPageNum_new(totalCount,printNum,rowNum,curPage){
-
     if (totalCount==0){     //( 총 100건 , 페이지 1/50 )
         //document.all['total'].innerHTML = " ( 총 0건 , 페이지 0/0 )";
         var sHtml = gfn_getPageNav_new('1',printNum,curPage);

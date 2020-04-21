@@ -155,7 +155,7 @@
                             //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
-                            function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
+                            function(data) {return data.payTypeName == null ? "-" : data.payTypeName + "<br/><a style='color: green'>" + gfn_isnull(data.depositUser)+"</a>";},
                             function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.cancelDate)+"</a>";},
                             function(data) {return data.deliveryStatusName == null ? "-" : data.deliveryStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},

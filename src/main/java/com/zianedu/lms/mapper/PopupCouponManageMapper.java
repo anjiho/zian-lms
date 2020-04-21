@@ -18,7 +18,8 @@ public interface PopupCouponManageMapper {
     TPopupVO selectTPopupInfo(@Param("popupKey") int popupKey);
 
     List<CouponListDTO>selectTCouponMaterList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                              @Param("searchText") String searchText, @Param("searchType") String searchType);
+                                              @Param("searchText") String searchText, @Param("searchType") String searchType,
+                                              @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate);
 
     int selectTCouponMaterListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
 
@@ -41,10 +42,12 @@ public interface PopupCouponManageMapper {
     int selectIssuedOfflineCouponCount(@Param("couponMasterKey") int couponMasterKey);
 
     List<AdminCouponListDTO>selectIssuedAdminCouponUserList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
-                                                            @Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText,
+                                                            @Param("couponMasterKey") int couponMasterKey,@Param("type") int type,
+                                                            @Param("searchText") String searchText,
                                                             @Param("searchType") String searchType);
 
-    int selectIssuedAdminCouponUserListCount(@Param("couponMasterKey") int couponMasterKey, @Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectIssuedAdminCouponUserListCount(@Param("couponMasterKey") int couponMasterKey, @Param("type") int type, @Param("searchText") String searchText,
+                                             @Param("searchType") String searchType);
 
     /** INSERT **/
     Integer insertTPopupInfo(TPopupVO tPopupVO);

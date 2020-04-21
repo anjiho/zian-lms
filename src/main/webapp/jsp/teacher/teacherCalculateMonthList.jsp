@@ -32,13 +32,15 @@
         dwr.util.removeAllRows("onlineList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("acaList"); //테이블 리스트 초기화
         dwr.util.removeAllRows("pacakgeList"); //테이블 리스트 초기화
+
         //옵션 목록 삭제
-        $("#sumList tr").each(function () {
-            var tr = $(this);
-            if (tr.attr("id") == 'option') {
-                tr.remove();
+        var trLength=$("#sumList tr").length;
+        if(trLength>6){
+            for(var i=0;i<trLength-6;i++){
+                $("#option"+i).remove();
             }
-        });
+        }
+
         var teacherKey      = getSelectboxValue("sel_1");
         var searchYearMonth = getSelectboxValue("searchYearMonth");
 
@@ -256,12 +258,13 @@
 
                 var alltotalPrice    = (totalPrice - cancelTotalPrice); // 총 합계 (판매합계 - 환불금액)
 
-                if(alltotalPrice > 0){
+                if(alltotalPrice >= 0){
                     var taxPrice =  (roundingDownWon(alltotalPrice) +  Number(roundingDownWon(optionPriceSum)))*0.033; //소득세,주민세
                         taxPrice = roundingDownWon(taxPrice) * -1;
 
                     var duesPrice  = 0; //사우회비
-                    if(totalPrice > 100000) duesPrice = -10000;
+                    var totalPlusOption =totalPrice+optionPriceSum;
+                    if(totalPlusOption > 100000) duesPrice = -10000;
                     else  duesPrice = 0;
 
                     var actualPay = roundingDownWon(alltotalPrice) + roundingDownWon(taxPrice) + duesPrice + Number(roundingDownWon(optionPriceSum));//실지급액
@@ -333,6 +336,7 @@
            statisManageService.saveTeacherCalculateOptionInfo(teacherKey, optionTitle, optionPrice, searchYearMonth, function () {
                var searchYearMonth =  getSelectboxValue('searchYearMonth');
                var teacherName =  getSelectboxValue('sel_1');
+
                innerValue("teacher_date_key", searchYearMonth);
                innerValue("teacher_name_key", teacherName);
                goPage('teacherManage', 'teacherCalculateMonthList');
@@ -402,6 +406,11 @@
         var month = getSelectboxValue("searchYearMonth");
         var teacherName = $("#sel_1 option:selected").text();
 
+        $('.ttss').html('<div style="width:200px">');
+        $('.ttss').html('<button type="button" class="btn btn-primary btn-sm" onclick="optionUpdate($(this).closest(\'td\').attr(\'id\'),$(this).closest(\'tr\').attr(\'id\'));">수정</button>');
+        $('.ttss').html('<button type="button" class="btn btn-secondary btn-sm" onclick="optionDelete($(this).closest(\'td\').attr(\'id\'));">삭제</button>');
+        $('.ttss').html('</div>');
+
         $("#excelDownloadDiv").table2excel({
             exclude: ".noExl",
             name: month + "_" + teacherName,
@@ -412,10 +421,17 @@
             exclude_links: true,
             exclude_inputs: true
         });
+
+        var searchYearMonth =  getSelectboxValue('searchYearMonth');
+        var teacherName =  getSelectboxValue('sel_1');
+
+        innerValue("teacher_date_key", searchYearMonth);
+        innerValue("teacher_name_key", teacherName);
+        goPage('teacherManage', 'teacherCalculateMonthList');
+
     }
 
 </script>
-
 <div class="page-breadcrumb">
     <input type="hidden" id="sPage">
     <input type="hidden" id="param_key" name="param_key" value="">
@@ -455,10 +471,11 @@
                     </div>
                 </div>
                 <!--온라인강좌-->
+                <table style="float: left;display:none"  id="onlineLable">
+                    <tr><td></td></tr>
+                    <tr><td  class="col-sm-3 control-label col-form-label">온라인강좌</td></tr>
+                </table>
                 <table class="table" id="onlineTable" style="display: none;">
-                    <div style="float: left;display: none;" id="onlineLable">
-                        <label  class="col-sm-3 control-label col-form-label card-title">온라인강좌</label>
-                    </div>
                     <thead>
                     <tr>
                         <th scope="col" style="width: 10%;">구분</th>
@@ -482,10 +499,11 @@
                 </table>
                 <!--//온라인강좌-->
                 <!--학원강의-->
+                <table style="float: left;display:none"  id="acaLable">
+                    <tr><td></td></tr>
+                    <tr><td  class="col-sm-3 control-label col-form-label">학원강의</td></tr>
+                </table>
                 <table class="table"  id="acaTable" style="display: none;">
-                    <div style="float: left;display: none;" id="acaLable">
-                        <label  class="col-sm-3 control-label col-form-label card-title">학원강의</label>
-                    </div>
                     <thead>
                     <tr>
                         <th scope="col" style="width: 10%;">구분</th>
@@ -499,7 +517,7 @@
                     <tbody id="acaList"></tbody>
                     <tfoot>
                         <tr class="caculate-list">
-                            <td colspan="2">온라인강좌 소개</td>
+                            <td colspan="2">학원강의 소계</td>
                             <td id="acaTotalCnt"></td>
                             <td id="acaPayPriceTotal"></td>
                             <td id="acaCancelTotalCnt"></td>
@@ -509,10 +527,11 @@
                 </table>
                 <!--//학원강의-->
                 <!--패키지-->
+                <table style="float: left;display:none"  id="pacakgeLable">
+                    <tr><td></td></tr>
+                    <tr><td  class="col-sm-3 control-label col-form-label">패키지</td></tr>
+                </table>
                 <table class="table calculate-list" id="pacakgeTable" style="display: none;">
-                    <div style="float: left;display: none;"  id="pacakgeLable">
-                        <label  class="col-sm-3 control-label col-form-label">패키지</label>
-                    </div>
                     <thead>
                     <tr>
                         <th scope="col" style="width: 10%;">구분</th>
@@ -526,7 +545,7 @@
                     <tbody id="pacakgeList"></tbody>
                     <tfoot>
                         <tr class="caculate-list">
-                            <td colspan="2">온라인강좌 소개</td>
+                            <td colspan="2">패키지 소계</td>
                             <td id="packageTotalCnt"></td>
                             <td id="packagePayPriceTotal"></td>
                             <td id="packageCancelCntTotal"></td>
@@ -535,11 +554,14 @@
                     </tfoot>
                 </table>
                 <!--//패키지-->
+                <table style="float: left;display:none">
+                    <tr><td></td></tr>
+                </table>
                 <table class="table text-center SumTable">
                     <input type="hidden" id="optionPriceSum" value="">
                     <tbody id="sumList">
                         <tr>
-                            <td colspan="4">판매합계</td>
+                            <td colspan="2">판매합계</td>
                             <td></td>
                             <td></td>
                             <td id="totalCnt"></td>
@@ -547,7 +569,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="4">환불합계</td>
+                            <td colspan="2">환불합계</td>
                             <td></td>
                             <td></td>
                             <td id="cancelTotalCnt"></td>
@@ -557,7 +579,7 @@
                         <tr id="test">
                         </tr>
                         <tr>
-                            <td colspan="4">총 합계</td>
+                            <td colspan="2">총 합계</td>
                             <td></td>
                             <td></td>
                             <td id="alltotalCnt"></td>
@@ -565,7 +587,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="4">소득세(0.3%) +  주민세(0.03%)</td>
+                            <td colspan="2">소득세(0.3%) +  주민세(0.03%)</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -573,7 +595,7 @@
                             <td></td>
                         </tr>
                         <tr>
-                            <td colspan="4">사우회비</td>
+                            <td colspan="2">사우회비</td>
                             <td></td>
                             <td></td>
                             <td></td>
@@ -581,19 +603,19 @@
                             <td></td>
                         </tr>
                         <tr style="display:none;">
-                            <td colspan="4"></td>
+                            <td colspan="2"></td>
                             <td style="width:200px"></td>
                             <td></td>
                             <td style="width:340px"></td>
                             <td style="width:1px"></td>
-                            <td style="width:200px">
+                            <td style="width:200px" class="ttss">
                                 <button type="button" class="btn btn-primary btn-sm" onclick="optionUpdate($(this).closest('td').attr('id'),$(this).closest('tr').attr('id'));">수정</button>
                                 <button type="button" class="btn btn-secondary btn-sm" onclick="optionDelete($(this).closest('td').attr('id'));">삭제</button>
                             </td>
                         </tr>
                         <tfoot>
                             <tr>
-                                <td colspan="4" style="color: yellow">실지급액</td>
+                                <td colspan="2" style="color: yellow">실지급액</td>
                                 <td></td>
                                 <td></td>
                                 <td></td>

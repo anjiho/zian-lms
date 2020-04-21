@@ -24,6 +24,14 @@ public enum CouponPeriodType {
         this.couponPeriodKey = couponPeriodKey;
         this.couponPeriodStr = couponPeriodStr;
     }
+    public static String getCouponPeriodStr(int couponPeriodKey) {
+        for (CouponPeriodType couponPeriodTypeType : CouponPeriodType.values()) {
+            if (couponPeriodKey == couponPeriodTypeType.couponPeriodKey) {
+                return couponPeriodTypeType.couponPeriodStr;
+            }
+        }
+        return null;
+    }
 
     public static List<SelectboxDTO> getCouponPeriodTypeSelectbox() {
         List<SelectboxDTO>list = new ArrayList<>();

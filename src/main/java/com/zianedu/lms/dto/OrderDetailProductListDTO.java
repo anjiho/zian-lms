@@ -22,4 +22,6 @@ public class OrderDetailProductListDTO {
     private String productTypeName;
 
     private String productOptionName;
+
+    private int extendPercent;
 }

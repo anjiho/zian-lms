@@ -62,7 +62,14 @@ public class ProductManageController {
             mvc.setViewName("product/mokProblemSubjectBankManage");
         }else if("modifyMokProblemSubjectBank".equals(page_gbn)) {
             mvc.setViewName("product/modifyMokProblemSubjectBank");
+        }else if("mokOfflineMemberList".equals(page_gbn)) {
+            mvc.setViewName("product/mokOfflineMemberList");
+        }else if("mokScoreManage".equals(page_gbn)) {
+            mvc.setViewName("product/mokScoreManage");
+        }else if("mokOfflineOmr".equals(page_gbn)) {
+            mvc.setViewName("product/mokOfflineOmr");
         }
+
         return mvc;
     }
 }

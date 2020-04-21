@@ -217,7 +217,7 @@
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item">팝업 관리</li>
+                        <li class="breadcrumb-item">팝업/쿠폰 관리</li>
                         <li class="breadcrumb-item active" aria-current="page">팝업수정</li>
                     </ol>
                 </nav>

@@ -8,8 +8,10 @@
              A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
              A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,
             ( SELECT NAME FROM
-                (
-                    SELECT /*+ PARALLEL(4) */ TT.NAME FROM T_ORDER_GOODS T  LEFT JOIN T_GOODS TT ON T.G_KEY = TT.G_KEY WHERE T.J_KEY = A.J_KEY
+                ( SELECT /*+ PARALLEL(4) */
+                    TT.NAME FROM T_ORDER_GOODS T LEFT JOIN T_GOODS TT ON T.G_KEY = TT.G_KEY
+                    WHERE T.J_KEY = A.J_KEY
+                    AND (T.J_PM_KEY=0 OR T.J_PM_KEY=(SELECT J_PM_KEY FROM T_ORDER_PROMOTION E WHERE E.PM_TYPE=2 AND T.J_PM_KEY=E.J_PM_KEY))
                 ) WHERE ROWNUM = 1
             ) as orderGoodsName,
             ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
@@ -55,7 +57,12 @@
             AND A.PAY_STATUS = #{payStatus}
         </if>
         <if test="goodsType != '' and goodsType != null">
-            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
+            <if test="goodsType == 1">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType} AND J_PM_KEY=0)
+            </if>
+            <if test="goodsType != 1">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
+            </if>
             <if test="goodsType != 5">
                 AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
             </if>
@@ -824,7 +831,7 @@
     </select>
 
     <select id="selectOrderDetailProductList" resultType="OrderDetailProductListDTO">
-        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, D.SELL_PRICE,A.EXTEND_DAY
+        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, D.SELL_PRICE,A.EXTEND_DAY,D.EXTEND_PERCENT
         FROM T_ORDER_GOODS A
         INNER JOIN T_GOODS B
         ON A.G_KEY = B.G_KEY
@@ -956,19 +963,6 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
-        <if test="dateSearchType == ''">
-            <if test="startSearchDate == endSearchDate">
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-            </if>
-            <if test="startSearchDate != endSearchDate">
-                <![CDATA[
-                    AND A.PAY_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-                 ]]>
-                <![CDATA[
-                    AND A.PAY_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-                ]]>
-            </if>
-        </if>
         <if test="dateSearchType == 'payDate'">
             <if test="startSearchDate == endSearchDate">
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -1009,7 +1003,12 @@
             AND A.PAY_STATUS = #{payStatus}
         </if>
         <if test="goodsType != '' and goodsType != null">
-            AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
+            <if test="goodsType == 1">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType} AND J_PM_KEY=0)
+            </if>
+            <if test="goodsType != 1">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
+            </if>
             <if test="goodsType != 5">
                 AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
             </if>
@@ -1026,7 +1025,7 @@
         <if test="isMobile != null and isMobile >= 0">
             AND A.IS_MOBILE = #{isMobile}
         </if>
-        <if test="searchType != ''">
+        <if test="searchText != ''">
             <if test="searchType == 'orderUserId'">
                 AND B.USER_ID = #{searchText}
             </if>

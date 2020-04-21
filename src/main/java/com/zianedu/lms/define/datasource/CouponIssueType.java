@@ -10,8 +10,8 @@ import java.util.List;
  */
 public enum CouponIssueType {
 
-    ADMIN(0, "관리자발급"),
-    OFFLINE(1, "오프라인발급")
+    ADMIN(0, "온라인"),
+    OFFLINE(1, "오프라인")
     ;
 
     int couponIssueTypeKey;

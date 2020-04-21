@@ -12,7 +12,7 @@
     String orderSearch = Util.isNullValue(request.getParameter("param_key9"), "");
     String searchText = Util.isNullValue(request.getParameter("param_key10"), "");
     String searchText2=new String( searchText.getBytes( "8859_1"), "UTF-8");
-    String isDetail = Util.isNullValue(request.getParameter("param_key11"), "");
+    String sPage = Util.isNullValue(request.getParameter("param_key13"), "");
 %>
 <style>
     ol,ul{list-style:none}
@@ -32,7 +32,7 @@
 <script type='text/javascript' src='/dwr/interface/orderManageService.js'></script>
 <script>
     function init() {
-        var isDetail = '<%=isDetail%>';
+        var sPage = '<%=sPage%>';
 
         var searchStartDate = '<%=searchStartDate%>';
         var searchEndDate = '<%=searchEndDate%>';
@@ -55,6 +55,7 @@
             innerValue("searchStartDate", searchStartDate);
             innerValue("searchEndDate", searchEndDate);
         }
+        innerValue("sPage", sPage);
 
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 1);
@@ -69,7 +70,11 @@
         innerValue("searchText", searchText);
         getOrderDateSearchSelectbox('dateSearchType',dateSearchType);//검색 주문일자기준선택
 
-        fn_search("new");
+        if(sPage=='') {
+            fn_search("new");
+        }else{
+            fn_search(sPage);
+        }
     }
 
     function fn_search(val) {
@@ -109,7 +114,7 @@
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
                                                 payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (cnt) {
-            paging.count(sPage, cnt, '10', '10', comment.blank_list);
+           (sPage, cnt, '10', '10', comment.blank_list);
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                 payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {
                 if (selList.length == 0) return;
@@ -117,9 +122,9 @@
                    function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                    function(data) {return "<a href='javascript:void(0);' color='blue' onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                    function(data) {return data.name == null ? "-" : data.name;},
-                   function(data) {return (data.typeChk ==2? "<a style='color: saddlebrown'>오프라인</a><br/>":"")+(data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>");},
+                   function(data) {return (data.isOffline ==1? "<a style='color: saddlebrown'>오프라인</a><br/>":"")+(data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>");},
                    function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
-                   function(data) {return data.payTypeName == null ? "-" : data.payTypeName;},
+                   function(data) {return data.payTypeName == null ? "-" : data.payTypeName + "<br/><a style='color: green'>" + gfn_isnull(data.depositUser)+"</a>";},
                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                    function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
@@ -145,6 +150,7 @@
         innerValue('param_key8', getSelectboxValue('deviceSel'));
         innerValue('param_key9', getSelectboxValue('orderSearch'));
         innerValue('param_key10', getInputTextValue('searchText'));
+        innerValue('param_key13', getInputTextValue("sPage"));
 
         goPage('orderManage', 'orderDetailManage');
     }
@@ -184,6 +190,7 @@
             var payType = getSelectboxValue("orderPayType");
             var isMobile = getSelectboxValue("deviceSel");
             var dateSearchType = getSelectboxValue("dateSearchType");
+
 
             var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
                 "&goodsType=" + "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=0" + "&dateSearchType=" + dateSearchType;

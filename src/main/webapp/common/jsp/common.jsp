@@ -147,9 +147,34 @@
 <%
     } else if (authority == 15) {
 %>
+    <!--학원 상담 관리자 메뉴-->
+<%@include file="/common/jsp/aside/academyConsult_aside.jsp" %>
+    <%
+    } else if (authority == 15) {
+%>
+    <!--편집 출판 관리자 메뉴-->
+<%@include file="/common/jsp/aside/editPublishing_aside.jsp" %>
+    <%
+    } else if (authority == 15) {
+%>
+    <!--마케팅 관리자 메뉴-->
+<%@include file="/common/jsp/aside/marketing_aside.jsp" %>
+    <%
+    } else if (authority == 15) {
+%>
+    <!--컨첸츠 관리 관리자 메뉴-->
+<%@include file="/common/jsp/aside/contentsManage_aside.jsp" %>
+    <%
+    } else if (authority == 15) {
+%>
     <!--도서관리자 메뉴-->
 <%@include file="/common/jsp/aside/book_aside.jsp" %>
 <%
+} else if (authority == 22) {
+%>
+<!--도서관리자 메뉴-->
+<%@include file="/common/jsp/aside/lmsTeacher_aside.jsp" %>
+    <%
 } else if (authority == 22) {
 %>
     <!--정산관리자 메뉴-->

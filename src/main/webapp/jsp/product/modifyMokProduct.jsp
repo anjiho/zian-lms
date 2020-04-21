@@ -551,7 +551,7 @@
                         <h3>모의고사 정보</h3>
                         <section>
                             <div class="float-right mb-3">
-                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateMockInfo();">수정</button>
+                                <button type="button" class="btn btn-outline-primary btn-sm" onclick="updateMockInfo();">저장</button>
                             </div>
                             <div id="section4">
                                 <div class="form-group row">

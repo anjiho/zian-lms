@@ -176,7 +176,7 @@
                             },
                             //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName;},
                             function (data) {
-                                return (data.typeChk ==2? "<a style='color: saddlebrown'>오프라인</a><br/>":"") + (data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName + "<a style='color: red'>외" + data.orderGoodsCount + "</a>");
+                                return (data.isOffline ==1? "<a style='color: saddlebrown'>오프라인</a><br/>":"") + (data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName + "<a style='color: red'>외" + data.orderGoodsCount + "</a>");
                             },
                             function (data) {
                                 return data.pricePay == null ? "-" : format(data.pricePay);
@@ -254,9 +254,11 @@
             var isOffline = getSelectboxValue("isOffline");
             var payType = getSelectboxValue("orderPayType");
             var isMobile = getSelectboxValue("deviceSel");
+            var dateSearchType = getSelectboxValue("dateSearchType");
 
             var url = "searchType=" + searchType + "&searchText=" + searchText + "&searchStartDate=" + searchStartDate + "&searchEndDate=" + searchEndDate +
                 "&goodsType=ACADEMY" + "&payStatus=" + orderStatus + "&isOffline=" + isOffline + "&payType=" + payType + "&isMobile=" + isMobile + "&isVideoReply=0"
+                +"&dateSearchType="+dateSearchType
 
             $.download('/excelDownload/orderList', url, 'post');
         }

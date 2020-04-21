@@ -98,6 +98,11 @@ public interface ProductManageMapper {
 
     int selectVideoProductListCountByFreeLectureInject(@Param("searchType") String searchType, @Param("searchText") String searchText);
 
+    int selectOfflineUserListCount(@Param("examKey") int examKey);
+
+    List<TCpVO> selectOfflineUserList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                              @Param("examKey") int examKey);
+
     /** INSERT **/
     int insertTGoods(TGoodsVO tGoodsVO);
 
@@ -143,6 +148,8 @@ public interface ProductManageMapper {
     void deleteTLinkKeyByLinkKey(@Param("linkKey") int linkKey);
 
     void deletePopupCategoryInfo(@Param("linkKey") int linkKey);
+
+    void deleteCouponCategoryInfo(@Param("linkKey") int linkKey,@Param("couponKey") int couponKey);
 
     void deleteTLinkKeyByResKey(@Param("resKey") int resKey);
 

@@ -21,7 +21,7 @@
         <if test="searchType == 'code'">
             AND USER_KEY = #{searchText}
         </if>
-        ORDER BY USER_KEY DESC
+        ORDER BY INDATE DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>
 
@@ -80,11 +80,15 @@
         </if>
         <if test="grade != null">
             <if test="grade lt 1000">
-                AND GRADE = #{grade}
+                <if test="grade lt 103">
+                    AND GRADE = #{grade}
+                </if>
             </if>
         </if>
         <if test="affiliationCtgKey lt 10000">
-            AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
+            <if test="affiliationCtgKey lt 1">
+                AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
+            </if>
         </if>
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
     </select>

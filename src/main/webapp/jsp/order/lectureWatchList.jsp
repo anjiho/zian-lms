@@ -1,5 +1,17 @@
+<%@ page import="com.zianedu.lms.utils.Util" %>
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@include file="/common/jsp/common.jsp" %>
+<%
+    String JLecKey = request.getParameter("param_key");
+    String type = request.getParameter("type");
+
+    String payStatus = Util.isNullValue(request.getParameter("param_key2"), "");
+    String orderStatus = Util.isNullValue(request.getParameter("param_key3"), "");
+    String orderSearch = Util.isNullValue(request.getParameter("param_key4"), "");
+    String searchStartDate = Util.isNullValue(request.getParameter("param_key5"), "");
+    String searchEndDate = Util.isNullValue(request.getParameter("param_key6"), "");
+    String searchText = Util.isNullValue(request.getParameter("param_key7"), "");
+%>
 <style>
     ol,ul{list-style:none}
 
@@ -36,17 +48,42 @@
         });
     });
     function init() {
+        var payStatus='<%=payStatus%>';
+        var orderStatus= '<%=orderStatus%>';
+        var orderSearch ='<%=orderSearch%>';
+        var searchStartDate='<%=searchStartDate%>';
+        var searchEndDate='<%=searchEndDate%>';
+        var searchText='<%=searchText%>';
+
         getProductSearchSelectbox("l_searchSel");
         menuActive('menu-3', 8);
-        getlectureWatchPayStatusSelectbox('PayStatus', ''); //결제상태
-        getlectureWatchOrderStatusCheckbox('orderStatus', ''); //진행상태
+        getlectureWatchPayStatusSelectbox('PayStatus',payStatus); //결제상태
+        getlectureWatchOrderStatusCheckbox('orderStatus',orderStatus); //진행상태
         getlectureWatchOrderStatusSelectbox1('stopModalStatus', ''); //일시정지 팝업 진행상태
         getlectureWatchOrderStatusSelectbox('ModalStatus', ''); //팝업 진행상태
-        orderSearchSelectbox('orderSearch', 'orderUserName');
-        listNumberSelectbox('listNumberSel', '');
-        setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+        orderSearchSelectbox('orderSearch', orderSearch);
+        listNumberSelectbox('listNumberSel', 10);
         getVideoOptionTypeList("optionSel",""); //팝업창 옵션
-        //fn_search("new");
+        if(searchStartDate==''){
+            if(searchEndDate==''){
+                setSearchDate('6m', 'searchStartDate', 'searchEndDate');
+            }else{
+                innerValue("searchStartDate", searchStartDate);
+                innerValue("searchEndDate", searchEndDate);
+            }
+        }else{
+            innerValue("searchStartDate", searchStartDate);
+            innerValue("searchEndDate", searchEndDate);
+        }
+
+        innerValue("searchText", searchText);
+
+        if(orderStatus.indexOf(',')!=-1){
+            var orderStatusArr=splitReplace(orderStatus,',');
+            overlapCheckbox('orderStatus',orderStatusArr);
+        }
+
+        fn_search("new");
     }
 
     function fn_search(val) {
@@ -140,7 +177,21 @@
     }
 
     function goOrderDetail(val) {
+        var payStatus       = getSelectboxValue('PayStatus');
+        var orderStatus  = getCheckboxValue("orderStatus");
+        var ordersearch      = getSelectboxValue("orderSearch");//검색타입
+        var startSearchDate = getInputTextValue('searchStartDate');
+        var endSearchDate   = getInputTextValue('searchEndDate');
+        var searchText      = getInputTextValue('searchText');
+
         innerValue("param_key", val);
+        innerValue("param_key2", payStatus);
+        innerValue("param_key3", orderStatus);
+        innerValue("param_key4", ordersearch);
+        innerValue("param_key5", startSearchDate);
+        innerValue("param_key6", endSearchDate);
+        innerValue("param_key7", searchText);
+
         goPage('orderManage', 'lectureTimeManage');
     }
 

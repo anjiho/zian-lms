@@ -26,6 +26,12 @@ public class PopupCouponManageController {
             mvc.setViewName("popup/popupList");
         }else if("modifyPopup".equals(page_gbn)){
             mvc.setViewName("popup/modifyPopup");
+        }else if("couponList".equals(page_gbn)){
+            mvc.setViewName("popup/couponList");
+        }else if("modifyCoupon".equals(page_gbn)){
+            mvc.setViewName("popup/modifyCoupon");
+        }else if("couponManage".equals(page_gbn)){
+            mvc.setViewName("popup/couponManage");
         }
         return mvc;
     }
