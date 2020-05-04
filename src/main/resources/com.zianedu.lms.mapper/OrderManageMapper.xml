@@ -1449,6 +1449,10 @@
             <if test="status != null">STATUS = #{status},</if>
             <if test="startDt != ''">START_DT = TO_DATE(#{startDt}, 'YYYY-MM-DD hh24:mi:ss'),</if>
             <if test="limitDay != null">LIMIT_DAY = #{limitDay},</if>
+            <if test="status == 1">
+                PAUSE_DAY = 0,
+                PAUSE_START_DT = ''
+            </if>
         </set>
         WHERE J_LEC_KEY = #{jLecKey}
     </update>
