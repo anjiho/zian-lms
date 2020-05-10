@@ -89,9 +89,9 @@
                         var cmpList = videoCalculateResult[i];
 
                         onlineTotalCnt += cmpList.payCnt;
-                        onlinePayPriceTotal += cmpList.payPrice;
+                        onlinePayPriceTotal += roundingDownWon(cmpList.payPrice);
                         onlineCancelCntTotal += cmpList.cancelCnt;
-                        onlineCancelPriceTotal += cmpList.cancelPrice;
+                        onlineCancelPriceTotal += roundingDownWon(cmpList.cancelPrice);
 
                         var kind = "";
                         if (cmpList.kind == '100') kind = "VOD";
@@ -110,13 +110,13 @@
                                     return cmpList.payCnt+"명"
                                 },
                                 function () {
-                                    return format(cmpList.payPrice)
+                                    return format(roundingDownWon(cmpList.payPrice))
                                 },
                                 function () {
                                     return cmpList.cancelCnt
                                 },
                                 function () {
-                                    return format(cmpList.cancelPrice)
+                                    return format(roundingDownWon(cmpList.cancelPrice))
                                 },
                             ];
                             dwr.util.addRows("onlineList", [0], cellData, {escapeHtml: false});
@@ -144,9 +144,9 @@
                     for (var i = 0; i < academyCalculateResult.length; i++) {
                         var cmpList = academyCalculateResult[i];
                         acaTotalCnt += cmpList.payCnt;
-                        acaPayPriceTotal += cmpList.payPrice;
+                        acaPayPriceTotal += roundingDownWon(cmpList.payPrice);
                         acaCancelTotalCnt += cmpList.cancelCnt;
-                        acaCancelPriceTotal += cmpList.cancelPrice;
+                        acaCancelPriceTotal += roundingDownWon(cmpList.cancelPrice);
 
                         if (cmpList != undefined) {
                             var cellData = [
@@ -160,13 +160,13 @@
                                     return cmpList.payCnt+"명"
                                 },
                                 function () {
-                                    return format(cmpList.payPrice)
+                                    return format(roundingDownWon(cmpList.payPrice))
                                 },
                                 function () {
                                     return cmpList.cancelCnt
                                 },
                                 function () {
-                                    return format(cmpList.cancelPrice)
+                                    return format(roundingDownWon(cmpList.cancelPrice))
                                 },
                             ];
                             dwr.util.addRows("acaList", [0], cellData, {escapeHtml: false});
@@ -194,9 +194,9 @@
                         var cmpList = packageCalculateResult[i];
 
                         packageTotalCnt += cmpList.payCnt;
-                        packagePayPriceTotal += cmpList.payPrice;
+                        packagePayPriceTotal += roundingDownWon(cmpList.payPrice);
                         packageCancelCntTotal += cmpList.cancelCnt;
-                        packageCancelPriceTotal += cmpList.cancelPrice;
+                        packageCancelPriceTotal += roundingDownWon(cmpList.cancelPrice);
 
                         var kind = "";
                         if (cmpList.kind == '100') kind = "VOD";
@@ -215,13 +215,13 @@
                                     return cmpList.payCnt
                                 },
                                 function () {
-                                    return format(cmpList.payPrice)
+                                    return format(roundingDownWon(cmpList.payPrice))
                                 },
                                 function () {
                                     return cmpList.cancelCnt
                                 },
                                 function () {
-                                    return format(cmpList.cancelPrice)
+                                    return format(roundingDownWon(cmpList.cancelPrice))
                                 },
                             ];
                             dwr.util.addRows("pacakgeList", [0], cellData, {escapeHtml: false});

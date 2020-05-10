@@ -114,7 +114,7 @@
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
                                                 payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (cnt) {
-           (sPage, cnt, '10', '10', comment.blank_list);
+           paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                 payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {
                 if (selList.length == 0) return;
@@ -127,6 +127,7 @@
                    function(data) {return data.payTypeName == null ? "-" : data.payTypeName + "<br/><a style='color: green'>" + gfn_isnull(data.depositUser)+"</a>";},
                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
+                   function(data) {return data.deliveryStatusName;},
                    function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
                 ], {escapeHtml:false});
             });
@@ -370,14 +371,15 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col" width="10%">주문번호</th>
+                        <th scope="col" width="13%">주문번호</th>
                         <th scope="col" width="8%">ID</th>
                         <th scope="col" width="8%">주문자</th>
-                        <th scope="col" width="30%">주문내역</th>
-                        <th scope="col" width="7%">결제금액</th>
-                        <th scope="col" width="5%">결제방법</th>
-                        <th scope="col" width="8%">진행상태</th>
-                        <th scope="col" width="8%">모바일</th>
+                        <th scope="col" width="40%">주문내역</th>
+                        <th scope="col" width="6%">결제금액</th>
+                        <th scope="col" width="8%">결제방법</th>
+                        <th scope="col" width="6%">진행상태</th>
+                        <th scope="col" width="5%">모바일</th>
+                        <th scope="col" width="6%">배송상태</th>
                         <th  width="3%">
                             <label class="customcheckbox m-b-20">
                             <input type="checkbox" id="mainCheckbox" id="allCheck" onclick="allChk(this, 'rowChk');">

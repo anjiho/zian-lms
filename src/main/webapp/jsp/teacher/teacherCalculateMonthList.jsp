@@ -263,7 +263,7 @@
                         taxPrice = roundingDownWon(taxPrice) * -1;
 
                     var duesPrice  = 0; //사우회비
-                    var totalPlusOption =totalPrice+optionPriceSum;
+                    var totalPlusOption =Number(totalPrice)+Number(optionPriceSum);
                     if(totalPlusOption > 100000) duesPrice = -10000;
                     else  duesPrice = 0;
 

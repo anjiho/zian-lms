@@ -181,9 +181,9 @@
     <select id="selectTeacherStatisByMonth" resultType="TeacherCalculateDTO">
         SELECT
             C.G_KEY, B.KIND, C.NAME,
-            COUNT (DECODE(B.PAY_STATUS, 2, 1)) PAY_CNT,
+            SUM (DECODE(B.PAY_STATUS, 2, B.J_COUNT)) PAY_CNT,
             SUM (DECODE(B.PAY_STATUS, 2, B.CALC_PRICE, 0)) PAY_PRICE,
-            COUNT (DECODE(B.PAY_STATUS, 8, 1)) CANCEL_CNT,
+            SUM (DECODE(B.PAY_STATUS, 8, B.J_COUNT)) CANCEL_CNT,
             SUM (DECODE(B.PAY_STATUS, 8, B.CALC_PRICE, 0)) CANCEL_PRICE
         FROM T_CALCULATE A
         RIGHT JOIN T_CALCULATE_DATA B
@@ -200,9 +200,9 @@
     <select id="selectTeacherStatisBySection" resultType="TeacherCalculateDTO">
         SELECT
             C.G_KEY, B.KIND, C.NAME,
-            COUNT (DECODE(B.PAY_STATUS, 2, 1)) PAY_CNT,
+            SUM (DECODE(B.PAY_STATUS, 2, B.J_COUNT)) PAY_CNT,
             SUM (DECODE(B.PAY_STATUS, 2, B.CALC_PRICE, 0)) PAY_PRICE,
-            COUNT (DECODE(B.PAY_STATUS, 8, 1)) CANCEL_CNT,
+            SUM (DECODE(B.PAY_STATUS, 8, B.J_COUNT)) CANCEL_CNT,
             SUM (DECODE(B.PAY_STATUS, 8, B.CALC_PRICE, 0)) CANCEL_PRICE
         FROM T_CALCULATE A
         RIGHT JOIN T_CALCULATE_DATA B

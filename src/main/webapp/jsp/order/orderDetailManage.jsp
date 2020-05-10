@@ -64,7 +64,7 @@
             innerHTML("dcPoint", payInfo.dcPoint == ''? '0원' : format(payInfo.dcPoint)+"원");//사용마일리지
             innerHTML("point", payInfo.point == ''? '0원' : format(payInfo.point)+"원");//적립마일리지
             innerHTML("remainPoint", payInfo.remainPoint == ''? '0원' : format(payInfo.remainPoint)+"원");//남은마일리지
-            innerHTML("payDate", payInfo.payDate);//결제일
+            innerHTML("payDate", payInfo.payStatus==2? payInfo.payDate:'');//결제일
             innerHTML("pricePay", payInfo.pricePay == ''? '0원' : format(payInfo.pricePay)+"원");//결제금액
             innerHTML("cancelDate", payInfo.cancelDate);//취소일
             innerHTML("cancelDate1", payInfo.cancelDate);//취소일
