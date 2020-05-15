@@ -70,7 +70,7 @@
 
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate,
             grade, affiliationCtgKey, function (cnt) {
-                paging.count(sPage, cnt, '10', '10', comment.blank_list);
+                paging.count(sPage, cnt, '5', '5', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
                 memberManageService.getMemeberList(sPage, 5, searchType, searchText,
                     regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {

@@ -217,31 +217,38 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
-        AND A.PAY_STATUS IN (
-            SELECT REGEXP_SUBSTR(#{cancelPayStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
-        <![CDATA[
-            CONNECT BY LEVEL <= 3
-        ]]>
-        )
-        AND A.IS_OFFLINE IN (
-            SELECT REGEXP_SUBSTR(#{cancelIsOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
-        <![CDATA[
-            CONNECT BY LEVEL <= 3
-        ]]>
-        )
-        AND A.PAY_TYPE IN (
-            SELECT REGEXP_SUBSTR(#{cancelPayType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
-        <![CDATA[
-            CONNECT BY LEVEL <= 8
-        ]]>
-        )
-        AND A.IS_MOBILE IN (
-            SELECT REGEXP_SUBSTR(#{cancelIsMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
-        <![CDATA[
-            CONNECT BY LEVEL <= 3
-        ]]>
-        )
-
+        <if test="cancelPayStatus != '-1'">
+            AND A.PAY_STATUS IN (
+                SELECT REGEXP_SUBSTR(#{cancelPayStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+            )
+        </if>
+        <if test="cancelIsOffline != '-1'">
+            AND A.IS_OFFLINE IN (
+                SELECT REGEXP_SUBSTR(#{cancelIsOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+            )
+        </if>
+        <if test="cancelPayType != '-1'">
+            AND A.PAY_TYPE IN (
+                SELECT REGEXP_SUBSTR(#{cancelPayType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 8
+            ]]>
+            )
+        </if>
+        <if test="cancelIsMobile != '-1'">
+            AND A.IS_MOBILE IN (
+                SELECT REGEXP_SUBSTR(#{cancelIsMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
+            <![CDATA[
+                CONNECT BY LEVEL <= 3
+            ]]>
+            )
+        </if>
         <if test="dateSearchType == 'payDate'">
             <if test="startSearchDate == endSearchDate">
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -322,30 +329,38 @@
             LEFT OUTER JOIN T_ORDER_DELIVERY D
             ON A.J_KEY = D.J_KEY
             WHERE 1=1
-            AND A.PAY_STATUS IN (
-                SELECT REGEXP_SUBSTR(#{cancelPayStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
-            <![CDATA[
-                CONNECT BY LEVEL <= 3
-            ]]>
-            )
-            AND A.IS_OFFLINE IN (
-                SELECT REGEXP_SUBSTR(#{cancelIsOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
-            <![CDATA[
-                CONNECT BY LEVEL <= 3
-            ]]>
-            )
-            AND A.PAY_TYPE IN (
-                SELECT REGEXP_SUBSTR(#{cancelPayType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
-            <![CDATA[
-                CONNECT BY LEVEL <= 8
-            ]]>
-            )
-            AND A.IS_MOBILE IN (
-                SELECT REGEXP_SUBSTR(#{cancelIsMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
-            <![CDATA[
-                CONNECT BY LEVEL <= 3
-            ]]>
-            )
+            <if test="cancelPayStatus != '-1'">
+                AND A.PAY_STATUS IN (
+                    SELECT REGEXP_SUBSTR(#{cancelPayStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
+                <![CDATA[
+                    CONNECT BY LEVEL <= 3
+                ]]>
+                )
+            </if>
+            <if test="cancelIsOffline != '-1'">
+                AND A.IS_OFFLINE IN (
+                    SELECT REGEXP_SUBSTR(#{cancelIsOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
+                <![CDATA[
+                    CONNECT BY LEVEL <= 3
+                ]]>
+                )
+            </if>
+            <if test="cancelPayType != '-1'">
+                AND A.PAY_TYPE IN (
+                    SELECT REGEXP_SUBSTR(#{cancelPayType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
+                <![CDATA[
+                    CONNECT BY LEVEL <= 8
+                ]]>
+                )
+            </if>
+            <if test="cancelIsMobile != '-1'">
+                AND A.IS_MOBILE IN (
+                    SELECT REGEXP_SUBSTR(#{cancelIsMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
+                <![CDATA[
+                    CONNECT BY LEVEL <= 3
+                ]]>
+                )
+            </if>
             <if test="dateSearchType == 'payDate'">
                 <if test="startSearchDate == endSearchDate">
                     AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -890,11 +905,7 @@
         A.*,B.NAME, B.USER_ID,B.TELEPHONE_MOBILE,B.EMAIL,
         ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
         (SELECT NAME FROM T_CATEGORY WHERE CTG_KEY = B.INTEREST_CTG_KEY_0) as AFFILIATION_NAME,
-        ( SELECT G_NAME FROM
-            (
-            SELECT /*+ PARALLEL(4) */ G_NAME FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
-            ) WHERE ROWNUM = 1
-        ) as orderGoodsName,
+        F.G_NAME as orderGoodsName,
 
         ( SELECT type FROM
             (
@@ -914,7 +925,7 @@
             ) WHERE ROWNUM = 1
         ) as goodsPrice,
 
-        ( SELECT price FROM
+        ( SELECT F.price FROM
             (
             SELECT /*+ PARALLEL(4) */ sell_price FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY
             ) WHERE ROWNUM = 1
@@ -960,6 +971,8 @@
         FROM T_ORDER A
         LEFT JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
+        LEFT JOIN T_ORDER_GOODS F
+        ON F.J_KEY = A.J_KEY
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
@@ -1046,6 +1059,8 @@
         <if test="isVideoReply == 1">
             AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY > -1)
         </if>
+        AND F.G_NAME IS NOT NULL
+        AND (F.J_PM_KEY=0 OR F.J_PM_KEY=(SELECT J_PM_KEY FROM T_ORDER_PROMOTION E WHERE E.PM_TYPE=2 AND F.J_PM_KEY=E.J_PM_KEY))
         ORDER BY A.J_KEY DESC
     </select>
 
@@ -1096,30 +1111,38 @@
         LEFT OUTER JOIN T_ORDER_DELIVERY D
         ON A.J_KEY = D.J_KEY
         WHERE 1=1
-        AND A.PAY_STATUS IN (
-        SELECT REGEXP_SUBSTR(#{payStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
-        <![CDATA[
-                CONNECT BY LEVEL <= 3
-            ]]>
-        )
-        AND A.IS_OFFLINE IN (
-        SELECT REGEXP_SUBSTR(#{isOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
-        <![CDATA[
-                CONNECT BY LEVEL <= 3
-            ]]>
-        )
-        AND A.PAY_TYPE IN (
-        SELECT REGEXP_SUBSTR(#{payType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
-        <![CDATA[
-                CONNECT BY LEVEL <= 8
-            ]]>
-        )
-        AND A.IS_MOBILE IN (
-        SELECT REGEXP_SUBSTR(#{isMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
-        <![CDATA[
-                CONNECT BY LEVEL <= 3
-            ]]>
-        )
+        <if test="payStatus != '-1'">
+            AND A.PAY_STATUS IN (
+            SELECT REGEXP_SUBSTR(#{payStatus},'[^,]+',1,LEVEL) AS PAY_STATUS FROM T_ORDER
+            <![CDATA[
+                    CONNECT BY LEVEL <= 3
+                ]]>
+            )
+        </if>
+        <if test="isOffline != '-1'">
+            AND A.IS_OFFLINE IN (
+            SELECT REGEXP_SUBSTR(#{isOffline},'[^,]+',1,LEVEL) AS IS_OFFLINE FROM T_ORDER
+            <![CDATA[
+                    CONNECT BY LEVEL <= 3
+                ]]>
+            )
+        </if>
+        <if test="payType != '-1'">
+            AND A.PAY_TYPE IN (
+            SELECT REGEXP_SUBSTR(#{payType},'[^,]+',1,LEVEL) AS PAY_TYPE FROM T_ORDER
+            <![CDATA[
+                    CONNECT BY LEVEL <= 8
+                ]]>
+            )
+        </if>
+        <if test="isMobile != '-1'">
+            AND A.IS_MOBILE IN (
+            SELECT REGEXP_SUBSTR(#{isMobile},'[^,]+',1,LEVEL) AS IS_MOBILE FROM T_ORDER
+            <![CDATA[
+                    CONNECT BY LEVEL <= 3
+                ]]>
+            )
+        </if>
         <if test="dateSearchType == 'payDate'">
             <if test="startSearchDate == endSearchDate">
                 AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')

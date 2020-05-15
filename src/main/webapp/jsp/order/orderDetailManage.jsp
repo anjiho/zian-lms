@@ -74,6 +74,7 @@
             innerHTML("bank", payInfo.bank);//(무통장입금) 은행명
             innerHTML("bankAccount", payInfo.bankAccount);//(무통장입금) 계좌버노
             innerHTML("depositUser", payInfo.depositUser);//(무통장입금) 입금예정자 이름
+            innerHTML("depositDate", payInfo.depositDate);//(무통장입금) 입금예정날짜
 
             if(payInfo.payTypeName == '신용카드') $('#cardContent').show();
             else if(payInfo.payTypeName == '무통장입금') $('#accountContent').show();
@@ -424,6 +425,10 @@
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">입금예정자 이름</label>
                                     <div class="col-lg-3">
                                         <span id="depositUser"></span>
+                                    </div>
+                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">입급 예정일</label>
+                                    <div class="col-lg-3">
+                                        <span id="depositDate"></span>
                                     </div>
                                 </div>
                                 <!--//무통장입금-->

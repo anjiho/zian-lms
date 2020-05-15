@@ -105,9 +105,9 @@ public class ExcelDownloadService extends AbstractExcelView {
                 }
 
                 String orderName = dto.getOrderGoodsName();
-                if (dto.getOrderGoodsCount() > 0) {
+                /*if (dto.getOrderGoodsCount() > 0) {
                     orderName += " 외" + dto.getOrderGoodsCount();
-                }
+                }*/
 
                 String isQuickDeliver = "";
                 if (!"".equals(Util.isNullValue(dto.getIsQuickDelivery(), ""))) {
@@ -146,7 +146,7 @@ public class ExcelDownloadService extends AbstractExcelView {
                 row.createCell(24).setCellValue(dto.getDepositDate());
                 row.createCell(25).setCellValue(OrderPayStatusType.getOrderPayStatusStr(dto.getPayStatus()));
                 row.createCell(26).setCellValue(dto.getIsCancelRequest() == 0 ? "X" : "O");
-                row.createCell(27).setCellValue(dto.getPayDate());
+                row.createCell(27).setCellValue(dto.getPayStatus()==0? "":dto.getPayDate());
                 row.createCell(28).setCellValue(dto.getCancelDate());
                 row.createCell(29).setCellValue(dto.getIsMobile() == 0 ? "X" : "O");
                 row.createCell(30).setCellValue(deliveryPrice);

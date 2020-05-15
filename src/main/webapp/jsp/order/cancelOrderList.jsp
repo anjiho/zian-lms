@@ -130,6 +130,7 @@
         var cancelEndDate = getInputTextValue('cancelEndDate');
         var searchText = getInputTextValue('searchText');
         var dateSearchType  = getSelectboxValue('dateSearchType');
+
         var loading = new Loading({
             direction: 'hor',
             discription: '검색중',
@@ -145,15 +146,13 @@
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 orderManageService.getCancelOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, cancelStartDate, cancelEndDate,
                     orderPayStatus, isOffline, payType, isMobile, searchType, searchText, dateSearchType, function (selList) {
-                    console.log(selList);
                         if (selList.length == 0) return;
-                        console.log(selList);
                         dwr.util.addRows("dataList", selList, [
                             function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goOrderDetail(" + data.JKey + ");'>" + data.JId + "</a>";},
                             function(data) {return "<a href='javascript:void(0);' color='blue' style=''onclick='goMemberDetail(" + data.userKey + ");'>" + data.userId + "</a>";},
                             function(data) {return data.name == null ? "-" : data.name;},
                             //function(data) {return data.orderGoodsName == null ? "-" : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
-                            function (data) { return data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>";},
+                            function (data) { return  (data.isOffline ==1? "<a style='color: saddlebrown'>오프라인</a><br/>":"")+(data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>");},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName + "<br/><a style='color: green'>" + gfn_isnull(data.depositUser)+"</a>";},
                             function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.cancelDate)+"</a>";},
@@ -465,13 +464,13 @@
                         <tr>
                             <th scope="col" width="10%">주문번호</th>
                             <th scope="col" width="8%">ID</th>
-                            <th scope="col" width="8%">주문자</th>
-                            <th scope="col" width="30%">주문내역</th>
+                            <th scope="col" width="6%">주문자</th>
+                            <th scope="col" width="40%">주문내역</th>
                             <th scope="col" width="7%">결제금액</th>
-                            <th scope="col" width="5%">결제방법</th>
+                            <th scope="col" width="8%">결제방법</th>
                             <th scope="col" width="8%">진행상태</th>
-                            <th scope="col" width="8%">배송상태</th>
-                            <th scope="col" width="8%">모바일</th>
+                            <th scope="col" width="7%">배송상태</th>
+                            <th scope="col" width="5%">모바일</th>
                             <th  width="3%">
                                 <label class="customcheckbox m-b-20">
                                     <input type="checkbox" id="mainCheckbox" id="allCheck" onclick="allChk(this, 'rowChk');">

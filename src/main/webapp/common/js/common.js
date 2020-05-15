@@ -1595,12 +1595,13 @@ function getCheckboxValue(tagId) {
 
     if (tagId != "") {
         if(checked){
-            for (var i = 2; i < 8; i++) {
+            /*for (var i = 2; i < 8; i++) {
                 var checked2=$("#" + tagId).find('#check'+i).val();
                 if(checked2!=null) {
                     selectedvalue += $("#" + tagId).find('#check' + i).val() + ",";
                 }
-            }
+            }*/
+            selectedvalue="-1";
         }else {
             for (var i = 2; i < 8; i++) {
                 if ($("#" + tagId ).find('#check'+i).is(":checked")) {

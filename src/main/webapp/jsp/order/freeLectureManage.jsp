@@ -27,12 +27,12 @@
         var searchText = getInputTextValue('SearchText');
         var regStartDate = "";
         var regEndDate = "";
-        var grade = 104;
-        var affiliationCtgKey = 2;
+        var grade = 1000;
+        var affiliationCtgKey = 10000;
 
         memberManageService.getMemeberListCount(searchType, searchText, regStartDate, regEndDate,
             grade, affiliationCtgKey, function (cnt) {
-                paging.count(sPage, cnt, '10', '10', comment.blank_list);
+                paging.count(sPage, cnt, '5', '5', comment.blank_list);
                 memberManageService.getMemeberList(sPage, 5, searchType, searchText,
                     regStartDate, regEndDate, grade, affiliationCtgKey, function (selList) {
                         if (selList.length == 0) return;
@@ -300,22 +300,22 @@
                         </div>
                     </div>
                 </div>
-                    <input type="hidden" id="sPage">
-                    <table class="table table-hover">
-                        <thead>
-                        <tr>
-                            <th scope="col" style="width:20%;">ID</th>
-                            <th scope="col" style="width:10%;">이름</th>
-                            <th scope="col" style="width:30%;">번호</th>
-                            <th scope="col" style="width:10%;">권한</th>
-                            <th scope="col" style="width:5%;"></th>
-                        </tr>
-                        </thead>
-                        <tbody id="dataList"> </tbody>
-                        <tr>
-                            <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
-                        </tr>
-                    </table>
+                <input type="hidden" id="sPage">
+                <table class="table table-hover">
+                    <thead>
+                    <tr>
+                        <th scope="col" style="width:20%;">ID</th>
+                        <th scope="col" style="width:10%;">이름</th>
+                        <th scope="col" style="width:30%;">번호</th>
+                        <th scope="col" style="width:10%;">권한</th>
+                        <th scope="col" style="width:5%;"></th>
+                    </tr>
+                    </thead>
+                    <tbody id="dataList"> </tbody>
+                    <tr>
+                        <td id="emptys" colspan='23' bgcolor="#ffffff" align='center' valign='middle' style="visibility:hidden"></td>
+                    </tr>
+                </table>
                 <%@ include file="/common/inc/com_pageNavi.inc" %>
                 </div>
             </div>

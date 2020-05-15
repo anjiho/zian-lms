@@ -1240,7 +1240,7 @@ function getlectureWatchPayStatusSelectbox(tagId, val) {
 }
 //수강내역목록 - 진행상태 셀렉박스
 function getlectureWatchOrderStatusSelectbox(tagId, val) {
-    var html = "<select id='changeOrderStatus' name='orderStatus' class='col-sm-5 select2 form-control custom-select'>";
+    var html = "<select id='changeOrderStatus' name='orderStatus' onchange='changePopup(this.id);' class='col-sm-5 select2 form-control custom-select'>";
     var selected = '';
     var selected1 = '';
     var selected2 = '';
@@ -1263,29 +1263,6 @@ function getlectureWatchOrderStatusSelectbox(tagId, val) {
     innerHTML(tagId, html);
 }
 
-function getlectureWatchOrderStatusSelectbox1(tagId, val) {
-    var html = "<select id='stopOrderStatus' name='orderStatus' onchange='changePopup();' class='col-sm-5 select2 form-control custom-select'>";
-    var selected = '';
-    var selected1 = '';
-    var selected2 = '';
-    var selected3 = '';
-    var selected4 = '';
-
-    if(val == 0) selected = 'selected';
-    else if(val == 1) selected1 = 'selected';
-    else if(val == 2) selected2 = 'selected';
-    else if(val == 3) selected3 = 'selected';
-    else if(val == 4) selected4 = 'selected';
-
-    html += "<option value='0' "+ selected +">대기중</option>";
-    html += "<option value='1' "+ selected1 +">시작</option>";
-    html += "<option value='2' "+ selected2 +">일시정지</option>";
-    html += "<option value='3' "+ selected3 +">종강</option>";
-    html += "<option value='4' "+ selected4 +">재시작대기</option>";
-    html += "</select>";
-
-    innerHTML(tagId, html);
-}
 
 function getMemberSearchSelectbox(tagId, val) {
     var nameSelected = "";

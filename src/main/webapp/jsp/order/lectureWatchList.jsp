@@ -36,11 +36,6 @@
                 this.reset();
             });
         });
-        $('#stopStateModal').on('hidden.bs.modal', function (e) {
-            $('form').each(function () {
-                this.reset();
-            });
-        });
         $('#optionModal').on('hidden.bs.modal', function (e) {
             $('form').each(function () {
                 this.reset();
@@ -59,7 +54,6 @@
         menuActive('menu-3', 8);
         getlectureWatchPayStatusSelectbox('PayStatus',payStatus); //결제상태
         getlectureWatchOrderStatusCheckbox('orderStatus',orderStatus); //진행상태
-        getlectureWatchOrderStatusSelectbox1('stopModalStatus', ''); //일시정지 팝업 진행상태
         getlectureWatchOrderStatusSelectbox('ModalStatus', ''); //팝업 진행상태
         orderSearchSelectbox('orderSearch', orderSearch);
         listNumberSelectbox('listNumberSel', 10);
@@ -122,7 +116,7 @@
                             function(data) {return data.userName == null ? "-" : data.userName;},
                             function(data) {return data.kindName == null ? "-" : '<a href="javascript:void(0);" data-toggle="modal" data-target="#optionModal" onclick="goOptionModify('+"'"+data.JId+"'"+','+data.kind+')" style="color: blue">'+data.kindName+'</a>';},
                             function(data) {return data.goodsName == null ? "-" : "<a href='javascript:void(0);' onclick='goOrderDetail("+ data.JLecKey +")' style='color: blue'>"+data.goodsName+"</a>";},
-                            function(data) {return data.status == 2 ? "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stopStateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>" : "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>";},
+                            function(data) {return "<a href='javascript:void(0);' data-toggle=\"modal\" data-target=\"#stateModal\" onclick='goStateModify("+ data.JLecKey +","+ data.status +")' style='color: blue'>"+data.statusName+"</a>";},
                             function(data) {return data.status == 0 ? "-": split_minute_getDay(data.startDt)+"<br>"+split_minute_getDay(data.endDt);},
                             function(data) {return data.limitDay == null ? "-" : data.limitDay;},
                             function(data) {return data.pauseTotalDay+"<br>"+data.pauseDay;},
@@ -134,13 +128,17 @@
             });
     }
 
-    function changePopup() {
+    function changePopup(id) {
         innerValue("pauseStartDt", "");
         innerValue("pauseStartDtLimit", "");
         innerValue("pauseDay", "");
         innerValue("pauseCnt", "");
         innerValue("pauseTotalDay", "");
-        $(".hidePopup").hide();
+
+        var state = getSelectboxValue(id);
+
+        if(state ==2) $(".hidePopup").show();
+        else $(".hidePopup").hide();
     }
     
     //진행상태 변경
@@ -150,7 +148,7 @@
                 $(".hidePopup").show();
                 innerValue("status", data.status);
                 innerValue("JLecKey", data.JLecKey);
-                getlectureWatchOrderStatusSelectbox1('stopModalStatus', data.status); //일시정지 팝업 진행상태
+                getlectureWatchOrderStatusSelectbox('ModalStatus', data.status); //일시정지 팝업 진행상태
                 innerValue("startDt", data.startDt);
                 innerValue("startDtLimit", data.startDtLimit);
                 innerValue("limitDay", data.limitDay);
@@ -163,9 +161,9 @@
                 innerValue("status", data.status);
                 innerValue("JLecKey", data.JLecKey);
                 getlectureWatchOrderStatusSelectbox('ModalStatus', data.status); //일시정지 팝업 진행상태
-                innerValue("startDt1", data.startDt);
-                innerValue("startDtLimit1", data.startDtLimit);
-                innerValue("limitDay1", data.limitDay);
+                innerValue("startDt", data.startDt);
+                innerValue("startDtLimit", data.startDtLimit);
+                innerValue("limitDay", data.limitDay);
             }
         });
     }
@@ -199,21 +197,13 @@
     function stateSave() {
         var getstate = getInputTextValue("status"); //기존 진행상태 값
 
-        if(getstate==2){
-            var state=getSelectboxValue("stopOrderStatus");
-        }else{
-            var state=getSelectboxValue("changeOrderStatus");
-        }
+        var state=getSelectboxValue("changeOrderStatus");
 
         var jLecKey = getInputTextValue("JLecKey");
 
-        var startDate = "";
-        if(state == 2) startDate = getInputTextValue("startDt");
-        else startDate = getInputTextValue("startDt1");
+        var startDate = getInputTextValue("startDt");
 
-        var limitDay = "";
-        if(state == 2) limitDay = getInputTextValue("limitDay");
-        else limitDay = getInputTextValue("limitDay1");
+        var limitDay = getInputTextValue("limitDay");
 
         var pauseStartDate = "";
         if(state == 2) pauseStartDate = getInputTextValue("pauseStartDt");
@@ -314,6 +304,20 @@
                 });
             }
         }
+    }
+
+    function dateAddDel2(val) {
+        var dt = new Date($('#startDt').val()); // 날짜값 입력
+        var dayOfMonth = dt.getDate();
+        dt.setDate(dayOfMonth + Number(val));
+        var year   = dt.getFullYear();
+        var month  = dt.getMonth() + 1;
+        var day    = dt.getDate();
+        month = month >= 10 ? month : '0' + month;
+        day = day >= 10 ? day : '0' + day;
+        var endDay = year+"-"+month+"-"+day;
+        $("#startDtLimit").val(endDay);
+
     }
 </script>
 <div class="page-breadcrumb">
@@ -476,7 +480,7 @@
 </div>
 
 <!-- 일시정지 상태 수정 팝업창 --->
-<div class="modal fade" id="stopStateModal" tabindex="-1" role="dialog" aria-hidden="true">
+<div class="modal fade" id="stateModal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog" role="document" style="max-width: 550px;">
         <div class="modal-content">
             <div class="modal-header">
@@ -490,7 +494,7 @@
                 <div class="form-group row">
                     <label class="col-sm-3 text-right control-label col-form-label">상태</label>
                     <div class="col-sm-9">
-                        <span id="stopModalStatus"></span>
+                        <span id="ModalStatus"></span>
                     </div>
                 </div>
                 <div class="form-group row">
@@ -518,7 +522,7 @@
                 <div class="form-group row">
                     <label class="col-sm-3 text-right control-label col-form-label">수강일</label>
                     <div class="col-sm-4">
-                        <input type="text" class="form-control" id="limitDay">
+                        <input type="text" class="form-control" id="limitDay" onkeyup="dateAddDel2(this.value);">
                     </div>
                 </div>
                 <div class="form-group row hidePopup">
@@ -555,59 +559,6 @@
                     <input type="text" class="form-control" id="pauseTotalDay">
                 </div>
             </div>
-                <button type="button" class="btn btn-info float-right" onclick="stateSave();">저장</button>
-            </div>
-            <!-- //modal body -->
-        </div>
-    </div>
-</div>
-
-<!-- 상태 수정 팝업창 --->
-<div class="modal fade" id="stateModal" tabindex="-1" role="dialog" aria-hidden="true">
-    <div class="modal-dialog" role="document" style="max-width: 500px;">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title">수강정보 상세보기</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <!-- modal body -->
-            <div class="modal-body">
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">상태</label>
-                    <div class="col-sm-9">
-                        <span id="ModalStatus"></span>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">강의시작일</label>
-                    <div class="col-sm-6">
-                        <div class="input-group">
-                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" id="startDt1">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">강의종료일</label>
-                    <div class="col-sm-6">
-                        <div class="input-group">
-                            <input type="text" class="form-control mydatepicker" placeholder="yyyy-mm-dd" id="startDtLimit1">
-                            <div class="input-group-append">
-                                <span class="input-group-text"><i class="fa fa-calendar"></i></span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <label class="col-sm-3 text-right control-label col-form-label">수강일</label>
-                    <div class="col-sm-4">
-                        <input type="text" class="form-control" id="limitDay1">
-                    </div>
-                </div>
                 <button type="button" class="btn btn-info float-right" onclick="stateSave();">저장</button>
             </div>
             <!-- //modal body -->

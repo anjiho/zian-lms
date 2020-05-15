@@ -243,7 +243,7 @@
             AND B.NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND B.USER_ID = #{searchText}
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         ORDER BY A.COUNSEL_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
