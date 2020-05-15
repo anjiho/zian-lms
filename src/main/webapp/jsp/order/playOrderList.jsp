@@ -158,7 +158,7 @@
 
         orderManageService.getOrderListCount(startSearchDate, endSearchDate, goodsType, payStatus, isOffline,
             payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (cnt) {
-               (sPage, cnt, '10', '10', comment.blank_list);
+                paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt - 1) + 1) - ((sPage - 1) * 10); //리스트 넘버링
                 orderManageService.getOrderList(sPage, listNumberSel, startSearchDate, endSearchDate, goodsType,
                     payStatus, isOffline, payType, isMobile, searchType, searchText, isVideoReply, dateSearchType, function (selList) {

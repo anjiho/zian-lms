@@ -37,7 +37,7 @@
                 dwr.util.addRows("dataList", selList, [
                     function(data) {return data.userName == null ? "-" : data.userName;},
                     function(data) {return data.userId == null ? "-" : data.userId;},
-                    function(data) {return data.indate == null ? "-" : split_minute_getDay(data.indate);},
+                    function(data) {return data.indate == null ? "-" : data.indate;},
                     function(data) {return data.deviceId+"<br>"+data.goodsName;},
                     function(data) {return "<button type='button' onclick='DeviceDelete("+ data.deviceLimitKey +");' class='btn btn-outline-danger btn-sm'>삭제</button>";},
                 ], {escapeHtml:false});

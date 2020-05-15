@@ -1048,6 +1048,10 @@ function orderStatusTypeSelecbox(tagId, val) {
         else html += "<option value='1'>결제대기</option>";
         if(val == '2') html += "<option value='2' selected>결제완료</option>";
         else html += "<option value='2'>결제완료</option>";
+        if(val == '8') html += "<option value='8' selected>결제취소</option>";
+        else html += "<option value='8'>결제취소</option>";
+        if(val == '9') html += "<option value='9' selected>주문취소</option>";
+        else html += "<option value='9'>주문취소</option>";
         html += "</select>";
 
         innerHTML(tagId, html);
