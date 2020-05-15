@@ -96,7 +96,9 @@ public class PromotionManageService {
                 );
             }
             //프리패스 연동 강사 저장
-            productManageService.upsultTGoodTeacherLink(productTeacherListByVideoInfo,gKey);
+            if (productTeacherListByVideoInfo != null) {
+                productManageService.upsultTGoodTeacherLink(productTeacherListByVideoInfo,gKey);
+            }
             //온라인강좌, 프리패스 입력
             productManageService.upsultTLinkKink(productOnlineLectureInfo, gKey);
         }
