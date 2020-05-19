@@ -124,6 +124,9 @@
                             <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">총수강시간</label>
                             <span id="remainTotalTime"></span>분&nbsp;/&nbsp;<span id="vodTotalTime"></span>분 (<span id="remainPer"></span>%)
                         </div>
+                        <div class="form-group row">
+                            <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">일시정지 기록</label>
+                        </div>
                         <div align="right">
                             <button type="button" class="btn btn-outline-info mx-auto" onclick="goOrderList()">목록</button>
                         </div>

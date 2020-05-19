@@ -144,7 +144,7 @@
                 var counselObj = {
                     counselKey: 0,
                     cKey: 0,
-                    userKey: userKey,
+                    userKey: Number(userKey),
                     writeUserKey: "",
                     type: type,
                     status: status,

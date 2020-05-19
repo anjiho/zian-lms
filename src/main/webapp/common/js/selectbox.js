@@ -1528,6 +1528,15 @@ function searchMemberSelectBox(tagId) {
     innerHTML(tagId, html);
 }
 
+function mileageTypeSelectBox(tagId) {
+    var html = "<select id='insertTypeSel'  class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value=1>지급</option>";
+    html += "<option value=0>차감</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
 function searchMemberSelectBox1(tagId) {
     var html = "<select id='searchMemberSel1' class='form-control'>";
     html += "<option value=''>선택</option>";
@@ -1548,16 +1557,29 @@ function searchCounselSelectBox(tagId) {
     innerHTML(tagId, html);
 }
 
+function searchMileageSelectBox(tagId) {
+    var html = "<select id='searchCounselSel' class='form-control'>";
+    html += "<option value=''>선택</option>";
+    html += "<option value='id'>아이디</option>";
+    html += "<option value='name'>이름</option>";
+    html += "<option value='jId'>주문번호</option>";
+    html += "</select>";
+    innerHTML(tagId, html);
+}
+
 //강사정보 권한
 function getAuthoritySelectbox(tagId, val) {
     var html = "<select id='authoritSel' class='form-control'>";
     var selected = "";
     var selected2 = "";
+    var selected3 = "";
     if(val == '0') selected = 'selected';
     else if(val == '5') selected2 = 'selected';
+    else if(val == '10') selected3 = 'selected';
 
-    html += "<option value=0 "+ selected +">관리자</option>";
+    html += "<option value=10 "+ selected3 +">회원</option>";
     html += "<option value=5 "+ selected2 +">강사</option>";
+    html += "<option value=0 "+ selected +">관리자</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }
@@ -1567,10 +1589,13 @@ function getAuthorityGradeSelectbox(tagId, val) {
     var html = "<select id='authoritGradeSel' class='form-control'>";
     var selected = "";
     var selected1 = "";
+    var selected2 = "";
     if(val == '0') selected = 'selected';
-    else if(val == '5') selected1 = 'selected';
-    html += "<option value=0 "+ selected +">관리자</option>";
-    html += "<option value=5 "+ selected1 +">강사</option>";
+    else if(val == '4') selected1 = 'selected';
+    else if(val == '5') selected2 = 'selected';
+    html += "<option value=0 "+ selected +">없음</option>";
+    html += "<option value=5 "+ selected2 +">강사</option>";
+    html += "<option value=4 "+ selected1 +">관리자</option>";
     html += "</select>";
     innerHTML(tagId, html);
 }

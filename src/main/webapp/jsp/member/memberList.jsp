@@ -69,7 +69,6 @@
         if(grade == null) grade = "";
         if(affiliationCtgKey == null) affiliationCtgKey = "10000";
 
-
         var loading = new Loading({
             direction: 'hor',
             discription: '검색중',

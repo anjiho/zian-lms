@@ -14,7 +14,7 @@
                     AND (T.J_PM_KEY=0 OR T.J_PM_KEY=(SELECT J_PM_KEY FROM T_ORDER_PROMOTION E WHERE E.PM_TYPE=2 AND T.J_PM_KEY=E.J_PM_KEY))
                 ) WHERE ROWNUM = 1
             ) as orderGoodsName,
-            ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY) ) as orderGoodsCount,
+            ( SELECT COUNT(J_G_KEY) - 1 FROM (SELECT /*+FIRST_ROWS*/ J_G_KEY FROM T_ORDER_GOODS T WHERE T.J_KEY = A.J_KEY AND T.G_NAME IS NOT NULL) ) as orderGoodsCount,
             (SELECT /*+FIRST_ROWS*/ TYPE FROM T_ORDER_GOODS T WHERE T.J_KEY=A.J_KEY AND ROWNUM = 1) as typeChk
         FROM T_ORDER A
         LEFT JOIN T_USER B
@@ -81,19 +81,29 @@
         </if>
         <if test="searchType != ''">
             <if test="searchType == 'orderUserId'">
+                <if test="searchText != ''">
                 AND B.USER_ID LIKE '%'||#{searchText}||'%'
+                </if>
             </if>
             <if test="searchType == 'orderUserName'">
+                <if test="searchText != ''">
                 AND B.NAME LIKE '%'||#{searchText}||'%'
+                </if>
             </if>
             <if test="searchType == 'orderId'">
+                <if test="searchText != ''">
                 AND A.J_ID LIKE '%'||#{searchText}||'%'
+                </if>
             </if>
             <if test="searchType == 'orderGoodsName'">
+                <if test="searchText != ''">
                 AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND Z.G_NAME LIKE '%'||#{searchText}||'%')
+                </if>
             </if>
             <if test="searchType == 'depositUserName'">
+                <if test="searchText != ''">
                 AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+                </if>
             </if>
         </if>
         <!-- 동영상 재수강 여부 -->
@@ -460,12 +470,14 @@
         <![CDATA[
                 AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
             ]]>
+        <if test="orderLecStatus != '-1'">
         AND A.STATUS IN (
         SELECT REGEXP_SUBSTR(#{orderLecStatus},'[^,]+',1,LEVEL) AS STATUS FROM T_ORDER_LEC
         <![CDATA[
                 CONNECT BY LEVEL <= 7
             ]]>
         )
+        </if>
         <!-- 결제상태 : 결제완료 -->
         <if test="payStatus == 2">
             AND C.PAY_STATUS IN (0, 1, 2)
@@ -573,6 +585,15 @@
         )
         AND Z.IS_SHOW = 1
         ORDER BY Z.CURRI_KEY ASC
+    </select>
+
+    <!-- 수강내역목록 > 수강시간 조정 > 일시정지 기록 리스트 -->
+    <select id="selectLecturePauseRec" resultType="LecturePauseRecDTO">
+        SELECT
+            LOG_TYPE,CREATE_DATE
+        FROM T_ORDER_LEC_START_STOP_LOG
+        WHERE J_LEC_KEY = #{jLecKey}
+        ORDER BY IDX ASC;
     </select>
 
     <!-- 수강내역목록 > 수강시간 조정 > 강의 총 시간, 수강한 총 시간 -->

@@ -120,7 +120,7 @@
 
                         var kind = "";
                         if (cmpList.kind == '100') kind = "VOD";
-                        else if (cmpList.kind == '100') kind = "MOBILE";
+                        else if (cmpList.kind == '101') kind = "MOBILE";
                         else kind = "VOD+MOBILE";
 
                         if (cmpList != undefined) {
@@ -137,7 +137,7 @@
                     }
                     innerHTML("onlineTotalCnt", onlineTotalCnt); //온라인강좌 - 인원 합계
                     innerHTML("onlinePayPriceTotal", format(roundingDownWon(onlinePayPriceTotal))); //온라인강좌 - 금액 합계
-                    innerHTML("onlineCancelCntTotal", onlineCancelCntTotal); //온라인강좌 - 환불인원 합계
+                    innerHTML("onlineCancelCntTotal", onlineCancelCntTotal == ""? "0":onlineCancelCntTotal); //온라인강좌 - 환불인원 합계
                     innerHTML("onlineCancelPriceTotal", format(roundingDownWon(onlineCancelPriceTotal))); //온라인강좌 - 환불금액 합계
                 } else {
                     $("#onlineTable").hide();
@@ -212,7 +212,7 @@
 
                         var kind = "";
                         if (cmpList.kind == '100') kind = "VOD";
-                        else if (cmpList.kind == '100') kind = "MOBILE";
+                        else if (cmpList.kind == '101') kind = "MOBILE";
                         else kind = "VOD+MOBILE";
 
                         if (cmpList != undefined) {
@@ -241,7 +241,7 @@
                     }
                     innerHTML("packageTotalCnt", packageTotalCnt); //패키지 - 인원 합계
                     innerHTML("packagePayPriceTotal", format(roundingDownWon(packagePayPriceTotal))); //패키지 - 금액 합계
-                    innerHTML("packageCancelCntTotal", packageCancelCntTotal); //패키지 - 환불인원 합계
+                    innerHTML("packageCancelCntTotal", packageCancelCntTotal == ""? "0":packageCancelCntTotal); //패키지 - 환불인원 합계
                     innerHTML("packageCancelPriceTotal", format(roundingDownWon(packageCancelPriceTotal))); //패키지 - 환불금액 합계
                 } else {
                     $("#pacakgeTable").hide();
@@ -259,8 +259,10 @@
                 var alltotalPrice    = (totalPrice - cancelTotalPrice); // 총 합계 (판매합계 - 환불금액)
 
                 if(alltotalPrice >= 0){
-                    var taxPrice =  (roundingDownWon(alltotalPrice) +  Number(roundingDownWon(optionPriceSum)))*0.033; //소득세,주민세
-                        taxPrice = roundingDownWon(taxPrice) * -1;
+                    var allTotalAndOptionSum = (roundingDownWon(alltotalPrice) +  Number(roundingDownWon(optionPriceSum)));
+
+                    if(allTotalAndOptionSum>0) var taxPrice = allTotalAndOptionSum*0.033; //소득세,주민세
+                    taxPrice = roundingDownWon(taxPrice) * -1;
 
                     var duesPrice  = 0; //사우회비
                     var totalPlusOption =Number(totalPrice)+Number(optionPriceSum);

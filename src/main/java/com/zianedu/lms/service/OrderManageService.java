@@ -3,6 +3,7 @@ package com.zianedu.lms.service;
 
 import com.zianedu.lms.define.datasource.*;
 import com.zianedu.lms.dto.*;
+import com.zianedu.lms.mapper.MemberManageMapper;
 import com.zianedu.lms.mapper.OrderManageMapper;
 import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.repository.GoodsKindNameRepository;
@@ -39,6 +40,10 @@ public class OrderManageService {
 
     @Autowired
     private ProductManageMapper productManageMapper;
+
+
+    @Autowired
+    private MemberManageMapper memberManageMapper;
 
     @Autowired
     private OrderLecStatusNameRepository orderLecStatusNameRepository;
@@ -249,11 +254,13 @@ public class OrderManageService {
         LectureTimeInfoDTO lectureTimeInfo = orderManageMapper.selectTOrderInfoAtLectureTime(jLecKey);
         List<LectureTimeDTO> lectureTimeInfoList = orderManageMapper.selectLectureTimeList(jLecKey);
         LectureTimeDTO lectureTotalTime = orderManageMapper.selectLectureTotalTime(jLecKey);
+        List<LecturePauseRecDTO> lecturePauseRec = orderManageMapper.selectLecturePauseRec(jLecKey);
 
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setResult(lectureTimeInfo);
         resultDTO.setResultList(lectureTimeInfoList);
         resultDTO.setResultTotalTime(lectureTotalTime);
+        resultDTO.setResultPauseRec(lecturePauseRec);
         return resultDTO;
     }
 
@@ -675,6 +682,42 @@ public class OrderManageService {
         for (HashMap<String, String>paramMap : list) {
             int jKey = Integer.parseInt(paramMap.get("jKey"));
             int payStatus = Integer.parseInt(paramMap.get("payStatus"));
+
+            OrderDetailInfoDTO orderDetailInfoDTO = orderManageMapper.selectOrderDetailInfo(jKey);
+
+            int userKey = orderDetailInfoDTO.getUserKey();
+            String jId= orderDetailInfoDTO.getJId();
+            int point = orderDetailInfoDTO.getPoint(); //지급 마일리지
+            int dcPoint = orderDetailInfoDTO.getDcPoint(); // 사용한 마일리지
+            String memo = "";
+
+            if(payStatus==2){ //결제완료
+                int typeSelect = 1;
+                int descType = 1;
+
+                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,point,memo,jKey,jId,descType);
+                memberManageMapper.insertTMileageIssue(mileageIssueVO);
+            }else if(payStatus==8){ //결제취소
+                int typeSelect = 1;
+                int descType = 4;
+
+                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,dcPoint,memo,jKey,jId,descType);
+                memberManageMapper.insertTMileageIssue(mileageIssueVO);
+
+                typeSelect = 0;
+                descType = 5;
+                point = point*-1;
+
+                TMileageIssueVO mileageIssueVO2 = new TMileageIssueVO(userKey,typeSelect,point,memo,jKey,jId,descType);
+                memberManageMapper.insertTMileageIssue(mileageIssueVO2);
+
+            }else if(payStatus==9){ //주문취소
+                int typeSelect = 1;
+                int descType = 3;
+
+                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,dcPoint,memo,jKey,jId,descType);
+                memberManageMapper.insertTMileageIssue(mileageIssueVO);
+            }
 
             if (jKey > 0) {
                 orderManageMapper.updateOrderStatus(jKey, payStatus);

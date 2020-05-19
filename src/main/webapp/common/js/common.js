@@ -428,6 +428,18 @@ function gfn_isnullvalue(str, fromStr) {
 }
 
 //--------------------------------------------------
+//undifined 을 문자 치환
+//--------------------------------------------------
+function gfn_isundefinedvalue(str, fromStr) {
+    if (str === undefined) {
+        return fromStr;
+    } else {
+        return str;
+    }
+}
+
+
+//--------------------------------------------------
 //  숫자 여부 체크
 //--------------------------------------------------
 function gfn_isnum(str) {

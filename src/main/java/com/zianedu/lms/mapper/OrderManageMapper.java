@@ -49,6 +49,8 @@ public interface OrderManageMapper {
 
     List<LectureTimeDTO> selectLectureTimeList(@Param("jLecKey") int jLecKey);
 
+    List<LecturePauseRecDTO> selectLecturePauseRec(@Param("jLecKey") int jLecKey);
+
     LectureTimeDTO selectLectureTotalTime(@Param("jLecKey") int jLecKey);
 
     TOrderLecCurriVO selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") Long curriKey);

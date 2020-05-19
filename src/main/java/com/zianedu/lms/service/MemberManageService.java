@@ -9,6 +9,7 @@ import com.zianedu.lms.mapper.ProductManageMapper;
 import com.zianedu.lms.utils.PagingSupport;
 import com.zianedu.lms.utils.Util;
 import com.zianedu.lms.vo.*;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -650,4 +651,64 @@ public class MemberManageService {
         productManageMapper.deleteTLinkKeyByLinkKey(linkKey);
     }
 
+    /**
+     * 마일리지 지급 내역 리스트 개수 ( 회원에게 쿠폰 발급 시 )
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public int getMileageListCount(String searchType, String searchText) {
+        return memberManageMapper.selectMileageListBySelectCount(
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+    }
+
+
+    /**
+     * 마일리지 지급 내역 리스트
+     * @param sPage
+     * @param listLimit
+     * @param searchType
+     * @param searchText
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public List<MileageSelectListDTO> getMileageList(int sPage, int listLimit, String searchType, String searchText) {
+        if (sPage == 0) return null;
+        int startNumber = PagingSupport.getPagingStartNumber(sPage, listLimit);
+
+        List<MileageSelectListDTO> list = memberManageMapper.selectMileageListBySelect(
+                startNumber,
+                listLimit,
+                Util.isNullValue(searchText, ""),
+                Util.isNullValue(searchType, "")
+        );
+
+        if (list.size() > 0) {
+            for (MileageSelectListDTO selectListDTO : list) {
+                int descType = selectListDTO.getDescType();
+                if(descType !=0) selectListDTO.setDescription(MileageDescType.getMileageDescTypeStr(selectListDTO.getDescType(),selectListDTO.getJId()));
+            }
+        }
+
+        return list;
+    }
+
+    /**
+     * 마일리지 수동 발급하기
+     * @param userSelectDTOList
+     */
+    @Transactional(propagation = Propagation.REQUIRED)
+    public void issueMileageToUser(List<MileageSelectListDTO>userSelectDTOList, int typeSelect, int point, String memo, int jKey, String jId, int descType) {
+        if (userSelectDTOList.size() > 0) {
+            for (MileageSelectListDTO userSelectDTO : userSelectDTOList) {
+                int userKey=userSelectDTO.getUserKey();
+
+                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,point,memo,jKey,jId,descType);
+                memberManageMapper.insertTMileageIssue(mileageIssueVO);
+            }
+        }
+    }
 }

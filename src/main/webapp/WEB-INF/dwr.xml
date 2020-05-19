@@ -107,6 +107,7 @@
 		<convert converter="bean" match="com.zianedu.lms.vo.TOrderDeliveryVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TCalculateOptionVO"/>
 		<convert converter="bean" match="com.zianedu.lms.vo.TOrderLecVO"/>
+		<convert converter="bean" match="com.zianedu.lms.vo.TMileageIssueVO"/>
 
 		<!--  dto 선언 -->
 		<convert converter="bean" match="com.zianedu.lms.dto.ResultDTO"/>
@@ -135,6 +136,7 @@
 		<convert converter="bean" match="com.zianedu.lms.dto.StatisResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.PromotionStatisDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.MemberStatisDTO"/>
+		<convert converter="bean" match="com.zianedu.lms.dto.MileageSelectListDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.TeacherCalculateDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.TeacherCalculateResultDTO"/>
 		<convert converter="bean" match="com.zianedu.lms.dto.OrderResultDTO"/>

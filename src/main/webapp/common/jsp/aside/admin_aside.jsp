@@ -136,15 +136,18 @@
                 </li>
                 <li class="sidebar-item" id="menu-5"> <a class="sidebar-link has-arrow waves-effect waves-dark" href="javascript:void(0)"  aria-expanded="false"><i class="mdi mdi-face"></i><span class="hide-menu">회원관리</span></a>
                     <ul aria-expanded="false" class="collapse  first-level">
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memberList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 회원 목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 탈퇴 / 신청 목록 </span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'counselList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu"> 상담내역 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memberList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu">회원 목록 </span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'memeberSecessionList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu">탈퇴 / 신청 목록 </span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'counselList'); return false;" class="sidebar-link" style="padding: 10px 19px;"><i class=""></i><span class="hide-menu">상담내역 </span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 목록</span></a></li>
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">강사 등록</span></a></li>
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'teacherManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">회원/강사 등록</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'sendSms'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">SMS 보내기</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'smsSendList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">SMS 발송내역</span></a></li>
+                        <hr style="width: 100%;color:#6c757d" noshade >
+                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('memberManage', 'mileageManage'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">마일리지 관리</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
                     </ul>
                 </li>
@@ -162,7 +165,7 @@
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalculateMonthList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">월별 정산내역</span></a></li>
                         <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalculateSectionList'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">기간별 정산내역</span></a></li>
                         <hr style="width: 100%;color:#6c757d" noshade >
-                        <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalcGraph'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">매출 그래프</span></a></li>
+                        <!-- <li class="sidebar-item"><a href="void(0)" onclick="goPage('teacherManage', 'teacherCalcGraph'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">매출 그래프</span></a></li> -->
                         <!-- <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'promotionStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">게시글관리</span></a></li>
                          <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">학습자료실</span></a></li>
                          <li class="sidebar-item"><a href="void(0)" onclick="goPage('statisManage', 'memberStatistics'); return false;" class="sidebar-link"><i class=""></i><span class="hide-menu">Q&A</span></a></li>

@@ -42,6 +42,8 @@ public class MemberManageController {
             mvc.setViewName("member/sendSms");
         }else if("smsSendList".equals(page_gbn)) {
             mvc.setViewName("member/smsSendList");
+        }else if("mileageManage".equals(page_gbn)) {
+            mvc.setViewName("member/mileageManage");
         }
 
         return mvc;

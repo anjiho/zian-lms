@@ -110,7 +110,10 @@
                 imageFile4: "",
                 imageFile5: ""
             };
-            memberManageService.updateCounselInfo(counselObj, function (selList) {});
+            memberManageService.updateCounselInfo(counselObj, function (selList) {
+                alert("수정이 완료되었습니다.");
+                isReloadPage(true);
+            });
         }
     }
 </script>

@@ -10,7 +10,7 @@
             AND NAME LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'id'">
-            AND USER_ID = #{searchText}
+            AND USER_ID LIKE '%'||#{searchText}||'%'
         </if>
         <if test="searchType == 'phone'">
             AND TELEPHONE = #{searchText}
@@ -86,7 +86,7 @@
             </if>
         </if>
         <if test="affiliationCtgKey lt 10000">
-            <if test="affiliationCtgKey lt 1">
+            <if test="affiliationCtgKey gt 1">
                 AND INTEREST_CTG_KEY_0 = #{affiliationCtgKey}
             </if>
         </if>
@@ -522,6 +522,49 @@
         ORDER BY B.INDATE DESC
     </select>
 
+    <select id="selectMileageListBySelectCount" resultType="Integer">
+        SELECT COUNT(*)
+        FROM T_POINT A
+        LEFT JOIN T_USER B ON A.USER_KEY=B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            AND B.NAME LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'id'">
+            AND B.USER_ID LIKE '%'||#{searchText}||'%'
+        </if>
+        <if test="searchType == 'jId'">
+            AND A.J_ID LIKE '%'||#{searchText}||'%'
+        </if>
+    </select>
+
+    <select id="selectMileageListBySelect" resultType="com.zianedu.lms.dto.MileageSelectListDTO">
+        SELECT B.NAME,B.USER_ID,A.INDATE,A.USER_KEY,A.POINT,A.TYPE,A.J_KEY,A.J_ID,A.DESC_TYPE,A.DESCRIPTION
+        FROM T_POINT A
+        LEFT JOIN T_USER B ON A.USER_KEY=B.USER_KEY
+        WHERE 1=1
+        <if test="searchType == 'name'">
+            <if test="searchText != ''">
+                AND B.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+        </if>
+
+        <if test="searchType == 'id'">
+            <if test="searchText != ''">
+                AND B.USER_ID LIKE '%'||#{searchText}||'%'
+            </if>
+        </if>
+
+        <if test="searchType == 'jId'">
+            <if test="searchText != ''">
+                AND A.J_ID LIKE '%'||#{searchText}||'%'
+            </if>
+        </if>
+
+        ORDER BY INDATE DESC
+        OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
     <insert id="insertTUSer" parameterType="com.zianedu.lms.vo.TUserVO">
         <selectKey resultType="Integer" keyProperty="userKey" order="BEFORE">
             SELECT T_USER_SEQ.nextval FROM DUAL
@@ -557,7 +600,8 @@
             <if test="indate != ''">sysdate,</if>
             <if test="procStartDate != ''">sysdate,</if>
             <if test="procEndDate != ''">sysdate,</if>
-            #{telephone}, #{telephoneMobile}, #{memo}, #{contents}
+            <if test="telephone != ''">#{telephone},</if>
+             #{telephoneMobile}, #{memo}, #{contents}
         )
     </insert>
 
@@ -589,6 +633,17 @@
             SC_TRAN_SEQ.nextval, TO_DATE(#{trSenddate}, 'YYYY-MM-DD hh24:mi:ss'), #{trId}, #{trSendstat}, #{trRsltstat}, #{trMsgtype}, #{trPhone}, #{trCallback},
             #{trRsltdate}, #{trModified}, #{trMsg}, #{trNet}, #{trEtc1}, #{trEtc2}, #{trEtc3}, #{trEtc4}, #{trEtc5}, #{trEtc6},
             #{trRealsenddate}, #{trRouteid}
+        )
+    </insert>
+
+    <insert id="insertTMileageIssue" parameterType="com.zianedu.lms.vo.TMileageIssueVO">
+        INSERT INTO T_POINT
+        (
+        POINT_KEY , C_KEY , INDATE , USER_KEY , TYPE , POINT , J_KEY , J_ID , DESC_TYPE , DESCRIPTION
+        )
+        VALUES
+        (
+        T_POINT_SEQ.nextval, 100, sysdate, #{userKey}, #{type} , #{point} , #{jKey} , #{jId} , #{descType} , #{description}
         )
     </insert>
 

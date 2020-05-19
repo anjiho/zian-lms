@@ -54,4 +54,8 @@ public class OrderResultDTO {
     private int typeChk;
 
     private String cancelDate;
+
+    private int point;
+
+    private int dcPoint;
 }

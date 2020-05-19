@@ -64,8 +64,8 @@
                                     var cellData = [
                                         function(data) {return cmpList.userName == null ? "-" : cmpList.userName;},
                                         function(data) {return "<a href='javascript:void(0);' color='blue' style='' onclick='goMemberDetail(" + cmpList.userKey + ");'>" + cmpList.userId + "</a>";},
-                                        function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
-                                        function(data) {return cmpList.deleteDate == null ? "-" : split_minute_getDay(cmpList.deleteDate);},
+                                        function(data) {return cmpList.indate == null ? "-" : cmpList.indate;},
+                                        function(data) {return cmpList.deleteDate == null ? "-" : cmpList.deleteDate;},
                                         function(data) {return deviceProductHtml;},
                                         function(data) {return cmpList.type == 0 ? "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                                         function(data) {return cmpList.deviceModel == null ? "-" : cmpList.deviceModel;},
@@ -200,15 +200,15 @@
                 <table class="table table-hover">
                     <thead>
                     <tr>
-                        <th scope="col" width="5%">사용자</th>
-                        <th scope="col" width="5%">ID</th>
-                        <th scope="col" width="9%">생성일시</th>
-                        <th scope="col" width="9%">삭제일시</th>
-                        <th scope="col" width="28%">디바이스ID / 상품명</th>
-                        <th scope="col" width="6%">모바일</th>
-                        <th scope="col" width="15%">모델명</th>
-                        <th scope="col" width="15%">OS버전</th>
-                        <th scope="col" width="20%">App버전</th>
+                        <th scope="col" width="8%">사용자</th>
+                        <th scope="col" width="8%">ID</th>
+                        <th scope="col" width="8%">생성일시</th>
+                        <th scope="col" width="8%">삭제일시</th>
+                        <th scope="col" width="33%">디바이스ID / 상품명</th>
+                        <th scope="col" width="5%">모바일</th>
+                        <th scope="col" width="10%">모델명</th>
+                        <th scope="col" width="10%">OS버전</th>
+                        <th scope="col" width="10%">App버전</th>
                     </tr>
                     </thead>
                     <tbody id="dataList"></tbody>

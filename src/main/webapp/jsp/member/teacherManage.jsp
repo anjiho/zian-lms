@@ -36,6 +36,16 @@
 
             var userId = getInputTextValue("userId");
             var pwd = getInputTextValue("pwd");
+
+            if(userId.indexOf('zian') == -1){
+                alert("'zian'또는 'guest'가 들어가는 ID로 생성해주세요.");
+                return false;
+            }
+            if(userId.indexOf('guest') == -1){
+                alert("'zian'또는 'guest'가 들어가는 ID로 생성해주세요.");
+                return false;
+            }
+
             if(userId == ""){
                 alert("아이디를 입력해 주세요.");
                 return false;
@@ -143,12 +153,12 @@
 <div class="page-breadcrumb">
     <div class="row">
         <div class="col-12 d-flex no-block align-items-center">
-            <h4 class="page-title">강사 등록</h4>
+            <h4 class="page-title">회원/강사 등록</h4>
             <div class="ml-auto text-right">
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb">
                         <li class="breadcrumb-item">회원관리</li>
-                        <li class="breadcrumb-item active" aria-current="page">강사 등록</li>
+                        <li class="breadcrumb-item active" aria-current="page">회원/강사 등록</li>
                     </ol>
                 </nav>
             </div>
@@ -167,7 +177,7 @@
                 <div id="playForm" method="" action="" class="m-t-40">
                     <div>
                         <!-- 1.기본정보 Tab -->
-                        <h3>강사 기본정보</h3>
+                        <h3>회원 / 강사 기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
                                 <input type="hidden" name="userKey" value="0">

@@ -128,7 +128,7 @@
                    function(data) {return data.payStatusName == null ? "-" : data.payStatusName;},
                    function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                    function(data) {return data.deliveryStatusName;},
-                   function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
+                   function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='" + data.JKey + "'><span class='checkmark'></span>";}
                 ], {escapeHtml:false});
             });
             loadingOut(loading);

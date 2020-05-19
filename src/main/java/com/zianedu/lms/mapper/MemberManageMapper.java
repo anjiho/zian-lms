@@ -75,6 +75,11 @@ public interface MemberManageMapper {
     List<MemberListDTO> selectExcelDownloadTeacherList(@Param("searchText") String searchText, @Param("searchType") String searchType,
                                                         @Param("regStartDate") String regStartDate, @Param("regEndDate") String regEndDate);
 
+    int selectMileageListBySelectCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    List<MileageSelectListDTO> selectMileageListBySelect(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
+                                                       @Param("searchText") String searchText, @Param("searchType") String searchType);
+
     /** INSERT **/
     Integer insertTUSer(TUserVO tUserVO);
 
@@ -83,6 +88,8 @@ public interface MemberManageMapper {
     void insertTTeacher(TTeacherVO tTeacherVO);
 
     void insertScTran(ScTranVO scTranVO);
+
+    void insertTMileageIssue(TMileageIssueVO mileageIssueVO);
 
     /** UPDATE **/
     void updateTCounsel(TCounselVO tCounselVO);
