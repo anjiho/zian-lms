@@ -33,9 +33,6 @@
         getLectureCountSelectbox("lectureTimeCnt","");//강좌시간
         getLectureCountSelectbox("lectureCnt","");//강좌정보 강좌수
         getClassRegistraionDaySelectbox("lectureDayCnt","");//수강일수
-        selectExamSearchSelectbox("searchType","");
-        selectExamSearchSelectbox("examsearchType","");
-        selectExamSearchSelectbox("booksearchType","");
         getExamPrepareSelectbox("examYear","");//시험대비년도 셀렉트박스
         getLectureStatusSelectbox("status","");//강좌정보- 진행상태
         $('#description').summernote({ //기본정보-에디터
@@ -387,7 +384,7 @@
                             <input type="hidden" value="0" name="calculateRate">
                             <input type="hidden" value="0" name="isQuickDelivery">
                             <input type="hidden" value="0" name="goodsId">
-                            <input type="hidden" value="" name="goodsTypeName">
+                            <input type="hidden" value="0" name="goodsTypeName">
                             <input type="hidden" value="" name="summary">
                             <div class="col-md-12">
                                 <div class="form-group row">

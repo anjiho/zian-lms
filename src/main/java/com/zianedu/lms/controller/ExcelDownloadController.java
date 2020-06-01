@@ -141,7 +141,7 @@ public class ExcelDownloadController {
                 searchStartDate, searchEndDate, cancelStartDate, cancelEndDate,
                 payStatus, isOffline,payType, isMobile, searchText, searchType, dateSearchType);
 
-        excelContent = "orderList";
+        excelContent = "cancelOrderList";
         topMenus = StringUtils.getStringArray("CODE", "주문번호", "주문날짜", "주문자 아이디", "주문자 이름", "주문자 휴대전화번호","주문자 이메일", "준비직렬", "주문구분","카테고리",
                 "주문내역", "오프라인 구매", "상품가격", "상품판매가", "결제금액", "결제방법", "입금예정 은행", "입금예정 계좌번호", "입금예정자 이름", "입금예정일", "결제상태",
                 "취소요청", "결제날짜", "취소날짜", "모바일", "배송비", "배송상태", "배송지 우편번호","배송지 주소(도로명)", "배송지 주소(지번)", "현금영수증방법", "현금영수증번호");

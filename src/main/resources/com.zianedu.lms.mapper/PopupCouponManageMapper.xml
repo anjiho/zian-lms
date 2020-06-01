@@ -37,8 +37,10 @@
             A.PERIOD_TYPE
         FROM T_COUPON_MASTER A
         WHERE 1=1
-        <if test="searchType == 'name'">
-            AND A.NAME LIKE '%'||#{searchText}||'%'
+        <if test="searchText !=''">
+            <if test="searchType == 'name'">
+                AND A.NAME LIKE '%'||#{searchText}||'%'
+            </if>
         </if>
         <if test="startSearchDate == endSearchDate">
             AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
@@ -59,11 +61,21 @@
         SELECT COUNT (COUPON_MASTER_KEY)
         FROM T_COUPON_MASTER
         WHERE 1=1
-        <if test="searchType == 'name'">
-            AND NAME LIKE '%'||#{searchText}||'%'
+        <if test="searchText != ''">
+            <if test="searchType == 'name'">
+                AND NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'code'">
+                AND COUPON_MASTER_KEY = #{searchText}
+            </if>
         </if>
-        <if test="searchType == 'code'">
-            AND COUPON_MASTER_KEY = #{searchText}
+        <if test="startSearchDate != endSearchDate">
+            <![CDATA[
+                    AND INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                 ]]>
+            <![CDATA[
+                    AND INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                ]]>
         </if>
     </select>
 

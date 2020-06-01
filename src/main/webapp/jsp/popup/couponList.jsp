@@ -74,7 +74,7 @@
         dwr.util.removeAllRows("dataList"); //테이블 리스트 초기화
         gfn_emptyView("H", "");//페이징 예외사항처리
 
-        popupCouponManageService.getCouponListCount( function (cnt) {
+        popupCouponManageService.getCouponListCount(searchType,searchText,startSearchDate,endSearchDate,function (cnt) {
                 paging.count(sPage, cnt, '10', '10', comment.blank_list);
                 var listNum = ((cnt-1)+1)-((sPage-1)*10); //리스트 넘버링
             popupCouponManageService.getCouponList(sPage, 10,searchType,searchText,startSearchDate,endSearchDate, function (selList) {

@@ -294,7 +294,6 @@
                             basicObj.imageList = "";
                             basicObj.imageView = "";
                         }
-
                         /*  2.옵션 obj */
                         var optionArray = new Array();
                         $('#optionTable tbody tr').each(function (index) {
@@ -390,7 +389,6 @@
                         <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" value="0" name="gKey">
                                 <input type="hidden" value="0" name="cpKey">
                                 <input type="hidden" value="0" name="isNodc">
                                 <input type="hidden" value="0" name="tags">

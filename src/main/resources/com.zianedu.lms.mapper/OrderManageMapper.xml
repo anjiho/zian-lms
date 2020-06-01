@@ -4,7 +4,7 @@
 
     <select id="selectOrderList" resultType="OrderResultDTO">
         SELECT /*+ PARALLEL(4) */ /*+index_desc (T_ORDER PK_T_ORDER) */
-            A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY,
+            A.J_KEY, A.J_ID, B.NAME, B.USER_ID, A.PRICE_PAY, TO_CHAR(A.CANCEL_DATE, 'YYYY-MM-DD') AS CANCEL_DATE,
              A.PAY_TYPE, A.PAY_STATUS, A.IS_MOBILE, D.STATUS as DELIVER_STATUS,
              A.INDATE, A.DEPOSIT_USER, A.CARD_CODE, A.IS_OFFLINE, B.USER_KEY,
             ( SELECT NAME FROM
@@ -67,7 +67,7 @@
                 AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
             </if>
             <if test="goodsType == 5">
-                AND A.UNIQUE_TYPE_LIST LIKE '5,'||'%'
+                AND A.UNIQUE_TYPE_LIST LIKE '5'||'%'
             </if>
         </if>
         <if test="isOffline != null and isOffline >= 0">
@@ -134,89 +134,104 @@
     <select id="selectOrderListCount" resultType="Integer">
         SELECT COUNT(J_KEY)
         FROM (
-                SELECT /*+FIRST_ROWS*/ A.J_KEY
-                FROM T_ORDER A
-                LEFT JOIN T_ORDER_GOODS C
-                ON A.J_KEY = C.J_KEY
-                WHERE 1=1
-                <if test="dateSearchType == 'payDate'">
-                    <if test="startSearchDate == endSearchDate">
-                        AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-                    </if>
-                    <if test="startSearchDate != endSearchDate">
-                        <![CDATA[
-                            AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-                         ]]>
-                        <![CDATA[
-                            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-                        ]]>
-                    </if>
+            SELECT A.J_KEY
+            FROM T_ORDER A
+            LEFT JOIN T_USER B
+            ON A.USER_KEY = B.USER_KEY
+            LEFT OUTER JOIN T_ORDER_DELIVERY D
+            ON A.J_KEY = D.J_KEY
+            WHERE 1=1
+            <if test="dateSearchType == 'payDate'">
+                <if test="startSearchDate == endSearchDate">
+                    AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                 </if>
-                <if test="dateSearchType == 'depositDate'">
-                    <if test="startSearchDate == endSearchDate">
-                        AND TO_CHAR(A.PAY_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-                    </if>
-                    <if test="startSearchDate != endSearchDate">
-                        <![CDATA[
-                            AND A.PAY_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
-                         ]]>
-                        <![CDATA[
-                            AND A.PAY_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
-                        ]]>
-                    </if>
+                <if test="startSearchDate != endSearchDate">
+                    <![CDATA[
+                        AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                     ]]>
+                    <![CDATA[
+                        AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    ]]>
                 </if>
+            </if>
+            <if test="dateSearchType == 'depositDate'">
+                <if test="startSearchDate == endSearchDate">
+                    AND TO_CHAR(A.PAY_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                </if>
+                <if test="startSearchDate != endSearchDate">
+                    <![CDATA[
+                        AND A.PAY_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                     ]]>
+                    <![CDATA[
+                        AND A.PAY_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    ]]>
+                </if>
+            </if>
 
-                <if test="payStatus == -1">
-                    AND A.PAY_STATUS IN (0, 1, 2)
+
+            <if test="payStatus == -1">
+                AND A.PAY_STATUS IN (0, 1, 2, 8, 9)
+            </if>
+            <if test="payStatus > -1">
+                AND A.PAY_STATUS = #{payStatus}
+            </if>
+            <if test="goodsType != '' and goodsType != null">
+                <if test="goodsType == 1">
+                    AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType} AND J_PM_KEY=0)
                 </if>
-                <if test="payStatus > -1">
-                    AND A.PAY_STATUS = #{payStatus}
+                <if test="goodsType != 1">
+                    AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND TYPE = #{goodsType})
                 </if>
-                <if test="goodsType != '' and goodsType != null">
-                    AND C.TYPE = #{goodsType}
-                    <if test="goodsType != 5">
-                        AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
-                    </if>
-                    <if test="goodsType == 5">
-                        AND A.UNIQUE_TYPE_LIST LIKE '5,'||'%'
-                    </if>
+                <if test="goodsType != 5">
+                    AND A.UNIQUE_TYPE_LIST NOT IN ('5,')
                 </if>
-                <if test="isOffline != null and isOffline >= 0">
-                    AND A.IS_OFFLINE = #{isOffline}
+                <if test="goodsType == 5">
+                    AND A.UNIQUE_TYPE_LIST LIKE '5,'||'%'
                 </if>
-                <if test="payType != null and payType >= 0">
-                    AND A.PAY_TYPE = #{payType}
-                </if>
-                <if test="isMobile != null and isMobile >= 0">
-                    AND A.IS_MOBILE = #{isMobile}
-                </if>
+            </if>
+            <if test="isOffline != null and isOffline >= 0">
+                AND A.IS_OFFLINE = #{isOffline}
+            </if>
+            <if test="payType != null and payType >= 0">
+                AND A.PAY_TYPE = #{payType}
+            </if>
+            <if test="isMobile != null and isMobile >= 0">
+                AND A.IS_MOBILE = #{isMobile}
+            </if>
+            <if test="searchType != ''">
                 <if test="searchType == 'orderUserId'">
                     <if test="searchText != ''">
-                        AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
+                        AND B.USER_ID LIKE '%'||#{searchText}||'%'
                     </if>
                 </if>
                 <if test="searchType == 'orderUserName'">
                     <if test="searchText != ''">
-                        AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+                        AND B.NAME LIKE '%'||#{searchText}||'%'
                     </if>
                 </if>
                 <if test="searchType == 'orderId'">
-                    AND A.J_ID LIKE '%'||#{searchText}||'%'
+                    <if test="searchText != ''">
+                        AND A.J_ID LIKE '%'||#{searchText}||'%'
+                    </if>
                 </if>
                 <if test="searchType == 'orderGoodsName'">
-                    AND C.G_NAME LIKE '%'||#{searchText}||'%'
+                    <if test="searchText != ''">
+                        AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND Z.G_NAME LIKE '%'||#{searchText}||'%')
+                    </if>
                 </if>
                 <if test="searchType == 'depositUserName'">
-                    AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+                    <if test="searchText != ''">
+                        AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+                    </if>
                 </if>
-                <!-- 동영상 재수강 여부 -->
-                <if test="isVideoReply == 0">
-                    AND C.EXTEND_DAY = -1
-                </if>
-                <if test="isVideoReply == 1">
-                    AND C.EXTEND_DAY > -1
-                </if>
-                GROUP BY A.J_KEY
+            </if>
+            <!-- 동영상 재수강 여부 -->
+            <if test="isVideoReply == 0">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY = -1)
+            </if>
+            <if test="isVideoReply == 1">
+                AND A.J_KEY IN (SELECT J_KEY FROM T_ORDER_GOODS Z WHERE Z.J_KEY = A.J_KEY AND EXTEND_DAY > -1)
+            </if>
         )
     </select>
 
@@ -289,14 +304,14 @@
         </if>
         <if test="dateSearchType == 'depositDate'">
             <if test="startSearchDate == endSearchDate">
-                AND TO_CHAR(A.INDATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                AND TO_CHAR(A.PAY_DATE, 'YYYY-MM-DD') = TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
             </if>
             <if test="startSearchDate != endSearchDate">
                 <![CDATA[
-                    AND A.INDATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
+                    AND A.PAY_DATE > TO_DATE(#{startSearchDate}, 'YYYY-MM-DD')
                  ]]>
                 <![CDATA[
-                    AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
+                    AND A.PAY_DATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
                 ]]>
             </if>
 
@@ -312,20 +327,22 @@
             ]]>
             </if>
         </if>
-        <if test="searchType == 'orderUserId'">
-            AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
-        </if>
-        <if test="searchType == 'orderUserName'">
-            AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
-        </if>
-        <if test="searchType == 'orderId'">
-            AND A.J_ID LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'orderUserName'">
-            AND B.NAME LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'depositUserName'">
-            AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+        <if test="searchText != ''">
+            <if test="searchType == 'orderUserId'">
+                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+            </if>
+            <if test="searchType == 'orderId'">
+                AND A.J_ID LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND B.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'depositUserName'">
+                AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+            </if>
         </if>
         ORDER BY A.J_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -424,26 +441,28 @@
                 ]]>
                 </if>
             </if>
-            <if test="searchType == 'orderUserId'">
-                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
-            </if>
-            <if test="searchType == 'orderUserName'">
-                AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
-            </if>
-<!--            <if test="searchType == 'orderUserId'">-->
-<!--                AND B.USER_ID LIKE '%'||#{searchText}||'%'-->
-<!--            </if>-->
-<!--            <if test="searchType == 'orderUserName'">-->
-<!--                AND B.NAME LIKE '%'||#{searchText}||'%'-->
-<!--            </if>-->
-            <if test="searchType == 'orderId'">
-                AND A.J_ID LIKE '%'||#{searchText}||'%'
-            </if>
-            <if test="searchType == 'orderUserName'">
-                AND C.G_NAME LIKE '%'||#{searchText}||'%'
-            </if>
-            <if test="searchType == 'depositUserName'">
-                AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+            <if test="searchText != ''">
+                <if test="searchType == 'orderUserId'">
+                    AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE USER_ID LIKE '%'||#{searchText}||'%')
+                </if>
+                <if test="searchType == 'orderUserName'">
+                    AND A.USER_KEY IN (SELECT USER_KEY FROM T_USER WHERE NAME LIKE '%'||#{searchText}||'%')
+                </if>
+    <!--            <if test="searchType == 'orderUserId'">-->
+    <!--                AND B.USER_ID LIKE '%'||#{searchText}||'%'-->
+    <!--            </if>-->
+    <!--            <if test="searchType == 'orderUserName'">-->
+    <!--                AND B.NAME LIKE '%'||#{searchText}||'%'-->
+    <!--            </if>-->
+                <if test="searchType == 'orderId'">
+                    AND A.J_ID LIKE '%'||#{searchText}||'%'
+                </if>
+                <if test="searchType == 'orderUserName'">
+                    AND C.G_NAME LIKE '%'||#{searchText}||'%'
+                </if>
+                <if test="searchType == 'depositUserName'">
+                    AND A.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+                </if>
             </if>
         )
     </select>
@@ -486,17 +505,22 @@
         <if test="payStatus == 8">
             AND C.PAY_STATUS IN (8, 9, 10)
         </if>
-        <if test="searchType == 'orderUserId'">
-            AND E.USER_ID LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'orderUserName'">
-            AND E.NAME LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'orderId'">
-            AND C.J_ID LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'orderGoodsName'">
-            AND D.NAME LIKE '%'||#{searchText}||'%'
+        <if test="searchText != ''">
+            <if test="searchType == 'orderUserId'">
+                AND E.USER_ID LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderUserName'">
+                AND E.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderId'">
+                AND C.J_ID LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'orderGoodsName'">
+                AND D.NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'depositUserName'">
+                AND C.DEPOSIT_USER LIKE '%'||#{searchText}||'%'
+            </if>
         </if>
         ORDER BY B.J_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
@@ -520,12 +544,14 @@
         <![CDATA[
             AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD') + 1
         ]]>
-        AND A.STATUS IN (
-        SELECT REGEXP_SUBSTR(#{orderLecStatus},'[^,]+',1,LEVEL) AS STATUS FROM T_ORDER_LEC
-        <![CDATA[
-                CONNECT BY LEVEL <= 7
-            ]]>
-        )
+        <if test="orderLecStatus != '-1'">
+            AND A.STATUS IN (
+            SELECT REGEXP_SUBSTR(#{orderLecStatus},'[^,]+',1,LEVEL) AS STATUS FROM T_ORDER_LEC
+            <![CDATA[
+                    CONNECT BY LEVEL <= 7
+                ]]>
+            )
+        </if>
         <!-- 결제상태 : 결제완료 -->
         <if test="payStatus == 2">
             AND C.PAY_STATUS IN (0, 1, 2)
@@ -593,7 +619,16 @@
             LOG_TYPE,CREATE_DATE
         FROM T_ORDER_LEC_START_STOP_LOG
         WHERE J_LEC_KEY = #{jLecKey}
-        ORDER BY IDX ASC;
+        ORDER BY IDX ASC
+    </select>
+
+    <!-- 수강내역목록 > 수강시간 조정 > 일시정지 총 횟수/일수 -->
+    <select id="selectLecturePauseDetail" resultType="LecturePauseRecDTO">
+        SELECT
+            PAUSE_TOTAL_DAY,PAUSE_CNT
+        FROM T_ORDER_LEC
+        WHERE 1=1
+        AND J_LEC_KEY = #{jLecKey}
     </select>
 
     <!-- 수강내역목록 > 수강시간 조정 > 강의 총 시간, 수강한 총 시간 -->
@@ -804,17 +839,32 @@
         INNER JOIN T_USER B
         ON A.USER_KEY = B.USER_KEY
         WHERE 1=1
-        <if test="searchType == 'id'">
-            AND B.USER_ID = #{searchText}
-        </if>
-        <if test="searchType == 'name'">
-            AND B.USER_NAME LIKE '%'||#{searchText}||'%'
-        </if>
-        <if test="searchType == 'jid'">
-            AND A.J_ID = #{searchText}
+        <if test="searchText != ''">
+            <if test="searchType == 'id'">
+                AND B.USER_ID = #{searchText}
+            </if>
+            <if test="searchType == 'name'">
+                AND B.USER_NAME LIKE '%'||#{searchText}||'%'
+            </if>
+            <if test="searchType == 'jid'">
+                AND A.J_ID = #{searchText}
+            </if>
         </if>
         ORDER BY A.POINT_KEY DESC
         OFFSET #{startNumber} ROWS FETCH NEXT #{listLimitNumber} ROWS ONLY
+    </select>
+
+    <select id="selectTPointUser" resultType="PointListDTO">
+        SELECT
+        B.USER_ID, B.NAME, TO_CHAR(A.INDATE, 'YYYY-MM-DD hh24:mi:ss') as INDATE,
+        A.J_ID, A.TYPE, A.POINT, A.DESC_TYPE, A.DESCRIPTION
+        FROM T_POINT A
+        INNER JOIN T_USER B
+        ON A.USER_KEY = B.USER_KEY
+        WHERE 1=1
+        AND A.J_KEY = #{jKey}
+        AND A.TYPE = 0
+        AND A.DESC_TYPE = 2
     </select>
 
     <select id="selectTPointListCount" resultType="Integer">
@@ -859,7 +909,7 @@
             A.BANK, A.BANK_ACCOUNT, A.DEPOSIT_USER,
             TO_CHAR( A.PAY_DATE, 'YYYY-MM-DD hh24:mm:ss') as PAY_DATE,
             TO_CHAR( A.DEPOSIT_DATE, 'YYYY-MM-DD') as DEPOSIT_DATE,
-            TO_CHAR( A.CANCEL_DATE, 'YYYY-MM-DD') as CANCEL_DATE,
+            TO_CHAR( A.CANCEL_DATE, 'YYYY-MM-DD hh24:mm:ss') as CANCEL_DATE,
             A.CASH_RECEIPT_TYPE, A.CASH_RECEIPT_NUMBER,
             C.RESULTMSG as PG_MSG
         FROM T_ORDER A
@@ -871,7 +921,7 @@
     </select>
 
     <select id="selectOrderDetailProductList" resultType="OrderDetailProductListDTO">
-        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, D.SELL_PRICE,A.EXTEND_DAY,D.EXTEND_PERCENT
+        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, A.SELL_PRICE,A.EXTEND_DAY,D.EXTEND_PERCENT
         FROM T_ORDER_GOODS A
         INNER JOIN T_GOODS B
         ON A.G_KEY = B.G_KEY
@@ -1035,7 +1085,7 @@
 <!--            AND A.INDATE <= TO_DATE(#{endSearchDate}, 'YYYY-MM-DD')-->
 <!--        ]]>-->
         <if test="payStatus == -1">
-            AND A.PAY_STATUS IN (0, 1, 2)
+            AND A.PAY_STATUS IN (0, 1, 2, 8, 9)
         </if>
         <if test="payStatus > -1">
             AND A.PAY_STATUS = #{payStatus}
@@ -1387,12 +1437,12 @@
         INSERT INTO T_CALCULATE_DATA
         (
             CALCULATE_DATA_KEY, CALCULATE_KEY, INDATE, G_KEY, TYPE, PM_TYPE, KIND, CALC_PRICE, J_COUNT, PAY_STATUS,
-            CALC_CALCULATE_RATE, G_CALCULATE_RATE, G_T_CALCULATE_RATE, T_CALCULATE_RATE, J_KEY
+            CALC_CALCULATE_RATE, G_CALCULATE_RATE, G_T_CALCULATE_RATE, T_CALCULATE_RATE
         )
         VALUES
         (
             #{calculateDataKey}, #{calculateKey}, TO_DATE(#{indate}, 'YYYY-mm-dd hh24:mi:ss'), #{gKey}, #{type}, #{pmType}, #{kind}, #{calcPrice}, #{jCount}, #{payStatus},
-            #{calcCalculateRate}, #{gCalculateRate}, #{gTCalculateRate}, #{tCalculateRate}, #{jKey}
+            #{calcCalculateRate}, #{gCalculateRate}, #{gTCalculateRate}, #{tCalculateRate}
         )
     </insert>
 

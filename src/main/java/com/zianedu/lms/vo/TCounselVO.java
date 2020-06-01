@@ -61,7 +61,7 @@ public class TCounselVO {
         this.indate = Util.returnNow();
         this.procStartDate = tCounselVO.getProcStartDate();
         this.procEndDate = tCounselVO.getProcEndDate();
-        this.telephone = tCounselVO.getTelephone();
+        this.telephone = Util.isNullValue(tCounselVO.getTelephone(),"");
         this.telephoneMobile = tCounselVO.getTelephoneMobile();
         this.memo = Util.isNullValue(tCounselVO.getMemo(), "");
         this.contents = Util.isNullValue(tCounselVO.getContents(), "");

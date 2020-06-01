@@ -196,14 +196,19 @@
             userKeyList.push(key);
         });
 
+        var status = 0;
         var basicObj = getJsonObjectFromDiv("section1");
+        alert(basicObj.startStop);
         if(basicObj.startStop == 'on') status = 1;
         else status = 0;
 
         if(userKeyList.length > 0){
             if(res_key.length > 0) {
                 if(confirm("무료강의제공을 하시겠습니까?")){
-                    orderManageService.injectFreeVideoLecture(priceKeyList, userKeyList, status, startDate, endDate,function (cnt) {isReloadPage();});
+                    orderManageService.injectFreeVideoLecture(priceKeyList, userKeyList, status, startDate, endDate,function (cnt) {
+                        alert("강의 제공이 완료되었습니다.");
+                        isReloadPage();
+                    });
                 }
             }else{
                 alert("상품을 선택해 주세요.");

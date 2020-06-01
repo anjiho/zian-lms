@@ -100,7 +100,7 @@ function getlectureWatchOrderStatusCheckbox(tagId, val) {
     var html = "";
     var tid=JSON.stringify(tagId);
 
-    if(val == '-1') html += "<label>전체</label><input type='checkbox' value='-1' id='check1' name='orderStatus' checked onclick='allBoxChecked(" + tid + ")'>";
+    if(val == '-1'||val=='') html += "<label>전체</label><input type='checkbox' value='-1' id='check1' name='orderStatus' checked onclick='allBoxChecked(" + tid + ")'>";
     else html += "<label>전체</label><input type='checkbox' value='-1' id='check1' name='orderStatus' onclick='allBoxChecked(" + tid + ")'>";
     if(val == '0') html += "<label>대기중</label><input type='checkbox' value='0' id='check2' name='orderStatus' checked onclick='boxChecked(" + tid + ")'>";
     else html += "<label>대기중</label><input type='checkbox' value='0' id='check2' name='orderStatus' onclick='boxChecked(" + tid + ")'>";

@@ -51,6 +51,8 @@ public interface OrderManageMapper {
 
     List<LecturePauseRecDTO> selectLecturePauseRec(@Param("jLecKey") int jLecKey);
 
+    LecturePauseRecDTO selectLecturePauseDetail(@Param("jLecKey") int jLecKey);
+
     LectureTimeDTO selectLectureTotalTime(@Param("jLecKey") int jLecKey);
 
     TOrderLecCurriVO selectLectureTimeByCurriKey(@Param("jLecKey") int jLecKey, @Param("curriKey") Long curriKey);
@@ -82,6 +84,8 @@ public interface OrderManageMapper {
 
     List<PointListDTO> selectTPointList(@Param("startNumber") int startNumber, @Param("listLimitNumber") int listLimitNumber,
                                         @Param("searchText") String searchText, @Param("searchType") String searchType);
+
+    PointListDTO selectTPointUser(@Param("jKey") int jKey);
 
     int selectTPointListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
 

@@ -282,7 +282,10 @@
             onlineLecInfo.push(data);
         });
         if(confirm("저장하시겠습니까?")) {
-            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo,array2, function () {isReloadPage(true);});
+            promotionManageService.savePackage(basicObj, optionArray, categoryArr, promotionInfo, onlineLecInfo,array2, function () {
+                alert("저장 완료 되었습니다.");
+                isReloadPage(true);
+            });
         }
     }
 
@@ -347,7 +350,6 @@
                         <h3>기본정보</h3>
                         <section class="col-md-auto">
                             <div id="section1">
-                                <input type="hidden" value="0" name="gKey">
                                 <input type="hidden" value="0" name="cpKey">
                                 <input type="hidden" value="0" name="isNodc">
                                 <input type="hidden" value="0" name="tags">

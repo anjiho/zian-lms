@@ -21,7 +21,7 @@ public interface PopupCouponManageMapper {
                                               @Param("searchText") String searchText, @Param("searchType") String searchType,
                                               @Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate);
 
-    int selectTCouponMaterListCount(@Param("searchText") String searchText, @Param("searchType") String searchType);
+    int selectTCouponMaterListCount(@Param("searchText") String searchText, @Param("searchType") String searchType,@Param("startSearchDate") String startSearchDate, @Param("endSearchDate") String endSearchDate);
 
     List<TLinkKeyVO>selectTCouponLinkKey(@Param("couponKey") int couponKey);
 

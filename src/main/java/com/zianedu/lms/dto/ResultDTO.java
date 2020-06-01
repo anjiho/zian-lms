@@ -15,6 +15,4 @@ public class ResultDTO {
     private List<?> resultList;
 
     private Object resultTotalTime;
-
-    private List<?> resultPauseRec;
 }

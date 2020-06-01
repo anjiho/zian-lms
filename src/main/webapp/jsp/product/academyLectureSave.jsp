@@ -227,7 +227,7 @@
         $('#optionTable tbody tr').each(function(index){
             var i =0;
             var optionName = $(this).find("td select").eq(0).val();
-            var price = $(this).find("td input").eq(0).val();
+            var price = uncomma($(this).find("td input").eq(0).val());
             var sellPrice = $(this).find("td input").eq(1).val();
             var point = $(this).find("td input").eq(2).val();
             var extendPercent = $(this).find("td input").eq(3).val();
@@ -332,7 +332,8 @@
                 contentType: false,
                 success: function (data) {
                     if(data.result){
-                       // goPage('productManage', 'academyLectureList');
+                        alert("저장되었습니다.");
+                        goPage('productManage', 'academyLectureList');
                     }
                 }
             });
@@ -482,6 +483,11 @@
                                                 ON
                                             </div>
                                         </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label class="col-sm-2 control-label col-form-label" style="margin-bottom: 0">정산률</label>
+                                        <input type="text" class="col-sm-2 form-control" id="calculateRate" name="calculateRate">
+                                        <span style="margin-top: 6px;">%</span>
                                     </div>
                                     <div class="form-group">
                                         <label class="control-label col-form-label">상세설명</label>

@@ -129,7 +129,7 @@ public class TOrderVO {
         this.payKey = 0;
         this.offlineSerial = 0;
         this.isMobile = 0;
-        this.isOffline = 1;
+        this.isOffline = 0;
         this.tmp = 0;
         this.gNameList = "";
         this.isCancelRequest = 0;

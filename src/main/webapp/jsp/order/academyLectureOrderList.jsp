@@ -185,7 +185,7 @@
                                 return data.payTypeName == null ? "-" : data.payTypeName;
                             },
                             function (data) {
-                                return data.payStatusName == null ? "-" : data.payStatusName;
+                                return data.payStatusName == null ? "-" : data.payStatus ==8?"<a class='payStatusCheck'>" + data.payStatusName + "</a><br/>" + data.cancelDate:"<a class='payStatusCheck'>" + data.payStatusName + "</a>";
                             },
                             //function(data) {return data.isMobile == null ? "-" : data.isMobile;},
                             function (data) {
@@ -223,22 +223,44 @@
 
     //결제상태변경
     function changePayStatus() {
-        if ($("input[name=rowChk]:checked").length == 0) {
+        if($("input[name=rowChk]:checked").length == 0){
             alert("회원을 선택해 주세요.");
             return false;
         }
         var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
-        var arr = new Array();
-        $("input[name=rowChk]:checked").each(function () {
+        var statusCheck = 1;
+
+        var arr =  new Array();
+        $("input[name=rowChk]:checked").each(function() {
+            var tr = $(this).closest('tr');
+            var payStatus = tr.find('.payStatusCheck').text();
+
+            if(payStatus == "결제완료"){
+                if(orderStatusChangeSel == 8){
+                    statusCheck =0;
+                }
+            }
+            if(payStatus == "입금예정" ){
+                if(orderStatusChangeSel == 2 || orderStatusChangeSel == 9){
+                    statusCheck = 0;
+                }
+            }
+
             var jKey = $(this).val();
             var data = {
-                jKey: jKey,
-                payStatus: orderStatusChangeSel
+                jKey : jKey,
+                payStatus : orderStatusChangeSel
             };
             arr.push(data);
         });
-        if (confirm('변경하시겠습니까?')) {
-            orderManageService.changePayStatus(arr, function () {
+
+        if(statusCheck == 1) {
+            alert("'결제완료 → 결제취소'\n'입금예정 → 주문취소, 결제완료'만 변경 가능합니다.");
+            return false;
+        }
+
+        if(confirm('변경하시겠습니까?')){
+            orderManageService.changePayStatus(arr , function() {
                 isReloadPage();
             });
         }

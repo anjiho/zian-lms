@@ -209,7 +209,7 @@
             optionArray.push(gKey);
         });
 
-        if(price>Number(sellPrice)){
+        if(price>Number(uncomma(sellPrice))){
             alert("결제금액이 판매금액보다 많을 수 없습니다.");
             return;
         }

@@ -89,7 +89,7 @@
                         var cellData = [
                             function(data) {return cmpList.counselKey == null ? "-" : cmpList.counselKey;},
                             function(data) {return cmpList.consultTypeName == null ? "-" : "<a href='javascript:void(0);' color='blue'  data-toggle=\"modal\" data-target=\"#consultModal\" onclick='modifyConsult("+ cmpList.counselKey +");'>"+cmpList.consultTypeName+"</a>";},
-                            function(data) {return cmpList.telephone+"<br>"+cmpList.telephoneMobile;},
+                            function(data) {return gfn_isnullvalue(cmpList.telephone,"자택 번호 : 없음")+"<br>"+cmpList.telephoneMobile;},
                             function(data) {return cmpList.indate == null ? "-" : split_minute_getDay(cmpList.indate);},
                             function(data) {return cmpList.procStartDate == null ? "-" : split_minute_getDay(cmpList.procStartDate);},
                             function(data) {return cmpList.procEndDate == null ? "-" : split_minute_getDay(cmpList.procEndDate);},

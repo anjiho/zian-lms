@@ -592,7 +592,8 @@
             <if test="indate != ''">INDATE,</if>
             <if test="procStartDate != ''">PROC_START_DATE,</if>
             <if test="procEndDate != ''">PROC_END_DATE,</if>
-            TELEPHONE, TELEPHONE_MOBILE, MEMO, CONTENTS
+            <if test="telephone != ''">TELEPHONE,</if>
+            TELEPHONE_MOBILE, MEMO, CONTENTS
         )
         VALUES
         (

@@ -38,12 +38,10 @@
             var pwd = getInputTextValue("pwd");
 
             if(userId.indexOf('zian') == -1){
-                alert("'zian'또는 'guest'가 들어가는 ID로 생성해주세요.");
-                return false;
-            }
-            if(userId.indexOf('guest') == -1){
-                alert("'zian'또는 'guest'가 들어가는 ID로 생성해주세요.");
-                return false;
+                if ( userId.indexOf('guest') == -1) {
+                    alert("'zian'또는 'guest'가 들어가는 ID로 생성해주세요.");
+                    return false;
+                }
             }
 
             if(userId == ""){
@@ -124,7 +122,10 @@
                                 note : "",
                                 interestCtgKey0 : Number(interestCtgKey0)
                             };
-                            memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {});
+                            memberManageService.saveMember(teacherObj, teacherInfoObj2, function(info) {
+                                alert("저장 완료 되었습니다.");
+                                isReloadPage(true);
+                            });
                         }
                     }
                 });

@@ -155,7 +155,7 @@
                             function (data) { return  (data.isOffline ==1? "<a style='color: saddlebrown'>오프라인</a><br/>":"")+(data.orderGoodsCount == 0 ? data.orderGoodsName : data.orderGoodsName +"<a style='color: red'>외"+data.orderGoodsCount+"</a>");},
                             function(data) {return data.pricePay == null ? "-" : format(data.pricePay);},
                             function(data) {return data.payTypeName == null ? "-" : data.payTypeName + "<br/><a style='color: green'>" + gfn_isnull(data.depositUser)+"</a>";},
-                            function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+data.payStatusName+"<br>"+split_minute_getDay(data.cancelDate)+"</a>";},
+                            function(data) {return data.payStatusName == null ? "-" : "<a style='color: #9c0000'>"+ "<a class='payStatusCheck'>" + data.payStatusName + "</a>"+"<br>"+split_minute_getDay(data.cancelDate)+"</a>";},
                             function(data) {return data.deliveryStatusName == null ? "-" : data.deliveryStatusName;},
                             function(data) {return data.isMobile == 0 ?  "<i class='mdi mdi-close' style='color: red'></i>" : "<i class='mdi mdi-check' style='color:green;'></i>";},
                             function(data) {return "<label class='customcheckbox m-b-20'><input type='checkbox' name='rowChk' value='"+ data.JKey + "'><span class='checkmark'></span>";}
@@ -194,8 +194,24 @@
             return false;
         }
         var orderStatusChangeSel = getSelectboxValue("orderStatusChangeSel");//결제상태변경
+        var statusCheck = 1;
+
         var arr =  new Array();
         $("input[name=rowChk]:checked").each(function() {
+            var tr = $(this).closest('tr');
+            var payStatus = tr.find('.payStatusCheck').text();
+
+            if(payStatus == "결제완료"){
+                if(orderStatusChangeSel == 8){
+                    statusCheck =0;
+                }
+            }
+            if(payStatus == "입금예정" ){
+                if(orderStatusChangeSel == 2 || orderStatusChangeSel == 9){
+                    statusCheck = 0;
+                }
+            }
+
             var jKey = $(this).val();
             var data = {
                 jKey : jKey,
@@ -203,6 +219,12 @@
             };
             arr.push(data);
         });
+
+        if(statusCheck == 1) {
+            alert("'결제완료 → 결제취소'\n'입금예정 → 주문취소, 결제완료'만 변경 가능합니다.");
+            return false;
+        }
+
         if(confirm('변경하시겠습니까?')){
             orderManageService.changePayStatus(arr , function() {
                 isReloadPage();

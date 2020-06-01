@@ -64,10 +64,9 @@
             innerHTML("dcPoint", payInfo.dcPoint == ''? '0원' : format(payInfo.dcPoint)+"원");//사용마일리지
             innerHTML("point", payInfo.point == ''? '0원' : format(payInfo.point)+"원");//적립마일리지
             innerHTML("remainPoint", payInfo.remainPoint == ''? '0원' : format(payInfo.remainPoint)+"원");//남은마일리지
-            innerHTML("payDate", payInfo.payStatus==2? payInfo.payDate:'');//결제일
+            innerHTML("payDate", payInfo.payStatus!=0? payInfo.payDate:'');//결제일
             innerHTML("pricePay", payInfo.pricePay == ''? '0원' : format(payInfo.pricePay)+"원");//결제금액
             innerHTML("cancelDate", payInfo.cancelDate);//취소일
-            innerHTML("cancelDate1", payInfo.cancelDate);//취소일
             innerHTML("cashReceiptTypeName", payInfo.cashReceiptTypeName);//현금영수증방법
             innerHTML("cashReceiptNumber", payInfo.cashReceiptNumber);//현금영수증번호
             innerHTML("pgMsg", payInfo.pgMsg);//PG사 메세지
@@ -104,7 +103,7 @@
                         function(data) {return num==3?data.extendDay==0?"<a style='color: blue'>[재수강]</a>"+data.name:"<a style='color: blue'>[" + data.extendDay + "일]</a>" +data.name:data.name},//출제구분
                         function(data) {return data.productOptionName},//출제구분
                         function(data) {return data.cnt},//출제구분
-                        function(data) {return data.extendDay!=-1?format(data.sellPrice*(1-data.extendPercent/100)):format(data.sellPrice)},//출제구분
+                        function(data) {return format(data.sellPrice)},//출제구분
                     ], {escapeHtml:false});
                     $('#dataList tr').each(function(){
                         var tr = $(this);
@@ -391,17 +390,13 @@
                                     <div class="col-lg-3">
                                         <span id="pricePay" style="color: blue;"></span>
                                     </div>
-                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
-                                    <div class="col-lg-3">
-                                        <span></span>
-                                    </div>
-                                </div>
-                                <!--신용카드-->
-                                <div class="row mb-3" id="cardContent" style="display: none;">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">취소일</label>
                                     <div class="col-lg-3">
                                         <span id="cancelDate"></span>
                                     </div>
+                                </div>
+                                <!--신용카드-->
+                                <div class="row mb-3" id="cardContent" style="display: none;">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">PG사메세지</label>
                                     <div class="col-lg-3">
                                         <span id="pgMsg" style="color: red;"></span>
@@ -432,21 +427,6 @@
                                     </div>
                                 </div>
                                 <!--//무통장입금-->
-                                <!--무료 / 현금+신카 / 온라인 / 현금-->
-                                <div class="row mb-3" id="otherContent" style="display: none;">
-                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">취소일</label>
-                                    <div class="col-lg-3">
-                                        <span id="cancelDate1"></span>
-                                    </div>
-                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
-                                    <div class="col-lg-3">
-                                        <span></span>
-                                    </div>
-                                    <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0"></label>
-                                    <div class="col-lg-3">
-                                        <span></span>
-                                    </div>
-                                </div>
                                 <!--//무통장입금-->
                                 <div class="row mb-3">
                                     <label class=" col-sm-1 control-label col-form-label" style="margin-bottom: 0">현금영수증방법</label>

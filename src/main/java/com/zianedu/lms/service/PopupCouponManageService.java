@@ -116,10 +116,12 @@ public class PopupCouponManageService {
      * @return
      */
     @Transactional(readOnly = true)
-    public int getCouponListCount(String searchType, String searchText) {
+    public int getCouponListCount(String searchType, String searchText,String startSearchDate, String endSearchDate) {
         return popupCouponManageMapper.selectTCouponMaterListCount(
                 Util.isNullValue(searchText, ""),
-                Util.isNullValue(searchType, "")
+                Util.isNullValue(searchType, ""),
+                Util.isNullValue(startSearchDate, ""),
+                Util.isNullValue(endSearchDate, "")
         );
     }
 

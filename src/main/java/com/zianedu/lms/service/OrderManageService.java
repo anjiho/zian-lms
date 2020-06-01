@@ -254,15 +254,30 @@ public class OrderManageService {
         LectureTimeInfoDTO lectureTimeInfo = orderManageMapper.selectTOrderInfoAtLectureTime(jLecKey);
         List<LectureTimeDTO> lectureTimeInfoList = orderManageMapper.selectLectureTimeList(jLecKey);
         LectureTimeDTO lectureTotalTime = orderManageMapper.selectLectureTotalTime(jLecKey);
-        List<LecturePauseRecDTO> lecturePauseRec = orderManageMapper.selectLecturePauseRec(jLecKey);
 
         ResultDTO resultDTO = new ResultDTO();
         resultDTO.setResult(lectureTimeInfo);
         resultDTO.setResultList(lectureTimeInfoList);
         resultDTO.setResultTotalTime(lectureTotalTime);
-        resultDTO.setResultPauseRec(lecturePauseRec);
+
         return resultDTO;
     }
+
+
+    /**
+     * 수강관리 > 수강내역목록 > 수강시간 조정  > 일시정지 기록 정보
+     * @param jLecKey
+     * @return
+     */
+    @Transactional(readOnly = true)
+    public  LecturePauseDetailDTO getUserLecturePauseLogInfo(int jLecKey) {
+
+        List<LecturePauseRecDTO> lecturePauseRec = orderManageMapper.selectLecturePauseRec(jLecKey);
+        LecturePauseRecDTO lecturePauseDetail = orderManageMapper.selectLecturePauseDetail(jLecKey);
+
+        return new LecturePauseDetailDTO(lecturePauseRec,lecturePauseDetail);
+    }
+
 
     /**
      * 디바이스 관리 > 상품별 디바이스 관리 리스트 (PC 디바이스로 변경)
@@ -688,7 +703,14 @@ public class OrderManageService {
             int userKey = orderDetailInfoDTO.getUserKey();
             String jId= orderDetailInfoDTO.getJId();
             int point = orderDetailInfoDTO.getPoint(); //지급 마일리지
-            int dcPoint = orderDetailInfoDTO.getDcPoint(); // 사용한 마일리지
+
+            int usePoint = 0;  // 사용한 마일리지
+            usePoint= orderDetailInfoDTO.getDcPoint();
+
+            if(usePoint != 0){
+                usePoint = usePoint*(-1);
+            }
+
             String memo = "";
 
             if(payStatus==2){ //결제완료
@@ -701,7 +723,7 @@ public class OrderManageService {
                 int typeSelect = 1;
                 int descType = 4;
 
-                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,dcPoint,memo,jKey,jId,descType);
+                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,usePoint,memo,jKey,jId,descType);
                 memberManageMapper.insertTMileageIssue(mileageIssueVO);
 
                 typeSelect = 0;
@@ -715,7 +737,7 @@ public class OrderManageService {
                 int typeSelect = 1;
                 int descType = 3;
 
-                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,dcPoint,memo,jKey,jId,descType);
+                TMileageIssueVO mileageIssueVO = new TMileageIssueVO(userKey,typeSelect,usePoint,memo,jKey,jId,descType);
                 memberManageMapper.insertTMileageIssue(mileageIssueVO);
             }
 
@@ -742,7 +764,7 @@ public class OrderManageService {
         if (jDeliveryKey == 0) {
             //저장
             TOrderDeliveryVO deliveryInfo = new TOrderDeliveryVO(
-                    jKey, deliveryMasterKey, status, deliveryNo, endDate
+                    jKey, status, deliveryMasterKey,  deliveryNo, endDate
             );
             orderManageMapper.insertTOrderDelivery(deliveryInfo);
         } else {
