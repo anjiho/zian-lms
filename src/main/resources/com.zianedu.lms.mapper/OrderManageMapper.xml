@@ -921,14 +921,12 @@
     </select>
 
     <select id="selectOrderDetailProductList" resultType="OrderDetailProductListDTO">
-        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, A.SELL_PRICE,A.EXTEND_DAY,D.EXTEND_PERCENT
+        SELECT A.J_G_KEY, C.TYPE,  B.NAME, A.KIND, A.CNT, A.SELL_PRICE,A.EXTEND_DAY
         FROM T_ORDER_GOODS A
         INNER JOIN T_GOODS B
         ON A.G_KEY = B.G_KEY
         INNER JOIN T_GOODS C
         ON A.G_KEY = C.G_KEY
-        INNER JOIN T_GOODS_PRICE_OPTION D
-        ON A.PRICE_KEY = D.PRICE_KEY
         WHERE A.J_KEY = #{jKey} AND (A.J_PM_KEY=0 OR A.J_PM_KEY=(SELECT J_PM_KEY FROM T_ORDER_PROMOTION E WHERE E.PM_TYPE=2 AND A.J_PM_KEY=E.J_PM_KEY))
         ORDER BY A.J_G_KEY ASC
     </select>
